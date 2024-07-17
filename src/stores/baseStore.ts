@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { supabase } from "../supabaseClient";
+import { supabase } from "../../supabase/client";
 import { User } from "@supabase/supabase-js";
-import { Group } from "../types/tables";
+import { Group } from "../../supabase/types/tables";
 
 export interface BaseStore {
   // user
