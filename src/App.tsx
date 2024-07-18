@@ -3,6 +3,7 @@ import { AuthProvider } from "./components/auth/AuthProvider";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import MainPage from "./pages/MainPage";
 import GroupPage from "./pages/GroupPage";
+import GroupCreatePage from "./pages/GroupCreatePage";
 
 const App = () => {
   return (
@@ -14,6 +15,22 @@ const App = () => {
               <Route path="/" element={<MainPage />}></Route>
               <Route
                 path="/group"
+                element={
+                  <PrivateRoute>
+                    <GroupPage />
+                  </PrivateRoute>
+                }
+              ></Route>
+              <Route
+                path="/group/new"
+                element={
+                  <PrivateRoute>
+                    <GroupCreatePage />
+                  </PrivateRoute>
+                }
+              ></Route>
+              <Route
+                path="/group/:groupId"
                 element={
                   <PrivateRoute>
                     <GroupPage />

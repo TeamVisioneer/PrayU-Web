@@ -2,7 +2,9 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { supabase } from "../../supabase/client";
 import { User } from "@supabase/supabase-js";
-import { Group } from "../../supabase/types/tables";
+import { Group, Member } from "../../supabase/types/tables";
+import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
+import { fetchMemberListByGroupId, createMember } from "@/apis/member";
 
 export interface BaseStore {
   // user
@@ -14,8 +16,24 @@ export interface BaseStore {
   // group
   groupList: Group[] | null;
   targetGroup: Group | null;
-  fetchGroupListByUserId: (userId: string) => void;
-  getGroup: (groupId: string) => void;
+  inputGroupName: string;
+  fetchGroupListByUserId: (userId: string | undefined) => Promise<void>;
+  getGroup: (groupId: string | undefined) => Promise<void>;
+  createGroup: (
+    userId: string | undefined,
+    name: string | undefined,
+    intro: string | undefined
+  ) => Promise<Group | null>;
+
+  // member
+  memberList: Member[] | null;
+  targetMember: Member | null;
+  fetchMemberListByGroupId: (groupId: string | undefined) => Promise<void>;
+  createMember: (
+    groupId: string | undefined,
+    userId: string | undefined
+  ) => Promise<Member | null>;
+  setGroupName: (groupName: string) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -54,33 +72,54 @@ const useBaseStore = create<BaseStore>()(
     // group
     groupList: null,
     targetGroup: null,
-    fetchGroupListByUserId: async (userId: string) => {
-      const { error, data } = await supabase
-        .from("group")
-        .select("*")
-        .eq("user_id", userId);
-      if (error) {
-        console.error("error", error);
-        return;
-      }
+    inputGroupName: "",
+    fetchGroupListByUserId: async (userId: string | undefined) => {
+      const data = await fetchGroupListByUserId(userId);
       set((state) => {
         state.groupList = data;
       });
     },
-    getGroup: async (groupId: string) => {
-      const { data, error } = await supabase
-        .from("group")
-        .select("*")
-        .eq("id", groupId)
-        .is("deleted_at", null)
-        .single();
-      if (error) {
-        console.error("Error get group ID:", error);
-        return null;
-      }
+    getGroup: async (groupId: string | undefined) => {
+      const data = await getGroup(groupId);
       set((state) => {
         state.targetGroup = data;
       });
+    },
+    createGroup: async (
+      userId: string | undefined,
+      name: string | undefined,
+      intro: string | undefined
+    ): Promise<Group | null> => {
+      const group = await createGroup(userId, name, intro);
+      set((state) => {
+        state.targetGroup = group;
+      });
+      return group;
+    },
+    setGroupName: (groupName: string) => {
+      set((state) => {
+        state.inputGroupName = groupName;
+      });
+    },
+
+    //member
+    memberList: null,
+    targetMember: null,
+    fetchMemberListByGroupId: async (groupId: string | undefined) => {
+      const data = await fetchMemberListByGroupId(groupId);
+      set((state) => {
+        state.memberList = data;
+      });
+    },
+    createMember: async (
+      groupId: string | undefined,
+      userId: string | undefined
+    ): Promise<Member | null> => {
+      const member = await createMember(groupId, userId);
+      set((state) => {
+        state.targetMember = member;
+      });
+      return member;
     },
   }))
 );

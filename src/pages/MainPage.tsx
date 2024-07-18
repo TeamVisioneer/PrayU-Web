@@ -1,5 +1,6 @@
 import React from "react";
 import { Auth } from "@supabase/auth-ui-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../../supabase/client";
 import useAuth from "../hooks/useAuth";
@@ -12,7 +13,16 @@ import {
 const MainPage: React.FC = () => {
   const { user } = useAuth();
 
-  console.log(user?.id);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  if (user) {
+    navigate("/group", { replace: true });
+  }
+
+  const from = location.state?.from?.pathname || "/group";
+  const redirectUrl = `${import.meta.env.VITE_BASE_URL}${from}`;
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-2  ">
@@ -37,7 +47,7 @@ const MainPage: React.FC = () => {
         </CarouselContent>
       </Carousel>
       <Auth
-        redirectTo={import.meta.env.VITE_BASE_URL}
+        redirectTo={redirectUrl}
         supabaseClient={supabase}
         appearance={{ theme: ThemeSupa }}
         onlyThirdPartyProviders={true}
