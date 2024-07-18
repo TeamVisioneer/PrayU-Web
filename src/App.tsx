@@ -20,6 +20,14 @@ const App = () => {
                   </PrivateRoute>
                 }
               ></Route>
+              <Route
+                path="/group/:groupId"
+                element={
+                  <PrivateRoute>
+                    <GroupPage />
+                  </PrivateRoute>
+                }
+              ></Route>
               {/* <Route path="*" element={<NotFound />}></Route> */}
             </Routes>
           </AuthProvider>

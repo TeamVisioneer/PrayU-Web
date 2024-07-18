@@ -9,3 +9,7 @@ export type Profiles = Database["public"]["Tables"]["profiles"]["Row"];
 export type PrayCard = Database["public"]["Tables"]["pray_card"]["Row"];
 
 export type Pray = Database["public"]["Tables"]["pray"]["Row"];
+
+export interface MemberWithGroup extends Member {
+  group: Group;
+}

@@ -3,6 +3,7 @@ import { immer } from "zustand/middleware/immer";
 import { supabase } from "../../supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Group } from "../../supabase/types/tables";
+import { fetchGroupListByUserId, getGroup } from "@/apis/group";
 
 export interface BaseStore {
   // user
@@ -14,8 +15,8 @@ export interface BaseStore {
   // group
   groupList: Group[] | null;
   targetGroup: Group | null;
-  fetchGroupListByUserId: (userId: string) => void;
-  getGroup: (groupId: string) => void;
+  fetchGroupListByUserId: (userId: string | undefined) => void;
+  getGroup: (groupId: string | undefined) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -54,30 +55,16 @@ const useBaseStore = create<BaseStore>()(
     // group
     groupList: null,
     targetGroup: null,
-    fetchGroupListByUserId: async (userId: string) => {
-      const { error, data } = await supabase
-        .from("group")
-        .select("*")
-        .eq("user_id", userId);
-      if (error) {
-        console.error("error", error);
-        return;
-      }
+    fetchGroupListByUserId: async (userId: string | undefined) => {
+      if (!userId) return;
+      const data = await fetchGroupListByUserId(userId);
       set((state) => {
         state.groupList = data;
       });
     },
-    getGroup: async (groupId: string) => {
-      const { data, error } = await supabase
-        .from("group")
-        .select("*")
-        .eq("id", groupId)
-        .is("deleted_at", null)
-        .single();
-      if (error) {
-        console.error("Error get group ID:", error);
-        return null;
-      }
+    getGroup: async (groupId: string | undefined) => {
+      if (!groupId) return;
+      const data = await getGroup(groupId);
       set((state) => {
         state.targetGroup = data;
       });
