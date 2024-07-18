@@ -7,8 +7,9 @@ import { Group } from "../../supabase/types/tables";
 export interface BaseStore {
   // user
   user: User | null;
+  userLoading: boolean;
   getUser: () => void;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 
   // group
   groupList: Group[] | null;
@@ -17,16 +18,18 @@ export interface BaseStore {
   getGroup: (groupId: string) => void;
 }
 
-const useBearStore = create<BaseStore>()(
+const useBaseStore = create<BaseStore>()(
   immer((set) => ({
     // user
     user: null,
+    userLoading: true,
     getUser: async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
       set((state) => {
         state.user = session?.user || null;
+        state.userLoading = false;
       });
 
       const {
@@ -82,4 +85,4 @@ const useBearStore = create<BaseStore>()(
   }))
 );
 
-export default useBearStore;
+export default useBaseStore;
