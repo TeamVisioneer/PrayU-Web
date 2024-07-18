@@ -1,9 +1,10 @@
-import { supabase } from "../../supabase/client";
+import { supabase } from "./../../supabase/client";
 import { MemberWithGroup, Group } from "../../supabase/types/tables";
 
 export const fetchGroupListByUserId = async (
-  userId: string
+  userId: string | undefined
 ): Promise<Group[] | null> => {
+  if (!userId) return null;
   const { data, error } = await supabase
     .from("member")
     .select(`group (*)`)
@@ -16,7 +17,10 @@ export const fetchGroupListByUserId = async (
   return (data as MemberWithGroup[]).map((member) => member.group);
 };
 
-export const getGroup = async (groupId: string): Promise<Group | null> => {
+export const getGroup = async (
+  groupId: string | undefined
+): Promise<Group | null> => {
+  if (!groupId) return null;
   const { error, data } = await supabase
     .from("group")
     .select("*")
@@ -27,4 +31,24 @@ export const getGroup = async (groupId: string): Promise<Group | null> => {
     return null;
   }
   return data;
+};
+
+export const createGroup = async (
+  userId: string | undefined,
+  name: string | undefined,
+  intro: string | undefined
+): Promise<Group | null> => {
+  if (!userId || !name || !intro) {
+    console.error("userId, name, intro is required");
+    return null;
+  }
+  const { error, data } = await supabase
+    .from("group")
+    .insert([{ user_id: userId, name, intro }])
+    .select();
+  if (error) {
+    console.error("error", error);
+    return null;
+  }
+  return data ? data[0] : null;
 };
