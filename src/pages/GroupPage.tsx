@@ -6,7 +6,7 @@ const GroupPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Group Page</h1>
+      <h1 className="text-yellow-300">Group Page</h1>
       <h2>{user?.id}</h2>
     </div>
   );
