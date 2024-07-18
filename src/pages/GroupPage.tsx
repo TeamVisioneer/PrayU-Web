@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
+import { KakaoShareButton } from "@/components/KakaoShareBtn";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -43,7 +44,12 @@ const GroupPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
+      <div className="flex justify-between items-center">
+        <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
+        <KakaoShareButton
+          webUrl={`${import.meta.env.VITE_BASE_URL}/${targetGroup?.id}`}
+        ></KakaoShareButton>
+      </div>
     </div>
   );
 };
