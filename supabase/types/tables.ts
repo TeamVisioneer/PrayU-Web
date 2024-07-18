@@ -13,3 +13,15 @@ export type Pray = Database["public"]["Tables"]["pray"]["Row"];
 export interface MemberWithGroup extends Member {
   group: Group;
 }
+
+export interface MemberWithProfiles extends Member {
+  profiles: Profiles;
+}
+
+export interface UserIdMemberHash {
+  [key: string]: MemberWithProfiles;
+}
+
+export interface userIdPrayCardListHash {
+  [key: string]: PrayCard;
+}

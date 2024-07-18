@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { ChevronRight } from "lucide-react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 declare global {
