@@ -7,7 +7,7 @@ import GroupPage from "./pages/GroupPage";
 const App = () => {
   return (
     <div className="w-screen h-screen">
-      <div className="mx-auto max-w-[480px] ">
+      <div className="mx-auto max-w-[480px] px-10 py-20">
         <BrowserRouter>
           <AuthProvider>
             <Routes>
