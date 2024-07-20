@@ -65,6 +65,7 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
       <div className="flex flex-col gap-2">
         <div className="text-sm ">내 기도제목</div>
         <Member
+          currentUserId={currentUserId}
           member={currentMember}
           prayCardList={userIdPrayCardListHash[currentUserId || ""]}
         />
@@ -75,6 +76,7 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
           {otherMembers.map((member) => (
             <Member
               key={member.id}
+              currentUserId={currentUserId}
               member={member}
               prayCardList={userIdPrayCardListHash[member.user_id || ""]}
             ></Member>

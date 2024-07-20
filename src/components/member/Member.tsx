@@ -1,14 +1,29 @@
 import { MemberWithProfiles, PrayCard } from "supabase/types/tables";
-import { formatDateString } from "../../lib/utils";
+import { getISODate } from "../../lib/utils";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import PrayCardUI from "../prayCard/PrayCardUI";
 
 interface MemberProps {
+  currentUserId: string | undefined;
   member: MemberWithProfiles | undefined;
   prayCardList: PrayCard[];
 }
 
-const Member: React.FC<MemberProps> = ({ member, prayCardList }) => {
+const Member: React.FC<MemberProps> = ({
+  currentUserId,
+  member,
+  prayCardList,
+}) => {
   const prayCard = prayCardList[0] || null;
-  return (
+
+  const memberUI = (
     <div className="flex flex-col gap-2 cursor-pointer bg-gray-600 p-4 rounded ">
       <div className="flex items-center">
         <img
@@ -22,9 +37,28 @@ const Member: React.FC<MemberProps> = ({ member, prayCardList }) => {
         {prayCard?.content || "아직 기도제목이 없어요"}
       </div>
       <div className="text-gray-500 text-left text-sm">
-        {formatDateString(prayCard?.updated_at)}
+        {getISODate(prayCard?.updated_at).split("T")[0]}
       </div>
     </div>
+  );
+
+  return (
+    <Drawer>
+      <DrawerTrigger>{memberUI}</DrawerTrigger>
+      <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] px-10 pb-20">
+        <DrawerHeader>
+          <DrawerTitle></DrawerTitle>
+          <DrawerDescription></DrawerDescription>
+        </DrawerHeader>
+        {/* PrayCard */}
+        <PrayCardUI
+          currentUserId={currentUserId}
+          member={member}
+          prayCard={prayCard}
+        />
+        {/* PrayCard */}
+      </DrawerContent>
+    </Drawer>
   );
 };
 
