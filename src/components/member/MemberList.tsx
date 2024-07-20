@@ -3,6 +3,7 @@ import useBaseStore from "@/stores/baseStore";
 import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
 import Member from "./Member";
+import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
 
 interface MembersProps {
   currentUserId: string | undefined;
@@ -46,7 +47,10 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
   }, {} as userIdPrayCardListHash);
 
   if (!userIdPrayCardListHash[currentUserId || ""]) {
-    return <div>기도카드 작성 모달</div>;
+    // TODO: 모달로 변경 필요
+    return (
+      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
+    );
   }
 
   return (

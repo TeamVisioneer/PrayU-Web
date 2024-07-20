@@ -34,3 +34,23 @@ export const fetchPrayCardListByUserId = async (
   }
   return data as PrayCard[];
 };
+
+export const createPrayCard = async (
+  groupId: string | undefined,
+  userId: string | undefined,
+  content: string
+): Promise<PrayCard | null> => {
+  if (!groupId || !userId) {
+    console.error("groupId, userId is required");
+    return null;
+  }
+  const { error, data } = await supabase
+    .from("pray_card")
+    .insert([{ group_id: groupId, user_id: userId, content }])
+    .select();
+  if (error) {
+    console.error("error", error);
+    return null;
+  }
+  return data ? data[0] : null;
+};

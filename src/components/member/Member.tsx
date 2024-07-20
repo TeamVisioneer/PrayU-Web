@@ -1,12 +1,12 @@
 import { MemberWithProfiles, PrayCard } from "supabase/types/tables";
 import { formatDateString } from "../../lib/utils";
 
-interface ProfileProps {
+interface MemberProps {
   member: MemberWithProfiles;
   prayCardList: PrayCard[];
 }
 
-const Profile: React.FC<ProfileProps> = ({ member, prayCardList }) => {
+const Member: React.FC<MemberProps> = ({ member, prayCardList }) => {
   const prayCard = prayCardList[0] || null;
   return (
     <div className="flex flex-col gap-2 cursor-pointer bg-gray-600 p-4 rounded mb-2 ">
@@ -28,4 +28,4 @@ const Profile: React.FC<ProfileProps> = ({ member, prayCardList }) => {
   );
 };
 
-export default Profile;
+export default Member;
