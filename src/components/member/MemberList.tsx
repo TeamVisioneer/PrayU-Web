@@ -3,6 +3,7 @@ import useBaseStore from "@/stores/baseStore";
 import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
 import Member from "./Member";
+import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
 
 interface MembersProps {
   currentUserId: string | undefined;
@@ -37,6 +38,13 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
     );
   }
 
+  const currentMember = memberList.find(
+    (member) => member.user_id === currentUserId
+  );
+  const otherMembers = memberList.filter(
+    (member) => member.user_id !== currentUserId
+  );
+
   const userIdPrayCardListHash = memberList.reduce((hash, member) => {
     const prayCardList = groupPrayCardList.filter(
       (prayCard) => prayCard.user_id === member.user_id
@@ -46,19 +54,33 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
   }, {} as userIdPrayCardListHash);
 
   if (!userIdPrayCardListHash[currentUserId || ""]) {
-    return <div>기도카드 작성 모달</div>;
+    // TODO: 모달로 변경 필요
+    return (
+      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
+    );
   }
 
   return (
-    <div>
-      맴버 리스트
-      {memberList.map((member) => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <div className="text-sm ">내 기도제목</div>
         <Member
-          key={member.id}
-          member={member}
-          prayCardList={userIdPrayCardListHash[member.user_id || ""]}
-        ></Member>
-      ))}
+          member={currentMember}
+          prayCardList={userIdPrayCardListHash[currentUserId || ""]}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="text-sm">Members({otherMembers.length + 1})</div>
+        <div className="flex flex-col gap-2">
+          {otherMembers.map((member) => (
+            <Member
+              key={member.id}
+              member={member}
+              prayCardList={userIdPrayCardListHash[member.user_id || ""]}
+            ></Member>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

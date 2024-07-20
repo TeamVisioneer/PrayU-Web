@@ -44,7 +44,7 @@ const GroupPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-10">
       <div className="flex justify-between items-center">
         <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
         <KakaoShareButton

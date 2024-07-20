@@ -13,6 +13,7 @@ import {
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import { fetchMemberListByGroupId, createMember } from "@/apis/member";
 import {
+  createPrayCard,
   fetchPrayCardListByGroupId,
   fetchPrayCardListByUserId,
 } from "@/apis/prayCard";
@@ -30,6 +31,7 @@ export interface BaseStore {
   inputGroupName: string;
   fetchGroupListByUserId: (userId: string | undefined) => Promise<void>;
   getGroup: (groupId: string | undefined) => Promise<void>;
+  setGroupName: (groupName: string) => void;
   createGroup: (
     userId: string | undefined,
     name: string | undefined,
@@ -45,19 +47,25 @@ export interface BaseStore {
     groupId: string | undefined,
     userId: string | undefined
   ) => Promise<Member | null>;
-  setGroupName: (groupName: string) => void;
 
   // prayCard
   groupPrayCardList: PrayCard[] | null;
   userPrayCardList: PrayCard[] | null;
   userIdPrayCardListHash: userIdPrayCardListHash | null;
   targetPrayCard: PrayCard | null;
+  inputPrayCardContent: string;
   fetchPrayCardListByGroupId: (groupId: string | undefined) => Promise<void>;
   fetchPrayCardListByUserId: (userId: string | undefined) => Promise<void>;
   createUserIdPrayCardListHash: (
     memberList: MemberWithProfiles[],
     groupPrayCardList: PrayCard[]
   ) => userIdPrayCardListHash;
+  createPrayCard: (
+    groupId: string | undefined,
+    userId: string | undefined,
+    content: string
+  ) => Promise<PrayCard | null>;
+  setPrayCardContent: (content: string) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -142,9 +150,6 @@ const useBaseStore = create<BaseStore>()(
       userId: string | undefined
     ): Promise<Member | null> => {
       const member = await createMember(groupId, userId);
-      set((state) => {
-        state.targetMember = member;
-      });
       return member;
     },
 
@@ -153,6 +158,7 @@ const useBaseStore = create<BaseStore>()(
     userPrayCardList: null,
     userIdPrayCardListHash: null,
     targetPrayCard: null,
+    inputPrayCardContent: "",
     fetchPrayCardListByGroupId: async (groupId: string | undefined) => {
       const groupPrayCardList = await fetchPrayCardListByGroupId(groupId);
       set((state) => {
@@ -180,6 +186,19 @@ const useBaseStore = create<BaseStore>()(
         state.userIdPrayCardListHash = userIdPrayCardListHash;
       });
       return userIdPrayCardListHash;
+    },
+    createPrayCard: async (
+      groupId: string | undefined,
+      userId: string | undefined,
+      content: string
+    ) => {
+      const prayCard = await createPrayCard(groupId, userId, content);
+      return prayCard;
+    },
+    setPrayCardContent: (content: string) => {
+      set((state) => {
+        state.inputPrayCardContent = content;
+      });
     },
   }))
 );
