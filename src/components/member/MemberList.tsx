@@ -38,6 +38,13 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
     );
   }
 
+  const currentMember = memberList.find(
+    (member) => member.user_id === currentUserId
+  );
+  const otherMembers = memberList.filter(
+    (member) => member.user_id !== currentUserId
+  );
+
   const userIdPrayCardListHash = memberList.reduce((hash, member) => {
     const prayCardList = groupPrayCardList.filter(
       (prayCard) => prayCard.user_id === member.user_id
@@ -54,15 +61,26 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
   }
 
   return (
-    <div>
-      맴버 리스트
-      {memberList.map((member) => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <div className="text-sm ">내 기도제목</div>
         <Member
-          key={member.id}
-          member={member}
-          prayCardList={userIdPrayCardListHash[member.user_id || ""]}
-        ></Member>
-      ))}
+          member={currentMember}
+          prayCardList={userIdPrayCardListHash[currentUserId || ""]}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="text-sm">Members({otherMembers.length + 1})</div>
+        <div className="flex flex-col gap-2">
+          {otherMembers.map((member) => (
+            <Member
+              key={member.id}
+              member={member}
+              prayCardList={userIdPrayCardListHash[member.user_id || ""]}
+            ></Member>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
