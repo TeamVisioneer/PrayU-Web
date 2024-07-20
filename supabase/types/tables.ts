@@ -23,5 +23,5 @@ export interface UserIdMemberHash {
 }
 
 export interface userIdPrayCardListHash {
-  [key: string]: PrayCard;
+  [key: string]: PrayCard[];
 }

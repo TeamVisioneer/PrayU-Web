@@ -12,7 +12,10 @@ import {
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import { fetchMemberListByGroupId, createMember } from "@/apis/member";
-import { fetchPrayCardListByGroupId } from "@/apis/prayCard";
+import {
+  fetchPrayCardListByGroupId,
+  fetchPrayCardListByUserId,
+} from "@/apis/prayCard";
 
 export interface BaseStore {
   // user
@@ -34,13 +37,10 @@ export interface BaseStore {
   ) => Promise<Group | null>;
 
   // member
-  memberList: Member[] | null;
+  memberList: MemberWithProfiles[] | null;
   targetMember: Member | null;
   userIdMemberHash: UserIdMemberHash | null;
-  fetchMemberListByGroupId: (
-    currentUserId: string | undefined,
-    groupId: string | undefined
-  ) => Promise<void>;
+  fetchMemberListByGroupId: (groupId: string | undefined) => Promise<void>;
   createMember: (
     groupId: string | undefined,
     userId: string | undefined
@@ -48,10 +48,16 @@ export interface BaseStore {
   setGroupName: (groupName: string) => void;
 
   // prayCard
-  prayCardList: PrayCard[] | null;
-  targetPrayCard: PrayCard | null;
+  groupPrayCardList: PrayCard[] | null;
+  userPrayCardList: PrayCard[] | null;
   userIdPrayCardListHash: userIdPrayCardListHash | null;
+  targetPrayCard: PrayCard | null;
   fetchPrayCardListByGroupId: (groupId: string | undefined) => Promise<void>;
+  fetchPrayCardListByUserId: (userId: string | undefined) => Promise<void>;
+  createUserIdPrayCardListHash: (
+    memberList: MemberWithProfiles[],
+    groupPrayCardList: PrayCard[]
+  ) => userIdPrayCardListHash;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -124,27 +130,11 @@ const useBaseStore = create<BaseStore>()(
     memberList: null,
     targetMember: null,
     userIdMemberHash: null,
-    fetchMemberListByGroupId: async (
-      currentUserId: string | undefined,
-      groupId: string | undefined
-    ) => {
-      let memberList = await fetchMemberListByGroupId(groupId);
-      const userIds = memberList?.map((member) => member.user_id);
-      if (currentUserId && !userIds?.includes(currentUserId)) {
-        await createMember(groupId, currentUserId);
-        memberList = await fetchMemberListByGroupId(groupId);
-      }
-      const userIdMemberHash = memberList?.reduce(
-        (hash, member: MemberWithProfiles) => {
-          if (member.user_id) hash[member.user_id] = member;
-          return hash;
-        },
-        {} as UserIdMemberHash
-      );
+    fetchMemberListByGroupId: async (groupId: string | undefined) => {
+      const memberList = await fetchMemberListByGroupId(groupId);
 
       set((state) => {
         state.memberList = memberList;
-        state.userIdMemberHash = userIdMemberHash || null;
       });
     },
     createMember: async (
@@ -159,22 +149,37 @@ const useBaseStore = create<BaseStore>()(
     },
 
     // prayCard
-    prayCardList: null,
-    targetPrayCard: null,
+    groupPrayCardList: null,
+    userPrayCardList: null,
     userIdPrayCardListHash: null,
+    targetPrayCard: null,
     fetchPrayCardListByGroupId: async (groupId: string | undefined) => {
-      const prayCardList = await fetchPrayCardListByGroupId(groupId);
-      const userIdPrayCardListHash = prayCardList?.reduce(
-        (hash, prayCard: PrayCard) => {
-          if (prayCard.user_id) hash[prayCard.user_id] = prayCard;
-          return hash;
-        },
-        {} as userIdPrayCardListHash
-      );
+      const groupPrayCardList = await fetchPrayCardListByGroupId(groupId);
       set((state) => {
-        state.prayCardList = prayCardList;
-        state.userIdPrayCardListHash = userIdPrayCardListHash || null;
+        state.groupPrayCardList = groupPrayCardList;
       });
+    },
+    fetchPrayCardListByUserId: async (userId: string | undefined) => {
+      const userPrayCardList = await fetchPrayCardListByUserId(userId);
+      set((state) => {
+        state.userPrayCardList = userPrayCardList;
+      });
+    },
+    createUserIdPrayCardListHash: (
+      memberList: MemberWithProfiles[],
+      groupPrayCardList: PrayCard[]
+    ) => {
+      const userIdPrayCardListHash = memberList.reduce((hash, member) => {
+        hash[member.user_id || ""] = [];
+        return hash;
+      }, {} as userIdPrayCardListHash);
+      groupPrayCardList.forEach((prayCard) => {
+        userIdPrayCardListHash[prayCard.user_id || ""].push(prayCard);
+      });
+      set((state) => {
+        state.userIdPrayCardListHash = userIdPrayCardListHash;
+      });
+      return userIdPrayCardListHash;
     },
   }))
 );
