@@ -1,5 +1,17 @@
 import { MemberWithProfiles, PrayCard } from "supabase/types/tables";
 import { formatDateString } from "../../lib/utils";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "../ui/button";
+import PrayCardUI from "../prayCard/PrayCardUI";
 
 interface MemberProps {
   member: MemberWithProfiles | undefined;
@@ -8,7 +20,8 @@ interface MemberProps {
 
 const Member: React.FC<MemberProps> = ({ member, prayCardList }) => {
   const prayCard = prayCardList[0] || null;
-  return (
+
+  const memberUI = (
     <div className="flex flex-col gap-2 cursor-pointer bg-gray-600 p-4 rounded ">
       <div className="flex items-center">
         <img
@@ -25,6 +38,28 @@ const Member: React.FC<MemberProps> = ({ member, prayCardList }) => {
         {formatDateString(prayCard?.updated_at)}
       </div>
     </div>
+  );
+
+  return (
+    <Drawer>
+      <DrawerTrigger>{memberUI}</DrawerTrigger>
+      <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] px-10">
+        <DrawerHeader>
+          <DrawerTitle></DrawerTitle>
+          <DrawerDescription></DrawerDescription>
+        </DrawerHeader>
+        {/* PrayCard 내용추가 */}
+        <PrayCardUI member={member} prayCard={prayCard} />
+
+        {/* PrayCard 내용추가 */}
+        <DrawerFooter>
+          <Button>Submit</Button>
+          <DrawerClose>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
