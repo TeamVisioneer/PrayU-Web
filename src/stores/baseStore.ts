@@ -1,3 +1,8 @@
+import {
+  createPray,
+  fetchPrayData,
+  fetchPrayDataByUserId,
+} from "./../apis/pray";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { supabase } from "../../supabase/client";
@@ -6,6 +11,7 @@ import {
   Group,
   Member,
   MemberWithProfiles,
+  Pray,
   PrayCard,
   UserIdMemberHash,
   userIdPrayCardListHash,
@@ -17,6 +23,8 @@ import {
   fetchPrayCardListByGroupId,
   fetchPrayCardListByUserId,
 } from "@/apis/prayCard";
+import { PrayType } from "@/Enums/prayType";
+import { getISOToday } from "@/lib/utils";
 
 export interface BaseStore {
   // user
@@ -66,6 +74,22 @@ export interface BaseStore {
     content: string
   ) => Promise<PrayCard | null>;
   setPrayCardContent: (content: string) => void;
+
+  //pray
+  prayData: Pray[] | null;
+  userPrayData: Pray[] | null;
+  todayPrayType: string | null;
+  fetchPrayData: (prayCardId: string | undefined) => Promise<void>;
+  fetchPrayDataByUserId: (
+    prayCardId: string | undefined,
+    userId: string | undefined
+  ) => Promise<void>;
+  createPray: (
+    prayCardId: string | undefined,
+    userId: string | undefined,
+    prayType: PrayType
+  ) => Promise<Pray | null>;
+  setTodayPrayType: (prayType: string | null) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -198,6 +222,53 @@ const useBaseStore = create<BaseStore>()(
     setPrayCardContent: (content: string) => {
       set((state) => {
         state.inputPrayCardContent = content;
+      });
+    },
+
+    // pray
+    prayData: null,
+    userPrayData: null,
+    todayPrayType: null,
+    fetchPrayData: async (prayCardId: string | undefined) => {
+      const prayData = await fetchPrayData(prayCardId);
+      set((state) => {
+        state.prayData = prayData;
+      });
+    },
+    fetchPrayDataByUserId: async (
+      prayCardId: string | undefined,
+      userId: string | undefined
+    ) => {
+      const userPrayData = await fetchPrayDataByUserId(prayCardId, userId);
+      const today = new Date(getISOToday());
+      const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+      const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+      const todayPray = userPrayData?.find(
+        (pray) =>
+          pray.user_id === userId &&
+          new Date(pray.created_at) >= startOfDay &&
+          new Date(pray.created_at) <= endOfDay
+      );
+      set((state) => {
+        state.userPrayData = userPrayData;
+        state.todayPrayType = todayPray?.pray_type || null;
+      });
+    },
+    createPray: async (
+      prayCardId: string | undefined,
+      userId: string | undefined,
+      prayType: PrayType
+    ) => {
+      const pray = await createPray(prayCardId, userId, prayType);
+      set((state) => {
+        state.todayPrayType = prayType;
+      });
+      return pray;
+    },
+    setTodayPrayType: (prayType: string | null) => {
+      set((state) => {
+        state.todayPrayType = prayType;
       });
     },
   }))

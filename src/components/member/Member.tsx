@@ -1,24 +1,26 @@
 import { MemberWithProfiles, PrayCard } from "supabase/types/tables";
-import { formatDateString } from "../../lib/utils";
+import { getISODate } from "../../lib/utils";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "../ui/button";
 import PrayCardUI from "../prayCard/PrayCardUI";
 
 interface MemberProps {
+  currentUserId: string | undefined;
   member: MemberWithProfiles | undefined;
   prayCardList: PrayCard[];
 }
 
-const Member: React.FC<MemberProps> = ({ member, prayCardList }) => {
+const Member: React.FC<MemberProps> = ({
+  currentUserId,
+  member,
+  prayCardList,
+}) => {
   const prayCard = prayCardList[0] || null;
 
   const memberUI = (
@@ -35,7 +37,7 @@ const Member: React.FC<MemberProps> = ({ member, prayCardList }) => {
         {prayCard?.content || "아직 기도제목이 없어요"}
       </div>
       <div className="text-gray-500 text-left text-sm">
-        {formatDateString(prayCard?.updated_at)}
+        {getISODate(prayCard?.updated_at).split("T")[0]}
       </div>
     </div>
   );
@@ -43,21 +45,18 @@ const Member: React.FC<MemberProps> = ({ member, prayCardList }) => {
   return (
     <Drawer>
       <DrawerTrigger>{memberUI}</DrawerTrigger>
-      <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] px-10">
+      <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] px-10 pb-20">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        {/* PrayCard 내용추가 */}
-        <PrayCardUI member={member} prayCard={prayCard} />
-
-        {/* PrayCard 내용추가 */}
-        <DrawerFooter>
-          <Button>Submit</Button>
-          <DrawerClose>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
+        {/* PrayCard */}
+        <PrayCardUI
+          currentUserId={currentUserId}
+          member={member}
+          prayCard={prayCard}
+        />
+        {/* PrayCard */}
       </DrawerContent>
     </Drawer>
   );
