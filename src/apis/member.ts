@@ -1,20 +1,20 @@
 import { supabase } from "../../supabase/client";
-import { Member } from "../../supabase/types/tables";
+import { Member, MemberWithProfiles } from "../../supabase/types/tables";
 
 export const fetchMemberListByGroupId = async (
   groupId: string | undefined
-): Promise<Member[] | null> => {
+): Promise<MemberWithProfiles[] | null> => {
   if (!groupId) return null;
   const { data, error } = await supabase
     .from("member")
-    .select("*")
+    .select(`*, profiles (id, full_name, avatar_url)`)
     .eq("group_id", groupId)
     .is("deleted_at", null);
   if (error) {
     console.error("error", error);
     return null;
   }
-  return data as Member[];
+  return data as MemberWithProfiles[];
 };
 
 export const createMember = async (

@@ -2,9 +2,20 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { supabase } from "../../supabase/client";
 import { User } from "@supabase/supabase-js";
-import { Group, Member } from "../../supabase/types/tables";
+import {
+  Group,
+  Member,
+  MemberWithProfiles,
+  PrayCard,
+  UserIdMemberHash,
+  userIdPrayCardListHash,
+} from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import { fetchMemberListByGroupId, createMember } from "@/apis/member";
+import {
+  fetchPrayCardListByGroupId,
+  fetchPrayCardListByUserId,
+} from "@/apis/prayCard";
 
 export interface BaseStore {
   // user
@@ -26,14 +37,27 @@ export interface BaseStore {
   ) => Promise<Group | null>;
 
   // member
-  memberList: Member[] | null;
+  memberList: MemberWithProfiles[] | null;
   targetMember: Member | null;
+  userIdMemberHash: UserIdMemberHash | null;
   fetchMemberListByGroupId: (groupId: string | undefined) => Promise<void>;
   createMember: (
     groupId: string | undefined,
     userId: string | undefined
   ) => Promise<Member | null>;
   setGroupName: (groupName: string) => void;
+
+  // prayCard
+  groupPrayCardList: PrayCard[] | null;
+  userPrayCardList: PrayCard[] | null;
+  userIdPrayCardListHash: userIdPrayCardListHash | null;
+  targetPrayCard: PrayCard | null;
+  fetchPrayCardListByGroupId: (groupId: string | undefined) => Promise<void>;
+  fetchPrayCardListByUserId: (userId: string | undefined) => Promise<void>;
+  createUserIdPrayCardListHash: (
+    memberList: MemberWithProfiles[],
+    groupPrayCardList: PrayCard[]
+  ) => userIdPrayCardListHash;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -105,10 +129,12 @@ const useBaseStore = create<BaseStore>()(
     //member
     memberList: null,
     targetMember: null,
+    userIdMemberHash: null,
     fetchMemberListByGroupId: async (groupId: string | undefined) => {
-      const data = await fetchMemberListByGroupId(groupId);
+      const memberList = await fetchMemberListByGroupId(groupId);
+
       set((state) => {
-        state.memberList = data;
+        state.memberList = memberList;
       });
     },
     createMember: async (
@@ -120,6 +146,40 @@ const useBaseStore = create<BaseStore>()(
         state.targetMember = member;
       });
       return member;
+    },
+
+    // prayCard
+    groupPrayCardList: null,
+    userPrayCardList: null,
+    userIdPrayCardListHash: null,
+    targetPrayCard: null,
+    fetchPrayCardListByGroupId: async (groupId: string | undefined) => {
+      const groupPrayCardList = await fetchPrayCardListByGroupId(groupId);
+      set((state) => {
+        state.groupPrayCardList = groupPrayCardList;
+      });
+    },
+    fetchPrayCardListByUserId: async (userId: string | undefined) => {
+      const userPrayCardList = await fetchPrayCardListByUserId(userId);
+      set((state) => {
+        state.userPrayCardList = userPrayCardList;
+      });
+    },
+    createUserIdPrayCardListHash: (
+      memberList: MemberWithProfiles[],
+      groupPrayCardList: PrayCard[]
+    ) => {
+      const userIdPrayCardListHash = memberList.reduce((hash, member) => {
+        hash[member.user_id || ""] = [];
+        return hash;
+      }, {} as userIdPrayCardListHash);
+      groupPrayCardList.forEach((prayCard) => {
+        userIdPrayCardListHash[prayCard.user_id || ""].push(prayCard);
+      });
+      set((state) => {
+        state.userIdPrayCardListHash = userIdPrayCardListHash;
+      });
+      return userIdPrayCardListHash;
     },
   }))
 );
