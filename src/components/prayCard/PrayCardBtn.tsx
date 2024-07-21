@@ -22,7 +22,7 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
   };
 
   return (
-    <div className="flex justify-between w-full">
+    <div className="flex justify-center space-x-8">
       {Object.values(PrayType).map((type) => {
         const { emoji, text } = getEmoji(type as PrayType);
         return (
@@ -31,7 +31,7 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
             onClick={() =>
               createPray(prayCard?.id, currentUserId, type as PrayType)
             }
-            className={`w-[90px] py-2 px-4 flex flex-col items-center rounded-2xl ${
+            className={`w-[90px] py-2 px-2 flex flex-col items-center rounded-2xl ${
               todayPrayType === type
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-purple-100 text-black"
@@ -39,7 +39,7 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
             disabled={Boolean(todayPrayType)}
           >
             <div className="text-2xl">{emoji}</div>
-            <div>{text}</div>
+            <div className="text-sm">{text}</div>
           </button>
         );
       })}

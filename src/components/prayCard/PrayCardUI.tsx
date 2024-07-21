@@ -29,7 +29,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   }
 
   const PrayCardBody = (
-    <div className="flex flex-col h-full p-5 bg-blue-50 rounded-2xl">
+    <div className="flex flex-col h-50vh p-5 bg-blue-50 rounded-2xl">
       <div className="flex items-center gap-2">
         <img
           src={prayCard?.profiles.avatar_url || ""}
@@ -44,7 +44,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   );
 
   return (
-    <div className="flex flex-col h-full gap-6">
+    <div className="flex flex-col gap-6">
       {PrayCardBody}
       {currentUserId != prayCard?.user_id && (
         <div className="flex flex-col gap-6">
