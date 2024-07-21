@@ -18,10 +18,14 @@ export interface MemberWithProfiles extends Member {
   profiles: Profiles;
 }
 
+export interface PrayCardWithProfiles extends PrayCard {
+  profiles: Profiles;
+}
+
 export interface UserIdMemberHash {
   [key: string]: MemberWithProfiles;
 }
 
 export interface userIdPrayCardListHash {
-  [key: string]: PrayCard[];
+  [key: string]: PrayCardWithProfiles[];
 }

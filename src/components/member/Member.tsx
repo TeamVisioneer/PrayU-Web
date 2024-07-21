@@ -1,4 +1,7 @@
-import { MemberWithProfiles, PrayCard } from "supabase/types/tables";
+import {
+  MemberWithProfiles,
+  PrayCardWithProfiles,
+} from "supabase/types/tables";
 import { getISODate } from "../../lib/utils";
 import {
   Drawer,
@@ -13,7 +16,7 @@ import PrayCardUI from "../prayCard/PrayCardUI";
 interface MemberProps {
   currentUserId: string | undefined;
   member: MemberWithProfiles | undefined;
-  prayCardList: PrayCard[];
+  prayCardList: PrayCardWithProfiles[];
 }
 
 const Member: React.FC<MemberProps> = ({
@@ -51,11 +54,7 @@ const Member: React.FC<MemberProps> = ({
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {/* PrayCard */}
-        <PrayCardUI
-          currentUserId={currentUserId}
-          member={member}
-          prayCard={prayCard}
-        />
+        <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
         {/* PrayCard */}
       </DrawerContent>
     </Drawer>

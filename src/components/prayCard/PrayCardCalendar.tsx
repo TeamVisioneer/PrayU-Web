@@ -1,9 +1,9 @@
 import { getISODate, getISOToday } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
-import { Pray, PrayCard } from "supabase/types/tables";
+import { Pray, PrayCardWithProfiles } from "supabase/types/tables";
 
 interface PrayCardCalendarProps {
-  prayCard: PrayCard | undefined;
+  prayCard: PrayCardWithProfiles | undefined;
   prayData: Pray[];
 }
 

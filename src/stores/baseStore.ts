@@ -13,6 +13,7 @@ import {
   MemberWithProfiles,
   Pray,
   PrayCard,
+  PrayCardWithProfiles,
   UserIdMemberHash,
   userIdPrayCardListHash,
 } from "../../supabase/types/tables";
@@ -57,16 +58,16 @@ export interface BaseStore {
   ) => Promise<Member | null>;
 
   // prayCard
-  groupPrayCardList: PrayCard[] | null;
-  userPrayCardList: PrayCard[] | null;
+  groupPrayCardList: PrayCardWithProfiles[] | null;
+  userPrayCardList: PrayCardWithProfiles[] | null;
   userIdPrayCardListHash: userIdPrayCardListHash | null;
-  targetPrayCard: PrayCard | null;
+  targetPrayCard: PrayCardWithProfiles | null;
   inputPrayCardContent: string;
   fetchPrayCardListByGroupId: (groupId: string | undefined) => Promise<void>;
   fetchPrayCardListByUserId: (userId: string | undefined) => Promise<void>;
   createUserIdPrayCardListHash: (
     memberList: MemberWithProfiles[],
-    groupPrayCardList: PrayCard[]
+    groupPrayCardList: PrayCardWithProfiles[]
   ) => userIdPrayCardListHash;
   createPrayCard: (
     groupId: string | undefined,
@@ -79,6 +80,7 @@ export interface BaseStore {
   prayData: Pray[] | null;
   userPrayData: Pray[] | null;
   todayPrayType: string | null;
+  isTodayPray: boolean;
   fetchPrayData: (prayCardId: string | undefined) => Promise<void>;
   fetchPrayDataByUserId: (
     prayCardId: string | undefined,
@@ -197,7 +199,7 @@ const useBaseStore = create<BaseStore>()(
     },
     createUserIdPrayCardListHash: (
       memberList: MemberWithProfiles[],
-      groupPrayCardList: PrayCard[]
+      groupPrayCardList: PrayCardWithProfiles[]
     ) => {
       const userIdPrayCardListHash = memberList.reduce((hash, member) => {
         hash[member.user_id || ""] = [];
@@ -229,6 +231,7 @@ const useBaseStore = create<BaseStore>()(
     prayData: null,
     userPrayData: null,
     todayPrayType: null,
+    isTodayPray: false,
     fetchPrayData: async (prayCardId: string | undefined) => {
       const prayData = await fetchPrayData(prayCardId);
       set((state) => {

@@ -4,6 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
 import Member from "./Member";
 import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
+import TodayPrayBtn from "../prayCard/TodayPrayBtn";
 
 interface MembersProps {
   currentUserId: string | undefined;
@@ -73,6 +74,7 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
       <div className="flex flex-col gap-2">
         <div className="text-sm">Members({otherMembers.length + 1})</div>
         <div className="flex flex-col gap-2">
+          <TodayPrayBtn currentUserId={currentUserId} />
           {otherMembers.map((member) => (
             <Member
               key={member.id}

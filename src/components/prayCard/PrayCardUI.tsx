@@ -1,22 +1,16 @@
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
-import { MemberWithProfiles, PrayCard } from "supabase/types/tables";
+import { PrayCardWithProfiles } from "supabase/types/tables";
 import PrayCardCalendar from "./PrayCardCalendar";
 import PrayCardBtn from "./PrayCardBtn";
 import { ClipLoader } from "react-spinners";
-import { current } from "immer";
 
 interface PrayCardProps {
   currentUserId: string | undefined;
-  member: MemberWithProfiles | undefined;
-  prayCard: PrayCard | undefined;
+  prayCard: PrayCardWithProfiles | undefined;
 }
 
-const PrayCardUI: React.FC<PrayCardProps> = ({
-  currentUserId,
-  member,
-  prayCard,
-}) => {
+const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   const userPrayData = useBaseStore((state) => state.userPrayData);
   const fetchPrayDataByUserId = useBaseStore(
     (state) => state.fetchPrayDataByUserId
@@ -35,13 +29,13 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   }
 
   const PrayCardBody = (
-    <div className="flex flex-col h-full p-5 bg-blue-50 rounded-2xl">
+    <div className="flex flex-col h-50vh p-5 bg-blue-50 rounded-2xl">
       <div className="flex items-center gap-2">
         <img
-          src={member?.profiles.avatar_url || ""}
+          src={prayCard?.profiles.avatar_url || ""}
           className="w-5 h-5 rounded-full"
         />
-        <div className="text-sm">{member?.profiles.full_name}</div>
+        <div className="text-sm">{prayCard?.profiles.full_name}</div>
       </div>
       <div className="flex h-full justify-center items-center">
         {prayCard?.content}
@@ -50,9 +44,9 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   return (
-    <div className="flex flex-col h-full gap-6">
+    <div className="flex flex-col gap-6">
       {PrayCardBody}
-      {currentUserId != member?.user_id && (
+      {currentUserId != prayCard?.user_id && (
         <div className="flex flex-col gap-6">
           <PrayCardCalendar prayCard={prayCard} prayData={userPrayData || []} />
           <PrayCardBtn currentUserId={currentUserId} prayCard={prayCard} />
