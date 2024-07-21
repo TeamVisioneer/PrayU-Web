@@ -1,10 +1,10 @@
 import { PrayType } from "@/Enums/prayType";
-import { PrayCard } from "supabase/types/tables";
+import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 
 interface PrayCardBtnProps {
   currentUserId: string | undefined;
-  prayCard: PrayCard | undefined;
+  prayCard: PrayCardWithProfiles | undefined;
 }
 
 const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
