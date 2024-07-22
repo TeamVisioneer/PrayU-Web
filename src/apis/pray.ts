@@ -38,7 +38,6 @@ export const fetchIsPrayToday = async (
     return false;
   }
 
-  console.log(data);
   return data.length > 0;
 };
 

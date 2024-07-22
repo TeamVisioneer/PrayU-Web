@@ -26,7 +26,6 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
   const handleClick = (prayType: PrayType) => () => {
     createPray(prayCard?.id, currentUserId, prayType);
     if (!isPrayToday) setIsPrayToday(true);
-    console.log(isPrayToday);
   };
 
   return (
