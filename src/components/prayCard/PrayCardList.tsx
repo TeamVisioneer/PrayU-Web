@@ -15,7 +15,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
 
   return (
-    <Carousel>
+    <Carousel
+      opts={{
+        startIndex: 1,
+      }}
+    >
       <CarouselContent>
         <CarouselItem className="basis-5/6 pointer-events-none">
           <div className="flex justify-center items-center w-full aspect-square">
