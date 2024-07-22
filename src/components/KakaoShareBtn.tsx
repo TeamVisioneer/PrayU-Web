@@ -27,11 +27,7 @@ interface KakaoLinkObject {
       webUrl: string;
     };
   };
-  social: {
-    likeCount: number;
-    commentCount: number;
-    sharedCount: number;
-  };
+
   buttons: Array<{
     title: string;
     link: {
@@ -72,11 +68,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
             webUrl: webUrl,
           },
         },
-        social: {
-          likeCount: 286,
-          commentCount: 45,
-          sharedCount: 845,
-        },
+
         buttons: [
           {
             title: "오늘의 기도",
