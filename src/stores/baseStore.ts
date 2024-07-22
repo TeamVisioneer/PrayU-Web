@@ -1,7 +1,6 @@
 import {
   createPray,
   fetchIsPrayToday,
-  fetchPrayData,
   fetchPrayDataByUserId,
 } from "./../apis/pray";
 import { create } from "zustand";
@@ -91,7 +90,6 @@ export interface BaseStore {
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean;
   setIsPrayToday: (isPrayToday: boolean) => void;
-  fetchPrayData: (prayCardId: string | undefined) => Promise<void>;
   fetchIsPrayToday: (
     userId: string | undefined,
     groupId: string | undefined
@@ -256,12 +254,7 @@ const useBaseStore = create<BaseStore>()(
         state.isPrayToday = isPrayToday;
       });
     },
-    fetchPrayData: async (prayCardId: string | undefined) => {
-      const prayData = await fetchPrayData(prayCardId);
-      set((state) => {
-        state.prayData = prayData;
-      });
-    },
+
     fetchIsPrayToday: async (
       userId: string | undefined,
       groupId: string | undefined
@@ -278,17 +271,10 @@ const useBaseStore = create<BaseStore>()(
       const prayData = await fetchPrayDataByUserId(prayCardId, userId);
       if (prayData) {
         set((state) => {
-          state.reactionDatas[PrayType.PRAY]!.num = 0;
-          state.reactionDatas[PrayType.GOOD]!.num = 0;
-          state.reactionDatas[PrayType.LIKE]!.num = 0;
-
-          prayData.forEach((pray) => {
-            if (
-              pray.pray_type &&
-              state.reactionDatas[pray.pray_type as PrayType]
-            ) {
-              state.reactionDatas[pray.pray_type as PrayType]!.num += 1;
-            }
+          Object.values(PrayType).forEach((type) => {
+            state.reactionDatas[type]!.num = prayData.filter(
+              (pray) => pray.pray_type === type
+            ).length;
           });
         });
       }

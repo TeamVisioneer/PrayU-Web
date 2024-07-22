@@ -28,9 +28,10 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   );
 
   useEffect(() => {
-    if (prayCard?.user_id == currentUserId)
-      fetchPrayDataByUserId(prayCard?.id, undefined);
-    else fetchPrayDataByUserId(prayCard?.id, currentUserId);
+    fetchPrayDataByUserId(
+      prayCard?.id,
+      prayCard?.user_id == currentUserId ? undefined : currentUserId
+    );
   }, [fetchPrayDataByUserId, prayCard?.id, currentUserId, prayCard?.user_id]);
 
   if (!prayDataHash[prayCard?.id || ""]) {
