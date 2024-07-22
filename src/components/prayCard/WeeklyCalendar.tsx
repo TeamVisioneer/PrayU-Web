@@ -45,7 +45,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   const weeklyDays = generateDates(prayCard?.created_at, prayData);
 
   return (
-    <div className="flex justify-center space-x-4">
+    <div className="flex justify-around">
       {weeklyDays.map((date) => {
         const isToday = date.date === currentDate;
         const day = new Date(date.date).getDate(); // Extract the day part of the date
