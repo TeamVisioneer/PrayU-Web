@@ -13,12 +13,20 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
 }) => {
   const todayPrayType = useBaseStore((state) => state.todayPrayType);
   const createPray = useBaseStore((state) => state.createPray);
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
 
   const getEmoji = (prayType: PrayType) => {
     if (prayType === "pray") return { emoji: "🙏", text: "기도해요" };
     if (prayType === "good") return { emoji: "👍", text: "힘내세요" };
     if (prayType === "like") return { emoji: "❤️", text: "응원해요" };
     return { emoji: "", text: "" };
+  };
+
+  const handleClick = (prayType: PrayType) => () => {
+    createPray(prayCard?.id, currentUserId, prayType);
+    if (!isPrayToday) setIsPrayToday(true);
+    console.log(isPrayToday);
   };
 
   return (
@@ -28,9 +36,7 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
         return (
           <button
             key={type}
-            onClick={() =>
-              createPray(prayCard?.id, currentUserId, type as PrayType)
-            }
+            onClick={handleClick(type as PrayType)}
             className={`w-[90px] py-2 px-2 flex flex-col items-center rounded-2xl ${
               todayPrayType === type
                 ? "bg-gray-300 cursor-not-allowed"

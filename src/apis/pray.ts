@@ -1,3 +1,4 @@
+import { getISOTodayDate } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
 import { Pray } from "../../supabase/types/tables";
 import { PrayType } from "../Enums/prayType";
@@ -16,6 +17,29 @@ export const fetchPrayData = async (
     return null;
   }
   return data as Pray[];
+};
+
+export const fetchIsPrayToday = async (
+  userId: string | undefined
+): Promise<boolean> => {
+  if (!userId) return false;
+
+  const today = getISOTodayDate();
+
+  const { data, error } = await supabase
+    .from("pray")
+    .select("created_at")
+    .eq("user_id", userId)
+    .gte("created_at", today)
+    .is("deleted_at", null);
+
+  if (error) {
+    console.error("error", error);
+    return false;
+  }
+
+  console.log(data);
+  return data.length > 0;
 };
 
 export const fetchPrayDataByUserId = async (

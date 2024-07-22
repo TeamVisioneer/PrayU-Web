@@ -19,6 +19,18 @@ export const getISOToday = () => {
   return isoString.replace("Z", "+09:00");
 };
 
+export const getISOTodayDate = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const koreaOffset = 9 * 60;
+  const koreaTime = new Date(today.getTime() + koreaOffset * 60 * 1000);
+
+  const isoString = koreaTime.toISOString();
+
+  return isoString.replace("Z", "+09:00");
+};
+
 // korean iso
 export const getISODate = (dateString: string | null) => {
   if (!dateString) return "";
