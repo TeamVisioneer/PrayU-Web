@@ -2,16 +2,16 @@ import { getISODate, getISOToday } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { Pray, PrayCardWithProfiles } from "supabase/types/tables";
 
-interface PrayCardCalendarProps {
+interface WeeklyCalendarProps {
   prayCard: PrayCardWithProfiles | undefined;
   prayData: Pray[];
 }
 
-const PrayCardCalender: React.FC<PrayCardCalendarProps> = ({
+const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   prayCard,
   prayData,
 }) => {
-  const todayPrayType = useBaseStore((state) => state.todayPrayType);
+  const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
 
   const getEmoji = (prayType: string | null) => {
     if (prayType === "pray") return "🙏";
@@ -45,7 +45,7 @@ const PrayCardCalender: React.FC<PrayCardCalendarProps> = ({
   const weeklyDays = generateDates(prayCard?.created_at, prayData);
 
   return (
-    <div className="flex justify-center space-x-4">
+    <div className="flex justify-around">
       {weeklyDays.map((date) => {
         const isToday = date.date === currentDate;
         const day = new Date(date.date).getDate(); // Extract the day part of the date
@@ -68,7 +68,9 @@ const PrayCardCalender: React.FC<PrayCardCalendarProps> = ({
                   isToday ? "text-red-500" : "text-gray-500"
                 }`}
               >
-                {isToday ? getEmoji(todayPrayType) : date.emoji}
+                {isToday
+                  ? getEmoji(todayPrayTypeHash[prayCard?.id || ""])
+                  : date.emoji}
               </span>
             </div>
           </div>
@@ -78,4 +80,4 @@ const PrayCardCalender: React.FC<PrayCardCalendarProps> = ({
   );
 };
 
-export default PrayCardCalender;
+export default WeeklyCalendar;

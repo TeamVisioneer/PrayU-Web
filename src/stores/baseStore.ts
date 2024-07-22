@@ -17,6 +17,7 @@ import {
   PrayCardWithProfiles,
   UserIdMemberHash,
   userIdPrayCardListHash,
+  TodayPrayTypeHash,
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import { fetchMemberListByGroupId, createMember } from "@/apis/member";
@@ -80,9 +81,9 @@ export interface BaseStore {
   //pray
   prayData: Pray[] | null;
   userPrayData: Pray[] | null;
-  todayPrayType: string | null;
   isPrayToday: boolean;
   setIsPrayToday: (isPrayToday: boolean) => void;
+  todayPrayTypeHash: TodayPrayTypeHash;
   fetchPrayData: (prayCardId: string | undefined) => Promise<void>;
   fetchIsPrayToday: (userId: string | undefined) => Promise<void>;
   fetchPrayDataByUserId: (
@@ -94,7 +95,6 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
-  setTodayPrayType: (prayType: string | null) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -233,7 +233,7 @@ const useBaseStore = create<BaseStore>()(
     // pray
     prayData: null,
     userPrayData: null,
-    todayPrayType: null,
+    todayPrayTypeHash: {},
     isPrayToday: false,
     setIsPrayToday: (isPrayToday: boolean) => {
       set((state) => {
@@ -269,7 +269,8 @@ const useBaseStore = create<BaseStore>()(
       );
       set((state) => {
         state.userPrayData = userPrayData;
-        state.todayPrayType = todayPray?.pray_type || null;
+        state.todayPrayTypeHash[prayCardId!] =
+          (todayPray?.pray_type as PrayType) || null;
       });
     },
     createPray: async (
@@ -279,14 +280,9 @@ const useBaseStore = create<BaseStore>()(
     ) => {
       const pray = await createPray(prayCardId, userId, prayType);
       set((state) => {
-        state.todayPrayType = prayType;
+        state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
-    },
-    setTodayPrayType: (prayType: string | null) => {
-      set((state) => {
-        state.todayPrayType = prayType;
-      });
     },
   }))
 );

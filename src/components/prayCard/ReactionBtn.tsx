@@ -2,16 +2,16 @@ import { PrayType } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 
-interface PrayCardBtnProps {
+interface ReactionBtnProps {
   currentUserId: string | undefined;
   prayCard: PrayCardWithProfiles | undefined;
 }
 
-const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
+const ReactionBtn: React.FC<ReactionBtnProps> = ({
   currentUserId,
   prayCard,
 }) => {
-  const todayPrayType = useBaseStore((state) => state.todayPrayType);
+  const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const createPray = useBaseStore((state) => state.createPray);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
@@ -37,11 +37,11 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
             key={type}
             onClick={handleClick(type as PrayType)}
             className={`w-[90px] py-2 px-2 flex flex-col items-center rounded-2xl ${
-              todayPrayType === type
+              todayPrayTypeHash[prayCard?.id || ""] === type
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-purple-100 text-black"
             }`}
-            disabled={Boolean(todayPrayType)}
+            disabled={Boolean(todayPrayTypeHash[prayCard?.id || ""])}
           >
             <div className="text-2xl">{emoji}</div>
             <div className="text-sm">{text}</div>
@@ -52,4 +52,4 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
   );
 };
 
-export default PrayCardBtn;
+export default ReactionBtn;

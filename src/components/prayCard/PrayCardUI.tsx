@@ -1,8 +1,8 @@
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
-import PrayCardCalendar from "./PrayCardCalendar";
-import PrayCardBtn from "./PrayCardBtn";
+import PrayCardCalendar from "./WeeklyCalendar";
+import ReactionBtn from "./ReactionBtn";
 import { ClipLoader } from "react-spinners";
 
 interface PrayCardProps {
@@ -49,7 +49,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
       {currentUserId != prayCard?.user_id && (
         <div className="flex flex-col gap-6">
           <PrayCardCalendar prayCard={prayCard} prayData={userPrayData || []} />
-          <PrayCardBtn currentUserId={currentUserId} prayCard={prayCard} />
+          <ReactionBtn currentUserId={currentUserId} prayCard={prayCard} />
         </div>
       )}
     </div>
