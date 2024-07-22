@@ -1,5 +1,6 @@
 import {
   createPray,
+  fetchIsPrayToday,
   fetchPrayData,
   fetchPrayDataByUserId,
 } from "./../apis/pray";
@@ -80,8 +81,10 @@ export interface BaseStore {
   prayData: Pray[] | null;
   userPrayData: Pray[] | null;
   todayPrayType: string | null;
-  isTodayPray: boolean;
+  isPrayToday: boolean;
+  setIsPrayToday: (isPrayToday: boolean) => void;
   fetchPrayData: (prayCardId: string | undefined) => Promise<void>;
+  fetchIsPrayToday: (userId: string | undefined) => Promise<void>;
   fetchPrayDataByUserId: (
     prayCardId: string | undefined,
     userId: string | undefined
@@ -231,11 +234,22 @@ const useBaseStore = create<BaseStore>()(
     prayData: null,
     userPrayData: null,
     todayPrayType: null,
-    isTodayPray: false,
+    isPrayToday: false,
+    setIsPrayToday: (isPrayToday: boolean) => {
+      set((state) => {
+        state.isPrayToday = isPrayToday;
+      });
+    },
     fetchPrayData: async (prayCardId: string | undefined) => {
       const prayData = await fetchPrayData(prayCardId);
       set((state) => {
         state.prayData = prayData;
+      });
+    },
+    fetchIsPrayToday: async (userId: string | undefined) => {
+      const isPrayToday = await fetchIsPrayToday(userId);
+      set((state) => {
+        state.isPrayToday = isPrayToday;
       });
     },
     fetchPrayDataByUserId: async (

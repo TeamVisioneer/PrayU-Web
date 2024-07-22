@@ -5,6 +5,8 @@ import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import { KakaoShareButton } from "@/components/KakaoShareBtn";
 import MemberList from "@/components/member/MemberList";
+import { Drawer } from "@/components/ui/drawer";
+import PrayCardContent from "@/components/prayCard/PrayCardContent";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -51,10 +53,13 @@ const GroupPage: React.FC = () => {
           webUrl={`${import.meta.env.VITE_BASE_URL}/${targetGroup?.id}`}
         ></KakaoShareButton>
       </div>
-      <MemberList
-        currentUserId={user?.id}
-        groupId={targetGroup?.id}
-      ></MemberList>
+      <Drawer>
+        <MemberList
+          currentUserId={user?.id}
+          groupId={targetGroup?.id}
+        ></MemberList>
+        <PrayCardContent currentUserId={user!.id} />
+      </Drawer>
     </div>
   );
 };

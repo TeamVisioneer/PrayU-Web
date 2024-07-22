@@ -1,18 +1,10 @@
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import PrayCardList from "./PrayCardList";
+import { DrawerTrigger } from "@/components/ui/drawer";
 
 interface TodayPrayBtnProps {
   currentUserId: string | undefined;
 }
 
-const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ currentUserId }) => {
+const TodayPrayBtn: React.FC<TodayPrayBtnProps> = () => {
   const todayPrayBtn = (
     <div
       className="className= flex flex-col justify-center h-12
@@ -24,20 +16,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ currentUserId }) => {
     </div>
   );
 
-  return (
-    <Drawer>
-      <DrawerTrigger>{todayPrayBtn}</DrawerTrigger>
-      <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] pb-20">
-        <DrawerHeader>
-          <DrawerTitle></DrawerTitle>
-          <DrawerDescription></DrawerDescription>
-        </DrawerHeader>
-        {/* PrayCardList */}
-        <PrayCardList currentUserId={currentUserId} />
-        {/* PrayCardList */}
-      </DrawerContent>
-    </Drawer>
-  );
+  return <DrawerTrigger>{todayPrayBtn}</DrawerTrigger>;
 };
 
 export default TodayPrayBtn;
