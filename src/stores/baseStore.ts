@@ -1,7 +1,6 @@
 import {
   createPray,
   fetchIsPrayToday,
-  fetchPrayData,
   fetchPrayDataByUserId,
 } from "./../apis/pray";
 import { create } from "zustand";
@@ -18,6 +17,7 @@ import {
   UserIdMemberHash,
   userIdPrayCardListHash,
   TodayPrayTypeHash,
+  PrayDataHash,
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import { fetchMemberListByGroupId, createMember } from "@/apis/member";
@@ -80,11 +80,10 @@ export interface BaseStore {
 
   //pray
   prayData: Pray[] | null;
-  userPrayData: Pray[] | null;
+  prayDataHash: PrayDataHash;
+  todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean;
   setIsPrayToday: (isPrayToday: boolean) => void;
-  todayPrayTypeHash: TodayPrayTypeHash;
-  fetchPrayData: (prayCardId: string | undefined) => Promise<void>;
   fetchIsPrayToday: (userId: string | undefined) => Promise<void>;
   fetchPrayDataByUserId: (
     prayCardId: string | undefined,
@@ -232,18 +231,12 @@ const useBaseStore = create<BaseStore>()(
 
     // pray
     prayData: null,
-    userPrayData: null,
+    prayDataHash: {},
     todayPrayTypeHash: {},
     isPrayToday: false,
     setIsPrayToday: (isPrayToday: boolean) => {
       set((state) => {
         state.isPrayToday = isPrayToday;
-      });
-    },
-    fetchPrayData: async (prayCardId: string | undefined) => {
-      const prayData = await fetchPrayData(prayCardId);
-      set((state) => {
-        state.prayData = prayData;
       });
     },
     fetchIsPrayToday: async (userId: string | undefined) => {
@@ -256,19 +249,19 @@ const useBaseStore = create<BaseStore>()(
       prayCardId: string | undefined,
       userId: string | undefined
     ) => {
-      const userPrayData = await fetchPrayDataByUserId(prayCardId, userId);
+      const prayData = await fetchPrayDataByUserId(prayCardId, userId);
       const today = new Date(getISOToday());
       const startOfDay = new Date(today.setHours(0, 0, 0, 0));
       const endOfDay = new Date(today.setHours(23, 59, 59, 999));
 
-      const todayPray = userPrayData?.find(
+      const todayPray = prayData?.find(
         (pray) =>
           pray.user_id === userId &&
           new Date(pray.created_at) >= startOfDay &&
           new Date(pray.created_at) <= endOfDay
       );
       set((state) => {
-        state.userPrayData = userPrayData;
+        state.prayDataHash[prayCardId!] = prayData;
         state.todayPrayTypeHash[prayCardId!] =
           (todayPray?.pray_type as PrayType) || null;
       });

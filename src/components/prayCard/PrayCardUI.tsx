@@ -11,7 +11,7 @@ interface PrayCardProps {
 }
 
 const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
-  const userPrayData = useBaseStore((state) => state.userPrayData);
+  const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const fetchPrayDataByUserId = useBaseStore(
     (state) => state.fetchPrayDataByUserId
   );
@@ -20,7 +20,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
     fetchPrayDataByUserId(prayCard?.id, currentUserId);
   }, [fetchPrayDataByUserId, prayCard?.id, currentUserId]);
 
-  if (!userPrayData) {
+  if (!prayDataHash[prayCard?.id || ""]) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -48,7 +48,10 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
       {PrayCardBody}
       {currentUserId != prayCard?.user_id && (
         <div className="flex flex-col gap-6">
-          <PrayCardCalendar prayCard={prayCard} prayData={userPrayData || []} />
+          <PrayCardCalendar
+            prayCard={prayCard}
+            prayData={prayDataHash[prayCard?.id || ""] || []}
+          />
           <ReactionBtn currentUserId={currentUserId} prayCard={prayCard} />
         </div>
       )}

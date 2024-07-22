@@ -22,11 +22,13 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
             start
           </div>
         </CarouselItem>
-        {groupPrayCardList?.map((prayCard) => (
-          <CarouselItem key={prayCard.id} className="basis-5/6">
-            <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
-          </CarouselItem>
-        ))}
+        {groupPrayCardList
+          ?.filter((prayCard) => prayCard.user_id != currentUserId)
+          .map((prayCard) => (
+            <CarouselItem key={prayCard.id} className="basis-5/6">
+              <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
+            </CarouselItem>
+          ))}
         <CarouselItem className="basis-5/6 pointer-events-none">
           <div className="flex justify-center items-center w-full aspect-square">
             end
