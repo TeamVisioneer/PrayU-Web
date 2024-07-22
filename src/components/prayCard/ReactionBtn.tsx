@@ -15,13 +15,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const createPray = useBaseStore((state) => state.createPray);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
-
-  const getEmoji = (prayType: PrayType) => {
-    if (prayType === "pray") return { emoji: "🙏", text: "기도해요" };
-    if (prayType === "good") return { emoji: "👍", text: "힘내세요" };
-    if (prayType === "like") return { emoji: "❤️", text: "응원해요" };
-    return { emoji: "", text: "" };
-  };
+  const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
   const handleClick = (prayType: PrayType) => () => {
     createPray(prayCard?.id, currentUserId, prayType);
@@ -31,7 +25,9 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   return (
     <div className="flex justify-center space-x-8">
       {Object.values(PrayType).map((type) => {
-        const { emoji, text } = getEmoji(type as PrayType);
+        const emojiData = reactionDatas[type];
+        if (!emojiData) return null;
+
         return (
           <button
             key={type}
@@ -43,8 +39,8 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
             }`}
             disabled={Boolean(todayPrayTypeHash[prayCard?.id || ""])}
           >
-            <div className="text-2xl">{emoji}</div>
-            <div className="text-sm">{text}</div>
+            <div className="text-2xl">{emojiData.emoji}</div>
+            <div className="text-sm">{emojiData.text}</div>
           </button>
         );
       })}

@@ -21,20 +21,17 @@ interface PrayCardProps {
 
 const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
+  const reactionDatas = useBaseStore((state) => state.reactionDatas);
+
   const fetchPrayDataByUserId = useBaseStore(
     (state) => state.fetchPrayDataByUserId
   );
 
-  const getEmoji = (prayType: PrayType) => {
-    if (prayType === "pray") return { emoji: "🙏", text: "기도해요", num: 10 };
-    if (prayType === "good") return { emoji: "👍", text: "힘내세요", num: 20 };
-    if (prayType === "like") return { emoji: "❤️", text: "응원해요", num: 11 };
-    return { emoji: "", text: "", num: 0 };
-  };
-
   useEffect(() => {
-    fetchPrayDataByUserId(prayCard?.id, currentUserId);
-  }, [fetchPrayDataByUserId, prayCard?.id, currentUserId]);
+    if (prayCard?.user_id == currentUserId)
+      fetchPrayDataByUserId(prayCard?.id, undefined);
+    else fetchPrayDataByUserId(prayCard?.id, currentUserId);
+  }, [fetchPrayDataByUserId, prayCard?.id, currentUserId, prayCard?.user_id]);
 
   if (!prayDataHash[prayCard?.id || ""]) {
     return (
@@ -76,15 +73,16 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
             <DrawerTrigger className="w-full">
               <div className="flex justify-center space-x-8">
                 {Object.values(PrayType).map((type) => {
-                  const { emoji, num } = getEmoji(type as PrayType);
+                  const emojiData = reactionDatas[type];
+                  if (!emojiData) return null;
                   return (
                     <div
                       key={type}
                       className={`w-[90px] py-2 px-2 flex flex-col items-center rounded-2xl bg-purple-100 text-black
                       }`}
                     >
-                      <div className="text-2xl">{emoji}</div>
-                      <div className="text-sm">{num}</div>
+                      <div className="text-2xl">{emojiData.emoji}</div>
+                      <div className="text-sm">{emojiData.num}</div>
                     </div>
                   );
                 })}

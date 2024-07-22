@@ -45,9 +45,6 @@ export const fetchIsPrayToday = async (
     return false;
   }
 
-  console.log(groupId);
-  console.log(data);
-
   return data && data.length > 0;
 };
 
@@ -55,17 +52,23 @@ export const fetchPrayDataByUserId = async (
   prayCardId: string | undefined,
   userId: string | undefined
 ): Promise<Pray[] | null> => {
-  if (!userId || !prayCardId) return null;
-  const { data, error } = await supabase
+  if (!prayCardId) return null;
+
+  let query = supabase
     .from("pray")
     .select("*")
     .eq("pray_card_id", prayCardId)
-    .eq("user_id", userId)
+
     .is("deleted_at", null);
+  if (userId) query = query.eq("user_id", userId);
+
+  const { data, error } = await query;
+
   if (error) {
     console.error("error", error);
     return null;
   }
+  console.log(data);
   return data as Pray[];
 };
 

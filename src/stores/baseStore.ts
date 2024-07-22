@@ -1,6 +1,7 @@
 import {
   createPray,
   fetchIsPrayToday,
+  fetchPrayData,
   fetchPrayDataByUserId,
 } from "./../apis/pray";
 import { create } from "zustand";
@@ -104,9 +105,7 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
-
-  //emoji
-  emojiMap: { [key in PrayType]?: EmojiData };
+  reactionDatas: { [key in PrayType]?: EmojiData };
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -247,6 +246,11 @@ const useBaseStore = create<BaseStore>()(
     prayDataHash: {},
     todayPrayTypeHash: {},
     isPrayToday: false,
+    reactionDatas: {
+      [PrayType.PRAY]: { emoji: "🙏", text: "기도해요", num: 0 },
+      [PrayType.GOOD]: { emoji: "👍", text: "힘내세요", num: 0 },
+      [PrayType.LIKE]: { emoji: "❤️", text: "응원해요", num: 0 },
+    },
     setIsPrayToday: (isPrayToday: boolean) => {
       set((state) => {
         state.isPrayToday = isPrayToday;
@@ -272,6 +276,23 @@ const useBaseStore = create<BaseStore>()(
       userId: string | undefined
     ) => {
       const prayData = await fetchPrayDataByUserId(prayCardId, userId);
+      if (prayData) {
+        set((state) => {
+          state.reactionDatas[PrayType.PRAY]!.num = 0;
+          state.reactionDatas[PrayType.GOOD]!.num = 0;
+          state.reactionDatas[PrayType.LIKE]!.num = 0;
+
+          prayData.forEach((pray) => {
+            if (
+              pray.pray_type &&
+              state.reactionDatas[pray.pray_type as PrayType]
+            ) {
+              state.reactionDatas[pray.pray_type as PrayType]!.num += 1;
+            }
+          });
+        });
+      }
+
       const today = new Date(getISOToday());
       const startOfDay = new Date(today.setHours(0, 0, 0, 0));
       const endOfDay = new Date(today.setHours(23, 59, 59, 999));
@@ -298,13 +319,6 @@ const useBaseStore = create<BaseStore>()(
         state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
-    },
-
-    // emoji
-    emojiMap: {
-      [PrayType.PRAY]: { emoji: "🙏", text: "기도해요", num: 0 },
-      [PrayType.GOOD]: { emoji: "👍", text: "힘내세요", num: 0 },
-      [PrayType.LIKE]: { emoji: "❤️", text: "응원해요", num: 0 },
     },
   }))
 );
