@@ -29,6 +29,12 @@ import {
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 
+interface EmojiData {
+  emoji: string;
+  text: string;
+  num: number;
+}
+
 export interface BaseStore {
   // user
   user: User | null;
@@ -84,7 +90,11 @@ export interface BaseStore {
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean;
   setIsPrayToday: (isPrayToday: boolean) => void;
-  fetchIsPrayToday: (userId: string | undefined) => Promise<void>;
+  fetchPrayData: (prayCardId: string | undefined) => Promise<void>;
+  fetchIsPrayToday: (
+    userId: string | undefined,
+    groupId: string | undefined
+  ) => Promise<void>;
   fetchPrayDataByUserId: (
     prayCardId: string | undefined,
     userId: string | undefined
@@ -94,6 +104,9 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
+
+  //emoji
+  emojiMap: { [key in PrayType]?: EmojiData };
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -239,8 +252,17 @@ const useBaseStore = create<BaseStore>()(
         state.isPrayToday = isPrayToday;
       });
     },
-    fetchIsPrayToday: async (userId: string | undefined) => {
-      const isPrayToday = await fetchIsPrayToday(userId);
+    fetchPrayData: async (prayCardId: string | undefined) => {
+      const prayData = await fetchPrayData(prayCardId);
+      set((state) => {
+        state.prayData = prayData;
+      });
+    },
+    fetchIsPrayToday: async (
+      userId: string | undefined,
+      groupId: string | undefined
+    ) => {
+      const isPrayToday = await fetchIsPrayToday(userId, groupId);
       set((state) => {
         state.isPrayToday = isPrayToday;
       });
@@ -276,6 +298,13 @@ const useBaseStore = create<BaseStore>()(
         state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
+    },
+
+    // emoji
+    emojiMap: {
+      [PrayType.PRAY]: { emoji: "🙏", text: "기도해요", num: 0 },
+      [PrayType.GOOD]: { emoji: "👍", text: "힘내세요", num: 0 },
+      [PrayType.LIKE]: { emoji: "❤️", text: "응원해요", num: 0 },
     },
   }))
 );

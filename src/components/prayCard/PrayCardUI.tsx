@@ -7,10 +7,12 @@ import { ClipLoader } from "react-spinners";
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
+import { PrayType } from "@/Enums/prayType";
 
 interface PrayCardProps {
   currentUserId: string | undefined;
@@ -22,6 +24,13 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   const fetchPrayDataByUserId = useBaseStore(
     (state) => state.fetchPrayDataByUserId
   );
+
+  const getEmoji = (prayType: PrayType) => {
+    if (prayType === "pray") return { emoji: "🙏", text: "기도해요", num: 10 };
+    if (prayType === "good") return { emoji: "👍", text: "힘내세요", num: 20 };
+    if (prayType === "like") return { emoji: "❤️", text: "응원해요", num: 11 };
+    return { emoji: "", text: "", num: 0 };
+  };
 
   useEffect(() => {
     fetchPrayDataByUserId(prayCard?.id, currentUserId);
@@ -65,33 +74,27 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
         <div>
           <Drawer>
             <DrawerTrigger className="w-full">
-              <div className="flex">
-                <div className="flex justify-center space-x-4 mt-2">
-                  <div
-                    className={`w-[80px] py-2 px-4 flex flex-col items-center rounded-2xl bg-purple-100 text-black`}
-                  >
-                    <span className="text-2xl">🙏</span>
-                    <span>{2}</span>
-                  </div>
-                  <div
-                    className={`w-[80px] py-2 px-4 flex flex-col items-center rounded-2xl bg-purple-100 text-black`}
-                  >
-                    <span className="text-2xl">👍</span>
-                    <span>{3}</span>
-                  </div>
-                  <div
-                    className={`w-[80px] py-2 px-4 flex flex-col items-center rounded-2xl bg-purple-100 text-black`}
-                  >
-                    <span className="text-2xl">❤️</span>
-                    <span>{4}</span>
-                  </div>
-                </div>
+              <div className="flex justify-center space-x-8">
+                {Object.values(PrayType).map((type) => {
+                  const { emoji, num } = getEmoji(type as PrayType);
+                  return (
+                    <div
+                      key={type}
+                      className={`w-[90px] py-2 px-2 flex flex-col items-center rounded-2xl bg-purple-100 text-black
+                      }`}
+                    >
+                      <div className="text-2xl">{emoji}</div>
+                      <div className="text-sm">{num}</div>
+                    </div>
+                  );
+                })}
               </div>
             </DrawerTrigger>
             <DrawerContent className="h-[400px]">
               <DrawerHeader>
-                <DrawerTitle>요일별 리스트</DrawerTitle>
+                <DrawerTitle>기도해준 사람</DrawerTitle>
               </DrawerHeader>
+              <DrawerDescription></DrawerDescription>
             </DrawerContent>
           </Drawer>
         </div>
