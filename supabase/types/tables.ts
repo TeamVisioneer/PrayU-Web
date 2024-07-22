@@ -36,5 +36,5 @@ export interface prayCardIdPrayDataHash {
 }
 
 export interface TodayPrayTypeHash {
-  [prayCardId: string]: PrayType;
+  [prayCardId: string]: PrayType | null;
 }

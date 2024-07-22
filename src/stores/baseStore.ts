@@ -1,5 +1,4 @@
 import {
-  bulkFetchPrayDataByUserId,
   createPray,
   fetchIsPrayToday,
   fetchPrayData,
@@ -18,7 +17,6 @@ import {
   PrayCardWithProfiles,
   UserIdMemberHash,
   userIdPrayCardListHash,
-  prayCardIdPrayDataHash,
   TodayPrayTypeHash,
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
@@ -97,7 +95,6 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
-  setTodayPrayType: (prayCardId: string, prayType: PrayType) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -286,11 +283,6 @@ const useBaseStore = create<BaseStore>()(
         state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
-    },
-    setTodayPrayType: (prayCardId: string, prayType: PrayType) => {
-      set((state) => {
-        state.todayPrayTypeHash[prayCardId] = prayType;
-      });
     },
   }))
 );

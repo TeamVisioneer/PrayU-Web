@@ -59,24 +59,6 @@ export const fetchPrayDataByUserId = async (
   return data as Pray[];
 };
 
-export const bulkFetchPrayDataByUserId = async (
-  prayCardIds: string[] | undefined,
-  userId: string | undefined
-): Promise<Pray[]> => {
-  if (!userId || !prayCardIds) return [];
-  const { data, error } = await supabase
-    .from("pray")
-    .select("*")
-    .in("pray_card_id", prayCardIds)
-    .eq("user_id", userId)
-    .is("deleted_at", null);
-  if (error) {
-    console.error("error", error);
-    return [];
-  }
-  return data as Pray[];
-};
-
 export const createPray = async (
   PrayCardId: string | undefined,
   userId: string | undefined,
