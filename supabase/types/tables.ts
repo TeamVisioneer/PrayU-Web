@@ -29,3 +29,7 @@ export interface UserIdMemberHash {
 export interface userIdPrayCardListHash {
   [key: string]: PrayCardWithProfiles[];
 }
+
+export interface prayCardIdPrayDataHash {
+  [key: string]: Pray[];
+}
