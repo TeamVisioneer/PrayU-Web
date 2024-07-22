@@ -2,12 +2,12 @@ import { PrayType } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 
-interface PrayCardBtnProps {
+interface ReactionBtnProps {
   currentUserId: string | undefined;
   prayCard: PrayCardWithProfiles | undefined;
 }
 
-const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
+const ReactionBtn: React.FC<ReactionBtnProps> = ({
   currentUserId,
   prayCard,
 }) => {
@@ -52,4 +52,4 @@ const PrayCardBtn: React.FC<PrayCardBtnProps> = ({
   );
 };
 
-export default PrayCardBtn;
+export default ReactionBtn;

@@ -2,12 +2,12 @@ import { getISODate, getISOToday } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { Pray, PrayCardWithProfiles } from "supabase/types/tables";
 
-interface PrayCardCalendarProps {
+interface WeeklyCalendarProps {
   prayCard: PrayCardWithProfiles | undefined;
   prayData: Pray[];
 }
 
-const PrayCardCalender: React.FC<PrayCardCalendarProps> = ({
+const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   prayCard,
   prayData,
 }) => {
@@ -78,4 +78,4 @@ const PrayCardCalender: React.FC<PrayCardCalendarProps> = ({
   );
 };
 
-export default PrayCardCalender;
+export default WeeklyCalendar;
