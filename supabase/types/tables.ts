@@ -1,3 +1,4 @@
+import { PrayType } from "@/Enums/prayType";
 import { Database } from "./database";
 
 export type Group = Database["public"]["Tables"]["group"]["Row"];
@@ -32,4 +33,8 @@ export interface userIdPrayCardListHash {
 
 export interface prayCardIdPrayDataHash {
   [key: string]: Pray[];
+}
+
+export interface TodayPrayTypeHash {
+  [prayCardId: string]: PrayType;
 }

@@ -19,6 +19,7 @@ import {
   UserIdMemberHash,
   userIdPrayCardListHash,
   prayCardIdPrayDataHash,
+  TodayPrayTypeHash,
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import { fetchMemberListByGroupId, createMember } from "@/apis/member";
@@ -82,26 +83,21 @@ export interface BaseStore {
   //pray
   prayData: Pray[] | null;
   userPrayData: Pray[] | null;
-  prayCardIdPrayDataHash: prayCardIdPrayDataHash | null;
-  todayPrayType: string | null;
   isPrayToday: boolean;
   setIsPrayToday: (isPrayToday: boolean) => void;
+  todayPrayTypeHash: TodayPrayTypeHash;
   fetchPrayData: (prayCardId: string | undefined) => Promise<void>;
   fetchIsPrayToday: (userId: string | undefined) => Promise<void>;
   fetchPrayDataByUserId: (
     prayCardId: string | undefined,
     userId: string | undefined
   ) => Promise<void>;
-  bulkFetchPrayDataByUserId: (
-    userId: string | undefined,
-    prayCardIds: string[] | undefined
-  ) => Promise<void>;
   createPray: (
     prayCardId: string | undefined,
     userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
-  setTodayPrayType: (prayType: string | null) => void;
+  setTodayPrayType: (prayCardId: string, prayType: PrayType) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -240,8 +236,7 @@ const useBaseStore = create<BaseStore>()(
     // pray
     prayData: null,
     userPrayData: null,
-    prayCardIdPrayDataHash: null,
-    todayPrayType: null,
+    todayPrayTypeHash: {},
     isPrayToday: false,
     setIsPrayToday: (isPrayToday: boolean) => {
       set((state) => {
@@ -277,30 +272,8 @@ const useBaseStore = create<BaseStore>()(
       );
       set((state) => {
         state.userPrayData = userPrayData;
-        state.todayPrayType = todayPray?.pray_type || null;
-      });
-    },
-    bulkFetchPrayDataByUserId: async (
-      userId: string | undefined,
-      prayCardIds: string[] | undefined
-    ) => {
-      const prayCardListPrayData = await bulkFetchPrayDataByUserId(
-        prayCardIds,
-        userId
-      );
-      const prayCardIdPrayDataHash = prayCardListPrayData.reduce(
-        (hash, pray) => {
-          if (!hash[pray.pray_card_id || ""]) {
-            hash[pray.pray_card_id || ""] = [];
-          }
-          hash[pray.pray_card_id || ""].push(pray);
-          return hash;
-        },
-        {} as prayCardIdPrayDataHash
-      );
-
-      set((state) => {
-        state.prayCardIdPrayDataHash = prayCardIdPrayDataHash;
+        state.todayPrayTypeHash[prayCardId!] =
+          (todayPray?.pray_type as PrayType) || null;
       });
     },
     createPray: async (
@@ -310,13 +283,13 @@ const useBaseStore = create<BaseStore>()(
     ) => {
       const pray = await createPray(prayCardId, userId, prayType);
       set((state) => {
-        state.todayPrayType = prayType;
+        state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
     },
-    setTodayPrayType: (prayType: string | null) => {
+    setTodayPrayType: (prayCardId: string, prayType: PrayType) => {
       set((state) => {
-        state.todayPrayType = prayType;
+        state.todayPrayTypeHash[prayCardId] = prayType;
       });
     },
   }))

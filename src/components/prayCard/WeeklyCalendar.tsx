@@ -11,7 +11,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   prayCard,
   prayData,
 }) => {
-  const todayPrayType = useBaseStore((state) => state.todayPrayType);
+  const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
 
   const getEmoji = (prayType: string | null) => {
     if (prayType === "pray") return "🙏";
@@ -68,7 +68,9 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
                   isToday ? "text-red-500" : "text-gray-500"
                 }`}
               >
-                {isToday ? getEmoji(todayPrayType) : date.emoji}
+                {isToday
+                  ? getEmoji(todayPrayTypeHash[prayCard?.id || ""])
+                  : date.emoji}
               </span>
             </div>
           </div>
