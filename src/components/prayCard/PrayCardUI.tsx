@@ -4,15 +4,9 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import PrayCardCalendar from "./WeeklyCalendar";
 import ReactionBtn from "./ReactionBtn";
 import { ClipLoader } from "react-spinners";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../ui/drawer";
+import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
+import PrayerList from "./PrayerList";
 
 interface PrayCardProps {
   currentUserId: string | undefined;
@@ -89,12 +83,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
                 })}
               </div>
             </DrawerTrigger>
-            <DrawerContent className="h-[400px]">
-              <DrawerHeader>
-                <DrawerTitle>기도해준 사람</DrawerTitle>
-              </DrawerHeader>
-              <DrawerDescription></DrawerDescription>
-            </DrawerContent>
+            <PrayerList />
           </Drawer>
         </div>
       )}

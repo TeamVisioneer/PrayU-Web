@@ -1,6 +1,6 @@
 import { getISOTodayDate } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
-import { Pray } from "../../supabase/types/tables";
+import { Pray, PrayWithProfiles } from "../../supabase/types/tables";
 import { PrayType } from "../Enums/prayType";
 
 export const fetchPrayData = async (
@@ -51,7 +51,7 @@ export const fetchIsPrayToday = async (
 export const fetchPrayDataByUserId = async (
   prayCardId: string | undefined,
   userId: string | undefined
-): Promise<Pray[] | null> => {
+): Promise<PrayWithProfiles[] | null> => {
   if (!prayCardId) return null;
 
   let query = supabase
@@ -68,7 +68,7 @@ export const fetchPrayDataByUserId = async (
     console.error("error", error);
     return null;
   }
-  return data as Pray[];
+  return data as PrayWithProfiles[];
 };
 
 export const createPray = async (

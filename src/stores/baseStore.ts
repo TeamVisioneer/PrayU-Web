@@ -18,6 +18,7 @@ import {
   userIdPrayCardListHash,
   TodayPrayTypeHash,
   PrayDataHash,
+  PrayWithProfiles,
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import { fetchMemberListByGroupId, createMember } from "@/apis/member";
@@ -27,7 +28,7 @@ import {
   fetchPrayCardListByUserId,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
-import { getISOToday } from "@/lib/utils";
+import { getISOToday, groupAndSortByUserId } from "@/lib/utils";
 
 interface EmojiData {
   emoji: string;
@@ -90,7 +91,7 @@ export interface BaseStore {
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean;
   reactionDatas: { [key in PrayType]?: EmojiData };
-  // TODO: prayerList 생성하기
+  prayerList: { [key: string]: PrayWithProfiles[] } | null;
   setIsPrayToday: (isPrayToday: boolean) => void;
   fetchIsPrayToday: (
     userId: string | undefined,
@@ -250,6 +251,8 @@ const useBaseStore = create<BaseStore>()(
       [PrayType.GOOD]: { emoji: "👍", text: "힘내세요", num: 0 },
       [PrayType.LIKE]: { emoji: "❤️", text: "응원해요", num: 0 },
     },
+    prayerList: null,
+
     setIsPrayToday: (isPrayToday: boolean) => {
       set((state) => {
         state.isPrayToday = isPrayToday;
@@ -265,14 +268,16 @@ const useBaseStore = create<BaseStore>()(
         state.isPrayToday = isPrayToday;
       });
     },
+
     fetchPrayDataByUserId: async (
       prayCardId: string | undefined,
       userId: string | undefined
     ) => {
       const prayData = await fetchPrayDataByUserId(prayCardId, userId);
-      console.log(prayData);
+
       if (prayData) {
         set((state) => {
+          state.prayerList = groupAndSortByUserId(prayData);
           Object.values(PrayType).forEach((type) => {
             state.reactionDatas[type]!.num = prayData.filter(
               (pray) => pray.pray_type === type
@@ -284,7 +289,6 @@ const useBaseStore = create<BaseStore>()(
       const today = new Date(getISOToday());
       const startOfDay = new Date(today.setHours(0, 0, 0, 0));
       const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-
       const todayPray = prayData?.find(
         (pray) =>
           pray.user_id === userId &&
@@ -297,6 +301,7 @@ const useBaseStore = create<BaseStore>()(
           (todayPray?.pray_type as PrayType) || null;
       });
     },
+
     createPray: async (
       prayCardId: string | undefined,
       userId: string | undefined,
