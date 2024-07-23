@@ -11,10 +11,6 @@ const PrayerList: React.FC = () => {
   const prayerList = useBaseStore((state) => state.prayerList);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
-  if (prayerList) {
-    Object.keys(prayerList).map((user_id) => console.log(prayerList[user_id]));
-  }
-
   return (
     <DrawerContent className="h-[400px]">
       <DrawerHeader>
