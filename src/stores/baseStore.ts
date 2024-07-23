@@ -85,6 +85,8 @@ export interface BaseStore {
     content: string
   ) => Promise<PrayCard | null>;
   setPrayCardContent: (content: string) => void;
+  carouselApi: CarouselApi | null;
+  setCarouselApi: (api: CarouselApi) => void;
 
   // pray
   prayData: Pray[] | null;
@@ -110,10 +112,6 @@ export interface BaseStore {
   groupAndSortByUserId: (data: PrayWithProfiles[]) => {
     [key: string]: PrayWithProfiles[];
   };
-
-  // carouselApi
-  carouselApi: CarouselApi | null;
-  setCarouselApi: (api: CarouselApi) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -248,6 +246,12 @@ const useBaseStore = create<BaseStore>()(
         state.inputPrayCardContent = content;
       });
     },
+    carouselApi: null,
+    setCarouselApi: (api: CarouselApi) => {
+      set((state) => {
+        state.carouselApi = api;
+      });
+    },
 
     // pray
     prayData: null,
@@ -340,13 +344,6 @@ const useBaseStore = create<BaseStore>()(
         state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
-    },
-    // carouselApi
-    carouselApi: null,
-    setCarouselApi: (api: CarouselApi) => {
-      set((state) => {
-        state.carouselApi = api;
-      });
     },
   }))
 );
