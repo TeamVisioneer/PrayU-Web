@@ -6,7 +6,7 @@ import ReactionBtn from "./ReactionBtn";
 import { ClipLoader } from "react-spinners";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
-import PrayerList from "./PrayerList";
+import PrayList from "../pray/PrayList";
 
 interface PrayCardProps {
   currentUserId: string | undefined;
@@ -83,7 +83,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
                 })}
               </div>
             </DrawerTrigger>
-            <PrayerList />
+            <PrayList />
           </Drawer>
         </div>
       )}

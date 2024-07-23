@@ -7,7 +7,7 @@ import {
 } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
 
-const PrayerList: React.FC = () => {
+const PrayList: React.FC = () => {
   const prayerList = useBaseStore((state) => state.prayerList);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
@@ -51,4 +51,4 @@ const PrayerList: React.FC = () => {
   );
 };
 
-export default PrayerList;
+export default PrayList;
