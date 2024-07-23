@@ -22,11 +22,11 @@ const PrayList: React.FC = () => {
           Object.keys(prayerList).map((user_id) => (
             <div
               key={user_id}
-              className="flex items-center justify-between mb-2 p-2 pl-4 pr-4"
+              className="flex items-center justify-between p-3 px-4"
             >
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 <img
-                  className="w-8 h-8 rounded-full mr-4"
+                  className="w-8 h-8 rounded-full"
                   src={prayerList[user_id][0].profiles.avatar_url ?? ""}
                   alt={`${prayerList[user_id][0].profiles.full_name} avatar`}
                 />
@@ -34,7 +34,7 @@ const PrayList: React.FC = () => {
                   {prayerList[user_id][0].profiles.full_name}
                 </p>
               </div>
-              <div className="flex space-x-2">
+              <div className="flex gap-2">
                 {prayerList[user_id].map((pray) => (
                   <p key={pray.id} className="text-xl text-gray-500">
                     {reactionDatas[pray.pray_type as PrayType]?.emoji}

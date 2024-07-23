@@ -28,7 +28,7 @@ import {
   fetchPrayCardListByUserId,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
-import { getISOToday, groupAndSortByUserId } from "@/lib/utils";
+import { getISOToday } from "@/lib/utils";
 
 interface EmojiData {
   emoji: string;
@@ -106,6 +106,9 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
+  groupAndSortByUserId: (data: PrayWithProfiles[]) => {
+    [key: string]: PrayWithProfiles[];
+  };
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -268,7 +271,27 @@ const useBaseStore = create<BaseStore>()(
         state.isPrayToday = isPrayToday;
       });
     },
+    groupAndSortByUserId: (data: PrayWithProfiles[]) => {
+      const hash: { [key: string]: PrayWithProfiles[] } = {};
 
+      data.forEach((item) => {
+        if (!hash[item.user_id!]) {
+          hash[item.user_id!] = [];
+        }
+        hash[item.user_id!].push(item);
+      });
+
+      const sortedEntries = Object.entries(hash).sort(
+        (a, b) => b[1].length - a[1].length
+      );
+
+      const sortedHash = sortedEntries.reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {} as { [key: string]: PrayWithProfiles[] });
+
+      return sortedHash;
+    },
     fetchPrayDataByUserId: async (
       prayCardId: string | undefined,
       userId: string | undefined
@@ -277,7 +300,7 @@ const useBaseStore = create<BaseStore>()(
 
       if (prayData) {
         set((state) => {
-          state.prayerList = groupAndSortByUserId(prayData);
+          state.prayerList = state.groupAndSortByUserId(prayData);
           Object.values(PrayType).forEach((type) => {
             state.reactionDatas[type]!.num = prayData.filter(
               (pray) => pray.pray_type === type

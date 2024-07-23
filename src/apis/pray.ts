@@ -58,8 +58,9 @@ export const fetchPrayDataByUserId = async (
     .from("pray")
     .select("*, profiles (id, full_name, avatar_url)")
     .eq("pray_card_id", prayCardId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false });
 
-    .is("deleted_at", null);
   if (userId) query = query.eq("user_id", userId);
 
   const { data, error } = await query;
