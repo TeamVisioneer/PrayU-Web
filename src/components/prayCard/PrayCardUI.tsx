@@ -25,7 +25,8 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
     (state) => state.fetchPrayDataByUserId
   );
 
-  const [content, setContent] = useState(prayCard?.content || "");
+  const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
+  const [content, setContent] = useState(myPrayerContent || "");
 
   useEffect(() => {
     fetchPrayDataByUserId(
@@ -85,19 +86,20 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
           <ReactionBtn currentUserId={currentUserId} prayCard={prayCard} />
         </div>
       ) : (
-        <div className="flex flex-col">
-          <button
-            className="w-full bg-black text-white rounded-2xl"
-            onClick={handleEditClick}
-          >
-            {isEditingPrayCard ? "" : "수정"}
-          </button>
-          {isEditingPrayCard && (
+        <div className="flex flex-col gap-5">
+          {isEditingPrayCard ? (
             <button
-              className="w-full bg-black text-white rounded-2xl"
+              className="w-full bg-green-700 text-white rounded-2xl"
               onClick={() => handleSaveClick(prayCard!.id, content)}
             >
               저장
+            </button>
+          ) : (
+            <button
+              className="w-full bg-black text-white rounded-2xl"
+              onClick={handleEditClick}
+            >
+              수정
             </button>
           )}
           <Drawer>
