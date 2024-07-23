@@ -29,6 +29,7 @@ import {
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
+import { type CarouselApi } from "@/components/ui/carousel";
 
 interface EmojiData {
   emoji: string;
@@ -109,10 +110,22 @@ export interface BaseStore {
   groupAndSortByUserId: (data: PrayWithProfiles[]) => {
     [key: string]: PrayWithProfiles[];
   };
+
+  // carouselApi
+  carouselApi: CarouselApi | null;
+  setCarouselApi: (api: CarouselApi) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
   immer((set) => ({
+    // carouselApi
+    carouselApi: null,
+    setCarouselApi: (api: CarouselApi) => {
+      set((state) => {
+        state.carouselApi = api;
+      });
+    },
+
     // user
     user: null,
     userLoading: true,

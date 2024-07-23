@@ -54,11 +54,7 @@ const Member: React.FC<MemberProps> = ({
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {/* PrayCard */}
-        <PrayCardUI
-          currentUserId={currentUserId}
-          prayCard={prayCard}
-          carouselApi={undefined}
-        />
+        <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
         {/* PrayCard */}
       </DrawerContent>
     </Drawer>

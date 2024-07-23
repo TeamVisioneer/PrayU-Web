@@ -1,24 +1,22 @@
 import { PrayType } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
-import { type CarouselApi } from "@/components/ui/carousel";
 
 interface ReactionBtnProps {
   currentUserId: string | undefined;
   prayCard: PrayCardWithProfiles | undefined;
-  carouselApi: CarouselApi;
 }
 
 const ReactionBtn: React.FC<ReactionBtnProps> = ({
   currentUserId,
   prayCard,
-  carouselApi,
 }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const createPray = useBaseStore((state) => state.createPray);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
+  const carouselApi = useBaseStore((state) => state.carouselApi);
 
   const handleClick = (prayType: PrayType) => () => {
     if (!carouselApi) {
