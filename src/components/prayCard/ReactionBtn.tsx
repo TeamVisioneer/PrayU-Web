@@ -1,16 +1,18 @@
 import { PrayType } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
+import { type CarouselApi } from "@/components/ui/carousel";
 
 interface ReactionBtnProps {
   currentUserId: string | undefined;
   prayCard: PrayCardWithProfiles | undefined;
+  carouselApi: CarouselApi;
 }
 
 const ReactionBtn: React.FC<ReactionBtnProps> = ({
   currentUserId,
   prayCard,
-  api,
+  carouselApi,
 }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const createPray = useBaseStore((state) => state.createPray);
@@ -19,12 +21,19 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
   const handleClick = (prayType: PrayType) => () => {
-    createPray(prayCard?.id, currentUserId, prayType);
-    if (!isPrayToday) setIsPrayToday(true);
-    if (api.selectedScrollSnap() == api.scrollSnapList().length - 2) {
+    if (!carouselApi) {
+      console.error("carouselApi is undefined");
       return null;
     }
-    api.scrollNext();
+    createPray(prayCard?.id, currentUserId, prayType);
+    if (!isPrayToday) setIsPrayToday(true);
+    if (
+      carouselApi.selectedScrollSnap() ==
+      carouselApi.scrollSnapList().length - 2
+    ) {
+      return null;
+    }
+    carouselApi.scrollNext();
   };
 
   return (

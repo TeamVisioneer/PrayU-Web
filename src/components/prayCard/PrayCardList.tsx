@@ -16,7 +16,6 @@ interface PrayCardListProps {
 const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (!api) {
@@ -30,7 +29,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
         api.scrollPrev();
       }
     });
-  }, [api, current]);
+  }, [api]);
 
   return (
     <Carousel
@@ -48,7 +47,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
               <PrayCardUI
                 currentUserId={currentUserId}
                 prayCard={prayCard}
-                api={api}
+                carouselApi={api}
               />
             </CarouselItem>
           ))}

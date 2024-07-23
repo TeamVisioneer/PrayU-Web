@@ -13,11 +13,7 @@ interface PrayCardProps {
   prayCard: PrayCardWithProfiles | undefined;
 }
 
-const PrayCardUI: React.FC<PrayCardProps> = ({
-  currentUserId,
-  prayCard,
-  api,
-}) => {
+const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
@@ -64,11 +60,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
             prayCard={prayCard}
             prayData={prayDataHash[prayCard?.id || ""] || []}
           />
-          <ReactionBtn
-            currentUserId={currentUserId}
-            prayCard={prayCard}
-            api={api}
-          />
+          <ReactionBtn currentUserId={currentUserId} prayCard={prayCard} />
         </div>
       ) : (
         <div>
