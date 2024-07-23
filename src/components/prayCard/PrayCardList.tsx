@@ -45,7 +45,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
           ?.filter((prayCard) => prayCard.user_id != currentUserId)
           .map((prayCard) => (
             <CarouselItem key={prayCard.id} className="basis-5/6">
-              <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
+              <PrayCardUI
+                currentUserId={currentUserId}
+                prayCard={prayCard}
+                api={api}
+              />
             </CarouselItem>
           ))}
         <CarouselItem className="basis-5/6 "></CarouselItem>

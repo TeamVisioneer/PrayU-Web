@@ -10,6 +10,7 @@ interface ReactionBtnProps {
 const ReactionBtn: React.FC<ReactionBtnProps> = ({
   currentUserId,
   prayCard,
+  api,
 }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const createPray = useBaseStore((state) => state.createPray);
@@ -20,6 +21,10 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const handleClick = (prayType: PrayType) => () => {
     createPray(prayCard?.id, currentUserId, prayType);
     if (!isPrayToday) setIsPrayToday(true);
+    if (api.selectedScrollSnap() == api.scrollSnapList().length - 2) {
+      return null;
+    }
+    api.scrollNext();
   };
 
   return (
