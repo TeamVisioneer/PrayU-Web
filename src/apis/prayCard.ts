@@ -54,3 +54,18 @@ export const createPrayCard = async (
   }
   return data ? data[0] : null;
 };
+
+export async function updatePrayCardContent(
+  prayCardId: string,
+  newPrayContent: string
+) {
+  const { data, error } = await supabase
+    .from("pray_card")
+    .update({ content: newPrayContent })
+    .eq("id", prayCardId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}

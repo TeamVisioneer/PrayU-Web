@@ -1,5 +1,5 @@
 import useBaseStore from "@/stores/baseStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import PrayCardCalendar from "./WeeklyCalendar";
 import ReactionBtn from "./ReactionBtn";
@@ -16,17 +16,34 @@ interface PrayCardProps {
 const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
+  const isEditingPrayCard = useBaseStore((state) => state.isEditingPrayCard);
+  const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
+  const handleEditClick = useBaseStore((state) => state.handleEditClick);
+  const handleSaveClick = useBaseStore((state) => state.handleSaveClick);
 
   const fetchPrayDataByUserId = useBaseStore(
     (state) => state.fetchPrayDataByUserId
   );
+
+  const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
+  const [content, setContent] = useState(prayCard?.content || "");
 
   useEffect(() => {
     fetchPrayDataByUserId(
       prayCard?.id,
       prayCard?.user_id == currentUserId ? undefined : currentUserId
     );
-  }, [fetchPrayDataByUserId, prayCard?.id, currentUserId, prayCard?.user_id]);
+    if (prayCard?.user_id == currentUserId && myPrayerContent)
+      setContent(myPrayerContent);
+  }, [
+    fetchPrayDataByUserId,
+    prayCard?.id,
+    currentUserId,
+    prayCard?.user_id,
+    setMyPrayerContent,
+    prayCard?.content,
+    myPrayerContent,
+  ]);
 
   if (!prayDataHash[prayCard?.id || ""]) {
     return (
@@ -42,11 +59,20 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
         <img
           src={prayCard?.profiles.avatar_url || ""}
           className="w-5 h-5 rounded-full"
+          alt={`${prayCard?.profiles.full_name} avatar`}
         />
         <div className="text-sm">{prayCard?.profiles.full_name}</div>
       </div>
       <div className="flex h-full justify-center items-center">
-        {prayCard?.content}
+        {isEditingPrayCard ? (
+          <textarea
+            className="w-full h-full p-2 rounded-md border border-gray-300"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        ) : (
+          <p>{content}</p>
+        )}
       </div>
     </div>
   );
@@ -63,7 +89,22 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
           <ReactionBtn currentUserId={currentUserId} prayCard={prayCard} />
         </div>
       ) : (
-        <div>
+        <div className="flex flex-col gap-5">
+          {isEditingPrayCard ? (
+            <button
+              className="w-full bg-green-700 text-white rounded-2xl"
+              onClick={() => handleSaveClick(prayCard!.id, content)}
+            >
+              저장
+            </button>
+          ) : (
+            <button
+              className="w-full bg-black text-white rounded-2xl"
+              onClick={handleEditClick}
+            >
+              수정
+            </button>
+          )}
           <Drawer>
             <DrawerTrigger className="w-full">
               <div className="flex justify-center space-x-8">
