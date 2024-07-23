@@ -16,10 +16,22 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
+  const carouselApi = useBaseStore((state) => state.carouselApi);
 
   const handleClick = (prayType: PrayType) => () => {
+    if (!carouselApi) {
+      console.error("carouselApi is undefined");
+      return null;
+    }
     createPray(prayCard?.id, currentUserId, prayType);
     if (!isPrayToday) setIsPrayToday(true);
+    if (
+      carouselApi.selectedScrollSnap() ==
+      carouselApi.scrollSnapList().length - 2
+    ) {
+      return null;
+    }
+    carouselApi.scrollNext();
   };
 
   return (

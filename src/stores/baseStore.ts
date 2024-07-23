@@ -29,6 +29,7 @@ import {
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
+import { type CarouselApi } from "@/components/ui/carousel";
 
 interface EmojiData {
   emoji: string;
@@ -84,6 +85,8 @@ export interface BaseStore {
     content: string
   ) => Promise<PrayCard | null>;
   setPrayCardContent: (content: string) => void;
+  carouselApi: CarouselApi | null;
+  setCarouselApi: (api: CarouselApi) => void;
 
   // pray
   prayData: Pray[] | null;
@@ -241,6 +244,12 @@ const useBaseStore = create<BaseStore>()(
     setPrayCardContent: (content: string) => {
       set((state) => {
         state.inputPrayCardContent = content;
+      });
+    },
+    carouselApi: null,
+    setCarouselApi: (api: CarouselApi) => {
+      set((state) => {
+        state.carouselApi = api;
       });
     },
 
