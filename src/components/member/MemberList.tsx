@@ -26,7 +26,7 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
   useEffect(() => {
     fetchMemberListByGroupId(groupId);
     fetchPrayCardListByGroupId(groupId);
-    fetchIsPrayToday(currentUserId);
+    fetchIsPrayToday(currentUserId, groupId);
   }, [
     currentUserId,
     groupId,
