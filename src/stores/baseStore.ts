@@ -118,14 +118,6 @@ export interface BaseStore {
 
 const useBaseStore = create<BaseStore>()(
   immer((set) => ({
-    // carouselApi
-    carouselApi: null,
-    setCarouselApi: (api: CarouselApi) => {
-      set((state) => {
-        state.carouselApi = api;
-      });
-    },
-
     // user
     user: null,
     userLoading: true,
@@ -348,6 +340,13 @@ const useBaseStore = create<BaseStore>()(
         state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
+    },
+    // carouselApi
+    carouselApi: null,
+    setCarouselApi: (api: CarouselApi) => {
+      set((state) => {
+        state.carouselApi = api;
+      });
     },
   }))
 );
