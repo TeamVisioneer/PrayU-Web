@@ -52,7 +52,9 @@ const GroupPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
         <KakaoShareButton
-          groupPageUrl={`${import.meta.env.VITE_BASE_URL}/${targetGroup?.id}`}
+          groupPageUrl={`${import.meta.env.VITE_BASE_URL}/group/${
+            targetGroup?.id
+          }`}
         ></KakaoShareButton>
       </div>
       <Drawer>
