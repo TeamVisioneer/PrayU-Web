@@ -56,7 +56,7 @@ export const fetchPrayDataByUserId = async (
 
   let query = supabase
     .from("pray")
-    .select("*")
+    .select("*, profiles (id, full_name, avatar_url)")
     .eq("pray_card_id", prayCardId)
 
     .is("deleted_at", null);
@@ -68,7 +68,6 @@ export const fetchPrayDataByUserId = async (
     console.error("error", error);
     return null;
   }
-  console.log(data);
   return data as Pray[];
 };
 

@@ -84,11 +84,13 @@ export interface BaseStore {
   ) => Promise<PrayCard | null>;
   setPrayCardContent: (content: string) => void;
 
-  //pray
+  // pray
   prayData: Pray[] | null;
   prayDataHash: PrayDataHash;
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean;
+  reactionDatas: { [key in PrayType]?: EmojiData };
+  // TODO: prayerList 생성하기
   setIsPrayToday: (isPrayToday: boolean) => void;
   fetchIsPrayToday: (
     userId: string | undefined,
@@ -103,7 +105,6 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
-  reactionDatas: { [key in PrayType]?: EmojiData };
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -269,6 +270,7 @@ const useBaseStore = create<BaseStore>()(
       userId: string | undefined
     ) => {
       const prayData = await fetchPrayDataByUserId(prayCardId, userId);
+      console.log(prayData);
       if (prayData) {
         set((state) => {
           Object.values(PrayType).forEach((type) => {
