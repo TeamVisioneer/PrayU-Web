@@ -18,6 +18,7 @@ import {
   userIdPrayCardListHash,
   TodayPrayTypeHash,
   PrayDataHash,
+  PrayWithProfiles,
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import { fetchMemberListByGroupId, createMember } from "@/apis/member";
@@ -84,11 +85,13 @@ export interface BaseStore {
   ) => Promise<PrayCard | null>;
   setPrayCardContent: (content: string) => void;
 
-  //pray
+  // pray
   prayData: Pray[] | null;
   prayDataHash: PrayDataHash;
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean;
+  reactionDatas: { [key in PrayType]?: EmojiData };
+  prayerList: { [key: string]: PrayWithProfiles[] } | null;
   setIsPrayToday: (isPrayToday: boolean) => void;
   fetchIsPrayToday: (
     userId: string | undefined,
@@ -103,7 +106,9 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
-  reactionDatas: { [key in PrayType]?: EmojiData };
+  groupAndSortByUserId: (data: PrayWithProfiles[]) => {
+    [key: string]: PrayWithProfiles[];
+  };
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -249,6 +254,8 @@ const useBaseStore = create<BaseStore>()(
       [PrayType.GOOD]: { emoji: "👍", text: "힘내세요", num: 0 },
       [PrayType.LIKE]: { emoji: "❤️", text: "응원해요", num: 0 },
     },
+    prayerList: null,
+
     setIsPrayToday: (isPrayToday: boolean) => {
       set((state) => {
         state.isPrayToday = isPrayToday;
@@ -264,13 +271,36 @@ const useBaseStore = create<BaseStore>()(
         state.isPrayToday = isPrayToday;
       });
     },
+    groupAndSortByUserId: (data: PrayWithProfiles[]) => {
+      const hash: { [key: string]: PrayWithProfiles[] } = {};
+
+      data.forEach((item) => {
+        if (!hash[item.user_id!]) {
+          hash[item.user_id!] = [];
+        }
+        hash[item.user_id!].push(item);
+      });
+
+      const sortedEntries = Object.entries(hash).sort(
+        (a, b) => b[1].length - a[1].length
+      );
+
+      const sortedHash = sortedEntries.reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {} as { [key: string]: PrayWithProfiles[] });
+
+      return sortedHash;
+    },
     fetchPrayDataByUserId: async (
       prayCardId: string | undefined,
       userId: string | undefined
     ) => {
       const prayData = await fetchPrayDataByUserId(prayCardId, userId);
+
       if (prayData) {
         set((state) => {
+          state.prayerList = state.groupAndSortByUserId(prayData);
           Object.values(PrayType).forEach((type) => {
             state.reactionDatas[type]!.num = prayData.filter(
               (pray) => pray.pray_type === type
@@ -282,7 +312,6 @@ const useBaseStore = create<BaseStore>()(
       const today = new Date(getISOToday());
       const startOfDay = new Date(today.setHours(0, 0, 0, 0));
       const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-
       const todayPray = prayData?.find(
         (pray) =>
           pray.user_id === userId &&
@@ -295,6 +324,7 @@ const useBaseStore = create<BaseStore>()(
           (todayPray?.pray_type as PrayType) || null;
       });
     },
+
     createPray: async (
       prayCardId: string | undefined,
       userId: string | undefined,

@@ -23,6 +23,10 @@ export interface PrayCardWithProfiles extends PrayCard {
   profiles: Profiles;
 }
 
+export interface PrayWithProfiles extends Pray {
+  profiles: Profiles;
+}
+
 export interface UserIdMemberHash {
   [key: string]: MemberWithProfiles;
 }
