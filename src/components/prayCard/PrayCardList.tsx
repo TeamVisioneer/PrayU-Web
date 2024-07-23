@@ -5,6 +5,8 @@ import {
 } from "@/components/ui/carousel";
 import useBaseStore from "@/stores/baseStore";
 import PrayCardUI from "./PrayCardUI";
+import { type CarouselApi } from "@/components/ui/carousel";
+import { useEffect, useState } from "react";
 
 interface PrayCardListProps {
   currentUserId: string | undefined;
@@ -13,19 +15,32 @@ interface PrayCardListProps {
 // TODO: PrayData 한번에 가져와서 미리 렌더링 할 수 있도록 수정
 const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+    api.on("select", () => {
+      if (api.selectedScrollSnap() == 0) {
+        api.scrollNext();
+      }
+      if (api.selectedScrollSnap() == api.scrollSnapList().length - 1) {
+        api.scrollPrev();
+      }
+    });
+  }, [api, current]);
 
   return (
     <Carousel
+      setApi={setApi}
       opts={{
         startIndex: 1,
       }}
     >
       <CarouselContent>
-        <CarouselItem className="basis-5/6 pointer-events-none">
-          <div className="flex justify-center items-center w-full aspect-square">
-            start
-          </div>
-        </CarouselItem>
+        <CarouselItem className="basis-5/6 "></CarouselItem>
         {groupPrayCardList
           ?.filter((prayCard) => prayCard.user_id != currentUserId)
           .map((prayCard) => (
@@ -33,11 +48,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
               <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
             </CarouselItem>
           ))}
-        <CarouselItem className="basis-5/6 pointer-events-none">
-          <div className="flex justify-center items-center w-full aspect-square">
-            end
-          </div>
-        </CarouselItem>
+        <CarouselItem className="basis-5/6 "></CarouselItem>
       </CarouselContent>
     </Carousel>
   );
