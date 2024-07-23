@@ -12,6 +12,8 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import PrayCardUI from "../prayCard/PrayCardUI";
+import useBaseStore from "@/stores/baseStore";
+import { useEffect } from "react";
 
 interface MemberProps {
   currentUserId: string | undefined;
@@ -25,6 +27,13 @@ const Member: React.FC<MemberProps> = ({
   prayCardList,
 }) => {
   const prayCard = prayCardList[0] || null;
+  const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
+  const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
+
+  useEffect(() => {
+    if (currentUserId == member?.user_id)
+      setMyPrayerContent(prayCard?.content || "");
+  }, [prayCard?.content, setMyPrayerContent, currentUserId, member?.user_id]);
 
   const memberUI = (
     <div className="flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
@@ -37,7 +46,9 @@ const Member: React.FC<MemberProps> = ({
         <h3>{member?.profiles.full_name}</h3>
       </div>
       <div className="text-left text-sm text-gray-600">
-        {prayCard?.content || "아직 기도제목이 없어요"}
+        {currentUserId != member?.user_id
+          ? prayCard?.content || "아직 기도제목이 없어요"
+          : myPrayerContent || "아직 기도제목이 없어요"}
       </div>
       <div className="text-gray-400 text-left text-xs">
         {getISODate(prayCard?.updated_at).split("T")[0]}

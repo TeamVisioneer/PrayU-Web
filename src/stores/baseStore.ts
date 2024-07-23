@@ -26,6 +26,7 @@ import {
   createPrayCard,
   fetchPrayCardListByGroupId,
   fetchPrayCardListByUserId,
+  updatePrayCardContent,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
@@ -73,6 +74,9 @@ export interface BaseStore {
   userIdPrayCardListHash: userIdPrayCardListHash | null;
   targetPrayCard: PrayCardWithProfiles | null;
   inputPrayCardContent: string;
+  isEditingPrayCard: boolean;
+  myPrayerContent: string | null;
+  setMyPrayerContent: (myPrayerContent: string) => void;
   fetchPrayCardListByGroupId: (groupId: string | undefined) => Promise<void>;
   fetchPrayCardListByUserId: (userId: string | undefined) => Promise<void>;
   createUserIdPrayCardListHash: (
@@ -87,6 +91,9 @@ export interface BaseStore {
   setPrayCardContent: (content: string) => void;
   carouselApi: CarouselApi | null;
   setCarouselApi: (api: CarouselApi) => void;
+  setIsEditingPrayCard: (isEditingPrayCard: boolean) => void;
+  handleEditClick: () => void;
+  handleSaveClick: (prayCardId: string, myPrayerContent: string) => void;
 
   // pray
   prayData: Pray[] | null;
@@ -205,6 +212,18 @@ const useBaseStore = create<BaseStore>()(
     userIdPrayCardListHash: null,
     targetPrayCard: null,
     inputPrayCardContent: "",
+    isEditingPrayCard: false,
+    myPrayerContent: null,
+    setMyPrayerContent: (myPrayerContent: string) => {
+      set((state) => {
+        state.myPrayerContent = myPrayerContent;
+      });
+    },
+    setIsEditingPrayCard: (isEditingPrayCard: boolean) => {
+      set((state) => {
+        state.isEditingPrayCard = isEditingPrayCard;
+      });
+    },
     fetchPrayCardListByGroupId: async (groupId: string | undefined) => {
       const groupPrayCardList = await fetchPrayCardListByGroupId(groupId);
       set((state) => {
@@ -250,6 +269,18 @@ const useBaseStore = create<BaseStore>()(
     setCarouselApi: (api: CarouselApi) => {
       set((state) => {
         state.carouselApi = api;
+      });
+    },
+    handleEditClick: () => {
+      set((state) => {
+        state.isEditingPrayCard = true;
+      });
+    },
+    handleSaveClick: (prayCardId, myPrayerContent) => {
+      updatePrayCardContent(prayCardId, myPrayerContent);
+      set((state) => {
+        state.isEditingPrayCard = false;
+        state.myPrayerContent = myPrayerContent;
       });
     },
 
