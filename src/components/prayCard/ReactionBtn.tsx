@@ -17,6 +17,9 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const carouselApi = useBaseStore((state) => state.carouselApi);
+  const sleep = (ms: number): Promise<void> => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
 
   const handleClick = (prayType: PrayType) => () => {
     if (!carouselApi) {
@@ -31,7 +34,10 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     ) {
       return null;
     }
-    carouselApi.scrollNext();
+    sleep(500).then(() => {
+      console.log("와아아다닫다다다ㅏㄷ다");
+      carouselApi.scrollNext();
+    });
   };
 
   return (
