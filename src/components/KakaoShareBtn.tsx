@@ -38,11 +38,11 @@ interface KakaoLinkObject {
 }
 
 interface KakaoShareButtonProps {
-  webUrl: string;
+  groupPageUrl: string;
 }
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
-  webUrl,
+  groupPageUrl,
 }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -60,28 +60,22 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
         container: "#kakaotalk-sharing-btn",
         objectType: "feed",
         content: {
-          title: "PrayU",
-          description: "PrayU와 함께 기도해요!",
-          imageUrl: "이미지주소",
+          title: "PrayU 우리만의 기도제목 기록공간",
+          description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
+          imageUrl: `${
+            import.meta.env.VITE_SUPA_PROJECT_URL
+          }/storage/v1/object/public/prayu-staging/prayCard.png`,
           link: {
-            mobileWebUrl: webUrl,
-            webUrl: webUrl,
+            mobileWebUrl: groupPageUrl,
+            webUrl: groupPageUrl,
           },
         },
-
         buttons: [
           {
             title: "오늘의 기도",
             link: {
-              mobileWebUrl: `${import.meta.env.VITE_BASE_URL}`,
-              webUrl: `${import.meta.env.VITE_BASE_URL}`,
-            },
-          },
-          {
-            title: "내 기도제목",
-            link: {
-              mobileWebUrl: `${import.meta.env.VITE_BASE_URL}`,
-              webUrl: `${import.meta.env.VITE_BASE_URL}`,
+              mobileWebUrl: groupPageUrl,
+              webUrl: groupPageUrl,
             },
           },
         ],
@@ -93,7 +87,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [groupPageUrl]);
 
   return (
     <Button id="kakaotalk-sharing-btn" variant="ghost" size="icon">
