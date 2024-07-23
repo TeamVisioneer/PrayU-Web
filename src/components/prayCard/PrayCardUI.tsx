@@ -85,12 +85,18 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
           <ReactionBtn currentUserId={currentUserId} prayCard={prayCard} />
         </div>
       ) : (
-        <div>
-          <button onClick={handleEditClick}>
+        <div className="flex flex-col">
+          <button
+            className="w-full bg-black text-white rounded-2xl"
+            onClick={handleEditClick}
+          >
             {isEditingPrayCard ? "" : "수정"}
           </button>
           {isEditingPrayCard && (
-            <button onClick={() => handleSaveClick(prayCard!.id, content)}>
+            <button
+              className="w-full bg-black text-white rounded-2xl"
+              onClick={() => handleSaveClick(prayCard!.id, content)}
+            >
               저장
             </button>
           )}
