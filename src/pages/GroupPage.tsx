@@ -7,6 +7,7 @@ import { KakaoShareButton } from "@/components/KakaoShareBtn";
 import MemberList from "@/components/member/MemberList";
 import { Drawer } from "@/components/ui/drawer";
 import PrayCardContent from "@/components/prayCard/PrayCardContent";
+import GroupMenu from "../components/GroupMenuBtn";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -47,6 +48,7 @@ const GroupPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-10">
+      <GroupMenu userGroupList={groupList} targetGroup={targetGroup} />
       <div className="flex justify-between items-center">
         <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
         <KakaoShareButton
