@@ -26,13 +26,15 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   );
 
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
-  const [content, setContent] = useState(myPrayerContent || "");
+  const [content, setContent] = useState(prayCard?.content || "");
 
   useEffect(() => {
     fetchPrayDataByUserId(
       prayCard?.id,
       prayCard?.user_id == currentUserId ? undefined : currentUserId
     );
+    if (prayCard?.user_id == currentUserId && myPrayerContent)
+      setContent(myPrayerContent);
   }, [
     fetchPrayDataByUserId,
     prayCard?.id,
@@ -40,6 +42,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
     prayCard?.user_id,
     setMyPrayerContent,
     prayCard?.content,
+    myPrayerContent,
   ]);
 
   if (!prayDataHash[prayCard?.id || ""]) {
