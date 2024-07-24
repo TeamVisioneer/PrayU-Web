@@ -21,14 +21,14 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
 }) => {
   return (
     <Sheet>
-      <SheetTrigger className="flex flex-col items-end focus:outline-none">
+      <SheetTrigger className="flex flex-col items-end">
         <img src={menuIcon} alt="asdf" className="w-8 h-8" />
       </SheetTrigger>
       <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end">
         <SheetHeader>
           <SheetTitle className="text-end">PrayU 그룹</SheetTitle>
           <SheetClose className="focus:outline-none">
-            <div className="flex flex-col gap-4 items-end text-gray-500 focus:outline-none">
+            <div className="flex flex-col gap-4 items-end text-gray-500">
               {userGroupList.map((group) => (
                 <a
                   key={group.id}
