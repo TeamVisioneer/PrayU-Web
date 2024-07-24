@@ -53,12 +53,6 @@ export const getDomainUrl = () => {
     : `${protocol}//${hostname}`;
 };
 
-export const reduceContent = (
-  text: string | null,
-  length: number = 10
-): string => {
-  if (!text) {
-    return "아직 기도제목이 없어요";
-  }
+export const reduceString = (text: string, length: number = 10): string => {
   return text.length <= length ? text : `${text.substring(0, length)}...`;
 };
