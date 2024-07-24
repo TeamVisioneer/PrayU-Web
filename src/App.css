@@ -79,3 +79,8 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+*:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
