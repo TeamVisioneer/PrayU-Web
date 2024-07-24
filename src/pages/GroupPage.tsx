@@ -8,6 +8,7 @@ import MemberList from "@/components/member/MemberList";
 import { Drawer } from "@/components/ui/drawer";
 import PrayCardContent from "@/components/prayCard/PrayCardContent";
 import GroupMenu from "../components/GroupMenuBtn";
+import { getDomainUrl } from "@/lib/utils";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -35,10 +36,10 @@ const GroupPage: React.FC = () => {
   useEffect(() => {
     if (!paramsGroupId && groupList) {
       if (groupList.length === 0) {
-        navigate("/group/new");
+        navigate("/group/new", { replace: true });
         return;
       } else {
-        navigate(`/group/${groupList[0].id}`);
+        navigate(`/group/${groupList[0].id}`, { replace: true });
         return;
       }
     }
@@ -52,15 +53,15 @@ const GroupPage: React.FC = () => {
     );
   }
 
+  const domainUrl = getDomainUrl();
+
   return (
     <div className="flex flex-col gap-10">
       <GroupMenu userGroupList={groupList} targetGroup={targetGroup} />
       <div className="flex justify-between items-center">
         <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
         <KakaoShareButton
-          groupPageUrl={`${import.meta.env.VITE_BASE_URL}/group/${
-            targetGroup?.id
-          }`}
+          groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
         ></KakaoShareButton>
       </div>
       <Drawer open={openTodayPrayDrawer} onOpenChange={setOpenTodayPrayDrawer}>

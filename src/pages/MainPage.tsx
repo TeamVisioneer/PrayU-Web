@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../../supabase/client";
 import useAuth from "../hooks/useAuth";
+import { getDomainUrl } from "@/lib/utils";
 
 const MainPage: React.FC = () => {
   const { user } = useAuth();
@@ -15,8 +16,9 @@ const MainPage: React.FC = () => {
     navigate("/group", { replace: true });
   }
 
+  const baseUrl = getDomainUrl();
   const from = location.state?.from?.pathname || "/group";
-  const redirectUrl = `${import.meta.env.VITE_BASE_URL}${from}`;
+  const redirectUrl = `${baseUrl}${from}`;
   const imageUrl = `${
     import.meta.env.VITE_SUPA_PROJECT_URL
   }/storage/v1/object/public/prayu-staging/prayCard.png`;

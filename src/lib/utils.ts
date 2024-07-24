@@ -45,3 +45,10 @@ export const getISODate = (dateString: string | null) => {
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export const getDomainUrl = () => {
+  const { protocol, hostname, port } = window.location;
+  return hostname === "localhost"
+    ? `${protocol}//${hostname}:${port}`
+    : `${protocol}//${hostname}`;
+};
