@@ -17,27 +17,31 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
-  const carouselApi = useBaseStore((state) => state.carouselApi);
-  const setOpenDrawer = useBaseStore((state) => state.setOpenDrawer);
+  const prayCardCarouselApi = useBaseStore(
+    (state) => state.prayCardCarouselApi
+  );
+  const setOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setOpenTodayPrayDrawer
+  );
 
   const handleClick = (prayType: PrayType) => () => {
-    if (!carouselApi) {
+    if (!prayCardCarouselApi) {
       console.error("carouselApi is undefined");
       return null;
     }
     createPray(prayCard?.id, currentUserId, prayType);
     if (!isPrayToday) setIsPrayToday(true);
-    if (
-      carouselApi.selectedScrollSnap() ==
-      carouselApi.scrollSnapList().length - 2
-    ) {
-      sleep(500).then(() => {
-        setOpenDrawer(false);
-      });
-      return null;
-    }
+
     sleep(500).then(() => {
-      carouselApi.scrollNext();
+      if (
+        prayCardCarouselApi.selectedScrollSnap() ==
+        prayCardCarouselApi.scrollSnapList().length - 2
+      ) {
+        setOpenTodayPrayDrawer(false);
+        return null;
+      } else {
+        prayCardCarouselApi.scrollNext();
+      }
     });
   };
 

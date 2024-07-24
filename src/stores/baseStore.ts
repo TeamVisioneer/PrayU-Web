@@ -57,8 +57,8 @@ export interface BaseStore {
     name: string | undefined,
     intro: string | undefined
   ) => Promise<Group | null>;
-  openDrawer: boolean;
-  setOpenDrawer: (openDrawer: boolean) => void;
+  openTodayPrayDrawer: boolean;
+  setOpenTodayPrayDrawer: (openTodayPrayDrawer: boolean) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -91,8 +91,8 @@ export interface BaseStore {
     content: string
   ) => Promise<PrayCard | null>;
   setPrayCardContent: (content: string) => void;
-  carouselApi: CarouselApi | null;
-  setCarouselApi: (api: CarouselApi) => void;
+  prayCardCarouselApi: CarouselApi | null;
+  setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
   setIsEditingPrayCard: (isEditingPrayCard: boolean) => void;
   handleEditClick: () => void;
   handleSaveClick: (prayCardId: string, myPrayerContent: string) => void;
@@ -188,10 +188,10 @@ const useBaseStore = create<BaseStore>()(
         state.inputGroupName = groupName;
       });
     },
-    openDrawer: false,
-    setOpenDrawer: (openDrawer: boolean) => {
+    openTodayPrayDrawer: false,
+    setOpenTodayPrayDrawer: (openTodayPrayDrawer: boolean) => {
       set((state) => {
-        state.openDrawer = openDrawer;
+        state.openTodayPrayDrawer = openTodayPrayDrawer;
       });
     },
 
@@ -273,10 +273,10 @@ const useBaseStore = create<BaseStore>()(
         state.inputPrayCardContent = content;
       });
     },
-    carouselApi: null,
-    setCarouselApi: (api: CarouselApi) => {
+    prayCardCarouselApi: null,
+    setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => {
       set((state) => {
-        state.carouselApi = api;
+        state.prayCardCarouselApi = prayCardCarouselApi;
       });
     },
     handleEditClick: () => {
