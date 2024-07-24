@@ -29,6 +29,7 @@ const Member: React.FC<MemberProps> = ({
   const prayCard = prayCardList[0] || null;
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
   const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
+  const makePrayerShort = useBaseStore((state) => state.makePrayerShort);
 
   useEffect(() => {
     if (currentUserId == member?.user_id)
@@ -45,10 +46,10 @@ const Member: React.FC<MemberProps> = ({
         />
         <h3>{member?.profiles.full_name}</h3>
       </div>
-      <div className="text-left text-sm text-gray-600 whitespace-pre-line">
+      <div className="text-left text-sm text-gray-600">
         {currentUserId != member?.user_id
-          ? prayCard?.content || "아직 기도제목이 없어요"
-          : myPrayerContent || "아직 기도제목이 없어요"}
+          ? makePrayerShort(prayCard?.content, 20)
+          : makePrayerShort(myPrayerContent, 20)}
       </div>
       <div className="text-gray-400 text-left text-xs">
         {getISODate(prayCard?.updated_at).split("T")[0]}

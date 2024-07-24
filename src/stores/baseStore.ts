@@ -69,6 +69,7 @@ export interface BaseStore {
     groupId: string | undefined,
     userId: string | undefined
   ) => Promise<Member | null>;
+  makePrayerShort: (text: string | null, length: number) => string;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -212,6 +213,14 @@ const useBaseStore = create<BaseStore>()(
     ): Promise<Member | null> => {
       const member = await createMember(groupId, userId);
       return member;
+    },
+    makePrayerShort: (text: string | null, length: number = 10): string => {
+      if (text && text.length <= length) {
+        return text;
+      }
+      return text
+        ? text.substring(0, length) + "..."
+        : "아직 기도제목이 없어요";
     },
 
     // prayCard
