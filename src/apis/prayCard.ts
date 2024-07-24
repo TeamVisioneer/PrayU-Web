@@ -1,3 +1,4 @@
+import { getISOToday } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
 import { PrayCard, PrayCardWithProfiles } from "../../supabase/types/tables";
 
@@ -61,7 +62,10 @@ export async function updatePrayCardContent(
 ) {
   const { data, error } = await supabase
     .from("pray_card")
-    .update({ content: newPrayContent })
+    .update({
+      content: newPrayContent,
+      updated_at: getISOToday(), // updated_at 필드를 현재 시간으로 설정
+    })
     .eq("id", prayCardId);
 
   if (error) {
