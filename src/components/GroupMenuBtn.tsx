@@ -21,7 +21,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
 }) => {
   return (
     <Sheet>
-      <SheetTrigger className="flex flex-col items-end">
+      <SheetTrigger className="flex flex-col items-end focus:outline-none">
         <img src={menuIcon} alt="asdf" className="w-8 h-8" />
       </SheetTrigger>
       <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end">

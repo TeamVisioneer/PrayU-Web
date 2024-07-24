@@ -56,7 +56,7 @@ const GroupPage: React.FC = () => {
   const domainUrl = getDomainUrl();
 
   return (
-    <div className="flex flex-col gap-10 focus:outline-none">
+    <div className="flex flex-col gap-10">
       <GroupMenu userGroupList={groupList} targetGroup={targetGroup} />
       <div className="flex justify-between items-center">
         <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
