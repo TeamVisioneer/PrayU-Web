@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../../supabase/client";
 import useAuth from "../hooks/useAuth";
+import { getDomainUrl } from "@/lib/utils";
 
 const MainPage: React.FC = () => {
   const { user } = useAuth();
@@ -15,8 +16,7 @@ const MainPage: React.FC = () => {
     navigate("/group", { replace: true });
   }
 
-  const { hostname, port } = window.location;
-  const baseUrl = hostname === "localhost" ? `${hostname}:${port}` : hostname;
+  const baseUrl = getDomainUrl();
   const from = location.state?.from?.pathname || "/group";
   const redirectUrl = `${baseUrl}${from}`;
   const imageUrl = `${
