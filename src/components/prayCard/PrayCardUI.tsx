@@ -1,5 +1,5 @@
 import useBaseStore from "@/stores/baseStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import PrayCardCalendar from "./WeeklyCalendar";
 import ReactionBtn from "./ReactionBtn";
@@ -26,7 +26,10 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   );
 
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
+
   const [content, setContent] = useState(prayCard?.content || "");
+  const [isScrollable, setIsScrollable] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     fetchPrayDataByUserId(
@@ -44,6 +47,13 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
     prayCard?.content,
     myPrayerContent,
   ]);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      setIsScrollable(textarea.scrollHeight > textarea.clientHeight);
+    }
+  }, [content]);
 
   if (!prayDataHash[prayCard?.id || ""]) {
     return (
@@ -63,15 +73,21 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
         />
         <div className="text-sm">{prayCard?.profiles.full_name}</div>
       </div>
-      <div className="flex h-full justify-center items-center">
-        {isEditingPrayCard ? (
+      <div
+        className={`flex justify-center  h-full overflow-y-auto ${
+          isScrollable ? "items-start" : "items-center"
+        }`}
+      >
+        {prayCard?.user_id == currentUserId && isEditingPrayCard ? (
           <textarea
-            className="w-full h-full p-2 rounded-md border border-gray-300"
+            ref={textareaRef}
+            className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            maxLength={400}
           />
         ) : (
-          <p>{content}</p>
+          <p className="whitespace-pre-line">{content}</p>
         )}
       </div>
     </div>

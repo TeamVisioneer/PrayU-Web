@@ -35,7 +35,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
       return null;
     }
     sleep(500).then(() => {
-      console.log("와아아다닫다다다ㅏㄷ다");
       carouselApi.scrollNext();
     });
   };
