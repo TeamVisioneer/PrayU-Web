@@ -78,7 +78,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
           isScrollable ? "items-start" : "items-center"
         }`}
       >
-        {isEditingPrayCard ? (
+        {prayCard?.user_id == currentUserId && isEditingPrayCard ? (
           <textarea
             ref={textareaRef}
             className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
