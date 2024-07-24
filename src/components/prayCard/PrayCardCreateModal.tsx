@@ -23,10 +23,6 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
     currentUserId: string | undefined,
     groupId: string | undefined
   ) => {
-    if (inputPrayCardContent.trim() === "") {
-      alert("기도제목을 입력해주세요.");
-      return;
-    }
     const isMember = memberList?.some(
       (member) => member.user_id === currentUserId
     );
