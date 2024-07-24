@@ -11,7 +11,6 @@ interface PrayCardListProps {
   currentUserId: string | undefined;
 }
 
-// TODO: PrayData 한번에 가져와서 미리 렌더링 할 수 있도록 수정
 const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const prayCardCarouselApi = useBaseStore(
@@ -22,19 +21,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
   );
 
   useEffect(() => {
-    if (!prayCardCarouselApi) {
-      return;
-    }
-    prayCardCarouselApi.on("select", () => {
-      if (prayCardCarouselApi.selectedScrollSnap() == 0) {
-        prayCardCarouselApi.scrollNext();
-      }
-      if (
-        prayCardCarouselApi.selectedScrollSnap() ==
-        prayCardCarouselApi.scrollSnapList().length - 1
-      ) {
-        prayCardCarouselApi.scrollPrev();
-      }
+    prayCardCarouselApi?.on("select", () => {
+      const currentIndex = prayCardCarouselApi.selectedScrollSnap();
+      const carouselLength = prayCardCarouselApi.scrollSnapList().length;
+      if (currentIndex == 0) prayCardCarouselApi.scrollNext();
+      if (currentIndex == carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
   }, [prayCardCarouselApi]);
 
