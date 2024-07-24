@@ -45,7 +45,7 @@ const Member: React.FC<MemberProps> = ({
         />
         <h3>{member?.profiles.full_name}</h3>
       </div>
-      <div className="text-left text-sm text-gray-600">
+      <div className="text-left text-sm text-gray-600 whitespace-pre-line">
         {currentUserId != member?.user_id
           ? prayCard?.content || "아직 기도제목이 없어요"
           : myPrayerContent || "아직 기도제목이 없어요"}
