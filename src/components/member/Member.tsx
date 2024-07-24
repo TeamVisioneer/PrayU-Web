@@ -59,7 +59,7 @@ const Member: React.FC<MemberProps> = ({
   return (
     <Drawer>
       <DrawerTrigger className="focus:outline-none">{memberUI}</DrawerTrigger>
-      <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] px-10 pb-20">
+      <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] px-10 pb-20 focus:outline-none">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
