@@ -35,10 +35,10 @@ const GroupPage: React.FC = () => {
   useEffect(() => {
     if (!paramsGroupId && groupList) {
       if (groupList.length === 0) {
-        navigate("/group/new");
+        navigate("/group/new", { replace: true });
         return;
       } else {
-        navigate(`/group/${groupList[0].id}`);
+        navigate(`/group/${groupList[0].id}`, { replace: true });
         return;
       }
     }

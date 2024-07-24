@@ -28,7 +28,7 @@ const GroupCreatePage: React.FC = () => {
       return;
     }
     const targetGroup = await createGroup(userId, inputGroupName, "intro");
-    targetGroup && navigate("/group/" + targetGroup.id);
+    targetGroup && navigate("/group/" + targetGroup.id, { replace: true });
   };
 
   return (
