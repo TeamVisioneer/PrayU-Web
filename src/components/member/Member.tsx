@@ -2,7 +2,7 @@ import {
   MemberWithProfiles,
   PrayCardWithProfiles,
 } from "supabase/types/tables";
-import { getISODate } from "../../lib/utils";
+import { getISODate, reduceContent } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -29,7 +29,6 @@ const Member: React.FC<MemberProps> = ({
   const prayCard = prayCardList[0] || null;
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
   const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
-  const makePrayerShort = useBaseStore((state) => state.makePrayerShort);
 
   useEffect(() => {
     if (currentUserId == member?.user_id)
@@ -48,8 +47,8 @@ const Member: React.FC<MemberProps> = ({
       </div>
       <div className="text-left text-sm text-gray-600">
         {currentUserId != member?.user_id
-          ? makePrayerShort(prayCard?.content, 20)
-          : makePrayerShort(myPrayerContent, 20)}
+          ? reduceContent(prayCard?.content, 20)
+          : reduceContent(myPrayerContent, 20)}
       </div>
       <div className="text-gray-400 text-left text-xs">
         {getISODate(prayCard?.updated_at).split("T")[0]}
