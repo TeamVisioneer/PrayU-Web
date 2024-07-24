@@ -11,14 +11,23 @@ const PrayList: React.FC = () => {
   const prayerList = useBaseStore((state) => state.prayerList);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
+  console.log(prayerList);
+
+  const isPrayerListEmpty = !prayerList || Object.keys(prayerList).length === 0;
+
   return (
     <DrawerContent className="h-[400px]">
       <DrawerHeader>
         <DrawerTitle>기도해준 사람</DrawerTitle>
       </DrawerHeader>
       <DrawerDescription></DrawerDescription>
-      <div className="h-full overflow-y-auto">
-        {prayerList ? (
+      <div className="h-full overflow-y-auto flex justify-center items-center">
+        {isPrayerListEmpty ? (
+          <div className="flex-col">
+            <p>아직 기도해준 사람이 없어요</p>
+            <p>그룹원들의 기도를 독려해봐요</p>
+          </div>
+        ) : (
           Object.keys(prayerList).map((user_id) => (
             <div
               key={user_id}
@@ -43,8 +52,6 @@ const PrayList: React.FC = () => {
               </div>
             </div>
           ))
-        ) : (
-          <div>아직 기도해준 사람이 없어요</div>
         )}
       </div>
     </DrawerContent>

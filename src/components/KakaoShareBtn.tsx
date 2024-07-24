@@ -39,10 +39,12 @@ interface KakaoLinkObject {
 
 interface KakaoShareButtonProps {
   groupPageUrl: string;
+  locate: string | null;
 }
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   groupPageUrl,
+  locate,
 }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -89,6 +91,9 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     };
   }, [groupPageUrl]);
 
+  if (locate === "prayCard") {
+    return null;
+  }
   return (
     <Button
       id="kakaotalk-sharing-btn"
