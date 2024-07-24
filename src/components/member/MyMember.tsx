@@ -10,6 +10,7 @@ import {
 import PrayCardUI from "../prayCard/PrayCardUI";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
+import { ClipLoader } from "react-spinners";
 
 interface MemberProps {
   currentUserId: string;
@@ -27,6 +28,14 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId }) => {
     getMemberById(currentUserId);
     fetchPrayCardListByUserId(currentUserId);
   }, [currentUserId, getMemberById, fetchPrayCardListByUserId]);
+
+  if (!member || !userPrayCardList) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
 
   const prayCard = userPrayCardList?.[0] || null;
   const content = prayCard

@@ -62,7 +62,7 @@ const GroupPage: React.FC = () => {
     if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
   }, [user, targetGroup, fetchIsPrayToday]);
 
-  if (!groupList || (paramsGroupId && !targetGroup) || !isPrayToday) {
+  if (!groupList || (paramsGroupId && !targetGroup) || isPrayToday == null) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
