@@ -28,7 +28,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
         <SheetHeader>
           <SheetTitle className="text-end">PrayU 그룹</SheetTitle>
           <SheetClose>
-            <div className="flex flex-col gap-4 items-end text-gray-500">
+            <div className="flex flex-col gap-4 items-end text-gray-500 focus:outline-none">
               {userGroupList.map((group) => (
                 <a
                   key={group.id}
