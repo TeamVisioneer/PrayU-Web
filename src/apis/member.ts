@@ -35,7 +35,7 @@ export const createMember = async (
 
 export const getMemberByUserId = async (
   userId: string | undefined
-): Promise<Member | null> => {
+): Promise<MemberWithProfiles | null> => {
   if (!userId) return null;
   const { data, error } = await supabase
     .from("member")
@@ -46,5 +46,5 @@ export const getMemberByUserId = async (
     console.error("error", error);
     return null;
   }
-  return data ? data[0] : null;
+  return data ? (data[0] as MemberWithProfiles) : null;
 };

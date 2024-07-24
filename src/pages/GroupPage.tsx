@@ -38,10 +38,6 @@ const GroupPage: React.FC = () => {
     (state) => state.setOpenTodayPrayDrawer
   );
 
-  const fetchPrayCardListByUserId = useBaseStore(
-    (state) => state.fetchPrayCardListByUserId
-  );
-
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
@@ -63,11 +59,10 @@ const GroupPage: React.FC = () => {
   }, [groupList, navigate, paramsGroupId]);
 
   useEffect(() => {
-    fetchPrayCardListByUserId(user!.id);
     if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
-  }, [user, targetGroup, fetchPrayCardListByUserId, fetchIsPrayToday]);
+  }, [user, targetGroup, fetchIsPrayToday]);
 
-  if (!groupList || (paramsGroupId && !targetGroup)) {
+  if (!groupList || (paramsGroupId && !targetGroup) || !isPrayToday) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
