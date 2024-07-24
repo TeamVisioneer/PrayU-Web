@@ -81,11 +81,10 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
         {isEditingPrayCard ? (
           <textarea
             ref={textareaRef}
-            className="w-full h-full p-2 rounded-md border border-gray-300"
+            className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            maxLength={200}
-            style={{ resize: "none", overflow: "auto" }}
+            maxLength={400}
           />
         ) : (
           <p className="whitespace-pre-line">{content}</p>
