@@ -45,14 +45,15 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
           기도제목을 작성하면 그룹에 참여할 수 있어요
         </div>
       </div>
-      <div className="flex items-center justify-center w-full">
-        <Textarea
-          className="h-48"
-          placeholder="기도제목을 작성해주세요"
-          value={inputPrayCardContent}
-          onChange={(e) => setPrayCardContent(e.target.value)}
-        />
-      </div>
+      <Textarea
+        className="h-48 placeholder-gray-50"
+        style={{
+          fontSize: "16px",
+        }}
+        placeholder="기도제목을 작성해주세요"
+        value={inputPrayCardContent}
+        onChange={(e) => setPrayCardContent(e.target.value)}
+      />
       <div className="w-full flex flex-col items-center justify-center text-center">
         <Button
           className="w-full bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
