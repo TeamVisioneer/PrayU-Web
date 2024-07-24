@@ -22,6 +22,10 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
   );
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
+  const currentGroupCount = useBaseStore((state) => state.currentGroupCount);
+  const maxPossibleGroupCount = useBaseStore(
+    (state) => state.maxPossibleGroupCount
+  );
 
   useEffect(() => {
     fetchMemberListByGroupId(groupId);
@@ -59,10 +63,16 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
   }, {} as userIdPrayCardListHash);
 
   if (!userIdPrayCardListHash[currentUserId || ""]) {
-    // TODO: 모달로 변경 필요
-    return (
-      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
-    );
+    if (currentGroupCount < maxPossibleGroupCount) {
+      return (
+        // TODO: 모달로 변경 필요
+        <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
+      );
+    } else {
+      return (
+        <div>최대 {maxPossibleGroupCount}개의 그룹만 참여할 수 있어요</div>
+      );
+    }
   }
 
   return (

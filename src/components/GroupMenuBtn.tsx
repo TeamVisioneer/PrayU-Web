@@ -61,7 +61,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             <button
               onClick={() => {
                 toast({
-                  description: `그룹은 최대 ${maxPossibleGroupCount}개까지 만들 수 있어요`,
+                  description: `최대 ${maxPossibleGroupCount}개의 그룹만 참여할 수 있어요`,
                 });
               }}
             >
