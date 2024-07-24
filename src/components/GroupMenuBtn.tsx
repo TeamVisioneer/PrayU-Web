@@ -29,20 +29,27 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           <SheetTitle className="text-end">PrayU 그룹</SheetTitle>
           <SheetClose className="focus:outline-none">
             <div className="flex flex-col gap-4 items-end text-gray-500">
-              {userGroupList.map((group) => (
-                <a
-                  key={group.id}
-                  href={`/group/${group.id}`}
-                  className={`${
-                    group.id === targetGroup?.id
-                      ? "text-black font-bold underline"
-                      : ""
-                  }`}
-                >
-                  {group.name}
-                </a>
-              ))}
-              <a href={"/group/new"}>+ 그룹 만들기</a>
+              {userGroupList.map(
+                (group) =>
+                  group && (
+                    <a
+                      key={group.id}
+                      href={`${import.meta.env.VITE_BASE_URL}/group/${
+                        group.id
+                      }`}
+                      className={`${
+                        group.id === targetGroup?.id
+                          ? "text-black font-bold underline"
+                          : ""
+                      }`}
+                    >
+                      {group.name}
+                    </a>
+                  )
+              )}
+              <a href={`${import.meta.env.VITE_BASE_URL}/group/new`}>
+                + 그룹 만들기
+              </a>
               <a href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}>
                 문의하기
               </a>
