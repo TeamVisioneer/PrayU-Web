@@ -74,7 +74,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
         <div className="text-sm">{prayCard?.profiles.full_name}</div>
       </div>
       <div
-        className={`flex justify-center  h-full overflow-y-auto ${
+        className={`flex justify-center  h-full overflow-y-auto no-scrollbar ${
           isScrollable ? "items-start" : "items-center"
         }`}
       >
