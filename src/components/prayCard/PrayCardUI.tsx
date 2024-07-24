@@ -108,8 +108,11 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
         <div className="flex flex-col gap-5">
           {isEditingPrayCard ? (
             <button
-              className="w-full bg-green-700 text-white rounded-2xl"
+              className={`w-full bg-green-700 text-white rounded-2xl ${
+                !content ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               onClick={() => handleSaveClick(prayCard!.id, content)}
+              disabled={!content}
             >
               저장
             </button>

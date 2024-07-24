@@ -64,7 +64,7 @@ export async function updatePrayCardContent(
     .from("pray_card")
     .update({
       content: newPrayContent,
-      updated_at: getISOToday(), // updated_at 필드를 현재 시간으로 설정
+      updated_at: getISOToday(),
     })
     .eq("id", prayCardId);
 
