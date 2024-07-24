@@ -54,7 +54,6 @@ const GroupPage: React.FC = () => {
 
   const { hostname, port } = window.location;
   const baseUrl = hostname === "localhost" ? `${hostname}:${port}` : hostname;
-  console.log(baseUrl);
 
   return (
     <div className="flex flex-col gap-10">
