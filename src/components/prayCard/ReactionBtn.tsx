@@ -1,6 +1,7 @@
 import { PrayType } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
+import { sleep } from "@/lib/utils";
 
 interface ReactionBtnProps {
   currentUserId: string | undefined;
@@ -18,9 +19,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const carouselApi = useBaseStore((state) => state.carouselApi);
   const setOpenDrawer = useBaseStore((state) => state.setOpenDrawer);
-  const sleep = (ms: number): Promise<void> => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  };
 
   const handleClick = (prayType: PrayType) => () => {
     if (!carouselApi) {

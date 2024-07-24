@@ -40,3 +40,8 @@ export const getISODate = (dateString: string | null) => {
   const isoString = koreaTime.toISOString();
   return isoString.replace("Z", "+09:00");
 };
+
+// sleep 함수
+export const sleep = (ms: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
