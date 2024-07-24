@@ -17,6 +17,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const carouselApi = useBaseStore((state) => state.carouselApi);
+  const setOpenDrawer = useBaseStore((state) => state.setOpenDrawer);
   const sleep = (ms: number): Promise<void> => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
@@ -32,6 +33,9 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
       carouselApi.selectedScrollSnap() ==
       carouselApi.scrollSnapList().length - 2
     ) {
+      sleep(500).then(() => {
+        setOpenDrawer(false);
+      });
       return null;
     }
     sleep(500).then(() => {

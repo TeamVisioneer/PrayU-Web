@@ -57,6 +57,8 @@ export interface BaseStore {
     name: string | undefined,
     intro: string | undefined
   ) => Promise<Group | null>;
+  openDrawer: boolean;
+  setOpenDrawer: (openDrawer: boolean) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -184,6 +186,12 @@ const useBaseStore = create<BaseStore>()(
     setGroupName: (groupName: string) => {
       set((state) => {
         state.inputGroupName = groupName;
+      });
+    },
+    openDrawer: false,
+    setOpenDrawer: (openDrawer: boolean) => {
+      set((state) => {
+        state.openDrawer = openDrawer;
       });
     },
 

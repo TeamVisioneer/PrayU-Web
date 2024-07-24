@@ -20,6 +20,8 @@ const GroupPage: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
+  const openDrawer = useBaseStore((state) => state.openDrawer);
+  const setOpenDrawer = useBaseStore((state) => state.setOpenDrawer);
 
   useEffect(() => {
     fetchGroupListByUserId(user?.id);
@@ -57,7 +59,7 @@ const GroupPage: React.FC = () => {
           }`}
         ></KakaoShareButton>
       </div>
-      <Drawer>
+      <Drawer open={openDrawer} onOpenChange={setOpenDrawer}>
         <MemberList
           currentUserId={user?.id}
           groupId={targetGroup?.id}
