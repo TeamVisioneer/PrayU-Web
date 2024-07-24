@@ -6,6 +6,7 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import PrayCardUI from "./PrayCardUI";
 import { useEffect } from "react";
+import { ClipLoader } from "react-spinners";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -28,6 +29,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   );
 
   useEffect(() => {
+    // TODO: 초기화 이후에 재랜더링 필요
     fetchPrayCardListByGroupId(groupId);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
@@ -36,6 +38,14 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
       if (currentIndex == carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
   }, [prayCardCarouselApi, fetchPrayCardListByGroupId, groupId]);
+
+  if (!groupPrayCardList) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
 
   return (
     <Carousel
