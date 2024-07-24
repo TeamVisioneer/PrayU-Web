@@ -27,12 +27,9 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
 
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
 
-  console.log(myPrayerContent);
   const [content, setContent] = useState(prayCard?.content || "");
   const [isScrollable, setIsScrollable] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  console.log(content);
 
   useEffect(() => {
     fetchPrayDataByUserId(
