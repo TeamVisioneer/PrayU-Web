@@ -197,7 +197,7 @@ const useBaseStore = create<BaseStore>()(
         state.openTodayPrayDrawer = openTodayPrayDrawer;
       });
     },
-    maxPossibleGroupCount: 30,
+    maxPossibleGroupCount: 10,
     currentGroupCount: 0,
     setCurrentGroupCount: (currentGroupCount: number) => {
       set((state) => {
