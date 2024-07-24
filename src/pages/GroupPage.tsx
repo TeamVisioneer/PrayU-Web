@@ -18,6 +18,7 @@ const GroupPage: React.FC = () => {
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
+  const currentGroupCount = useBaseStore((state) => state.currentGroupCount);
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
@@ -27,6 +28,9 @@ const GroupPage: React.FC = () => {
   const setOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setOpenTodayPrayDrawer
   );
+  const setCurrentGroupCount = useBaseStore(
+    (state) => state.setCurrentGroupCount
+  );
 
   useEffect(() => {
     fetchGroupListByUserId(user?.id);
@@ -34,8 +38,12 @@ const GroupPage: React.FC = () => {
   }, [fetchGroupListByUserId, user, paramsGroupId, getGroup]);
 
   useEffect(() => {
+    if (groupList) {
+      setCurrentGroupCount(groupList.length);
+      console.log("currentGroupCount", currentGroupCount);
+    }
     if (!paramsGroupId && groupList) {
-      if (groupList.length === 0) {
+      if (currentGroupCount === 0) {
         navigate("/group/new", { replace: true });
         return;
       } else {
@@ -43,7 +51,13 @@ const GroupPage: React.FC = () => {
         return;
       }
     }
-  }, [groupList, navigate, paramsGroupId]);
+  }, [
+    groupList,
+    navigate,
+    paramsGroupId,
+    currentGroupCount,
+    setCurrentGroupCount,
+  ]);
 
   if (!groupList || (paramsGroupId && !targetGroup)) {
     return (

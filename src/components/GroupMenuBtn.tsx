@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import menuIcon from "@/assets/menuIcon.png";
 import { Group } from "supabase/types/tables";
+import useBaseStore from "@/stores/baseStore";
 
 interface GroupManuBtnProps {
   userGroupList: Group[];
@@ -19,6 +20,10 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   userGroupList,
   targetGroup,
 }) => {
+  const currentGroupCount = useBaseStore((state) => state.currentGroupCount);
+  const maxPossibleGroupCount = useBaseStore(
+    (state) => state.maxPossibleGroupCount
+  );
   return (
     <Sheet>
       <SheetTrigger className="flex flex-col items-end focus:outline-none">
@@ -47,9 +52,13 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
                     </a>
                   )
               )}
-              <a href={`${import.meta.env.VITE_BASE_URL}/group/new`}>
-                + 그룹 만들기
-              </a>
+              {currentGroupCount < maxPossibleGroupCount ? (
+                <a href={`${import.meta.env.VITE_BASE_URL}/group/new`}>
+                  + 그룹 만들기
+                </a>
+              ) : (
+                <button>+ 그룹 못만들엉</button>
+              )}
               <a href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}>
                 문의하기
               </a>

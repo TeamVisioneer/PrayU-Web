@@ -59,6 +59,9 @@ export interface BaseStore {
   ) => Promise<Group | null>;
   openTodayPrayDrawer: boolean;
   setOpenTodayPrayDrawer: (openTodayPrayDrawer: boolean) => void;
+  maxPossibleGroupCount: number;
+  currentGroupCount: number;
+  setCurrentGroupCount: (currentGroupCount: number) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -192,6 +195,13 @@ const useBaseStore = create<BaseStore>()(
     setOpenTodayPrayDrawer: (openTodayPrayDrawer: boolean) => {
       set((state) => {
         state.openTodayPrayDrawer = openTodayPrayDrawer;
+      });
+    },
+    maxPossibleGroupCount: 30,
+    currentGroupCount: 0,
+    setCurrentGroupCount: (currentGroupCount: number) => {
+      set((state) => {
+        state.currentGroupCount = currentGroupCount;
       });
     },
 
