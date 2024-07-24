@@ -47,6 +47,8 @@ export const sleep = (ms: number): Promise<void> => {
 };
 
 export const getDomainUrl = () => {
-  const { hostname, port } = window.location;
-  return hostname === "localhost" ? `${hostname}:${port}` : hostname;
+  const { protocol, hostname, port } = window.location;
+  return hostname === "localhost"
+    ? `${protocol}//${hostname}:${port}`
+    : `${protocol}//${hostname}`;
 };
