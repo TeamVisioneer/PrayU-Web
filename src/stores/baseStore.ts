@@ -215,12 +215,10 @@ const useBaseStore = create<BaseStore>()(
       return member;
     },
     makePrayerShort: (text: string | null, length: number = 10): string => {
-      if (text && text.length <= length) {
-        return text;
+      if (!text) {
+        return "아직 기도제목이 없어요";
       }
-      return text
-        ? text.substring(0, length) + "..."
-        : "아직 기도제목이 없어요";
+      return text.length <= length ? text : `${text.substring(0, length)}...`;
     },
 
     // prayCard
