@@ -20,6 +20,12 @@ const GroupPage: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
+  const openTodayPrayDrawer = useBaseStore(
+    (state) => state.openTodayPrayDrawer
+  );
+  const setOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setOpenTodayPrayDrawer
+  );
 
   useEffect(() => {
     fetchGroupListByUserId(user?.id);
@@ -57,7 +63,7 @@ const GroupPage: React.FC = () => {
           }`}
         ></KakaoShareButton>
       </div>
-      <Drawer>
+      <Drawer open={openTodayPrayDrawer} onOpenChange={setOpenTodayPrayDrawer}>
         <MemberList
           currentUserId={user?.id}
           groupId={targetGroup?.id}

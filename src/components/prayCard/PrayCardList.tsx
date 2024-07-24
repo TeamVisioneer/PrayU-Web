@@ -14,29 +14,33 @@ interface PrayCardListProps {
 // TODO: PrayData 한번에 가져와서 미리 렌더링 할 수 있도록 수정
 const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
-  const carouselApi = useBaseStore((state) => state.carouselApi);
-  const setCarouselApi = useBaseStore((state) => state.setCarouselApi);
+  const prayCardCarouselApi = useBaseStore(
+    (state) => state.prayCardCarouselApi
+  );
+  const setPrayCardCarouselApi = useBaseStore(
+    (state) => state.setPrayCardCarouselApi
+  );
 
   useEffect(() => {
-    if (!carouselApi) {
+    if (!prayCardCarouselApi) {
       return;
     }
-    carouselApi.on("select", () => {
-      if (carouselApi.selectedScrollSnap() == 0) {
-        carouselApi.scrollNext();
+    prayCardCarouselApi.on("select", () => {
+      if (prayCardCarouselApi.selectedScrollSnap() == 0) {
+        prayCardCarouselApi.scrollNext();
       }
       if (
-        carouselApi.selectedScrollSnap() ==
-        carouselApi.scrollSnapList().length - 1
+        prayCardCarouselApi.selectedScrollSnap() ==
+        prayCardCarouselApi.scrollSnapList().length - 1
       ) {
-        carouselApi.scrollPrev();
+        prayCardCarouselApi.scrollPrev();
       }
     });
-  }, [carouselApi]);
+  }, [prayCardCarouselApi]);
 
   return (
     <Carousel
-      setApi={setCarouselApi}
+      setApi={setPrayCardCarouselApi}
       opts={{
         startIndex: 1,
       }}
