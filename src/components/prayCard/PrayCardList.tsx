@@ -8,11 +8,18 @@ import PrayCardUI from "./PrayCardUI";
 import { useEffect } from "react";
 
 interface PrayCardListProps {
-  currentUserId: string | undefined;
+  currentUserId: string;
+  groupId: string | undefined;
 }
 
-const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
+const PrayCardList: React.FC<PrayCardListProps> = ({
+  currentUserId,
+  groupId,
+}) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
+  const fetchPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchPrayCardListByGroupId
+  );
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
@@ -21,13 +28,14 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
   );
 
   useEffect(() => {
+    fetchPrayCardListByGroupId(groupId);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
       if (currentIndex == 0) prayCardCarouselApi.scrollNext();
       if (currentIndex == carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
-  }, [prayCardCarouselApi]);
+  }, [prayCardCarouselApi, fetchPrayCardListByGroupId, groupId]);
 
   return (
     <Carousel

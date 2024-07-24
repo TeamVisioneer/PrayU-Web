@@ -5,16 +5,26 @@ import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import { KakaoShareButton } from "@/components/KakaoShareBtn";
 import MemberList from "@/components/member/MemberList";
-import { Drawer } from "@/components/ui/drawer";
-import PrayCardContent from "@/components/prayCard/PrayCardContent";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import GroupMenuBtn from "../components/GroupMenuBtn";
 import { getDomainUrl } from "@/lib/utils";
+import PrayCardList from "@/components/prayCard/PrayCardList";
+import TodayPrayBtn from "@/components/todayPray/TodayPrayBtn";
+import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
+import MyMember from "@/components/member/MyMember";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const { groupId: paramsGroupId } = useParams();
+
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
@@ -28,8 +38,15 @@ const GroupPage: React.FC = () => {
     (state) => state.setOpenTodayPrayDrawer
   );
 
+  const fetchPrayCardListByUserId = useBaseStore(
+    (state) => state.fetchPrayCardListByUserId
+  );
+
+  const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
+
   useEffect(() => {
-    fetchGroupListByUserId(user?.id);
+    fetchGroupListByUserId(user!.id);
     if (paramsGroupId) getGroup(paramsGroupId);
   }, [fetchGroupListByUserId, user, paramsGroupId, getGroup]);
 
@@ -45,6 +62,11 @@ const GroupPage: React.FC = () => {
     }
   }, [groupList, navigate, paramsGroupId]);
 
+  useEffect(() => {
+    fetchPrayCardListByUserId(user!.id);
+    if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
+  }, [user, targetGroup, fetchPrayCardListByUserId, fetchIsPrayToday]);
+
   if (!groupList || (paramsGroupId && !targetGroup)) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -56,7 +78,7 @@ const GroupPage: React.FC = () => {
   const domainUrl = getDomainUrl();
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-6">
       <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       <div className="flex justify-between items-center">
         <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
@@ -64,13 +86,42 @@ const GroupPage: React.FC = () => {
           groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
         ></KakaoShareButton>
       </div>
-      <Drawer open={openTodayPrayDrawer} onOpenChange={setOpenTodayPrayDrawer}>
-        <MemberList
-          currentUserId={user?.id}
-          groupId={targetGroup?.id}
-        ></MemberList>
-        <PrayCardContent currentUserId={user!.id} />
-      </Drawer>
+
+      <div className="flex flex-col gap-2">
+        <div className="text-sm ">내 기도제목</div>
+        <MyMember currentUserId={user!.id} />
+        {isPrayToday ? (
+          <MemberList
+            currentUserId={user!.id}
+            groupId={targetGroup?.id}
+          ></MemberList>
+        ) : (
+          <TodayPrayStartCard />
+        )}
+      </div>
+
+      <div>
+        <Drawer
+          open={openTodayPrayDrawer}
+          onOpenChange={setOpenTodayPrayDrawer}
+        >
+          <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] pb-20">
+            <DrawerHeader>
+              <DrawerTitle></DrawerTitle>
+              <DrawerDescription></DrawerDescription>
+            </DrawerHeader>
+            {/* PrayCardList */}
+            <PrayCardList currentUserId={user!.id} groupId={targetGroup?.id} />
+            {/* PrayCardList */}
+          </DrawerContent>
+        </Drawer>
+      </div>
+
+      {isPrayToday && (
+        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
+          <TodayPrayBtn />
+        </div>
+      )}
     </div>
   );
 };

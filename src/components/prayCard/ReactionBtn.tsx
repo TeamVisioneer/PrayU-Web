@@ -4,8 +4,8 @@ import useBaseStore from "@/stores/baseStore";
 import { sleep } from "@/lib/utils";
 
 interface ReactionBtnProps {
-  currentUserId: string | undefined;
-  prayCard: PrayCardWithProfiles | undefined;
+  currentUserId: string;
+  prayCard: PrayCardWithProfiles | null;
 }
 
 const ReactionBtn: React.FC<ReactionBtnProps> = ({
