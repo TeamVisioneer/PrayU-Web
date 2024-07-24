@@ -91,8 +91,12 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     };
   }, [groupPageUrl]);
 
-  if (locate === "prayCard") {
-    return null;
+  if (locate === "prayList") {
+    return (
+      <Button id="kakaotalk-sharing-btn">
+        <p>그룹원들의 기도를 독려하기</p>
+      </Button>
+    );
   }
   return (
     <Button

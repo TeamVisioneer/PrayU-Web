@@ -6,6 +6,7 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
+import { KakaoShareButton } from "../KakaoShareBtn";
 
 const PrayList: React.FC = () => {
   const prayerList = useBaseStore((state) => state.prayerList);
@@ -26,6 +27,10 @@ const PrayList: React.FC = () => {
           <div className="flex-col">
             <p>아직 기도해준 사람이 없어요</p>
             <p>그룹원들의 기도를 독려해봐요</p>
+            <KakaoShareButton
+              groupPageUrl={window.location.href}
+              locate="prayList"
+            />
           </div>
         ) : (
           Object.keys(prayerList).map((user_id) => (
