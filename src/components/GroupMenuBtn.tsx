@@ -32,7 +32,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
               {userGroupList.map((group) => (
                 <a
                   key={group.id}
-                  href={`${import.meta.env.VITE_BASE_URL}/group/${group.id}`}
+                  href={`/group/${group.id}`}
                   className={`${
                     group.id === targetGroup?.id
                       ? "text-black font-bold underline"
@@ -42,9 +42,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
                   {group.name}
                 </a>
               ))}
-              <a href={`${import.meta.env.VITE_BASE_URL}/group/new`}>
-                + 그룹 만들기
-              </a>
+              <a href={"/group/new"}>+ 그룹 만들기</a>
               <a href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}>
                 문의하기
               </a>

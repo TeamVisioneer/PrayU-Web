@@ -52,15 +52,17 @@ const GroupPage: React.FC = () => {
     );
   }
 
+  const { hostname, port } = window.location;
+  const baseUrl = hostname === "localhost" ? `${hostname}:${port}` : hostname;
+  console.log(baseUrl);
+
   return (
     <div className="flex flex-col gap-10">
       <GroupMenu userGroupList={groupList} targetGroup={targetGroup} />
       <div className="flex justify-between items-center">
         <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
         <KakaoShareButton
-          groupPageUrl={`${import.meta.env.VITE_BASE_URL}/group/${
-            targetGroup?.id
-          }`}
+          groupPageUrl={`${baseUrl}/group/${targetGroup?.id}`}
         ></KakaoShareButton>
       </div>
       <Drawer open={openTodayPrayDrawer} onOpenChange={setOpenTodayPrayDrawer}>
