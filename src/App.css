@@ -79,13 +79,3 @@
     scrollbar-width: none; /* Firefox */
   }
 }
-
-div:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.drawer-trigger:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
