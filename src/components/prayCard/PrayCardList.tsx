@@ -30,7 +30,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   );
 
   const startDt = getISOTodayDate(-6);
-  const endDt = getISOTodayDate();
+  const endDt = getISOTodayDate(1);
 
   useEffect(() => {
     // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
