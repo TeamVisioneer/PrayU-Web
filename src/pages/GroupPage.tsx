@@ -73,14 +73,16 @@ const GroupPage: React.FC = () => {
   const domainUrl = getDomainUrl();
 
   return (
-    <div className="flex flex-col gap-10">
-      <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
-      <div className="flex justify-between items-center">
-        <div className="text-lg font-bold">{targetGroup?.name} 그룹</div>
-        <KakaoShareButton
-          groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
-          message={null}
-        ></KakaoShareButton>
+    <div className="flex flex-col gap-6">
+      <div className="flex justify-between">
+        <div className="flex flex-grow justify-center items-center gap-2">
+          <div className="text-lg font-bold">{targetGroup?.name}</div>
+          <KakaoShareButton
+            groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
+            message={null}
+          ></KakaoShareButton>
+        </div>
+        <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
       <div className="flex flex-col gap-2">
         <div className="text-sm ">내 기도제목</div>
