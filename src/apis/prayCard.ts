@@ -2,16 +2,21 @@ import { getISOToday } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
 import { PrayCard, PrayCardWithProfiles } from "../../supabase/types/tables";
 
-export const fetchPrayCardListByGroupId = async (
-  groupId: string | undefined
+export const fetchGroupPrayCardList = async (
+  groupId: string | undefined,
+  startDt: string,
+  endDt: string
 ): Promise<PrayCardWithProfiles[] | null> => {
   if (!groupId) return null;
   const { data, error } = await supabase
     .from("pray_card")
     .select(`*, profiles (id, full_name, avatar_url)`)
     .eq("group_id", groupId)
-    .is("deleted_at", null);
-  // TODO : 이후에 7일 이내의 데이터만 가져오도록 수정 필요
+    .gte("created_at", startDt)
+    .lt("created_at", endDt)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false });
+
   if (error) {
     console.error("error", error);
     return null;
@@ -19,16 +24,22 @@ export const fetchPrayCardListByGroupId = async (
   return data as PrayCardWithProfiles[];
 };
 
-export const fetchPrayCardListByUserId = async (
-  userId: string | undefined
+export const fetchUserPrayCardListByGroupId = async (
+  userId: string | undefined,
+  groupId: string | undefined,
+  startDt: string,
+  endDt: string
 ): Promise<PrayCardWithProfiles[] | null> => {
-  if (!userId) return null;
+  if (!userId || !groupId) return null;
   const { data, error } = await supabase
     .from("pray_card")
     .select(`*, profiles (id, full_name, avatar_url)`)
     .eq("user_id", userId)
+    .eq("group_id", groupId)
+    .gte("created_at", startDt)
+    .lt("created_at", endDt)
     .is("deleted_at", null)
-    .limit(10); // TODO: 이후 페이지네이션 적용 필요
+    .order("created_at", { ascending: false });
   if (error) {
     console.error("error", error);
     return null;

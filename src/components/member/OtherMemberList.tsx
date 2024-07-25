@@ -4,6 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
 import Member from "./Member";
 import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
+import { getISOTodayDate } from "@/lib/utils";
 
 interface MembersProps {
   currentUserId: string;
@@ -16,17 +17,26 @@ const OtherMemberList: React.FC<MembersProps> = ({
 }) => {
   const memberList = useBaseStore((state) => state.memberList);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
-  const fetchPrayCardListByGroupId = useBaseStore(
-    (state) => state.fetchPrayCardListByGroupId
+  const fetchGroupPrayCardList = useBaseStore(
+    (state) => state.fetchGroupPrayCardList
   );
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
 
+  const startDt = getISOTodayDate();
+  const endDt = getISOTodayDate(7);
+
   useEffect(() => {
     fetchMemberListByGroupId(groupId);
-    fetchPrayCardListByGroupId(groupId);
-  }, [fetchMemberListByGroupId, fetchPrayCardListByGroupId, groupId]);
+    fetchGroupPrayCardList(groupId, startDt, endDt);
+  }, [
+    fetchMemberListByGroupId,
+    fetchGroupPrayCardList,
+    groupId,
+    startDt,
+    endDt,
+  ]);
 
   if (!memberList || !groupPrayCardList) {
     return (

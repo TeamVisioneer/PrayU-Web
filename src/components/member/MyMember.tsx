@@ -1,4 +1,4 @@
-import { getISODate, reduceString } from "../../lib/utils";
+import { getISODate, getISOTodayDate, reduceString } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -11,23 +11,35 @@ import PrayCardUI from "../prayCard/PrayCardUI";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
 
 interface MemberProps {
   currentUserId: string;
+  groupId: string | undefined;
 }
 
-const MyMember: React.FC<MemberProps> = ({ currentUserId }) => {
+const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const member = useBaseStore((state) => state.targetMember);
-  const getMemberById = useBaseStore((state) => state.getMemberByUserId);
-  const fetchPrayCardListByUserId = useBaseStore(
-    (state) => state.fetchPrayCardListByUserId
+  const getMemberByUserId = useBaseStore((state) => state.getMemberByUserId);
+  const fetchUserPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchUserPrayCardListByGroupId
   );
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
 
+  const startDt = getISOTodayDate();
+  const endDt = getISOTodayDate(7);
+
   useEffect(() => {
-    getMemberById(currentUserId);
-    fetchPrayCardListByUserId(currentUserId);
-  }, [currentUserId, getMemberById, fetchPrayCardListByUserId]);
+    getMemberByUserId(currentUserId);
+    fetchUserPrayCardListByGroupId(currentUserId, groupId, startDt, endDt);
+  }, [
+    currentUserId,
+    groupId,
+    getMemberByUserId,
+    fetchUserPrayCardListByGroupId,
+    startDt,
+    endDt,
+  ]);
 
   if (!member || !userPrayCardList) {
     return (
@@ -37,7 +49,13 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId }) => {
     );
   }
 
-  const prayCard = userPrayCardList?.[0] || null;
+  if (userPrayCardList.length === 0) {
+    return (
+      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
+    );
+  }
+
+  const prayCard = userPrayCardList[0] || null;
   const content = prayCard
     ? reduceString(prayCard.content, 20)
     : "아직 기도제목이 없어요";
@@ -54,14 +72,17 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId }) => {
       </div>
       <div className="text-left text-sm text-gray-600">{content}</div>
       <div className="text-gray-400 text-left text-xs">
-        {prayCard ? getISODate(prayCard.updated_at).split("T")[0] : "-"}
+        {prayCard && getISODate(prayCard.updated_at).split("T")[0]}
       </div>
     </div>
   );
 
   return (
     <Drawer>
-      <DrawerTrigger className="focus:outline-none">{MyMemberUI}</DrawerTrigger>
+      <DrawerTrigger className="focus:outline-none">
+        <div className="text-sm ">내 기도제목</div>
+        {MyMemberUI}
+      </DrawerTrigger>
 
       <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] px-10 pb-20 focus:outline-none">
         <DrawerHeader>

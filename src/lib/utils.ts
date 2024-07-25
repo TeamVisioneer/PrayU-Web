@@ -19,12 +19,14 @@ export const getISOToday = () => {
   return isoString.replace("Z", "+09:00");
 };
 
-export const getISOTodayDate = () => {
+export const getISOTodayDate = (n: number = 0) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  const afterDt = new Date(today.getTime() + n * 24 * 60 * 60 * 1000);
+
   const koreaOffset = 9 * 60;
-  const koreaTime = new Date(today.getTime() + koreaOffset * 60 * 1000);
+  const koreaTime = new Date(afterDt.getTime() + koreaOffset * 60 * 1000);
 
   const isoString = koreaTime.toISOString();
 

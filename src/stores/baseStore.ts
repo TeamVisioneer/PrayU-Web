@@ -15,7 +15,6 @@ import {
   PrayCard,
   PrayCardWithProfiles,
   UserIdMemberHash,
-  userIdPrayCardListHash,
   TodayPrayTypeHash,
   PrayDataHash,
   PrayWithProfiles,
@@ -28,8 +27,8 @@ import {
 } from "@/apis/member";
 import {
   createPrayCard,
-  fetchPrayCardListByGroupId,
-  fetchPrayCardListByUserId,
+  fetchGroupPrayCardList,
+  fetchUserPrayCardListByGroupId,
   updatePrayCardContent,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
@@ -78,18 +77,22 @@ export interface BaseStore {
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
   userPrayCardList: PrayCardWithProfiles[] | null;
-  userIdPrayCardListHash: userIdPrayCardListHash | null;
   targetPrayCard: PrayCardWithProfiles | null;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
   myPrayerContent: string | null;
   setMyPrayerContent: (myPrayerContent: string) => void;
-  fetchPrayCardListByGroupId: (groupId: string | undefined) => Promise<void>;
-  fetchPrayCardListByUserId: (userId: string | undefined) => Promise<void>;
-  createUserIdPrayCardListHash: (
-    memberList: MemberWithProfiles[],
-    groupPrayCardList: PrayCardWithProfiles[]
-  ) => userIdPrayCardListHash;
+  fetchGroupPrayCardList: (
+    groupId: string | undefined,
+    startDt: string,
+    endDt: string
+  ) => Promise<void>;
+  fetchUserPrayCardListByGroupId: (
+    userId: string | undefined,
+    groupId: string | undefined,
+    startDt: string,
+    endDt: string
+  ) => Promise<void>;
   createPrayCard: (
     groupId: string | undefined,
     userId: string | undefined,
@@ -227,7 +230,6 @@ const useBaseStore = create<BaseStore>()(
     // prayCard
     groupPrayCardList: null,
     userPrayCardList: null,
-    userIdPrayCardListHash: null,
     targetPrayCard: null,
     inputPrayCardContent: "",
     isEditingPrayCard: false,
@@ -242,34 +244,37 @@ const useBaseStore = create<BaseStore>()(
         state.isEditingPrayCard = isEditingPrayCard;
       });
     },
-    fetchPrayCardListByGroupId: async (groupId: string | undefined) => {
-      const groupPrayCardList = await fetchPrayCardListByGroupId(groupId);
+    fetchGroupPrayCardList: async (
+      groupId: string | undefined,
+      startDt: string,
+      endDt: string
+    ) => {
+      const groupPrayCardList = await fetchGroupPrayCardList(
+        groupId,
+        startDt,
+        endDt
+      );
       set((state) => {
         state.groupPrayCardList = groupPrayCardList;
       });
     },
-    fetchPrayCardListByUserId: async (userId: string | undefined) => {
-      const userPrayCardList = await fetchPrayCardListByUserId(userId);
+    fetchUserPrayCardListByGroupId: async (
+      userId: string | undefined,
+      groupId: string | undefined,
+      startDt: string,
+      endDt: string
+    ) => {
+      const userPrayCardList = await fetchUserPrayCardListByGroupId(
+        userId,
+        groupId,
+        startDt,
+        endDt
+      );
       set((state) => {
         state.userPrayCardList = userPrayCardList;
       });
     },
-    createUserIdPrayCardListHash: (
-      memberList: MemberWithProfiles[],
-      groupPrayCardList: PrayCardWithProfiles[]
-    ) => {
-      const userIdPrayCardListHash = memberList.reduce((hash, member) => {
-        hash[member.user_id || ""] = [];
-        return hash;
-      }, {} as userIdPrayCardListHash);
-      groupPrayCardList.forEach((prayCard) => {
-        userIdPrayCardListHash[prayCard.user_id || ""].push(prayCard);
-      });
-      set((state) => {
-        state.userIdPrayCardListHash = userIdPrayCardListHash;
-      });
-      return userIdPrayCardListHash;
-    },
+
     createPrayCard: async (
       groupId: string | undefined,
       userId: string | undefined,
