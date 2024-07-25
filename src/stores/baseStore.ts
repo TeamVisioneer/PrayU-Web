@@ -89,9 +89,7 @@ export interface BaseStore {
   ) => Promise<void>;
   fetchUserPrayCardListByGroupId: (
     userId: string | undefined,
-    groupId: string | undefined,
-    startDt: string,
-    endDt: string
+    groupId: string | undefined
   ) => Promise<void>;
   createPrayCard: (
     groupId: string | undefined,
@@ -260,15 +258,11 @@ const useBaseStore = create<BaseStore>()(
     },
     fetchUserPrayCardListByGroupId: async (
       userId: string | undefined,
-      groupId: string | undefined,
-      startDt: string,
-      endDt: string
+      groupId: string | undefined
     ) => {
       const userPrayCardList = await fetchUserPrayCardListByGroupId(
         userId,
-        groupId,
-        startDt,
-        endDt
+        groupId
       );
       set((state) => {
         state.userPrayCardList = userPrayCardList;

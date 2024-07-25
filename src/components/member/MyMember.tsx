@@ -26,19 +26,14 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   );
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
 
-  const startDt = getISOTodayDate();
-  const endDt = getISOTodayDate(7);
-
   useEffect(() => {
     getMemberByUserId(currentUserId);
-    fetchUserPrayCardListByGroupId(currentUserId, groupId, startDt, endDt);
+    fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [
     currentUserId,
     groupId,
     getMemberByUserId,
     fetchUserPrayCardListByGroupId,
-    startDt,
-    endDt,
   ]);
 
   if (!member || !userPrayCardList) {
@@ -49,7 +44,10 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     );
   }
 
-  if (userPrayCardList.length === 0) {
+  if (
+    userPrayCardList.length === 0 ||
+    userPrayCardList[0].created_at < getISOTodayDate(-6)
+  ) {
     return (
       <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
     );

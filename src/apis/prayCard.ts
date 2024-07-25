@@ -27,8 +27,8 @@ export const fetchGroupPrayCardList = async (
 export const fetchUserPrayCardListByGroupId = async (
   userId: string | undefined,
   groupId: string | undefined,
-  startDt: string,
-  endDt: string
+  limit: number = 10,
+  offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   if (!userId || !groupId) return null;
   const { data, error } = await supabase
@@ -36,10 +36,9 @@ export const fetchUserPrayCardListByGroupId = async (
     .select(`*, profiles (id, full_name, avatar_url)`)
     .eq("user_id", userId)
     .eq("group_id", groupId)
-    .gte("created_at", startDt)
-    .lt("created_at", endDt)
     .is("deleted_at", null)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
   if (error) {
     console.error("error", error);
     return null;
