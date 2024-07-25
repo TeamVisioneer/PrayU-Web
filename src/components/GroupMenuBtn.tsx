@@ -10,7 +10,6 @@ import {
 import { useToast } from "./ui/use-toast";
 import menuIcon from "@/assets/menuIcon.png";
 import { Group } from "supabase/types/tables";
-import useBaseStore from "@/stores/baseStore";
 
 interface GroupManuBtnProps {
   userGroupList: Group[];
@@ -21,11 +20,9 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   userGroupList,
   targetGroup,
 }) => {
-  const currentGroupCount = useBaseStore((state) => state.currentGroupCount);
-  const maxPossibleGroupCount = useBaseStore(
-    (state) => state.maxPossibleGroupCount
-  );
+  const maxPossibleGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
+
   return (
     <Sheet>
       <SheetTrigger className="flex flex-col items-end focus:outline-none">
@@ -53,7 +50,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
                 </a>
               )
           )}
-          {currentGroupCount < maxPossibleGroupCount ? (
+          {userGroupList.length < maxPossibleGroupCount ? (
             <a href={`${import.meta.env.VITE_BASE_URL}/group/new`}>
               + 그룹 만들기
             </a>
