@@ -18,13 +18,16 @@ import PrayCardList from "@/components/prayCard/PrayCardList";
 import TodayPrayBtn from "@/components/todayPray/TodayPrayBtn";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import MyMember from "@/components/member/MyMember";
+import { Group } from "supabase/types/tables";
+import PrayCardCreateModal from "@/components/prayCard/PrayCardCreateModal";
+import LimitGroupCard from "@/components/limitGroup/LimitGroupCard";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const { groupId: paramsGroupId } = useParams();
-
+  const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
@@ -37,6 +40,13 @@ const GroupPage: React.FC = () => {
   const setOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setOpenTodayPrayDrawer
   );
+  const isParamsGroupIdInGroupList = (
+    paramsGroupId: string | undefined,
+    groupList: Group[]
+  ) => {
+    if (!paramsGroupId || !groupList) return false;
+    return groupList.some((group) => group?.id === paramsGroupId);
+  };
 
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
@@ -84,39 +94,59 @@ const GroupPage: React.FC = () => {
         </div>
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
-      <div className="flex flex-col gap-2">
-        <MyMember currentUserId={user!.id} groupId={targetGroup?.id} />
-        {isPrayToday ? (
-          <OtherMemberList
-            currentUserId={user!.id}
-            groupId={targetGroup?.id}
-          ></OtherMemberList>
-        ) : (
-          <TodayPrayStartCard />
-        )}
-      </div>
 
-      <div>
-        <Drawer
-          open={openTodayPrayDrawer}
-          onOpenChange={setOpenTodayPrayDrawer}
-        >
-          <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] pb-20">
-            <DrawerHeader>
-              <DrawerTitle></DrawerTitle>
-              <DrawerDescription></DrawerDescription>
-            </DrawerHeader>
-            {/* PrayCardList */}
-            <PrayCardList currentUserId={user!.id} groupId={targetGroup?.id} />
-            {/* PrayCardList */}
-          </DrawerContent>
-        </Drawer>
-      </div>
+      {isParamsGroupIdInGroupList(paramsGroupId, groupList) ? (
+        <>
+          <div className="flex flex-col gap-2">
+            <div className="text-sm ">내 기도제목</div>
+            <MyMember currentUserId={user!.id} groupId={paramsGroupId} />
+            {isPrayToday ? (
+              <OtherMemberList
+                currentUserId={user!.id}
+                groupId={targetGroup?.id}
+              ></OtherMemberList>
+            ) : (
+              <TodayPrayStartCard />
+            )}
+          </div>
 
-      {isPrayToday && (
-        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
-          <TodayPrayBtn />
-        </div>
+          <div>
+            <Drawer
+              open={openTodayPrayDrawer}
+              onOpenChange={setOpenTodayPrayDrawer}
+            >
+              <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] pb-20">
+                <DrawerHeader>
+                  <DrawerTitle></DrawerTitle>
+                  <DrawerDescription></DrawerDescription>
+                </DrawerHeader>
+                {/* PrayCardList */}
+                <PrayCardList
+                  currentUserId={user!.id}
+                  groupId={targetGroup?.id}
+                />
+                {/* PrayCardList */}
+              </DrawerContent>
+            </Drawer>
+          </div>
+          {/* 현재그룹수와 최대그룹 수 비교 */}
+          {isPrayToday && (
+            <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
+              <TodayPrayBtn />
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {groupList.length < maxGroupCount ? (
+            <PrayCardCreateModal
+              currentUserId={user!.id}
+              groupId={paramsGroupId}
+            />
+          ) : (
+            <LimitGroupCard />
+          )}
+        </>
       )}
     </div>
   );
