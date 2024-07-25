@@ -2,7 +2,7 @@ import useBaseStore from "@/stores/baseStore";
 import PrayCardCalendar from "./WeeklyCalendar";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import ReactionBtn from "./ReactionBtn";
-import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import { getISOTodayDate } from "@/lib/utils";
 import { getDateDistance } from "@toss/date";
 import { KakaoShareButton } from "../KakaoShareBtn";
 
@@ -13,13 +13,12 @@ interface PrayCardProps {
 const PrayCardUIToOther: React.FC<PrayCardProps> = ({ prayCard }) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const currentUserId = useBaseStore((state) => state.user?.id);
-  const todayDate = getISOTodayDate();
   const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(prayCard!.created_at)),
-    new Date(todayDate)
+    new Date(prayCard!.created_at),
+    new Date(getISOTodayDate())
   );
 
-  if (dateDistance.days >= 7) {
+  if (dateDistance.days >= 6) {
     return (
       <div className="flex flex-col items-center justify-center p-4 gap-4">
         <p>기도제목이 업데이트 되지 않았어요</p>

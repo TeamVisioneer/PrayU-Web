@@ -43,16 +43,6 @@ export const getISODate = (dateString: string | null) => {
   return isoString.replace("Z", "+09:00");
 };
 
-export const getISOOnlyDate = (dateString: string) => {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-  date.setHours(0, 0, 0, 0);
-  const koreaOffset = 9 * 60; // KST는 UTC+9이므로 9시간 * 60분
-  const koreaTime = new Date(date.getTime() + koreaOffset * 60 * 1000);
-  const isoString = koreaTime.toISOString();
-  return isoString.replace("Z", "+09:00");
-};
-
 // sleep 함수
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
