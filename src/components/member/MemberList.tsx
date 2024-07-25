@@ -59,7 +59,9 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
   }, {} as userIdPrayCardListHash);
 
   if (!userIdPrayCardListHash[currentUserId || ""]) {
-    <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />;
+    return (
+      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
+    );
     // 명준이 형 머지 후 다시 아래 코드를 groupPage.tsx로 옮겨야 함
     // if (currentGroupCount < maxPossibleGroupCount) {
     //   return (

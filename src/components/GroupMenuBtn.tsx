@@ -22,15 +22,15 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   targetGroup,
 }) => {
   const navigate = useNavigate();
-  const maxPossibleGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
+  const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
 
   const handleClick = () => () => {
-    if (userGroupList.length < maxPossibleGroupCount) {
+    if (userGroupList.length < maxGroupCount) {
       navigate("/group/new");
     } else {
       toast({
-        description: `최대 ${maxPossibleGroupCount}개의 그룹만 참여할 수 있어요`,
+        description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
       });
     }
   };
@@ -51,7 +51,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
               group && (
                 <a
                   key={group.id}
-                  href={`${import.meta.env.VITE_BASE_URL}/group/${group.id}`}
+                  href={`/group/${group.id}`}
                   className={`${
                     group.id === targetGroup?.id
                       ? "text-black font-bold underline"
