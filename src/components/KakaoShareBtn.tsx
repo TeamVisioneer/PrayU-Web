@@ -90,7 +90,12 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   }, [groupPageUrl]);
 
   return (
-    <Button id="kakaotalk-sharing-btn" variant="ghost" size="icon">
+    <Button
+      id="kakaotalk-sharing-btn"
+      variant="ghost"
+      size="icon"
+      className="w-8 h-8"
+    >
       <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png" />
     </Button>
   );

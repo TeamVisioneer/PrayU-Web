@@ -6,14 +6,21 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import PrayCardUI from "./PrayCardUI";
 import { useEffect } from "react";
+import { ClipLoader } from "react-spinners";
 
 interface PrayCardListProps {
-  currentUserId: string | undefined;
+  currentUserId: string;
+  groupId: string | undefined;
 }
 
-// TODO: PrayData 한번에 가져와서 미리 렌더링 할 수 있도록 수정
-const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
+const PrayCardList: React.FC<PrayCardListProps> = ({
+  currentUserId,
+  groupId,
+}) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
+  const fetchPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchPrayCardListByGroupId
+  );
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
@@ -22,21 +29,23 @@ const PrayCardList: React.FC<PrayCardListProps> = ({ currentUserId }) => {
   );
 
   useEffect(() => {
-    if (!prayCardCarouselApi) {
-      return;
-    }
-    prayCardCarouselApi.on("select", () => {
-      if (prayCardCarouselApi.selectedScrollSnap() == 0) {
-        prayCardCarouselApi.scrollNext();
-      }
-      if (
-        prayCardCarouselApi.selectedScrollSnap() ==
-        prayCardCarouselApi.scrollSnapList().length - 1
-      ) {
-        prayCardCarouselApi.scrollPrev();
-      }
+    // TODO: 초기화 이후에 재랜더링 필요
+    fetchPrayCardListByGroupId(groupId);
+    prayCardCarouselApi?.on("select", () => {
+      const currentIndex = prayCardCarouselApi.selectedScrollSnap();
+      const carouselLength = prayCardCarouselApi.scrollSnapList().length;
+      if (currentIndex == 0) prayCardCarouselApi.scrollNext();
+      if (currentIndex == carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
-  }, [prayCardCarouselApi]);
+  }, [prayCardCarouselApi, fetchPrayCardListByGroupId, groupId]);
+
+  if (!groupPrayCardList) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
 
   return (
     <Carousel

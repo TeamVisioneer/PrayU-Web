@@ -9,8 +9,8 @@ import { PrayType } from "@/Enums/prayType";
 import PrayList from "../pray/PrayList";
 
 interface PrayCardProps {
-  currentUserId: string | undefined;
-  prayCard: PrayCardWithProfiles | undefined;
+  currentUserId: string;
+  prayCard: PrayCardWithProfiles | null;
 }
 
 const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {

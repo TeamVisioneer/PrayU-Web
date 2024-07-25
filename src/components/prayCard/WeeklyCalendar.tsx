@@ -3,7 +3,7 @@ import useBaseStore from "@/stores/baseStore";
 import { Pray, PrayCardWithProfiles } from "supabase/types/tables";
 
 interface WeeklyCalendarProps {
-  prayCard: PrayCardWithProfiles | undefined;
+  prayCard: PrayCardWithProfiles | null;
   prayData: Pray[];
 }
 

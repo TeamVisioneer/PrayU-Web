@@ -21,7 +21,11 @@ import {
   PrayWithProfiles,
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
-import { fetchMemberListByGroupId, createMember } from "@/apis/member";
+import {
+  fetchMemberListByGroupId,
+  createMember,
+  getMemberByUserId,
+} from "@/apis/member";
 import {
   createPrayCard,
   fetchPrayCardListByGroupId,
@@ -62,13 +66,14 @@ export interface BaseStore {
 
   // member
   memberList: MemberWithProfiles[] | null;
-  targetMember: Member | null;
+  targetMember: MemberWithProfiles | null;
   userIdMemberHash: UserIdMemberHash | null;
   fetchMemberListByGroupId: (groupId: string | undefined) => Promise<void>;
   createMember: (
     groupId: string | undefined,
     userId: string | undefined
   ) => Promise<Member | null>;
+  getMemberByUserId: (userId: string | undefined) => Promise<void>;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -201,7 +206,6 @@ const useBaseStore = create<BaseStore>()(
     userIdMemberHash: null,
     fetchMemberListByGroupId: async (groupId: string | undefined) => {
       const memberList = await fetchMemberListByGroupId(groupId);
-
       set((state) => {
         state.memberList = memberList;
       });
@@ -212,6 +216,12 @@ const useBaseStore = create<BaseStore>()(
     ): Promise<Member | null> => {
       const member = await createMember(groupId, userId);
       return member;
+    },
+    getMemberByUserId: async (userId: string | undefined) => {
+      const member = await getMemberByUserId(userId);
+      set((state) => {
+        state.targetMember = member;
+      });
     },
 
     // prayCard
