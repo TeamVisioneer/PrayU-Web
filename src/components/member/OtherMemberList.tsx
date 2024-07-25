@@ -25,7 +25,7 @@ const OtherMemberList: React.FC<MembersProps> = ({
   );
 
   const startDt = getISOTodayDate(-6);
-  const endDt = getISOTodayDate();
+  const endDt = getISOTodayDate(1);
 
   useEffect(() => {
     fetchMemberListByGroupId(groupId);

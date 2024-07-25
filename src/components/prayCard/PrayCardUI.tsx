@@ -55,7 +55,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
     }
   }, [content]);
 
-  if (!prayDataHash[prayCard?.id || ""]) {
+  if (!prayDataHash) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -64,7 +64,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   }
 
   const PrayCardBody = (
-    <div className="flex flex-col h-50vh p-5 bg-blue-50 rounded-2xl">
+    <div className="flex flex-col h-50vh min-h-[300px] p-5 bg-blue-50 rounded-2xl">
       <div className="flex items-center gap-2">
         <img
           src={prayCard?.profiles.avatar_url || ""}
@@ -74,7 +74,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
         <div className="text-sm">{prayCard?.profiles.full_name}</div>
       </div>
       <div
-        className={`flex justify-center  h-full overflow-y-auto no-scrollbar ${
+        className={`flex justify-center h-full overflow-y-auto no-scrollbar ${
           isScrollable ? "items-start" : "items-center"
         }`}
       >
