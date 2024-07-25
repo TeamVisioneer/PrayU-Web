@@ -62,17 +62,6 @@ const OtherMemberList: React.FC<MembersProps> = ({
     return (
       <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
     );
-    // 명준이 형 머지 후 다시 아래 코드를 groupPage.tsx로 옮겨야 함
-    // if (currentGroupCount < maxPossibleGroupCount) {
-    //   return (
-    //     // TODO: 모달로 변경 필요
-    //     <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
-    //   );
-    // } else {
-    //   return (
-    //     <div>최대 {maxPossibleGroupCount}개의 그룹만 참여할 수 있어요</div>
-    //   );
-    // }
   }
 
   return (

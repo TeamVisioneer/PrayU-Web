@@ -21,6 +21,8 @@ import MyMember from "@/components/member/MyMember";
 import { Group } from "supabase/types/tables";
 import PrayCardCreateModal from "@/components/prayCard/PrayCardCreateModal";
 import LimitGroupCard from "@/components/limitGroup/LimitGroupCard";
+import { getISOTodayDate } from "@/lib/utils";
+import PrayEncourageCard from "@/components/prayEncourage/PrayEncourageCard";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -31,6 +33,12 @@ const GroupPage: React.FC = () => {
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
+  const startDt = getISOTodayDate(-6);
+  const endDt = getISOTodayDate();
+  const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
+  const fetchGroupPrayCardList = useBaseStore(
+    (state) => state.fetchGroupPrayCardList
+  );
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
@@ -72,6 +80,10 @@ const GroupPage: React.FC = () => {
     if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
   }, [user, targetGroup, fetchIsPrayToday]);
 
+  useEffect(() => {
+    fetchGroupPrayCardList(paramsGroupId, startDt, endDt);
+  }, [fetchGroupPrayCardList, paramsGroupId, startDt, endDt]);
+
   if (!groupList || (paramsGroupId && !targetGroup) || isPrayToday == null) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -81,6 +93,10 @@ const GroupPage: React.FC = () => {
   }
 
   const domainUrl = getDomainUrl();
+
+  const otherPrayCardNumber = groupPrayCardList
+    ? groupPrayCardList.filter((prayCard) => prayCard?.user_id !== user!.id)
+    : [];
 
   return (
     <div className="flex flex-col gap-6">
@@ -105,8 +121,13 @@ const GroupPage: React.FC = () => {
                 currentUserId={user!.id}
                 groupId={targetGroup?.id}
               ></OtherMemberList>
+            ) : otherPrayCardNumber.length > 0 ? (
+              <TodayPrayStartCard
+                currentUserId={user!.id}
+                groupId={paramsGroupId}
+              />
             ) : (
-              <TodayPrayStartCard />
+              <PrayEncourageCard />
             )}
           </div>
 
