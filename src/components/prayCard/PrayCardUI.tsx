@@ -6,6 +6,8 @@ import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
 import PrayList from "../pray/PrayList";
 import ReactionWithCalendar from "./ReactionWithCalendar";
+import { getDateDistance } from "@toss/date";
+import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -29,6 +31,11 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
   const [content, setContent] = useState(prayCard?.content || "");
   const [isScrollable, setIsScrollable] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const dateDistance = getDateDistance(
+    new Date(getISOTodayDate()),
+    new Date(getISOOnlyDate(prayCard?.created_at ?? getISOTodayDate()))
+  );
 
   useEffect(() => {
     fetchPrayDataByUserId(
@@ -71,6 +78,16 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
           alt={`${prayCard?.profiles.full_name} avatar`}
         />
         <div className="text-sm">{prayCard?.profiles.full_name}</div>
+        {currentUserId == prayCard?.user_id && (
+          <div className="flex gap-2">
+            <p className="text-sm text-gray-500">
+              {dateDistance.days + 1}일 차
+            </p>
+            <p className="text-sm text-gray-500">
+              created at:{prayCard?.created_at.split("T")[0]}
+            </p>
+          </div>
+        )}
       </div>
       <div
         className={`flex justify-center h-full overflow-y-auto no-scrollbar ${

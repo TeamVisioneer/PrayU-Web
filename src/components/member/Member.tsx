@@ -2,7 +2,7 @@ import {
   MemberWithProfiles,
   PrayCardWithProfiles,
 } from "supabase/types/tables";
-import { getISOTodayDate, reduceString } from "../../lib/utils";
+import { getISOOnlyDate, getISOTodayDate, reduceString } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -32,16 +32,20 @@ const Member: React.FC<MemberProps> = ({
   const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
 
   const dateDistance = getDateDistance(
-    new Date(prayCard?.updated_at),
+    new Date(getISOOnlyDate(prayCard?.created_at)),
     new Date(getISOTodayDate())
   );
 
-  const dateDistanceText = getDateDistanceText(dateDistance, {
+  let dateDistanceText = getDateDistanceText(dateDistance, {
     days: (t) => 1 <= t.days,
-    hours: (t) => 1 <= t.hours && t.days < 1,
-    minutes: (t) => 1 <= t.minutes && t.hours < 1 && t.days < 1,
-    seconds: (t) => t.minutes < 1 && t.hours < 1 && t.days < 1,
+    hours: () => false,
+    minutes: () => false,
+    seconds: () => false,
   });
+
+  if (dateDistance.days < 1) {
+    dateDistanceText = "오늘";
+  }
 
   useEffect(() => {
     if (currentUserId == member?.user_id)

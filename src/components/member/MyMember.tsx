@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
 import { getDateDistance, getDateDistanceText } from "@toss/date";
+import { getISOOnlyDate } from "@/lib/utils";
 
 interface MemberProps {
   currentUserId: string;
@@ -60,16 +61,20 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     : "아직 기도제목이 없어요";
 
   const dateDistance = getDateDistance(
-    new Date(prayCard?.updated_at),
+    new Date(getISOOnlyDate(prayCard?.created_at)),
     new Date(getISOTodayDate())
   );
 
-  const dateDistanceText = getDateDistanceText(dateDistance, {
+  let dateDistanceText = getDateDistanceText(dateDistance, {
     days: (t) => 1 <= t.days,
-    hours: (t) => 1 <= t.hours && t.days < 1,
-    minutes: (t) => 1 <= t.minutes && t.hours < 1 && t.days < 1,
-    seconds: (t) => t.minutes < 1 && t.hours < 1 && t.days < 1,
+    hours: () => false,
+    minutes: () => false,
+    seconds: () => false,
   });
+
+  if (dateDistance.days < 1) {
+    dateDistanceText = "오늘";
+  }
 
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
