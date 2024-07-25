@@ -123,8 +123,7 @@ const GroupPage: React.FC = () => {
               ></OtherMemberList>
             ) : otherPrayCardNumber.length > 0 ? (
               <TodayPrayStartCard
-                currentUserId={user!.id}
-                groupId={paramsGroupId}
+                otherPrayCardNumber={otherPrayCardNumber.length}
               />
             ) : (
               <PrayEncourageCard />
