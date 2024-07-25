@@ -40,11 +40,13 @@ interface KakaoLinkObject {
 interface KakaoShareButtonProps {
   groupPageUrl: string;
   message?: string;
+  id: string;
 }
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   groupPageUrl,
   message,
+  id,
 }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -59,7 +61,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
         window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
       }
       window.Kakao.Share.createDefaultButton({
-        container: "#kakaotalk-sharing-btn",
+        container: `#${id}`,
         objectType: "feed",
         content: {
           title: "PrayU 우리만의 기도제목 기록공간",
@@ -89,22 +91,17 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     return () => {
       document.body.removeChild(script);
     };
-  }, [groupPageUrl]);
+  }, [groupPageUrl, id]);
 
   if (message) {
     return (
-      <Button id="kakaotalk-sharing-btn" className="bg-yellow-300">
+      <Button id={id} className="bg-yellow-300">
         <p className="text-black">{message}</p>
       </Button>
     );
   }
   return (
-    <Button
-      id="kakaotalk-sharing-btn"
-      variant="ghost"
-      size="icon"
-      className="w-8 h-8"
-    >
+    <Button id={id} variant="ghost" size="icon" className="w-8 h-8">
       <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png" />
     </Button>
   );
