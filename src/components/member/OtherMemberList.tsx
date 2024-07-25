@@ -24,8 +24,8 @@ const OtherMemberList: React.FC<MembersProps> = ({
     (state) => state.fetchMemberListByGroupId
   );
 
-  const startDt = getISOTodayDate();
-  const endDt = getISOTodayDate(7);
+  const startDt = getISOTodayDate(-6);
+  const endDt = getISOTodayDate();
 
   useEffect(() => {
     fetchMemberListByGroupId(groupId);
@@ -45,6 +45,8 @@ const OtherMemberList: React.FC<MembersProps> = ({
       </div>
     );
   }
+
+  console.log(groupPrayCardList);
 
   const otherMembers = memberList.filter(
     (member) => member.user_id !== currentUserId

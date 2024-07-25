@@ -29,8 +29,8 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     (state) => state.setPrayCardCarouselApi
   );
 
-  const startDt = getISOTodayDate();
-  const endDt = getISOTodayDate(7);
+  const startDt = getISOTodayDate(-6);
+  const endDt = getISOTodayDate();
 
   useEffect(() => {
     // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
