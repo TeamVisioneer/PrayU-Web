@@ -10,6 +10,7 @@ import {
 import { useToast } from "./ui/use-toast";
 import menuIcon from "@/assets/menuIcon.png";
 import { Group } from "supabase/types/tables";
+import { useNavigate } from "react-router-dom";
 
 interface GroupManuBtnProps {
   userGroupList: Group[];
@@ -20,13 +21,24 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   userGroupList,
   targetGroup,
 }) => {
+  const navigate = useNavigate();
   const maxPossibleGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
+
+  const handleClick = () => () => {
+    if (userGroupList.length < maxPossibleGroupCount) {
+      navigate("/group/new");
+    } else {
+      toast({
+        description: `최대 ${maxPossibleGroupCount}개의 그룹만 참여할 수 있어요`,
+      });
+    }
+  };
 
   return (
     <Sheet>
       <SheetTrigger className="flex flex-col items-end focus:outline-none">
-        <img src={menuIcon} alt="asdf" className="w-8 h-8" />
+        <img src={menuIcon} className="w-8 h-8" />
       </SheetTrigger>
       <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end">
         <SheetHeader>
@@ -50,21 +62,9 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
                 </a>
               )
           )}
-          {userGroupList.length < maxPossibleGroupCount ? (
-            <a href={`${import.meta.env.VITE_BASE_URL}/group/new`}>
-              + 그룹 만들기
-            </a>
-          ) : (
-            <button
-              onClick={() => {
-                toast({
-                  description: `최대 ${maxPossibleGroupCount}개의 그룹만 참여할 수 있어요`,
-                });
-              }}
-            >
-              + 그룹 만들기
-            </button>
-          )}
+          <a className="cursor-pointer" onClick={handleClick()}>
+            + 그룹 만들기
+          </a>
           <a href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}>
             문의하기
           </a>
