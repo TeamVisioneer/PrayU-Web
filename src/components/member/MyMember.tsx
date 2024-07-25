@@ -1,4 +1,4 @@
-import { getISODate, getISOTodayDate, reduceString } from "../../lib/utils";
+import { getISOTodayDate, reduceString } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -12,6 +12,7 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
+import { getDateDistance, getDateDistanceText } from "@toss/date";
 
 interface MemberProps {
   currentUserId: string;
@@ -58,6 +59,18 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     ? reduceString(prayCard.content, 20)
     : "아직 기도제목이 없어요";
 
+  const dateDistance = getDateDistance(
+    new Date(prayCard?.updated_at),
+    new Date(getISOTodayDate())
+  );
+
+  const dateDistanceText = getDateDistanceText(dateDistance, {
+    days: (t) => 1 <= t.days,
+    hours: (t) => 1 <= t.hours && t.days < 1,
+    minutes: (t) => 1 <= t.minutes && t.hours < 1 && t.days < 1,
+    seconds: (t) => t.minutes < 1 && t.hours < 1 && t.days < 1,
+  });
+
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
       <div className="flex items-center gap-2">
@@ -69,9 +82,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
         <h3>{member?.profiles.full_name}</h3>
       </div>
       <div className="text-left text-sm text-gray-600">{content}</div>
-      <div className="text-gray-400 text-left text-xs">
-        {prayCard && getISODate(prayCard.updated_at).split("T")[0]}
-      </div>
+      <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
     </div>
   );
 
