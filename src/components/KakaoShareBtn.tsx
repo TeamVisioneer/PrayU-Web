@@ -39,7 +39,7 @@ interface KakaoLinkObject {
 
 interface KakaoShareButtonProps {
   groupPageUrl: string;
-  message: string | null;
+  message?: string;
 }
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
