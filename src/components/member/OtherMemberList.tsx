@@ -10,7 +10,10 @@ interface MembersProps {
   groupId: string | undefined;
 }
 
-const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
+const OtherMemberList: React.FC<MembersProps> = ({
+  currentUserId,
+  groupId,
+}) => {
   const memberList = useBaseStore((state) => state.memberList);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchPrayCardListByGroupId = useBaseStore(
@@ -81,4 +84,4 @@ const MemberList: React.FC<MembersProps> = ({ currentUserId, groupId }) => {
   );
 };
 
-export default MemberList;
+export default OtherMemberList;

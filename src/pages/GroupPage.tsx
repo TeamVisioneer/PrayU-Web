@@ -4,7 +4,7 @@ import { ClipLoader } from "react-spinners";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import { KakaoShareButton } from "@/components/KakaoShareBtn";
-import MemberList from "@/components/member/MemberList";
+import OtherMemberList from "@/components/member/OtherMemberList";
 import {
   Drawer,
   DrawerContent,
@@ -86,10 +86,10 @@ const GroupPage: React.FC = () => {
         <div className="text-sm ">내 기도제목</div>
         <MyMember currentUserId={user!.id} />
         {isPrayToday ? (
-          <MemberList
+          <OtherMemberList
             currentUserId={user!.id}
             groupId={targetGroup?.id}
-          ></MemberList>
+          ></OtherMemberList>
         ) : (
           <TodayPrayStartCard />
         )}
