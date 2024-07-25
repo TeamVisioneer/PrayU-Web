@@ -84,11 +84,10 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
       <div className="flex items-center gap-2">
         <img
-          src={member?.profiles.avatar_url || ""}
-          alt={`${member?.profiles.full_name}'s avatar`}
+          src={member.profiles.avatar_url || ""}
           className="w-5 h-5 rounded-full"
         />
-        <h3>{member?.profiles.full_name}</h3>
+        <h3>{member.profiles.full_name}</h3>
       </div>
       <div className="text-left text-sm text-gray-600">
         {reduceString(myPrayerContent, 20)}
@@ -112,7 +111,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {/* PrayCard */}
-        <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
+        <PrayCardUI
+          currentUserId={currentUserId}
+          member={member}
+          prayCard={prayCard}
+        />
         {/* PrayCard */}
       </DrawerContent>
     </Drawer>
