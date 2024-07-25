@@ -16,7 +16,7 @@ const PrayList: React.FC = () => {
   const isPrayerListEmpty = !prayerList || Object.keys(prayerList).length === 0;
 
   return (
-    <DrawerContent className="h-[400px]">
+    <DrawerContent className="h-[400px] focus:outline-none">
       <DrawerHeader>
         <DrawerTitle>기도해준 사람</DrawerTitle>
       </DrawerHeader>
