@@ -84,8 +84,7 @@ const GroupPage: React.FC = () => {
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
       <div className="flex flex-col gap-2">
-        <div className="text-sm ">내 기도제목</div>
-        <MyMember currentUserId={user!.id} />
+        <MyMember currentUserId={user!.id} groupId={targetGroup?.id} />
         {isPrayToday ? (
           <OtherMemberList
             currentUserId={user!.id}

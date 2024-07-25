@@ -4,6 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
 import Member from "./Member";
 import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
+import { getISOTodayDate } from "@/lib/utils";
 
 interface MembersProps {
   currentUserId: string;
@@ -16,17 +17,26 @@ const OtherMemberList: React.FC<MembersProps> = ({
 }) => {
   const memberList = useBaseStore((state) => state.memberList);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
-  const fetchPrayCardListByGroupId = useBaseStore(
-    (state) => state.fetchPrayCardListByGroupId
+  const fetchGroupPrayCardList = useBaseStore(
+    (state) => state.fetchGroupPrayCardList
   );
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
 
+  const startDt = getISOTodayDate(-6);
+  const endDt = getISOTodayDate();
+
   useEffect(() => {
     fetchMemberListByGroupId(groupId);
-    fetchPrayCardListByGroupId(groupId);
-  }, [fetchMemberListByGroupId, fetchPrayCardListByGroupId, groupId]);
+    fetchGroupPrayCardList(groupId, startDt, endDt);
+  }, [
+    fetchMemberListByGroupId,
+    fetchGroupPrayCardList,
+    groupId,
+    startDt,
+    endDt,
+  ]);
 
   if (!memberList || !groupPrayCardList) {
     return (
@@ -35,6 +45,8 @@ const OtherMemberList: React.FC<MembersProps> = ({
       </div>
     );
   }
+
+  console.log(groupPrayCardList);
 
   const otherMembers = memberList.filter(
     (member) => member.user_id !== currentUserId
@@ -66,19 +78,19 @@ const OtherMemberList: React.FC<MembersProps> = ({
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-2">
+      <div className="text-base text-gray-950">
+        Members({otherMembers.length + 1})
+      </div>
       <div className="flex flex-col gap-2">
-        <div className="text-sm">Members({otherMembers.length + 1})</div>
-        <div className="flex flex-col gap-2">
-          {otherMembers.map((member) => (
-            <Member
-              key={member.id}
-              currentUserId={currentUserId}
-              member={member}
-              prayCardList={userIdPrayCardListHash[member.user_id || ""]}
-            ></Member>
-          ))}
-        </div>
+        {otherMembers.map((member) => (
+          <Member
+            key={member.id}
+            currentUserId={currentUserId}
+            member={member}
+            prayCardList={userIdPrayCardListHash[member.user_id || ""]}
+          ></Member>
+        ))}
       </div>
     </div>
   );

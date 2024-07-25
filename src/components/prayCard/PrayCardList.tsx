@@ -7,6 +7,7 @@ import useBaseStore from "@/stores/baseStore";
 import PrayCardUI from "./PrayCardUI";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import { getISOTodayDate } from "@/lib/utils";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -18,8 +19,8 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   groupId,
 }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
-  const fetchPrayCardListByGroupId = useBaseStore(
-    (state) => state.fetchPrayCardListByGroupId
+  const fetchGroupPrayCardList = useBaseStore(
+    (state) => state.fetchGroupPrayCardList
   );
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
@@ -28,16 +29,19 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     (state) => state.setPrayCardCarouselApi
   );
 
+  const startDt = getISOTodayDate(-6);
+  const endDt = getISOTodayDate();
+
   useEffect(() => {
-    // TODO: 초기화 이후에 재랜더링 필요
-    fetchPrayCardListByGroupId(groupId);
+    // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
+    fetchGroupPrayCardList(groupId, startDt, endDt);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
       if (currentIndex == 0) prayCardCarouselApi.scrollNext();
       if (currentIndex == carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
-  }, [prayCardCarouselApi, fetchPrayCardListByGroupId, groupId]);
+  }, [prayCardCarouselApi, fetchGroupPrayCardList, groupId, startDt, endDt]);
 
   if (!groupPrayCardList) {
     return (
