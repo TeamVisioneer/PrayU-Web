@@ -10,9 +10,7 @@ const PrayEncourageBtn: React.FC = () => {
         rounded cursor-pointer"
       asChild
     >
-      <a href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}>
-        문의하기
-      </a>
+      <a>카카오톡 버튼으로 수정할 것임</a>
     </Button>
   );
 };

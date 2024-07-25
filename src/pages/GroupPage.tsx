@@ -116,12 +116,14 @@ const GroupPage: React.FC = () => {
           <div className="flex flex-col gap-2">
             <div className="text-sm ">내 기도제목</div>
             <MyMember currentUserId={user!.id} groupId={paramsGroupId} />
+            {/* 오늘 기도 했는지 검사 */}
             {isPrayToday ? (
               <OtherMemberList
                 currentUserId={user!.id}
                 groupId={targetGroup?.id}
               ></OtherMemberList>
-            ) : otherPrayCardNumber.length > 0 ? (
+            ) : // 오늘 기도 안했을 떄 그룹의 현재 기도 카드 수에 따라 다른 기도 카드 보여주기
+            otherPrayCardNumber.length > 0 ? (
               <TodayPrayStartCard
                 otherPrayCardNumber={otherPrayCardNumber.length}
               />
