@@ -12,24 +12,20 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import PrayCardUI from "../prayCard/PrayCardUI";
-import useBaseStore from "@/stores/baseStore";
-import { useEffect } from "react";
 import { getDateDistance, getDateDistanceText } from "@toss/date";
 
 interface MemberProps {
   currentUserId: string;
-  member: MemberWithProfiles | undefined;
+  member: MemberWithProfiles;
   prayCardList: PrayCardWithProfiles[];
 }
 
-const Member: React.FC<MemberProps> = ({
+const OtherMember: React.FC<MemberProps> = ({
   currentUserId,
   member,
   prayCardList,
 }) => {
   const prayCard = prayCardList[0] || null;
-  const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
-  const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
 
   const dateDistance = getDateDistance(
     new Date(getISOOnlyDate(member?.updated_at ?? null)),
@@ -47,29 +43,17 @@ const Member: React.FC<MemberProps> = ({
     dateDistanceText = "오늘";
   }
 
-  useEffect(() => {
-    if (currentUserId == member?.user_id)
-      setMyPrayerContent(prayCard?.content || "");
-  }, [prayCard?.content, setMyPrayerContent, currentUserId, member?.user_id]);
-
   const memberUI = (
     <div className="flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
       <div className="flex items-center gap-2">
         <img
-          src={member?.profiles.avatar_url || ""}
-          alt={`${member?.profiles.full_name}'s avatar`}
+          src={member.profiles.avatar_url || ""}
           className="w-5 h-5 rounded-full"
         />
-        <h3>{member?.profiles.full_name}</h3>
+        <h3>{member.profiles.full_name}</h3>
       </div>
       <div className="text-left text-sm text-gray-600">
-        {currentUserId != member?.user_id
-          ? prayCard?.content
-            ? reduceString(prayCard.content, 20)
-            : "아직 기도제목이 없어요"
-          : myPrayerContent
-          ? reduceString(myPrayerContent, 20)
-          : "아직 기도제목이 없어요"}
+        {reduceString(member.pray_summary, 20)}
       </div>
       <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
     </div>
@@ -91,4 +75,4 @@ const Member: React.FC<MemberProps> = ({
   );
 };
 
-export default Member;
+export default OtherMember;

@@ -2,16 +2,15 @@ import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
-import Member from "./Member";
-import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
+import OtherMember from "./OtherMember";
 import { getISOTodayDate } from "@/lib/utils";
 
-interface MembersProps {
+interface OtherMembersProps {
   currentUserId: string;
   groupId: string | undefined;
 }
 
-const OtherMemberList: React.FC<MembersProps> = ({
+const OtherMemberList: React.FC<OtherMembersProps> = ({
   currentUserId,
   groupId,
 }) => {
@@ -58,12 +57,6 @@ const OtherMemberList: React.FC<MembersProps> = ({
     return hash;
   }, {} as userIdPrayCardListHash);
 
-  if (!userIdPrayCardListHash[currentUserId || ""]) {
-    return (
-      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
-    );
-  }
-
   return (
     <div className="flex flex-col gap-2">
       <div className="text-base text-gray-950">
@@ -71,12 +64,12 @@ const OtherMemberList: React.FC<MembersProps> = ({
       </div>
       <div className="flex flex-col gap-2">
         {otherMembers.map((member) => (
-          <Member
+          <OtherMember
             key={member.id}
             currentUserId={currentUserId}
             member={member}
             prayCardList={userIdPrayCardListHash[member.user_id || ""]}
-          ></Member>
+          ></OtherMember>
         ))}
       </div>
     </div>

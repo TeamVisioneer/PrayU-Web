@@ -27,6 +27,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     (state) => state.fetchUserPrayCardListByGroupId
   );
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
+  const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
+  const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
 
   useEffect(() => {
     getMemberByUserId(currentUserId);
@@ -37,6 +39,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     getMemberByUserId,
     fetchUserPrayCardListByGroupId,
   ]);
+
+  useEffect(() => {
+    if (userPrayCardList)
+      setMyPrayerContent(userPrayCardList[0]?.content || "");
+  }, [userPrayCardList, setMyPrayerContent]);
 
   if (!member || !userPrayCardList) {
     return (
@@ -55,11 +62,6 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     );
   }
 
-  const prayCard = userPrayCardList[0] || null;
-  const content = prayCard
-    ? reduceString(prayCard.content, 20)
-    : "아직 기도제목이 없어요";
-
   const dateDistance = getDateDistance(
     new Date(getISOOnlyDate(member?.updated_at ?? null)),
     new Date(getISOTodayDate())
@@ -76,6 +78,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     dateDistanceText = "오늘";
   }
 
+  const prayCard = userPrayCardList[0];
+
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
       <div className="flex items-center gap-2">
@@ -86,7 +90,9 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
         />
         <h3>{member?.profiles.full_name}</h3>
       </div>
-      <div className="text-left text-sm text-gray-600">{content}</div>
+      <div className="text-left text-sm text-gray-600">
+        {reduceString(myPrayerContent, 20)}
+      </div>
       <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
     </div>
   );
