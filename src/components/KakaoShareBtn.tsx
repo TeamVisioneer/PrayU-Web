@@ -93,8 +93,8 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
 
   if (locate === "prayList") {
     return (
-      <Button id="kakaotalk-sharing-btn">
-        <p>그룹원들의 기도를 독려하기</p>
+      <Button id="kakaotalk-sharing-btn" className="bg-yellow-300">
+        <p className="text-black">그룹원 기도 독려하기</p>
       </Button>
     );
   }

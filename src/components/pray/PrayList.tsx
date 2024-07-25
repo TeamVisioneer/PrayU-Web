@@ -22,11 +22,13 @@ const PrayList: React.FC = () => {
         <DrawerTitle>기도해준 사람</DrawerTitle>
       </DrawerHeader>
       <DrawerDescription></DrawerDescription>
-      <div className="h-full overflow-y-auto flex justify-center items-center">
+      <div className="overflow-y-auto justify-center items-center">
         {isPrayerListEmpty ? (
-          <div className="flex-col">
-            <p>아직 기도해준 사람이 없어요</p>
-            <p>그룹원들의 기도를 독려해봐요</p>
+          <div className="flex flex-col gap-4 p-6 items-center">
+            <div className="flex flex-col text-gray-400 text-sm text-center">
+              <p>아직 기도해준 사람이 없어요</p>
+              <p>그룹원들의 기도를 독려해봐요</p>
+            </div>
             <KakaoShareButton
               groupPageUrl={window.location.href}
               locate="prayList"
