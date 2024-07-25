@@ -61,7 +61,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     : "아직 기도제목이 없어요";
 
   const MyMemberUI = (
-    <div className="flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
+    <div className="w-full flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
       <div className="flex items-center gap-2">
         <img
           src={member?.profiles.avatar_url || ""}
@@ -80,8 +80,10 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   return (
     <Drawer>
       <DrawerTrigger className="focus:outline-none">
-        <div className="text-sm ">내 기도제목</div>
-        {MyMemberUI}
+        <div className="flex flex-col items-start gap-2">
+          <div className="text-base text-gray-950">My</div>
+          {MyMemberUI}
+        </div>
       </DrawerTrigger>
 
       <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] px-10 pb-20 focus:outline-none">
