@@ -125,7 +125,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
             </button>
           )}
           <Drawer>
-            <DrawerTrigger className="w-full">
+            <DrawerTrigger className="w-full focus:outline-none">
               <div className="flex justify-center space-x-8">
                 {Object.values(PrayType).map((type) => {
                   const emojiData = reactionDatas[type];

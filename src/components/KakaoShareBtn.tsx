@@ -39,10 +39,12 @@ interface KakaoLinkObject {
 
 interface KakaoShareButtonProps {
   groupPageUrl: string;
+  message?: string;
 }
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   groupPageUrl,
+  message,
 }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -89,6 +91,13 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     };
   }, [groupPageUrl]);
 
+  if (message) {
+    return (
+      <Button id="kakaotalk-sharing-btn" className="bg-yellow-300">
+        <p className="text-black">{message}</p>
+      </Button>
+    );
+  }
   return (
     <Button
       id="kakaotalk-sharing-btn"
