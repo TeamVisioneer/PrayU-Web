@@ -105,7 +105,7 @@ const GroupPage: React.FC = () => {
         <>
           <div className="flex flex-col gap-4">
             <MyMember currentUserId={user!.id} groupId={paramsGroupId} />
-            {otherMembers.length - 1 > 0 ? (
+            {otherMembers.length > 0 ? (
               <>
                 {isPrayToday ? (
                   <OtherMemberList
