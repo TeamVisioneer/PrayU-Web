@@ -1,3 +1,4 @@
+import { PrayType } from "@/Enums/prayType";
 import { getISODate, getISOToday } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { Pray, PrayCardWithProfiles } from "supabase/types/tables";
@@ -12,12 +13,15 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   prayData,
 }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
+  const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
-  const getEmoji = (prayType: string | null) => {
-    if (prayType === "pray") return "🙏";
-    if (prayType === "good") return "👍";
-    if (prayType === "like") return "❤️";
-    return "";
+  const getReactionEmoticon = (prayType: string | null) => {
+    return (
+      <img
+        src={reactionDatas[prayType as PrayType]?.img}
+        alt={reactionDatas[prayType as PrayType]?.img}
+      ></img>
+    );
   };
 
   const generateDates = (createdAt: string | undefined, prayData: Pray[]) => {
@@ -35,7 +39,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
         return prayDate === newDateString;
       });
 
-      const emoji = pray ? getEmoji(pray.pray_type) : "";
+      const emoji = pray ? getReactionEmoticon(pray.pray_type) : "";
       dateList.push({ date: newDateString, emoji });
     }
     return dateList;
@@ -69,7 +73,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
                 }`}
               >
                 {isToday
-                  ? getEmoji(todayPrayTypeHash[prayCard?.id || ""])
+                  ? getReactionEmoticon(todayPrayTypeHash[prayCard?.id || ""])
                   : date.emoji}
               </span>
             </div>

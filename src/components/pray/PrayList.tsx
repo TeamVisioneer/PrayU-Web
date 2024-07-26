@@ -56,7 +56,12 @@ const PrayList: React.FC = () => {
                 <div className="flex gap-2">
                   {prayerList[user_id].map((pray) => (
                     <p key={pray.id} className="text-xl text-gray-500">
-                      {reactionDatas[pray.pray_type as PrayType]?.emoji}
+                      {
+                        <img
+                          src={reactionDatas[pray.pray_type as PrayType]?.img}
+                          alt={reactionDatas[pray.pray_type as PrayType]?.img}
+                        ></img>
+                      }
                     </p>
                   ))}
                 </div>
