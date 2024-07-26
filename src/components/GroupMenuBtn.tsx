@@ -69,7 +69,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             문의하기
           </a>
         </div>
-        <SheetClose className="focus:outline-none">Close</SheetClose>
+        <SheetClose className="focus:outline-none"></SheetClose>
       </SheetContent>
     </Sheet>
   );
