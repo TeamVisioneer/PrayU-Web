@@ -5,7 +5,7 @@ import { ClipLoader } from "react-spinners";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
 import PrayList from "../pray/PrayList";
-import PrayCardUIToOther from "./PrayCardUIToOther";
+import ReactionWithCalendar from "./ReactionWithCalendar";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -96,7 +96,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
     <div className="flex flex-col gap-6">
       {PrayCardBody}
       {currentUserId != prayCard?.user_id ? (
-        <PrayCardUIToOther prayCard={prayCard} />
+        <ReactionWithCalendar prayCard={prayCard} />
       ) : (
         <div className="flex flex-col gap-5">
           {isEditingPrayCard ? (

@@ -10,7 +10,7 @@ interface PrayCardProps {
   prayCard: PrayCardWithProfiles | null;
 }
 
-const PrayCardUIToOther: React.FC<PrayCardProps> = ({ prayCard }) => {
+const ReactionWithCalendar: React.FC<PrayCardProps> = ({ prayCard }) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const currentUserId = useBaseStore((state) => state.user?.id);
   const dateDistance = getDateDistance(
@@ -41,4 +41,4 @@ const PrayCardUIToOther: React.FC<PrayCardProps> = ({ prayCard }) => {
   );
 };
 
-export default PrayCardUIToOther;
+export default ReactionWithCalendar;
