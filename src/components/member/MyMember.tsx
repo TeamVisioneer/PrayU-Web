@@ -43,9 +43,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   ]);
 
   useEffect(() => {
-    if (userPrayCardList)
-      setMyPrayerContent(userPrayCardList[0]?.content || "");
-  }, [userPrayCardList, setMyPrayerContent]);
+    setMyPrayerContent(member?.pray_summary || "");
+  }, [member, setMyPrayerContent]);
 
   if (memberLoading || !userPrayCardList) {
     return (
