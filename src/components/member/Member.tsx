@@ -20,7 +20,7 @@ interface MemberProps {
   prayCardList: PrayCardWithProfiles[];
 }
 
-const OtherMember: React.FC<MemberProps> = ({
+const Member: React.FC<MemberProps> = ({
   currentUserId,
   member,
   prayCardList,
@@ -79,4 +79,4 @@ const OtherMember: React.FC<MemberProps> = ({
   );
 };
 
-export default OtherMember;
+export default Member;
