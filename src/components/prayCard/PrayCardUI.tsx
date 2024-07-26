@@ -68,7 +68,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
     if (textarea) {
       setIsScrollable(textarea.scrollHeight > textarea.clientHeight);
     }
-  }, []);
+  }, [inputPrayCardContent]);
 
   if (!prayDataHash) {
     return (
