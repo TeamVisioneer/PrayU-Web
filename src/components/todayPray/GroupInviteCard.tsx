@@ -1,4 +1,5 @@
 import { KakaoShareButton } from "../KakaoShareBtn";
+import prayCardIcon from "@/assets/prayCard.svg";
 
 export const GroupInviteCard = () => {
   return (
@@ -9,7 +10,11 @@ export const GroupInviteCard = () => {
       </div>
 
       <img
+<<<<<<< HEAD
         src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png"
+=======
+        src={prayCardIcon}
+>>>>>>> 9b58d5f (fix: image icon)
         sizes="
             (max-width: 640px) 100vw,"
         className="rounded-md  w-full"
