@@ -9,6 +9,7 @@ import PrayList from "../pray/PrayList";
 import ReactionWithCalendar from "./ReactionWithCalendar";
 import { getDateDistance } from "@toss/date";
 import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import { Textarea } from "../ui/textarea";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -108,7 +109,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
             {prayCard?.content || member?.pray_summary}
           </p>
         ) : isEditingPrayCard ? (
-          <textarea
+          <Textarea
             ref={textareaRef}
             className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
             value={inputPrayCardContent}
@@ -120,7 +121,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
         )}
       </div>
       <p className="text-sm text-gray-500">
-        created at:{prayCard?.created_at.split("T")[0]}
+        created at:{member?.updated_at.split("T")[0]}
       </p>
     </div>
   );

@@ -8,6 +8,7 @@ import PrayCardUI from "./PrayCardUI";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
+import { KakaoShareButton } from "../KakaoShareBtn";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -47,6 +48,23 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
+
+  if (groupPrayCardList.length == 1) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center text-center gap-4">
+        <div>
+          <p>아직 그룹원들이 기도제목을 작성하지 않았어요</p>
+          <p>그룹원들의 기도를 독려해봐요</p>
+        </div>
+
+        <KakaoShareButton
+          groupPageUrl={window.location.href}
+          message="그룹원 기도 독려하기"
+          id="prayCardListNull"
+        />
       </div>
     );
   }
