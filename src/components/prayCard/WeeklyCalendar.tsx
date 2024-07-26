@@ -19,7 +19,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
     return (
       <img
         src={reactionDatas[prayType as PrayType]?.img}
-        alt={reactionDatas[prayType as PrayType]?.img}
+        alt={reactionDatas[prayType as PrayType]?.emoji}
       ></img>
     );
   };

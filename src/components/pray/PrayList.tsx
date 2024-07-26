@@ -59,7 +59,7 @@ const PrayList: React.FC = () => {
                       {
                         <img
                           src={reactionDatas[pray.pray_type as PrayType]?.img}
-                          alt={reactionDatas[pray.pray_type as PrayType]?.img}
+                          alt={reactionDatas[pray.pray_type as PrayType]?.emoji}
                         ></img>
                       }
                     </p>
