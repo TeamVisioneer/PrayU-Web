@@ -21,9 +21,10 @@ import {
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import {
-  fetchMemberListByGroupId,
   createMember,
-  getMemberByUserId,
+  fetchMemberListByGroupId,
+  getMember,
+  updateMember,
 } from "@/apis/member";
 import {
   createPrayCard,
@@ -65,6 +66,7 @@ export interface BaseStore {
 
   // member
   memberList: MemberWithProfiles[] | null;
+  memberLoading: boolean;
   targetMember: MemberWithProfiles | null;
   userIdMemberHash: UserIdMemberHash | null;
   fetchMemberListByGroupId: (groupId: string | undefined) => Promise<void>;
@@ -72,7 +74,14 @@ export interface BaseStore {
     groupId: string | undefined,
     userId: string | undefined
   ) => Promise<Member | null>;
-  getMemberByUserId: (userId: string | undefined) => Promise<void>;
+  updateMember: (
+    memberId: string | undefined,
+    praySummary: string
+  ) => Promise<Member | null>;
+  getMember: (
+    userId: string,
+    groupId: string | undefined
+  ) => Promise<MemberWithProfiles | null>;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -203,6 +212,7 @@ const useBaseStore = create<BaseStore>()(
 
     //member
     memberList: null,
+    memberLoading: true,
     targetMember: null,
     userIdMemberHash: null,
     fetchMemberListByGroupId: async (groupId: string | undefined) => {
@@ -218,11 +228,17 @@ const useBaseStore = create<BaseStore>()(
       const member = await createMember(groupId, userId);
       return member;
     },
-    getMemberByUserId: async (userId: string | undefined) => {
-      const member = await getMemberByUserId(userId);
+    updateMember: async (memberId: string | undefined, praySummary: string) => {
+      const member = await updateMember(memberId, praySummary);
+      return member;
+    },
+    getMember: async (userId: string, groupId: string | undefined) => {
+      const member = await getMember(userId, groupId);
       set((state) => {
         state.targetMember = member;
+        state.memberLoading = false;
       });
+      return member;
     },
 
     // prayCard

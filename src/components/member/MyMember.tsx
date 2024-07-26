@@ -22,23 +22,32 @@ interface MemberProps {
 
 const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const member = useBaseStore((state) => state.targetMember);
-  const getMemberByUserId = useBaseStore((state) => state.getMemberByUserId);
+  const memberLoading = useBaseStore((state) => state.memberLoading);
+  const getMember = useBaseStore((state) => state.getMember);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
   );
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
+  const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
+  const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
 
   useEffect(() => {
-    getMemberByUserId(currentUserId);
+    getMember(currentUserId, groupId);
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [
     currentUserId,
-    groupId,
-    getMemberByUserId,
     fetchUserPrayCardListByGroupId,
+    getMember,
+    groupId,
+    setMyPrayerContent,
   ]);
 
-  if (!member || !userPrayCardList) {
+  useEffect(() => {
+    if (userPrayCardList)
+      setMyPrayerContent(userPrayCardList[0]?.content || "");
+  }, [userPrayCardList, setMyPrayerContent]);
+
+  if (memberLoading || !userPrayCardList) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -47,18 +56,18 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   }
 
   if (
+    member == null ||
     userPrayCardList.length === 0 ||
     userPrayCardList[0].created_at < getISOTodayDate(-6)
   ) {
     return (
-      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
+      <PrayCardCreateModal
+        currentUserId={currentUserId}
+        groupId={groupId}
+        member={member}
+      />
     );
   }
-
-  const prayCard = userPrayCardList[0] || null;
-  const content = prayCard
-    ? reduceString(prayCard.content, 20)
-    : "아직 기도제목이 없어요";
 
   const dateDistance = getDateDistance(
     new Date(getISOOnlyDate(member?.updated_at ?? null)),
@@ -80,16 +89,19 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
       <div className="flex items-center gap-2">
         <img
-          src={member?.profiles.avatar_url || ""}
-          alt={`${member?.profiles.full_name}'s avatar`}
+          src={member.profiles.avatar_url || ""}
           className="w-5 h-5 rounded-full"
         />
-        <h3>{member?.profiles.full_name}</h3>
+        <h3>{member.profiles.full_name}</h3>
       </div>
-      <div className="text-left text-sm text-gray-600">{content}</div>
+      <div className="text-left text-sm text-gray-600">
+        {reduceString(myPrayerContent, 20)}
+      </div>
       <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
     </div>
   );
+
+  const prayCard = userPrayCardList[0];
 
   return (
     <Drawer>
@@ -106,7 +118,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {/* PrayCard */}
-        <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
+        <PrayCardUI
+          currentUserId={currentUserId}
+          member={member}
+          prayCard={prayCard}
+        />
         {/* PrayCard */}
       </DrawerContent>
     </Drawer>

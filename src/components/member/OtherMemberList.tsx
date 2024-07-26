@@ -3,15 +3,14 @@ import useBaseStore from "@/stores/baseStore";
 import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
 import Member from "./Member";
-import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
 import { getISOTodayDate } from "@/lib/utils";
 
-interface MembersProps {
+interface OtherMembersProps {
   currentUserId: string;
   groupId: string | undefined;
 }
 
-const OtherMemberList: React.FC<MembersProps> = ({
+const OtherMemberList: React.FC<OtherMembersProps> = ({
   currentUserId,
   groupId,
 }) => {
@@ -57,12 +56,6 @@ const OtherMemberList: React.FC<MembersProps> = ({
     hash[member.user_id || "deletedUser"] = prayCardList;
     return hash;
   }, {} as userIdPrayCardListHash);
-
-  if (!userIdPrayCardListHash[currentUserId || ""]) {
-    return (
-      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
-    );
-  }
 
   return (
     <div className="flex flex-col gap-2">

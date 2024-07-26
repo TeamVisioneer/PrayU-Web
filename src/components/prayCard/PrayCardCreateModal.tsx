@@ -1,33 +1,36 @@
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import useBaseStore from "@/stores/baseStore";
+import { MemberWithProfiles } from "supabase/types/tables";
 
 interface PrayCardCreateModalProps {
   currentUserId: string | undefined;
   groupId: string | undefined;
+  member: MemberWithProfiles | null;
 }
 
 const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   currentUserId,
   groupId,
+  member,
 }) => {
-  const memberList = useBaseStore((state) => state.memberList);
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
   const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
   const createMember = useBaseStore((state) => state.createMember);
+  const updateMember = useBaseStore((state) => state.updateMember);
   const createPrayCard = useBaseStore((state) => state.createPrayCard);
 
   const handleCreatePrayCard = async (
     currentUserId: string | undefined,
     groupId: string | undefined
   ) => {
-    const isMember = memberList?.some(
-      (member) => member.user_id === currentUserId
-    );
-    if (!isMember) {
-      await createMember(groupId, currentUserId);
+    if (!member) {
+      const newMember = await createMember(groupId, currentUserId);
+      await updateMember(newMember?.id, inputPrayCardContent);
+    } else {
+      await updateMember(member.id, inputPrayCardContent);
     }
     await createPrayCard(groupId, currentUserId, inputPrayCardContent);
     window.location.reload();

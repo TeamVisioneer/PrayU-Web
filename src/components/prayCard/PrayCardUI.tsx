@@ -1,6 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { useEffect, useState, useRef } from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
+import { MemberWithProfiles } from "supabase/types/tables";
 import { ClipLoader } from "react-spinners";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
@@ -12,9 +13,14 @@ import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 interface PrayCardProps {
   currentUserId: string;
   prayCard: PrayCardWithProfiles | null;
+  member?: MemberWithProfiles | undefined;
 }
 
-const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
+const PrayCardUI: React.FC<PrayCardProps> = ({
+  currentUserId,
+  member,
+  prayCard,
+}) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const isEditingPrayCard = useBaseStore((state) => state.isEditingPrayCard);
@@ -28,7 +34,9 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
 
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
 
-  const [content, setContent] = useState(prayCard?.content || "");
+  const [content, setContent] = useState(
+    prayCard?.content || member?.pray_summary || ""
+  );
   const [isScrollable, setIsScrollable] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -73,11 +81,14 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ currentUserId, prayCard }) => {
     <div className="flex flex-col h-50vh min-h-[300px] p-5 bg-blue-50 rounded-2xl">
       <div className="flex items-center gap-2">
         <img
-          src={prayCard?.profiles.avatar_url || ""}
+          src={
+            prayCard?.profiles.avatar_url || member?.profiles.avatar_url || ""
+          }
           className="w-5 h-5 rounded-full"
-          alt={`${prayCard?.profiles.full_name} avatar`}
         />
-        <div className="text-sm">{prayCard?.profiles.full_name}</div>
+        <div className="text-sm">
+          {prayCard?.profiles.full_name || member?.profiles.full_name}
+        </div>
         {currentUserId == prayCard?.user_id && (
           <div className="flex gap-2">
             <p className="text-sm text-gray-500">
