@@ -8,6 +8,7 @@ import PrayCardUI from "./PrayCardUI";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
+import PrayEncourageCard from "@/components/todayPray/PrayEncourageCard";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -18,6 +19,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   currentUserId,
   groupId,
 }) => {
+  const memberList = useBaseStore((state) => state.memberList);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
@@ -32,14 +34,18 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   const startDt = getISOTodayDate(-6);
   const endDt = getISOTodayDate(1);
 
+  const otherMembers = memberList
+    ? memberList.filter((member) => member.user_id !== currentUserId)
+    : [];
+
   useEffect(() => {
     // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
     fetchGroupPrayCardList(groupId, startDt, endDt);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
-      if (currentIndex == 0) prayCardCarouselApi.scrollNext();
-      if (currentIndex == carouselLength - 1) prayCardCarouselApi.scrollPrev();
+      if (currentIndex === 0) prayCardCarouselApi.scrollNext();
+      if (currentIndex === carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
   }, [prayCardCarouselApi, fetchGroupPrayCardList, groupId, startDt, endDt]);
 
@@ -52,24 +58,33 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   }
 
   return (
-    <Carousel
-      setApi={setPrayCardCarouselApi}
-      opts={{
-        startIndex: 1,
-      }}
-    >
-      <CarouselContent>
-        <CarouselItem className="basis-5/6 "></CarouselItem>
-        {groupPrayCardList
-          ?.filter((prayCard) => prayCard.user_id != currentUserId)
-          .map((prayCard) => (
-            <CarouselItem key={prayCard.id} className="basis-5/6">
-              <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
-            </CarouselItem>
-          ))}
-        <CarouselItem className="basis-5/6 "></CarouselItem>
-      </CarouselContent>
-    </Carousel>
+    <>
+      {otherMembers.length - 1 > 0 ? (
+        <Carousel
+          setApi={setPrayCardCarouselApi}
+          opts={{
+            startIndex: 1,
+          }}
+        >
+          <CarouselContent>
+            <CarouselItem className="basis-5/6 "></CarouselItem>
+            {groupPrayCardList
+              ?.filter((prayCard) => prayCard.user_id !== currentUserId)
+              .map((prayCard) => (
+                <CarouselItem key={prayCard.id} className="basis-5/6">
+                  <PrayCardUI
+                    currentUserId={currentUserId}
+                    prayCard={prayCard}
+                  />
+                </CarouselItem>
+              ))}
+            <CarouselItem className="basis-5/6 "></CarouselItem>
+          </CarouselContent>
+        </Carousel>
+      ) : (
+        <PrayEncourageCard />
+      )}
+    </>
   );
 };
 

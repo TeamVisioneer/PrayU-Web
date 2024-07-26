@@ -30,6 +30,10 @@ const GroupPage: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
 
+  const fetchMemberListByGroupId = useBaseStore(
+    (state) => state.fetchMemberListByGroupId
+  );
+
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
@@ -63,6 +67,10 @@ const GroupPage: React.FC = () => {
   useEffect(() => {
     if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
   }, [user, targetGroup, fetchIsPrayToday]);
+
+  useEffect(() => {
+    fetchMemberListByGroupId(paramsGroupId);
+  }, [fetchMemberListByGroupId, paramsGroupId]);
 
   if (!groupList || (paramsGroupId && !targetGroup) || isPrayToday == null) {
     return (
