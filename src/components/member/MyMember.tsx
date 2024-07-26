@@ -28,23 +28,19 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     (state) => state.fetchUserPrayCardListByGroupId
   );
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
-  const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
-  const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
+  const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
+  const inputPrayCardContent = useBaseStore(
+    (state) => state.inputPrayCardContent
+  );
 
   useEffect(() => {
     getMember(currentUserId, groupId);
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
-  }, [
-    currentUserId,
-    fetchUserPrayCardListByGroupId,
-    getMember,
-    groupId,
-    setMyPrayerContent,
-  ]);
+  }, [currentUserId, fetchUserPrayCardListByGroupId, getMember, groupId]);
 
   useEffect(() => {
-    setMyPrayerContent(member?.pray_summary || "");
-  }, [member, setMyPrayerContent]);
+    setPrayCardContent(member?.pray_summary || "");
+  }, [member, setPrayCardContent]);
 
   if (memberLoading || !userPrayCardList) {
     return (
@@ -94,7 +90,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
         <h3>{member.profiles.full_name}</h3>
       </div>
       <div className="text-left text-sm text-gray-600">
-        {reduceString(myPrayerContent, 20)}
+        {reduceString(inputPrayCardContent, 20)}
       </div>
       <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
     </div>

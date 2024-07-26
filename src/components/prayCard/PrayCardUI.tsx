@@ -23,20 +23,22 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
 }) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
+  const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
+  const inputPrayCardContent = useBaseStore(
+    (state) => state.inputPrayCardContent
+  );
   const isEditingPrayCard = useBaseStore((state) => state.isEditingPrayCard);
-  const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
-  const handleEditClick = useBaseStore((state) => state.handleEditClick);
-  const handleSaveClick = useBaseStore((state) => state.handleSaveClick);
-
+  const setIsEditingPrayCard = useBaseStore(
+    (state) => state.setIsEditingPrayCard
+  );
+  const updateMember = useBaseStore((state) => state.updateMember);
+  const updatePrayCardContent = useBaseStore(
+    (state) => state.updatePrayCardContent
+  );
   const fetchPrayDataByUserId = useBaseStore(
     (state) => state.fetchPrayDataByUserId
   );
 
-  const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
-
-  const [content, setContent] = useState(
-    prayCard?.content || member?.pray_summary || ""
-  );
   const [isScrollable, setIsScrollable] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -45,29 +47,28 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
     new Date(getISOOnlyDate(prayCard?.created_at ?? getISOTodayDate()))
   );
 
+  const handleSaveClick = (
+    prayCardId: string,
+    content: string,
+    memberId: string | undefined
+  ) => {
+    updatePrayCardContent(prayCardId, content);
+    updateMember(memberId, content);
+  };
+
   useEffect(() => {
     fetchPrayDataByUserId(
       prayCard?.id,
       prayCard?.user_id == currentUserId ? undefined : currentUserId
     );
-    if (prayCard?.user_id == currentUserId && myPrayerContent)
-      setContent(myPrayerContent);
-  }, [
-    fetchPrayDataByUserId,
-    prayCard?.id,
-    currentUserId,
-    prayCard?.user_id,
-    setMyPrayerContent,
-    prayCard?.content,
-    myPrayerContent,
-  ]);
+  }, [currentUserId, fetchPrayDataByUserId, prayCard?.id, prayCard?.user_id]);
 
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
       setIsScrollable(textarea.scrollHeight > textarea.clientHeight);
     }
-  }, [content]);
+  }, []);
 
   if (!prayDataHash) {
     return (
@@ -109,12 +110,12 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
           <textarea
             ref={textareaRef}
             className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={inputPrayCardContent}
+            onChange={(e) => setPrayCardContent(e.target.value)}
             maxLength={400}
           />
         ) : (
-          <p className="whitespace-pre-line">{content}</p>
+          <p className="whitespace-pre-line">{inputPrayCardContent}</p>
         )}
       </div>
     </div>
@@ -130,17 +131,19 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
           {isEditingPrayCard ? (
             <button
               className={`w-full bg-green-700 text-white rounded-2xl ${
-                !content ? "opacity-50 cursor-not-allowed" : ""
+                !inputPrayCardContent ? "opacity-50 cursor-not-allowed" : ""
               }`}
-              onClick={() => handleSaveClick(prayCard!.id, content)}
-              disabled={!content}
+              onClick={() =>
+                handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
+              }
+              disabled={!inputPrayCardContent}
             >
               저장
             </button>
           ) : (
             <button
               className="w-full bg-black text-white rounded-2xl"
-              onClick={handleEditClick}
+              onClick={() => setIsEditingPrayCard(true)}
             >
               수정
             </button>

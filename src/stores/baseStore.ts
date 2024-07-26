@@ -90,8 +90,7 @@ export interface BaseStore {
   targetPrayCard: PrayCardWithProfiles | null;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
-  myPrayerContent: string | null;
-  setMyPrayerContent: (myPrayerContent: string) => void;
+  prayCardCarouselApi: CarouselApi | null;
   fetchGroupPrayCardList: (
     groupId: string | undefined,
     startDt: string,
@@ -106,12 +105,10 @@ export interface BaseStore {
     userId: string | undefined,
     content: string
   ) => Promise<PrayCard | null>;
-  setPrayCardContent: (content: string) => void;
-  prayCardCarouselApi: CarouselApi | null;
-  setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
   setIsEditingPrayCard: (isEditingPrayCard: boolean) => void;
-  handleEditClick: () => void;
-  handleSaveClick: (prayCardId: string, myPrayerContent: string) => void;
+  updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
+  setPrayCardContent: (content: string) => void;
+  setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
 
   // pray
   prayData: Pray[] | null;
@@ -248,12 +245,7 @@ const useBaseStore = create<BaseStore>()(
     targetPrayCard: null,
     inputPrayCardContent: "",
     isEditingPrayCard: false,
-    myPrayerContent: null,
-    setMyPrayerContent: (myPrayerContent: string) => {
-      set((state) => {
-        state.myPrayerContent = myPrayerContent;
-      });
-    },
+    prayCardCarouselApi: null,
     setIsEditingPrayCard: (isEditingPrayCard: boolean) => {
       set((state) => {
         state.isEditingPrayCard = isEditingPrayCard;
@@ -285,7 +277,6 @@ const useBaseStore = create<BaseStore>()(
         state.userPrayCardList = userPrayCardList;
       });
     },
-
     createPrayCard: async (
       groupId: string | undefined,
       userId: string | undefined,
@@ -294,27 +285,26 @@ const useBaseStore = create<BaseStore>()(
       const prayCard = await createPrayCard(groupId, userId, content);
       return prayCard;
     },
+    updatePrayCardContent: async (prayCardId: string, content: string) => {
+      await updatePrayCardContent(prayCardId, content);
+      set((state) => {
+        state.inputPrayCardContent = content;
+        state.isEditingPrayCard = false;
+      });
+    },
     setPrayCardContent: (content: string) => {
       set((state) => {
         state.inputPrayCardContent = content;
       });
     },
-    prayCardCarouselApi: null,
     setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => {
       set((state) => {
         state.prayCardCarouselApi = prayCardCarouselApi;
       });
     },
-    handleEditClick: () => {
+    setIsEditing: () => {
       set((state) => {
         state.isEditingPrayCard = true;
-      });
-    },
-    handleSaveClick: (prayCardId, myPrayerContent) => {
-      updatePrayCardContent(prayCardId, myPrayerContent);
-      set((state) => {
-        state.isEditingPrayCard = false;
-        state.myPrayerContent = myPrayerContent;
       });
     },
 
