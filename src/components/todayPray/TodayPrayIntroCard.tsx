@@ -1,14 +1,6 @@
 import { KakaoShareButton } from "../KakaoShareBtn";
-import { getDomainUrl } from "../../lib/utils";
 
-interface IntroProps {
-  groupId: string | undefined;
-}
-
-export const TodayPrayIntroCard: React.FC<IntroProps> = ({
-  groupId: groupId,
-}) => {
-  const domainUrl = getDomainUrl();
+export const TodayPrayIntroCard = () => {
   return (
     <div className="flex flex-col  gap-2 border p-4 rounded-lg shadow-md bg-white justify-center items-center h-60vh">
       <div className="text-center">
@@ -24,8 +16,8 @@ export const TodayPrayIntroCard: React.FC<IntroProps> = ({
       />
 
       <KakaoShareButton
-        groupPageUrl={`${domainUrl}/group/${groupId}`}
-        id="groupPage"
+        groupPageUrl={window.location.href}
+        id="paryTodayIntro"
       ></KakaoShareButton>
     </div>
   );

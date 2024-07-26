@@ -118,7 +118,7 @@ const GroupPage: React.FC = () => {
                 )}
               </>
             ) : (
-              <TodayPrayIntroCard groupId={paramsGroupId} />
+              <TodayPrayIntroCard />
             )}
           </div>
 
