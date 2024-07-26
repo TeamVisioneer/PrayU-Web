@@ -19,7 +19,7 @@ import TodayPrayBtn from "@/components/todayPray/TodayPrayBtn";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import MyMember from "@/components/member/MyMember";
 import LimitGroupCard from "@/components/group/LimitGroupCard";
-import TodayPrayIntroCard from "@/components/todayPray/TodayPrayIntroCard";
+import GroupInviteCard from "@/components/todayPray/GroupInviteCard";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -118,7 +118,7 @@ const GroupPage: React.FC = () => {
                 )}
               </>
             ) : (
-              <TodayPrayIntroCard />
+              <GroupInviteCard />
             )}
           </div>
 

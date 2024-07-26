@@ -1,6 +1,6 @@
 import { KakaoShareButton } from "../KakaoShareBtn";
 
-export const TodayPrayIntroCard = () => {
+export const GroupInviteCard = () => {
   return (
     <div className="flex flex-col  gap-2 border p-4 rounded-lg shadow-md bg-white justify-center items-center h-60vh">
       <div className="text-center">
@@ -23,4 +23,4 @@ export const TodayPrayIntroCard = () => {
   );
 };
 
-export default TodayPrayIntroCard;
+export default GroupInviteCard;
