@@ -87,7 +87,7 @@ export type Database = {
           group_id: string | null
           id: string
           pray_summary: string | null
-          updated_at: string | null
+          updated_at: string
           user_id: string | null
         }
         Insert: {
@@ -96,7 +96,7 @@ export type Database = {
           group_id?: string | null
           id?: string
           pray_summary?: string | null
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string | null
         }
         Update: {
@@ -105,7 +105,7 @@ export type Database = {
           group_id?: string | null
           id?: string
           pray_summary?: string | null
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string | null
         }
         Relationships: [

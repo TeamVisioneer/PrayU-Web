@@ -7,17 +7,13 @@ import {
 } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
 import { KakaoShareButton } from "../KakaoShareBtn";
-import { getDomainUrl } from "@/lib/utils";
 
 const PrayList: React.FC = () => {
   const prayerList = useBaseStore((state) => state.prayerList);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const targetGroup = useBaseStore((state) => state.targetGroup);
 
   const isPrayerListEmpty = !prayerList || Object.keys(prayerList).length === 0;
-
-  const domainUrl = getDomainUrl();
 
   return (
     <DrawerContent className="h-[400px] focus:outline-none">
@@ -33,7 +29,7 @@ const PrayList: React.FC = () => {
               <p>그룹원들의 기도를 독려해봐요</p>
             </div>
             <KakaoShareButton
-              groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
+              groupPageUrl={window.location.href}
               message="그룹원 기도 독려하기"
               id="prayList"
             />

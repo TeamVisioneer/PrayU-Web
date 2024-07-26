@@ -61,7 +61,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     : "아직 기도제목이 없어요";
 
   const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(prayCard?.created_at)),
+    new Date(getISOOnlyDate(member?.updated_at ?? null)),
     new Date(getISOTodayDate())
   );
 
