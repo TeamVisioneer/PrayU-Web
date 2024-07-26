@@ -8,7 +8,7 @@ import PrayCardUI from "./PrayCardUI";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
-import PrayEncourageCard from "@/components/todayPray/PrayEncourageCard";
+import TodayPrayIntroCard from "../todayPray/TodayPrayIntroCard";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -82,7 +82,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
           </CarouselContent>
         </Carousel>
       ) : (
-        <PrayEncourageCard groupId={groupId} />
+        <TodayPrayIntroCard groupId={groupId} />
       )}
     </>
   );

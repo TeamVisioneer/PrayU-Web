@@ -1,11 +1,11 @@
 import { KakaoShareButton } from "../KakaoShareBtn";
 import { getDomainUrl } from "../../lib/utils";
 
-interface EncourageProps {
+interface IntroProps {
   groupId: string | undefined;
 }
 
-export const PrayEncourageCard: React.FC<EncourageProps> = ({
+export const TodayPrayIntroCard: React.FC<IntroProps> = ({
   groupId: groupId,
 }) => {
   const domainUrl = getDomainUrl();
@@ -31,4 +31,4 @@ export const PrayEncourageCard: React.FC<EncourageProps> = ({
   );
 };
 
-export default PrayEncourageCard;
+export default TodayPrayIntroCard;
