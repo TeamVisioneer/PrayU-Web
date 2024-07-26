@@ -1,6 +1,6 @@
-import PrayEncourageBtn from "./PrayEncourageBtn";
+import { KakaoShareButton } from "../KakaoShareBtn";
 
-export const PrayEncourageCard = () => {
+export const GroupInviteCard = () => {
   return (
     <div className="flex flex-col  gap-2 border p-4 rounded-lg shadow-md bg-white justify-center items-center h-60vh">
       <div className="text-center">
@@ -15,9 +15,12 @@ export const PrayEncourageCard = () => {
         className="rounded-md  w-full"
       />
 
-      <PrayEncourageBtn />
+      <KakaoShareButton
+        groupPageUrl={window.location.href}
+        id="paryTodayIntro"
+      ></KakaoShareButton>
     </div>
   );
 };
 
-export default PrayEncourageCard;
+export default GroupInviteCard;

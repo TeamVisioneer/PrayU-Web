@@ -19,23 +19,13 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
   );
-  const fetchMemberListByGroupId = useBaseStore(
-    (state) => state.fetchMemberListByGroupId
-  );
 
   const startDt = getISOTodayDate(-6);
   const endDt = getISOTodayDate(1);
 
   useEffect(() => {
-    fetchMemberListByGroupId(groupId);
     fetchGroupPrayCardList(groupId, startDt, endDt);
-  }, [
-    fetchMemberListByGroupId,
-    fetchGroupPrayCardList,
-    groupId,
-    startDt,
-    endDt,
-  ]);
+  }, [fetchGroupPrayCardList, groupId, startDt, endDt]);
 
   if (!memberList || !groupPrayCardList) {
     return (

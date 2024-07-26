@@ -38,8 +38,8 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
-      if (currentIndex == 0) prayCardCarouselApi.scrollNext();
-      if (currentIndex == carouselLength - 1) prayCardCarouselApi.scrollPrev();
+      if (currentIndex === 0) prayCardCarouselApi.scrollNext();
+      if (currentIndex === carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
   }, [prayCardCarouselApi, fetchGroupPrayCardList, groupId, startDt, endDt]);
 
@@ -61,7 +61,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
       <CarouselContent>
         <CarouselItem className="basis-5/6 "></CarouselItem>
         {groupPrayCardList
-          ?.filter((prayCard) => prayCard.user_id != currentUserId)
+          ?.filter((prayCard) => prayCard.user_id !== currentUserId)
           .map((prayCard) => (
             <CarouselItem key={prayCard.id} className="basis-5/6">
               <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />

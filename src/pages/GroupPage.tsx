@@ -19,6 +19,7 @@ import TodayPrayBtn from "@/components/todayPray/TodayPrayBtn";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import MyMember from "@/components/member/MyMember";
 import LimitGroupCard from "@/components/group/LimitGroupCard";
+import GroupInviteCard from "@/components/todayPray/GroupInviteCard";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -29,6 +30,10 @@ const GroupPage: React.FC = () => {
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
+  const memberList = useBaseStore((state) => state.memberList);
+  const fetchMemberListByGroupId = useBaseStore(
+    (state) => state.fetchMemberListByGroupId
+  );
 
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
@@ -64,6 +69,10 @@ const GroupPage: React.FC = () => {
     if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
   }, [user, targetGroup, fetchIsPrayToday]);
 
+  useEffect(() => {
+    fetchMemberListByGroupId(paramsGroupId);
+  }, [fetchMemberListByGroupId, paramsGroupId]);
+
   if (!groupList || (paramsGroupId && !targetGroup) || isPrayToday == null) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -73,6 +82,9 @@ const GroupPage: React.FC = () => {
   }
 
   const domainUrl = getDomainUrl();
+  const otherMembers = memberList
+    ? memberList.filter((member) => member.user_id !== user!.id)
+    : [];
 
   return (
     <div className="flex flex-col gap-6">
@@ -92,17 +104,21 @@ const GroupPage: React.FC = () => {
       ) : (
         <>
           <div className="flex flex-col gap-2">
-            <div className="text-sm ">내 기도제목</div>
+            <div className="text-sm">내 기도제목</div>
             <MyMember currentUserId={user!.id} groupId={paramsGroupId} />
-            {/* 오늘 기도 했는지 검사 */}
-            {isPrayToday ? (
-              <OtherMemberList
-                currentUserId={user!.id}
-                groupId={targetGroup?.id}
-              ></OtherMemberList>
+            {otherMembers.length - 1 > 0 ? (
+              <>
+                {isPrayToday ? (
+                  <OtherMemberList
+                    currentUserId={user!.id}
+                    groupId={targetGroup?.id}
+                  />
+                ) : (
+                  <TodayPrayStartCard />
+                )}
+              </>
             ) : (
-              // 오늘 기도 안했을 떄 그룹의 현재 기도 카드 수에 따라 다른 기도 카드 보여주기
-              <TodayPrayStartCard />
+              <GroupInviteCard />
             )}
           </div>
 
