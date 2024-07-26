@@ -22,7 +22,8 @@ interface MemberProps {
 
 const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const member = useBaseStore((state) => state.targetMember);
-  const getMemberByUserId = useBaseStore((state) => state.getMemberByUserId);
+  const memberLoading = useBaseStore((state) => state.memberLoading);
+  const getMember = useBaseStore((state) => state.getMember);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
   );
@@ -31,13 +32,14 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
 
   useEffect(() => {
-    getMemberByUserId(currentUserId);
+    getMember(currentUserId, groupId);
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [
     currentUserId,
-    groupId,
-    getMemberByUserId,
     fetchUserPrayCardListByGroupId,
+    getMember,
+    groupId,
+    setMyPrayerContent,
   ]);
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
       setMyPrayerContent(userPrayCardList[0]?.content || "");
   }, [userPrayCardList, setMyPrayerContent]);
 
-  if (!member || !userPrayCardList) {
+  if (memberLoading || !userPrayCardList) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -54,11 +56,16 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   }
 
   if (
+    member == null ||
     userPrayCardList.length === 0 ||
     userPrayCardList[0].created_at < getISOTodayDate(-6)
   ) {
     return (
-      <PrayCardCreateModal currentUserId={currentUserId} groupId={groupId} />
+      <PrayCardCreateModal
+        currentUserId={currentUserId}
+        groupId={groupId}
+        member={member}
+      />
     );
   }
 
@@ -78,8 +85,6 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     dateDistanceText = "오늘";
   }
 
-  const prayCard = userPrayCardList[0];
-
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
       <div className="flex items-center gap-2">
@@ -95,6 +100,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
       <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
     </div>
   );
+
+  const prayCard = userPrayCardList[0];
 
   return (
     <Drawer>

@@ -17,7 +17,7 @@ import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 
 interface PrayCardProps {
   currentUserId: string;
-  member: MemberWithProfiles;
+  member: MemberWithProfiles | undefined;
   prayCard: PrayCardWithProfiles | null;
 }
 
@@ -40,7 +40,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
 
   const [content, setContent] = useState(
-    prayCard?.content || member.pray_summary || ""
+    prayCard?.content || member?.pray_summary || ""
   );
   const [isScrollable, setIsScrollable] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
