@@ -95,9 +95,6 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
             <p className="text-sm text-gray-500">
               {dateDistance.days + 1}일 차
             </p>
-            <p className="text-sm text-gray-500">
-              created at:{prayCard?.created_at.split("T")[0]}
-            </p>
           </div>
         )}
       </div>
@@ -118,6 +115,9 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
           <p className="whitespace-pre-line">{inputPrayCardContent}</p>
         )}
       </div>
+      <p className="text-sm text-gray-500">
+        created at:{prayCard?.created_at.split("T")[0]}
+      </p>
     </div>
   );
 
