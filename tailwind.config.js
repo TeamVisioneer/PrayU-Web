@@ -18,6 +18,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        mainBg: "#F2F3FD",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -82,6 +83,9 @@ module.exports = {
         "80vh": "80vh",
         "90vh": "90vh",
         "100vh": "100vh",
+      },
+      boxShadow: {
+        member: "0 7px 7px rgba(193, 198, 246, 0.25)",
       },
     },
   },

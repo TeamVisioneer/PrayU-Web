@@ -52,7 +52,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
       <div className="text-base text-gray-950">
         Members({otherMembers.length + 1})
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         {otherMembers.map((member) => (
           <OtherMember
             key={member.id}
