@@ -31,6 +31,20 @@ const GroupPage: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
   const memberList = useBaseStore((state) => state.memberList);
+  type UUID = string;
+
+  // UUID 유효성 검사 함수
+  function isValidUUID(uuid: string): boolean {
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(uuid);
+  }
+
+  // 사용자 정의 타입 가드
+  function isUUID(uuid: string): uuid is UUID {
+    return isValidUUID(uuid);
+  }
+
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
@@ -47,6 +61,10 @@ const GroupPage: React.FC = () => {
 
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
+
+  if (!(paramsGroupId && isUUID(paramsGroupId))) {
+    navigate("/", { replace: true });
+  }
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
