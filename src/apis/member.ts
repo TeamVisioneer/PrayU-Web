@@ -51,7 +51,7 @@ export const updateMember = async (
       pray_summary: praySummary,
       updated_at: getISOToday(),
     })
-    .eq("id", "26dc408f-0257-44e6-9737-ba19cb026771")
+    .eq("id", memberId)
     .select();
   if (error) {
     console.error("error", error);
