@@ -325,19 +325,19 @@ const useBaseStore = create<BaseStore>()(
     isPrayToday: false,
     reactionDatas: {
       [PrayType.PRAY]: {
-        img: "../src/assets/pray.png",
+        img: "../src/assets/pray.svg",
         emoji: "🙏",
         text: "기도해요",
         num: 0,
       },
       [PrayType.GOOD]: {
-        img: "../src/assets/good.png",
+        img: "../src/assets/good.svg",
         emoji: "👍",
         text: "힘내세요",
         num: 0,
       },
       [PrayType.LIKE]: {
-        img: "../src/assets/like.png",
+        img: "../src/assets/like.svg",
         emoji: "❤️",
         text: "응원해요",
         num: 0,
