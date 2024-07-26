@@ -19,6 +19,22 @@ export const fetchMemberListByGroupId = async (
   return data as MemberWithProfiles[];
 };
 
+export const createMember = async (
+  groupId: string | undefined,
+  userId: string | undefined
+): Promise<Member | null> => {
+  if (!groupId || !userId) return null;
+  const { error, data } = await supabase
+    .from("member")
+    .insert([{ group_id: groupId, user_id: userId }])
+    .select();
+  if (error) {
+    console.error("error", error);
+    return null;
+  }
+  return data ? data[0] : null;
+};
+
 export const getMember = async (
   userId: string,
   groupId: string | undefined

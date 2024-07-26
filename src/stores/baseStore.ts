@@ -1,4 +1,3 @@
-import { upsertMember } from "./../apis/member";
 import {
   createPray,
   fetchIsPrayToday,
@@ -22,8 +21,8 @@ import {
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import {
-  fetchMemberListByGroupId,
   createMember,
+  fetchMemberListByGroupId,
   getMember,
   updateMember,
 } from "@/apis/member";
