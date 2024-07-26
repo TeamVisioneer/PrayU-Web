@@ -25,7 +25,8 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({ prayCard }) => {
         <KakaoShareButton
           groupPageUrl={window.location.href}
           message="기도제목 요청하기"
-        />
+          id="prayCardUIToOther"
+        ></KakaoShareButton>
       </div>
     );
   }

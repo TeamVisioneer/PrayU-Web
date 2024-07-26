@@ -2,7 +2,7 @@ import {
   MemberWithProfiles,
   PrayCardWithProfiles,
 } from "supabase/types/tables";
-import { getISODate, reduceString } from "../../lib/utils";
+import { getISOOnlyDate, getISOTodayDate, reduceString } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -14,6 +14,7 @@ import {
 import PrayCardUI from "../prayCard/PrayCardUI";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
+import { getDateDistance, getDateDistanceText } from "@toss/date";
 
 interface MemberProps {
   currentUserId: string;
@@ -29,6 +30,22 @@ const Member: React.FC<MemberProps> = ({
   const prayCard = prayCardList[0] || null;
   const myPrayerContent = useBaseStore((state) => state.myPrayerContent);
   const setMyPrayerContent = useBaseStore((state) => state.setMyPrayerContent);
+
+  const dateDistance = getDateDistance(
+    new Date(getISOOnlyDate(member?.updated_at ?? null)),
+    new Date(getISOTodayDate())
+  );
+
+  let dateDistanceText = getDateDistanceText(dateDistance, {
+    days: (t) => 1 <= t.days,
+    hours: () => false,
+    minutes: () => false,
+    seconds: () => false,
+  });
+
+  if (dateDistance.days < 1) {
+    dateDistanceText = "오늘";
+  }
 
   useEffect(() => {
     if (currentUserId == member?.user_id)
@@ -54,9 +71,7 @@ const Member: React.FC<MemberProps> = ({
           ? reduceString(myPrayerContent, 20)
           : "아직 기도제목이 없어요"}
       </div>
-      <div className="text-gray-400 text-left text-xs">
-        {getISODate(prayCard?.updated_at).split("T")[0]}
-      </div>
+      <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
     </div>
   );
 

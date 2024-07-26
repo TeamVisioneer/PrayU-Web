@@ -79,6 +79,7 @@ const GroupPage: React.FC = () => {
           <div className="text-lg font-bold">{targetGroup?.name}</div>
           <KakaoShareButton
             groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
+            id="groupPage"
           ></KakaoShareButton>
         </div>
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />

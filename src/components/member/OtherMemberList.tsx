@@ -46,8 +46,6 @@ const OtherMemberList: React.FC<MembersProps> = ({
     );
   }
 
-  console.log(groupPrayCardList);
-
   const otherMembers = memberList.filter(
     (member) => member.user_id !== currentUserId
   );

@@ -31,6 +31,7 @@ const PrayList: React.FC = () => {
             <KakaoShareButton
               groupPageUrl={window.location.href}
               message="그룹원 기도 독려하기"
+              id="prayList"
             />
           </div>
         ) : (
