@@ -9,10 +9,10 @@ export const PrayEncourageCard = () => {
       </div>
 
       <img
-        src={"/dist/PrayCard.png"}
+        src={"/public/PrayCard.png"}
         sizes="
             (max-width: 640px) 100vw,"
-        className="rounded-md object-cover"
+        className="rounded-md"
       />
 
       <PrayEncourageBtn />
