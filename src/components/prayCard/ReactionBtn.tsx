@@ -25,24 +25,22 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   );
 
   const handleClick = (prayType: PrayType) => () => {
-    if (!prayCardCarouselApi) {
-      console.error("carouselApi is undefined");
-      return null;
-    }
     createPray(prayCard?.id, currentUserId, prayType);
     if (!isPrayToday) setIsPrayToday(true);
 
-    sleep(500).then(() => {
-      if (
-        prayCardCarouselApi.selectedScrollSnap() ==
-        prayCardCarouselApi.scrollSnapList().length - 2
-      ) {
-        setOpenTodayPrayDrawer(false);
-        return null;
-      } else {
-        prayCardCarouselApi.scrollNext();
-      }
-    });
+    if (prayCardCarouselApi) {
+      sleep(500).then(() => {
+        if (
+          prayCardCarouselApi.selectedScrollSnap() ==
+          prayCardCarouselApi.scrollSnapList().length - 2
+        ) {
+          setOpenTodayPrayDrawer(false);
+          return null;
+        } else {
+          prayCardCarouselApi.scrollNext();
+        }
+      });
+    }
   };
 
   return (
