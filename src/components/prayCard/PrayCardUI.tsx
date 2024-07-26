@@ -1,12 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { useEffect, useState, useRef } from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
-import {
-  MemberWithProfiles,
-  PrayCardWithProfiles,
-} from "supabase/types/tables";
-import PrayCardCalendar from "./WeeklyCalendar";
-import ReactionBtn from "./ReactionBtn";
+import { MemberWithProfiles } from "supabase/types/tables";
 import { ClipLoader } from "react-spinners";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType } from "@/Enums/prayType";
@@ -17,8 +12,8 @@ import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 
 interface PrayCardProps {
   currentUserId: string;
-  member: MemberWithProfiles | undefined;
   prayCard: PrayCardWithProfiles | null;
+  member?: MemberWithProfiles | undefined;
 }
 
 const PrayCardUI: React.FC<PrayCardProps> = ({
@@ -86,11 +81,13 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
     <div className="flex flex-col h-50vh min-h-[300px] p-5 bg-blue-50 rounded-2xl">
       <div className="flex items-center gap-2">
         <img
-          src={prayCard?.profiles.avatar_url || member.profiles.avatar_url!}
+          src={
+            prayCard?.profiles.avatar_url || member?.profiles.avatar_url || ""
+          }
           className="w-5 h-5 rounded-full"
         />
         <div className="text-sm">
-          {prayCard?.profiles.full_name || member.profiles.full_name}
+          {prayCard?.profiles.full_name || member?.profiles.full_name}
         </div>
         {currentUserId == prayCard?.user_id && (
           <div className="flex gap-2">
