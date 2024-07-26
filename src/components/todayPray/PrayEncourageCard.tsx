@@ -12,7 +12,7 @@ export const PrayEncourageCard = () => {
         src={"/public/PrayCard.png"}
         sizes="
             (max-width: 640px) 100vw,"
-        className="rounded-md"
+        className="rounded-md  w-full"
       />
 
       <PrayEncourageBtn />

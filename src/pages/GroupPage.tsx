@@ -20,7 +20,7 @@ import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import MyMember from "@/components/member/MyMember";
 import { Group } from "supabase/types/tables";
 import PrayCardCreateModal from "@/components/prayCard/PrayCardCreateModal";
-import LimitGroupCard from "@/components/limitGroup/LimitGroupCard";
+import LimitGroupCard from "@/components/group/LimitGroupCard";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
