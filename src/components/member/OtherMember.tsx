@@ -44,7 +44,7 @@ const OtherMember: React.FC<OtherMemberProps> = ({
   }
 
   const memberUI = (
-    <div className="flex flex-col gap-2 cursor-pointer bg-blue-100 p-4 rounded ">
+    <div className="flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
       <div className="flex items-center gap-2">
         <img
           src={member.profiles.avatar_url || ""}

@@ -3,7 +3,7 @@ import TodayPrayBtn from "./TodayPrayBtn";
 export const TodayPrayStartCard = () => {
   return (
     <>
-      <div className="flex flex-col  gap-2 border p-4 rounded-lg shadow-md bg-white justify-center items-center h-60vh">
+      <div className="flex flex-col  gap-2 border p-4 rounded-2xl shadow-md bg-white justify-center items-center h-60vh">
         <div className="text-center">
           <h1 className="font-bold text-xl mb-5">오늘의 기도를 시작해보세요</h1>
           <h1>그룹원의 기도제목이</h1>

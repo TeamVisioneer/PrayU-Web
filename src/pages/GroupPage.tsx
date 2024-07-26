@@ -87,7 +87,7 @@ const GroupPage: React.FC = () => {
     : [];
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-10">
       <div className="flex justify-between">
         <div className="flex flex-grow justify-center items-center gap-2">
           <div className="text-lg font-bold">{targetGroup?.name}</div>
@@ -103,8 +103,7 @@ const GroupPage: React.FC = () => {
         <LimitGroupCard />
       ) : (
         <>
-          <div className="flex flex-col gap-2">
-            <div className="text-sm">내 기도제목</div>
+          <div className="flex flex-col gap-4">
             <MyMember currentUserId={user!.id} groupId={paramsGroupId} />
             {otherMembers.length - 1 > 0 ? (
               <>
