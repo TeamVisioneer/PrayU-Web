@@ -35,6 +35,9 @@ import {
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
+import prayIcon from "@/assets/pray.svg";
+import goodIcon from "@/assets/good.svg";
+import likeIcon from "@/assets/like.svg";
 
 interface EmojiData {
   img: string;
@@ -315,19 +318,19 @@ const useBaseStore = create<BaseStore>()(
     isPrayToday: false,
     reactionDatas: {
       [PrayType.PRAY]: {
-        img: "../src/assets/pray.svg",
+        img: prayIcon,
         emoji: "🙏",
         text: "기도해요",
         num: 0,
       },
       [PrayType.GOOD]: {
-        img: "../src/assets/good.svg",
+        img: goodIcon,
         emoji: "👍",
         text: "힘내세요",
         num: 0,
       },
       [PrayType.LIKE]: {
-        img: "../src/assets/like.svg",
+        img: likeIcon,
         emoji: "❤️",
         text: "응원해요",
         num: 0,
