@@ -1,6 +1,14 @@
-import PrayEncourageBtn from "./PrayEncourageBtn";
+import { KakaoShareButton } from "../KakaoShareBtn";
+import { getDomainUrl } from "../../lib/utils";
 
-export const PrayEncourageCard = () => {
+interface EncourageProps {
+  groupId: string | undefined;
+}
+
+export const PrayEncourageCard: React.FC<EncourageProps> = ({
+  groupId: groupId,
+}) => {
+  const domainUrl = getDomainUrl();
   return (
     <div className="flex flex-col  gap-2 border p-4 rounded-lg shadow-md bg-white justify-center items-center h-60vh">
       <div className="text-center">
@@ -15,7 +23,10 @@ export const PrayEncourageCard = () => {
         className="rounded-md  w-full"
       />
 
-      <PrayEncourageBtn />
+      <KakaoShareButton
+        groupPageUrl={`${domainUrl}/group/${groupId}`}
+        id="groupPage"
+      ></KakaoShareButton>
     </div>
   );
 };

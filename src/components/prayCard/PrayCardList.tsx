@@ -82,7 +82,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
           </CarouselContent>
         </Carousel>
       ) : (
-        <PrayEncourageCard />
+        <PrayEncourageCard groupId={groupId} />
       )}
     </>
   );
