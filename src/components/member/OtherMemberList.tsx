@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
-import Member from "./Member";
+import OtherMember from "./OtherMember";
 import { getISOTodayDate } from "@/lib/utils";
 
 interface OtherMembersProps {
@@ -54,12 +54,12 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
       </div>
       <div className="flex flex-col gap-2">
         {otherMembers.map((member) => (
-          <Member
+          <OtherMember
             key={member.id}
             currentUserId={currentUserId}
             member={member}
             prayCardList={userIdPrayCardListHash[member.user_id || ""]}
-          ></Member>
+          ></OtherMember>
         ))}
       </div>
     </div>

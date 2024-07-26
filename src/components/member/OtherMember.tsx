@@ -14,13 +14,13 @@ import {
 import PrayCardUI from "../prayCard/PrayCardUI";
 import { getDateDistance, getDateDistanceText } from "@toss/date";
 
-interface MemberProps {
+interface OtherMemberProps {
   currentUserId: string;
   member: MemberWithProfiles;
   prayCardList: PrayCardWithProfiles[];
 }
 
-const Member: React.FC<MemberProps> = ({
+const OtherMember: React.FC<OtherMemberProps> = ({
   currentUserId,
   member,
   prayCardList,
@@ -79,4 +79,4 @@ const Member: React.FC<MemberProps> = ({
   );
 };
 
-export default Member;
+export default OtherMember;
