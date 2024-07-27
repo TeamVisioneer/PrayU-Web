@@ -5,7 +5,7 @@ env:
 on:
   push:
     tags:
-      - "v.*" # Push events to every tag not containing /
+      - "v*" # Push events to every tag not containing /
     branches:
       - hotfix-* # Push events to hotfix branches
 jobs:
