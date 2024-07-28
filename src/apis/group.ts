@@ -14,7 +14,9 @@ export const fetchGroupListByUserId = async (
     console.error("error", error);
     return null;
   }
-  return (data as MemberWithGroup[]).map((member) => member.group);
+  return (data as MemberWithGroup[])
+    .filter((member) => member.group != null)
+    .map((member) => member.group);
 };
 
 export const getGroup = async (

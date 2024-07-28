@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { validate as isUUID } from "uuid";
 import { useParams, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import useAuth from "../hooks/useAuth";
@@ -33,16 +34,8 @@ const GroupPage: React.FC = () => {
   const memberList = useBaseStore((state) => state.memberList);
   type UUID = string;
 
-  // UUID 유효성 검사 함수
-  function isValidUUID(uuid: string): boolean {
-    const uuidRegex =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(uuid);
-  }
-
-  // 사용자 정의 타입 가드
-  function isUUID(uuid: string): uuid is UUID {
-    return isValidUUID(uuid);
+  function isValidUUID(uuid: UUID): boolean {
+    return isUUID(uuid);
   }
 
   const fetchMemberListByGroupId = useBaseStore(
@@ -62,8 +55,8 @@ const GroupPage: React.FC = () => {
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
-  if (!(paramsGroupId && isUUID(paramsGroupId))) {
-    navigate("/", { replace: true });
+  if (paramsGroupId && !(paramsGroupId && isValidUUID(paramsGroupId))) {
+    navigate("/group", { replace: true });
   }
 
   useEffect(() => {
