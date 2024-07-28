@@ -19,9 +19,8 @@ const MainPage: React.FC = () => {
   const baseUrl = getDomainUrl();
   const from = location.state?.from?.pathname || "/group";
   const redirectUrl = `${baseUrl}${from}`;
-  const imageUrl = `${
-    import.meta.env.VITE_SUPA_PROJECT_URL
-  }/storage/v1/object/public/prayu-staging/prayCard.png`;
+  const imageUrl =
+    "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png";
 
   return (
     <div className="flex flex-col gap-8">

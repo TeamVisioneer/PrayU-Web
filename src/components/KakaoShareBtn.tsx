@@ -66,9 +66,8 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
         content: {
           title: "PrayU 우리만의 기도제목 기록공간",
           description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
-          imageUrl: `${
-            import.meta.env.VITE_SUPA_PROJECT_URL
-          }/storage/v1/object/public/prayu-staging/prayCard.png`,
+          imageUrl:
+            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png",
           link: {
             mobileWebUrl: groupPageUrl,
             webUrl: groupPageUrl,
