@@ -1,4 +1,5 @@
 import { KakaoShareButton } from "../KakaoShareBtn";
+import prayCardIcon from "@/assets/prayCard.svg";
 
 export const GroupInviteCard = () => {
   return (
@@ -8,12 +9,7 @@ export const GroupInviteCard = () => {
         <h1 className="mb-5">기도제목을 공유하고 기도해 보아요</h1>
       </div>
 
-      <img
-        src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png"
-        sizes="
-            (max-width: 640px) 100vw,"
-        className="rounded-md  w-full"
-      />
+      <img src={prayCardIcon} className="rounded-md w-1/2" />
 
       <KakaoShareButton
         groupPageUrl={window.location.href}
