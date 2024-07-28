@@ -58,6 +58,7 @@ const GroupCreatePage: React.FC = () => {
           value={inputGroupName}
           onChange={(e) => setGroupName(e.target.value)}
           placeholder="그룹 이름을 입력해주세요"
+          maxLength={15}
         />
         <Button
           onClick={() => handleCreateGroup(user?.id, inputGroupName)}
