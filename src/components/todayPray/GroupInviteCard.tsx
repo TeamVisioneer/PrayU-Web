@@ -9,7 +9,7 @@ export const GroupInviteCard = () => {
       </div>
 
       <img
-        src={"/public/PrayCard.png"}
+        src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png"
         sizes="
             (max-width: 640px) 100vw,"
         className="rounded-md  w-full"

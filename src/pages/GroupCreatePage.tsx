@@ -39,14 +39,8 @@ const GroupCreatePage: React.FC = () => {
 
       <Carousel>
         <CarouselContent className="aspect-square">
-          <CarouselItem className=" bg-gray-500">
-            <div className="bg-gray-400 aspect-square"></div>
-          </CarouselItem>
-          <CarouselItem className=" bg-gray-500">
-            <div className="bg-gray-400 aspect-square"></div>
-          </CarouselItem>
-          <CarouselItem className=" bg-gray-500">
-            <div className="bg-gray-400 aspect-square"></div>
+          <CarouselItem>
+            <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/todayPray.png?t=2024-07-28T04%3A12%3A49.623Z" />
           </CarouselItem>
         </CarouselContent>
       </Carousel>
