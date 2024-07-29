@@ -24,6 +24,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   member,
   prayCard,
 }) => {
+  console.log(member);
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
@@ -111,7 +112,9 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
             )}
           </div>
           <p className="text-xs text-white w-full text-left">
-            시작일 : {member?.updated_at.split("T")[0]}
+            시작일 :{" "}
+            {prayCard?.created_at.split("T")[0] ||
+              member?.updated_at.split("T")[0]}
           </p>
         </div>
         <div
@@ -185,7 +188,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
                       className={`w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2
                       }`}
                     >
-                      <div className="text-sm">
+                      <div className="text-sm w-5 h-5">
                         <img
                           src={reactionDatas[type]?.img}
                           alt={reactionDatas[type]?.emoji}

@@ -64,7 +64,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
               {day}
             </span>
             <div
-              className={`w-7 h-7 flex items-center justify-center ${
+              className={`w-7 h-7 flex items-center justify-center rounded-md ${
                 isToday ? "bg-red-100" : "bg-gray-200"
               }`}
             >

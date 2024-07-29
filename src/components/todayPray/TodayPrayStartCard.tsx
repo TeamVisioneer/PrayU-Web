@@ -21,14 +21,14 @@ export const TodayPrayStartCard = () => {
       <div className="flex flex-col gap-2 border rounded-2xl shadow-md bg-gradient-to-b from-start/40 via-middle/40 via-30% to-end/40 justify-center items-center w-6/7 h-60vh">
         <div className="flex flex-col text-center gap-4">
           <div className="flex flex-col gap-10">
-            <div className="flex justify-center gap-2 items-center max-w-full overflow-hidden">
-              <div className="flex justift-center items-center gap-2 overflow-hidden">
+            <div className="flex justify-center gap-2 items-center max-w-full">
+              <div className="flex justift-center items-center gap-2">
                 {reactionImages.map((reaction, index) =>
                   reaction.profile ? (
                     <img
                       key={index}
                       src={member?.profiles.avatar_url || ""}
-                      className="w-14 h-14 rounded-full"
+                      className="w-14 h-14 rounded-full ring-2 ring-[#FFBFBD]/50 drop-shadow-[0_0_10px_rgb(255,148,146,0.8)]"
                     />
                   ) : (
                     <img

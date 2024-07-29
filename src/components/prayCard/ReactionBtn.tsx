@@ -43,6 +43,8 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     }
   };
 
+  const hasPrayed = Boolean(todayPrayTypeHash[prayCard?.id || ""]);
+
   return (
     <div className="flex justify-center space-x-8">
       {Object.values(PrayType).map((type) => {
@@ -53,15 +55,14 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           <button
             key={type}
             onClick={handleClick(type as PrayType)}
-            className={`w-[90px] py-2 px-2 flex flex-col items-center rounded-2xl ${
-              todayPrayTypeHash[prayCard?.id || ""] === type
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-purple-100 text-black"
+            className={`w-12 h-12 flex flex-col items-center rounded-2xl drop-shadow-[0_4px_2px_rgb(0,0,0,0.3)] ${
+              hasPrayed && todayPrayTypeHash[prayCard?.id || ""] !== type
+                ? "opacity-20"
+                : "opacity-90"
             }`}
-            disabled={Boolean(todayPrayTypeHash[prayCard?.id || ""])}
+            disabled={hasPrayed}
           >
-            <div className="text-2xl">{emojiData.emoji}</div>
-            <div className="text-sm">{emojiData.text}</div>
+            <img src={emojiData.reactImg} className="w-12 h-12" />
           </button>
         );
       })}

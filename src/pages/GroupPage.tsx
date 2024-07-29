@@ -99,7 +99,7 @@ const GroupPage: React.FC = () => {
           id="groupPage"
           img={inviteMemberIcon}
         ></KakaoShareButton>
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
           <div className="text-lg font-bold">{targetGroup?.name}</div>
         </div>
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />

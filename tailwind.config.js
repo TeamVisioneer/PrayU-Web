@@ -17,8 +17,12 @@ module.exports = {
       },
     },
     extend: {
+      boxShadow: {
+        button: "0 10px 10px rgba(188, 190, 208, 0.8)",
+      },
       colors: {
         mainBg: "#F2F3FD",
+
         prayCardStart: "#B7DFFF",
         prayCardMiddle: "#F3E5FF",
         prayCardMiddle2: "#F9E9F5",
