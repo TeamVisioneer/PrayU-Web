@@ -86,6 +86,9 @@ const GroupPage: React.FC = () => {
   const otherMembers = memberList
     ? memberList.filter((member) => member.user_id !== user!.id)
     : [];
+  const isParamsGroupIdinGroupList = groupList.some(
+    (group) => group.id === paramsGroupId
+  );
 
   return (
     <div className="flex flex-col gap-10">
@@ -100,7 +103,7 @@ const GroupPage: React.FC = () => {
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
 
-      {groupList.length >= maxGroupCount ? (
+      {groupList.length == maxGroupCount && !isParamsGroupIdinGroupList ? (
         <LimitGroupCard />
       ) : (
         <>

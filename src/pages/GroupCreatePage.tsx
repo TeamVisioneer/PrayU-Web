@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import useAuth from "../hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "../components/ui/use-toast";
+import { ClipLoader } from "react-spinners";
 
 import {
   Carousel,
@@ -14,22 +16,49 @@ import {
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const createGroup = useBaseStore((state) => state.createGroup);
   const inputGroupName = useBaseStore((state) => state.inputGroupName);
   const setGroupName = useBaseStore((state) => state.setGroupName);
+  const groupList = useBaseStore((state) => state.groupList);
+  const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
+
+  const fetchGroupListByUserId = useBaseStore(
+    (state) => state.fetchGroupListByUserId
+  );
+
+  useEffect(() => {
+    fetchGroupListByUserId(user!.id);
+  }, [fetchGroupListByUserId, user]);
 
   const handleCreateGroup = async (
     userId: string | undefined,
     inputGroupName: string
   ) => {
+    if (groupList!.length == maxGroupCount) {
+      toast({
+        description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
+      });
+      return;
+    }
     if (inputGroupName.trim() === "") {
-      alert("그룹 이름을 입력해주세요.");
+      toast({
+        description: "그룹 이름을 입력해주세요.",
+      });
       return;
     }
     const targetGroup = await createGroup(userId, inputGroupName, "intro");
     targetGroup && navigate("/group/" + targetGroup.id, { replace: true });
   };
+
+  if (!groupList) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-2">
