@@ -83,13 +83,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
       <div className="flex items-center gap-2">
-        {/* <img
-          src={member.profiles.avatar_url || ""}
-          className="w-5 h-5 rounded-full"
-        /> */}
-        <h3 className="font-bold">
-          {/*member.profiles.full_name*/ "내 기도제목"}
-        </h3>
+        <h3 className="font-bold">내 기도제목</h3>
       </div>
       <div className="text-left text-sm text-gray-600">
         {reduceString(inputPrayCardContent, 20)}

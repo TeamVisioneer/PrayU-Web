@@ -24,7 +24,6 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   member,
   prayCard,
 }) => {
-  console.log(member);
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
