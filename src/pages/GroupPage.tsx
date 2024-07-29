@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { validate as isUUID } from "uuid";
 import { useParams, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import useAuth from "../hooks/useAuth";
@@ -32,11 +31,6 @@ const GroupPage: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
   const memberList = useBaseStore((state) => state.memberList);
-  type UUID = string;
-
-  function isValidUUID(uuid: UUID): boolean {
-    return isUUID(uuid);
-  }
 
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
@@ -54,10 +48,6 @@ const GroupPage: React.FC = () => {
 
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-
-  if (paramsGroupId && !(paramsGroupId && isValidUUID(paramsGroupId))) {
-    navigate("/group", { replace: true });
-  }
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
