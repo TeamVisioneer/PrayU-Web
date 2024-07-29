@@ -5,6 +5,7 @@ import useAuth from "../hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "../components/ui/use-toast";
+import { ClipLoader } from "react-spinners";
 
 import {
   Carousel,
@@ -50,6 +51,14 @@ const GroupCreatePage: React.FC = () => {
     const targetGroup = await createGroup(userId, inputGroupName, "intro");
     targetGroup && navigate("/group/" + targetGroup.id, { replace: true });
   };
+
+  if (!groupList) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-2">
