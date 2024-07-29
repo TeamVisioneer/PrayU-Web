@@ -5,6 +5,11 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../../supabase/client";
 import useAuth from "../hooks/useAuth";
 import { getDomainUrl } from "@/lib/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 const MainPage: React.FC = () => {
   const { user } = useAuth();
@@ -19,21 +24,55 @@ const MainPage: React.FC = () => {
   const baseUrl = getDomainUrl();
   const from = location.state?.from?.pathname || "/group";
   const redirectUrl = `${baseUrl}${from}`;
-  const imageUrl =
-    "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png";
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2 text-center">
-        <img src={imageUrl} />
-
-        <div className="text-lg font-bold">
-          우리만의 기도제목 기록공간 PrayU
-        </div>
-        <div className="text-sm text-gray-500">
-          PrayU 에서 매일 반응하며 함께 기도해요
-        </div>
-      </div>
+    <div className="flex flex-col gap-8 pt-20 text-center">
+      <div className="text-lg font-bold">우리만의 기도제목 기록공간 PrayU</div>
+      <Carousel>
+        <CarouselContent>
+          <CarouselItem className="flex flex-col items-center gap-4">
+            <div className="w-full  flex flex-col  items-center">
+              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageInro1.png" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="text-lg font-bold">1. 기도제목 나누기</div>
+              <div className="text-sm text-gray-500">
+                PrayU 는 그룹 내에서
+                <br />
+                함께 기도제목을 공유하는 공간이에요
+              </div>
+            </div>
+          </CarouselItem>
+          <CarouselItem className="flex flex-col items-center gap-4">
+            <div className="w-full  flex flex-col  items-center ">
+              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="text-lg font-bold">2. 오늘의 기도</div>
+              <div className="text-sm text-gray-500">
+                일주일 동안 기도제목을 서로
+                <br />
+                확인하고 반응할 수 있어요
+              </div>
+            </div>
+          </CarouselItem>
+          <CarouselItem className="flex flex-col items-center gap-4">
+            <div className="w-full  flex flex-col  items-center ">
+              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageInro3.png" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="text-lg font-bold">
+                3. 나에게 기도해준 사람 보기
+              </div>
+              <div className="text-sm text-gray-500">
+                작성한 기도제목은 오늘의 기도에 올라가요
+                <br />
+                나에게 기도해준 사람도 확인할 수 있어요
+              </div>
+            </div>
+          </CarouselItem>
+        </CarouselContent>
+      </Carousel>
 
       <Auth
         redirectTo={redirectUrl}

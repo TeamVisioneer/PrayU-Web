@@ -7,12 +7,6 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "../components/ui/use-toast";
 import { ClipLoader } from "react-spinners";
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -66,13 +60,7 @@ const GroupCreatePage: React.FC = () => {
         <div className="text-lg font-bold">PrayU 그룹 생성</div>
       </div>
 
-      <Carousel>
-        <CarouselContent className="aspect-square">
-          <CarouselItem>
-            <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/todayPray.png?t=2024-07-28T04%3A12%3A49.623Z" />
-          </CarouselItem>
-        </CarouselContent>
-      </Carousel>
+      <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png" />
 
       <div className="text-sm font-bold">그룹명</div>
       <div className="flex flex-col items-center gap-4 w-full ">

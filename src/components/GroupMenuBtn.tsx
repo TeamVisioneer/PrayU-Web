@@ -27,7 +27,8 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const { toast } = useToast();
   const signOut = useBaseStore((state) => state.signOut);
 
-  const handleClick = () => () => {
+  const handleClick = () => {
+    console.log("click");
     if (userGroupList.length < maxGroupCount) {
       navigate("/group/new");
     } else {
