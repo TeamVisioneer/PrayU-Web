@@ -67,6 +67,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           <a className="cursor-pointer" onClick={() => handleClick()}>
             + 그룹 만들기
           </a>
+          <hr />
           <a href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}>
             문의하기
           </a>
