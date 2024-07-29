@@ -57,10 +57,7 @@ export const updateMember = async (
   memberId: string | undefined,
   praySummary: string | undefined
 ): Promise<Member | null> => {
-  if (!memberId) {
-    console.log("memberId is required");
-    return null;
-  }
+  if (!memberId) return null;
   const { error, data } = await supabase
     .from("member")
     .update({

@@ -26,16 +26,16 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
 
   const generateDates = (createdAt: string | undefined, prayData: Pray[]) => {
     if (!createdAt) return [];
-    const startDate = getISODate(createdAt);
+    const startDate = getISODate(new Date(createdAt));
     const dateList = [];
 
     for (let i = 0; i < 7; i++) {
       const newDate = new Date(startDate);
       newDate.setDate(new Date(startDate).getDate() + i);
-      const newDateString = newDate.toISOString().split("T")[0];
+      const newDateString = getISODate(newDate).split("T")[0];
 
       const pray = prayData.find((entry) => {
-        const prayDate = getISODate(entry.created_at).split("T")[0];
+        const prayDate = getISODate(new Date(entry.created_at)).split("T")[0];
         return prayDate === newDateString;
       });
 
