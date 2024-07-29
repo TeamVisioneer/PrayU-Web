@@ -96,7 +96,7 @@ const GroupPage: React.FC = () => {
   const otherMembers = memberList
     ? memberList.filter((member) => member.user_id !== user!.id)
     : [];
-  const isParaminGroupList = groupList.some(
+  const isParamsGroupIdinGroupList = groupList.some(
     (group) => group.id === paramsGroupId
   );
 
@@ -113,7 +113,7 @@ const GroupPage: React.FC = () => {
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
 
-      {groupList.length == maxGroupCount && !isParaminGroupList ? (
+      {groupList.length == maxGroupCount && !isParamsGroupIdinGroupList ? (
         <LimitGroupCard />
       ) : (
         <>
