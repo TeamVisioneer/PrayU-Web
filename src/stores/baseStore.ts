@@ -38,9 +38,13 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import prayIcon from "@/assets/pray.svg";
 import goodIcon from "@/assets/good.svg";
 import likeIcon from "@/assets/like.svg";
+import prayIconToOther from "@/assets/prayToOther.svg";
+import goodIconToOther from "@/assets/goodToOther.svg";
+import likeIconToOther from "@/assets/likeToOther.svg";
 
 interface EmojiData {
   img: string;
+  reactImg: string;
   emoji: string;
   text: string;
   num: number;
@@ -319,18 +323,21 @@ const useBaseStore = create<BaseStore>()(
     reactionDatas: {
       [PrayType.PRAY]: {
         img: prayIcon,
+        reactImg: prayIconToOther,
         emoji: "🙏",
         text: "기도해요",
         num: 0,
       },
       [PrayType.GOOD]: {
         img: goodIcon,
+        reactImg: goodIconToOther,
         emoji: "👍",
         text: "힘내세요",
         num: 0,
       },
       [PrayType.LIKE]: {
         img: likeIcon,
+        reactImg: likeIconToOther,
         emoji: "❤️",
         text: "응원해요",
         num: 0,

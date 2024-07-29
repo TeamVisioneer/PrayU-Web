@@ -9,12 +9,12 @@ const TodayPrayBtn: React.FC = () => {
   return (
     <Button
       className="className= 
-        flex flex-col justify-center w-32 h-12
-        bg-blue-950 text-white
-        rounded-full cursor-pointer"
+        flex flex-col justify-center w-32 h-11
+        bg-todayPrayBtn text-white
+        rounded-xl cursor-pointer"
       onClick={() => setOpenTodayPrayDrawer(true)}
     >
-      오늘의 기도
+      기도 시작하기
     </Button>
   );
 };
