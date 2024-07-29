@@ -11,6 +11,7 @@ import { useToast } from "./ui/use-toast";
 import menuIcon from "@/assets/menuIcon.png";
 import { Group } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
+import useBaseStore from "@/stores/baseStore";
 
 interface GroupManuBtnProps {
   userGroupList: Group[];
@@ -24,9 +25,10 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const navigate = useNavigate();
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
+  const signOut = useBaseStore((state) => state.signOut);
 
   const handleClick = () => () => {
-    if (userGroupList.length < maxGroupCount) {
+    if (userGroupList.length <= maxGroupCount) {
       navigate("/group/new");
     } else {
       toast({
@@ -62,11 +64,14 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
                 </a>
               )
           )}
-          <a className="cursor-pointer" onClick={handleClick()}>
+          <a className="cursor-pointer" onClick={() => handleClick()}>
             + 그룹 만들기
           </a>
           <a href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}>
             문의하기
+          </a>
+          <a className="cursor-pointer" onClick={() => signOut()}>
+            로그아웃
           </a>
         </div>
         <SheetClose className="focus:outline-none"></SheetClose>
