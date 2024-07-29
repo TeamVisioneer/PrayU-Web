@@ -28,7 +28,6 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const signOut = useBaseStore((state) => state.signOut);
 
   const handleClick = () => {
-    console.log("click");
     if (userGroupList.length < maxGroupCount) {
       navigate("/group/new");
     } else {
