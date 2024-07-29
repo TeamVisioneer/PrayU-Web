@@ -83,42 +83,14 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
 
   const PrayCardBody = (
     <>
-      <div className="flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
-        <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 h-15vh flex flex-col justify-center items-start gap-2 rounded-t-2xl p-4">
+      <div className="relative flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
+        <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 h-15vh flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
           <div className="flex items-center gap-2 w-full">
             {currentUserId == prayCard?.user_id ? (
               <div className="flex gap-2 items-center">
                 <p className="text-xl text-white">
-                  기도 {dateDistance.days + 1}일 차
+                  기도 {dateDistance.days + 1}일차
                 </p>
-                <div className="flex items-center">
-                  {isEditingPrayCard ? (
-                    <button
-                      className={` text-white rounded-2xl${
-                        !inputPrayCardContent
-                          ? "opacity-50 cursor-not-allowed"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        handleSaveClick(
-                          prayCard!.id,
-                          inputPrayCardContent,
-                          member?.id
-                        )
-                      }
-                      disabled={!inputPrayCardContent}
-                    >
-                      <FaSave />
-                    </button>
-                  ) : (
-                    <button
-                      className=" text-white rounded-2xl"
-                      onClick={() => setIsEditingPrayCard(true)}
-                    >
-                      <FaEdit />
-                    </button>
-                  )}
-                </div>
               </div>
             ) : (
               <>
@@ -143,7 +115,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
           </p>
         </div>
         <div
-          className={`p-4 flex justify-center h-full overflow-y-auto no-scrollbar ${
+          className={`p-2 flex justify-center h-full overflow-y-auto no-scrollbar ${
             isScrollable ? "items-start" : "items-center"
           }`}
         >
@@ -163,6 +135,34 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
             <p className="whitespace-pre-line">{inputPrayCardContent}</p>
           )}
         </div>
+        {prayCard?.user_id === currentUserId && (
+          <div className="absolute bottom-4 right-4 w-10 h-10 bg-end rounded-full flex justify-center items-center">
+            {isEditingPrayCard ? (
+              <button
+                className={`text-white rounded-full ${
+                  !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={() =>
+                  handleSaveClick(
+                    prayCard!.id,
+                    inputPrayCardContent,
+                    member?.id
+                  )
+                }
+                disabled={!inputPrayCardContent}
+              >
+                <FaSave className="text-white w-5 h-5" />
+              </button>
+            ) : (
+              <button
+                className="text-white rounded-full"
+                onClick={() => setIsEditingPrayCard(true)}
+              >
+                <FaEdit className="text-white w-5 h-5" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

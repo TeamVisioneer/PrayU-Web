@@ -8,7 +8,7 @@ const TodayPrayBtn: React.FC = () => {
 
   return (
     <Button
-      className="className= 
+      className="shadow-md
         flex flex-col justify-center w-32 h-11
         bg-todayPrayBtn text-white
         rounded-xl cursor-pointer"

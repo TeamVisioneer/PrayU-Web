@@ -20,6 +20,7 @@ import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import MyMember from "@/components/member/MyMember";
 import LimitGroupCard from "@/components/group/LimitGroupCard";
 import GroupInviteCard from "@/components/todayPray/GroupInviteCard";
+import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -96,9 +97,9 @@ const GroupPage: React.FC = () => {
         <KakaoShareButton
           groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
           id="groupPage"
-          message="공유"
+          img={inviteMemberIcon}
         ></KakaoShareButton>
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-2">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center">
           <div className="text-lg font-bold">{targetGroup?.name}</div>
         </div>
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
