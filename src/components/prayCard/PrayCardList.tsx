@@ -85,7 +85,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
               <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
             </CarouselItem>
           ))}
-        <CarouselItem className="basis-5/6 "></CarouselItem>
+        <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>
     </Carousel>
   );
