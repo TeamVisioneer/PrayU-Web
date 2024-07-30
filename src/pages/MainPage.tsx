@@ -31,7 +31,7 @@ const MainPage: React.FC = () => {
       <Carousel>
         <CarouselContent>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-full  flex flex-col  items-center">
+            <div className="w-5/6  flex flex-col  items-center">
               <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageInro1.png" />
             </div>
             <div className="flex flex-col gap-2">
@@ -45,7 +45,7 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-full  flex flex-col  items-center ">
+            <div className="w-5/6  flex flex-col  items-center ">
               <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png" />
             </div>
             <div className="flex flex-col gap-2">
@@ -61,7 +61,7 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-full  flex flex-col  items-center ">
+            <div className="w-5/6 flex flex-col  items-center ">
               <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageInro3.png" />
             </div>
             <div className="flex flex-col gap-2">
