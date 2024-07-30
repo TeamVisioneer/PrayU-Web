@@ -1,4 +1,4 @@
-import { PrayType } from "@/Enums/prayType";
+import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { sleep } from "@/lib/utils";
@@ -16,7 +16,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const createPray = useBaseStore((state) => state.createPray);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
-  const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
@@ -47,7 +46,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   return (
     <div className="flex justify-center p-2 space-x-8">
       {Object.values(PrayType).map((type) => {
-        const emojiData = reactionDatas[type];
+        const emojiData = PrayTypeDatas[type];
         if (!emojiData) return null;
 
         return (

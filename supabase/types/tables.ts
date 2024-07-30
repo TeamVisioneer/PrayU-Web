@@ -21,6 +21,7 @@ export interface MemberWithProfiles extends Member {
 
 export interface PrayCardWithProfiles extends PrayCard {
   profiles: Profiles;
+  pray?: Pray[];
 }
 
 export interface PrayWithProfiles extends Pray {

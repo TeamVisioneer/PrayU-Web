@@ -4,7 +4,7 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { ClipLoader } from "react-spinners";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
-import { PrayType } from "@/Enums/prayType";
+import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import PrayList from "../pray/PrayList";
 import ReactionWithCalendar from "./ReactionWithCalendar";
 import { getDateDistance } from "@toss/date";
@@ -193,8 +193,8 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
                     >
                       <div className="text-sm w-5 h-5">
                         <img
-                          src={reactionDatas[type]?.img}
-                          alt={reactionDatas[type]?.emoji}
+                          src={PrayTypeDatas[type].img}
+                          alt={PrayTypeDatas[type].emoji}
                           className="w-5 h-5"
                         />
                       </div>
