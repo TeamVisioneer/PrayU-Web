@@ -5,12 +5,11 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
-import { PrayType } from "@/Enums/prayType";
+import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { KakaoShareButton } from "../KakaoShareBtn";
 
 const PrayList: React.FC = () => {
   const prayerList = useBaseStore((state) => state.prayerList);
-  const reactionDatas = useBaseStore((state) => state.reactionDatas);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   const isPrayerListEmpty = !prayerList || Object.keys(prayerList).length === 0;
@@ -58,8 +57,8 @@ const PrayList: React.FC = () => {
                     <p key={pray.id} className="text-xl text-gray-500">
                       {
                         <img
-                          src={reactionDatas[pray.pray_type as PrayType]?.img}
-                          alt={reactionDatas[pray.pray_type as PrayType]?.emoji}
+                          src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
+                          alt={PrayTypeDatas[pray.pray_type as PrayType]?.emoji}
                         ></img>
                       }
                     </p>

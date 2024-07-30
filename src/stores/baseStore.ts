@@ -36,10 +36,6 @@ import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
 
-interface EmojiData {
-  num: number;
-}
-
 export interface BaseStore {
   // user
   user: User | null;
@@ -118,7 +114,7 @@ export interface BaseStore {
   prayDataHash: PrayDataHash;
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean;
-  reactionDatas: { [key in PrayType]?: EmojiData };
+  reactionCounts: { [key in PrayType]?: number };
   prayerList: { [key: string]: PrayWithProfiles[] } | null;
   setIsPrayToday: (isPrayToday: boolean) => void;
   fetchIsPrayToday: (
@@ -330,16 +326,10 @@ const useBaseStore = create<BaseStore>()(
     prayDataHash: {},
     todayPrayTypeHash: {},
     isPrayToday: false,
-    reactionDatas: {
-      [PrayType.PRAY]: {
-        num: 0,
-      },
-      [PrayType.GOOD]: {
-        num: 0,
-      },
-      [PrayType.LIKE]: {
-        num: 0,
-      },
+    reactionCounts: {
+      [PrayType.PRAY]: 0,
+      [PrayType.GOOD]: 0,
+      [PrayType.LIKE]: 0,
     },
     prayerList: null,
 
@@ -389,7 +379,7 @@ const useBaseStore = create<BaseStore>()(
         set((state) => {
           state.prayerList = state.groupAndSortByUserId(prayData);
           Object.values(PrayType).forEach((type) => {
-            state.reactionDatas[type]!.num = prayData.filter(
+            state.reactionCounts[type] = prayData.filter(
               (pray) => pray.pray_type === type
             ).length;
           });

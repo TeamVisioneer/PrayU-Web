@@ -25,7 +25,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   prayCard,
 }) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
-  const reactionDatas = useBaseStore((state) => state.reactionDatas);
+  const reactionCounts = useBaseStore((state) => state.reactionCounts);
   const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
@@ -184,7 +184,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
             <DrawerTrigger className="w-full focus:outline-none">
               <div className="flex justify-center gap-2">
                 {Object.values(PrayType).map((type) => {
-                  if (!reactionDatas) return null;
+                  if (!reactionCounts) return null;
                   return (
                     <div
                       key={type}
@@ -198,7 +198,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
                           className="w-5 h-5"
                         />
                       </div>
-                      <div className="text-sm">{reactionDatas[type]?.num}</div>
+                      <div className="text-sm">{reactionCounts[type]}</div>
                     </div>
                   );
                 })}

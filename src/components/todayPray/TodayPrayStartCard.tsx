@@ -1,10 +1,9 @@
 import useBaseStore from "@/stores/baseStore";
 import TodayPrayBtn from "./TodayPrayBtn";
-import { PrayType } from "@/Enums/prayType";
+import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 
 export const TodayPrayStartCard = () => {
   const member = useBaseStore((state) => state.targetMember);
-  const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
   const reactionImages = [
     { type: PrayType.PRAY, opacity: "opacity-40" },
@@ -31,8 +30,8 @@ export const TodayPrayStartCard = () => {
               ) : (
                 <img
                   key={index}
-                  src={reactionDatas[reaction.type!]?.img}
-                  alt={reactionDatas[reaction.type!]?.emoji}
+                  src={PrayTypeDatas[reaction.type!]?.img}
+                  alt={PrayTypeDatas[reaction.type!]?.emoji}
                   className={`w-7 h-7 ${reaction.opacity}`}
                 />
               )

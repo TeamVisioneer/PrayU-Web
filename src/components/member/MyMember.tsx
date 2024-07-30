@@ -74,11 +74,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
       <div className="text-left text-sm text-gray-600">
         {reduceString(inputPrayCardContent, 20)}
       </div>
-      <div className="w-fit flex bg-gray-100 rounded-lg p-2">
+      <div className="w-fit flex bg-gray-100 rounded-lg p-2 gap-3">
         {Object.values(PrayType).map((type) => {
           return (
-            <div key={type} className={`w-[40px] flex gap-1`}>
-              <div className="flex justify-center items-center gap-1 ">
+            <div key={type} className="flex">
+              <div className="flex  gap-1 ">
                 <img
                   src={PrayTypeDatas[type].img}
                   alt={PrayTypeDatas[type].emoji}
