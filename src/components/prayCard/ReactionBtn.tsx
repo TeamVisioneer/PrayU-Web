@@ -27,7 +27,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const handleClick = (prayType: PrayType) => () => {
     createPray(prayCard?.id, currentUserId, prayType);
     if (!isPrayToday) setIsPrayToday(true);
-    window.navigator.vibrate(200);
     if (prayCardCarouselApi) {
       sleep(500).then(() => {
         if (

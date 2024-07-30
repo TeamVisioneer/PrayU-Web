@@ -1,19 +1,24 @@
 import { KakaoShareButton } from "../KakaoShareBtn";
-import prayCardIcon from "@/assets/prayCard.svg";
 
 export const GroupInviteCard = () => {
   return (
-    <div className="flex flex-col  gap-2 border p-4 rounded-lg shadow-md bg-white justify-center items-center h-60vh">
-      <div className="text-center">
-        <h1>그룹원들을 초대하여 함께</h1>
-        <h1 className="mb-5">기도제목을 공유하고 기도해 보아요</h1>
+    <div className="flex flex-col gap-4 border p-10 rounded-lg shadow-md bg-white items-center h-60vh">
+      <img
+        src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png"
+        className="rounded-md"
+      />
+      <div className="flex flex-col text-center gap-2">
+        <p className="text-lg font-bold">그룹원 초대</p>
+        <div>
+          <p className="text-sm text-gray-500">그룹원을 초대하고</p>
+          <p className="text-sm text-gray-500">오늘의 기도를 시작해 보아요</p>
+        </div>
       </div>
-
-      <img src={prayCardIcon} className="rounded-md w-1/2" />
 
       <KakaoShareButton
         groupPageUrl={window.location.href}
         id="paryTodayIntro"
+        message="카카오톡으로 초대하기"
       ></KakaoShareButton>
     </div>
   );
