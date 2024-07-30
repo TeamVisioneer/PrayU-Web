@@ -78,6 +78,8 @@ export interface BaseStore {
     userId: string,
     groupId: string | undefined
   ) => Promise<MemberWithProfiles | null>;
+  openMyMemberDrawer: boolean;
+  setOpenMyMemberDrawer: (openMyMemberDrawer: boolean) => void;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -243,6 +245,12 @@ const useBaseStore = create<BaseStore>()(
         state.memberLoading = false;
       });
       return member;
+    },
+    openMyMemberDrawer: false,
+    setOpenMyMemberDrawer: (openMyMemberDrawer: boolean) => {
+      set((state) => {
+        state.openMyMemberDrawer = openMyMemberDrawer;
+      });
     },
 
     // prayCard

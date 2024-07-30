@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../KakaoShareBtn";
+import TodayPrayEndCard from "../todayPray/TodayPrayEndCard";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -85,6 +86,9 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
               <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
             </CarouselItem>
           ))}
+        <CarouselItem className="basis-5/6">
+          <TodayPrayEndCard />
+        </CarouselItem>
         <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>
     </Carousel>
