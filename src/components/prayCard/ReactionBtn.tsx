@@ -45,7 +45,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard?.id || ""]);
 
   return (
-    <div className="flex justify-center space-x-8">
+    <div className="flex justify-center p-2 space-x-8">
       {Object.values(PrayType).map((type) => {
         const emojiData = reactionDatas[type];
         if (!emojiData) return null;
