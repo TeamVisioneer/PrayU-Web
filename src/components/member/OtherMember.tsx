@@ -12,7 +12,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import PrayCardUI from "../prayCard/PrayCardUI";
-import { getDateDistance, getDateDistanceText } from "@toss/date";
+import { getDateDistance } from "@toss/date";
 
 interface OtherMemberProps {
   currentUserId: string;
@@ -32,17 +32,6 @@ const OtherMember: React.FC<OtherMemberProps> = ({
     new Date(getISOTodayDate())
   );
 
-  let dateDistanceText = getDateDistanceText(dateDistance, {
-    days: (t) => 1 <= t.days,
-    hours: () => false,
-    minutes: () => false,
-    seconds: () => false,
-  });
-
-  if (dateDistance.days < 1) {
-    dateDistanceText = "오늘";
-  }
-
   const memberUI = (
     <div className="flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
       <div className="flex items-center gap-2">
@@ -56,7 +45,7 @@ const OtherMember: React.FC<OtherMemberProps> = ({
         {reduceString(member.pray_summary, 20)}
       </div>
       <div className="text-gray-400 text-left text-xs">
-        {dateDistanceText}전
+        {dateDistance.days < 1 ? "오늘" : `${dateDistance.days}일 전`}
       </div>
     </div>
   );
