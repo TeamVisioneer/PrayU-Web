@@ -7,10 +7,11 @@ export const GroupInviteCard = () => {
         src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png"
         className="rounded-md"
       />
-      <div className="flex flex-col gap-2">
-        <div className="text-center text-lg font-bold">그룹원 초대</div>
-        <div className="text-sm text-gray-500">
-          그룹원을 초대하고 오늘의 기도를 시작해 보아요
+      <div className="flex flex-col text-center gap-2">
+        <p className="text-lg font-bold">그룹원 초대</p>
+        <div>
+          <p className="text-sm text-gray-500">그룹원을 초대하고</p>
+          <p className="text-sm text-gray-500">오늘의 기도를 시작해 보아요</p>
         </div>
       </div>
 
