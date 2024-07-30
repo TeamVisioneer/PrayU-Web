@@ -46,8 +46,12 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const dateDistance = getDateDistance(
-    new Date(getISOTodayDate()),
-    new Date(getISOOnlyDate(prayCard?.created_at ?? getISOTodayDate()))
+    new Date(
+      getISOOnlyDate(
+        prayCard?.created_at ?? member?.updated_at ?? getISOTodayDate()
+      )
+    ),
+    new Date(getISOTodayDate())
   );
 
   const handleSaveClick = (
