@@ -4,38 +4,21 @@ import { ClipLoader } from "react-spinners";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import { KakaoShareButton } from "@/components/KakaoShareBtn";
-import OtherMemberList from "@/components/member/OtherMemberList";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+
 import GroupMenuBtn from "../components/GroupMenuBtn";
 import { getDomainUrl } from "@/lib/utils";
-import PrayCardList from "@/components/prayCard/PrayCardList";
-import TodayPrayBtn from "@/components/todayPray/TodayPrayBtn";
-import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
-import MyMember from "@/components/member/MyMember";
-import LimitGroupCard from "@/components/group/LimitGroupCard";
-import GroupInviteCard from "@/components/todayPray/GroupInviteCard";
+
 import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
+import GroupBody from "@/components/group/GroupBody";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const { groupId: paramsGroupId } = useParams();
-  const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
-  const memberList = useBaseStore((state) => state.memberList);
-
-  const fetchMemberListByGroupId = useBaseStore(
-    (state) => state.fetchMemberListByGroupId
-  );
 
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
@@ -71,10 +54,6 @@ const GroupPage: React.FC = () => {
     if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
   }, [user, targetGroup, fetchIsPrayToday]);
 
-  useEffect(() => {
-    fetchMemberListByGroupId(paramsGroupId);
-  }, [fetchMemberListByGroupId, paramsGroupId]);
-
   if (!groupList || (paramsGroupId && !targetGroup) || isPrayToday == null) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -84,12 +63,6 @@ const GroupPage: React.FC = () => {
   }
 
   const domainUrl = getDomainUrl();
-  const otherMembers = memberList
-    ? memberList.filter((member) => member.user_id !== user!.id)
-    : [];
-  const isParamsGroupIdinGroupList = groupList.some(
-    (group) => group.id === paramsGroupId
-  );
 
   return (
     <div className="flex flex-col gap-10">
@@ -105,52 +78,11 @@ const GroupPage: React.FC = () => {
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
 
-      {groupList.length == maxGroupCount && !isParamsGroupIdinGroupList ? (
-        <LimitGroupCard />
-      ) : (
-        <>
-          <div className="flex flex-col gap-4">
-            <MyMember currentUserId={user!.id} groupId={paramsGroupId} />
-            {otherMembers.length > 0 ? (
-              <>
-                {isPrayToday ? (
-                  <OtherMemberList
-                    currentUserId={user!.id}
-                    groupId={targetGroup?.id}
-                  />
-                ) : (
-                  <TodayPrayStartCard />
-                )}
-              </>
-            ) : (
-              <GroupInviteCard />
-            )}
-          </div>
-
-          <Drawer
-            open={isOpenTodayPrayDrawer}
-            onOpenChange={setIsOpenTodayPrayDrawer}
-          >
-            <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full h-[90%] pb-20">
-              <DrawerHeader>
-                <DrawerTitle></DrawerTitle>
-                <DrawerDescription></DrawerDescription>
-              </DrawerHeader>
-              {/* PrayCardList */}
-              <PrayCardList
-                currentUserId={user!.id}
-                groupId={targetGroup?.id}
-              />
-              {/* PrayCardList */}
-            </DrawerContent>
-          </Drawer>
-          {isPrayToday && (
-            <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
-              <TodayPrayBtn />
-            </div>
-          )}
-        </>
-      )}
+      <GroupBody
+        currentUserId={user!.id}
+        groupList={groupList}
+        targetGroup={targetGroup}
+      />
     </div>
   );
 };
