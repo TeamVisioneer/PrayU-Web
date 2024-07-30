@@ -88,7 +88,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   const PrayCardBody = (
     <>
       <div className="relative flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
-        <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+        <div className="bg-gradient-to-r from-start/60 via-middle/60 h-15vh via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
           <div className="flex items-center gap-2 w-full">
             {currentUserId == prayCard?.user_id ? (
               <div className="flex gap-2 items-center">
