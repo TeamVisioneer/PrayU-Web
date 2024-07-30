@@ -55,7 +55,9 @@ const OtherMember: React.FC<OtherMemberProps> = ({
       <div className="text-left text-sm text-gray-600">
         {reduceString(member.pray_summary, 20)}
       </div>
-      <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
+      <div className="text-gray-400 text-left text-xs">
+        {dateDistanceText}전
+      </div>
     </div>
   );
 
