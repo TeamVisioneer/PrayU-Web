@@ -41,12 +41,14 @@ interface KakaoShareButtonProps {
   groupPageUrl: string;
   message?: string;
   id: string;
+  img?: string;
 }
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   groupPageUrl,
   message,
   id,
+  img,
 }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -98,7 +100,14 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
         <p className="text-black">{message}</p>
       </Button>
     );
+  } else if (img) {
+    return (
+      <Button id={id} className="bg-mainBg p-2">
+        <img src={img} className="w-6 h-6" />
+      </Button>
+    );
   }
+
   return (
     <Button id={id} variant="ghost" size="icon" className="w-8 h-8">
       <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png" />

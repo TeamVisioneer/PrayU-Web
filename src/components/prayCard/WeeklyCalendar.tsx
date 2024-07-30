@@ -18,8 +18,9 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   const getReactionEmoticon = (prayType: string | null) => {
     return (
       <img
-        src={reactionDatas[prayType as PrayType]?.img}
+        src={reactionDatas[prayType as PrayType]?.reactImg}
         alt={reactionDatas[prayType as PrayType]?.emoji}
+        className="w-7 h-7"
       ></img>
     );
   };
@@ -63,7 +64,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
               {day}
             </span>
             <div
-              className={`w-8 h-8 flex items-center justify-center rounded ${
+              className={`w-7 h-7 flex items-center justify-center rounded-md ${
                 isToday ? "bg-red-100" : "bg-gray-200"
               }`}
             >

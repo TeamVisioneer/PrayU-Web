@@ -77,11 +77,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
       }}
     >
       <CarouselContent>
-        <CarouselItem className="basis-5/6 "></CarouselItem>
+        <CarouselItem className="basis-5/6"></CarouselItem>
         {groupPrayCardList
           ?.filter((prayCard) => prayCard.user_id !== currentUserId)
           .map((prayCard) => (
-            <CarouselItem key={prayCard.id} className="basis-5/6">
+            <CarouselItem key={prayCard.id} className="basis-5/6 h-screen">
               <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
             </CarouselItem>
           ))}

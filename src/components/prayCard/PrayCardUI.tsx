@@ -10,6 +10,8 @@ import ReactionWithCalendar from "./ReactionWithCalendar";
 import { getDateDistance } from "@toss/date";
 import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
+import { FaEdit, FaSave } from "react-icons/fa";
+import iconUserMono from "@/assets/icon-user-mono.svg";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -80,50 +82,91 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   }
 
   const PrayCardBody = (
-    <div className="flex flex-col h-50vh min-h-[300px] p-5 bg-blue-50 rounded-2xl">
-      <div className="flex items-center gap-2">
-        <img
-          src={
-            prayCard?.profiles.avatar_url || member?.profiles.avatar_url || ""
-          }
-          className="w-5 h-5 rounded-full"
-        />
-        <div className="text-sm">
-          {prayCard?.profiles.full_name || member?.profiles.full_name}
+    <>
+      <div className="relative flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
+        <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 h-15vh flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+          <div className="flex items-center gap-2 w-full">
+            {currentUserId == prayCard?.user_id ? (
+              <div className="flex gap-2 items-center">
+                <p className="text-xl text-white">
+                  기도 {dateDistance.days + 1}일차
+                </p>
+              </div>
+            ) : (
+              <>
+                <img
+                  src={
+                    prayCard?.profiles.avatar_url ||
+                    member?.profiles.avatar_url ||
+                    ""
+                  }
+                  className="w-6 h-6 rounded-full"
+                />
+                <div className="">
+                  <p className="text-white text-lg">
+                    {prayCard?.profiles.full_name || member?.profiles.full_name}
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+          <p className="text-xs text-white w-full text-left">
+            시작일 :{" "}
+            {prayCard?.created_at.split("T")[0] ||
+              member?.updated_at.split("T")[0]}
+          </p>
         </div>
-        {currentUserId == prayCard?.user_id && (
-          <div className="flex gap-2">
-            <p className="text-sm text-gray-500">
-              {dateDistance.days + 1}일 차
+        <div
+          className={`p-2 flex justify-center h-full overflow-y-auto no-scrollbar ${
+            isScrollable ? "items-start" : "items-center"
+          }`}
+        >
+          {prayCard?.user_id !== currentUserId ? (
+            <p className="whitespace-pre-line">
+              {prayCard?.content || member?.pray_summary}
             </p>
+          ) : isEditingPrayCard ? (
+            <Textarea
+              ref={textareaRef}
+              className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
+              value={inputPrayCardContent}
+              onChange={(e) => setPrayCardContent(e.target.value)}
+              maxLength={400}
+            />
+          ) : (
+            <p className="whitespace-pre-line">{inputPrayCardContent}</p>
+          )}
+        </div>
+        {prayCard?.user_id === currentUserId && (
+          <div className="absolute bottom-4 right-4 w-10 h-10 bg-end rounded-full flex justify-center items-center">
+            {isEditingPrayCard ? (
+              <button
+                className={`text-white rounded-full ${
+                  !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={() =>
+                  handleSaveClick(
+                    prayCard!.id,
+                    inputPrayCardContent,
+                    member?.id
+                  )
+                }
+                disabled={!inputPrayCardContent}
+              >
+                <FaSave className="text-white w-5 h-5" />
+              </button>
+            ) : (
+              <button
+                className="text-white rounded-full"
+                onClick={() => setIsEditingPrayCard(true)}
+              >
+                <FaEdit className="text-white w-5 h-5" />
+              </button>
+            )}
           </div>
         )}
       </div>
-      <div
-        className={`flex justify-center h-full overflow-y-auto no-scrollbar ${
-          isScrollable ? "items-start" : "items-center"
-        }`}
-      >
-        {prayCard?.user_id !== currentUserId ? (
-          <p className="whitespace-pre-line">
-            {prayCard?.content || member?.pray_summary}
-          </p>
-        ) : isEditingPrayCard ? (
-          <Textarea
-            ref={textareaRef}
-            className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
-            value={inputPrayCardContent}
-            onChange={(e) => setPrayCardContent(e.target.value)}
-            maxLength={400}
-          />
-        ) : (
-          <p className="whitespace-pre-line">{inputPrayCardContent}</p>
-        )}
-      </div>
-      <p className="text-sm text-gray-500">
-        created at:{member?.updated_at.split("T")[0]}
-      </p>
-    </div>
+    </>
   );
 
   return (
@@ -133,43 +176,31 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
         <ReactionWithCalendar prayCard={prayCard} />
       ) : (
         <div className="flex flex-col gap-5">
-          {isEditingPrayCard ? (
-            <button
-              className={`w-full bg-green-700 text-white rounded-2xl ${
-                !inputPrayCardContent ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={() =>
-                handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
-              }
-              disabled={!inputPrayCardContent}
-            >
-              저장
-            </button>
-          ) : (
-            <button
-              className="w-full bg-black text-white rounded-2xl"
-              onClick={() => setIsEditingPrayCard(true)}
-            >
-              수정
-            </button>
-          )}
           <Drawer>
             <DrawerTrigger className="w-full focus:outline-none">
-              <div className="flex justify-center space-x-8">
+              <div className="flex justify-center gap-2">
                 {Object.values(PrayType).map((type) => {
-                  const emojiData = reactionDatas[type];
-                  if (!emojiData) return null;
+                  if (!reactionDatas) return null;
                   return (
                     <div
                       key={type}
-                      className={`w-[90px] py-2 px-2 flex flex-col items-center rounded-2xl bg-purple-100 text-black
+                      className={`w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2
                       }`}
                     >
-                      <div className="text-2xl">{emojiData.emoji}</div>
-                      <div className="text-sm">{emojiData.num}</div>
+                      <div className="text-sm w-5 h-5">
+                        <img
+                          src={reactionDatas[type]?.img}
+                          alt={reactionDatas[type]?.emoji}
+                          className="w-5 h-5"
+                        />
+                      </div>
+                      <div className="text-sm">{reactionDatas[type]?.num}</div>
                     </div>
                   );
                 })}
+                <div className="bg-white rounded-lg flex justify-center items-center p-1">
+                  <img className="w-5" src={iconUserMono} alt="user-icon" />
+                </div>
               </div>
             </DrawerTrigger>
             <PrayList />

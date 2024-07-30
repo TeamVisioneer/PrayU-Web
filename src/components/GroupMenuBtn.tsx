@@ -8,7 +8,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useToast } from "./ui/use-toast";
-import menuIcon from "@/assets/menuIcon.png";
+import menuIcon from "@/assets/menuIcon.svg";
 import { Group } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";

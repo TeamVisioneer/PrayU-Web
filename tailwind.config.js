@@ -17,8 +17,20 @@ module.exports = {
       },
     },
     extend: {
+      boxShadow: {
+        button: "0 10px 10px rgba(188, 190, 208, 0.8)",
+      },
       colors: {
         mainBg: "#F2F3FD",
+
+        prayCardStart: "#B7DFFF",
+        prayCardMiddle: "#F3E5FF",
+        prayCardMiddle2: "#F9E9F5",
+        start: "#4B93FF",
+        middle: "#B095FF",
+        end: "#FFC7B4",
+        grayText: "#4A4A4A",
+        todayPrayBtn: "#70AAFF",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -74,10 +86,12 @@ module.exports = {
       },
       height: {
         "10vh": "10vh",
+        "15vh": "15vh",
         "20vh": "20vh",
         "30vh": "30vh",
         "40vh": "40vh",
         "50vh": "50vh",
+        "55vh": "55vh",
         "60vh": "60vh",
         "70vh": "70vh",
         "80vh": "80vh",

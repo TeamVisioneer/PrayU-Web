@@ -75,3 +75,9 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }
+.inner-shadow {
+  box-shadow: inset 5px 5px 10px 5px rgb(77, 71, 71);
+}
+.active-inner-shadow {
+  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3);
+}

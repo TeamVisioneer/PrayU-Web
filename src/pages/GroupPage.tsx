@@ -20,6 +20,7 @@ import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import MyMember from "@/components/member/MyMember";
 import LimitGroupCard from "@/components/group/LimitGroupCard";
 import GroupInviteCard from "@/components/todayPray/GroupInviteCard";
+import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -92,13 +93,14 @@ const GroupPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="flex justify-between">
-        <div className="flex flex-grow justify-center items-center gap-2">
+      <div className="relative flex justify-between items-center">
+        <KakaoShareButton
+          groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
+          id="groupPage"
+          img={inviteMemberIcon}
+        ></KakaoShareButton>
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
           <div className="text-lg font-bold">{targetGroup?.name}</div>
-          <KakaoShareButton
-            groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
-            id="groupPage"
-          ></KakaoShareButton>
         </div>
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
@@ -129,7 +131,7 @@ const GroupPage: React.FC = () => {
             open={openTodayPrayDrawer}
             onOpenChange={setOpenTodayPrayDrawer}
           >
-            <DrawerContent className="max-w-[480px] mx-auto w-full h-[90%] pb-20">
+            <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full h-[90%] pb-20">
               <DrawerHeader>
                 <DrawerTitle></DrawerTitle>
                 <DrawerDescription></DrawerDescription>
