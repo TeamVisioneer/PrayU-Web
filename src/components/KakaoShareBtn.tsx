@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 declare global {
   interface Window {
@@ -94,23 +93,19 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     };
   }, [groupPageUrl, id]);
 
+  const kakaoDefaultImage =
+    "https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png";
+
   if (message) {
     return (
-      <Button id={id} className="bg-yellow-300">
+      <button id={id} className="bg-yellow-300 px-10 py-2 rounded-md text-sm">
         <p className="text-black">{message}</p>
-      </Button>
-    );
-  } else if (img) {
-    return (
-      <Button id={id} className="bg-mainBg p-2">
-        <img src={img} className="w-6 h-6" />
-      </Button>
+      </button>
     );
   }
-
   return (
-    <Button id={id} variant="ghost" size="icon" className="w-8 h-8">
-      <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png" />
-    </Button>
+    <button id={id} className="bg-mainBg p-2 rounded-md">
+      <img src={img ?? kakaoDefaultImage} className="w-5 h-5" />
+    </button>
   );
 };
