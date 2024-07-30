@@ -15,16 +15,17 @@ const GroupCreatePage: React.FC = () => {
   const createGroup = useBaseStore((state) => state.createGroup);
   const inputGroupName = useBaseStore((state) => state.inputGroupName);
   const setGroupName = useBaseStore((state) => state.setGroupName);
+  const isDisabledGroupCreateBtn = useBaseStore(
+    (state) => state.isDisabledGroupCreateBtn
+  );
+  const setIsDisabledGroupCreateBtn = useBaseStore(
+    (state) => state.setIsDisabledGroupCreateBtn
+  );
   const groupList = useBaseStore((state) => state.groupList);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
-
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
-
-  useEffect(() => {
-    fetchGroupListByUserId(user!.id);
-  }, [fetchGroupListByUserId, user]);
 
   const handleCreateGroup = async (
     userId: string | undefined,
@@ -36,15 +37,14 @@ const GroupCreatePage: React.FC = () => {
       });
       return;
     }
-    if (inputGroupName.trim() === "") {
-      toast({
-        description: "그룹 이름을 입력해주세요.",
-      });
-      return;
-    }
+    setIsDisabledGroupCreateBtn(true);
     const targetGroup = await createGroup(userId, inputGroupName, "intro");
     targetGroup && navigate("/group/" + targetGroup.id, { replace: true });
   };
+
+  useEffect(() => {
+    fetchGroupListByUserId(user!.id);
+  }, [fetchGroupListByUserId, user]);
 
   if (!groupList) {
     return (
@@ -74,6 +74,7 @@ const GroupCreatePage: React.FC = () => {
         <Button
           onClick={() => handleCreateGroup(user?.id, inputGroupName)}
           className="w-full"
+          disabled={isDisabledGroupCreateBtn}
         >
           그룹 생성하기
         </Button>

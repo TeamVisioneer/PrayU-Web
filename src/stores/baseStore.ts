@@ -61,9 +61,11 @@ export interface BaseStore {
   groupList: Group[] | null;
   targetGroup: Group | null;
   inputGroupName: string;
+  isDisabledGroupCreateBtn: boolean;
   fetchGroupListByUserId: (userId: string | undefined) => Promise<void>;
   getGroup: (groupId: string | undefined) => Promise<void>;
   setGroupName: (groupName: string) => void;
+  setIsDisabledGroupCreateBtn: (isDisabled: boolean) => void;
   createGroup: (
     userId: string | undefined,
     name: string | undefined,
@@ -97,6 +99,7 @@ export interface BaseStore {
   targetPrayCard: PrayCardWithProfiles | null;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
+  isDisabledPrayCardCreateBtn: boolean;
   prayCardCarouselApi: CarouselApi | null;
   fetchGroupPrayCardList: (
     groupId: string | undefined,
@@ -113,6 +116,9 @@ export interface BaseStore {
     content: string
   ) => Promise<PrayCard | null>;
   setIsEditingPrayCard: (isEditingPrayCard: boolean) => void;
+  setIsDisabledPrayCardCreateBtn: (
+    isDisabledPrayCardCreateBtn: boolean
+  ) => void;
   updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
   setPrayCardContent: (content: string) => void;
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
@@ -180,6 +186,7 @@ const useBaseStore = create<BaseStore>()(
     groupList: null,
     targetGroup: null,
     inputGroupName: "",
+    isDisabledGroupCreateBtn: false,
     fetchGroupListByUserId: async (userId: string | undefined) => {
       const data = await fetchGroupListByUserId(userId);
       set((state) => {
@@ -206,6 +213,12 @@ const useBaseStore = create<BaseStore>()(
     setGroupName: (groupName: string) => {
       set((state) => {
         state.inputGroupName = groupName;
+        state.isDisabledGroupCreateBtn = groupName.trim() === "";
+      });
+    },
+    setIsDisabledGroupCreateBtn: (isDisabled: boolean) => {
+      set((state) => {
+        state.isDisabledGroupCreateBtn = isDisabled;
       });
     },
     openTodayPrayDrawer: false,
@@ -252,6 +265,7 @@ const useBaseStore = create<BaseStore>()(
     targetPrayCard: null,
     inputPrayCardContent: "",
     isEditingPrayCard: false,
+    isDisabledPrayCardCreateBtn: false,
     prayCardCarouselApi: null,
     setIsEditingPrayCard: (isEditingPrayCard: boolean) => {
       set((state) => {
@@ -302,6 +316,12 @@ const useBaseStore = create<BaseStore>()(
     setPrayCardContent: (content: string) => {
       set((state) => {
         state.inputPrayCardContent = content;
+        state.isDisabledPrayCardCreateBtn = content.trim() === "";
+      });
+    },
+    setIsDisabledPrayCardCreateBtn: (isDisabled: boolean) => {
+      set((state) => {
+        state.isDisabledPrayCardCreateBtn = isDisabled;
       });
     },
     setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => {
