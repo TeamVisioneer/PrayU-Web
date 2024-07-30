@@ -2,6 +2,7 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import useBaseStore from "@/stores/baseStore";
 import { MemberWithProfiles } from "supabase/types/tables";
+import { useEffect } from "react";
 
 interface PrayCardCreateModalProps {
   currentUserId: string | undefined;
@@ -42,6 +43,10 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
     await createPrayCard(groupId, currentUserId, inputPrayCardContent);
     window.location.reload();
   };
+
+  useEffect(() => {
+    setPrayCardContent(member?.pray_summary || "");
+  }, [member, setPrayCardContent]);
 
   return (
     <div className="flex flex-col items-center min-h-screen gap-4">
