@@ -30,11 +30,11 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   targetGroup,
 }) => {
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const openTodayPrayDrawer = useBaseStore(
-    (state) => state.openTodayPrayDrawer
+  const isOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.isOpenTodayPrayDrawer
   );
-  const setOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setOpenTodayPrayDrawer
+  const setIsOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenTodayPrayDrawer
   );
   const isParamsGroupIdinGroupList = groupList.some(
     (group) => group.id === targetGroup?.id
@@ -85,7 +85,10 @@ const GroupBody: React.FC<GroupBodyProps> = ({
         )}
       </div>
 
-      <Drawer open={openTodayPrayDrawer} onOpenChange={setOpenTodayPrayDrawer}>
+      <Drawer
+        open={isOpenTodayPrayDrawer}
+        onOpenChange={setIsOpenTodayPrayDrawer}
+      >
         <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full h-[90%] pb-20">
           <DrawerHeader>
             <DrawerTitle></DrawerTitle>
