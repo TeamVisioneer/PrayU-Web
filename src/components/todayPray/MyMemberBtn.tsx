@@ -5,8 +5,8 @@ const MyMemberBtn: React.FC = () => {
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
-  const setOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setOpenTodayPrayDrawer
+  const setIsOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenTodayPrayDrawer
   );
 
   return (
@@ -16,7 +16,7 @@ const MyMemberBtn: React.FC = () => {
         bg-todayPrayBtn text-white
         rounded-xl cursor-pointer"
       onClick={() => {
-        setOpenTodayPrayDrawer(false);
+        setIsOpenTodayPrayDrawer(false);
         setIsOpenMyMemberDrawer(true);
       }}
     >

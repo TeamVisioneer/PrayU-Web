@@ -57,8 +57,8 @@ export interface BaseStore {
     name: string | undefined,
     intro: string | undefined
   ) => Promise<Group | null>;
-  openTodayPrayDrawer: boolean;
-  setOpenTodayPrayDrawer: (openTodayPrayDrawer: boolean) => void;
+  isOpenTodayPrayDrawer: boolean;
+  setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -209,10 +209,10 @@ const useBaseStore = create<BaseStore>()(
         state.isDisabledGroupCreateBtn = isDisabled;
       });
     },
-    openTodayPrayDrawer: false,
-    setOpenTodayPrayDrawer: (openTodayPrayDrawer: boolean) => {
+    isOpenTodayPrayDrawer: false,
+    setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => {
       set((state) => {
-        state.openTodayPrayDrawer = openTodayPrayDrawer;
+        state.isOpenTodayPrayDrawer = isOpenTodayPrayDrawer;
       });
     },
 

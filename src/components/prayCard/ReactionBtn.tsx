@@ -19,8 +19,8 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
-  const setOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setOpenTodayPrayDrawer
+  const setIsOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenTodayPrayDrawer
   );
 
   const handleClick = (prayType: PrayType) => () => {
@@ -32,7 +32,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           prayCardCarouselApi.selectedScrollSnap() ==
           prayCardCarouselApi.scrollSnapList().length - 2
         ) {
-          setOpenTodayPrayDrawer(false);
+          setIsOpenTodayPrayDrawer(false);
           return null;
         } else {
           prayCardCarouselApi.scrollNext();
