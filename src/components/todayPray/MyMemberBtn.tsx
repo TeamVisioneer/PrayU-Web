@@ -11,10 +11,8 @@ const MyMemberBtn: React.FC = () => {
 
   return (
     <Button
-      className="shadow-md
-        flex flex-col justify-center w-32 h-11
-        bg-todayPrayBtn text-white
-        rounded-xl cursor-pointer"
+      variant="primary"
+      className="w-32"
       onClick={() => {
         setIsOpenTodayPrayDrawer(false);
         setIsOpenMyMemberDrawer(true);

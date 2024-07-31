@@ -21,7 +21,10 @@ module.exports = {
         button: "0 10px 10px rgba(188, 190, 208, 0.8)",
       },
       colors: {
+        // custom
         mainBg: "#F2F3FD",
+        mainBtn: "#70AAFF",
+        // custom
 
         prayCardStart: "#B7DFFF",
         prayCardMiddle: "#F3E5FF",
@@ -30,7 +33,6 @@ module.exports = {
         middle: "#B095FF",
         end: "#FFC7B4",
         grayText: "#4A4A4A",
-        todayPrayBtn: "#70AAFF",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
