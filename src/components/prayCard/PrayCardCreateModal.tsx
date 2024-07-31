@@ -61,15 +61,14 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
         onChange={(e) => setPrayCardContent(e.target.value)}
       />
 
-      <div className="w-full flex flex-col items-center justify-center text-center">
-        <Button
-          className="w-full bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => handleCreatePrayCard(currentUserId, groupId)}
-          disabled={isDisabledPrayCardCreateBtn}
-        >
-          그룹 참여하기
-        </Button>
-      </div>
+      <Button
+        className="w-full"
+        onClick={() => handleCreatePrayCard(currentUserId, groupId)}
+        disabled={isDisabledPrayCardCreateBtn}
+        variant="primary"
+      >
+        그룹 참여하기
+      </Button>
       <div className="text-sm text-gray-500">
         기도제목을 작성하면 그룹에 참여할 수 있어요
       </div>
