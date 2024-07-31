@@ -1,5 +1,5 @@
+import { useState, useRef, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
-import { useEffect, useState, useRef } from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { ClipLoader } from "react-spinners";
@@ -37,8 +37,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     (state) => state.setReactionDatasForMe
   );
 
-  const [isScrollable, setIsScrollable] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const [displayedContent, setDisplayedContent] =
+    useState(inputPrayCardContent);
+  const [isOverflow, setIsOverflow] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const prayDatas = prayCard.pray;
 
   const dateDistance = getDateDistance(
@@ -57,17 +60,24 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   ) => {
     updatePrayCardContent(prayCardId, content);
     updateMember(memberId, content);
+    setDisplayedContent(content);
+    setIsEditingPrayCard(false);
   };
 
   useEffect(() => {
-    const textarea = textareaRef.current;
     if (prayDatas) {
       setReactionDatasForMe(prayDatas);
     }
-    if (textarea) {
-      setIsScrollable(textarea.scrollHeight > textarea.clientHeight);
+  }, [prayDatas, setReactionDatasForMe]);
+
+  useEffect(() => {
+    const contentElement = contentRef.current;
+    if (contentElement) {
+      const isContentOverflowing =
+        contentElement.scrollHeight > contentElement.clientHeight;
+      setIsOverflow(isContentOverflowing);
     }
-  }, [inputPrayCardContent, prayDatas, setReactionDatasForMe]);
+  }, [inputPrayCardContent, displayedContent]);
 
   if (!prayDataHash) {
     return (
@@ -94,20 +104,20 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
         </p>
       </div>
       <div
-        className={`p-2 flex justify-center h-full overflow-y-auto no-scrollbar ${
-          isScrollable ? "items-start" : "items-center"
+        ref={contentRef}
+        className={`p-2 flex h-full overflow-y-auto no-scrollbar justify-center ${
+          isOverflow ? "items-start" : "items-center"
         }`}
       >
         {isEditingPrayCard ? (
           <Textarea
-            ref={textareaRef}
             className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
             value={inputPrayCardContent}
             onChange={(e) => setPrayCardContent(e.target.value)}
             maxLength={400}
           />
         ) : (
-          <p className="whitespace-pre-line">{inputPrayCardContent}</p>
+          <p className="whitespace-pre-line">{displayedContent}</p>
         )}
       </div>
       <div className="absolute bottom-4 right-4">

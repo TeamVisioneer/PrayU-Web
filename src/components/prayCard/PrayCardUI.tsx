@@ -1,5 +1,5 @@
+import { useState, useRef, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
-import { useEffect } from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { ClipLoader } from "react-spinners";
@@ -21,11 +21,23 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
     fetchPrayDataByUserId: state.fetchPrayDataByUserId,
   }));
 
+  const [isOverflow, setIsOverflow] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (prayCard?.id) {
       fetchPrayDataByUserId(prayCard.id, currentUserId);
     }
   }, [currentUserId, fetchPrayDataByUserId, prayCard?.id]);
+
+  useEffect(() => {
+    const contentElement = contentRef.current;
+    if (contentElement) {
+      const isContentOverflowing =
+        contentElement.scrollHeight > contentElement.clientHeight;
+      setIsOverflow(isContentOverflowing);
+    }
+  }, [prayCard?.content, member?.pray_summary]);
 
   if (!prayDataHash) {
     return (
@@ -58,7 +70,12 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
               member?.updated_at.split("T")[0]}
           </p>
         </div>
-        <div className="p-2 flex justify-center h-full overflow-y-auto no-scrollbar items-center">
+        <div
+          ref={contentRef}
+          className={`p-2 flex ${
+            isOverflow ? "items-start" : "items-center"
+          } h-full overflow-y-auto no-scrollbar`}
+        >
           <p className="whitespace-pre-line">
             {prayCard?.content || member?.pray_summary}
           </p>
