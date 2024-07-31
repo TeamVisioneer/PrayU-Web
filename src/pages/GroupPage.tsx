@@ -59,7 +59,7 @@ const GroupPage: React.FC = () => {
   const domainUrl = getDomainUrl();
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-5">
       <div className="relative flex justify-between items-center">
         <KakaoShareButton
           groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
