@@ -17,6 +17,7 @@ import { getISOTodayDate } from "@/lib/utils";
 
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import TodayPrayStartCard from "../todayPray/TodayPrayStartCard";
 
 interface GroupBodyProps {
   currentUserId: string;
@@ -75,10 +76,14 @@ const GroupBody: React.FC<GroupBodyProps> = ({
     <>
       <div className="flex flex-col gap-4">
         <MyMember currentUserId={currentUserId} groupId={targetGroup?.id} />
-        <OtherMemberList
-          currentUserId={currentUserId}
-          groupId={targetGroup?.id}
-        />
+        {isPrayToday ? (
+          <OtherMemberList
+            currentUserId={currentUserId}
+            groupId={targetGroup?.id}
+          />
+        ) : (
+          <TodayPrayStartCard />
+        )}
       </div>
 
       <Drawer open={openTodayPrayDrawer} onOpenChange={setOpenTodayPrayDrawer}>
@@ -95,11 +100,6 @@ const GroupBody: React.FC<GroupBodyProps> = ({
           {/* PrayCardList */}
         </DrawerContent>
       </Drawer>
-      {isPrayToday && (
-        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
-          <TodayPrayBtn />
-        </div>
-      )}
     </>
   );
 };
