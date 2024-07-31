@@ -1,4 +1,5 @@
 import useBaseStore from "@/stores/baseStore";
+import { Button } from "../ui/button";
 
 const TodayPrayBtn: React.FC = () => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
@@ -6,15 +7,13 @@ const TodayPrayBtn: React.FC = () => {
   );
 
   return (
-    <button
-      className="shadow-md
-        flex justify-center items-center w-32 h-11
-        bg-todayPrayBtn text-white
-        rounded-xl cursor-pointer"
+    <Button
+      variant="primary"
+      className="w-32"
       onClick={() => setIsOpenTodayPrayDrawer(true)}
     >
       기도 시작하기
-    </button>
+    </Button>
   );
 };
 
