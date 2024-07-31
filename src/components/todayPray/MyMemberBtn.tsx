@@ -2,8 +2,8 @@ import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 
 const MyMemberBtn: React.FC = () => {
-  const setOpenMyMemberDrawer = useBaseStore(
-    (state) => state.setOpenMyMemberDrawer
+  const setIsOpenMyMemberDrawer = useBaseStore(
+    (state) => state.setIsOpenMyMemberDrawer
   );
   const setOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setOpenTodayPrayDrawer
@@ -17,7 +17,7 @@ const MyMemberBtn: React.FC = () => {
         rounded-xl cursor-pointer"
       onClick={() => {
         setOpenTodayPrayDrawer(false);
-        setOpenMyMemberDrawer(true);
+        setIsOpenMyMemberDrawer(true);
       }}
     >
       내 기도 확인하기

@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../KakaoShareBtn";
-import TodayPrayEndCard from "../todayPray/TodayPrayEndCard";
+import MyMemberBtn from "../todayPray/MyMemberBtn";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -33,6 +33,17 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
 
   const startDt = getISOTodayDate(-6);
   const endDt = getISOTodayDate(1);
+
+  const completedItem = (
+    <div className="flex flex-col gap-4 justify-center items-center pt-10">
+      <h1 className="font-bold text-xl">기도 완료</h1>
+      <div className="text-grayText text-center">
+        <h1>당신의 기도제목을</h1>
+        <h1>확인하세요</h1>
+      </div>
+      <MyMemberBtn />
+    </div>
+  );
 
   useEffect(() => {
     // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
@@ -86,9 +97,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
               <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
             </CarouselItem>
           ))}
-        <CarouselItem className="basis-5/6">
-          <TodayPrayEndCard />
-        </CarouselItem>
+        <CarouselItem className="basis-5/6">{completedItem}</CarouselItem>
         <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>
     </Carousel>

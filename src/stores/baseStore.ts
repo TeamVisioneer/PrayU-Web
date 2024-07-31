@@ -78,8 +78,8 @@ export interface BaseStore {
     userId: string,
     groupId: string | undefined
   ) => Promise<MemberWithProfiles | null>;
-  openMyMemberDrawer: boolean;
-  setOpenMyMemberDrawer: (openMyMemberDrawer: boolean) => void;
+  isOpenMyMemberDrawer: boolean;
+  setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -246,10 +246,10 @@ const useBaseStore = create<BaseStore>()(
       });
       return member;
     },
-    openMyMemberDrawer: false,
-    setOpenMyMemberDrawer: (openMyMemberDrawer: boolean) => {
+    isOpenMyMemberDrawer: false,
+    setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => {
       set((state) => {
-        state.openMyMemberDrawer = openMyMemberDrawer;
+        state.isOpenMyMemberDrawer = isOpenMyMemberDrawer;
       });
     },
 
