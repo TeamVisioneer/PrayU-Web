@@ -35,20 +35,6 @@ import {
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
-import prayIcon from "@/assets/pray.svg";
-import goodIcon from "@/assets/good.svg";
-import likeIcon from "@/assets/like.svg";
-import prayIconToOther from "@/assets/prayToOther.svg";
-import goodIconToOther from "@/assets/goodToOther.svg";
-import likeIconToOther from "@/assets/likeToOther.svg";
-
-interface EmojiData {
-  img: string;
-  reactImg: string;
-  emoji: string;
-  text: string;
-  num: number;
-}
 
 export interface BaseStore {
   // user
@@ -128,7 +114,7 @@ export interface BaseStore {
   prayDataHash: PrayDataHash;
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean;
-  reactionDatas: { [key in PrayType]?: EmojiData };
+  reactionCounts: { [key in PrayType]?: number };
   prayerList: { [key: string]: PrayWithProfiles[] } | null;
   setIsPrayToday: (isPrayToday: boolean) => void;
   fetchIsPrayToday: (
@@ -340,28 +326,10 @@ const useBaseStore = create<BaseStore>()(
     prayDataHash: {},
     todayPrayTypeHash: {},
     isPrayToday: false,
-    reactionDatas: {
-      [PrayType.PRAY]: {
-        img: prayIcon,
-        reactImg: prayIconToOther,
-        emoji: "🙏",
-        text: "기도해요",
-        num: 0,
-      },
-      [PrayType.GOOD]: {
-        img: goodIcon,
-        reactImg: goodIconToOther,
-        emoji: "👍",
-        text: "힘내세요",
-        num: 0,
-      },
-      [PrayType.LIKE]: {
-        img: likeIcon,
-        reactImg: likeIconToOther,
-        emoji: "❤️",
-        text: "응원해요",
-        num: 0,
-      },
+    reactionCounts: {
+      [PrayType.PRAY]: 0,
+      [PrayType.GOOD]: 0,
+      [PrayType.LIKE]: 0,
     },
     prayerList: null,
 
@@ -411,7 +379,7 @@ const useBaseStore = create<BaseStore>()(
         set((state) => {
           state.prayerList = state.groupAndSortByUserId(prayData);
           Object.values(PrayType).forEach((type) => {
-            state.reactionDatas[type]!.num = prayData.filter(
+            state.reactionCounts[type] = prayData.filter(
               (pray) => pray.pray_type === type
             ).length;
           });

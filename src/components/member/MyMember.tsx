@@ -12,8 +12,7 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
-import { getDateDistance, getDateDistanceText } from "@toss/date";
-import { getISOOnlyDate } from "@/lib/utils";
+import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 
 interface MemberProps {
   currentUserId: string;
@@ -64,35 +63,38 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     );
   }
 
-  const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(member?.updated_at ?? null)),
-    new Date(getISOTodayDate())
-  );
-
-  let dateDistanceText = getDateDistanceText(dateDistance, {
-    days: (t) => 1 <= t.days,
-    hours: () => false,
-    minutes: () => false,
-    seconds: () => false,
-  });
-
-  if (dateDistance.days < 1) {
-    dateDistanceText = "오늘";
-  }
+  const prayCard = userPrayCardList[0];
+  const prayDatasForMe = prayCard.pray;
 
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
-      <div className="flex items-center gap-2">
-        <h3 className="font-bold">내 기도제목</h3>
-      </div>
+      <h3 className="flex font-bold">내 기도제목</h3>
       <div className="text-left text-sm text-gray-600">
         {reduceString(inputPrayCardContent, 20)}
       </div>
-      <div className="text-gray-400 text-left text-xs">{dateDistanceText}</div>
+      <div className="w-fit flex bg-gray-100 rounded-lg p-2 gap-3">
+        {Object.values(PrayType).map((type) => {
+          return (
+            <div key={type} className="flex">
+              <div className="flex  gap-1 ">
+                <img
+                  src={PrayTypeDatas[type].img}
+                  alt={PrayTypeDatas[type].emoji}
+                  className="w-4 h-4 opacity-90"
+                />
+                <p className="text-xs text-gray-600">
+                  {
+                    prayDatasForMe?.filter((pray) => pray.pray_type === type)
+                      .length
+                  }
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
-
-  const prayCard = userPrayCardList[0];
 
   return (
     <Drawer>

@@ -33,7 +33,11 @@ export const fetchUserPrayCardListByGroupId = async (
   if (!userId || !groupId) return null;
   const { data, error } = await supabase
     .from("pray_card")
-    .select(`*, profiles (id, full_name, avatar_url)`)
+    .select(
+      `*, 
+      profiles (id, full_name, avatar_url),
+      pray (id, pray_card_id, user_id, pray_type, created_at, updated_at)`
+    )
     .eq("user_id", userId)
     .eq("group_id", groupId)
     .is("deleted_at", null)

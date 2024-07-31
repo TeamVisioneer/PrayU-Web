@@ -1,4 +1,4 @@
-import { PrayType } from "@/Enums/prayType";
+import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { getISODate, getISOToday } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { Pray, PrayCardWithProfiles } from "supabase/types/tables";
@@ -13,13 +13,12 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   prayData,
 }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
-  const reactionDatas = useBaseStore((state) => state.reactionDatas);
 
   const getReactionEmoticon = (prayType: string | null) => {
     return (
       <img
-        src={reactionDatas[prayType as PrayType]?.reactImg}
-        alt={reactionDatas[prayType as PrayType]?.emoji}
+        src={PrayTypeDatas[prayType as PrayType]?.reactImg}
+        alt={PrayTypeDatas[prayType as PrayType]?.emoji}
         className="w-7 h-7"
       ></img>
     );
