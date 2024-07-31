@@ -1,5 +1,5 @@
 import useBaseStore from "@/stores/baseStore";
-import PrayCardCalendar from "./WeeklyCalendar";
+import WeeklyCalendar from "./WeeklyCalendar";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import ReactionBtn from "./ReactionBtn";
 import { KakaoShareButton } from "../KakaoShareBtn";
@@ -27,7 +27,7 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({ prayCard }) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <PrayCardCalendar
+      <WeeklyCalendar
         prayCard={prayCard}
         prayData={prayDataHash[prayCard?.id || ""] || []}
       />

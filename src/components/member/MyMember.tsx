@@ -7,11 +7,11 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import PrayCardUI from "../prayCard/PrayCardUI";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
+import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 
 interface MemberProps {
   currentUserId: string;
@@ -99,11 +99,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {/* PrayCard */}
-        <PrayCardUI
-          currentUserId={currentUserId}
-          member={member}
-          prayCard={prayCard}
-        />
+        <MyPrayCardUI member={member} prayCard={prayCard} />
         {/* PrayCard */}
       </DrawerContent>
     </Drawer>
