@@ -59,8 +59,11 @@ const GroupCreatePage: React.FC = () => {
     <div className="flex flex-col pt-10 gap-8 items-center">
       <div className="text-lg font-bold">PrayU 그룹 생성</div>
 
-      <div className="flex justify-center  w-[600px]">
-        <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayCardList.png" />
+      <div className="flex justify-center h-[300px] w-auto">
+        <img
+          className="w-auto h-full object-cover"
+          src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayCardListLarge.png"
+        />
       </div>
       <div className="flex flex-col items-center gap-4 w-full ">
         <Input
