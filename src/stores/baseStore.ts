@@ -91,6 +91,7 @@ export interface BaseStore {
   prayCardCarouselApi: CarouselApi | null;
   fetchGroupPrayCardList: (
     groupId: string | undefined,
+    currentUserId: string,
     startDt: string,
     endDt: string
   ) => Promise<void>;
@@ -269,11 +270,13 @@ const useBaseStore = create<BaseStore>()(
     },
     fetchGroupPrayCardList: async (
       groupId: string | undefined,
+      currentUserId: string,
       startDt: string,
       endDt: string
     ) => {
       const groupPrayCardList = await fetchGroupPrayCardList(
         groupId,
+        currentUserId,
         startDt,
         endDt
       );

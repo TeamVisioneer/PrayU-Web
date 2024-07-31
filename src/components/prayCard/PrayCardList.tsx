@@ -47,14 +47,21 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
 
   useEffect(() => {
     // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
-    fetchGroupPrayCardList(groupId, startDt, endDt);
+    fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
       if (currentIndex === 0) prayCardCarouselApi.scrollNext();
       if (currentIndex === carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
-  }, [prayCardCarouselApi, fetchGroupPrayCardList, groupId, startDt, endDt]);
+  }, [
+    prayCardCarouselApi,
+    fetchGroupPrayCardList,
+    groupId,
+    currentUserId,
+    startDt,
+    endDt,
+  ]);
 
   if (!groupPrayCardList) {
     return (
@@ -64,6 +71,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     );
   }
 
+  // TODO: member 가 아예 없는 경우와 기도카드가 올라오지 않은 경우
   if (groupPrayCardList.length == 1) {
     return (
       <div className="flex flex-col justify-center items-center p-10 gap-4">
@@ -88,6 +96,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     );
   }
 
+  const todayDt = getISOTodayDate();
   return (
     <Carousel
       setApi={setPrayCardCarouselApi}
@@ -98,7 +107,12 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
         {groupPrayCardList
-          ?.filter((prayCard) => prayCard.user_id !== currentUserId)
+          ?.filter(
+            (prayCard) =>
+              prayCard.user_id !== currentUserId &&
+              prayCard.pray?.filter((pray) => pray.created_at >= todayDt)
+                .length === 0
+          )
           .map((prayCard) => (
             <CarouselItem key={prayCard.id} className="basis-5/6 h-screen">
               <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
