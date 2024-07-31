@@ -50,7 +50,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   return (
     <div className="flex flex-col gap-2">
       <div className="text-sm text-gray-950 p-2">
-        Members ({otherMembers.length + 1})
+        Members ({otherMembers.length})
       </div>
       <div className="flex flex-col gap-4">
         {otherMembers.map((member) => (

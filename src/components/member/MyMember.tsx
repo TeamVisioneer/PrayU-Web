@@ -31,6 +31,12 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
+  const isOpenMyMemberDrawer = useBaseStore(
+    (state) => state.isOpenMyMemberDrawer
+  );
+  const setIsOpenMyMemberDrawer = useBaseStore(
+    (state) => state.setIsOpenMyMemberDrawer
+  );
 
   useEffect(() => {
     getMember(currentUserId, groupId);
@@ -97,7 +103,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   );
 
   return (
-    <Drawer>
+    <Drawer open={isOpenMyMemberDrawer} onOpenChange={setIsOpenMyMemberDrawer}>
       <DrawerTrigger className="focus:outline-none">
         <div className="flex flex-col items-start gap-2">{MyMemberUI}</div>
       </DrawerTrigger>

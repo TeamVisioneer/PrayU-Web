@@ -57,8 +57,8 @@ export interface BaseStore {
     name: string | undefined,
     intro: string | undefined
   ) => Promise<Group | null>;
-  openTodayPrayDrawer: boolean;
-  setOpenTodayPrayDrawer: (openTodayPrayDrawer: boolean) => void;
+  isOpenTodayPrayDrawer: boolean;
+  setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -78,6 +78,8 @@ export interface BaseStore {
     userId: string,
     groupId: string | undefined
   ) => Promise<MemberWithProfiles | null>;
+  isOpenMyMemberDrawer: boolean;
+  setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -207,10 +209,10 @@ const useBaseStore = create<BaseStore>()(
         state.isDisabledGroupCreateBtn = isDisabled;
       });
     },
-    openTodayPrayDrawer: false,
-    setOpenTodayPrayDrawer: (openTodayPrayDrawer: boolean) => {
+    isOpenTodayPrayDrawer: false,
+    setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => {
       set((state) => {
-        state.openTodayPrayDrawer = openTodayPrayDrawer;
+        state.isOpenTodayPrayDrawer = isOpenTodayPrayDrawer;
       });
     },
 
@@ -243,6 +245,12 @@ const useBaseStore = create<BaseStore>()(
         state.memberLoading = false;
       });
       return member;
+    },
+    isOpenMyMemberDrawer: false,
+    setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => {
+      set((state) => {
+        state.isOpenMyMemberDrawer = isOpenMyMemberDrawer;
+      });
     },
 
     // prayCard
