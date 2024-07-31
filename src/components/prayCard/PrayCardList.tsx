@@ -66,17 +66,24 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
 
   if (groupPrayCardList.length == 1) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-center gap-4">
-        <div>
-          <p>아직 그룹원들이 기도제목을 작성하지 않았어요</p>
-          <p>그룹원들의 기도를 독려해봐요</p>
+      <div className="flex flex-col justify-center items-center p-10 gap-4">
+        <div className="h-[300px] flex flex-col items-center">
+          <img
+            className="h-full rounded-md"
+            src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/KakaoShare.png"
+          />
         </div>
-
+        <div className="text-center">
+          <p className="text-sm text-gray-500">아직 올라온 기도카드가 없어요</p>
+          <p className="text-sm text-gray-500">
+            그룹원과 같이 오늘의 기도를 시작해 보아요
+          </p>
+        </div>
         <KakaoShareButton
           groupPageUrl={window.location.href}
-          message="그룹원 기도 독려하기"
-          id="prayCardListNull"
-        />
+          id="paryTodayIntro"
+          message="카카오톡으로 초대하기"
+        ></KakaoShareButton>
       </div>
     );
   }

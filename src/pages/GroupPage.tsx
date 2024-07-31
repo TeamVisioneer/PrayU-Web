@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ClipLoader } from "react-spinners";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import { KakaoShareButton } from "@/components/KakaoShareBtn";
@@ -49,11 +48,7 @@ const GroupPage: React.FC = () => {
   }, [user, targetGroup, fetchIsPrayToday]);
 
   if (!groupList || (paramsGroupId && !targetGroup) || isPrayToday == null) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
-      </div>
-    );
+    return null;
   }
 
   const domainUrl = getDomainUrl();
