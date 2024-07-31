@@ -22,7 +22,13 @@ const PrayList: React.FC = () => {
       </DrawerHeader>
       <div className="overflow-y-auto justify-center items-center">
         {isPrayerListEmpty ? (
-          <div className="flex flex-col gap-4 p-6">
+          <div className="flex flex-col gap-4 px-4">
+            <div className="h-[150px] flex flex-col items-center">
+              <img
+                className="h-full rounded-md shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayList.png"
+              />
+            </div>
             <div className="flex flex-col text-gray-400 text-sm text-center">
               <p>아직 기도해준 사람이 없어요</p>
               <p>그룹 채팅방에 오늘의 기도 링크를 전달해주세요</p>

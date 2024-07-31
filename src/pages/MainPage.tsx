@@ -57,7 +57,7 @@ const MainPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col gap-8 pt-10 text-center">
+    <div className="flex flex-col gap-8 text-center">
       <div className="text-lg font-bold">우리만의 기도제목 기록공간 PrayU</div>
       <Carousel setApi={setApi}>
         <CarouselContent>
