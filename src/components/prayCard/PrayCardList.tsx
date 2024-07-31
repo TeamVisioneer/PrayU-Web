@@ -10,6 +10,7 @@ import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../KakaoShareBtn";
 import MyMemberBtn from "../todayPray/MyMemberBtn";
+import { PrayTypeDatas } from "@/Enums/prayType";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -37,10 +38,15 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
 
   const completedItem = (
     <div className="flex flex-col gap-4 justify-center items-center pt-10">
-      <h1 className="font-bold text-xl">기도 완료</h1>
-      <div className="text-grayText text-center">
-        <h1>당신의 기도제목을</h1>
-        <h1>확인하세요</h1>
+      <img
+        src={PrayTypeDatas["pray"].img}
+        alt={PrayTypeDatas["pray"].emoji}
+        className="w-16 h-16 opacity-100"
+      />
+      <h1 className="font-bold text-xl">오늘의 기도 완료</h1>
+      <div className="text-gray-400 text-center">
+        <h1>당신을 위해 기도한</h1>
+        <h1>사람들을 확인해보세요</h1>
       </div>
       <MyMemberBtn />
     </div>
