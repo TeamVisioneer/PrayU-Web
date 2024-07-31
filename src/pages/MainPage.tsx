@@ -42,7 +42,6 @@ const MainPage: React.FC = () => {
     api.scrollTo(index);
   };
 
-  console.log(currentIndex);
   const CarouselDots = () => (
     <div className="flex justify-center mt-4">
       {Array.from({ length: 3 }, (_, index) => (
