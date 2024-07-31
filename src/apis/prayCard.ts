@@ -29,7 +29,6 @@ export const fetchGroupPrayCardList = async (
     console.error("error", error);
     return null;
   }
-  console.log("data", data);
   return data as PrayCardWithProfiles[];
 };
 
