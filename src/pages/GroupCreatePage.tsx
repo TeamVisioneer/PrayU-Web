@@ -44,7 +44,8 @@ const GroupCreatePage: React.FC = () => {
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
-  }, [fetchGroupListByUserId, user]);
+    setGroupName("");
+  }, [fetchGroupListByUserId, user, setGroupName]);
 
   if (!groupList) {
     return (
@@ -55,14 +56,15 @@ const GroupCreatePage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-col gap-2">
-        <div className="text-lg font-bold">PrayU 그룹 생성</div>
+    <div className="flex flex-col pt-10 gap-8 items-center">
+      <div className="text-lg font-bold">PrayU 그룹 생성</div>
+
+      <div className="flex justify-center h-[300px] w-auto">
+        <img
+          className="w-auto h-full object-cover"
+          src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayCardListLarge.png"
+        />
       </div>
-
-      <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png" />
-
-      <div className="text-sm font-bold">그룹명</div>
       <div className="flex flex-col items-center gap-4 w-full ">
         <Input
           type="text"
@@ -75,11 +77,17 @@ const GroupCreatePage: React.FC = () => {
           onClick={() => handleCreateGroup(user?.id, inputGroupName)}
           className="w-full"
           disabled={isDisabledGroupCreateBtn}
+          variant="primary"
         >
           그룹 생성하기
         </Button>
-        <div className="text-xs text-gray-500">
-          기존 그룹에 참여하고 싶은 경우 그룹장에게 초대링크를 요청해 주세요
+        <div className="text-center">
+          <p className="text-xs text-gray-500">
+            기존 그룹에 참여하고 싶은 경우
+          </p>
+          <p className="text-xs text-gray-500">
+            그룹장에게 초대링크를 요청해 주세요
+          </p>
         </div>
       </div>
     </div>

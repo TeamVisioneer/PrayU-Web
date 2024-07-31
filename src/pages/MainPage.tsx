@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
@@ -7,13 +7,13 @@ import useAuth from "../hooks/useAuth";
 import { getDomainUrl } from "@/lib/utils";
 import {
   Carousel,
+  CarouselApi,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
 
 const MainPage: React.FC = () => {
   const { user } = useAuth();
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,14 +25,48 @@ const MainPage: React.FC = () => {
   const from = location.state?.from?.pathname || "/group";
   const redirectUrl = `${baseUrl}${from}`;
 
+  const [api, setApi] = useState<CarouselApi>();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    setCurrentIndex(api.selectedScrollSnap());
+    api.on("select", () => {
+      setCurrentIndex(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  const handleDotsClick = (index: number) => {
+    if (!api) return;
+    setCurrentIndex(index);
+    api.scrollTo(index);
+  };
+
+  const CarouselDots = () => (
+    <div className="flex justify-center mt-4">
+      {Array.from({ length: 3 }, (_, index) => (
+        <span
+          key={index}
+          className={`h-2 w-2 mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
+            currentIndex === index ? "bg-gray-800" : "bg-gray-400"
+          }`}
+          onClick={() => handleDotsClick(index)}
+        ></span>
+      ))}
+    </div>
+  );
+
   return (
     <div className="flex flex-col gap-8 pt-10 text-center">
       <div className="text-lg font-bold">우리만의 기도제목 기록공간 PrayU</div>
-      <Carousel>
+      <Carousel setApi={setApi}>
         <CarouselContent>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-5/6  flex flex-col  items-center">
-              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageInro1.png" />
+            <div className="h-[300px] flex flex-col  items-center">
+              <img
+                className="h-full"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro1.png"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">1. 기도제목 나누기</p>
@@ -45,8 +79,11 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-5/6  flex flex-col  items-center ">
-              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png" />
+            <div className="h-[300px]  flex flex-col  items-center ">
+              <img
+                className="h-full"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">2. 오늘의 기도</p>
@@ -61,8 +98,11 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-5/6 flex flex-col  items-center ">
-              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageInro3.png" />
+            <div className="h-[300px] flex flex-col  items-center ">
+              <img
+                className="h-full"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro3.png"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold"> 3. 나에게 기도해준 사람 보기</p>
@@ -77,6 +117,7 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
         </CarouselContent>
+        <CarouselDots />
       </Carousel>
 
       <Auth
