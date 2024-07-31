@@ -36,18 +36,28 @@ export const fetchUserPrayCardListByGroupId = async (
     .select(
       `*, 
       profiles (id, full_name, avatar_url),
-      pray (id, pray_card_id, user_id, pray_type, created_at, updated_at)`
+      pray (id, pray_card_id, user_id, pray_type, created_at, updated_at, profiles (id, full_name, avatar_url))`
     )
     .eq("user_id", userId)
     .eq("group_id", groupId)
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
+
   if (error) {
     console.error("error", error);
     return null;
   }
-  return data as PrayCardWithProfiles[];
+
+  const sortedData = data.map((data) => ({
+    ...data,
+    pray: data.pray.sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    ),
+  }));
+
+  return sortedData as PrayCardWithProfiles[];
 };
 
 export const createPrayCard = async (

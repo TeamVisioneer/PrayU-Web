@@ -135,6 +135,7 @@ export interface BaseStore {
   groupAndSortByUserId: (data: PrayWithProfiles[]) => {
     [key: string]: PrayWithProfiles[];
   };
+  setReactionDatasForMe: (prayData: PrayWithProfiles[]) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -420,6 +421,17 @@ const useBaseStore = create<BaseStore>()(
         state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
+    },
+    setReactionDatasForMe: (prayData: PrayWithProfiles[]) => {
+      if (prayData)
+        set((state) => {
+          state.prayerList = state.groupAndSortByUserId(prayData);
+          Object.values(PrayType).forEach((type) => {
+            state.reactionCounts[type] = prayData.filter(
+              (pray) => pray.pray_type === type
+            ).length;
+          });
+        });
     },
   }))
 );

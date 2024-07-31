@@ -13,7 +13,7 @@ import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 
 interface PrayCardProps {
-  prayCard: PrayCardWithProfiles | null;
+  prayCard: PrayCardWithProfiles;
   member?: MemberWithProfiles | null;
 }
 
@@ -33,12 +33,13 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   const updatePrayCardContent = useBaseStore(
     (state) => state.updatePrayCardContent
   );
-  const fetchPrayDataByUserId = useBaseStore(
-    (state) => state.fetchPrayDataByUserId
+  const setReactionDatasForMe = useBaseStore(
+    (state) => state.setReactionDatasForMe
   );
 
   const [isScrollable, setIsScrollable] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const prayDatas = prayCard.pray;
 
   const dateDistance = getDateDistance(
     new Date(
@@ -59,15 +60,14 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   };
 
   useEffect(() => {
-    fetchPrayDataByUserId(prayCard?.id, undefined);
-  }, [fetchPrayDataByUserId, prayCard?.id, prayCard?.user_id]);
-
-  useEffect(() => {
     const textarea = textareaRef.current;
+    if (prayDatas) {
+      setReactionDatasForMe(prayDatas);
+    }
     if (textarea) {
       setIsScrollable(textarea.scrollHeight > textarea.clientHeight);
     }
-  }, [inputPrayCardContent]);
+  }, [inputPrayCardContent, prayDatas, setReactionDatasForMe]);
 
   if (!prayDataHash) {
     return (
@@ -77,69 +77,67 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     );
   }
 
-  const PrayCardBody = (
-    <>
-      <div className="relative flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
-        <div className="bg-gradient-to-r from-start/60 via-middle/60 h-15vh via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
-          <div className="flex items-center gap-2 w-full">
-            <div className="flex gap-2 items-center">
-              <p className="text-xl text-white">
-                기도 {dateDistance.days + 1}일차
-              </p>
-            </div>
+  const MyPrayCardBody = (
+    <div className="relative flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
+      <div className="bg-gradient-to-r from-start/60 via-middle/60 h-15vh via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+        <div className="flex items-center gap-2 w-full">
+          <div className="flex gap-2 items-center">
+            <p className="text-xl text-white">
+              기도 {dateDistance.days + 1}일차
+            </p>
           </div>
-          <p className="text-xs text-white w-full text-left">
-            시작일 :{" "}
-            {prayCard?.created_at.split("T")[0] ||
-              member?.updated_at.split("T")[0]}
-          </p>
         </div>
-        <div
-          className={`p-2 flex justify-center h-full overflow-y-auto no-scrollbar ${
-            isScrollable ? "items-start" : "items-center"
-          }`}
-        >
-          {isEditingPrayCard ? (
-            <Textarea
-              ref={textareaRef}
-              className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
-              value={inputPrayCardContent}
-              onChange={(e) => setPrayCardContent(e.target.value)}
-              maxLength={400}
-            />
-          ) : (
-            <p className="whitespace-pre-line">{inputPrayCardContent}</p>
-          )}
-        </div>
-        <div className="absolute bottom-4 right-4">
-          {isEditingPrayCard ? (
-            <button
-              className={`text-white rounded-full bg-middle/90 w-10 h-10 flex justify-center items-center ${
-                !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={() =>
-                handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
-              }
-              disabled={!inputPrayCardContent}
-            >
-              <FaSave className="text-white w-5 h-5" />
-            </button>
-          ) : (
-            <button
-              className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
-              onClick={() => setIsEditingPrayCard(true)}
-            >
-              <FaEdit className="text-white w-5 h-5" />
-            </button>
-          )}
-        </div>
+        <p className="text-xs text-white w-full text-left">
+          시작일 :{" "}
+          {prayCard?.created_at.split("T")[0] ||
+            member?.updated_at.split("T")[0]}
+        </p>
       </div>
-    </>
+      <div
+        className={`p-2 flex justify-center h-full overflow-y-auto no-scrollbar ${
+          isScrollable ? "items-start" : "items-center"
+        }`}
+      >
+        {isEditingPrayCard ? (
+          <Textarea
+            ref={textareaRef}
+            className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
+            value={inputPrayCardContent}
+            onChange={(e) => setPrayCardContent(e.target.value)}
+            maxLength={400}
+          />
+        ) : (
+          <p className="whitespace-pre-line">{inputPrayCardContent}</p>
+        )}
+      </div>
+      <div className="absolute bottom-4 right-4">
+        {isEditingPrayCard ? (
+          <button
+            className={`text-white rounded-full bg-middle/90 w-10 h-10 flex justify-center items-center ${
+              !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={() =>
+              handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
+            }
+            disabled={!inputPrayCardContent}
+          >
+            <FaSave className="text-white w-5 h-5" />
+          </button>
+        ) : (
+          <button
+            className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
+            onClick={() => setIsEditingPrayCard(true)}
+          >
+            <FaEdit className="text-white w-5 h-5" />
+          </button>
+        )}
+      </div>
+    </div>
   );
 
   return (
     <div className="flex flex-col gap-6">
-      {PrayCardBody}
+      {MyPrayCardBody}
       <div className="flex flex-col gap-5">
         <Drawer>
           <DrawerTrigger className="w-full focus:outline-none">
