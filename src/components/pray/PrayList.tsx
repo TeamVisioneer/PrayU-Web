@@ -22,7 +22,7 @@ const PrayList: React.FC = () => {
       </DrawerHeader>
       <div className="overflow-y-auto justify-center items-center">
         {isPrayerListEmpty ? (
-          <div className="flex flex-col gap-4 px-4">
+          <div className="flex flex-col items-center gap-4 px-4">
             <div className="h-[150px] flex flex-col items-center">
               <img
                 className="h-full rounded-md shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
