@@ -1,7 +1,6 @@
 import { Group } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import PrayCardList from "@/components/prayCard/PrayCardList";
-import TodayPrayBtn from "@/components/todayPray/TodayPrayBtn";
 import MyMember from "@/components/member/MyMember";
 import LimitGroupCard from "@/components/group/LimitGroupCard";
 import OtherMemberList from "@/components/member/OtherMemberList";
