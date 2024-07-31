@@ -23,12 +23,6 @@ const GroupPage: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
-  const isOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.isOpenTodayPrayDrawer
-  );
-  const setIsOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenTodayPrayDrawer
-  );
 
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
