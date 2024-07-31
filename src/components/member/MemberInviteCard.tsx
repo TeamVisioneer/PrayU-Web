@@ -1,6 +1,6 @@
 import { KakaoShareButton } from "../KakaoShareBtn";
 
-export const GroupInviteCard = () => {
+export const MemberInviteCard = () => {
   return (
     <div className="flex flex-col gap-4 border p-10 rounded-lg shadow-md bg-white items-center h-60vh">
       <img
@@ -24,4 +24,4 @@ export const GroupInviteCard = () => {
   );
 };
 
-export default GroupInviteCard;
+export default MemberInviteCard;

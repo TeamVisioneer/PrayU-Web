@@ -1,4 +1,4 @@
-import { getISOTodayDate, reduceString } from "../../lib/utils";
+import { reduceString } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -11,7 +11,6 @@ import PrayCardUI from "../prayCard/PrayCardUI";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
-import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 
 interface MemberProps {
@@ -52,20 +51,6 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
       </div>
-    );
-  }
-
-  if (
-    member == null ||
-    userPrayCardList.length === 0 ||
-    userPrayCardList[0].created_at < getISOTodayDate(-6)
-  ) {
-    return (
-      <PrayCardCreateModal
-        currentUserId={currentUserId}
-        groupId={groupId}
-        member={member}
-      />
     );
   }
 

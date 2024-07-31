@@ -16,7 +16,7 @@ import iconUserMono from "@/assets/icon-user-mono.svg";
 interface PrayCardProps {
   currentUserId: string;
   prayCard: PrayCardWithProfiles | null;
-  member?: MemberWithProfiles | undefined;
+  member?: MemberWithProfiles | null;
 }
 
 const PrayCardUI: React.FC<PrayCardProps> = ({

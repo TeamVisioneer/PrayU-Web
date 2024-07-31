@@ -4,6 +4,8 @@ import { ClipLoader } from "react-spinners";
 import { userIdPrayCardListHash } from "../../../supabase/types/tables";
 import OtherMember from "./OtherMember";
 import { getISOTodayDate } from "@/lib/utils";
+import MemberInviteCard from "./MemberInviteCard";
+import TodayPrayBtn from "../todayPray/TodayPrayBtn";
 
 interface OtherMembersProps {
   currentUserId: string;
@@ -15,6 +17,9 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   groupId,
 }) => {
   const memberList = useBaseStore((state) => state.memberList);
+  const fetchMemberListByGroupId = useBaseStore(
+    (state) => state.fetchMemberListByGroupId
+  );
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
@@ -25,7 +30,14 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
 
   useEffect(() => {
     fetchGroupPrayCardList(groupId, startDt, endDt);
-  }, [fetchGroupPrayCardList, groupId, startDt, endDt]);
+    fetchMemberListByGroupId(groupId);
+  }, [
+    fetchGroupPrayCardList,
+    fetchMemberListByGroupId,
+    groupId,
+    startDt,
+    endDt,
+  ]);
 
   if (!memberList || !groupPrayCardList) {
     return (
@@ -47,6 +59,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
     return hash;
   }, {} as userIdPrayCardListHash);
 
+  if (otherMembers.length === 0) return <MemberInviteCard />;
   return (
     <div className="flex flex-col gap-2">
       <div className="text-sm text-gray-950 p-2">
@@ -61,6 +74,9 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
             prayCardList={userIdPrayCardListHash[member.user_id || ""]}
           ></OtherMember>
         ))}
+      </div>
+      <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
+        <TodayPrayBtn />
       </div>
     </div>
   );
