@@ -24,6 +24,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
   );
+
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
@@ -97,6 +98,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   }
 
   const todayDt = getISOTodayDate();
+  const filterdGroupPrayCardList = groupPrayCardList?.filter(
+    (prayCard) =>
+      prayCard.user_id !== currentUserId &&
+      prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length === 0
+  );
   return (
     <Carousel
       setApi={setPrayCardCarouselApi}
@@ -106,18 +112,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     >
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
-        {groupPrayCardList
-          ?.filter(
-            (prayCard) =>
-              prayCard.user_id !== currentUserId &&
-              prayCard.pray?.filter((pray) => pray.created_at >= todayDt)
-                .length === 0
-          )
-          .map((prayCard) => (
-            <CarouselItem key={prayCard.id} className="basis-5/6 h-screen">
-              <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
-            </CarouselItem>
-          ))}
+        {filterdGroupPrayCardList.map((prayCard) => (
+          <CarouselItem key={prayCard.id} className="basis-5/6 h-screen">
+            <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
+          </CarouselItem>
+        ))}
         <CarouselItem className="basis-5/6">{completedItem}</CarouselItem>
         <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>
