@@ -13,15 +13,18 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   prayCard,
 }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
-  const createPray = useBaseStore((state) => state.createPray);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
+
+  const createPray = useBaseStore((state) => state.createPray);
+  const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
+
+  const hasPrayed = Boolean(todayPrayTypeHash[prayCard?.id || ""]);
 
   const handleClick = (prayType: PrayType) => () => {
     createPray(prayCard?.id, currentUserId, prayType);
@@ -41,8 +44,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     }
   };
 
-  const hasPrayed = Boolean(todayPrayTypeHash[prayCard?.id || ""]);
-
   return (
     <div className="flex justify-center p-2 space-x-8">
       {Object.values(PrayType).map((type) => {
@@ -53,14 +54,18 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           <button
             key={type}
             onClick={handleClick(type as PrayType)}
-            className={`w-12 h-12 flex flex-col items-center rounded-2xl drop-shadow-[0_4px_2px_rgb(0,0,0,0.3)] ${
-              hasPrayed && todayPrayTypeHash[prayCard?.id || ""] !== type
-                ? "opacity-20"
-                : "opacity-90"
+            className={`flex justify-center items-center w-12 h-12 rounded-lg ${
+              emojiData.bgColor
+            } ${
+              !hasPrayed
+                ? "opacity-90 shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
+                : todayPrayTypeHash[prayCard?.id || ""] == type
+                ? "opacity-90 inner-shadow"
+                : "opacity-20 shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
             }`}
             disabled={hasPrayed}
           >
-            <img src={emojiData.reactImg} className="w-12 h-12" />
+            <img src={emojiData.icon} className="w-9 h-9" />
           </button>
         );
       })}

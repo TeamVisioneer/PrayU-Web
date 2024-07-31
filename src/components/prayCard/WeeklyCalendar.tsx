@@ -19,7 +19,6 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
       <img
         src={PrayTypeDatas[prayType as PrayType]?.reactImg}
         alt={PrayTypeDatas[prayType as PrayType]?.emoji}
-        className="w-7 h-7"
       ></img>
     );
   };
