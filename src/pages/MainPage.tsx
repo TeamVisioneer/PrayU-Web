@@ -63,8 +63,11 @@ const MainPage: React.FC = () => {
       <Carousel setApi={setApi}>
         <CarouselContent>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-5/6  flex flex-col  items-center">
-              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro1.png" />
+            <div className="h-[300px] flex flex-col  items-center">
+              <img
+                className="h-full"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro1.png"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">1. 기도제목 나누기</p>
@@ -77,8 +80,11 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-5/6  flex flex-col  items-center ">
-              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png" />
+            <div className="h-[300px]  flex flex-col  items-center ">
+              <img
+                className="h-full"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">2. 오늘의 기도</p>
@@ -93,8 +99,11 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="w-5/6 flex flex-col  items-center ">
-              <img src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro3.png" />
+            <div className="h-[300px] flex flex-col  items-center ">
+              <img
+                className="h-full"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro3.png"
+              />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold"> 3. 나에게 기도해준 사람 보기</p>
