@@ -11,19 +11,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
 
 const MainPage: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  if (user) {
-    navigate("/group", { replace: true });
-  }
-
-  const baseUrl = getDomainUrl();
-  const from = location.state?.from?.pathname || "/group";
-  const redirectUrl = `${baseUrl}${from}`;
 
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -56,8 +47,54 @@ const MainPage: React.FC = () => {
     </div>
   );
 
+  const KakaoLoginBtn = () => {
+    const location = useLocation();
+    const baseUrl = getDomainUrl();
+    const from = location.state?.from?.pathname || "/group";
+    const redirectUrl = `${baseUrl}${from}`;
+    return (
+      <Auth
+        redirectTo={redirectUrl}
+        supabaseClient={supabase}
+        appearance={{
+          theme: ThemeSupa,
+          style: {
+            button: { background: "#FFE237", color: "black" },
+          },
+        }}
+        localization={{
+          variables: {
+            sign_in: {
+              social_provider_text: "카카오로 시작하기",
+            },
+            sign_up: {
+              social_provider_text: "카카오로 시작하기",
+            },
+          },
+        }}
+        onlyThirdPartyProviders={true}
+        providers={["kakao"]}
+      />
+    );
+  };
+
+  const PrayUStartBtn = () => {
+    const navigate = useNavigate();
+    return (
+      <div className="flex items-center h-[75px]">
+        <Button
+          variant="primary"
+          className="w-32"
+          onClick={() => navigate("/group")}
+        >
+          PrayU 시작하기
+        </Button>
+      </div>
+    );
+  };
+
   return (
-    <div className="flex flex-col gap-8 text-center">
+    <div className="flex flex-col gap-6 items-center text-center">
       <div className="text-lg font-bold">우리만의 기도제목 기록공간 PrayU</div>
       <Carousel setApi={setApi}>
         <CarouselContent>
@@ -139,29 +176,7 @@ const MainPage: React.FC = () => {
         <CarouselDots />
       </Carousel>
 
-      <Auth
-        redirectTo={redirectUrl}
-        supabaseClient={supabase}
-        appearance={{
-          theme: ThemeSupa,
-          style: {
-            button: { background: "#FFE237", color: "black" },
-            container: { width: "80%", margin: "0 auto" },
-          },
-        }}
-        localization={{
-          variables: {
-            sign_in: {
-              social_provider_text: "카카오 로그인",
-            },
-            sign_up: {
-              social_provider_text: "카카오 로그인",
-            },
-          },
-        }}
-        onlyThirdPartyProviders={true}
-        providers={["kakao"]}
-      />
+      {user ? <PrayUStartBtn /> : <KakaoLoginBtn />}
     </div>
   );
 };
