@@ -161,10 +161,14 @@ const useBaseStore = create<BaseStore>()(
           state.user = session?.user || null;
         });
         // Sentry 설정
-        Sentry.setUser({
-          id: session?.user.id,
-          email: session?.user.email,
-        });
+        if (
+          import.meta.env.VITE_ENV === "staging" ||
+          import.meta.env.VITE_ENV === "prod"
+        )
+          Sentry.setUser({
+            id: session?.user.id,
+            email: session?.user.email,
+          });
       });
 
       return () => {
