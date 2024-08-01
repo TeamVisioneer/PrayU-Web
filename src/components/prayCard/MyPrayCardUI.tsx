@@ -55,7 +55,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   );
 
   const onClickPrayerList = () => {
-    analyticsTrack("클릭_기도카드_반응리스트", {});
+    analyticsTrack("클릭_기도카드_반응결과", {});
   };
 
   const handleEditClick = () => {

@@ -14,6 +14,7 @@ const MyMemberBtn: React.FC = () => {
     setIsOpenTodayPrayDrawer(false);
     setIsOpenMyMemberDrawer(true);
     analyticsTrack("클릭_멤버_본인", { where: "PrayCardList" });
+    analyticsTrack("클릭_오늘의기도_완료", {});
   };
 
   return (

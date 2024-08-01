@@ -11,7 +11,6 @@ import { getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../KakaoShareBtn";
 import MyMemberBtn from "../todayPray/MyMemberBtn";
 import { PrayTypeDatas } from "@/Enums/prayType";
-import { analyticsTrack } from "@/analytics/analytics";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -61,12 +60,6 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
 
       if (currentIndex === 0) prayCardCarouselApi.scrollNext();
-      if (currentIndex === carouselLength - 2) {
-        analyticsTrack("클릭_오늘의기도_완료", {
-          group_id: groupId,
-          index: currentIndex,
-        });
-      }
       if (currentIndex === carouselLength - 1) {
         prayCardCarouselApi.scrollPrev();
       }
