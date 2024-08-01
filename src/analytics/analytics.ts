@@ -1,11 +1,13 @@
 import Analytics from "analytics";
 import amplitudePlugin from "@analytics/amplitude";
 
+const apiKey = import.meta.env.VITE_AMPLITUDE_API_KEY;
+
 export const analytics = Analytics({
   app: "awesome-app",
   plugins: [
     amplitudePlugin({
-      apiKey: "3045d3fe56e7bc3e11793d51ce1da755",
+      apiKey: apiKey,
       options: {
         trackingOptions: {
           ip_address: false,
