@@ -35,6 +35,7 @@ import {
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
+import * as Sentry from "@sentry/react";
 
 export interface BaseStore {
   // user
@@ -158,6 +159,11 @@ const useBaseStore = create<BaseStore>()(
       } = supabase.auth.onAuthStateChange((_event, session) => {
         set((state) => {
           state.user = session?.user || null;
+        });
+        // Sentry 설정
+        Sentry.setUser({
+          id: session?.user.id,
+          email: session?.user.email,
         });
       });
 
