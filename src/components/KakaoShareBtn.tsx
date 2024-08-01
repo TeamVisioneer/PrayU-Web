@@ -57,7 +57,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     script.crossOrigin = "anonymous";
     script.async = true;
 
-    window.onload = () => {
+    script.onload = () => {
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
       }
