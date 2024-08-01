@@ -39,7 +39,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
 
   const [displayedContent, setDisplayedContent] =
     useState(inputPrayCardContent);
-  const [isOverflow, setIsOverflow] = useState(false);
+
   const contentRef = useRef<HTMLDivElement>(null);
 
   const prayDatas = prayCard.pray;
@@ -70,15 +70,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     }
   }, [prayDatas, setReactionDatasForMe]);
 
-  useEffect(() => {
-    const contentElement = contentRef.current;
-    if (contentElement) {
-      const isContentOverflowing =
-        contentElement.scrollHeight > contentElement.clientHeight;
-      setIsOverflow(isContentOverflowing);
-    }
-  }, [inputPrayCardContent, displayedContent]);
-
   if (!prayDataHash) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -105,9 +96,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
       </div>
       <div
         ref={contentRef}
-        className={`p-2 flex h-full overflow-y-auto no-scrollbar justify-center ${
-          isOverflow ? "items-start" : "items-center"
-        }`}
+        className="px-[21px] py-[25px] items-start h-full overflow-y-auto no-scrollbar"
       >
         {isEditingPrayCard ? (
           <Textarea
