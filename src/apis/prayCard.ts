@@ -4,18 +4,26 @@ import { PrayCard, PrayCardWithProfiles } from "../../supabase/types/tables";
 
 export const fetchGroupPrayCardList = async (
   groupId: string | undefined,
+  currentUserId: string,
   startDt: string,
   endDt: string
 ): Promise<PrayCardWithProfiles[] | null> => {
   if (!groupId) return null;
   const { data, error } = await supabase
     .from("pray_card")
-    .select(`*, profiles (id, full_name, avatar_url)`)
+    .select(
+      `*,
+      profiles (id, full_name, avatar_url),
+      pray (*, 
+        profiles (id, full_name, avatar_url)
+      )`
+    )
     .eq("group_id", groupId)
+    .eq("pray.user_id", currentUserId)
     .gte("created_at", startDt)
     .lt("created_at", endDt)
     .is("deleted_at", null)
-    .order("created_at", { ascending: false });
+    .order("updated_at", { ascending: false });
 
   if (error) {
     console.error("error", error);
@@ -34,9 +42,11 @@ export const fetchUserPrayCardListByGroupId = async (
   const { data, error } = await supabase
     .from("pray_card")
     .select(
-      `*, 
+      `*,
       profiles (id, full_name, avatar_url),
-      pray (id, pray_card_id, user_id, pray_type, created_at, updated_at, profiles (id, full_name, avatar_url))`
+      pray (*, 
+        profiles (id, full_name, avatar_url)
+      )`
     )
     .eq("user_id", userId)
     .eq("group_id", groupId)

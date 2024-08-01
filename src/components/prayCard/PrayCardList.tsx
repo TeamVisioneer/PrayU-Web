@@ -10,6 +10,7 @@ import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../KakaoShareBtn";
 import MyMemberBtn from "../todayPray/MyMemberBtn";
+import { PrayTypeDatas } from "@/Enums/prayType";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -24,6 +25,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
   );
+
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
@@ -36,10 +38,15 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
 
   const completedItem = (
     <div className="flex flex-col gap-4 justify-center items-center pt-10">
-      <h1 className="font-bold text-xl">기도 완료</h1>
-      <div className="text-grayText text-center">
-        <h1>당신의 기도제목을</h1>
-        <h1>확인하세요</h1>
+      <img
+        src={PrayTypeDatas["pray"].img}
+        alt={PrayTypeDatas["pray"].emoji}
+        className="w-16 h-16 opacity-100"
+      />
+      <h1 className="font-bold text-xl">오늘의 기도 완료</h1>
+      <div className="text-gray-400 text-center">
+        <h1>당신을 위해 기도한</h1>
+        <h1>사람들을 확인해보세요</h1>
       </div>
       <MyMemberBtn />
     </div>
@@ -47,14 +54,21 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
 
   useEffect(() => {
     // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
-    fetchGroupPrayCardList(groupId, startDt, endDt);
+    fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
       if (currentIndex === 0) prayCardCarouselApi.scrollNext();
       if (currentIndex === carouselLength - 1) prayCardCarouselApi.scrollPrev();
     });
-  }, [prayCardCarouselApi, fetchGroupPrayCardList, groupId, startDt, endDt]);
+  }, [
+    prayCardCarouselApi,
+    fetchGroupPrayCardList,
+    groupId,
+    currentUserId,
+    startDt,
+    endDt,
+  ]);
 
   if (!groupPrayCardList) {
     return (
@@ -64,6 +78,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     );
   }
 
+  // TODO: member 가 아예 없는 경우와 기도카드가 올라오지 않은 경우
   if (groupPrayCardList.length == 1) {
     return (
       <div className="flex flex-col justify-center items-center p-10 gap-4">
@@ -88,6 +103,12 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     );
   }
 
+  const todayDt = getISOTodayDate();
+  const filterdGroupPrayCardList = groupPrayCardList?.filter(
+    (prayCard) =>
+      prayCard.user_id !== currentUserId &&
+      prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length === 0
+  );
   return (
     <Carousel
       setApi={setPrayCardCarouselApi}
@@ -97,13 +118,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     >
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
-        {groupPrayCardList
-          ?.filter((prayCard) => prayCard.user_id !== currentUserId)
-          .map((prayCard) => (
-            <CarouselItem key={prayCard.id} className="basis-5/6 h-screen">
-              <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
-            </CarouselItem>
-          ))}
+        {filterdGroupPrayCardList.map((prayCard) => (
+          <CarouselItem key={prayCard.id} className="basis-5/6 h-screen">
+            <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
+          </CarouselItem>
+        ))}
         <CarouselItem className="basis-5/6">{completedItem}</CarouselItem>
         <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>

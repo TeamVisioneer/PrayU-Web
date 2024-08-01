@@ -28,13 +28,15 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   const startDt = getISOTodayDate(-6);
   const endDt = getISOTodayDate(1);
 
+  // PrayCardList 멤버리스트에서는 PrayCardList 불러오지 않기
   useEffect(() => {
-    fetchGroupPrayCardList(groupId, startDt, endDt);
+    fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
     fetchMemberListByGroupId(groupId);
   }, [
     fetchGroupPrayCardList,
     fetchMemberListByGroupId,
     groupId,
+    currentUserId,
     startDt,
     endDt,
   ]);
@@ -51,6 +53,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
     (member) => member.user_id !== currentUserId
   );
 
+  // TODO: 이것도 제거하기
   const userIdPrayCardListHash = memberList.reduce((hash, member) => {
     const prayCardList = groupPrayCardList.filter(
       (prayCard) => prayCard.user_id === member.user_id
