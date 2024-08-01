@@ -44,7 +44,7 @@ const MainPage: React.FC = () => {
 
   const CarouselDots = () => (
     <div className="flex justify-center mt-4">
-      {Array.from({ length: 3 }, (_, index) => (
+      {Array.from({ length: 4 }, (_, index) => (
         <span
           key={index}
           className={`h-2 w-2 mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
@@ -69,7 +69,7 @@ const MainPage: React.FC = () => {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <p className="text-lg font-bold">1. 기도제목 나누기</p>
+              <p className="text-lg font-bold">1. 기도제목 나눔</p>
               <div>
                 <p className="text-sm text-gray-500">PrayU 는 그룹 내에서</p>
                 <p className="text-sm text-gray-500">
@@ -79,7 +79,7 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="h-[300px]  flex flex-col  items-center ">
+            <div className="h-[300px] flex flex-col  items-center">
               <img
                 className="h-full"
                 src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro2.png"
@@ -89,10 +89,29 @@ const MainPage: React.FC = () => {
               <p className="text-lg font-bold">2. 오늘의 기도</p>
               <div>
                 <p className="text-sm text-gray-500">
-                  일주일 동안 기도제목을 서로
+                  기도제목은 일주일 동안 오늘의 기도에 올라가요
                 </p>
                 <p className="text-sm text-gray-500">
-                  확인하고 반응할 수 있어요
+                  매주 꾸준히 기도제목을 작성해 보아요
+                </p>
+              </div>
+            </div>
+          </CarouselItem>
+          <CarouselItem className="flex flex-col items-center gap-4">
+            <div className="h-[300px]  flex flex-col  items-center ">
+              <img
+                className="h-full"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro3.png"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-lg font-bold">3. 함께하는 기도</p>
+              <div>
+                <p className="text-sm text-gray-500">
+                  친구들의 기도제목을 볼 수 있어요
+                </p>
+                <p className="text-sm text-gray-500">
+                  꾸준히 서로 반응하며 함께 기도해 보아요
                 </p>
               </div>
             </div>
@@ -101,17 +120,17 @@ const MainPage: React.FC = () => {
             <div className="h-[300px] flex flex-col  items-center ">
               <img
                 className="h-full"
-                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro3.png"
+                src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/MainPageIntro4.png"
               />
             </div>
             <div className="flex flex-col gap-2">
-              <p className="text-lg font-bold"> 3. 나에게 기도해준 사람 보기</p>
+              <p className="text-lg font-bold"> 4. 내게 기도해준 친구</p>
               <div>
                 <p className="text-sm text-gray-500">
-                  작성한 기도제목은 오늘의 기도에 올라가요
+                  내 기도제목이 오늘의 기도에 있는 동안
                 </p>
                 <p className="text-sm text-gray-500">
-                  나에게 기도해준 사람도 확인할 수 있어요
+                  내게 기도해준 친구들을 확인할 수 있어요
                 </p>
               </div>
             </div>
