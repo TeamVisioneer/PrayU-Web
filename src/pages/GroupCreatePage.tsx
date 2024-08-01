@@ -57,7 +57,16 @@ const GroupCreatePage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6 items-center">
-      <div className="text-lg font-bold">PrayU 그룹 생성</div>
+      <div className="text-lg font-bold">
+        PrayU 그룹
+        <button
+          onClick={() => {
+            throw new Error("버그 테스트");
+          }}
+        >
+          생성
+        </button>
+      </div>
 
       <div className="flex justify-center h-[300px] w-max">
         <img

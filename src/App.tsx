@@ -8,7 +8,7 @@ import GroupCreatePage from "./pages/GroupCreatePage";
 const App = () => {
   return (
     <div className="w-screen h-screen bg-mainBg ">
-      <div className="mx-auto max-w-[480px] p-5">
+      <div className="mx-auto max-w-[480px] p-5 overflow-hidden">
         <BrowserRouter>
           <AuthProvider>
             <Routes>
