@@ -18,6 +18,10 @@ const GroupPage: React.FC = () => {
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const getGroup = useBaseStore((state) => state.getGroup);
+  const memberList = useBaseStore((state) => state.memberList) || [];
+  const fetchMemberListByGroupId = useBaseStore(
+    (state) => state.fetchMemberListByGroupId
+  );
 
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
@@ -47,6 +51,10 @@ const GroupPage: React.FC = () => {
     if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
   }, [user, targetGroup, fetchIsPrayToday]);
 
+  useEffect(() => {
+    if (targetGroup) fetchMemberListByGroupId(targetGroup.id);
+  }, [fetchMemberListByGroupId, targetGroup]);
+
   if (!groupList || (paramsGroupId && !targetGroup) || isPrayToday == null) {
     return null;
   }
@@ -62,7 +70,10 @@ const GroupPage: React.FC = () => {
           img={inviteMemberIcon}
         ></KakaoShareButton>
         <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
-          <div className="text-lg font-bold">{targetGroup?.name}</div>
+          <div className="text-lg font-bold flex items-center gap-1">
+            {targetGroup?.name}
+            <span className="text-sm text-gray-500">{memberList?.length}</span>
+          </div>
         </div>
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>

@@ -65,9 +65,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   if (otherMembers.length === 0) return <MemberInviteCard />;
   return (
     <div className="flex flex-col gap-2">
-      <div className="text-sm text-gray-950 p-2">
-        Members ({otherMembers.length})
-      </div>
+      <div className="text-sm text-gray-500 p-2">기도 구성원</div>
       <div className="flex flex-col gap-4">
         {otherMembers.map((member) => (
           <OtherMember
