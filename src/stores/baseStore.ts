@@ -35,11 +35,8 @@ import {
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
-<<<<<<< HEAD
 import * as Sentry from "@sentry/react";
-=======
 import { analytics } from "@/analytics/analytics";
->>>>>>> 4e2c569 (build: analytics-amplitude setting)
 
 export interface BaseStore {
   // user
