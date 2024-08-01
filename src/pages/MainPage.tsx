@@ -81,13 +81,15 @@ const MainPage: React.FC = () => {
   const PrayUStartBtn = () => {
     const navigate = useNavigate();
     return (
-      <Button
-        variant="primary"
-        className="w-32"
-        onClick={() => navigate("/group")}
-      >
-        PrayU 시작하기
-      </Button>
+      <div className="flex items-center h-[75px]">
+        <Button
+          variant="primary"
+          className="w-32"
+          onClick={() => navigate("/group")}
+        >
+          PrayU 시작하기
+        </Button>
+      </div>
     );
   };
 
