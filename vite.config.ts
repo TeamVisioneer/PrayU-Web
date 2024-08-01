@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
         org: "visioneer",
         project: "prayu-web",
         authToken: env.VITE_SENTRY_AUTH_TOKEN,
+        telemetry: false,
       }),
     ],
     resolve: {
