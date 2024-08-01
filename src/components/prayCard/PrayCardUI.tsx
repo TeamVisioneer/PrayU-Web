@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
@@ -21,7 +21,6 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
     fetchPrayDataByUserId: state.fetchPrayDataByUserId,
   }));
 
-  const [isOverflow, setIsOverflow] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,15 +28,6 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
       fetchPrayDataByUserId(prayCard.id, currentUserId);
     }
   }, [currentUserId, fetchPrayDataByUserId, prayCard?.id]);
-
-  useEffect(() => {
-    const contentElement = contentRef.current;
-    if (contentElement) {
-      const isContentOverflowing =
-        contentElement.scrollHeight > contentElement.clientHeight;
-      setIsOverflow(isContentOverflowing);
-    }
-  }, [prayCard?.content, member?.pray_summary]);
 
   if (!prayDataHash) {
     return (
