@@ -7,7 +7,7 @@ import GroupMenuBtn from "../components/GroupMenuBtn";
 import { getDomainUrl } from "@/lib/utils";
 import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
 import GroupBody from "@/components/group/GroupBody";
-import { analytics, analyticsTrack } from "@/analytics/analytics";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -60,16 +60,6 @@ const GroupPage: React.FC = () => {
 
   const domainUrl = getDomainUrl();
 
-  // TODO: 카톡 공유 클릭이 안돼서 알아봐야함!
-  const handleShareClick = () => {
-    // TODO: 얘를 함수화 시켜서 env가 dev일 때는 동작안하게 해야돼!
-    analytics.track("클릭_카카오_공유", {
-      groupId: targetGroup?.id,
-      groupName: targetGroup?.name,
-      where: "GroupPage",
-    });
-  };
-
   const handleMenuButtonClick = () => {
     analyticsTrack("클릭_그룹_메뉴", {
       group_id: targetGroup?.id,
@@ -80,13 +70,11 @@ const GroupPage: React.FC = () => {
   return (
     <div className="flex flex-col gap-5">
       <div className="relative flex justify-between items-center">
-        <div onClick={() => handleShareClick()}>
-          <KakaoShareButton
-            groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
-            id="groupPage"
-            img={inviteMemberIcon}
-          />
-        </div>
+        <KakaoShareButton
+          groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
+          id="groupPage"
+          img={inviteMemberIcon}
+        />
 
         <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
           <div className="text-lg font-bold flex items-center gap-1">

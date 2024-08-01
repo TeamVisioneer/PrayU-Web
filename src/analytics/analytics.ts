@@ -16,7 +16,6 @@ export const analytics = Analytics({
 });
 
 export function analyticsTrack(eventName: string, eventProperties: object) {
-  // TODO: 얘가 dev가 아닐 때로 바꿔줘야 함!
   if (
     import.meta.env.VITE_ENV == "staging" ||
     import.meta.env.VITE_ENV == "prod"

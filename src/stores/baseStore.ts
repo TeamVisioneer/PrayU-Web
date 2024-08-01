@@ -170,6 +170,13 @@ const useBaseStore = create<BaseStore>()(
       } = supabase.auth.onAuthStateChange((_event, session) => {
         set((state) => {
           state.user = session?.user || null;
+          if (state.user) {
+            analytics.identify(state.user?.id, {
+              email: state.user?.user_metadata?.email,
+              full_name: state.user?.user_metadata?.full_name,
+              user_name: state.user?.user_metadata?.user_name,
+            });
+          }
         });
         // Sentry 설정
         if (

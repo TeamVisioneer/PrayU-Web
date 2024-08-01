@@ -104,11 +104,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     );
   }
   return (
-    <button
-      id={id}
-      onClick={() => console.log("hi")}
-      className="bg-mainBg p-2 rounded-md"
-    >
+    <button id={id} className="bg-mainBg p-2 rounded-md">
       <img src={img ?? kakaoDefaultImage} className="w-5 h-5" />
     </button>
   );
