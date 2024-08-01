@@ -74,32 +74,33 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const prayDatasForMe = prayCard.pray;
 
   const MyMemberUI = (
-    <div className="w-full flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
-      <h3 className="flex font-bold">내 기도제목</h3>
-      <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis ">
-        {inputPrayCardContent}
+    <div className="w-full flex flex-col gap-4 cursor-pointer bg-white p-[25px] rounded-[15px] shadow-member">
+      <div className="flex flex-col gap-2">
+        <h3 className="flex font-bold text-lg">내 기도제목</h3>
+        <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">
+          {inputPrayCardContent}
+        </div>
       </div>
-      <div className="flex items-center ">
+
+      <div className="flex">
         <div
-          className="w-fit flex bg-gray-100 rounded-lg p-2 gap-3"
+          className="w-fit flex bg-gray-100 rounded-lg px-4 py-2 gap-[18px]"
           onClick={() => handleClick()}
         >
           {Object.values(PrayType).map((type) => {
             return (
-              <div key={type} className="flex">
-                <div className="flex  gap-1 ">
-                  <img
-                    src={PrayTypeDatas[type].img}
-                    alt={PrayTypeDatas[type].emoji}
-                    className="w-4 h-4 opacity-90"
-                  />
-                  <p className="text-xs text-gray-600">
-                    {
-                      prayDatasForMe?.filter((pray) => pray.pray_type === type)
-                        .length
-                    }
-                  </p>
-                </div>
+              <div key={type} className="flex items-center gap-1 ">
+                <img
+                  src={PrayTypeDatas[type].img}
+                  alt={PrayTypeDatas[type].emoji}
+                  className="w-4 h-4 opacity-90"
+                />
+                <p className="text-sm text-dark">
+                  {
+                    prayDatasForMe?.filter((pray) => pray.pray_type === type)
+                      .length
+                  }
+                </p>
               </div>
             );
           })}

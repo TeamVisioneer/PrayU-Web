@@ -38,11 +38,11 @@ const OtherMember: React.FC<OtherMemberProps> = ({
   };
 
   const memberUI = (
-    <div className="flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
+    <div className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl shadow-member">
       <div className="flex items-center gap-2">
         <img
           src={member.profiles.avatar_url || ""}
-          className="w-5 h-5 rounded-full"
+          className="w-8 h-8 rounded-full"
         />
         <h3>{member.profiles.full_name}</h3>
       </div>
