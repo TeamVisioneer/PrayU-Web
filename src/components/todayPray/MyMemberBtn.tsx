@@ -1,5 +1,6 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const MyMemberBtn: React.FC = () => {
   const setIsOpenMyMemberDrawer = useBaseStore(
@@ -9,13 +10,18 @@ const MyMemberBtn: React.FC = () => {
     (state) => state.setIsOpenTodayPrayDrawer
   );
 
+  const onClickMyMemberBtn = () => {
+    setIsOpenTodayPrayDrawer(false);
+    setIsOpenMyMemberDrawer(true);
+    analyticsTrack("클릭_멤버_본인", { where: "PrayCardList" });
+  };
+
   return (
     <Button
       variant="primary"
       className="w-32"
       onClick={() => {
-        setIsOpenTodayPrayDrawer(false);
-        setIsOpenMyMemberDrawer(true);
+        onClickMyMemberBtn();
       }}
     >
       내 기도 확인하기

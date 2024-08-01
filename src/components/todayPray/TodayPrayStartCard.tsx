@@ -45,7 +45,7 @@ export const TodayPrayStartCard = () => {
             </div>
           </div>
         </div>
-        <TodayPrayBtn />
+        <TodayPrayBtn where="TodayPrayStartCard" />
       </div>
     </>
   );

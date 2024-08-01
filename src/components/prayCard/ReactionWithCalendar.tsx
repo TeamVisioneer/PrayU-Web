@@ -6,9 +6,10 @@ import { KakaoShareButton } from "../KakaoShareBtn";
 
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles | null;
+  where: string;
 }
 
-const ReactionWithCalendar: React.FC<PrayCardProps> = ({ prayCard }) => {
+const ReactionWithCalendar: React.FC<PrayCardProps> = ({ prayCard, where }) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const currentUserId = useBaseStore((state) => state.user?.id);
 
@@ -31,7 +32,11 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({ prayCard }) => {
         prayCard={prayCard}
         prayData={prayDataHash[prayCard?.id || ""] || []}
       />
-      <ReactionBtn currentUserId={currentUserId!} prayCard={prayCard} />
+      <ReactionBtn
+        currentUserId={currentUserId!}
+        prayCard={prayCard}
+        where={where}
+      />
     </div>
   );
 };

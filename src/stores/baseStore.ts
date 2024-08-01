@@ -35,7 +35,11 @@ import {
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
+<<<<<<< HEAD
 import * as Sentry from "@sentry/react";
+=======
+import { analytics } from "@/analytics/analytics";
+>>>>>>> 4e2c569 (build: analytics-amplitude setting)
 
 export interface BaseStore {
   // user
@@ -152,6 +156,13 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.user = session?.user || null;
         state.userLoading = false;
+        if (state.user) {
+          analytics.identify(state.user?.id, {
+            email: state.user?.user_metadata?.email,
+            full_name: state.user?.user_metadata?.full_name,
+            user_name: state.user?.user_metadata?.user_name,
+          });
+        }
       });
 
       const {

@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import MyPrayCardUI from "../prayCard/MyPrayCardUI";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface MemberProps {
   currentUserId: string;
@@ -87,9 +88,19 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     </div>
   );
 
+  const onClickMyMember = () => {
+    analyticsTrack("클릭_멤버_본인", {
+      group_id: groupId,
+      where: "MyMember",
+    });
+  };
+
   return (
     <Drawer open={isOpenMyMemberDrawer} onOpenChange={setIsOpenMyMemberDrawer}>
-      <DrawerTrigger className="focus:outline-none">
+      <DrawerTrigger
+        className="focus:outline-none"
+        onClick={() => onClickMyMember()}
+      >
         <div className="flex flex-col items-start gap-2">{MyMemberUI}</div>
       </DrawerTrigger>
 
