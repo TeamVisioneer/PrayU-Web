@@ -28,7 +28,7 @@ export const fetchGroupPrayCardList = async (
       .order("updated_at", { ascending: false });
 
     if (error) {
-      console.error("error", error);
+      Sentry.captureException(error);
       return null;
     }
     return data as PrayCardWithProfiles[];
@@ -62,7 +62,7 @@ export const fetchUserPrayCardListByGroupId = async (
       .range(offset, offset + limit - 1);
 
     if (error) {
-      console.error("error", error);
+      Sentry.captureException(error);
       return null;
     }
 
@@ -96,7 +96,7 @@ export const createPrayCard = async (
       .insert([{ group_id: groupId, user_id: userId, content }])
       .select();
     if (error) {
-      console.error("error", error);
+      Sentry.captureException(error);
       return null;
     }
     return data ? data[0] : null;
@@ -120,7 +120,7 @@ export async function updatePrayCardContent(
       .eq("id", prayCardId);
 
     if (error) {
-      console.error("error", error);
+      Sentry.captureException(error);
       return null;
     }
     return data;

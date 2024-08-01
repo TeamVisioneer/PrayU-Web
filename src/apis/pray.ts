@@ -15,7 +15,7 @@ export const fetchPrayData = async (
       .eq("pray_card_id", prayCardId)
       .is("deleted_at", null);
     if (error) {
-      console.error("error", error);
+      Sentry.captureException(error);
       return null;
     }
     return data as Pray[];
@@ -75,7 +75,7 @@ export const fetchPrayDataByUserId = async (
     const { data, error } = await query;
 
     if (error) {
-      console.error("error", error);
+      Sentry.captureException(error);
       return null;
     }
     return data as PrayWithProfiles[];
@@ -99,7 +99,7 @@ export const createPray = async (
       ])
       .select();
     if (error) {
-      console.error("error", error);
+      Sentry.captureException(error);
       return null;
     }
     return data ? data[0] : null;
