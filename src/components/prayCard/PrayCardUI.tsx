@@ -62,7 +62,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
         </div>
         <div
           ref={contentRef}
-          className={"p-2 items-start h-full overflow-y-auto no-scrollbar"}
+          className="px-[21px] py-[25px] items-start h-full overflow-y-auto no-scrollbar"
         >
           <p className="whitespace-pre-line">
             {prayCard?.content || member?.pray_summary}
