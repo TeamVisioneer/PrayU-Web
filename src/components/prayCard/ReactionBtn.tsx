@@ -4,16 +4,20 @@ import useBaseStore from "@/stores/baseStore";
 import { sleep } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
 
+interface EventOption {
+  where: string;
+}
+
 interface ReactionBtnProps {
   currentUserId: string;
   prayCard: PrayCardWithProfiles | null;
-  where: string;
+  eventOption: EventOption;
 }
 
 const ReactionBtn: React.FC<ReactionBtnProps> = ({
   currentUserId,
   prayCard,
-  where,
+  eventOption,
 }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
@@ -32,7 +36,10 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const handleClick = (prayType: PrayType) => () => {
     createPray(prayCard?.id, currentUserId, prayType);
     if (!isPrayToday) setIsPrayToday(true);
-    analyticsTrack("클릭_기도카드_반응", { pray_type: prayType, where: where });
+    analyticsTrack("클릭_기도카드_반응", {
+      pray_type: prayType,
+      where: eventOption.where,
+    });
     if (prayCardCarouselApi) {
       sleep(500).then(() => {
         if (

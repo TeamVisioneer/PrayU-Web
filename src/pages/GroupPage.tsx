@@ -7,7 +7,6 @@ import GroupMenuBtn from "../components/GroupMenuBtn";
 import { getDomainUrl } from "@/lib/utils";
 import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
 import GroupBody from "@/components/group/GroupBody";
-import { analyticsTrack } from "@/analytics/analytics";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -60,13 +59,6 @@ const GroupPage: React.FC = () => {
 
   const domainUrl = getDomainUrl();
 
-  const handleMenuButtonClick = () => {
-    analyticsTrack("클릭_그룹_메뉴", {
-      group_id: targetGroup?.id,
-      group_name: targetGroup?.name,
-    });
-  };
-
   return (
     <div className="flex flex-col gap-5">
       <div className="relative flex justify-between items-center">
@@ -83,11 +75,7 @@ const GroupPage: React.FC = () => {
           </div>
         </div>
 
-        <GroupMenuBtn
-          userGroupList={groupList}
-          targetGroup={targetGroup}
-          onClick={handleMenuButtonClick}
-        />
+        <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
 
       <GroupBody

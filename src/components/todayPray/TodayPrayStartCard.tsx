@@ -45,7 +45,7 @@ export const TodayPrayStartCard = () => {
             </div>
           </div>
         </div>
-        <TodayPrayBtn where="TodayPrayStartCard" />
+        <TodayPrayBtn eventOption={{ where: "TodayPrayStartCard" }} />
       </div>
     </>
   );

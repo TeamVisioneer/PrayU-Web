@@ -2,17 +2,20 @@ import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 
-interface TodayPrayBtnProps {
+interface EventOption {
   where: string;
 }
+interface TodayPrayBtnProps {
+  eventOption: EventOption;
+}
 
-const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ where }) => {
+const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
   const onClickTodayPrayBtn = () => {
     setIsOpenTodayPrayDrawer(true);
-    analyticsTrack("클릭_오늘의기도_시작", { where: where });
+    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
   };
 
   return (

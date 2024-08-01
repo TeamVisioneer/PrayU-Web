@@ -4,12 +4,19 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import ReactionBtn from "./ReactionBtn";
 import { KakaoShareButton } from "../KakaoShareBtn";
 
-interface PrayCardProps {
-  prayCard: PrayCardWithProfiles | null;
+interface EventOption {
   where: string;
 }
 
-const ReactionWithCalendar: React.FC<PrayCardProps> = ({ prayCard, where }) => {
+interface PrayCardProps {
+  prayCard: PrayCardWithProfiles | null;
+  eventOption: EventOption;
+}
+
+const ReactionWithCalendar: React.FC<PrayCardProps> = ({
+  prayCard,
+  eventOption,
+}) => {
   const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const currentUserId = useBaseStore((state) => state.user?.id);
 
@@ -35,7 +42,7 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({ prayCard, where }) => {
       <ReactionBtn
         currentUserId={currentUserId!}
         prayCard={prayCard}
-        where={where}
+        eventOption={eventOption}
       />
     </div>
   );

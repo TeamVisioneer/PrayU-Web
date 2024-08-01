@@ -17,13 +17,11 @@ import { analyticsTrack } from "@/analytics/analytics";
 interface GroupManuBtnProps {
   userGroupList: Group[];
   targetGroup: Group | null;
-  onClick: () => void;
 }
 
 const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   userGroupList,
   targetGroup,
-  onClick,
 }) => {
   const navigate = useNavigate();
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
@@ -49,11 +47,18 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
     analyticsTrack("클릭_문의", {});
   };
 
+  const onClickSheetTrigeer = () => {
+    analyticsTrack("클릭_그룹_메뉴", {
+      group_id: targetGroup?.id,
+      group_name: targetGroup?.name,
+    });
+  };
+
   return (
     <Sheet>
       <SheetTrigger
         className="flex flex-col items-end focus:outline-none"
-        onClick={() => onClick()}
+        onClick={() => onClickSheetTrigeer()}
       >
         <img src={menuIcon} className="w-8 h-8" />
       </SheetTrigger>

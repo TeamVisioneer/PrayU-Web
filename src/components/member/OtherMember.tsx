@@ -73,7 +73,7 @@ const OtherMember: React.FC<OtherMemberProps> = ({
           currentUserId={currentUserId}
           member={member}
           prayCard={prayCard}
-          where="OtherMember"
+          eventOption={{ where: "OtherMember" }}
         />
         {/* PrayCard */}
       </DrawerContent>

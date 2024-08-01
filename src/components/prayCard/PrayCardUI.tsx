@@ -5,18 +5,22 @@ import { MemberWithProfiles } from "supabase/types/tables";
 import { ClipLoader } from "react-spinners";
 import ReactionWithCalendar from "./ReactionWithCalendar";
 
+interface EventOption {
+  where: string;
+}
+
 interface PrayCardProps {
   currentUserId: string;
   prayCard: PrayCardWithProfiles | null;
   member?: MemberWithProfiles | null;
-  where: string;
+  eventOption: EventOption;
 }
 
 const PrayCardUI: React.FC<PrayCardProps> = ({
   currentUserId,
   member,
   prayCard,
-  where,
+  eventOption,
 }) => {
   const { prayDataHash, fetchPrayDataByUserId } = useBaseStore((state) => ({
     prayDataHash: state.prayDataHash,
@@ -71,7 +75,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
           </p>
         </div>
       </div>
-      <ReactionWithCalendar prayCard={prayCard} where={where} />
+      <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />
     </div>
   );
 };

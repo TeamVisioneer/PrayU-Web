@@ -126,7 +126,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
             <PrayCardUI
               currentUserId={currentUserId}
               prayCard={prayCard}
-              where="PrayCardList"
+              eventOption={{ where: "PrayCardList" }}
             />
           </CarouselItem>
         ))}
