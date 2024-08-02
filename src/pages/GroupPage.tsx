@@ -66,6 +66,7 @@ const GroupPage: React.FC = () => {
           groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
           id="groupPage"
           img={inviteMemberIcon}
+          eventOption={{ where: "GroupPage" }}
         />
 
         <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">

@@ -101,6 +101,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
           groupPageUrl={window.location.href}
           id="paryTodayIntro"
           message="카카오톡으로 초대하기"
+          eventOption={{ where: "PrayCardList" }}
         ></KakaoShareButton>
       </div>
     );
