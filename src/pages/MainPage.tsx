@@ -100,7 +100,7 @@ const MainPage: React.FC = () => {
         <CarouselContent>
           <CarouselItem className="flex flex-col items-center gap-4">
             <div className="h-[300px] flex flex-col  items-center">
-              <img className="h-full" src="/public/images/MainPageIntro1.png" />
+              <img className="h-full" src="/images/MainPageIntro1.png" />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">1. 기도제목 나눔</p>
@@ -114,7 +114,7 @@ const MainPage: React.FC = () => {
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
             <div className="h-[300px] flex flex-col  items-center">
-              <img className="h-full" src="/public/images/MainPageIntro2.png" />
+              <img className="h-full" src="/images/MainPageIntro2.png" />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">2. 오늘의 기도</p>
@@ -130,7 +130,7 @@ const MainPage: React.FC = () => {
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
             <div className="h-[300px]  flex flex-col  items-center ">
-              <img className="h-full" src="/public/images/MainPageIntro3.png" />
+              <img className="h-full" src="/images/MainPageIntro3.png" />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">3. 함께하는 기도</p>
@@ -146,7 +146,7 @@ const MainPage: React.FC = () => {
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
             <div className="h-[300px] flex flex-col  items-center ">
-              <img className="h-full" src="/public/images/MainPageIntro4.png" />
+              <img className="h-full" src="/images/MainPageIntro4.png" />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold"> 4. 내게 기도해준 친구</p>

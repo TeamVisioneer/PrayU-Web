@@ -26,7 +26,7 @@ const PrayList: React.FC = () => {
             <div className="h-[150px] flex flex-col items-center">
               <img
                 className="h-full rounded-md shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
-                src="/public/images/prayList.png"
+                src="/images/prayList.png"
               />
             </div>
             <div className="flex flex-col text-gray-400 text-sm text-center">
