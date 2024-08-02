@@ -1,25 +1,35 @@
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../ui/drawer";
+import useBaseStore from "@/stores/baseStore";
+import { Button } from "../ui/button";
 
-const OpenShareDrawerBtn: React.FC = () => {
+interface OpenShareDrawerBtnProps {
+  message: string;
+  iconUrl?: string;
+}
+
+const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
+  message,
+  iconUrl,
+}) => {
+  const setIsOpenShareDrawer = useBaseStore(
+    (state) => state.setIsOpenShareDrawer
+  );
+  if (iconUrl) {
+    return (
+      <img
+        src={iconUrl}
+        alt="share"
+        onClick={() => setIsOpenShareDrawer(true)}
+      />
+    );
+  }
   return (
-    <Drawer>
-      <DrawerTrigger className="bg-yellow-300 w-32">
-        <p>그룹 초대하기</p>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>초대</DrawerTitle>
-          <DrawerDescription>초대 명세</DrawerDescription>
-        </DrawerHeader>
-      </DrawerContent>
-    </Drawer>
+    <Button
+      variant="primary"
+      className="w-32"
+      onClick={() => setIsOpenShareDrawer(true)}
+    >
+      {message}
+    </Button>
   );
 };
 
