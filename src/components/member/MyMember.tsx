@@ -1,4 +1,3 @@
-import { reduceString } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -69,8 +68,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
       <h3 className="flex font-bold">내 기도제목</h3>
-      <div className="text-left text-sm text-gray-600">
-        {reduceString(inputPrayCardContent, 20)}
+      <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
+        {inputPrayCardContent}
       </div>
       <div className="flex items-center ">
         <div

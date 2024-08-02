@@ -2,7 +2,7 @@ import {
   MemberWithProfiles,
   PrayCardWithProfiles,
 } from "supabase/types/tables";
-import { getISOOnlyDate, getISOTodayDate, reduceString } from "../../lib/utils";
+import { getISOOnlyDate, getISOTodayDate } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -46,8 +46,8 @@ const OtherMember: React.FC<OtherMemberProps> = ({
         />
         <h3>{member.profiles.full_name}</h3>
       </div>
-      <div className="text-left text-sm text-gray-600">
-        {reduceString(member.pray_summary, 20)}
+      <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
+        {member.pray_summary}
       </div>
       <div className="text-gray-400 text-left text-xs">
         {dateDistance.days < 1 ? "오늘" : `${dateDistance.days}일 전`}
