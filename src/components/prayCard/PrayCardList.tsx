@@ -89,7 +89,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
         <div className="h-[300px] flex flex-col items-center">
           <img
             className="h-full rounded-md"
-            src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/KakaoShare.png"
+            src="/public/images/KakaoShare.png"
           />
         </div>
         <div className="text-center">
