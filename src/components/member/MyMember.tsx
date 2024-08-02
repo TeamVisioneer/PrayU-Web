@@ -74,8 +74,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const prayDatasForMe = prayCard.pray;
 
   const MyMemberUI = (
-    <div className="w-full flex flex-col gap-4 cursor-pointer bg-white p-[25px] rounded-[15px] shadow-member">
-      <div className="flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-3 cursor-pointer bg-white p-[25px] rounded-[15px] shadow-member">
+      <div className="flex flex-col gap-1">
         <h3 className="flex font-bold text-lg">내 기도제목</h3>
         <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">
           {inputPrayCardContent}
