@@ -97,9 +97,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
             );
           })}
         </div>
-        <p className=" flex items-center text-gray-500 text-[8px] p-2">
-          누군가 내게 기도했어요 😊
-        </p>
+        {prayDatasForMe && prayDatasForMe.length > 0 && (
+          <p className=" flex items-center text-gray-500 text-[8px] p-2">
+            누군가 내게 기도했어요 😊
+          </p>
+        )}
       </div>
     </div>
   );
