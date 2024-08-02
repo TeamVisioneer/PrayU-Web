@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
-import { KakaoShareButton } from "@/components/KakaoShareBtn";
+import { KakaoShareButton } from "@/components/share/KakaoShareBtn";
 import GroupMenuBtn from "../components/GroupMenuBtn";
 import { getDomainUrl } from "@/lib/utils";
 import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
