@@ -7,6 +7,7 @@ import GroupMenuBtn from "../components/GroupMenuBtn";
 import { getDomainUrl } from "@/lib/utils";
 import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
 import GroupBody from "@/components/group/GroupBody";
+import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -84,6 +85,7 @@ const GroupPage: React.FC = () => {
         groupList={groupList}
         targetGroup={targetGroup}
       />
+      <OpenShareDrawerBtn />
     </div>
   );
 };

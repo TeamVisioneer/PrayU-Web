@@ -4,6 +4,7 @@ import useBaseStore from "@/stores/baseStore";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { useEffect } from "react";
 import { analyticsTrack } from "@/analytics/analytics";
+import { getISOTodayDate } from "@/lib/utils";
 
 interface PrayCardCreateModalProps {
   currentUserId: string | undefined;
@@ -38,9 +39,13 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
     analyticsTrack("클릭_기도카드_생성", { group_id: groupId });
     if (!member) {
       const newMember = await createMember(groupId, currentUserId);
-      await updateMember(newMember?.id, inputPrayCardContent);
+      await updateMember(
+        newMember?.id,
+        inputPrayCardContent,
+        getISOTodayDate()
+      );
     } else {
-      await updateMember(member.id, inputPrayCardContent);
+      await updateMember(member.id, inputPrayCardContent, getISOTodayDate());
     }
     await createPrayCard(groupId, currentUserId, inputPrayCardContent);
     window.location.reload();
