@@ -112,7 +112,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
       </div>
       <div
         ref={contentRef}
-        className="px-[21px] py-[25px] items-start h-full overflow-y-auto no-scrollbar"
+        className="px-[21px] py-[25px] items-start h-full overflow-y-auto no-scrollbar relative"
       >
         {isEditingPrayCard ? (
           <Textarea
@@ -124,28 +124,28 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
         ) : (
           <p className="whitespace-pre-line">{displayedContent}</p>
         )}
-      </div>
-      <div className="absolute bottom-4 right-4">
-        {isEditingPrayCard ? (
-          <button
-            className={`text-white rounded-full bg-middle/90 w-10 h-10 flex justify-center items-center ${
-              !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={() =>
-              handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
-            }
-            disabled={!inputPrayCardContent}
-          >
-            <FaSave className="text-white w-5 h-5" />
-          </button>
-        ) : (
-          <button
-            className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
-            onClick={() => handleEditClick()}
-          >
-            <FaEdit className="text-white w-5 h-5" />
-          </button>
-        )}
+        <div className="absolute top-4 right-4">
+          {isEditingPrayCard ? (
+            <button
+              className={`text-white rounded-full bg-middle/90 w-10 h-10 flex justify-center items-center ${
+                !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
+              }`}
+              onClick={() =>
+                handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
+              }
+              disabled={!inputPrayCardContent}
+            >
+              <FaSave className="text-white w-5 h-5" />
+            </button>
+          ) : (
+            <button
+              className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
+              onClick={() => handleEditClick()}
+            >
+              <FaEdit className="text-white w-5 h-5" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
