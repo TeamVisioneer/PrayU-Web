@@ -82,7 +82,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     );
   }
 
-  if (groupPrayCardList.length == 0) {
+  if (groupPrayCardList.length == 1) {
     return (
       <div className="flex flex-col justify-center items-center p-10 gap-4">
         <p className="text-lg font-bold">아직 올라온 기도카드가 없어요 😭</p>
