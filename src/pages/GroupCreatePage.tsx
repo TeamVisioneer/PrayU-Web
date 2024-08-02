@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "../components/ui/use-toast";
 import { ClipLoader } from "react-spinners";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -38,6 +39,7 @@ const GroupCreatePage: React.FC = () => {
       return;
     }
     setIsDisabledGroupCreateBtn(true);
+    analyticsTrack("클릭_그룹_생성", { group_name: inputGroupName });
     const targetGroup = await createGroup(userId, inputGroupName, "intro");
     targetGroup && navigate("/group/" + targetGroup.id, { replace: true });
   };

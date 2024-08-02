@@ -37,6 +37,7 @@ const PrayList: React.FC = () => {
               groupPageUrl={window.location.href}
               message="카카오톡 링크 공유"
               id="prayList"
+              eventOption={{ where: "PrayList" }}
             />
           </div>
         ) : (

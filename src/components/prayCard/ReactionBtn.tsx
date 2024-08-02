@@ -2,15 +2,22 @@ import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { sleep } from "@/lib/utils";
+import { analyticsTrack } from "@/analytics/analytics";
+
+interface EventOption {
+  where: string;
+}
 
 interface ReactionBtnProps {
   currentUserId: string;
   prayCard: PrayCardWithProfiles | null;
+  eventOption: EventOption;
 }
 
 const ReactionBtn: React.FC<ReactionBtnProps> = ({
   currentUserId,
   prayCard,
+  eventOption,
 }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
@@ -29,6 +36,10 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const handleClick = (prayType: PrayType) => () => {
     createPray(prayCard?.id, currentUserId, prayType);
     if (!isPrayToday) setIsPrayToday(true);
+    analyticsTrack("클릭_기도카드_반응", {
+      pray_type: prayType,
+      where: eventOption.where,
+    });
     if (prayCardCarouselApi) {
       sleep(500).then(() => {
         if (

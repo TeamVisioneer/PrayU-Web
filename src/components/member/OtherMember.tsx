@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/drawer";
 import PrayCardUI from "../prayCard/PrayCardUI";
 import { getDateDistance } from "@toss/date";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface OtherMemberProps {
   currentUserId: string;
@@ -31,6 +32,10 @@ const OtherMember: React.FC<OtherMemberProps> = ({
     new Date(getISOOnlyDate(member?.updated_at ?? null)),
     new Date(getISOTodayDate())
   );
+
+  const onClickOtherMember = () => {
+    analyticsTrack("클릭_멤버_구성원", { member: member.user_id });
+  };
 
   const memberUI = (
     <div className="flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
@@ -52,7 +57,12 @@ const OtherMember: React.FC<OtherMemberProps> = ({
 
   return (
     <Drawer>
-      <DrawerTrigger className="focus:outline-none">{memberUI}</DrawerTrigger>
+      <DrawerTrigger
+        className="focus:outline-none"
+        onClick={() => onClickOtherMember()}
+      >
+        {memberUI}
+      </DrawerTrigger>
       <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full h-[90%] px-10 pb-20 focus:outline-none">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
@@ -63,6 +73,7 @@ const OtherMember: React.FC<OtherMemberProps> = ({
           currentUserId={currentUserId}
           member={member}
           prayCard={prayCard}
+          eventOption={{ where: "OtherMember" }}
         />
         {/* PrayCard */}
       </DrawerContent>

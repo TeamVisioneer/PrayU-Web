@@ -36,6 +36,7 @@ import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
+import { analytics } from "@/analytics/analytics";
 
 export interface BaseStore {
   // user
@@ -152,6 +153,13 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.user = session?.user || null;
         state.userLoading = false;
+        if (state.user) {
+          analytics.identify(state.user?.id, {
+            email: state.user?.user_metadata?.email,
+            full_name: state.user?.user_metadata?.full_name,
+            user_name: state.user?.user_metadata?.user_name,
+          });
+        }
       });
 
       const {
@@ -159,6 +167,13 @@ const useBaseStore = create<BaseStore>()(
       } = supabase.auth.onAuthStateChange((_event, session) => {
         set((state) => {
           state.user = session?.user || null;
+          if (state.user) {
+            analytics.identify(state.user?.id, {
+              email: state.user?.user_metadata?.email,
+              full_name: state.user?.user_metadata?.full_name,
+              user_name: state.user?.user_metadata?.user_name,
+            });
+          }
         });
         // Sentry 설정
         if (

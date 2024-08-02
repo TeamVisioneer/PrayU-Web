@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import useBaseStore from "@/stores/baseStore";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { useEffect } from "react";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface PrayCardCreateModalProps {
   currentUserId: string | undefined;
@@ -34,6 +35,7 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
     groupId: string | undefined
   ) => {
     setIsDisabledPrayCardCreateBtn(true);
+    analyticsTrack("클릭_기도카드_생성", { group_id: groupId });
     if (!member) {
       const newMember = await createMember(groupId, currentUserId);
       await updateMember(newMember?.id, inputPrayCardContent);

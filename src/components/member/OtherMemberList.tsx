@@ -77,7 +77,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
         ))}
       </div>
       <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
-        <TodayPrayBtn />
+        <TodayPrayBtn eventOption={{ where: "OtherMemberList" }} />
       </div>
     </div>
   );

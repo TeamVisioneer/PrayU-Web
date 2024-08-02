@@ -3,10 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import { KakaoShareButton } from "@/components/KakaoShareBtn";
-
 import GroupMenuBtn from "../components/GroupMenuBtn";
 import { getDomainUrl } from "@/lib/utils";
-
 import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
 import GroupBody from "@/components/group/GroupBody";
 
@@ -68,13 +66,16 @@ const GroupPage: React.FC = () => {
           groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
           id="groupPage"
           img={inviteMemberIcon}
-        ></KakaoShareButton>
+          eventOption={{ where: "GroupPage" }}
+        />
+
         <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
           <div className="text-lg font-bold flex items-center gap-1">
             {targetGroup?.name}
             <span className="text-sm text-gray-500">{memberList?.length}</span>
           </div>
         </div>
+
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
 

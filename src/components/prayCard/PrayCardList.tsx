@@ -58,8 +58,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
+
       if (currentIndex === 0) prayCardCarouselApi.scrollNext();
-      if (currentIndex === carouselLength - 1) prayCardCarouselApi.scrollPrev();
+      if (currentIndex === carouselLength - 1) {
+        prayCardCarouselApi.scrollPrev();
+      }
     });
   }, [
     prayCardCarouselApi,
@@ -98,6 +101,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
           groupPageUrl={window.location.href}
           id="paryTodayIntro"
           message="카카오톡으로 초대하기"
+          eventOption={{ where: "PrayCardList" }}
         ></KakaoShareButton>
       </div>
     );
@@ -120,7 +124,11 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
         <CarouselItem className="basis-5/6"></CarouselItem>
         {filterdGroupPrayCardList.map((prayCard) => (
           <CarouselItem key={prayCard.id} className="basis-5/6 h-screen">
-            <PrayCardUI currentUserId={currentUserId} prayCard={prayCard} />
+            <PrayCardUI
+              currentUserId={currentUserId}
+              prayCard={prayCard}
+              eventOption={{ where: "PrayCardList" }}
+            />
           </CarouselItem>
         ))}
         <CarouselItem className="basis-5/6">{completedItem}</CarouselItem>

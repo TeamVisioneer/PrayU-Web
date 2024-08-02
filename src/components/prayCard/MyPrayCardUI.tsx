@@ -11,6 +11,7 @@ import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles;
@@ -53,6 +54,15 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     new Date(getISOTodayDate())
   );
 
+  const onClickPrayerList = () => {
+    analyticsTrack("클릭_기도카드_반응결과", {});
+  };
+
+  const handleEditClick = () => {
+    setIsEditingPrayCard(true);
+    analyticsTrack("클릭_기도카드_수정", {});
+  };
+
   const handleSaveClick = (
     prayCardId: string,
     content: string,
@@ -62,6 +72,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     updateMember(memberId, content);
     setDisplayedContent(content);
     setIsEditingPrayCard(false);
+    analyticsTrack("클릭_기도카드_저장", {});
   };
 
   useEffect(() => {
@@ -125,7 +136,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
         ) : (
           <button
             className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
-            onClick={() => setIsEditingPrayCard(true)}
+            onClick={() => handleEditClick()}
           >
             <FaEdit className="text-white w-5 h-5" />
           </button>
@@ -139,7 +150,10 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
       {MyPrayCardBody}
       <div className="flex flex-col gap-5">
         <Drawer>
-          <DrawerTrigger className="w-full focus:outline-none">
+          <DrawerTrigger
+            className="w-full focus:outline-none"
+            onClick={() => onClickPrayerList()}
+          >
             <div className="flex justify-center gap-2">
               {Object.values(PrayType).map((type) => {
                 if (!reactionCounts) return null;
