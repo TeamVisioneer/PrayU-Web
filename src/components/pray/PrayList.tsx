@@ -17,7 +17,7 @@ const PrayList: React.FC = () => {
   return (
     <DrawerContent className="max-w-[480px] mx-auto w-full h-[400px] focus:outline-none">
       <DrawerHeader>
-        <DrawerTitle>기도해준 사람</DrawerTitle>
+        <DrawerTitle>기도해 준 친구</DrawerTitle>
         <DrawerDescription></DrawerDescription>
       </DrawerHeader>
       <div className="overflow-y-auto justify-center items-center">
@@ -30,8 +30,8 @@ const PrayList: React.FC = () => {
               />
             </div>
             <div className="flex flex-col text-gray-400 text-sm text-center">
-              <p>아직 기도해준 사람이 없어요</p>
-              <p>그룹 채팅방에 오늘의 기도 링크를 전달해주세요</p>
+              <p>아직 기도해 준 친구가 없어요 😭</p>
+              <p>그룹 채팅방에 오늘의 기도 링크를 공유해 보아요</p>
             </div>
             <KakaoShareButton
               groupPageUrl={window.location.href}

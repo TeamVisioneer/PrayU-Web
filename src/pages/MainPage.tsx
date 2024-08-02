@@ -95,7 +95,7 @@ const MainPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6 items-center text-center">
-      <div className="text-lg font-bold">우리만의 기도제목 기록공간 PrayU</div>
+      <div className="text-lg font-bold">우리만의 기도제목 나눔 공간 PrayU</div>
       <Carousel setApi={setApi}>
         <CarouselContent>
           <CarouselItem className="flex flex-col items-center gap-4">
@@ -155,7 +155,7 @@ const MainPage: React.FC = () => {
                   내 기도제목이 오늘의 기도에 있는 동안
                 </p>
                 <p className="text-sm text-gray-500">
-                  내게 기도해준 친구들을 확인할 수 있어요
+                  내게 기도해 준 친구들을 확인할 수 있어요
                 </p>
               </div>
             </div>

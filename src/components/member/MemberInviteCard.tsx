@@ -10,7 +10,7 @@ export const MemberInviteCard = () => {
       <div className="flex flex-col text-center gap-4">
         <div>
           <p className="text-sm text-gray-500">
-            그룹원을 초대하고 오늘의 기도를 시작해 보아요
+            친구들과 함께 오늘의 기도를 시작해 보아요
           </p>
         </div>
         <KakaoShareButton
