@@ -73,7 +73,7 @@ const GroupCreatePage: React.FC = () => {
       <div className="flex justify-center h-[300px] w-max">
         <img
           className="h-full object-cover"
-          src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayCardListLarge.png"
+          src="/images/PrayCardListLarge.png"
         />
       </div>
       <div className="flex flex-col items-center gap-4 w-full ">

@@ -74,8 +74,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
         content: {
           title: "PrayU 우리만의 기도제목 기록공간",
           description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
-          imageUrl:
-            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png",
+          imageUrl: "/images/prayCard.png",
           link: {
             mobileWebUrl: groupPageUrl,
             webUrl: groupPageUrl,
@@ -102,8 +101,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const kakaoDefaultImage =
-    "https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png";
+  const kakaoDefaultImage = "/images/kakaotalk_sharing_btn_medium.png";
 
   if (message) {
     return (

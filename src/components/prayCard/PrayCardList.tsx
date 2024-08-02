@@ -87,10 +87,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
       <div className="flex flex-col justify-center items-center p-10 gap-4">
         <p className="text-lg font-bold">아직 올라온 기도카드가 없어요 😭</p>
         <div className="h-[300px] flex flex-col items-center">
-          <img
-            className="h-full rounded-md"
-            src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/KakaoShare.png"
-          />
+          <img className="h-full rounded-md" src="/images/KakaoShare.png" />
         </div>
         <div className="text-center">
           <p className="text-sm text-gray-500">

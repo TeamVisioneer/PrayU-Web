@@ -4,10 +4,7 @@ export const MemberInviteCard = () => {
   return (
     <div className="flex flex-col gap-4 border p-6 rounded-lg shadow-md bg-white items-center h-60vh overflow-hidden">
       <div className="h-[300px]">
-        <img
-          className="h-full"
-          src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/intro_img_2.png"
-        />
+        <img className="h-full" src="/images/intro_img_2.png" />
       </div>
 
       <div className="flex flex-col text-center gap-4">
