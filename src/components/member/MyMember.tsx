@@ -37,6 +37,14 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
+  const setIsOpenMyPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenMyPrayDrawer
+  );
+
+  const handleClick = () => {
+    setIsOpenMyMemberDrawer(true);
+    setIsOpenMyPrayDrawer(true);
+  };
 
   useEffect(() => {
     getMember(currentUserId, groupId);
@@ -64,26 +72,34 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
       <div className="text-left text-sm text-gray-600">
         {reduceString(inputPrayCardContent, 20)}
       </div>
-      <div className="w-fit flex bg-gray-100 rounded-lg p-2 gap-3">
-        {Object.values(PrayType).map((type) => {
-          return (
-            <div key={type} className="flex">
-              <div className="flex  gap-1 ">
-                <img
-                  src={PrayTypeDatas[type].img}
-                  alt={PrayTypeDatas[type].emoji}
-                  className="w-4 h-4 opacity-90"
-                />
-                <p className="text-xs text-gray-600">
-                  {
-                    prayDatasForMe?.filter((pray) => pray.pray_type === type)
-                      .length
-                  }
-                </p>
+      <div className="flex items-center ">
+        <div
+          className="w-fit flex bg-gray-100 rounded-lg p-2 gap-3"
+          onClick={() => handleClick()}
+        >
+          {Object.values(PrayType).map((type) => {
+            return (
+              <div key={type} className="flex">
+                <div className="flex  gap-1 ">
+                  <img
+                    src={PrayTypeDatas[type].img}
+                    alt={PrayTypeDatas[type].emoji}
+                    className="w-4 h-4 opacity-90"
+                  />
+                  <p className="text-xs text-gray-600">
+                    {
+                      prayDatasForMe?.filter((pray) => pray.pray_type === type)
+                        .length
+                    }
+                  </p>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <p className=" flex items-center text-gray-500 text-[8px] p-2">
+          누군가 내게 기도했어요 😊
+        </p>
       </div>
     </div>
   );

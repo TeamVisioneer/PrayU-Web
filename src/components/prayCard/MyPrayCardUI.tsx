@@ -38,6 +38,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     (state) => state.setReactionDatasForMe
   );
 
+  const isOpenMyPrayDrawer = useBaseStore((state) => state.isOpenMyPrayDrawer);
+  const setIsOpenMyPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenMyPrayDrawer
+  );
+
   const [displayedContent, setDisplayedContent] =
     useState(inputPrayCardContent);
 
@@ -90,7 +95,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   }
 
   const MyPrayCardBody = (
-    <div className="relative flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
+    <div className="flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
       <div className="bg-gradient-to-r from-start/60 via-middle/60 h-15vh via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
         <div className="flex items-center gap-2 w-full">
           <div className="flex gap-2 items-center">
@@ -107,7 +112,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
       </div>
       <div
         ref={contentRef}
-        className="px-[21px] py-[25px] items-start h-full overflow-y-auto no-scrollbar"
+        className="px-[21px] py-[25px] items-start h-full overflow-y-auto no-scrollbar relative"
       >
         {isEditingPrayCard ? (
           <Textarea
@@ -119,28 +124,28 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
         ) : (
           <p className="whitespace-pre-line">{displayedContent}</p>
         )}
-      </div>
-      <div className="absolute bottom-4 right-4">
-        {isEditingPrayCard ? (
-          <button
-            className={`text-white rounded-full bg-middle/90 w-10 h-10 flex justify-center items-center ${
-              !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={() =>
-              handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
-            }
-            disabled={!inputPrayCardContent}
-          >
-            <FaSave className="text-white w-5 h-5" />
-          </button>
-        ) : (
-          <button
-            className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
-            onClick={() => handleEditClick()}
-          >
-            <FaEdit className="text-white w-5 h-5" />
-          </button>
-        )}
+        <div className="absolute top-4 right-4">
+          {isEditingPrayCard ? (
+            <button
+              className={`text-white rounded-full bg-middle/90 w-10 h-10 flex justify-center items-center ${
+                !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
+              }`}
+              onClick={() =>
+                handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
+              }
+              disabled={!inputPrayCardContent}
+            >
+              <FaSave className="text-white w-5 h-5" />
+            </button>
+          ) : (
+            <button
+              className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
+              onClick={() => handleEditClick()}
+            >
+              <FaEdit className="text-white w-5 h-5" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -149,7 +154,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     <div className="flex flex-col gap-6">
       {MyPrayCardBody}
       <div className="flex flex-col gap-5">
-        <Drawer>
+        <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
           <DrawerTrigger
             className="w-full focus:outline-none"
             onClick={() => onClickPrayerList()}
