@@ -6,7 +6,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
-import OpenShareDrawerBtn from "./OpenShareDrawerBtn";
 import { getDomainUrl } from "@/lib/utils";
 import { KakaoShareButton } from "./KakaoShareBtn";
 import { Button } from "../ui/button";
@@ -68,7 +67,6 @@ const ShareDrawer: React.FC = () => {
 
   return (
     <Drawer open={isOpenShareDrawer} onOpenChange={setIsOpenShareDrawer}>
-      <OpenShareDrawerBtn message="그룹 초대하기" />
       <DrawerContent className="bg-mainBg">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>

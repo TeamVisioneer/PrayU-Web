@@ -77,6 +77,7 @@ const GroupPage: React.FC = () => {
         groupList={groupList}
         targetGroup={targetGroup}
       />
+
       <ShareDrawer />
     </div>
   );
