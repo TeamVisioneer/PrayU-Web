@@ -40,9 +40,17 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     (state) => state.setIsOpenMyPrayDrawer
   );
 
+  const onClickMyMemberPray = () => {
+    analyticsTrack("클릭_멤버_본인반응", {
+      group_id: groupId,
+      where: "MyMember",
+    });
+  };
+
   const handleClick = () => {
     setIsOpenMyMemberDrawer(true);
     setIsOpenMyPrayDrawer(true);
+    onClickMyMemberPray();
   };
 
   useEffect(() => {
