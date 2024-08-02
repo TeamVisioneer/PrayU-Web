@@ -51,13 +51,14 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   }, [member, setPrayCardContent]);
 
   return (
-    <div className="flex flex-col items-center min-h-screen gap-4">
-      <div className="w-full flex flex-col"></div>
+    <div className="flex flex-col items-center min-h-screen gap-6">
+      <div className="flex flex-col items-center gap-2 p-2">
+        <p className="text-xl font-bold">이번주 기도제목을 알려주세요😁</p>
+        <p className="text-sm">기도카드는 1주일 동안 유지돼요</p>
+      </div>
+
       <Textarea
-        className="h-80 placeholder-gray-50 p-5"
-        style={{
-          fontSize: "16px",
-        }}
+        className="h-80 p-5 text-[16px]"
         placeholder="기도제목을 작성해주세요"
         value={inputPrayCardContent}
         onChange={(e) => setPrayCardContent(e.target.value)}
