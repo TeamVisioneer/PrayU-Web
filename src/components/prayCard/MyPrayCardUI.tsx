@@ -38,6 +38,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     (state) => state.setReactionDatasForMe
   );
 
+  const isOpenMyPrayDrawer = useBaseStore((state) => state.isOpenMyPrayDrawer);
+  const setIsOpenMyPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenMyPrayDrawer
+  );
+
   const [displayedContent, setDisplayedContent] =
     useState(inputPrayCardContent);
 
@@ -149,7 +154,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     <div className="flex flex-col gap-6">
       {MyPrayCardBody}
       <div className="flex flex-col gap-5">
-        <Drawer>
+        <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
           <DrawerTrigger
             className="w-full focus:outline-none"
             onClick={() => onClickPrayerList()}

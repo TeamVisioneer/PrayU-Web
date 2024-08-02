@@ -139,6 +139,8 @@ export interface BaseStore {
     [key: string]: PrayWithProfiles[];
   };
   setReactionDatasForMe: (prayData: PrayWithProfiles[]) => void;
+  isOpenMyPrayDrawer: boolean;
+  setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -460,6 +462,12 @@ const useBaseStore = create<BaseStore>()(
             ).length;
           });
         });
+    },
+    isOpenMyPrayDrawer: false,
+    setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => {
+      set((state) => {
+        state.isOpenMyPrayDrawer = isOpenTodayPrayDrawer;
+      });
     },
   }))
 );

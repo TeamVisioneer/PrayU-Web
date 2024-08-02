@@ -37,6 +37,14 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
+  const setIsOpenMyPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenMyPrayDrawer
+  );
+
+  const handleClick = () => {
+    setIsOpenMyMemberDrawer(true);
+    setIsOpenMyPrayDrawer(true);
+  };
 
   useEffect(() => {
     getMember(currentUserId, groupId);
@@ -64,7 +72,10 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
       <div className="text-left text-sm text-gray-600">
         {reduceString(inputPrayCardContent, 20)}
       </div>
-      <div className="w-fit flex bg-gray-100 rounded-lg p-2 gap-3">
+      <div
+        className="w-fit flex bg-gray-100 rounded-lg p-2 gap-3"
+        onClick={() => handleClick()}
+      >
         {Object.values(PrayType).map((type) => {
           return (
             <div key={type} className="flex">
