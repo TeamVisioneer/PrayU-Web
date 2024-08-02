@@ -75,7 +75,11 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
           </p>
         </div>
       </div>
-      <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />
+      <ReactionWithCalendar
+        prayCard={prayCard}
+        eventOption={eventOption}
+        member={member}
+      />
     </div>
   );
 };

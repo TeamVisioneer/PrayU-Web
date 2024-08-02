@@ -43,7 +43,8 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
         alt={PrayTypeDatas["pray"].emoji}
         className="w-16 h-16 opacity-100"
       />
-      <h1 className="font-bold text-xl">오늘의 기도 완료</h1>
+      <h1 className="font-bold text-xl">오늘의 기도 완료!</h1>
+      <h3 className="text-gray-600">내일도 기도해주실거죠? 🤗</h3>
       <div className="text-gray-400 text-center">
         <h1>당신을 위해 기도한</h1>
         <h1>사람들을 확인해보세요</h1>
@@ -81,10 +82,10 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
     );
   }
 
-  // TODO: member 가 아예 없는 경우와 기도카드가 올라오지 않은 경우
   if (groupPrayCardList.length == 1) {
     return (
       <div className="flex flex-col justify-center items-center p-10 gap-4">
+        <p className="text-lg font-bold">아직 올라온 기도카드가 없어요 😭</p>
         <div className="h-[300px] flex flex-col items-center">
           <img
             className="h-full rounded-md"
@@ -92,7 +93,6 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
           />
         </div>
         <div className="text-center">
-          <p className="text-sm text-gray-500">아직 올라온 기도카드가 없어요</p>
           <p className="text-sm text-gray-500">
             그룹원과 같이 오늘의 기도를 시작해 보아요
           </p>
