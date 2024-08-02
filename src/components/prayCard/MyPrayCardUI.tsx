@@ -46,8 +46,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   const [displayedContent, setDisplayedContent] =
     useState(inputPrayCardContent);
 
-  const contentRef = useRef<HTMLDivElement>(null);
-
   const prayDatas = prayCard.pray;
 
   const dateDistance = getDateDistance(
@@ -95,8 +93,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   }
 
   const MyPrayCardBody = (
-    <div className="flex flex-col h-50vh min-h-[300px] bg-white rounded-2xl shadow-md">
-      <div className="bg-gradient-to-r from-start/60 via-middle/60 h-15vh via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+    <div className="flex flex-col flex-grow max-h-full min-h-full bg-white rounded-2xl shadow-md">
+      <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
         <div className="flex items-center gap-2 w-full">
           <div className="flex gap-2 items-center">
             <p className="text-xl text-white">
@@ -110,16 +108,12 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
             member?.updated_at.split("T")[0]}
         </p>
       </div>
-      <div
-        ref={contentRef}
-        className="px-[21px] py-[25px] items-start h-full overflow-y-auto no-scrollbar relative"
-      >
+      <div className="flex flex-col flex-grow max-h-full min-h-full px-[21px] py-[25px] items-start overflow-y-auto no-scrollbar relative">
         {isEditingPrayCard ? (
           <Textarea
-            className="w-full h-full p-2 rounded-md border border-gray-300 resize-none overflow-auto"
+            className="flex-grow w-full p-2 rounded-md border border-gray-300 overflow-auto"
             value={inputPrayCardContent}
             onChange={(e) => setPrayCardContent(e.target.value)}
-            maxLength={400}
           />
         ) : (
           <p className="whitespace-pre-line">{displayedContent}</p>
@@ -151,42 +145,40 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   );
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 min-h-[70vh] max-h-[70vh]">
       {MyPrayCardBody}
-      <div className="flex flex-col gap-5">
-        <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
-          <DrawerTrigger
-            className="w-full focus:outline-none"
-            onClick={() => onClickPrayerList()}
-          >
-            <div className="flex justify-center gap-2">
-              {Object.values(PrayType).map((type) => {
-                if (!reactionCounts) return null;
-                return (
-                  <div
-                    key={type}
-                    className={`w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2
+      <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
+        <DrawerTrigger
+          className="w-full focus:outline-none"
+          onClick={() => onClickPrayerList()}
+        >
+          <div className="flex justify-center gap-2">
+            {Object.values(PrayType).map((type) => {
+              if (!reactionCounts) return null;
+              return (
+                <div
+                  key={type}
+                  className={`w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2
                       }`}
-                  >
-                    <div className="text-sm w-5 h-5">
-                      <img
-                        src={PrayTypeDatas[type].img}
-                        alt={PrayTypeDatas[type].emoji}
-                        className="w-5 h-5"
-                      />
-                    </div>
-                    <div className="text-sm">{reactionCounts[type]}</div>
+                >
+                  <div className="text-sm w-5 h-5">
+                    <img
+                      src={PrayTypeDatas[type].img}
+                      alt={PrayTypeDatas[type].emoji}
+                      className="w-5 h-5"
+                    />
                   </div>
-                );
-              })}
-              <div className="bg-white rounded-lg flex justify-center items-center p-1">
-                <img className="w-5" src={iconUserMono} alt="user-icon" />
-              </div>
+                  <div className="text-sm">{reactionCounts[type]}</div>
+                </div>
+              );
+            })}
+            <div className="bg-white rounded-lg flex justify-center items-center p-1">
+              <img className="w-5" src={iconUserMono} alt="user-icon" />
             </div>
-          </DrawerTrigger>
-          <PrayList />
-        </Drawer>
-      </div>
+          </div>
+        </DrawerTrigger>
+        <PrayList />
+      </Drawer>
     </div>
   );
 };
