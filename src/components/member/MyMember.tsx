@@ -40,7 +40,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   );
 
   const onClickMyMemberReaction = () => {
-    analyticsTrack("클릭_멤버_반응결과", {
+    analyticsTrack("클릭_기도카드_반응결과", {
       where: "MyMember",
     });
   };

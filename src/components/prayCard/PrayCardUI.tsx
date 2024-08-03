@@ -4,6 +4,7 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { ClipLoader } from "react-spinners";
 import ReactionWithCalendar from "./ReactionWithCalendar";
+import { Textarea } from "../ui/textarea";
 
 interface EventOption {
   where: string;
@@ -64,10 +65,12 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
               member?.updated_at.split("T")[0]}
           </p>
         </div>
-        <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[21px] py-[25px] overflow-y-auto no-scrollbar">
-          <p className="whitespace-pre-line">
-            {prayCard?.content || member?.pray_summary}
-          </p>
+        <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
+          <Textarea
+            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
+            value={prayCard?.content || member?.pray_summary || ""}
+            disabled={true}
+          />
         </div>
       </div>
       <ReactionWithCalendar

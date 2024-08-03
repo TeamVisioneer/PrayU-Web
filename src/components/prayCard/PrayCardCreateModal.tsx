@@ -59,7 +59,9 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
     <div className="flex flex-col items-center min-h-screen gap-6">
       <div className="flex flex-col items-center gap-2 p-2">
         <p className="text-xl font-bold">이번 주 기도제목을 알려주세요 😁</p>
-        <p className="text-sm">기도카드는 일주일 동안 유지되어요</p>
+        <p className="text-sm text-gray-500">
+          기도카드는 일주일 간 그룹원들이 볼 수 있어요
+        </p>
       </div>
 
       <Textarea

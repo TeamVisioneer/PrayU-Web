@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
@@ -41,10 +41,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     (state) => state.setIsOpenMyPrayDrawer
   );
 
-  const [displayedContent, setDisplayedContent] =
-    useState(inputPrayCardContent);
-
-  const prayDatas = prayCard.pray;
+  const prayDatas = prayCard?.pray;
 
   const dateDistance = getDateDistance(
     new Date(
@@ -71,8 +68,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   ) => {
     updatePrayCardContent(prayCardId, content);
     updateMember(memberId, content);
-    setDisplayedContent(content);
     setIsEditingPrayCard(false);
+    setIsDivVisible(true);
     analyticsTrack("클릭_기도카드_저장", {});
   };
 
@@ -83,32 +80,43 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     }
   }, [prayDatas, setReactionDatasForMe]);
 
+  const [isDivVisible, setIsDivVisible] = useState(true);
+
   const MyPrayCardBody = (
-    <div className="flex flex-col flex-grow max-h-full min-h-full bg-white rounded-2xl shadow-md">
-      <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
-        <div className="flex items-center gap-2 w-full">
-          <div className="flex gap-2 items-center">
-            <p className="text-xl text-white">
-              기도 {dateDistance.days + 1}일차
-            </p>
+    <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+      {isDivVisible && (
+        <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+          <div className="flex items-center gap-2 w-full">
+            <div className="flex gap-2 items-center">
+              <p className="text-xl text-white">
+                기도 {dateDistance.days + 1}일차
+              </p>
+            </div>
           </div>
+          <p className="text-xs text-white w-full text-left">
+            시작일 :{" "}
+            {prayCard?.created_at.split("T")[0] ||
+              member?.updated_at.split("T")[0]}
+          </p>
         </div>
-        <p className="text-xs text-white w-full text-left">
-          시작일 :{" "}
-          {prayCard?.created_at.split("T")[0] ||
-            member?.updated_at.split("T")[0]}
-        </p>
-      </div>
-      <div className="flex flex-col flex-grow max-h-full min-h-full px-[21px] py-[25px] items-start overflow-y-auto no-scrollbar relative">
-        {isEditingPrayCard ? (
-          <Textarea
-            className="flex-grow w-full p-2 rounded-md border border-gray-300 overflow-auto"
-            value={inputPrayCardContent}
-            onChange={(e) => setPrayCardContent(e.target.value)}
-          />
-        ) : (
-          <p className="whitespace-pre-line">{displayedContent}</p>
-        )}
+      )}
+      <div
+        className={`flex flex-col px-[20px] py-[20px] relative ${
+          isDivVisible ? "h-full" : "h-[300px]"
+        }`}
+      >
+        <Textarea
+          className={`h-full w-full p-2 rounded-md overflow-y-auto  text-black !opacity-100 ${
+            isEditingPrayCard ? " border-gray-300" : "border-none no-scrollbar"
+          }`}
+          value={inputPrayCardContent}
+          onChange={(e) => setPrayCardContent(e.target.value)}
+          disabled={!isEditingPrayCard}
+          onFocus={() => setIsDivVisible(false)}
+          onBlur={() =>
+            handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
+          }
+        />
         <div className="absolute top-2 right-2">
           {isEditingPrayCard ? (
             <button
@@ -136,7 +144,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   );
 
   return (
-    <div className="flex flex-col gap-6 min-h-[70vh] max-h-[70vh]">
+    <div className="flex flex-col gap-6 h-[70vh]">
       {MyPrayCardBody}
       <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
         <DrawerTrigger
