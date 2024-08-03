@@ -78,7 +78,6 @@ const GroupBody: React.FC<GroupBodyProps> = ({
           groupId={targetGroup?.id}
         />
       </div>
-
       <Drawer
         open={isOpenTodayPrayDrawer}
         onOpenChange={setIsOpenTodayPrayDrawer}
