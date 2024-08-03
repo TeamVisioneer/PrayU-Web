@@ -26,7 +26,7 @@ const ShareDrawer: React.FC = () => {
       .writeText(currentUrl)
       .then(() => {
         toast({
-          description: "🔗 링크가 복사되었어요",
+          description: "🔗 그룹 링크가 복사되었어요",
         });
       })
       .catch((err) => {
@@ -65,7 +65,7 @@ const ShareDrawer: React.FC = () => {
 
   return (
     <Drawer open={isOpenShareDrawer} onOpenChange={setIsOpenShareDrawer}>
-      <DrawerContent className="bg-mainBg">
+      <DrawerContent className="bg-mainBg focus:outline-none">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>

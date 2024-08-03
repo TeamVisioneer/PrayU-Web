@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
-import GroupMenuBtn from "../components/GroupMenuBtn";
+import GroupMenuBtn from "../components/group/GroupMenuBtn";
 import GroupBody from "@/components/group/GroupBody";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";

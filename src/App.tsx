@@ -19,7 +19,8 @@ const App = () => {
       <div className="mx-auto max-w-[480px] h-full p-5 overflow-x-hidden no-scrollbar">
         <BrowserRouter>
           <AuthProvider>
-            <AnalyticsTracker />
+            {(import.meta.env.VITE_ENV === "staging" ||
+              import.meta.env.VITE_ENV === "prod") && <AnalyticsTracker />}
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route
@@ -57,7 +58,6 @@ const App = () => {
 
 const AnalyticsTracker = () => {
   const location = useLocation();
-  const { groupId } = useParams();
 
   useEffect(() => {
     switch (location.pathname) {
@@ -71,12 +71,11 @@ const AnalyticsTracker = () => {
         if (location.pathname.startsWith("/group/")) {
           analytics.track("페이지_그룹_홈", {
             title: "Group Page",
-            groupId: groupId,
           });
         }
         break;
     }
-  }, [location, groupId]);
+  }, [location.pathname]);
 
   return null;
 };

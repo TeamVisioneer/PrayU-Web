@@ -161,13 +161,6 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.user = session?.user || null;
         state.userLoading = false;
-        if (state.user) {
-          analytics.identify(state.user?.id, {
-            email: state.user?.user_metadata?.email,
-            full_name: state.user?.user_metadata?.full_name,
-            user_name: state.user?.user_metadata?.user_name,
-          });
-        }
       });
 
       const {
@@ -175,23 +168,22 @@ const useBaseStore = create<BaseStore>()(
       } = supabase.auth.onAuthStateChange((_event, session) => {
         set((state) => {
           state.user = session?.user || null;
-          if (state.user) {
-            analytics.identify(state.user?.id, {
-              email: state.user?.user_metadata?.email,
-              full_name: state.user?.user_metadata?.full_name,
-              user_name: state.user?.user_metadata?.user_name,
-            });
-          }
         });
-        // Sentry 설정
+        // Sentry, Event 설정
         if (
           import.meta.env.VITE_ENV === "staging" ||
           import.meta.env.VITE_ENV === "prod"
-        )
+        ) {
           Sentry.setUser({
             id: session?.user.id,
             email: session?.user.email,
           });
+          analytics.identify(session?.user.id || "", {
+            email: session?.user.user_metadata?.email,
+            full_name: session?.user.user_metadata?.full_name,
+            user_name: session?.user.user_metadata?.user_name,
+          });
+        }
       });
 
       return () => {
