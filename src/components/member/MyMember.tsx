@@ -40,7 +40,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     (state) => state.setIsOpenMyPrayDrawer
   );
 
-  const onClickMyMemberPray = () => {
+  const onClickMyMemberReaction = () => {
     analyticsTrack("클릭_멤버_본인반응", {
       group_id: groupId,
       where: "MyMember",
@@ -50,7 +50,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const handleClick = () => {
     setIsOpenMyMemberDrawer(true);
     setIsOpenMyPrayDrawer(true);
-    onClickMyMemberPray();
+    onClickMyMemberReaction();
   };
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
       <h3 className="flex font-bold">내 기도제목</h3>
-      <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
+      <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis ">
         {inputPrayCardContent}
       </div>
       <div className="flex items-center ">
