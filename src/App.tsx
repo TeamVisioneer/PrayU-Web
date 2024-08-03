@@ -16,7 +16,7 @@ import { analytics } from "@/analytics/analytics";
 const App = () => {
   return (
     <div className="w-screen h-screen bg-mainBg ">
-      <div className="mx-auto max-w-[480px] p-5 overflow-hidden">
+      <div className="mx-auto max-w-[480px] h-full p-5 overflow-x-hidden no-scrollbar">
         <BrowserRouter>
           <AuthProvider>
             <AnalyticsTracker />

@@ -25,9 +25,6 @@ const GroupPage: React.FC = () => {
     (state) => state.fetchGroupListByUserId
   );
 
-  const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
-
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
     if (paramsGroupId) getGroup(paramsGroupId);
@@ -46,19 +43,15 @@ const GroupPage: React.FC = () => {
   }, [groupList, navigate, paramsGroupId]);
 
   useEffect(() => {
-    if (targetGroup) fetchIsPrayToday(user!.id, targetGroup.id);
-  }, [user, targetGroup, fetchIsPrayToday]);
-
-  useEffect(() => {
     if (targetGroup) fetchMemberListByGroupId(targetGroup.id);
   }, [fetchMemberListByGroupId, targetGroup]);
 
-  if (!groupList || (paramsGroupId && !targetGroup) || isPrayToday == null) {
+  if (!groupList || (paramsGroupId && !targetGroup)) {
     return null;
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col h-full gap-5">
       <div className="relative flex justify-between items-center">
         <OpenShareDrawerBtn message="" iconUrl={inviteMemberIcon} />
 
