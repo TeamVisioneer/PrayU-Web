@@ -82,14 +82,18 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
                   <a
                     key={group.id}
                     onClick={() => onClickOtherGroup(group.id)}
-                    className="underline"
+                    className="underline max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
                   >
                     {group.name}
                   </a>
                 </div>
               );
             return (
-              <a key={group.id} onClick={() => onClickOtherGroup(group.id)}>
+              <a
+                key={group.id}
+                onClick={() => onClickOtherGroup(group.id)}
+                className="max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
+              >
                 {group.name}
               </a>
             );
