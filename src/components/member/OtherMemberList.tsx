@@ -6,6 +6,7 @@ import OtherMember from "./OtherMember";
 import { getISOTodayDate } from "@/lib/utils";
 import MemberInviteCard from "./MemberInviteCard";
 import TodayPrayBtn from "../todayPray/TodayPrayBtn";
+import TodayPrayStartCard from "../todayPray/TodayPrayStartCard";
 
 interface OtherMembersProps {
   currentUserId: string;
@@ -16,10 +17,9 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   currentUserId,
   groupId,
 }) => {
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
   const memberList = useBaseStore((state) => state.memberList);
-  const fetchMemberListByGroupId = useBaseStore(
-    (state) => state.fetchMemberListByGroupId
-  );
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
@@ -28,20 +28,19 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   const startDt = getISOTodayDate(-6);
   const endDt = getISOTodayDate(1);
 
-  // PrayCardList 멤버리스트에서는 PrayCardList 불러오지 않기
   useEffect(() => {
     fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
-    fetchMemberListByGroupId(groupId);
+    fetchIsPrayToday(currentUserId, groupId);
   }, [
-    fetchGroupPrayCardList,
-    fetchMemberListByGroupId,
-    groupId,
     currentUserId,
-    startDt,
     endDt,
+    fetchGroupPrayCardList,
+    fetchIsPrayToday,
+    groupId,
+    startDt,
   ]);
 
-  if (!memberList || !groupPrayCardList) {
+  if (isPrayToday == null || !memberList || !groupPrayCardList) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -63,6 +62,8 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   }, {} as userIdPrayCardListHash);
 
   if (otherMembers.length === 0) return <MemberInviteCard />;
+  if (!isPrayToday) return <TodayPrayStartCard />;
+
   return (
     <div className="flex flex-col gap-2">
       <div className="text-sm text-gray-500 p-2">기도 구성원</div>

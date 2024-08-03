@@ -13,6 +13,7 @@ import { Group } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
+import OpenShareDrawerBtn from "./share/OpenShareDrawerBtn";
 
 interface GroupManuBtnProps {
   userGroupList: Group[];
@@ -41,6 +42,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
 
   const onClickOtherGroup = (groupId: string) => {
     analyticsTrack("클릭_그룹_전환", { group_id: groupId });
+    window.location.href = `/group/${groupId}`;
   };
 
   const onClickContactUs = () => {
@@ -68,28 +70,39 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           <SheetDescription></SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-4 items-end text-gray-500">
-          {userGroupList.map(
-            (group) =>
-              group && (
-                <a
-                  key={group.id}
-                  href={`/group/${group.id}`}
-                  onClick={() => onClickOtherGroup(group.id)}
-                  className={`${
-                    group.id === targetGroup?.id
-                      ? "text-black font-bold underline"
-                      : ""
-                  }`}
-                >
-                  {group.name}
-                </a>
-              )
-          )}
+          {userGroupList.map((group) => {
+            if (group.id === targetGroup?.id)
+              return (
+                <div className="flex items-center text-black font-bold">
+                  <OpenShareDrawerBtn
+                    text="초대"
+                    type="ghost"
+                    eventOption={{ where: "GroupMenuBtn" }}
+                  />
+                  <a
+                    key={group.id}
+                    onClick={() => onClickOtherGroup(group.id)}
+                    className="underline max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
+                  >
+                    {group.name}
+                  </a>
+                </div>
+              );
+            return (
+              <a
+                key={group.id}
+                onClick={() => onClickOtherGroup(group.id)}
+                className="max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
+              >
+                {group.name}
+              </a>
+            );
+          })}
           <a className="cursor-pointer" onClick={() => handleClick()}>
             + 그룹 만들기
           </a>
           <hr />
-          <a href="/">홈 화면</a>
+          <a href="/">PrayU 공유하기</a>
           <a
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
             onClick={() => onClickContactUs()}

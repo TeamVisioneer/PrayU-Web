@@ -119,7 +119,7 @@ export interface BaseStore {
   prayData: Pray[] | null;
   prayDataHash: PrayDataHash;
   todayPrayTypeHash: TodayPrayTypeHash;
-  isPrayToday: boolean;
+  isPrayToday: boolean | null;
   reactionCounts: { [key in PrayType]?: number };
   prayerList: { [key: string]: PrayWithProfiles[] } | null;
   setIsPrayToday: (isPrayToday: boolean) => void;
@@ -379,7 +379,7 @@ const useBaseStore = create<BaseStore>()(
     prayData: null,
     prayDataHash: {},
     todayPrayTypeHash: {},
-    isPrayToday: false,
+    isPrayToday: null,
     reactionCounts: {
       [PrayType.PRAY]: 0,
       [PrayType.GOOD]: 0,
