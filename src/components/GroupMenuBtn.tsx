@@ -73,16 +73,16 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           {userGroupList.map((group) => {
             if (group.id === targetGroup?.id)
               return (
-                <div className="flex items-center text-black font-bold">
+                <div className="flex items-center gap-3 text-black">
                   <OpenShareDrawerBtn
                     text="초대"
-                    type="ghost"
+                    type="tag"
                     eventOption={{ where: "GroupMenuBtn" }}
                   />
                   <a
                     key={group.id}
                     onClick={() => onClickOtherGroup(group.id)}
-                    className="underline max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="font-bold underline max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
                   >
                     {group.name}
                   </a>

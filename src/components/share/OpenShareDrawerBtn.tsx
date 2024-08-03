@@ -10,15 +10,13 @@ interface EventOption {
 interface OpenShareDrawerBtnProps {
   text: string;
   eventOption: EventOption;
-  className?: string;
-  type?: "primary" | "ghost";
+  type?: "button" | "tag";
 }
 
 const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
   text,
   eventOption,
-  className = "",
-  type = "primary",
+  type = "button",
 }) => {
   const setIsOpenShareDrawer = useBaseStore(
     (state) => state.setIsOpenShareDrawer
@@ -27,20 +25,23 @@ const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
     setIsOpenShareDrawer(true);
     analyticsTrack("클릭_공유_그룹초대", { where: eventOption.where });
   };
-  return (
-    <Button
-      variant={type}
-      className={className}
-      onClick={() => handleClickSharBtn()}
-    >
-      <div className="flex items-center gap-1">
-        {type == "ghost" && (
-          <img src={inviteIcon} className="w-[10px] h-[10px]" />
-        )}
+  if (type == "button")
+    return (
+      <Button
+        variant="primary"
+        className="w-32"
+        onClick={() => handleClickSharBtn()}
+      >
         {text}
+      </Button>
+    );
+  if (type == "tag")
+    return (
+      <div className="flex items-center gap-1 text-[12px]">
+        <img src={inviteIcon} className="w-[10px] h-[10px]" />
+        <span>{text}</span>
       </div>
-    </Button>
-  );
+    );
 };
 
 export default OpenShareDrawerBtn;

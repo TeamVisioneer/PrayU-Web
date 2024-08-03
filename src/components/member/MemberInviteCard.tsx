@@ -44,7 +44,6 @@ export const MemberInviteCard = () => {
       <OpenShareDrawerBtn
         text="그룹원 초대하기"
         eventOption={{ where: "MemberInviteCard" }}
-        className="w-32"
       />
     </div>
   );
