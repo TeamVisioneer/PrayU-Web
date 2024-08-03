@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
-import GroupMenuBtn from "../components/GroupMenuBtn";
+import GroupMenuBtn from "../components/group/GroupMenuBtn";
 import GroupBody from "@/components/group/GroupBody";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
@@ -27,7 +27,14 @@ const GroupPage: React.FC = () => {
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
     if (paramsGroupId) getGroup(paramsGroupId);
-  }, [fetchGroupListByUserId, user, paramsGroupId, getGroup]);
+    if (paramsGroupId) fetchMemberListByGroupId(paramsGroupId);
+  }, [
+    fetchGroupListByUserId,
+    fetchMemberListByGroupId,
+    user,
+    paramsGroupId,
+    getGroup,
+  ]);
 
   useEffect(() => {
     if (!paramsGroupId && groupList) {
@@ -41,11 +48,7 @@ const GroupPage: React.FC = () => {
     }
   }, [groupList, navigate, paramsGroupId]);
 
-  useEffect(() => {
-    if (targetGroup) fetchMemberListByGroupId(targetGroup.id);
-  }, [fetchMemberListByGroupId, targetGroup]);
-
-  if (!groupList || (paramsGroupId && !targetGroup)) {
+  if (!groupList || !memberList || (paramsGroupId && !targetGroup)) {
     return null;
   }
 
