@@ -60,13 +60,13 @@ const GroupCreatePage: React.FC = () => {
   return (
     <div className="flex flex-col gap-6 items-center">
       <div className="text-lg font-bold">
-        PrayU 그룹
+        PrayU 그룹{" "}
         <button
           onClick={() => {
             throw new Error("버그 테스트");
           }}
         >
-          생성
+          만들기
         </button>
       </div>
 
@@ -81,7 +81,7 @@ const GroupCreatePage: React.FC = () => {
           type="text"
           value={inputGroupName}
           onChange={(e) => setGroupName(e.target.value)}
-          placeholder="그룹 이름을 입력해주세요"
+          placeholder="그룹 이름을 입력해 주세요"
           maxLength={15}
         />
         <Button
@@ -97,7 +97,7 @@ const GroupCreatePage: React.FC = () => {
             기존 그룹에 참여하고 싶은 경우
           </p>
           <p className="text-xs text-gray-500">
-            그룹장에게 초대링크를 요청해 주세요
+            그룹장에게 초대 링크를 요청해 보아요
           </p>
         </div>
       </div>

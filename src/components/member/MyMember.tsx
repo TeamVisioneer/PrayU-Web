@@ -1,4 +1,3 @@
-import { reduceString } from "../../lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -41,9 +40,17 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     (state) => state.setIsOpenMyPrayDrawer
   );
 
+  const onClickMyMemberReaction = () => {
+    analyticsTrack("클릭_멤버_본인반응", {
+      group_id: groupId,
+      where: "MyMember",
+    });
+  };
+
   const handleClick = () => {
     setIsOpenMyMemberDrawer(true);
     setIsOpenMyPrayDrawer(true);
+    onClickMyMemberReaction();
   };
 
   useEffect(() => {
@@ -69,8 +76,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-2 cursor-pointer bg-white p-4 rounded-2xl shadow-md">
       <h3 className="flex font-bold">내 기도제목</h3>
-      <div className="text-left text-sm text-gray-600">
-        {reduceString(inputPrayCardContent, 20)}
+      <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis ">
+        {inputPrayCardContent}
       </div>
       <div className="flex items-center ">
         <div
@@ -97,9 +104,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
             );
           })}
         </div>
-        <p className=" flex items-center text-gray-500 text-[8px] p-2">
-          누군가 내게 기도했어요 😊
-        </p>
+        {prayDatasForMe && prayDatasForMe.length > 0 && (
+          <p className=" flex items-center text-gray-500 text-[8px] p-2">
+            누군가 내게 기도했어요 😊
+          </p>
+        )}
       </div>
     </div>
   );

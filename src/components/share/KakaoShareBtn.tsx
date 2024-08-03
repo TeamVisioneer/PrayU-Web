@@ -72,7 +72,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
         container: `#${id}`,
         objectType: "feed",
         content: {
-          title: "PrayU 우리만의 기도제목 기록공간",
+          title: "PrayU 우리만의 기도제목 나눔 공간",
           description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
           imageUrl: "/images/prayCard.png",
           link: {

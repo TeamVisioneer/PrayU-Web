@@ -63,11 +63,3 @@ export const getDomainUrl = () => {
     ? `${protocol}//${hostname}:${port}`
     : `${protocol}//${hostname}`;
 };
-
-export const reduceString = (
-  text: string | null,
-  length: number = 10
-): string => {
-  if (!text) return "";
-  return text.length <= length ? text : `${text.substring(0, length)}...`;
-};
