@@ -37,7 +37,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   const endDt = getISOTodayDate(1);
 
   const completedItem = (
-    <div className="flex flex-col gap-4 justify-center items-center pt-10">
+    <div className="flex flex-col gap-4 justify-center items-center pb-10">
       <img
         src={PrayTypeDatas["pray"].img}
         alt={PrayTypeDatas["pray"].emoji}
@@ -84,7 +84,7 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
 
   if (groupPrayCardList.length == 1) {
     return (
-      <div className="flex flex-col justify-center items-center p-10 gap-4">
+      <div className="flex flex-col justify-center items-center px-10 gap-4">
         <p className="text-lg font-bold">아직 올라온 기도제목이 없어요 😭</p>
         <div className="h-[300px] flex flex-col items-center">
           <img className="h-full rounded-md" src="/images/KakaoShare.png" />

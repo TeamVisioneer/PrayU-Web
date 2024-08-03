@@ -63,8 +63,8 @@ const OtherMember: React.FC<OtherMemberProps> = ({
       >
         {memberUI}
       </DrawerTrigger>
-      <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-20 focus:outline-none">
-        <DrawerHeader>
+      <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
+        <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
-import { ClipLoader } from "react-spinners";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import PrayList from "../pray/PrayList";
@@ -19,7 +18,6 @@ interface PrayCardProps {
 }
 
 const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
-  const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const reactionCounts = useBaseStore((state) => state.reactionCounts);
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
@@ -58,7 +56,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   );
 
   const onClickPrayerList = () => {
-    analyticsTrack("클릭_기도카드_반응결과", {});
+    analyticsTrack("클릭_기도카드_반응결과", { where: "MyPrayCard" });
   };
 
   const handleEditClick = () => {
@@ -78,19 +76,12 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     analyticsTrack("클릭_기도카드_저장", {});
   };
 
+  // TODO: useEffect 써야하는지 재고
   useEffect(() => {
     if (prayDatas) {
       setReactionDatasForMe(prayDatas);
     }
   }, [prayDatas, setReactionDatasForMe]);
-
-  if (!prayDataHash) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
-      </div>
-    );
-  }
 
   const MyPrayCardBody = (
     <div className="flex flex-col flex-grow max-h-full min-h-full bg-white rounded-2xl shadow-md">

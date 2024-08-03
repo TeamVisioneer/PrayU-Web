@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
-import { ClipLoader } from "react-spinners";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -41,8 +40,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   );
 
   const onClickMyMemberReaction = () => {
-    analyticsTrack("클릭_멤버_본인반응", {
-      group_id: groupId,
+    analyticsTrack("클릭_멤버_반응결과", {
       where: "MyMember",
     });
   };
@@ -62,13 +60,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     setPrayCardContent(member?.pray_summary || "");
   }, [member, setPrayCardContent]);
 
-  if (memberLoading || !userPrayCardList) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
-      </div>
-    );
-  }
+  if (memberLoading || !userPrayCardList) return null;
 
   const prayCard = userPrayCardList[0];
   const prayDatasForMe = prayCard.pray;
@@ -131,7 +123,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
       </DrawerTrigger>
 
       <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-20 focus:outline-none">
-        <DrawerHeader>
+        <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
