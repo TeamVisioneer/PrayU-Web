@@ -89,7 +89,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
         open={isOpenTodayPrayDrawer}
         onOpenChange={setIsOpenTodayPrayDrawer}
       >
-        <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full h-[90%] pb-20">
+        <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full pb-10">
           <DrawerHeader>
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>
