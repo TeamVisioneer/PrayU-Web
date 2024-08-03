@@ -26,7 +26,7 @@ const ShareDrawer: React.FC = () => {
       .writeText(currentUrl)
       .then(() => {
         toast({
-          description: "링크가 복사되었어요.",
+          description: "🔗 링크가 복사되었어요",
         });
       })
       .catch((err) => {
@@ -57,7 +57,7 @@ const ShareDrawer: React.FC = () => {
           className="px-10 py-2 rounded-md"
           onClick={() => onClickCopyLink()}
         >
-          링크 복사하기
+          그룹 링크 복사하기
         </Button>
       </div>
     </div>
