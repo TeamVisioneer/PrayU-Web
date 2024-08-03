@@ -89,7 +89,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             + 그룹 만들기
           </a>
           <hr />
-          <a href="/">홈 화면</a>
+          <a href="/">PrayU 공유하기</a>
           <a
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
             onClick={() => onClickContactUs()}
