@@ -6,6 +6,7 @@ import GroupMenuBtn from "../components/group/GroupMenuBtn";
 import GroupBody from "@/components/group/GroupBody";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
+import { ClipLoader } from "react-spinners";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -49,7 +50,11 @@ const GroupPage: React.FC = () => {
   }, [groupList, navigate, paramsGroupId]);
 
   if (!groupList || !memberList || (paramsGroupId && !targetGroup)) {
-    return null;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
   }
 
   return (
