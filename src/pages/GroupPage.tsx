@@ -56,6 +56,7 @@ const GroupPage: React.FC = () => {
           text="초대"
           eventOption={{ where: "GroupPage" }}
           type="ghost"
+          className="text-[12px]"
         />
 
         <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">

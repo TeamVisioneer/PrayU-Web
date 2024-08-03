@@ -34,7 +34,9 @@ const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
       onClick={() => handleClickSharBtn()}
     >
       <div className="flex items-center gap-1">
-        <img src={inviteIcon} className="w-3 h-3" />
+        {type == "ghost" && (
+          <img src={inviteIcon} className="w-[10px] h-[10px]" />
+        )}
         {text}
       </div>
     </Button>
