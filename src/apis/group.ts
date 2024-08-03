@@ -13,7 +13,7 @@ export const fetchGroupListByUserId = async (
       .eq("user_id", userId)
       .is("deleted_at", null);
     if (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message);
       return null;
     }
     return (data as MemberWithGroup[])
@@ -36,7 +36,7 @@ export const getGroup = async (
       .eq("id", groupId)
       .single();
     if (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message);
       return null;
     }
     return data;
@@ -58,7 +58,7 @@ export const createGroup = async (
       .insert([{ user_id: userId, name, intro }])
       .select();
     if (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message);
       return null;
     }
     return data ? data[0] : null;
