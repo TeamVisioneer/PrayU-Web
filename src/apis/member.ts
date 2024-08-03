@@ -15,7 +15,7 @@ export const fetchMemberListByGroupId = async (
       .is("deleted_at", null)
       .order("updated_at", { ascending: false });
     if (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message);
       return null;
     }
     return data as MemberWithProfiles[];
@@ -36,7 +36,7 @@ export const createMember = async (
       .insert([{ group_id: groupId, user_id: userId }])
       .select();
     if (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message);
       return null;
     }
     return data ? data[0] : null;
@@ -59,7 +59,7 @@ export const getMember = async (
       .eq("group_id", groupId)
       .is("deleted_at", null);
     if (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message);
       return null;
     }
     return data ? (data[0] as MemberWithProfiles) : null;
@@ -86,7 +86,7 @@ export const updateMember = async (
       .eq("id", memberId)
       .select();
     if (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message);
       return null;
     }
     return data ? data[0] : null;

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
-import { ClipLoader } from "react-spinners";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import PrayList from "../pray/PrayList";
@@ -19,7 +18,6 @@ interface PrayCardProps {
 }
 
 const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
-  const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const reactionCounts = useBaseStore((state) => state.reactionCounts);
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
@@ -58,7 +56,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
   );
 
   const onClickPrayerList = () => {
-    analyticsTrack("클릭_기도카드_반응결과", {});
+    analyticsTrack("클릭_기도카드_반응결과", { where: "MyPrayCard" });
   };
 
   const handleEditClick = () => {
@@ -78,19 +76,12 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     analyticsTrack("클릭_기도카드_저장", {});
   };
 
+  // TODO: useEffect 써야하는지 재고
   useEffect(() => {
     if (prayDatas) {
       setReactionDatasForMe(prayDatas);
     }
   }, [prayDatas, setReactionDatasForMe]);
-
-  if (!prayDataHash) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
-      </div>
-    );
-  }
 
   const MyPrayCardBody = (
     <div className="flex flex-col flex-grow max-h-full min-h-full bg-white rounded-2xl shadow-md">
@@ -118,10 +109,10 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
         ) : (
           <p className="whitespace-pre-line">{displayedContent}</p>
         )}
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-2 right-2">
           {isEditingPrayCard ? (
             <button
-              className={`text-white rounded-full bg-middle/90 w-10 h-10 flex justify-center items-center ${
+              className={`text-white rounded-full bg-middle/90 w-8 h-8 flex justify-center items-center ${
                 !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
               }`}
               onClick={() =>
@@ -129,14 +120,14 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
               }
               disabled={!inputPrayCardContent}
             >
-              <FaSave className="text-white w-5 h-5" />
+              <FaSave className="text-white w-4 h-4" />
             </button>
           ) : (
             <button
-              className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
+              className="text-white rounded-full bg-end/90 w-8 h-8 flex justify-center items-center"
               onClick={() => handleEditClick()}
             >
-              <FaEdit className="text-white w-5 h-5" />
+              <FaEdit className="text-white w-4 h-4" />
             </button>
           )}
         </div>
