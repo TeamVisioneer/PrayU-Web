@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import GroupMenuBtn from "../components/GroupMenuBtn";
-import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
 import GroupBody from "@/components/group/GroupBody";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";

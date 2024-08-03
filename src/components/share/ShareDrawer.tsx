@@ -10,6 +10,7 @@ import { getDomainUrl } from "@/lib/utils";
 import { KakaoShareButton } from "./KakaoShareBtn";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
+import KakaoShareImageUrl from "/images/KakaoShare.png";
 
 const ShareDrawer: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -39,14 +40,11 @@ const ShareDrawer: React.FC = () => {
         <p className="text-lg font-bold">
           그룹에 참여하면 함께 기도할 수 있어요!
         </p>
-        <p> 새 구성원을 초대해봐요 📮</p>
+        <p className="text-gray-500"> 새 구성원을 초대해봐요 📮</p>
       </div>
 
       <div className="h-[300px] flex flex-col items-center">
-        <img
-          className="h-full rounded-md"
-          src="https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/KakaoShare.png"
-        />
+        <img className="h-full rounded-md" src={KakaoShareImageUrl} />
       </div>
       <div className="flex flex-col gap-2">
         <KakaoShareButton

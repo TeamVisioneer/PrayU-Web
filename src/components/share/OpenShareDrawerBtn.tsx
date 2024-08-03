@@ -1,6 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
+import inviteIcon from "@/assets/icon-invite.png";
 
 interface EventOption {
   where: string;
@@ -32,7 +33,10 @@ const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
       className={className}
       onClick={() => handleClickSharBtn()}
     >
-      {text}
+      <div className="flex items-center gap-1">
+        <img src={inviteIcon} className="w-3 h-3" />
+        {text}
+      </div>
     </Button>
   );
 };
