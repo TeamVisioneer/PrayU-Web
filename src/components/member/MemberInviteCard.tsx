@@ -1,6 +1,6 @@
-import { Button } from "../ui/button";
 import useBaseStore from "@/stores/baseStore";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
+import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
 export const MemberInviteCard = () => {
   const member = useBaseStore((state) => state.targetMember);
@@ -41,8 +41,11 @@ export const MemberInviteCard = () => {
           <h1>기도제목을 공유하고 매일 기도해 주세요</h1>
         </div>
       </div>
-      {/* TODO: 초대 드로워 트리거로 변경 */}
-      <Button variant="primary">그룹원 초대하기</Button>
+      <OpenShareDrawerBtn
+        text="그룹원 초대하기"
+        eventOption={{ where: "MemberInviteCard" }}
+        className="w-32"
+      />
     </div>
   );
 };

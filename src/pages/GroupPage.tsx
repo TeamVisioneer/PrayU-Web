@@ -53,7 +53,11 @@ const GroupPage: React.FC = () => {
   return (
     <div className="flex flex-col h-full gap-5">
       <div className="relative flex justify-between items-center">
-        <OpenShareDrawerBtn message="" iconUrl={inviteMemberIcon} />
+        <OpenShareDrawerBtn
+          text="초대"
+          eventOption={{ where: "GroupPage" }}
+          type="ghost"
+        />
 
         <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
           <div className="text-lg font-bold flex items-center gap-1">
