@@ -1,7 +1,5 @@
 import { analyticsTrack } from "@/analytics/analytics";
 import { useEffect, useRef } from "react";
-import prayCardImageUrl from "/images/prayCard.png";
-
 declare global {
   interface Window {
     Kakao: Kakao;
@@ -75,7 +73,8 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
         content: {
           title: "PrayU 우리만의 기도제목 나눔 공간",
           description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
-          imageUrl: prayCardImageUrl,
+          imageUrl:
+            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png",
           link: {
             mobileWebUrl: groupPageUrl,
             webUrl: groupPageUrl,
