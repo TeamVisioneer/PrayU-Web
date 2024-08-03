@@ -8,7 +8,7 @@ import PrayCardUI from "./PrayCardUI";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
-import { KakaoShareButton } from "../KakaoShareBtn";
+import { KakaoShareButton } from "../share/KakaoShareBtn";
 import MyMemberBtn from "../todayPray/MyMemberBtn";
 import { PrayTypeDatas } from "@/Enums/prayType";
 

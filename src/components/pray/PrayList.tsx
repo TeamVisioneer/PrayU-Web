@@ -6,7 +6,7 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import { KakaoShareButton } from "../KakaoShareBtn";
+import { KakaoShareButton } from "../share/KakaoShareBtn";
 
 const PrayList: React.FC = () => {
   const prayerList = useBaseStore((state) => state.prayerList);

@@ -5,7 +5,7 @@ import {
   PrayCardWithProfiles,
 } from "supabase/types/tables";
 import ReactionBtn from "./ReactionBtn";
-import { KakaoShareButton } from "../KakaoShareBtn";
+import { KakaoShareButton } from "../share/KakaoShareBtn";
 import { getDateDistance } from "@toss/date";
 import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 

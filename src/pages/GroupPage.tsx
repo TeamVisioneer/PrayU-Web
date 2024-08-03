@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
-import { KakaoShareButton } from "@/components/KakaoShareBtn";
 import GroupMenuBtn from "../components/GroupMenuBtn";
-import { getDomainUrl } from "@/lib/utils";
 import inviteMemberIcon from "@/assets/inviteMemberIcon.svg";
 import GroupBody from "@/components/group/GroupBody";
+import ShareDrawer from "@/components/share/ShareDrawer";
+import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -57,17 +57,10 @@ const GroupPage: React.FC = () => {
     return null;
   }
 
-  const domainUrl = getDomainUrl();
-
   return (
     <div className="flex flex-col gap-5">
       <div className="relative flex justify-between items-center">
-        <KakaoShareButton
-          groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
-          id="groupPage"
-          img={inviteMemberIcon}
-          eventOption={{ where: "GroupPage" }}
-        />
+        <OpenShareDrawerBtn message="" iconUrl={inviteMemberIcon} />
 
         <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
           <div className="text-lg font-bold flex items-center gap-1">
@@ -84,6 +77,8 @@ const GroupPage: React.FC = () => {
         groupList={groupList}
         targetGroup={targetGroup}
       />
+
+      <ShareDrawer />
     </div>
   );
 };

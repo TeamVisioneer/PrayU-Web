@@ -1,4 +1,4 @@
-import { KakaoShareButton } from "../KakaoShareBtn";
+import { KakaoShareButton } from "../share/KakaoShareBtn";
 
 export const MemberInviteCard = () => {
   return (

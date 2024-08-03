@@ -74,7 +74,8 @@ export interface BaseStore {
   ) => Promise<Member | null>;
   updateMember: (
     memberId: string | undefined,
-    praySummary: string
+    praySummary: string,
+    updatedAt?: string
   ) => Promise<Member | null>;
   getMember: (
     userId: string,
@@ -139,8 +140,13 @@ export interface BaseStore {
     [key: string]: PrayWithProfiles[];
   };
   setReactionDatasForMe: (prayData: PrayWithProfiles[]) => void;
+
   isOpenMyPrayDrawer: boolean;
   setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
+
+  // share
+  isOpenShareDrawer: boolean;
+  setIsOpenShareDrawer: (isOpenShareDrawer: boolean) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -263,8 +269,17 @@ const useBaseStore = create<BaseStore>()(
       const member = await createMember(groupId, userId);
       return member;
     },
-    updateMember: async (memberId: string | undefined, praySummary: string) => {
-      const member = await updateMember(memberId, praySummary);
+    updateMember: async (
+      memberId: string | undefined,
+      praySummary,
+      updatedAt?: string
+    ) => {
+      let member;
+      if (updatedAt) {
+        member = await updateMember(memberId, praySummary, updatedAt);
+      } else {
+        member = await updateMember(memberId, praySummary);
+      }
       return member;
     },
     getMember: async (userId: string, groupId: string | undefined) => {
@@ -467,6 +482,14 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => {
       set((state) => {
         state.isOpenMyPrayDrawer = isOpenTodayPrayDrawer;
+      });
+    },
+
+    // share
+    isOpenShareDrawer: false,
+    setIsOpenShareDrawer: (isOpenShareDrawer: boolean) => {
+      set((state) => {
+        state.isOpenShareDrawer = isOpenShareDrawer;
       });
     },
   }))

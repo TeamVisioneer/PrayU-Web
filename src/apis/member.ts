@@ -71,16 +71,18 @@ export const getMember = async (
 
 export const updateMember = async (
   memberId: string | undefined,
-  praySummary: string | undefined
+  praySummary: string | undefined,
+  updatedAt?: string
 ): Promise<Member | null> => {
   try {
     if (!memberId) return null;
+    const updateParams = {
+      pray_summary: praySummary,
+      ...(updatedAt && { updated_at: getISOToday() }),
+    };
     const { error, data } = await supabase
       .from("member")
-      .update({
-        pray_summary: praySummary,
-        updated_at: getISOToday(),
-      })
+      .update(updateParams)
       .eq("id", memberId)
       .select();
     if (error) {
