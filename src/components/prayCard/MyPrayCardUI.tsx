@@ -109,10 +109,10 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
         ) : (
           <p className="whitespace-pre-line">{displayedContent}</p>
         )}
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-2 right-2">
           {isEditingPrayCard ? (
             <button
-              className={`text-white rounded-full bg-middle/90 w-10 h-10 flex justify-center items-center ${
+              className={`text-white rounded-full bg-middle/90 w-8 h-8 flex justify-center items-center ${
                 !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
               }`}
               onClick={() =>
@@ -120,14 +120,14 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
               }
               disabled={!inputPrayCardContent}
             >
-              <FaSave className="text-white w-5 h-5" />
+              <FaSave className="text-white w-4 h-4" />
             </button>
           ) : (
             <button
-              className="text-white rounded-full bg-end/90 w-10 h-10 flex justify-center items-center"
+              className="text-white rounded-full bg-end/90 w-8 h-8 flex justify-center items-center"
               onClick={() => handleEditClick()}
             >
-              <FaEdit className="text-white w-5 h-5" />
+              <FaEdit className="text-white w-4 h-4" />
             </button>
           )}
         </div>
