@@ -1,7 +1,5 @@
 import { analyticsTrack } from "@/analytics/analytics";
 import { useEffect, useRef } from "react";
-import prayCardImageUrl from "/images/prayCard.png";
-
 declare global {
   interface Window {
     Kakao: Kakao;
