@@ -19,11 +19,19 @@ module.exports = {
     extend: {
       boxShadow: {
         button: "0 10px 10px rgba(188, 190, 208, 0.8)",
+        // custom
+        member: "0 7px 7px rgba(193, 198, 246, 0.25)",
+        prayCard: "0 10px 10px rgba(193, 198, 246, 0.25)",
+        // custom
       },
       colors: {
         // custom
         mainBg: "#F2F3FD",
         mainBtn: "#70AAFF",
+
+        black: "#020202",
+        dark: "#6A6A6A",
+        deactivate: "#BFBFBF",
         // custom
 
         prayCardStart: "#B7DFFF",
@@ -99,9 +107,6 @@ module.exports = {
         "80vh": "80vh",
         "90vh": "90vh",
         "100vh": "100vh",
-      },
-      boxShadow: {
-        member: "0 7px 7px rgba(193, 198, 246, 0.25)",
       },
     },
   },

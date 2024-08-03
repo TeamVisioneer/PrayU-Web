@@ -48,33 +48,27 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   const weeklyDays = generateDates(prayCard?.created_at, prayData);
 
   return (
-    <div className="flex justify-around">
+    <div className="flex justify-center gap-[13px]">
       {weeklyDays.map((date) => {
         const isToday = date.date === currentDate;
         const day = new Date(date.date).getDate(); // Extract the day part of the date
         return (
-          <div key={date.date} className="flex flex-col items-center">
+          <div key={date.date} className="flex flex-col items-center gap-2">
             <span
               className={`text-sm ${
-                isToday ? "font-bold text-black" : "text-gray-400"
+                isToday ? "font-bold text-black" : "text-deactivate"
               }`}
             >
               {day}
             </span>
             <div
-              className={`w-7 h-7 flex items-center justify-center rounded-md ${
+              className={`w-7 h-7 flex items-center justify-center rounded-[5px] ${
                 isToday ? "bg-red-100" : "bg-gray-200"
               }`}
             >
-              <span
-                className={`text-2xl ${
-                  isToday ? "text-red-500" : "text-gray-500"
-                }`}
-              >
-                {isToday
-                  ? getReactionEmoticon(todayPrayTypeHash[prayCard?.id || ""])
-                  : date.emoji}
-              </span>
+              {isToday
+                ? getReactionEmoticon(todayPrayTypeHash[prayCard?.id || ""])
+                : date.emoji}
             </div>
           </div>
         );

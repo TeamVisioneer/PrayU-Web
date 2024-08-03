@@ -53,7 +53,7 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-[33px] p-2">
       <WeeklyCalendar
         prayCard={prayCard}
         prayData={prayDataHash[prayCard?.id || ""] || []}
