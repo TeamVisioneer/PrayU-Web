@@ -13,7 +13,7 @@ import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 
 interface PrayCardProps {
-  prayCard: PrayCardWithProfiles;
+  prayCard: PrayCardWithProfiles | null;
   member?: MemberWithProfiles | null;
 }
 
