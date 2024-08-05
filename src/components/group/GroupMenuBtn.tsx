@@ -37,8 +37,8 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
   const signOut = useBaseStore((state) => state.signOut);
-  const setIsGroupAlertOpen = useBaseStore(
-    (state) => state.setIsGroupAlertOpen
+  const setIsConfirmAlertOpen = useBaseStore(
+    (state) => state.setIsConfirmAlertOpen
   );
 
   const handleClickCreateGroup = () => {
@@ -70,7 +70,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
         window.location.href = "/";
       },
     });
-    setIsGroupAlertOpen(true);
+    setIsConfirmAlertOpen(true);
   };
 
   const onClickOtherGroup = (groupId: string) => {
@@ -138,7 +138,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             + 그룹 만들기
           </a>
           <a className="cursor-pointer" onClick={() => handleClickExitGroup()}>
-            - 그룹 나가기
+            현재 그룹 나가기
           </a>
 
           <hr />

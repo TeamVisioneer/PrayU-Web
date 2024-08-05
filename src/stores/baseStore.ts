@@ -58,13 +58,11 @@ export interface BaseStore {
   targetGroup: Group | null;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
-  isGroupAlertOpen: boolean;
 
   fetchGroupListByUserId: (userId: string | undefined) => Promise<void>;
   getGroup: (groupId: string | undefined) => Promise<void>;
   setGroupName: (groupName: string) => void;
   setIsDisabledGroupCreateBtn: (isDisabled: boolean) => void;
-  setIsGroupAlertOpen: (isGroupAlertOpen: boolean) => void;
   createGroup: (
     userId: string | undefined,
     name: string | undefined,
@@ -167,6 +165,9 @@ export interface BaseStore {
   setIsOpenShareDrawer: (isOpenShareDrawer: boolean) => void;
 
   // etc
+  isConfirmAlertOpen: boolean;
+  setIsConfirmAlertOpen: (isGroupAlertOpen: boolean) => void;
+
   alertData: {
     title: string;
     description: string;
@@ -236,7 +237,6 @@ const useBaseStore = create<BaseStore>()(
     targetGroup: null,
     inputGroupName: "",
     isDisabledGroupCreateBtn: false,
-    isGroupAlertOpen: false,
     fetchGroupListByUserId: async (userId: string | undefined) => {
       const data = await fetchGroupListByUserId(userId);
       set((state) => {
@@ -275,11 +275,6 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => {
       set((state) => {
         state.isOpenTodayPrayDrawer = isOpenTodayPrayDrawer;
-      });
-    },
-    setIsGroupAlertOpen(isGroupAlertOpen) {
-      set((state) => {
-        state.isGroupAlertOpen = isGroupAlertOpen;
       });
     },
 
@@ -542,6 +537,12 @@ const useBaseStore = create<BaseStore>()(
     },
 
     // etc
+    isConfirmAlertOpen: false,
+    setIsConfirmAlertOpen(isGroupAlertOpen) {
+      set((state) => {
+        state.isConfirmAlertOpen = isGroupAlertOpen;
+      });
+    },
     alertData: {
       title: "",
       description: "",

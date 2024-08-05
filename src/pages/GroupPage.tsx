@@ -7,7 +7,7 @@ import GroupBody from "@/components/group/GroupBody";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 import { ClipLoader } from "react-spinners";
-import GroupAlert from "@/components/group/GroupAlert";
+import ConfirmAlert from "@/components/alert/ConfirmAlert";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -83,7 +83,7 @@ const GroupPage: React.FC = () => {
         targetGroup={targetGroup}
       />
 
-      <GroupAlert />
+      <ConfirmAlert />
       <ShareDrawer />
     </div>
   );

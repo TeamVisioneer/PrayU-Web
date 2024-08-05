@@ -10,15 +10,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import useBaseStore from "@/stores/baseStore";
 
-const GroupAlert: React.FC = () => {
+const ConfirmAlert: React.FC = () => {
   const alertData = useBaseStore((state) => state.alertData);
-  const isGroupAlertOpen = useBaseStore((state) => state.isGroupAlertOpen);
-  const setIsGroupAlertOpen = useBaseStore(
-    (state) => state.setIsGroupAlertOpen
+  const isConfirmAlertOpen = useBaseStore((state) => state.isConfirmAlertOpen);
+  const setIsConfirmAlertOpen = useBaseStore(
+    (state) => state.setIsConfirmAlertOpen
   );
 
   return (
-    <AlertDialog open={isGroupAlertOpen} onOpenChange={setIsGroupAlertOpen}>
+    <AlertDialog open={isConfirmAlertOpen} onOpenChange={setIsConfirmAlertOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{alertData.title}</AlertDialogTitle>
@@ -26,18 +26,20 @@ const GroupAlert: React.FC = () => {
             {alertData.description}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{alertData.cancelText}</AlertDialogCancel>
+        <AlertDialogFooter className="flex flex-col items-center">
           <AlertDialogAction
-            className="bg-red-500"
+            className="bg-mainBtn w-3/4"
             onClick={() => alertData.onAction()}
           >
             {alertData.actionText}
           </AlertDialogAction>
+          <AlertDialogCancel className="w-3/4">
+            {alertData.cancelText}
+          </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
 };
 
-export default GroupAlert;
+export default ConfirmAlert;
