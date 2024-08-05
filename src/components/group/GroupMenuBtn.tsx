@@ -55,7 +55,9 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const handleClickExitGroup = () => {
     setAlertData({
       title: "그룹 나가기",
-      description: "정말 그룹을 나가시겠어요?",
+      description: `더 이상 ${
+        targetGroup!.name
+      }의\n기도를 받을 수 없게 돼요 :(`,
       actionText: "나가기",
       cancelText: "취소",
       onAction: async () => {
@@ -65,7 +67,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           memberList!.length
         );
         await deletePrayCardByGroupId(user!.id, targetGroup!.id);
-        //window.location.href = "/";
+        window.location.href = "/";
       },
     });
     setIsGroupAlertOpen(true);

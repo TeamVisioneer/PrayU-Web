@@ -22,7 +22,7 @@ const GroupAlert: React.FC = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{alertData.title}</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="whitespace-pre-wrap">
             {alertData.description}
           </AlertDialogDescription>
         </AlertDialogHeader>
