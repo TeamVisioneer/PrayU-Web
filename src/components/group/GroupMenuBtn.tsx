@@ -24,12 +24,16 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   userGroupList,
   targetGroup,
 }) => {
+  const setAlertData = useBaseStore((state) => state.setAlertData);
   const navigate = useNavigate();
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
   const signOut = useBaseStore((state) => state.signOut);
+  const setIsGroupAlertOpen = useBaseStore(
+    (state) => state.setIsGroupAlertOpen
+  );
 
-  const handleClick = () => {
+  const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount) {
       navigate("/group/new");
       analyticsTrack("클릭_그룹_추가", { group_length: userGroupList.length });
@@ -54,6 +58,19 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
       group_id: targetGroup?.id,
       group_name: targetGroup?.name,
     });
+  };
+
+  const handleClickExitGroup = () => {
+    setAlertData({
+      title: "그룹 나가기",
+      description: "정말 그룹을 나가시겠어요?",
+      actionText: "나가기",
+      cancelText: "취소",
+      onAction: () => {
+        navigate("/");
+      },
+    });
+    setIsGroupAlertOpen(true);
   };
 
   return (
@@ -98,9 +115,16 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
               </a>
             );
           })}
-          <a className="cursor-pointer" onClick={() => handleClick()}>
+          <a
+            className="cursor-pointer"
+            onClick={() => handleClickCreateGroup()}
+          >
             + 그룹 만들기
           </a>
+          <a className="cursor-pointer" onClick={() => handleClickExitGroup()}>
+            - 그룹 나가기
+          </a>
+
           <hr />
           <a href="/">PrayU 공유하기</a>
           <a

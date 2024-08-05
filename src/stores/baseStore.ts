@@ -50,10 +50,13 @@ export interface BaseStore {
   targetGroup: Group | null;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
+  isGroupAlertOpen: boolean;
+
   fetchGroupListByUserId: (userId: string | undefined) => Promise<void>;
   getGroup: (groupId: string | undefined) => Promise<void>;
   setGroupName: (groupName: string) => void;
   setIsDisabledGroupCreateBtn: (isDisabled: boolean) => void;
+  setIsGroupAlertOpen: (isGroupAlertOpen: boolean) => void;
   createGroup: (
     userId: string | undefined,
     name: string | undefined,
@@ -147,6 +150,22 @@ export interface BaseStore {
   // share
   isOpenShareDrawer: boolean;
   setIsOpenShareDrawer: (isOpenShareDrawer: boolean) => void;
+
+  // etc
+  alertData: {
+    title: string;
+    description: string;
+    cancelText: string;
+    actionText: string;
+    onAction: () => void;
+  };
+  setAlertData: (alertData: {
+    title: string;
+    description: string;
+    cancelText: string;
+    actionText: string;
+    onAction: () => void;
+  }) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -202,6 +221,7 @@ const useBaseStore = create<BaseStore>()(
     targetGroup: null,
     inputGroupName: "",
     isDisabledGroupCreateBtn: false,
+    isGroupAlertOpen: false,
     fetchGroupListByUserId: async (userId: string | undefined) => {
       const data = await fetchGroupListByUserId(userId);
       set((state) => {
@@ -240,6 +260,11 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => {
       set((state) => {
         state.isOpenTodayPrayDrawer = isOpenTodayPrayDrawer;
+      });
+    },
+    setIsGroupAlertOpen(isGroupAlertOpen) {
+      set((state) => {
+        state.isGroupAlertOpen = isGroupAlertOpen;
       });
     },
 
@@ -482,6 +507,20 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenShareDrawer: (isOpenShareDrawer: boolean) => {
       set((state) => {
         state.isOpenShareDrawer = isOpenShareDrawer;
+      });
+    },
+
+    // etc
+    alertData: {
+      title: "",
+      description: "",
+      cancelText: "",
+      actionText: "",
+      onAction: () => {},
+    },
+    setAlertData: (alertData) => {
+      set((state) => {
+        state.alertData = alertData;
       });
     },
   }))
