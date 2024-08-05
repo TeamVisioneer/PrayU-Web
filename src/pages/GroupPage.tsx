@@ -49,7 +49,7 @@ const GroupPage: React.FC = () => {
     }
   }, [groupList, navigate, paramsGroupId]);
 
-  if (!groupList || !memberList || (paramsGroupId && !targetGroup)) {
+  if (!groupList || !memberList || !targetGroup) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -68,8 +68,8 @@ const GroupPage: React.FC = () => {
 
         <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
           <div className="text-lg font-bold flex items-center gap-1">
-            {targetGroup?.name}
-            <span className="text-sm text-gray-500">{memberList?.length}</span>
+            {targetGroup.name}
+            <span className="text-sm text-gray-500">{memberList.length}</span>
           </div>
         </div>
 
