@@ -95,3 +95,24 @@ export const updateMember = async (
     return null;
   }
 };
+
+export const deleteMemberbyGroupId = async (
+  userId: string,
+  groupId: string
+) => {
+  try {
+    const { error } = await supabase
+      .from("member")
+      .update({ deleted_at: getISOToday() })
+      .eq("user_id", userId)
+      .eq("group_id", groupId);
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return true;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};

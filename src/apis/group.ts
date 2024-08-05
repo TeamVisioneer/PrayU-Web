@@ -1,6 +1,7 @@
 import { supabase } from "./../../supabase/client";
 import { MemberWithGroup, Group } from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
+import { getISOToday } from "@/lib/utils";
 
 export const fetchGroupListByUserId = async (
   userId: string | undefined
@@ -62,6 +63,24 @@ export const createGroup = async (
       return null;
     }
     return data ? data[0] : null;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const deleteGroup = async (groupId: string) => {
+  try {
+    const { error } = await supabase
+      .from("group")
+      .update({ deleted_at: getISOToday() })
+      .eq("id", groupId);
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return true;
   } catch (error) {
     Sentry.captureException(error);
     return null;

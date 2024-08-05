@@ -19,15 +19,23 @@ import {
   PrayDataHash,
   PrayWithProfiles,
 } from "../../supabase/types/tables";
-import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
+import {
+  fetchGroupListByUserId,
+  getGroup,
+  createGroup,
+  deleteGroup,
+} from "@/apis/group";
 import {
   createMember,
+  deleteMemberbyGroupId,
   fetchMemberListByGroupId,
   getMember,
   updateMember,
 } from "@/apis/member";
 import {
   createPrayCard,
+  deletePrayCard,
+  deletePrayCardByGroupId,
   fetchGroupPrayCardList,
   fetchUserPrayCardListByGroupId,
   updatePrayCardContent,
@@ -86,6 +94,11 @@ export interface BaseStore {
   ) => Promise<MemberWithProfiles | null>;
   isOpenMyMemberDrawer: boolean;
   setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
+  deleteMemberbyGroupId: (
+    userId: string,
+    groupId: string,
+    numMember: number
+  ) => Promise<void>;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -117,6 +130,8 @@ export interface BaseStore {
   updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
   setPrayCardContent: (content: string) => void;
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
+  deletePrayCard: (prayCardId: string) => Promise<void>;
+  deletePrayCardByGroupId: (userId: string, groupId: string) => Promise<void>;
 
   // pray
   prayData: Pray[] | null;
@@ -313,6 +328,16 @@ const useBaseStore = create<BaseStore>()(
         state.isOpenMyMemberDrawer = isOpenMyMemberDrawer;
       });
     },
+    deleteMemberbyGroupId: async (
+      userId: string,
+      groupId: string,
+      numMember: number
+    ) => {
+      if (numMember <= 1) {
+        await deleteGroup(groupId);
+      }
+      await deleteMemberbyGroupId(userId, groupId);
+    },
 
     // prayCard
     groupPrayCardList: null,
@@ -390,6 +415,12 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.isEditingPrayCard = true;
       });
+    },
+    deletePrayCard: async (prayCardId: string) => {
+      await deletePrayCard(prayCardId);
+    },
+    deletePrayCardByGroupId: async (userId: string, groupId: string) => {
+      await deletePrayCardByGroupId(userId, groupId);
     },
 
     // pray

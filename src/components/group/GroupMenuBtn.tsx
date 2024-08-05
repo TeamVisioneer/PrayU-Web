@@ -24,6 +24,14 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   userGroupList,
   targetGroup,
 }) => {
+  const user = useBaseStore((state) => state.user);
+  const memberList = useBaseStore((state) => state.memberList);
+  const deleteMemberbyGroupId = useBaseStore(
+    (state) => state.deleteMemberbyGroupId
+  );
+  const deletePrayCardByGroupId = useBaseStore(
+    (state) => state.deletePrayCardByGroupId
+  );
   const setAlertData = useBaseStore((state) => state.setAlertData);
   const navigate = useNavigate();
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
@@ -44,6 +52,25 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
     }
   };
 
+  const handleClickExitGroup = () => {
+    setAlertData({
+      title: "그룹 나가기",
+      description: "정말 그룹을 나가시겠어요?",
+      actionText: "나가기",
+      cancelText: "취소",
+      onAction: async () => {
+        await deleteMemberbyGroupId(
+          user!.id,
+          targetGroup!.id,
+          memberList!.length
+        );
+        await deletePrayCardByGroupId(user!.id, targetGroup!.id);
+        //window.location.href = "/";
+      },
+    });
+    setIsGroupAlertOpen(true);
+  };
+
   const onClickOtherGroup = (groupId: string) => {
     analyticsTrack("클릭_그룹_전환", { group_id: groupId });
     window.location.href = `/group/${groupId}`;
@@ -58,19 +85,6 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
       group_id: targetGroup?.id,
       group_name: targetGroup?.name,
     });
-  };
-
-  const handleClickExitGroup = () => {
-    setAlertData({
-      title: "그룹 나가기",
-      description: "정말 그룹을 나가시겠어요?",
-      actionText: "나가기",
-      cancelText: "취소",
-      onAction: () => {
-        navigate("/");
-      },
-    });
-    setIsGroupAlertOpen(true);
   };
 
   return (
