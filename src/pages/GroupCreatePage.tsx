@@ -10,8 +10,8 @@ import { analyticsTrack } from "@/analytics/analytics";
 
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const createGroup = useBaseStore((state) => state.createGroup);
   const inputGroupName = useBaseStore((state) => state.inputGroupName);
@@ -28,10 +28,7 @@ const GroupCreatePage: React.FC = () => {
     (state) => state.fetchGroupListByUserId
   );
 
-  const handleCreateGroup = async (
-    userId: string | undefined,
-    inputGroupName: string
-  ) => {
+  const handleCreateGroup = async (userId: string, inputGroupName: string) => {
     if (groupList!.length == maxGroupCount) {
       toast({
         description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
@@ -41,7 +38,11 @@ const GroupCreatePage: React.FC = () => {
     setIsDisabledGroupCreateBtn(true);
     analyticsTrack("클릭_그룹_생성", { group_name: inputGroupName });
     const targetGroup = await createGroup(userId, inputGroupName, "intro");
-    targetGroup && navigate("/group/" + targetGroup.id, { replace: true });
+    if (!targetGroup || !targetGroup.id) {
+      setIsDisabledGroupCreateBtn(false);
+      return;
+    }
+    navigate("/group/" + targetGroup.id, { replace: true });
   };
 
   useEffect(() => {
@@ -85,7 +86,7 @@ const GroupCreatePage: React.FC = () => {
           maxLength={15}
         />
         <Button
-          onClick={() => handleCreateGroup(user?.id, inputGroupName)}
+          onClick={() => handleCreateGroup(user!.id, inputGroupName)}
           className="w-full"
           disabled={isDisabledGroupCreateBtn}
           variant="primary"
