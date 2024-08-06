@@ -14,7 +14,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 
 interface MemberProps {
   currentUserId: string;
-  groupId: string | undefined;
+  groupId: string;
 }
 
 const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
@@ -84,16 +84,16 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
                   className="w-4 h-4 opacity-90"
                 />
                 <p className="text-sm text-dark">
-                  {
-                    prayCard?.pray?.filter((pray) => pray.pray_type === type)
-                      .length
-                  }
+                  {prayCard
+                    ? prayCard.pray.filter((pray) => pray.pray_type === type)
+                        .length
+                    : 0}
                 </p>
               </div>
             );
           })}
         </div>
-        {prayCard?.pray && prayCard.pray.length > 0 && (
+        {prayCard && prayCard.pray.length > 0 && (
           <p className=" flex items-center text-gray-500 text-[10px]">
             기도해 준 사람이 있어요😊
           </p>
@@ -124,7 +124,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {/* PrayCard */}
-        <MyPrayCardUI member={member} prayCard={prayCard} />
+        <MyPrayCardUI
+          currentUserId={currentUserId}
+          groupId={groupId}
+          member={member}
+        />
         {/* PrayCard */}
       </DrawerContent>
     </Drawer>

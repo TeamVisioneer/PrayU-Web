@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
-import { PrayCardWithProfiles } from "supabase/types/tables";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { Drawer, DrawerTrigger } from "../ui/drawer";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
@@ -11,27 +10,40 @@ import { Textarea } from "../ui/textarea";
 import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
+import { ClipLoader } from "react-spinners";
 
 interface PrayCardProps {
-  prayCard: PrayCardWithProfiles | null;
-  member?: MemberWithProfiles | null;
+  currentUserId: string;
+  groupId: string;
+  member: MemberWithProfiles | null;
 }
 
-const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
-  const reactionCounts = useBaseStore((state) => state.reactionCounts);
+const MyPrayCardUI: React.FC<PrayCardProps> = ({
+  currentUserId,
+  groupId,
+  member,
+}) => {
+  const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
+  const fetchUserPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchUserPrayCardListByGroupId
+  );
+
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
-  const isEditingPrayCard = useBaseStore((state) => state.isEditingPrayCard);
-
   const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
+
+  const isEditingPrayCard = useBaseStore((state) => state.isEditingPrayCard);
   const setIsEditingPrayCard = useBaseStore(
     (state) => state.setIsEditingPrayCard
   );
+
   const updateMember = useBaseStore((state) => state.updateMember);
   const updatePrayCardContent = useBaseStore(
     (state) => state.updatePrayCardContent
   );
+
+  const reactionCounts = useBaseStore((state) => state.reactionCounts);
   const setReactionDatasForMe = useBaseStore(
     (state) => state.setReactionDatasForMe
   );
@@ -41,16 +53,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     (state) => state.setIsOpenMyPrayDrawer
   );
 
-  const prayDatas = prayCard?.pray;
-
-  const dateDistance = getDateDistance(
-    new Date(
-      getISOOnlyDate(
-        prayCard?.created_at ?? member?.updated_at ?? getISOTodayDate()
-      )
-    ),
-    new Date(getISOTodayDate())
-  );
+  // TODO: 전역으로 변경 예정
+  const [isDivVisible, setIsDivVisible] = useState(true);
 
   const onClickPrayerList = () => {
     analyticsTrack("클릭_기도카드_반응결과", { where: "MyPrayCard" });
@@ -73,14 +77,36 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member, prayCard }) => {
     analyticsTrack("클릭_기도카드_저장", {});
   };
 
+  // TODO: 본 과정에서 setReactionDatasForMe 처리할 수 있도록
+  useEffect(() => {
+    fetchUserPrayCardListByGroupId(currentUserId, groupId);
+  }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
+
   // TODO: useEffect 써야하는지 재고
   useEffect(() => {
-    if (prayDatas) {
-      setReactionDatasForMe(prayDatas);
+    if (userPrayCardList && userPrayCardList[0]) {
+      setReactionDatasForMe(userPrayCardList[0].pray);
     }
-  }, [prayDatas, setReactionDatasForMe]);
+  }, [userPrayCardList, setReactionDatasForMe]);
 
-  const [isDivVisible, setIsDivVisible] = useState(true);
+  if (!userPrayCardList) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
+
+  const prayCard = userPrayCardList[0];
+
+  const dateDistance = getDateDistance(
+    new Date(
+      getISOOnlyDate(
+        prayCard?.created_at ?? member?.updated_at ?? getISOTodayDate()
+      )
+    ),
+    new Date(getISOTodayDate())
+  );
 
   const MyPrayCardBody = (
     <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">

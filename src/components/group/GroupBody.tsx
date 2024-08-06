@@ -20,7 +20,7 @@ import { ClipLoader } from "react-spinners";
 interface GroupBodyProps {
   currentUserId: string;
   groupList: Group[];
-  targetGroup: Group | null;
+  targetGroup: Group;
 }
 
 const GroupBody: React.FC<GroupBodyProps> = ({
@@ -35,7 +35,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
     (state) => state.setIsOpenTodayPrayDrawer
   );
   const isParamsGroupIdinGroupList = groupList.some(
-    (group) => group.id === targetGroup?.id
+    (group) => group.id === targetGroup.id
   );
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
 
@@ -72,7 +72,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   return (
     <>
       <div className="flex flex-col h-full gap-4">
-        <MyMember currentUserId={currentUserId} groupId={targetGroup?.id} />
+        <MyMember currentUserId={currentUserId} groupId={targetGroup.id} />
         <OtherMemberList
           currentUserId={currentUserId}
           groupId={targetGroup?.id}
