@@ -19,15 +19,23 @@ import {
   PrayDataHash,
   PrayWithProfiles,
 } from "../../supabase/types/tables";
-import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
+import {
+  fetchGroupListByUserId,
+  getGroup,
+  createGroup,
+  deleteGroup,
+} from "@/apis/group";
 import {
   createMember,
+  deleteMemberbyGroupId,
   fetchMemberListByGroupId,
   getMember,
   updateMember,
 } from "@/apis/member";
 import {
   createPrayCard,
+  deletePrayCard,
+  deletePrayCardByGroupId,
   fetchGroupPrayCardList,
   fetchUserPrayCardListByGroupId,
   updatePrayCardContent,
@@ -50,6 +58,7 @@ export interface BaseStore {
   targetGroup: Group | null;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
+
   fetchGroupListByUserId: (userId: string | undefined) => Promise<void>;
   getGroup: (groupId: string | undefined) => Promise<void>;
   setGroupName: (groupName: string) => void;
@@ -83,6 +92,11 @@ export interface BaseStore {
   ) => Promise<MemberWithProfiles | null>;
   isOpenMyMemberDrawer: boolean;
   setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
+  deleteMemberbyGroupId: (
+    userId: string,
+    groupId: string,
+    numMember: number
+  ) => Promise<void>;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -114,6 +128,8 @@ export interface BaseStore {
   updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
   setPrayCardContent: (content: string) => void;
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
+  deletePrayCard: (prayCardId: string) => Promise<void>;
+  deletePrayCardByGroupId: (userId: string, groupId: string) => Promise<void>;
 
   // pray
   prayData: Pray[] | null;
@@ -147,6 +163,25 @@ export interface BaseStore {
   // share
   isOpenShareDrawer: boolean;
   setIsOpenShareDrawer: (isOpenShareDrawer: boolean) => void;
+
+  // etc
+  isConfirmAlertOpen: boolean;
+  setIsConfirmAlertOpen: (isGroupAlertOpen: boolean) => void;
+
+  alertData: {
+    title: string;
+    description: string;
+    cancelText: string;
+    actionText: string;
+    onAction: () => void;
+  };
+  setAlertData: (alertData: {
+    title: string;
+    description: string;
+    cancelText: string;
+    actionText: string;
+    onAction: () => void;
+  }) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -288,6 +323,16 @@ const useBaseStore = create<BaseStore>()(
         state.isOpenMyMemberDrawer = isOpenMyMemberDrawer;
       });
     },
+    deleteMemberbyGroupId: async (
+      userId: string,
+      groupId: string,
+      numMember: number
+    ) => {
+      if (numMember <= 1) {
+        await deleteGroup(groupId);
+      }
+      await deleteMemberbyGroupId(userId, groupId);
+    },
 
     // prayCard
     groupPrayCardList: null,
@@ -365,6 +410,12 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.isEditingPrayCard = true;
       });
+    },
+    deletePrayCard: async (prayCardId: string) => {
+      await deletePrayCard(prayCardId);
+    },
+    deletePrayCardByGroupId: async (userId: string, groupId: string) => {
+      await deletePrayCardByGroupId(userId, groupId);
     },
 
     // pray
@@ -482,6 +533,26 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenShareDrawer: (isOpenShareDrawer: boolean) => {
       set((state) => {
         state.isOpenShareDrawer = isOpenShareDrawer;
+      });
+    },
+
+    // etc
+    isConfirmAlertOpen: false,
+    setIsConfirmAlertOpen(isGroupAlertOpen) {
+      set((state) => {
+        state.isConfirmAlertOpen = isGroupAlertOpen;
+      });
+    },
+    alertData: {
+      title: "",
+      description: "",
+      cancelText: "",
+      actionText: "",
+      onAction: () => {},
+    },
+    setAlertData: (alertData) => {
+      set((state) => {
+        state.alertData = alertData;
       });
     },
   }))

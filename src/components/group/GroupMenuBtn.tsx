@@ -24,12 +24,24 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   userGroupList,
   targetGroup,
 }) => {
+  const user = useBaseStore((state) => state.user);
+  const memberList = useBaseStore((state) => state.memberList);
+  const deleteMemberbyGroupId = useBaseStore(
+    (state) => state.deleteMemberbyGroupId
+  );
+  const deletePrayCardByGroupId = useBaseStore(
+    (state) => state.deletePrayCardByGroupId
+  );
+  const setAlertData = useBaseStore((state) => state.setAlertData);
   const navigate = useNavigate();
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
   const signOut = useBaseStore((state) => state.signOut);
+  const setIsConfirmAlertOpen = useBaseStore(
+    (state) => state.setIsConfirmAlertOpen
+  );
 
-  const handleClick = () => {
+  const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount) {
       navigate("/group/new");
       analyticsTrack("클릭_그룹_추가", { group_length: userGroupList.length });
@@ -38,6 +50,27 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
         description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
       });
     }
+  };
+
+  const handleClickExitGroup = () => {
+    setAlertData({
+      title: "그룹 나가기",
+      description: `더 이상 ${
+        targetGroup!.name
+      }의\n기도를 받을 수 없게 돼요 :(`,
+      actionText: "나가기",
+      cancelText: "취소",
+      onAction: async () => {
+        await deleteMemberbyGroupId(
+          user!.id,
+          targetGroup!.id,
+          memberList!.length
+        );
+        await deletePrayCardByGroupId(user!.id, targetGroup!.id);
+        window.location.href = "/";
+      },
+    });
+    setIsConfirmAlertOpen(true);
   };
 
   const onClickOtherGroup = (groupId: string) => {
@@ -98,9 +131,19 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
               </a>
             );
           })}
-          <a className="cursor-pointer" onClick={() => handleClick()}>
+          <a
+            className="cursor-pointer text-green-900"
+            onClick={() => handleClickCreateGroup()}
+          >
             + 그룹 만들기
           </a>
+          <a
+            className="cursor-pointer text-red-900"
+            onClick={() => handleClickExitGroup()}
+          >
+            - 그룹 나가기
+          </a>
+
           <hr />
           <a href="/">PrayU 공유하기</a>
           <a

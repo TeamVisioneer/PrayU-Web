@@ -129,3 +129,43 @@ export async function updatePrayCardContent(
     return null;
   }
 }
+
+export const deletePrayCard = async (prayCardId: string) => {
+  try {
+    const { error } = await supabase
+      .from("pray_card")
+      .update({ deleted_at: getISOToday() })
+      .eq("id", prayCardId);
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return true;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const deletePrayCardByGroupId = async (
+  userId: string,
+  groupId: string
+) => {
+  try {
+    const { error } = await supabase
+      .from("pray_card")
+      .update({ deleted_at: getISOToday() })
+      .eq("user_id", userId)
+      .eq("group_id", groupId);
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return true;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
