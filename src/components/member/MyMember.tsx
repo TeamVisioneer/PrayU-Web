@@ -19,7 +19,6 @@ interface MemberProps {
 
 const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const member = useBaseStore((state) => state.targetMember);
-  const memberLoading = useBaseStore((state) => state.memberLoading);
   const getMember = useBaseStore((state) => state.getMember);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
@@ -60,10 +59,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     setPrayCardContent(member?.pray_summary || "");
   }, [member, setPrayCardContent]);
 
-  if (memberLoading || !userPrayCardList) return null;
-
-  const prayCard = userPrayCardList[0];
-  const prayDatasForMe = prayCard.pray;
+  const prayCard = userPrayCardList?.[0] || null;
 
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-3 cursor-pointer bg-white p-[25px] rounded-[15px] shadow-member">
@@ -89,7 +85,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
                 />
                 <p className="text-sm text-dark">
                   {
-                    prayDatasForMe?.filter((pray) => pray.pray_type === type)
+                    prayCard?.pray?.filter((pray) => pray.pray_type === type)
                       .length
                   }
                 </p>
@@ -97,7 +93,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
             );
           })}
         </div>
-        {prayDatasForMe && prayDatasForMe.length > 0 && (
+        {prayCard?.pray && prayCard.pray.length > 0 && (
           <p className=" flex items-center text-gray-500 text-[10px]">
             기도해 준 사람이 있어요😊
           </p>
