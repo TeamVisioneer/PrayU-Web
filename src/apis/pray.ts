@@ -69,7 +69,8 @@ export const updatePray = async (
       .from("pray")
       .update({ pray_type: prayType })
       .eq("pray_card_id", prayCardId)
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .gte("created_at", getISOTodayDate());
     if (error) {
       Sentry.captureException(error.message);
       return null;
