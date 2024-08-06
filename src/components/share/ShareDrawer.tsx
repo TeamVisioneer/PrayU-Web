@@ -11,6 +11,7 @@ import { KakaoShareButton } from "./KakaoShareBtn";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 import KakaoShareImageUrl from "/images/KakaoShare.png";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const ShareDrawer: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -32,6 +33,7 @@ const ShareDrawer: React.FC = () => {
       .catch((err) => {
         console.error("복사하는 중 오류가 발생했습니다: ", err);
       });
+    analyticsTrack("클릭_링크_공유", {});
   };
 
   const DrawerBody = (
