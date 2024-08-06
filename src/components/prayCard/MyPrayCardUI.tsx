@@ -27,7 +27,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
   );
-
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
@@ -41,11 +40,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   const updateMember = useBaseStore((state) => state.updateMember);
   const updatePrayCardContent = useBaseStore(
     (state) => state.updatePrayCardContent
-  );
-
-  const reactionCounts = useBaseStore((state) => state.reactionCounts);
-  const setReactionDatasForMe = useBaseStore(
-    (state) => state.setReactionDatasForMe
   );
 
   const isOpenMyPrayDrawer = useBaseStore((state) => state.isOpenMyPrayDrawer);
@@ -68,7 +62,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   const handleSaveClick = (
     prayCardId: string,
     content: string,
-    memberId: string | undefined
+    memberId: string
   ) => {
     updatePrayCardContent(prayCardId, content);
     updateMember(memberId, content);
@@ -77,24 +71,21 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     analyticsTrack("클릭_기도카드_저장", {});
   };
 
-  // TODO: 본 과정에서 setReactionDatasForMe 처리할 수 있도록
   useEffect(() => {
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
-  // TODO: useEffect 써야하는지 재고
-  useEffect(() => {
-    if (userPrayCardList && userPrayCardList[0]) {
-      setReactionDatasForMe(userPrayCardList[0].pray);
-    }
-  }, [userPrayCardList, setReactionDatasForMe]);
-
-  if (!userPrayCardList) {
+  if (!userPrayCardList || !member) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
       </div>
     );
+  }
+
+  // TODO: PrayCardCreateModal 로 반환하기 ( 이미 GroupBody 에서 member.updated_at 으로 처리중 )
+  if (userPrayCardList.length === 0) {
+    return null;
   }
 
   const prayCard = userPrayCardList[0];
@@ -120,9 +111,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             </div>
           </div>
           <p className="text-xs text-white w-full text-left">
-            시작일 :{" "}
-            {prayCard?.created_at.split("T")[0] ||
-              member?.updated_at.split("T")[0]}
+            시작일 : {prayCard.created_at.split("T")[0]}
           </p>
         </div>
       )}
@@ -140,7 +129,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
           disabled={!isEditingPrayCard}
           onFocus={() => setIsDivVisible(false)}
           onBlur={() =>
-            handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
+            handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
           }
         />
         <div className="absolute top-2 right-2">
@@ -150,7 +139,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
                 !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
               }`}
               onClick={() =>
-                handleSaveClick(prayCard!.id, inputPrayCardContent, member?.id)
+                handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
               }
               disabled={!inputPrayCardContent}
             >
@@ -178,31 +167,32 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
           onClick={() => onClickPrayerList()}
         >
           <div className="flex justify-center gap-2">
-            {Object.values(PrayType).map((type) => {
-              if (!reactionCounts) return null;
-              return (
-                <div
-                  key={type}
-                  className={`w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2
-                      }`}
-                >
-                  <div className="text-sm w-5 h-5">
-                    <img
-                      src={PrayTypeDatas[type].img}
-                      alt={PrayTypeDatas[type].emoji}
-                      className="w-5 h-5"
-                    />
-                  </div>
-                  <div className="text-sm">{reactionCounts[type]}</div>
+            {Object.values(PrayType).map((type) => (
+              <div
+                key={type}
+                className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
+              >
+                <div className="text-sm w-5 h-5">
+                  <img
+                    src={PrayTypeDatas[type].img}
+                    alt={PrayTypeDatas[type].emoji}
+                    className="w-5 h-5"
+                  />
                 </div>
-              );
-            })}
+                <div className="text-sm">
+                  {
+                    prayCard.pray.filter((pray) => pray.pray_type === type)
+                      .length
+                  }
+                </div>
+              </div>
+            ))}
             <div className="bg-white rounded-lg flex justify-center items-center p-1">
               <img className="w-5" src={iconUserMono} alt="user-icon" />
             </div>
           </div>
         </DrawerTrigger>
-        <PrayList />
+        <PrayList prayData={prayCard.pray} />
       </Drawer>
     </div>
   );

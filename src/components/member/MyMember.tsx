@@ -54,11 +54,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   useEffect(() => {
     getMember(currentUserId, groupId);
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
-  }, [currentUserId, fetchUserPrayCardListByGroupId, getMember, groupId]);
+  }, [getMember, fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
   useEffect(() => {
-    setPrayCardContent(member?.pray_summary || "");
-  }, [member, setPrayCardContent]);
+    if (member) setPrayCardContent(member.pray_summary || "");
+  }, [setPrayCardContent, member]);
 
   const prayCard = userPrayCardList?.[0] || null;
   const prayDatasForMe = prayCard?.pray;
