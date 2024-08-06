@@ -28,18 +28,6 @@ export interface PrayWithProfiles extends Pray {
   profiles: Profiles;
 }
 
-export interface UserIdMemberHash {
-  [key: string]: MemberWithProfiles;
-}
-
-export interface userIdPrayCardListHash {
-  [key: string]: PrayCardWithProfiles[];
-}
-
 export interface TodayPrayTypeHash {
   [prayCardId: string]: PrayType | null;
-}
-
-export interface PrayDataHash {
-  [prayCardId: string]: Pray[] | null;
 }
