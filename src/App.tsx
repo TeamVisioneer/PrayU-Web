@@ -6,6 +6,8 @@ import MainPage from "./pages/MainPage";
 import GroupPage from "./pages/GroupPage";
 import GroupCreatePage from "./pages/GroupCreatePage";
 import { analytics } from "@/analytics/analytics";
+import ConfirmAlert from "./components/alert/ConfirmAlert";
+import { Toaster } from "./components/ui/toaster";
 
 const App = () => {
   return (
@@ -46,6 +48,8 @@ const App = () => {
           </AuthProvider>
         </BrowserRouter>
       </div>
+      <Toaster />
+      <ConfirmAlert />
     </div>
   );
 };
