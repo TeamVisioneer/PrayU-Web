@@ -20,28 +20,20 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   member,
   eventOption,
 }) => {
-  const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
-  const fetchUserPrayCardListByGroupId = useBaseStore(
-    (state) => state.fetchUserPrayCardListByGroupId
-  );
-
-  const prayDataHash = useBaseStore((state) => state.prayDataHash);
-  const fetchPrayDataByUserId = useBaseStore(
-    (state) => state.fetchPrayDataByUserId
+  const otherPrayCardList = useBaseStore((state) => state.otherPrayCardList);
+  const fetchOtherPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchOtherPrayCardListByGroupId
   );
 
   useEffect(() => {
-    fetchUserPrayCardListByGroupId(member.user_id!, member.group_id!);
-  }, [fetchUserPrayCardListByGroupId, member]);
+    fetchOtherPrayCardListByGroupId(
+      currentUserId,
+      member.user_id!,
+      member.group_id!
+    );
+  }, [fetchOtherPrayCardListByGroupId, currentUserId, member]);
 
-  // TODO: 제거 예정. PrayCard.pray 로 사용 예정
-  useEffect(() => {
-    if (userPrayCardList && userPrayCardList.length > 0) {
-      fetchPrayDataByUserId(userPrayCardList[0].id, currentUserId);
-    }
-  }, [currentUserId, fetchPrayDataByUserId, userPrayCardList]);
-
-  if (!userPrayCardList || !prayDataHash) {
+  if (!otherPrayCardList) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
@@ -50,11 +42,11 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   }
 
   // TODO: PrayCardCreateModal 로 반환하기 ( 이미 GroupBody 에서 member.updated_at 으로 처리중 )
-  if (userPrayCardList.length === 0) {
+  if (otherPrayCardList.length === 0) {
     return null;
   }
 
-  const prayCard = userPrayCardList[0];
+  const prayCard = otherPrayCardList[0];
 
   return (
     <div className="flex flex-col gap-6 min-h-[80vh] max-h-[80vh]">
