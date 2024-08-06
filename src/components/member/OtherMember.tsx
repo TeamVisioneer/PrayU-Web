@@ -1,7 +1,4 @@
-import {
-  MemberWithProfiles,
-  PrayCardWithProfiles,
-} from "supabase/types/tables";
+import { MemberWithProfiles } from "supabase/types/tables";
 import { getISOOnlyDate, getISOTodayDate } from "../../lib/utils";
 import {
   Drawer,
@@ -11,25 +8,19 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import PrayCardUI from "../prayCard/PrayCardUI";
+import OtherPrayCardUI from "../prayCard/OtherPrayCardUI";
 import { getDateDistance } from "@toss/date";
 import { analyticsTrack } from "@/analytics/analytics";
+import ExpiredPrayCardUI from "../prayCard/ExpiredPrayCardUI";
 
 interface OtherMemberProps {
   currentUserId: string;
   member: MemberWithProfiles;
-  prayCardList: PrayCardWithProfiles[];
 }
 
-const OtherMember: React.FC<OtherMemberProps> = ({
-  currentUserId,
-  member,
-  prayCardList,
-}) => {
-  const prayCard = prayCardList[0] || null;
-
+const OtherMember: React.FC<OtherMemberProps> = ({ currentUserId, member }) => {
   const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(member?.updated_at ?? null)),
+    new Date(getISOOnlyDate(member.updated_at)),
     new Date(getISOTodayDate())
   );
 
@@ -69,12 +60,15 @@ const OtherMember: React.FC<OtherMemberProps> = ({
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {/* PrayCard */}
-        <PrayCardUI
-          currentUserId={currentUserId}
-          member={member}
-          prayCard={prayCard}
-          eventOption={{ where: "OtherMember" }}
-        />
+        {dateDistance.days > 7 ? (
+          <ExpiredPrayCardUI member={member} />
+        ) : (
+          <OtherPrayCardUI
+            currentUserId={currentUserId}
+            member={member}
+            eventOption={{ where: "OtherMember" }}
+          />
+        )}
         {/* PrayCard */}
       </DrawerContent>
     </Drawer>

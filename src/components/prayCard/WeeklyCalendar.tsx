@@ -4,7 +4,7 @@ import useBaseStore from "@/stores/baseStore";
 import { Pray, PrayCardWithProfiles } from "supabase/types/tables";
 
 interface WeeklyCalendarProps {
-  prayCard: PrayCardWithProfiles | null;
+  prayCard: PrayCardWithProfiles;
   prayData: Pray[];
 }
 
@@ -45,7 +45,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   };
 
   const currentDate = getISOToday().split("T")[0];
-  const weeklyDays = generateDates(prayCard?.created_at, prayData);
+  const weeklyDays = generateDates(prayCard.created_at, prayData);
 
   return (
     <div className="flex justify-center gap-[13px]">
@@ -67,7 +67,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
               }`}
             >
               {isToday
-                ? getReactionEmoticon(todayPrayTypeHash[prayCard?.id || ""])
+                ? getReactionEmoticon(todayPrayTypeHash[prayCard.id])
                 : date.emoji}
             </div>
           </div>
