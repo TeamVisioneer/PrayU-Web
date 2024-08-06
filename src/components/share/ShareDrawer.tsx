@@ -33,7 +33,7 @@ const ShareDrawer: React.FC = () => {
       .catch((err) => {
         console.error("복사하는 중 오류가 발생했습니다: ", err);
       });
-    analyticsTrack("클릭_링크_공유", {});
+    analyticsTrack("클릭_공유_링크복사", {});
   };
 
   const DrawerBody = (
