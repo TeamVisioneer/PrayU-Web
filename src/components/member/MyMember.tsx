@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
+import { getISOTodayDate } from "@/lib/utils";
 
 interface MemberProps {
   currentUserId: string;
@@ -60,6 +61,10 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   }, [member, setPrayCardContent]);
 
   const prayCard = userPrayCardList?.[0] || null;
+  const prayDatasForMe = prayCard?.pray;
+  const prayDatasForMeToday = prayDatasForMe?.filter(
+    (pray) => pray.created_at > getISOTodayDate()
+  );
 
   const MyMemberUI = (
     <div className="w-full flex flex-col gap-3 cursor-pointer bg-white p-[25px] rounded-[15px] shadow-member">
@@ -93,9 +98,9 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
             );
           })}
         </div>
-        {prayCard && prayCard.pray.length > 0 && (
+        {prayDatasForMeToday && prayDatasForMeToday.length > 0 && (
           <p className=" flex items-center text-gray-500 text-[10px]">
-            기도해 준 사람이 있어요😊
+            오늘 기도해 준 사람이 있어요😊
           </p>
         )}
       </div>
