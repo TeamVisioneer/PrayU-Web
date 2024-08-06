@@ -1,6 +1,6 @@
 import { getISOTodayDate } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
-import { Pray, PrayWithProfiles } from "../../supabase/types/tables";
+import { Pray } from "../../supabase/types/tables";
 import { PrayType } from "../Enums/prayType";
 import * as Sentry from "@sentry/react";
 
