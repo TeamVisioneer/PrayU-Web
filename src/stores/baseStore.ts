@@ -1,4 +1,4 @@
-import { createPray, fetchIsPrayToday } from "./../apis/pray";
+import { createPray, fetchIsPrayToday, updatePray } from "./../apis/pray";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { supabase } from "../../supabase/client";
@@ -140,6 +140,11 @@ export interface BaseStore {
   createPray: (
     prayCardId: string,
     userId: string,
+    prayType: PrayType
+  ) => Promise<Pray | null>;
+  updatePray: (
+    prayCardId: string | undefined,
+    userId: string | undefined,
     prayType: PrayType
   ) => Promise<Pray | null>;
   groupAndSortByUserId: (data: PrayWithProfiles[]) => {
@@ -501,6 +506,17 @@ const useBaseStore = create<BaseStore>()(
       const pray = await createPray(prayCardId, userId, prayType);
       set((state) => {
         state.todayPrayTypeHash[prayCardId] = prayType;
+      });
+      return pray;
+    },
+    updatePray: async (
+      prayCardId: string | undefined,
+      userId: string | undefined,
+      prayType: PrayType
+    ) => {
+      const pray = await updatePray(prayCardId, userId, prayType);
+      set((state) => {
+        state.todayPrayTypeHash[prayCardId!] = prayType;
       });
       return pray;
     },
