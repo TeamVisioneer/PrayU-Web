@@ -47,7 +47,7 @@ export const fetchOtherPrayCardListByGroupId = async (
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     if (!userId || !groupId) return null;
-    const query = supabase
+    const { data, error } = await supabase
       .from("pray_card")
       .select(
         `*,
@@ -63,7 +63,6 @@ export const fetchOtherPrayCardListByGroupId = async (
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
-    const { data, error } = await query;
     if (error) {
       Sentry.captureException(error.message);
       return null;
