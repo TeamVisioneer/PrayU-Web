@@ -7,11 +7,19 @@ import {
 } from "../ui/drawer";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
+import { PrayWithProfiles } from "supabase/types/tables";
 
-const PrayList: React.FC = () => {
-  const prayerList = useBaseStore((state) => state.prayerList);
+interface PrayListProps {
+  prayData: PrayWithProfiles[];
+}
+
+const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const groupAndSortByUserId = useBaseStore(
+    (state) => state.groupAndSortByUserId
+  );
 
+  const prayerList = groupAndSortByUserId(prayData);
   const isPrayerListEmpty = !prayerList || Object.keys(prayerList).length === 0;
 
   return (
