@@ -132,13 +132,16 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             );
           })}
           <a
-            className="cursor-pointer"
+            className="cursor-pointer text-green-900"
             onClick={() => handleClickCreateGroup()}
           >
             + 그룹 만들기
           </a>
-          <a className="cursor-pointer" onClick={() => handleClickExitGroup()}>
-            현재 그룹 나가기
+          <a
+            className="cursor-pointer text-red-900"
+            onClick={() => handleClickExitGroup()}
+          >
+            - 그룹 나가기
           </a>
 
           <hr />

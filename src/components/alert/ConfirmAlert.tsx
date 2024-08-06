@@ -28,7 +28,7 @@ const ConfirmAlert: React.FC = () => {
         </AlertDialogHeader>
         <AlertDialogFooter className="flex flex-col items-center">
           <AlertDialogAction
-            className="bg-mainBtn w-3/4"
+            className="bg-red-400 w-3/4"
             onClick={() => alertData.onAction()}
           >
             {alertData.actionText}
