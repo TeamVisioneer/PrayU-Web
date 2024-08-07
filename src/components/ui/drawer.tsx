@@ -6,7 +6,7 @@ import { navigateToSectionWithHash } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 interface DrawerProps {
-  onOpenChange: (isDisabled: boolean) => void;
+  onOpenChange?: (isDisabled: boolean) => void;
 }
 
 const Drawer = ({
@@ -34,16 +34,17 @@ const DrawerOverlay = React.forwardRef<
   const [previousHash, setPreviousHash] = useState(location.hash);
 
   useEffect(() => {
-    const previousHash = location.hash;
-    console.log("previousHash", previousHash);
+    if (onOpenChange) {
+      const previousHash = location.hash;
+      console.log("previousHash", previousHash);
 
-    navigateToSectionWithHash("drawer");
-    console.log("컴포넌트가 생성되고 네비게이트돼었습니다.");
-    const nowHash = location.hash;
-    console.log("nowHash", nowHash);
-
+      navigateToSectionWithHash("drawer");
+      console.log("컴포넌트가 생성되고 네비게이트돼었습니다.");
+      const nowHash = location.hash;
+      console.log("nowHash", nowHash);
+    }
     return () => {
-      if (isBackKeyPressed == 0) {
+      if (onOpenChange && isBackKeyPressed == 0) {
         window.history.go(-1);
         console.log("컴포넌트가 제거되고 뒤로가기되었습니다.");
       }
@@ -51,19 +52,17 @@ const DrawerOverlay = React.forwardRef<
   }, []);
 
   useEffect(() => {
-    //아싸리 백키로만 처리를 하든(드로어 중첩되면 이슈 발생 우러...)
-    //해시 변화를 감지하여 최상단 글자가 지금 currentHash랑 같든지 등의 처리 유도.를 하든
-    // 개선 되어야만 함!!
     const handleHashChange = () => {
-      const currentHash = location.hash;
+      const currentHash = window.location.hash;
 
-      console.log(
-        "백키가 눌러졌으므로 뒤로가기를 따로 안누릅니다.",
-        currentHash
-      );
-      //window.history.go(0);
-      isBackKeyPressed = 1;
-      onOpenChange(false);
+      if (onOpenChange) {
+        console.log(
+          "Hash has been reduced (back action detected)",
+          currentHash
+        );
+        isBackKeyPressed = 1;
+        onOpenChange(false);
+      }
 
       setPreviousHash(currentHash);
     };

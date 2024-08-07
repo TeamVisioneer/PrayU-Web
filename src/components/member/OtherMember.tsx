@@ -67,7 +67,7 @@ const OtherMember: React.FC<OtherMemberProps> = ({ currentUserId, member }) => {
       </DrawerTrigger>
       <DrawerContent
         className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none"
-        onOpenChange={setIsOpenOtherMemberDrawer}
+        //onOpenChange={setIsOpenOtherMemberDrawer}
       >
         <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
