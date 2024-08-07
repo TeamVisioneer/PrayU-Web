@@ -12,6 +12,7 @@ import OtherPrayCardUI from "../prayCard/OtherPrayCardUI";
 import { getDateDistance } from "@toss/date";
 import { analyticsTrack } from "@/analytics/analytics";
 import ExpiredPrayCardUI from "../prayCard/ExpiredPrayCardUI";
+import useBaseStore from "@/stores/baseStore";
 
 interface OtherMemberProps {
   currentUserId: string;
@@ -19,6 +20,13 @@ interface OtherMemberProps {
 }
 
 const OtherMember: React.FC<OtherMemberProps> = ({ currentUserId, member }) => {
+  const isOpenOtherMemberDrawer = useBaseStore(
+    (state) => state.isOpenOtherMemberDrawer
+  );
+  const setIsOpenOtherMemberDrawer = useBaseStore(
+    (state) => state.setIsOpenOtherMemberDrawer
+  );
+
   const dateDistance = getDateDistance(
     new Date(getISOOnlyDate(member.updated_at)),
     new Date(getISOTodayDate())
@@ -47,14 +55,20 @@ const OtherMember: React.FC<OtherMemberProps> = ({ currentUserId, member }) => {
   );
 
   return (
-    <Drawer>
+    <Drawer
+      open={isOpenOtherMemberDrawer}
+      onOpenChange={setIsOpenOtherMemberDrawer}
+    >
       <DrawerTrigger
         className="focus:outline-none"
         onClick={() => onClickOtherMember()}
       >
         {memberUI}
       </DrawerTrigger>
-      <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
+      <DrawerContent
+        className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none"
+        onOpenChange={setIsOpenOtherMemberDrawer}
+      >
         <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>

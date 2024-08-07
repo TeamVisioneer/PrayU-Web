@@ -18,12 +18,18 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
   const groupAndSortByUserId = useBaseStore(
     (state) => state.groupAndSortByUserId
   );
+  const setIsOpenMyPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenMyPrayDrawer
+  );
 
   const prayerList = groupAndSortByUserId(prayData);
   const isPrayerListEmpty = !prayerList || Object.keys(prayerList).length === 0;
 
   return (
-    <DrawerContent className="max-w-[480px] mx-auto w-full h-[400px] focus:outline-none">
+    <DrawerContent
+      className="max-w-[480px] mx-auto w-full h-[400px] focus:outline-none"
+      onOpenChange={setIsOpenMyPrayDrawer}
+    >
       <DrawerHeader>
         <DrawerTitle>기도해 준 친구</DrawerTitle>
         <DrawerDescription></DrawerDescription>

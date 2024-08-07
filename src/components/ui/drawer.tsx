@@ -1,7 +1,13 @@
 import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
+import { useEffect, useState } from "react";
+import { navigateToSectionWithHash } from "@/lib/utils";
 
 import { cn } from "@/lib/utils";
+
+interface DrawerProps {
+  onOpenChange: (isDisabled: boolean) => void;
+}
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -22,22 +28,69 @@ const DrawerClose = DrawerPrimitive.Close;
 
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <DrawerPrimitive.Overlay
-    ref={ref}
-    className={cn("fixed inset-0 z-50 bg-black/80", className)}
-    {...props}
-  />
-));
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay> & DrawerProps
+>(({ className, onOpenChange, ...props }, ref) => {
+  let isBackKeyPressed = 0;
+  const [previousHash, setPreviousHash] = useState(location.hash);
+
+  useEffect(() => {
+    const previousHash = location.hash;
+    console.log("previousHash", previousHash);
+
+    navigateToSectionWithHash("drawer");
+    console.log("컴포넌트가 생성되고 네비게이트돼었습니다.");
+    const nowHash = location.hash;
+    console.log("nowHash", nowHash);
+
+    return () => {
+      if (isBackKeyPressed == 0) {
+        window.history.go(-1);
+        console.log("컴포넌트가 제거되고 뒤로가기되었습니다.");
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    //아싸리 백키로만 처리를 하든(드로어 중첩되면 이슈 발생 우러...)
+    //해시 변화를 감지하여 최상단 글자가 지금 currentHash랑 같든지 등의 처리 유도.를 하든
+    // 개선 되어야만 함!!
+    const handleHashChange = () => {
+      const currentHash = location.hash;
+
+      console.log(
+        "백키가 눌러졌으므로 뒤로가기를 따로 안누릅니다.",
+        currentHash
+      );
+      //window.history.go(0);
+      isBackKeyPressed = 1;
+      onOpenChange(false);
+
+      setPreviousHash(currentHash);
+    };
+
+    window.addEventListener("popstate", handleHashChange);
+
+    return () => {
+      window.removeEventListener("popstate", handleHashChange);
+    };
+  }, [previousHash, onOpenChange]);
+
+  return (
+    <DrawerPrimitive.Overlay
+      ref={ref}
+      className={cn("fixed inset-0 z-50 bg-black/80", className)}
+      {...props}
+    />
+  );
+});
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & DrawerProps
+>(({ className, children, onOpenChange, ...props }, ref) => (
   <DrawerPortal>
-    <DrawerOverlay />
+    <DrawerOverlay onOpenChange={onOpenChange} />
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
