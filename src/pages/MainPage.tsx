@@ -3,7 +3,6 @@ import { Auth } from "@supabase/auth-ui-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../../supabase/client";
-import useAuth from "../hooks/useAuth";
 import { getDomainUrl } from "@/lib/utils";
 import {
   Carousel,
@@ -12,9 +11,11 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
+import useBaseStore from "@/stores/baseStore";
 
 const MainPage: React.FC = () => {
-  const { user } = useAuth();
+  const user = useBaseStore((state) => state.user);
+  const userLoading = useBaseStore((state) => state.userLoading);
 
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,6 +27,10 @@ const MainPage: React.FC = () => {
       setCurrentIndex(api.selectedScrollSnap());
     });
   }, [api]);
+
+  if (userLoading) {
+    return null;
+  }
 
   const handleDotsClick = (index: number) => {
     if (!api) return;
