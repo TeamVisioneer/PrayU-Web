@@ -59,7 +59,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     <div className="flex justify-center gap-[30px]">
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
-        if (!emojiData) return null;
 
         return (
           <button
@@ -70,7 +69,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
             } ${
               !hasPrayed
                 ? "opacity-90 shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
-                : todayPrayTypeHash[prayCard?.id || ""] == type
+                : todayPrayTypeHash[prayCard.id] == type
                 ? "opacity-90 inner-shadow"
                 : "opacity-20 shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
             }`}
