@@ -4,20 +4,20 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import useBaseStore from "@/stores/baseStore";
-import PrayCardUI from "./PrayCardUI";
+import PrayCardUI from "./TodayPrayCardUI";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
-import MyMemberBtn from "../todayPray/MyMemberBtn";
+import MyMemberBtn from "../member/MyMemberBtn";
 import { PrayTypeDatas } from "@/Enums/prayType";
 
 interface PrayCardListProps {
   currentUserId: string;
-  groupId: string | undefined;
+  groupId: string;
 }
 
-const PrayCardList: React.FC<PrayCardListProps> = ({
+const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   currentUserId,
   groupId,
 }) => {
@@ -134,4 +134,4 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
   );
 };
 
-export default PrayCardList;
+export default TodayPrayCardList;

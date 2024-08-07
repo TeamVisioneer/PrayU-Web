@@ -1,5 +1,5 @@
 import { PrayCardWithProfiles } from "supabase/types/tables";
-import ReactionWithCalendar from "./ReactionWithCalendar";
+import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
 
 interface EventOption {

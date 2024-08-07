@@ -1,8 +1,8 @@
 import { Group } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
-import PrayCardList from "@/components/prayCard/PrayCardList";
+import TodayPrayCardList from "@/components/todayPray/TodayPrayCardList";
 import MyMember from "@/components/member/MyMember";
-import LimitGroupCard from "@/components/group/LimitGroupCard";
+import GroupLimitCard from "@/components/group/GroupLimitCard";
 import OtherMemberList from "@/components/member/OtherMemberList";
 import {
   Drawer,
@@ -56,14 +56,14 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   }
 
   if (groupList.length == maxGroupCount && !isParamsGroupIdinGroupList) {
-    return <LimitGroupCard />;
+    return <GroupLimitCard />;
   }
 
   if (member == null || member.updated_at < getISOTodayDate(-6)) {
     return (
       <PrayCardCreateModal
         currentUserId={currentUserId}
-        groupId={targetGroup?.id}
+        groupId={targetGroup.id}
         member={member}
       />
     );
@@ -75,7 +75,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
         <MyMember currentUserId={currentUserId} groupId={targetGroup.id} />
         <OtherMemberList
           currentUserId={currentUserId}
-          groupId={targetGroup?.id}
+          groupId={targetGroup.id}
         />
       </div>
       <Drawer
@@ -87,12 +87,12 @@ const GroupBody: React.FC<GroupBodyProps> = ({
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
-          {/* PrayCardList */}
-          <PrayCardList
+          {/* TodayPrayCardList */}
+          <TodayPrayCardList
             currentUserId={currentUserId}
-            groupId={targetGroup?.id}
+            groupId={targetGroup.id}
           />
-          {/* PrayCardList */}
+          {/* TodayPrayCardList */}
         </DrawerContent>
       </Drawer>
     </>

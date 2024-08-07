@@ -4,10 +4,9 @@ import { Member, MemberWithProfiles } from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 
 export const fetchMemberListByGroupId = async (
-  groupId: string | undefined
+  groupId: string
 ): Promise<MemberWithProfiles[] | null> => {
   try {
-    if (!groupId) return null;
     const { data, error } = await supabase
       .from("member")
       .select(`*, profiles (id, full_name, avatar_url)`)
@@ -26,14 +25,16 @@ export const fetchMemberListByGroupId = async (
 };
 
 export const createMember = async (
-  groupId: string | undefined,
-  userId: string | undefined
+  groupId: string,
+  userId: string,
+  praySummay: string
 ): Promise<Member | null> => {
   try {
-    if (!groupId || !userId) return null;
     const { error, data } = await supabase
       .from("member")
-      .insert([{ group_id: groupId, user_id: userId }])
+      .insert([
+        { group_id: groupId, user_id: userId, pray_summary: praySummay },
+      ])
       .select();
     if (error) {
       Sentry.captureException(error.message);
@@ -48,10 +49,9 @@ export const createMember = async (
 
 export const getMember = async (
   userId: string,
-  groupId: string | undefined
+  groupId: string
 ): Promise<MemberWithProfiles | null> => {
   try {
-    if (!groupId) return null;
     const { data, error } = await supabase
       .from("member")
       .select(`*, profiles (id, full_name, avatar_url)`)
@@ -70,12 +70,11 @@ export const getMember = async (
 };
 
 export const updateMember = async (
-  memberId: string | undefined,
-  praySummary: string | undefined,
+  memberId: string,
+  praySummary: string,
   updatedAt?: string
 ): Promise<Member | null> => {
   try {
-    if (!memberId) return null;
     const updateParams = {
       pray_summary: praySummary,
       ...(updatedAt && { updated_at: getISOToday() }),

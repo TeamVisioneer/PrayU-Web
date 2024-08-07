@@ -7,7 +7,7 @@ import TodayPrayStartCard from "../todayPray/TodayPrayStartCard";
 
 interface OtherMembersProps {
   currentUserId: string;
-  groupId: string | undefined;
+  groupId: string;
 }
 
 const OtherMemberList: React.FC<OtherMembersProps> = ({

@@ -17,7 +17,7 @@ import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
 interface GroupManuBtnProps {
   userGroupList: Group[];
-  targetGroup: Group | null;
+  targetGroup: Group;
 }
 
 const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
@@ -55,18 +55,16 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const handleClickExitGroup = () => {
     setAlertData({
       title: "그룹 나가기",
-      description: `더 이상 ${
-        targetGroup!.name
-      }의\n기도를 받을 수 없게 돼요 :(`,
+      description: `더 이상 ${targetGroup.name}의\n기도를 받을 수 없게 돼요 :(`,
       actionText: "나가기",
       cancelText: "취소",
       onAction: async () => {
         await deleteMemberbyGroupId(
           user!.id,
-          targetGroup!.id,
+          targetGroup.id,
           memberList!.length
         );
-        await deletePrayCardByGroupId(user!.id, targetGroup!.id);
+        await deletePrayCardByGroupId(user!.id, targetGroup.id);
         window.location.href = "/";
       },
     });
@@ -84,8 +82,8 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
 
   const onClickSheetTrigeer = () => {
     analyticsTrack("클릭_그룹_메뉴", {
-      group_id: targetGroup?.id,
-      group_name: targetGroup?.name,
+      group_id: targetGroup.id,
+      group_name: targetGroup.name,
     });
   };
 
@@ -104,7 +102,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
         </SheetHeader>
         <div className="flex flex-col gap-4 items-end text-gray-500">
           {userGroupList.map((group) => {
-            if (group.id === targetGroup?.id)
+            if (group.id === targetGroup.id)
               return (
                 <div className="flex items-center gap-3 text-black">
                   <OpenShareDrawerBtn

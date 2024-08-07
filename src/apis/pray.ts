@@ -5,11 +5,10 @@ import { PrayType } from "../Enums/prayType";
 import * as Sentry from "@sentry/react";
 
 export const fetchIsPrayToday = async (
-  userId: string | undefined,
-  groupId: string | undefined
+  userId: string,
+  groupId: string
 ): Promise<boolean> => {
   try {
-    if (!userId || !groupId) return false;
     const today = getISOTodayDate();
     const { data, error } = await supabase
       .from("pray")
@@ -37,12 +36,11 @@ export const fetchIsPrayToday = async (
 };
 
 export const createPray = async (
-  PrayCardId: string | undefined,
-  userId: string | undefined,
-  prayType: PrayType | null
+  PrayCardId: string,
+  userId: string,
+  prayType: PrayType
 ): Promise<Pray | null> => {
   try {
-    if (!PrayCardId || !userId) return null;
     const { error, data } = await supabase
       .from("pray")
       .insert([

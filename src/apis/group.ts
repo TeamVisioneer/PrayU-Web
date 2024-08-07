@@ -4,10 +4,9 @@ import * as Sentry from "@sentry/react";
 import { getISOToday } from "@/lib/utils";
 
 export const fetchGroupListByUserId = async (
-  userId: string | undefined
+  userId: string
 ): Promise<Group[] | null> => {
   try {
-    if (!userId) return null;
     const { data, error } = await supabase
       .from("member")
       .select(`group (*)`)
@@ -26,11 +25,8 @@ export const fetchGroupListByUserId = async (
   }
 };
 
-export const getGroup = async (
-  groupId: string | undefined
-): Promise<Group | null> => {
+export const getGroup = async (groupId: string): Promise<Group | null> => {
   try {
-    if (!groupId) return null;
     const { error, data } = await supabase
       .from("group")
       .select("*")
@@ -48,12 +44,11 @@ export const getGroup = async (
 };
 
 export const createGroup = async (
-  userId: string | undefined,
-  name: string | undefined,
-  intro: string | undefined
+  userId: string,
+  name: string,
+  intro: string
 ): Promise<Group | null> => {
   try {
-    if (!userId || !name || !intro) return null;
     const { error, data } = await supabase
       .from("group")
       .insert([{ user_id: userId, name, intro }])

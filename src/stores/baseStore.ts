@@ -54,14 +54,14 @@ export interface BaseStore {
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
 
-  fetchGroupListByUserId: (userId: string | undefined) => Promise<void>;
-  getGroup: (groupId: string | undefined) => Promise<void>;
+  fetchGroupListByUserId: (userId: string) => Promise<void>;
+  getGroup: (groupId: string) => Promise<void>;
   setGroupName: (groupName: string) => void;
   setIsDisabledGroupCreateBtn: (isDisabled: boolean) => void;
   createGroup: (
-    userId: string | undefined,
-    name: string | undefined,
-    intro: string | undefined
+    userId: string,
+    name: string,
+    intro: string
   ) => Promise<Group | null>;
   isOpenTodayPrayDrawer: boolean;
   setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
@@ -70,19 +70,20 @@ export interface BaseStore {
   memberList: MemberWithProfiles[] | null;
   memberLoading: boolean;
   targetMember: MemberWithProfiles | null;
-  fetchMemberListByGroupId: (groupId: string | undefined) => Promise<void>;
+  fetchMemberListByGroupId: (groupId: string) => Promise<void>;
   createMember: (
-    groupId: string | undefined,
-    userId: string | undefined
+    groupId: string,
+    userId: string,
+    praySummary: string
   ) => Promise<Member | null>;
   updateMember: (
-    memberId: string | undefined,
+    memberId: string,
     praySummary: string,
     updatedAt?: string
   ) => Promise<Member | null>;
   getMember: (
     userId: string,
-    groupId: string | undefined
+    groupId: string
   ) => Promise<MemberWithProfiles | null>;
   isOpenMyMemberDrawer: boolean;
   setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
@@ -102,23 +103,23 @@ export interface BaseStore {
   isDisabledPrayCardCreateBtn: boolean;
   prayCardCarouselApi: CarouselApi | null;
   fetchGroupPrayCardList: (
-    groupId: string | undefined,
+    groupId: string,
     currentUserId: string,
     startDt: string,
     endDt: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   fetchOtherPrayCardListByGroupId: (
     currentUserId: string,
-    userId: string | undefined,
-    groupId: string | undefined
+    userId: string,
+    groupId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   fetchUserPrayCardListByGroupId: (
     currentUserId: string,
-    groupId: string | undefined
+    groupId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   createPrayCard: (
-    groupId: string | undefined,
-    userId: string | undefined,
+    groupId: string,
+    userId: string,
     content: string
   ) => Promise<PrayCard | null>;
   setIsEditingPrayCard: (isEditingPrayCard: boolean) => void;
@@ -135,13 +136,10 @@ export interface BaseStore {
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean | null;
   setIsPrayToday: (isPrayToday: boolean) => void;
-  fetchIsPrayToday: (
-    userId: string | undefined,
-    groupId: string | undefined
-  ) => Promise<void>;
+  fetchIsPrayToday: (userId: string, groupId: string) => Promise<void>;
   createPray: (
-    prayCardId: string | undefined,
-    userId: string | undefined,
+    prayCardId: string,
+    userId: string,
     prayType: PrayType
   ) => Promise<Pray | null>;
   groupAndSortByUserId: (data: PrayWithProfiles[]) => {
@@ -232,22 +230,22 @@ const useBaseStore = create<BaseStore>()(
     targetGroup: null,
     inputGroupName: "",
     isDisabledGroupCreateBtn: false,
-    fetchGroupListByUserId: async (userId: string | undefined) => {
+    fetchGroupListByUserId: async (userId: string) => {
       const data = await fetchGroupListByUserId(userId);
       set((state) => {
         state.groupList = data;
       });
     },
-    getGroup: async (groupId: string | undefined) => {
+    getGroup: async (groupId: string) => {
       const data = await getGroup(groupId);
       set((state) => {
         state.targetGroup = data;
       });
     },
     createGroup: async (
-      userId: string | undefined,
-      name: string | undefined,
-      intro: string | undefined
+      userId: string,
+      name: string,
+      intro: string
     ): Promise<Group | null> => {
       const group = await createGroup(userId, name, intro);
       set((state) => {
@@ -277,24 +275,21 @@ const useBaseStore = create<BaseStore>()(
     memberList: null,
     memberLoading: true,
     targetMember: null,
-    fetchMemberListByGroupId: async (groupId: string | undefined) => {
+    fetchMemberListByGroupId: async (groupId: string) => {
       const memberList = await fetchMemberListByGroupId(groupId);
       set((state) => {
         state.memberList = memberList;
       });
     },
     createMember: async (
-      groupId: string | undefined,
-      userId: string | undefined
+      groupId: string,
+      userId: string,
+      praySummay: string
     ): Promise<Member | null> => {
-      const member = await createMember(groupId, userId);
+      const member = await createMember(groupId, userId, praySummay);
       return member;
     },
-    updateMember: async (
-      memberId: string | undefined,
-      praySummary,
-      updatedAt?: string
-    ) => {
+    updateMember: async (memberId: string, praySummary, updatedAt?: string) => {
       let member;
       if (updatedAt) {
         member = await updateMember(memberId, praySummary, updatedAt);
@@ -303,7 +298,7 @@ const useBaseStore = create<BaseStore>()(
       }
       return member;
     },
-    getMember: async (userId: string, groupId: string | undefined) => {
+    getMember: async (userId: string, groupId: string) => {
       const member = await getMember(userId, groupId);
       set((state) => {
         state.targetMember = member;
@@ -343,7 +338,7 @@ const useBaseStore = create<BaseStore>()(
       });
     },
     fetchGroupPrayCardList: async (
-      groupId: string | undefined,
+      groupId: string,
       currentUserId: string,
       startDt: string,
       endDt: string
@@ -364,8 +359,8 @@ const useBaseStore = create<BaseStore>()(
     },
     fetchOtherPrayCardListByGroupId: async (
       currentUserId: string,
-      userId: string | undefined,
-      groupId: string | undefined
+      userId: string,
+      groupId: string
     ) => {
       const otherPrayCardList = await fetchOtherPrayCardListByGroupId(
         currentUserId,
@@ -382,7 +377,7 @@ const useBaseStore = create<BaseStore>()(
     },
     fetchUserPrayCardListByGroupId: async (
       currentUserId: string,
-      groupId: string | undefined
+      groupId: string
     ) => {
       const userPrayCardList = await fetchUserPrayCardListByGroupId(
         currentUserId,
@@ -394,8 +389,8 @@ const useBaseStore = create<BaseStore>()(
       return userPrayCardList;
     },
     createPrayCard: async (
-      groupId: string | undefined,
-      userId: string | undefined,
+      groupId: string,
+      userId: string,
       content: string
     ) => {
       const prayCard = await createPrayCard(groupId, userId, content);
@@ -444,10 +439,7 @@ const useBaseStore = create<BaseStore>()(
         state.isPrayToday = isPrayToday;
       });
     },
-    fetchIsPrayToday: async (
-      userId: string | undefined,
-      groupId: string | undefined
-    ) => {
+    fetchIsPrayToday: async (userId: string, groupId: string) => {
       const isPrayToday = await fetchIsPrayToday(userId, groupId);
       set((state) => {
         state.isPrayToday = isPrayToday;
@@ -495,8 +487,8 @@ const useBaseStore = create<BaseStore>()(
     },
 
     createPray: async (
-      prayCardId: string | undefined,
-      userId: string | undefined,
+      prayCardId: string,
+      userId: string,
       prayType: PrayType
     ) => {
       const pray = await createPray(prayCardId, userId, prayType);
