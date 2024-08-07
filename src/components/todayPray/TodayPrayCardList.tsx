@@ -40,7 +40,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   const endDt = getISOTodayDate(1);
 
   const completedItem = (
-    <div className="flex flex-col gap-4 justify-center items-center pb-10">
+    <div className="flex flex-col gap-4 justify-center items-center min-h-[80vh] max-h-[80vh] pb-10">
       <img
         src={PrayTypeDatas["pray"].img}
         alt={PrayTypeDatas["pray"].emoji}
