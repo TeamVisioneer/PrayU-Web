@@ -4,7 +4,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import useBaseStore from "@/stores/baseStore";
-import PrayCardUI from "./PrayCardUI";
+import PrayCardUI from "./TodayPrayCardUI";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
