@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 
-const LimitGroupBtn: React.FC = () => {
+const GroupLimitBtn: React.FC = () => {
   return (
     <Button
       variant="primary"
@@ -13,7 +13,7 @@ const LimitGroupBtn: React.FC = () => {
   );
 };
 
-export const LimitGroupCard = () => {
+export const GroupLimitCard = () => {
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   return (
     <div className="flex flex-col justify-center items-center gap-4 p-4 border rounded-lg shadow-prayCard bg-white ">
@@ -22,9 +22,9 @@ export const LimitGroupCard = () => {
         <p>{maxGroupCount}개 이상의 그룹 참여는</p>
         <p>문의하기를 통해 진행해주세요</p>
       </div>
-      <LimitGroupBtn />
+      <GroupLimitBtn />
     </div>
   );
 };
 
-export default LimitGroupCard;
+export default GroupLimitCard;
