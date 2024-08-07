@@ -22,6 +22,9 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   groupId,
 }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
+  const setGroupPrayCardList = useBaseStore(
+    (state) => state.setGroupPrayCardList
+  );
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
   );
@@ -54,7 +57,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   );
 
   useEffect(() => {
-    // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
+    setGroupPrayCardList([]);
     fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
@@ -67,6 +70,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
     });
   }, [
     prayCardCarouselApi,
+    setGroupPrayCardList,
     fetchGroupPrayCardList,
     groupId,
     currentUserId,

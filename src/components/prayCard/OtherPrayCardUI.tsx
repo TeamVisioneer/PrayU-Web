@@ -21,17 +21,26 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   eventOption,
 }) => {
   const otherPrayCardList = useBaseStore((state) => state.otherPrayCardList);
+  const setOtherPrayCardList = useBaseStore(
+    (state) => state.setOtherPrayCardList
+  );
   const fetchOtherPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchOtherPrayCardListByGroupId
   );
 
   useEffect(() => {
+    setOtherPrayCardList([]);
     fetchOtherPrayCardListByGroupId(
       currentUserId,
       member.user_id!,
       member.group_id!
     );
-  }, [fetchOtherPrayCardListByGroupId, currentUserId, member]);
+  }, [
+    fetchOtherPrayCardListByGroupId,
+    setOtherPrayCardList,
+    currentUserId,
+    member,
+  ]);
 
   if (!otherPrayCardList) {
     return (
