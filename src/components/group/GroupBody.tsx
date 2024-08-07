@@ -63,7 +63,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
     return (
       <PrayCardCreateModal
         currentUserId={currentUserId}
-        groupId={targetGroup?.id}
+        groupId={targetGroup.id}
         member={member}
       />
     );
@@ -75,7 +75,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
         <MyMember currentUserId={currentUserId} groupId={targetGroup.id} />
         <OtherMemberList
           currentUserId={currentUserId}
-          groupId={targetGroup?.id}
+          groupId={targetGroup.id}
         />
       </div>
       <Drawer
@@ -90,7 +90,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
           {/* PrayCardList */}
           <PrayCardList
             currentUserId={currentUserId}
-            groupId={targetGroup?.id}
+            groupId={targetGroup.id}
           />
           {/* PrayCardList */}
         </DrawerContent>

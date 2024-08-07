@@ -14,7 +14,7 @@ import { PrayTypeDatas } from "@/Enums/prayType";
 
 interface PrayCardListProps {
   currentUserId: string;
-  groupId: string | undefined;
+  groupId: string;
 }
 
 const PrayCardList: React.FC<PrayCardListProps> = ({

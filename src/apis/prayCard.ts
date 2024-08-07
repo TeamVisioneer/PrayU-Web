@@ -4,13 +4,12 @@ import { PrayCard, PrayCardWithProfiles } from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 
 export const fetchGroupPrayCardList = async (
-  groupId: string | undefined,
+  groupId: string,
   currentUserId: string,
   startDt: string,
   endDt: string
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
-    if (!groupId) return null;
     const { data, error } = await supabase
       .from("pray_card")
       .select(
@@ -40,13 +39,12 @@ export const fetchGroupPrayCardList = async (
 
 export const fetchOtherPrayCardListByGroupId = async (
   currentUserId: string,
-  userId: string | undefined,
-  groupId: string | undefined,
+  userId: string,
+  groupId: string,
   limit: number = 10,
   offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
-    if (!userId || !groupId) return null;
     const { data, error } = await supabase
       .from("pray_card")
       .select(
@@ -76,12 +74,11 @@ export const fetchOtherPrayCardListByGroupId = async (
 
 export const fetchUserPrayCardListByGroupId = async (
   currentUserId: string,
-  groupId: string | undefined,
+  groupId: string,
   limit: number = 10,
   offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
-    if (!groupId) return null;
     const { data, error } = await supabase
       .from("pray_card")
       .select(
@@ -117,15 +114,11 @@ export const fetchUserPrayCardListByGroupId = async (
 };
 
 export const createPrayCard = async (
-  groupId: string | undefined,
-  userId: string | undefined,
+  groupId: string,
+  userId: string,
   content: string
 ): Promise<PrayCard | null> => {
   try {
-    if (!groupId || !userId) {
-      console.error("groupId, userId is required");
-      return null;
-    }
     const { error, data } = await supabase
       .from("pray_card")
       .insert([{ group_id: groupId, user_id: userId, content }])

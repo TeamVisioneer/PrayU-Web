@@ -91,11 +91,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   const prayCard = userPrayCardList[0];
 
   const dateDistance = getDateDistance(
-    new Date(
-      getISOOnlyDate(
-        prayCard?.created_at ?? member?.updated_at ?? getISOTodayDate()
-      )
-    ),
+    new Date(getISOOnlyDate(prayCard.created_at)),
     new Date(getISOTodayDate())
   );
 
