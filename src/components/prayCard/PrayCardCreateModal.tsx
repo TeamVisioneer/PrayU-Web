@@ -1,7 +1,7 @@
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import useBaseStore from "@/stores/baseStore";
-import { MemberWithProfiles } from "supabase/types/tables";
+import { Member, MemberWithProfiles } from "supabase/types/tables";
 import { useEffect } from "react";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate } from "@/lib/utils";
@@ -37,12 +37,33 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   ) => {
     setIsDisabledPrayCardCreateBtn(true);
     analyticsTrack("클릭_기도카드_생성", { group_id: groupId });
+    let updatedMember: Member | null;
     if (!member) {
-      await createMember(groupId, currentUserId, inputPrayCardContent);
+      updatedMember = await createMember(
+        groupId,
+        currentUserId,
+        inputPrayCardContent
+      );
     } else {
-      await updateMember(member.id, inputPrayCardContent, getISOTodayDate());
+      updatedMember = await updateMember(
+        member.id,
+        inputPrayCardContent,
+        getISOTodayDate()
+      );
     }
-    await createPrayCard(groupId, currentUserId, inputPrayCardContent);
+    if (!updatedMember) {
+      setIsDisabledPrayCardCreateBtn(false);
+      return;
+    }
+    const newPrayCard = await createPrayCard(
+      groupId,
+      currentUserId,
+      inputPrayCardContent
+    );
+    if (!newPrayCard) {
+      setIsDisabledPrayCardCreateBtn(false);
+      return;
+    }
     window.location.reload();
   };
 
