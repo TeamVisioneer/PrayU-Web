@@ -22,9 +22,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   groupId,
 }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
-  const setGroupPrayCardList = useBaseStore(
-    (state) => state.setGroupPrayCardList
-  );
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
   );
@@ -57,7 +54,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   );
 
   useEffect(() => {
-    setGroupPrayCardList([]);
     fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
@@ -70,7 +66,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
     });
   }, [
     prayCardCarouselApi,
-    setGroupPrayCardList,
     fetchGroupPrayCardList,
     groupId,
     currentUserId,

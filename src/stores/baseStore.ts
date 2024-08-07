@@ -102,14 +102,12 @@ export interface BaseStore {
   isEditingPrayCard: boolean;
   isDisabledPrayCardCreateBtn: boolean;
   prayCardCarouselApi: CarouselApi | null;
-  setGroupPrayCardList: (groupPrayCardList: PrayCardWithProfiles[]) => void;
   fetchGroupPrayCardList: (
     groupId: string,
     currentUserId: string,
     startDt: string,
     endDt: string
   ) => Promise<PrayCardWithProfiles[] | null>;
-  setOtherPrayCardList: (otherPrayCardList: PrayCardWithProfiles[]) => void;
   fetchOtherPrayCardListByGroupId: (
     currentUserId: string,
     userId: string,
@@ -335,11 +333,6 @@ const useBaseStore = create<BaseStore>()(
         state.isEditingPrayCard = isEditingPrayCard;
       });
     },
-    setGroupPrayCardList: (groupPrayCardList: PrayCardWithProfiles[]) => {
-      set((state) => {
-        state.groupPrayCardList = groupPrayCardList;
-      });
-    },
     fetchGroupPrayCardList: async (
       groupId: string,
       currentUserId: string,
@@ -370,11 +363,6 @@ const useBaseStore = create<BaseStore>()(
         });
       });
       return groupPrayCardList;
-    },
-    setOtherPrayCardList: (otherPrayCardList: PrayCardWithProfiles[]) => {
-      set((state) => {
-        state.otherPrayCardList = otherPrayCardList;
-      });
     },
     fetchOtherPrayCardListByGroupId: async (
       currentUserId: string,
