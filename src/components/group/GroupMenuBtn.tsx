@@ -104,7 +104,10 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           {userGroupList.map((group) => {
             if (group.id === targetGroup.id)
               return (
-                <div className="flex items-center gap-3 text-black">
+                <div
+                  key={group.id}
+                  className="flex items-center gap-3 text-black"
+                >
                   <OpenShareDrawerBtn
                     text="초대"
                     type="tag"
