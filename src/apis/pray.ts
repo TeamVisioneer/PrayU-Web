@@ -1,29 +1,8 @@
 import { getISOTodayDate } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
-import { Pray, PrayWithProfiles } from "../../supabase/types/tables";
+import { Pray } from "../../supabase/types/tables";
 import { PrayType } from "../Enums/prayType";
 import * as Sentry from "@sentry/react";
-
-export const fetchPrayData = async (
-  prayCardId: string | undefined
-): Promise<Pray[] | null> => {
-  try {
-    if (!prayCardId) return null;
-    const { data, error } = await supabase
-      .from("pray")
-      .select("*")
-      .eq("pray_card_id", prayCardId)
-      .is("deleted_at", null);
-    if (error) {
-      Sentry.captureException(error.message);
-      return null;
-    }
-    return data as Pray[];
-  } catch (error) {
-    Sentry.captureException(error);
-    return null;
-  }
-};
 
 export const fetchIsPrayToday = async (
   userId: string | undefined,
@@ -54,34 +33,6 @@ export const fetchIsPrayToday = async (
   } catch (error) {
     Sentry.captureException(error);
     return false;
-  }
-};
-
-export const fetchPrayDataByUserId = async (
-  prayCardId: string | undefined,
-  userId: string | undefined
-): Promise<PrayWithProfiles[] | null> => {
-  try {
-    if (!prayCardId) return null;
-    let query = supabase
-      .from("pray")
-      .select("*, profiles (id, full_name, avatar_url)")
-      .eq("pray_card_id", prayCardId)
-      .is("deleted_at", null)
-      .order("created_at", { ascending: false });
-
-    if (userId) query = query.eq("user_id", userId);
-
-    const { data, error } = await query;
-
-    if (error) {
-      Sentry.captureException(error.message);
-      return null;
-    }
-    return data as PrayWithProfiles[];
-  } catch (error) {
-    Sentry.captureException(error);
-    return null;
   }
 };
 

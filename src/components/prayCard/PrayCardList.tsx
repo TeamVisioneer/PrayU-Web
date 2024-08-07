@@ -122,7 +122,6 @@ const PrayCardList: React.FC<PrayCardListProps> = ({
         {filterdGroupPrayCardList.map((prayCard) => (
           <CarouselItem key={prayCard.id} className="basis-5/6">
             <PrayCardUI
-              currentUserId={currentUserId}
               prayCard={prayCard}
               eventOption={{ where: "PrayCardList" }}
             />

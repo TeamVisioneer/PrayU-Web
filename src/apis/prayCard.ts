@@ -38,7 +38,8 @@ export const fetchGroupPrayCardList = async (
   }
 };
 
-export const fetchUserPrayCardListByGroupId = async (
+export const fetchOtherPrayCardListByGroupId = async (
+  currentUserId: string,
   userId: string | undefined,
   groupId: string | undefined,
   limit: number = 10,
@@ -57,6 +58,41 @@ export const fetchUserPrayCardListByGroupId = async (
       )
       .eq("user_id", userId)
       .eq("group_id", groupId)
+      .eq("pray.user_id", currentUserId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data as PrayCardWithProfiles[];
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const fetchUserPrayCardListByGroupId = async (
+  currentUserId: string,
+  groupId: string | undefined,
+  limit: number = 10,
+  offset: number = 0
+): Promise<PrayCardWithProfiles[] | null> => {
+  try {
+    if (!groupId) return null;
+    const { data, error } = await supabase
+      .from("pray_card")
+      .select(
+        `*,
+      profiles (id, full_name, avatar_url),
+      pray (*, 
+        profiles (id, full_name, avatar_url)
+      )`
+      )
+      .eq("user_id", currentUserId)
+      .eq("group_id", groupId)
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
@@ -73,7 +109,6 @@ export const fetchUserPrayCardListByGroupId = async (
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       ),
     }));
-
     return sortedData as PrayCardWithProfiles[];
   } catch (error) {
     Sentry.captureException(error);

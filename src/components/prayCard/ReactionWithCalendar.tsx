@@ -16,15 +16,11 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({
   prayCard,
   eventOption,
 }) => {
-  const prayDataHash = useBaseStore((state) => state.prayDataHash);
   const currentUserId = useBaseStore((state) => state.user?.id);
 
   return (
     <div className="flex flex-col gap-[33px] p-2">
-      <WeeklyCalendar
-        prayCard={prayCard}
-        prayData={prayDataHash[prayCard.id] || []}
-      />
+      <WeeklyCalendar prayCard={prayCard} prayData={prayCard.pray} />
       <ReactionBtn
         currentUserId={currentUserId!}
         prayCard={prayCard}
