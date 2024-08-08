@@ -53,7 +53,7 @@ const GroupCreatePage: React.FC = () => {
   if (!groupList) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
+        <ClipLoader size={30} color={"#70AAFF"} loading={true} />
       </div>
     );
   }

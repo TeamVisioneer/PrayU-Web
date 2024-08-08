@@ -50,7 +50,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   if (memberLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
+        <ClipLoader size={30} color={"#70AAFF"} loading={true} />
       </div>
     );
   }
