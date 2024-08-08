@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "../ui/button";
 import useBaseStore from "@/stores/baseStore";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const OpenContentDrawerBtn: React.FC = () => {
   const setIsOpenContentDrawer = useBaseStore(
@@ -12,12 +12,18 @@ const OpenContentDrawerBtn: React.FC = () => {
   const onClickOpenContentDrawerBtn = () => {
     setIsOpenTodayPrayDrawer(false);
     setIsOpenContentDrawer(true);
+    analyticsTrack("클릭_오늘의말씀_보기", {
+      where: "OpenContentDrawerBtn",
+    });
   };
 
   return (
-    <Button className="w-32" onClick={() => onClickOpenContentDrawerBtn()}>
+    <p
+      className="text-sm text-gray-600 underline p-3"
+      onClick={() => onClickOpenContentDrawerBtn()}
+    >
       오늘의 말씀 보기
-    </Button>
+    </p>
   );
 };
 
