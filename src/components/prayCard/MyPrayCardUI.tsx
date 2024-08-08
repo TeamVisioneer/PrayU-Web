@@ -127,6 +127,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
           }
         />
+        <textarea className="h-10 bg-red-300" placeholder="ㅎㅇ"></textarea>
         <div className="absolute top-2 right-2">
           {isEditingPrayCard ? (
             <button
