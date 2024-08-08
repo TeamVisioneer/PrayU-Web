@@ -11,6 +11,7 @@ import { getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
 import MyMemberBtn from "../member/MyMemberBtn";
 import { PrayTypeDatas } from "@/Enums/prayType";
+import OpenContentDrawerBtn from "../share/OpenContentDrawerBtn";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -50,6 +51,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
         <h1>친구들을 확인해 보아요</h1>
       </div>
       <MyMemberBtn />
+      <OpenContentDrawerBtn />
     </div>
   );
 

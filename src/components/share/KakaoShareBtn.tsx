@@ -46,7 +46,27 @@ interface KakaoShareButtonProps {
   id: string;
   img?: string;
   eventOption: EventOption;
+  option?: string;
 }
+
+const getContentByOption = (option?: string) => {
+  switch (option) {
+    case "bible":
+      return {
+        title: "Option 1 Title",
+        description: "Option 1 Description",
+        imageUrl:
+          "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/20240808.svg",
+      };
+    default:
+      return {
+        title: "PrayU 우리만의 기도제목 나눔 공간",
+        description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
+        imageUrl:
+          "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png",
+      };
+  }
+};
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   groupPageUrl,
@@ -54,6 +74,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   id,
   img,
   eventOption,
+  option,
 }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -67,14 +88,14 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
       }
+      const content = getContentByOption(option);
       window.Kakao.Share.createDefaultButton({
         container: `#${id}`,
         objectType: "feed",
         content: {
-          title: "PrayU 우리만의 기도제목 나눔 공간",
-          description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
-          imageUrl:
-            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png",
+          title: content.title,
+          description: content.description,
+          imageUrl: content.imageUrl,
           link: {
             mobileWebUrl: groupPageUrl,
             webUrl: groupPageUrl,
