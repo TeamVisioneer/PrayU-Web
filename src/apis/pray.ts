@@ -36,7 +36,7 @@ export const fetchIsPrayToday = async (
 };
 
 export const createPray = async (
-  PrayCardId: string,
+  prayCardId: string,
   userId: string,
   prayType: PrayType
 ): Promise<Pray | null> => {
@@ -44,9 +44,33 @@ export const createPray = async (
     const { error, data } = await supabase
       .from("pray")
       .insert([
-        { pray_card_id: PrayCardId, user_id: userId, pray_type: prayType },
+        { pray_card_id: prayCardId, user_id: userId, pray_type: prayType },
       ])
       .select();
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data ? data[0] : null;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const updatePray = async (
+  prayCardId: string | undefined,
+  userId: string | undefined,
+  prayType: PrayType
+): Promise<Pray | null> => {
+  try {
+    if (!prayCardId || !userId) return null;
+    const { error, data } = await supabase
+      .from("pray")
+      .update({ pray_type: prayType })
+      .eq("pray_card_id", prayCardId)
+      .eq("user_id", userId)
+      .gte("created_at", getISOTodayDate());
     if (error) {
       Sentry.captureException(error.message);
       return null;
