@@ -6,14 +6,18 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
+import { KakaoShareButton } from "./KakaoShareBtn";
+import { getDomainUrl } from "@/lib/utils";
 
 const ContentDrawer = () => {
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const isOpenContentDrawer = useBaseStore(
     (state) => state.isOpenContentDrawer
   );
   const setIsOpenContentDrawer = useBaseStore(
     (state) => state.setIsOpenContentDrawer
   );
+  const domainUrl = getDomainUrl();
 
   const DrawerBody = (
     <div className="h-[80vh] flex flex-col items-center gap-4">
@@ -30,6 +34,12 @@ const ContentDrawer = () => {
           }
         />
       </div>
+      <KakaoShareButton
+        groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
+        id="ContentDrawer"
+        message="카카오톡으로 공유하기"
+        eventOption={{ where: "ContentDrawer" }}
+      />
     </div>
   );
 
