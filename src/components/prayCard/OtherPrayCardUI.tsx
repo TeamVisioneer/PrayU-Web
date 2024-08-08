@@ -60,7 +60,7 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
             <p className="text-white text-lg">{prayCard.profiles.full_name}</p>
           </div>
           <p className="text-sm text-white w-full text-left">
-            시작일 : {prayCard.updated_at.split("T")[0]}
+            시작일 : {prayCard.created_at.split("T")[0]}
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
