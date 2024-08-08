@@ -4,7 +4,6 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
