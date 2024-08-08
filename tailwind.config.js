@@ -17,9 +17,6 @@ module.exports = {
       },
     },
     extend: {
-      userSelect: {
-        text: "text",
-      },
       boxShadow: {
         button: "0 10px 10px rgba(188, 190, 208, 0.8)",
         // custom
@@ -111,11 +108,6 @@ module.exports = {
         "90vh": "90vh",
         "100vh": "100vh",
       },
-    },
-  },
-  variants: {
-    extend: {
-      userSelect: ["responsive", "hover", "focus"],
     },
   },
   plugins: [require("tailwindcss-animate")],

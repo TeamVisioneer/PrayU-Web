@@ -122,7 +122,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
           }`}
           value={inputPrayCardContent}
           onChange={(e) => setPrayCardContent(e.target.value)}
-          disabled={!isEditingPrayCard}
           onFocus={() => setIsDivVisible(false)}
           onBlur={() =>
             handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
