@@ -1,17 +1,13 @@
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { getISODate, getISOToday } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
-import { Pray, PrayCardWithProfiles } from "supabase/types/tables";
+import { PrayCardWithProfiles } from "supabase/types/tables";
 
 interface WeeklyCalendarProps {
   prayCard: PrayCardWithProfiles;
-  prayData: Pray[];
 }
 
-const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
-  prayCard,
-  prayData,
-}) => {
+const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
 
   const getReactionEmoticon = (prayType: string | null) => {
@@ -23,9 +19,8 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
     );
   };
 
-  const generateDates = (createdAt: string | undefined, prayData: Pray[]) => {
-    if (!createdAt) return [];
-    const startDate = getISODate(new Date(createdAt));
+  const generateDates = (prayCard: PrayCardWithProfiles) => {
+    const startDate = getISODate(new Date(prayCard.created_at));
     const dateList = [];
 
     for (let i = 0; i < 7; i++) {
@@ -33,7 +28,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
       newDate.setDate(new Date(startDate).getDate() + i);
       const newDateString = getISODate(newDate).split("T")[0];
 
-      const pray = prayData.find((entry) => {
+      const pray = prayCard.pray.find((entry) => {
         const prayDate = getISODate(new Date(entry.created_at)).split("T")[0];
         return prayDate === newDateString;
       });
@@ -45,7 +40,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({
   };
 
   const currentDate = getISOToday().split("T")[0];
-  const weeklyDays = generateDates(prayCard.created_at, prayData);
+  const weeklyDays = generateDates(prayCard);
 
   return (
     <div className="flex justify-center gap-[13px]">

@@ -37,7 +37,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   const endDt = getISOTodayDate(1);
 
   const completedItem = (
-    <div className="flex flex-col gap-4 justify-center items-center pb-10">
+    <div className="flex flex-col gap-4 justify-center items-center min-h-[80vh] max-h-[80vh] pb-10">
       <img
         src={PrayTypeDatas["pray"].img}
         alt={PrayTypeDatas["pray"].emoji}
@@ -54,7 +54,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   );
 
   useEffect(() => {
-    // TODO: 초기화 이후에 재랜더링 필요(useEffect 무한 로딩 고려)
     fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();

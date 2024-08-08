@@ -104,7 +104,10 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           {userGroupList.map((group) => {
             if (group.id === targetGroup.id)
               return (
-                <div className="flex items-center gap-3 text-black">
+                <div
+                  key={group.id}
+                  className="flex items-center gap-3 text-black"
+                >
                   <OpenShareDrawerBtn
                     text="초대"
                     type="tag"
@@ -148,7 +151,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
             onClick={() => onClickContactUs()}
           >
-            문의하기
+            피드백 & 버그제보
           </a>
           <a className="cursor-pointer" onClick={() => signOut()}>
             로그아웃
