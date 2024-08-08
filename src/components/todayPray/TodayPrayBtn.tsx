@@ -21,7 +21,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   return (
     <Button
       variant="primary"
-      className="w-32"
+      className="w-[166px] h-[48px] text-md font-bold rounded-[10px]"
       onClick={() => onClickTodayPrayBtn()}
     >
       기도 시작하기
