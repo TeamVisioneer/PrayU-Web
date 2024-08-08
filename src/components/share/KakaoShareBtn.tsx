@@ -60,7 +60,7 @@ const getContentByOption = (option?: string) => {
           today.day,
           10
         ).toString()}일 오늘의 말씀`,
-        description: "prayu에서 오늘의 말씀과 함께 기도해요!",
+        description: "PrayU에서 오늘의 말씀과 함께 기도해요!",
         imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${today.year}${today.month}${today.day}.png`,
       };
     default:
