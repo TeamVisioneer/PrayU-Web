@@ -16,6 +16,7 @@ import { getISOTodayDate } from "@/lib/utils";
 
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import { Textarea } from "../ui/textarea";
 
 interface GroupBodyProps {
   currentUserId: string;
@@ -72,6 +73,8 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   return (
     <>
       <div className="flex flex-col h-full gap-4">
+        <Textarea className="bg-red-300" />
+        <textarea className="bg-blue-300" />
         <MyMember currentUserId={currentUserId} groupId={targetGroup.id} />
         <OtherMemberList
           currentUserId={currentUserId}
