@@ -76,6 +76,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
                 ? "opacity-90 inner-shadow"
                 : "opacity-20 shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
             }`}
+            disabled={todayPrayTypeHash[prayCard.id] == type}
           >
             <img src={emojiData.icon} className="w-9 h-9" />
           </button>
