@@ -51,7 +51,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
 
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 pb-10">
         <div className="text-sm text-gray-500 p-2">기도 구성원</div>
         <div className="flex flex-col gap-4">
           {otherMemberList.map((member) => (

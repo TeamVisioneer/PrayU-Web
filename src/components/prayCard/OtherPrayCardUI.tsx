@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
-import { ClipLoader } from "react-spinners";
 import ReactionWithCalendar from "./ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
 import { getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
+import { ClipLoader } from "react-spinners";
 
 interface EventOption {
   where: string;
@@ -35,19 +35,18 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
 
   if (!otherPrayCardList) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      <div className="flex justify-center items-center min-h-[80vh] max-h-[80vh]">
+        <ClipLoader size={20} color={"#123abc"} loading={true} />
       </div>
     );
   }
 
   // TODO: PrayCardCreateModal 로 반환하기 ( 이미 GroupBody 에서 member.updated_at 으로 처리중 )
-  if (otherPrayCardList.length === 0) {
-    return null;
-  }
+  if (otherPrayCardList.length === 0) return null;
+  if (!otherMember) return null;
 
   const prayCard = otherPrayCardList[0];
-  const isExpiredOtherMember = otherMember!.updated_at < getISOTodayDate(-6);
+  const isExpiredOtherMember = otherMember.updated_at < getISOTodayDate(-6);
 
   const PrayCardUI = () => (
     <div className="flex flex-col gap-6 min-h-[80vh] max-h-[80vh]">

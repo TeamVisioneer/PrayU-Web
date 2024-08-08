@@ -73,13 +73,12 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
     endDt,
   ]);
 
-  if (!groupPrayCardList) {
+  if (!groupPrayCardList)
     return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      <div className="flex justify-center items-center min-h-[80vh] max-h-[80vh]">
+        <ClipLoader size={20} color={"#123abc"} loading={true} />
       </div>
     );
-  }
 
   if (groupPrayCardList.length == 1) {
     return (
