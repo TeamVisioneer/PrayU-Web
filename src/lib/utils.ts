@@ -52,6 +52,13 @@ export const getISOOnlyDate = (dateString: string | null) => {
   return isoString.replace("Z", "+09:00");
 };
 
+export const getISOTodayDateYMD = () => {
+  const todayDate = getISOTodayDate();
+  const [datePart] = todayDate.split("T");
+  const [year, month, day] = datePart.split("-");
+  return { year, month, day };
+};
+
 // sleep 함수
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));

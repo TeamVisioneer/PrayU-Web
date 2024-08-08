@@ -7,9 +7,10 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 import { KakaoShareButton } from "./KakaoShareBtn";
-import { getDomainUrl } from "@/lib/utils";
+import { getDomainUrl, getISOTodayDateYMD } from "@/lib/utils";
 
 const ContentDrawer = () => {
+  const today = getISOTodayDateYMD();
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const isOpenContentDrawer = useBaseStore(
     (state) => state.isOpenContentDrawer
@@ -20,18 +21,18 @@ const ContentDrawer = () => {
   const domainUrl = getDomainUrl();
 
   const DrawerBody = (
-    <div className="h-[80vh] flex flex-col items-center gap-4">
+    <div className="h-[80vh] flex flex-col items-center gap-6">
       <div className="flex flex-col items-center gap-2">
         <p className="text-xl font-bold">오늘의 말씀이 도착했어요 🎁</p>
-        <p className="text-md text-gray-500"> 구성원들에게 공유해봐요 :)</p>
+        <p className="text-sm text-gray-500">
+          오늘의 기도를 한 분들에게만 도착해요 :)
+        </p>
       </div>
 
       <div className="h-[300px] flex flex-col items-center">
         <img
           className="h-full rounded-md"
-          src={
-            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/20240808.svg"
-          }
+          src={`https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${today.year}${today.month}${today.day}.png`}
         />
       </div>
       <KakaoShareButton

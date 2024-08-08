@@ -1,4 +1,5 @@
 import { analyticsTrack } from "@/analytics/analytics";
+import { getISOTodayDateYMD } from "@/lib/utils";
 import { useEffect, useRef } from "react";
 declare global {
   interface Window {
@@ -49,14 +50,18 @@ interface KakaoShareButtonProps {
   type?: string;
 }
 
+const today = getISOTodayDateYMD();
+
 const getContentByOption = (option?: string) => {
   switch (option) {
     case "bible":
       return {
-        title: "8월 8일 오늘의 말씀",
+        title: `${parseInt(today.month, 10).toString()}월 ${parseInt(
+          today.day,
+          10
+        ).toString()}일 오늘의 말씀`,
         description: "prayu에서 오늘의 말씀과 함께 기도해요!",
-        imageUrl:
-          "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/20240808.png",
+        imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${today.year}${today.month}${today.day}.png`,
       };
     default:
       return {
@@ -118,7 +123,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     return () => {
       document.body.removeChild(script);
     };
-  }, [groupPageUrl, id]);
+  }, [groupPageUrl, id, type]);
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
