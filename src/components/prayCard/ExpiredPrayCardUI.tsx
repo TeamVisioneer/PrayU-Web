@@ -1,16 +1,16 @@
-import { MemberWithProfiles } from "supabase/types/tables";
 import { Textarea } from "../ui/textarea";
 import { getDateDistance } from "@toss/date";
 import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
+import useBaseStore from "@/stores/baseStore";
 
-interface ExpiredPrayCardProps {
-  member: MemberWithProfiles;
-}
+const ExpiredPrayCardUI: React.FC = () => {
+  const otherMember = useBaseStore((state) => state.otherMember);
 
-const ExpiredPrayCardUI: React.FC<ExpiredPrayCardProps> = ({ member }) => {
+  if (!otherMember) return null;
+
   const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(member.updated_at)),
+    new Date(getISOOnlyDate(otherMember.updated_at)),
     new Date(getISOTodayDate())
   );
 
@@ -20,19 +20,21 @@ const ExpiredPrayCardUI: React.FC<ExpiredPrayCardProps> = ({ member }) => {
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
             <img
-              src={member.profiles.avatar_url || ""}
+              src={otherMember.profiles.avatar_url || ""}
               className="w-7 h-7 rounded-full"
             />
-            <p className="text-white text-lg">{member?.profiles.full_name}</p>
+            <p className="text-white text-lg">
+              {otherMember.profiles.full_name}
+            </p>
           </div>
           <p className="text-sm text-white w-full text-left">
-            시작일 : {member.updated_at.split("T")[0]}
+            시작일 : {otherMember.updated_at.split("T")[0]}
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
           <Textarea
             className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
-            value={member.pray_summary || ""}
+            value={otherMember.pray_summary || ""}
             disabled={true}
           />
         </div>

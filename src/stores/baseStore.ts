@@ -70,6 +70,9 @@ export interface BaseStore {
   memberList: MemberWithProfiles[] | null;
   memberLoading: boolean;
   myMember: MemberWithProfiles | null;
+  otherMember: MemberWithProfiles | null;
+  isOpenOtherMemberDrawer: boolean;
+  setIsOpenOtherMemberDrawer: (isOpenOtherMemberDrawer: boolean) => void;
   fetchMemberListByGroupId: (groupId: string) => Promise<void>;
   createMember: (
     groupId: string,
@@ -85,6 +88,7 @@ export interface BaseStore {
     userId: string,
     groupId: string
   ) => Promise<MemberWithProfiles | null>;
+  setOtherMember: (member: MemberWithProfiles) => void;
   isOpenMyMemberDrawer: boolean;
   setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
   deleteMemberbyGroupId: (
@@ -271,6 +275,13 @@ const useBaseStore = create<BaseStore>()(
     memberList: null,
     memberLoading: true,
     myMember: null,
+    otherMember: null,
+    isOpenOtherMemberDrawer: false,
+    setIsOpenOtherMemberDrawer: (isOpenOtherMemberDrawer: boolean) => {
+      set((state) => {
+        state.isOpenOtherMemberDrawer = isOpenOtherMemberDrawer;
+      });
+    },
     fetchMemberListByGroupId: async (groupId: string) => {
       const memberList = await fetchMemberListByGroupId(groupId);
       set((state) => {
@@ -301,6 +312,11 @@ const useBaseStore = create<BaseStore>()(
         state.memberLoading = false;
       });
       return member;
+    },
+    setOtherMember: (member: MemberWithProfiles) => {
+      set((state) => {
+        state.otherMember = member;
+      });
     },
     isOpenMyMemberDrawer: false,
     setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => {

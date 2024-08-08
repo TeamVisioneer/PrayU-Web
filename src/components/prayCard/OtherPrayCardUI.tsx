@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
-import { MemberWithProfiles } from "supabase/types/tables";
 import { ClipLoader } from "react-spinners";
 import ReactionWithCalendar from "./ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
+import { getISOTodayDate } from "@/lib/utils";
+import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 
 interface EventOption {
   where: string;
@@ -11,27 +12,26 @@ interface EventOption {
 
 interface OtherPrayCardProps {
   currentUserId: string;
-  member: MemberWithProfiles;
   eventOption: EventOption;
 }
 
 const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   currentUserId,
-  member,
   eventOption,
 }) => {
   const otherPrayCardList = useBaseStore((state) => state.otherPrayCardList);
   const fetchOtherPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchOtherPrayCardListByGroupId
   );
+  const otherMember = useBaseStore((state) => state.otherMember);
 
   useEffect(() => {
     fetchOtherPrayCardListByGroupId(
       currentUserId,
-      member.user_id!,
-      member.group_id!
+      otherMember!.user_id!,
+      otherMember!.group_id!
     );
-  }, [fetchOtherPrayCardListByGroupId, currentUserId, member]);
+  }, [fetchOtherPrayCardListByGroupId, currentUserId, otherMember]);
 
   if (!otherPrayCardList) {
     return (
@@ -47,8 +47,9 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   }
 
   const prayCard = otherPrayCardList[0];
+  const isExpiredOtherMember = otherMember!.updated_at < getISOTodayDate(-6);
 
-  return (
+  const PrayCardUI = () => (
     <div className="flex flex-col gap-6 min-h-[80vh] max-h-[80vh]">
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
@@ -74,6 +75,8 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
       <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />
     </div>
   );
+
+  return isExpiredOtherMember ? <ExpiredPrayCardUI /> : <PrayCardUI />;
 };
 
 export default OtherPrayCardUI;
