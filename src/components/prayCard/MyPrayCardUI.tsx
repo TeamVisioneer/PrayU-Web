@@ -117,6 +117,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
         }`}
       >
         <Textarea
+          draggable={true}
           className={`h-full w-full p-2 rounded-md overflow-y-auto  text-black !opacity-100 ${
             isEditingPrayCard ? " border-gray-300" : "border-none no-scrollbar"
           }`}
