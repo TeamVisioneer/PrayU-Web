@@ -53,8 +53,8 @@ const getContentByOption = (option?: string) => {
   switch (option) {
     case "bible":
       return {
-        title: "Option 1 Title",
-        description: "Option 1 Description",
+        title: "8월 8일 오늘의 말씀",
+        description: "prayu에서 오늘의 말씀과 함께 기도해요!",
         imageUrl:
           "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/20240808.svg",
       };
