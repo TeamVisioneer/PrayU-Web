@@ -68,7 +68,6 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
           <Textarea
             className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
             value={prayCard.content || ""}
-            disabled={true}
           />
         </div>
       </div>
