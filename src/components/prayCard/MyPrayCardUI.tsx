@@ -116,6 +116,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
           isDivVisible ? "h-full" : "h-[300px]"
         }`}
       >
+        <textarea className="h-10 bg-red-300" placeholder="ㅎㅇ"></textarea>
+
         <Textarea
           className={`h-full w-full p-2 rounded-md overflow-y-auto  text-black !opacity-100 ${
             isEditingPrayCard ? " border-gray-300" : "border-none no-scrollbar"
@@ -127,7 +129,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
           }
         />
-        <textarea className="h-10 bg-red-300" placeholder="ㅎㅇ"></textarea>
         <div className="absolute top-2 right-2">
           {isEditingPrayCard ? (
             <button
