@@ -92,6 +92,8 @@ export interface BaseStore {
     groupId: string,
     numMember: number
   ) => Promise<void>;
+  isOpenOtherMemberDrawer: boolean;
+  setIsOpenOtherMemberDrawer: (isOpenOtherMemberDrawer: boolean) => void;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -322,6 +324,12 @@ const useBaseStore = create<BaseStore>()(
         await deleteGroup(groupId);
       }
       await deleteMemberbyGroupId(userId, groupId);
+    },
+    isOpenOtherMemberDrawer: false,
+    setIsOpenOtherMemberDrawer: (isOpenOtherMemberDrawer: boolean) => {
+      set((state) => {
+        state.isOpenOtherMemberDrawer = isOpenOtherMemberDrawer;
+      });
     },
 
     // prayCard

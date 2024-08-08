@@ -123,7 +123,10 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
         <div className="flex flex-col items-start gap-2">{MyMemberUI}</div>
       </DrawerTrigger>
 
-      <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-20 focus:outline-none">
+      <DrawerContent
+        onOpenChange={setIsOpenMyMemberDrawer}
+        className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-20 focus:outline-none"
+      >
         <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>

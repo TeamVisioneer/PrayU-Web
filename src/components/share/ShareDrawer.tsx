@@ -67,7 +67,10 @@ const ShareDrawer: React.FC = () => {
 
   return (
     <Drawer open={isOpenShareDrawer} onOpenChange={setIsOpenShareDrawer}>
-      <DrawerContent className="bg-mainBg focus:outline-none">
+      <DrawerContent
+        className="bg-mainBg focus:outline-none"
+        onOpenChange={setIsOpenShareDrawer}
+      >
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
