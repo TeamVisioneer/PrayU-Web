@@ -339,6 +339,9 @@ const useBaseStore = create<BaseStore>()(
       startDt: string,
       endDt: string
     ) => {
+      set((state) => {
+        state.groupPrayCardList = [];
+      });
       const groupPrayCardList = await fetchGroupPrayCardList(
         groupId,
         currentUserId,
@@ -369,6 +372,10 @@ const useBaseStore = create<BaseStore>()(
       userId: string,
       groupId: string
     ) => {
+      set((state) => {
+        state.otherPrayCardList = [];
+      });
+
       const otherPrayCardList = await fetchOtherPrayCardListByGroupId(
         currentUserId,
         userId,
