@@ -96,7 +96,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   const MyPrayCardBody = (
-    <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+    <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard z-50">
       {isDivVisible && (
         <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
           <div className="flex items-center gap-2 w-full">
@@ -156,7 +156,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   return (
-    <div className="flex flex-col gap-6 h-[70vh]">
+    <div className="flex flex-col gap-6 h-[70vh] z-30">
       {MyPrayCardBody}
       <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
         <DrawerTrigger
