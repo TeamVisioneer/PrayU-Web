@@ -3,7 +3,7 @@ import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
 export const MemberInviteCard = () => {
-  const member = useBaseStore((state) => state.targetMember);
+  const myMember = useBaseStore((state) => state.myMember);
 
   const reactionImages = [
     { type: PrayType.PRAY, opacity: "opacity-40" },
@@ -21,7 +21,7 @@ export const MemberInviteCard = () => {
           reaction.profile ? (
             <img
               key={index}
-              src={member?.profiles.avatar_url || ""}
+              src={myMember?.profiles.avatar_url || ""}
               className="w-14 h-14 rounded-full ring-2 ring-[#FFBFBD]/50 drop-shadow-[0_0_10px_rgb(255,148,146,0.8)]"
             />
           ) : (

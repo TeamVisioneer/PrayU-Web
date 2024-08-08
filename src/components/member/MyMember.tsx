@@ -19,7 +19,7 @@ interface MemberProps {
 }
 
 const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
-  const member = useBaseStore((state) => state.targetMember);
+  const member = useBaseStore((state) => state.myMember);
   const getMember = useBaseStore((state) => state.getMember);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId

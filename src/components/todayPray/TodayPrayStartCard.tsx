@@ -3,7 +3,7 @@ import TodayPrayBtn from "./TodayPrayBtn";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 
 export const TodayPrayStartCard = () => {
-  const member = useBaseStore((state) => state.targetMember);
+  const member = useBaseStore((state) => state.myMember);
 
   const reactionImages = [
     { type: PrayType.PRAY, opacity: "opacity-40" },

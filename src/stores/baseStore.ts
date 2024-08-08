@@ -69,7 +69,7 @@ export interface BaseStore {
   // member
   memberList: MemberWithProfiles[] | null;
   memberLoading: boolean;
-  targetMember: MemberWithProfiles | null;
+  myMember: MemberWithProfiles | null;
   fetchMemberListByGroupId: (groupId: string) => Promise<void>;
   createMember: (
     groupId: string,
@@ -270,7 +270,7 @@ const useBaseStore = create<BaseStore>()(
     //member
     memberList: null,
     memberLoading: true,
-    targetMember: null,
+    myMember: null,
     fetchMemberListByGroupId: async (groupId: string) => {
       const memberList = await fetchMemberListByGroupId(groupId);
       set((state) => {
@@ -297,7 +297,7 @@ const useBaseStore = create<BaseStore>()(
     getMember: async (userId: string, groupId: string) => {
       const member = await getMember(userId, groupId);
       set((state) => {
-        state.targetMember = member;
+        state.myMember = member;
         state.memberLoading = false;
       });
       return member;
