@@ -5,6 +5,7 @@ import { Member, MemberWithProfiles } from "supabase/types/tables";
 import { useEffect } from "react";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate } from "@/lib/utils";
+import prayerVerses from "@/data/prayCardTemplate.json";
 
 interface PrayCardCreateModalProps {
   currentUserId: string;
@@ -30,6 +31,16 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   const createMember = useBaseStore((state) => state.createMember);
   const updateMember = useBaseStore((state) => state.updateMember);
   const createPrayCard = useBaseStore((state) => state.createPrayCard);
+
+  const getRandomVerse = () => {
+    const randomIndex = Math.floor(Math.random() * prayerVerses.length);
+    return `(${prayerVerses[randomIndex].verse})\n${prayerVerses[randomIndex].text}`;
+  };
+
+  const onClickPrayCardTemplate = () => {
+    analyticsTrack("클릭_기도카드_템플릿", {});
+    setPrayCardContent(getRandomVerse());
+  };
 
   const handleCreatePrayCard = async (
     currentUserId: string,
@@ -72,17 +83,20 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   }, [member, setPrayCardContent]);
 
   return (
-    <div className="flex flex-col items-center min-h-screen gap-6">
+    <div className="flex flex-col items-center min-h-screen gap-3">
       <div className="flex flex-col items-center gap-2 p-2">
         <p className="text-xl font-bold">이번 주 기도제목을 알려주세요 😁</p>
-        <p className="text-sm text-gray-500">
-          기도카드는 일주일 간 그룹원들이 볼 수 있어요
-        </p>
       </div>
+      <p
+        className="text-sm text-gray-500 underline"
+        onClick={() => onClickPrayCardTemplate()}
+      >
+        기도카드 템플릿 사용하기
+      </p>
 
       <Textarea
         className="h-80 p-5 text-[16px]"
-        placeholder="기도제목을 작성해 보아요:)"
+        placeholder="일주일 간 그룹원들이 볼 수 있어요! :)"
         value={inputPrayCardContent}
         onChange={(e) => setPrayCardContent(e.target.value)}
       />
