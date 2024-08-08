@@ -40,7 +40,6 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   const onClickPrayCardTemplate = () => {
     analyticsTrack("클릭_기도카드_템플릿", {});
     setPrayCardContent(getRandomVerse());
-    console.log("기도카드 템플릿 사용하기");
   };
 
   const handleCreatePrayCard = async (
