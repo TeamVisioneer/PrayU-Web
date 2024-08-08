@@ -1,24 +1,18 @@
 import { MemberWithProfiles } from "supabase/types/tables";
 import { getISOOnlyDate, getISOTodayDate } from "../../lib/utils";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import OtherPrayCardUI from "../prayCard/OtherPrayCardUI";
 import { getDateDistance } from "@toss/date";
 import { analyticsTrack } from "@/analytics/analytics";
-import ExpiredPrayCardUI from "../prayCard/ExpiredPrayCardUI";
+import useBaseStore from "@/stores/baseStore";
 
 interface OtherMemberProps {
-  currentUserId: string;
   member: MemberWithProfiles;
 }
 
-const OtherMember: React.FC<OtherMemberProps> = ({ currentUserId, member }) => {
+const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
+  const setOtherMember = useBaseStore((state) => state.setOtherMember);
+  const setIsOpenOtherMemberDrawer = useBaseStore(
+    (state) => state.setIsOpenOtherMemberDrawer
+  );
   const dateDistance = getDateDistance(
     new Date(getISOOnlyDate(member.updated_at)),
     new Date(getISOTodayDate())
@@ -26,10 +20,15 @@ const OtherMember: React.FC<OtherMemberProps> = ({ currentUserId, member }) => {
 
   const onClickOtherMember = () => {
     analyticsTrack("클릭_멤버_구성원", { member: member.user_id });
+    setOtherMember(member);
+    setIsOpenOtherMemberDrawer(true);
   };
 
-  const memberUI = (
-    <div className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl shadow-member">
+  return (
+    <div
+      className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl shadow-member"
+      onClick={() => onClickOtherMember()}
+    >
       <div className="flex items-center gap-2">
         <img
           src={member.profiles.avatar_url || ""}
@@ -44,34 +43,6 @@ const OtherMember: React.FC<OtherMemberProps> = ({ currentUserId, member }) => {
         {dateDistance.days < 1 ? "오늘" : `${dateDistance.days}일 전`}
       </div>
     </div>
-  );
-
-  return (
-    <Drawer>
-      <DrawerTrigger
-        className="focus:outline-none"
-        onClick={() => onClickOtherMember()}
-      >
-        {memberUI}
-      </DrawerTrigger>
-      <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
-        <DrawerHeader className="p-2">
-          <DrawerTitle></DrawerTitle>
-          <DrawerDescription></DrawerDescription>
-        </DrawerHeader>
-        {/* PrayCard */}
-        {dateDistance.days > 7 ? (
-          <ExpiredPrayCardUI member={member} />
-        ) : (
-          <OtherPrayCardUI
-            currentUserId={currentUserId}
-            member={member}
-            eventOption={{ where: "OtherMember" }}
-          />
-        )}
-        {/* PrayCard */}
-      </DrawerContent>
-    </Drawer>
   );
 };
 

@@ -39,7 +39,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   );
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
 
-  const member = useBaseStore((state) => state.targetMember);
+  const member = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
   const getMember = useBaseStore((state) => state.getMember);
 

@@ -69,7 +69,10 @@ export interface BaseStore {
   // member
   memberList: MemberWithProfiles[] | null;
   memberLoading: boolean;
-  targetMember: MemberWithProfiles | null;
+  myMember: MemberWithProfiles | null;
+  otherMember: MemberWithProfiles | null;
+  isOpenOtherMemberDrawer: boolean;
+  setIsOpenOtherMemberDrawer: (isOpenOtherMemberDrawer: boolean) => void;
   fetchMemberListByGroupId: (groupId: string) => Promise<void>;
   createMember: (
     groupId: string,
@@ -85,6 +88,7 @@ export interface BaseStore {
     userId: string,
     groupId: string
   ) => Promise<MemberWithProfiles | null>;
+  setOtherMember: (member: MemberWithProfiles) => void;
   isOpenMyMemberDrawer: boolean;
   setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
   deleteMemberbyGroupId: (
@@ -275,7 +279,14 @@ const useBaseStore = create<BaseStore>()(
     //member
     memberList: null,
     memberLoading: true,
-    targetMember: null,
+    myMember: null,
+    otherMember: null,
+    isOpenOtherMemberDrawer: false,
+    setIsOpenOtherMemberDrawer: (isOpenOtherMemberDrawer: boolean) => {
+      set((state) => {
+        state.isOpenOtherMemberDrawer = isOpenOtherMemberDrawer;
+      });
+    },
     fetchMemberListByGroupId: async (groupId: string) => {
       const memberList = await fetchMemberListByGroupId(groupId);
       set((state) => {
@@ -302,10 +313,15 @@ const useBaseStore = create<BaseStore>()(
     getMember: async (userId: string, groupId: string) => {
       const member = await getMember(userId, groupId);
       set((state) => {
-        state.targetMember = member;
+        state.myMember = member;
         state.memberLoading = false;
       });
       return member;
+    },
+    setOtherMember: (member: MemberWithProfiles) => {
+      set((state) => {
+        state.otherMember = member;
+      });
     },
     isOpenMyMemberDrawer: false,
     setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => {
@@ -344,9 +360,6 @@ const useBaseStore = create<BaseStore>()(
       startDt: string,
       endDt: string
     ) => {
-      set((state) => {
-        state.groupPrayCardList = [];
-      });
       const groupPrayCardList = await fetchGroupPrayCardList(
         groupId,
         currentUserId,
@@ -377,10 +390,6 @@ const useBaseStore = create<BaseStore>()(
       userId: string,
       groupId: string
     ) => {
-      set((state) => {
-        state.otherPrayCardList = [];
-      });
-
       const otherPrayCardList = await fetchOtherPrayCardListByGroupId(
         currentUserId,
         userId,
