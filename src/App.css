@@ -78,3 +78,7 @@
 .inner-shadow {
   box-shadow: rgb(114, 114, 114) 0px 2px 4px 0px inset;
 }
+.user-select-text {
+  -webkit-user-select: text;
+  user-select: text;
+}
