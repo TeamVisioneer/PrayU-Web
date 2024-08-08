@@ -4,6 +4,7 @@ import ReactionWithCalendar from "./ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
 import { getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
+import { ClipLoader } from "react-spinners";
 
 interface EventOption {
   where: string;
@@ -34,7 +35,9 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
 
   if (!otherPrayCardList) {
     return (
-      <div className="flex justify-center items-center min-h-[80vh] max-h-[80vh]"></div>
+      <div className="flex justify-center items-center min-h-[80vh] max-h-[80vh]">
+        <ClipLoader size={20} color={"#123abc"} loading={true} />
+      </div>
     );
   }
 
@@ -51,21 +54,19 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
             <img
-              src={otherMember.profiles.avatar_url || ""}
+              src={prayCard.profiles.avatar_url || ""}
               className="w-7 h-7 rounded-full"
             />
-            <p className="text-white text-lg">
-              {otherMember.profiles.full_name}
-            </p>
+            <p className="text-white text-lg">{prayCard.profiles.full_name}</p>
           </div>
           <p className="text-sm text-white w-full text-left">
-            시작일 : {otherMember.updated_at.split("T")[0]}
+            시작일 : {prayCard.updated_at.split("T")[0]}
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
           <Textarea
             className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
-            value={otherMember.pray_summary || ""}
+            value={prayCard.content || ""}
             disabled={true}
           />
         </div>
