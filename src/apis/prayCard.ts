@@ -41,7 +41,7 @@ export const fetchOtherPrayCardListByGroupId = async (
   currentUserId: string,
   userId: string,
   groupId: string,
-  limit: number = 10,
+  limit: number = 1,
   offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
@@ -49,10 +49,10 @@ export const fetchOtherPrayCardListByGroupId = async (
       .from("pray_card")
       .select(
         `*,
-      profiles (id, full_name, avatar_url),
-      pray (*, 
-        profiles (id, full_name, avatar_url)
-      )`
+        profiles (id, full_name, avatar_url),
+        pray (*, 
+          profiles (id, full_name, avatar_url)
+        )`
       )
       .eq("user_id", userId)
       .eq("group_id", groupId)
@@ -75,7 +75,7 @@ export const fetchOtherPrayCardListByGroupId = async (
 export const fetchUserPrayCardListByGroupId = async (
   currentUserId: string,
   groupId: string,
-  limit: number = 10,
+  limit: number = 1,
   offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {

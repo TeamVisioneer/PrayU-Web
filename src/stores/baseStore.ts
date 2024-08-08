@@ -88,7 +88,7 @@ export interface BaseStore {
     userId: string,
     groupId: string
   ) => Promise<MemberWithProfiles | null>;
-  setOtherMember: (member: MemberWithProfiles) => void;
+  setOtherMember: (member: MemberWithProfiles | null) => void;
   isOpenMyMemberDrawer: boolean;
   setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
   deleteMemberbyGroupId: (
@@ -318,7 +318,7 @@ const useBaseStore = create<BaseStore>()(
       });
       return member;
     },
-    setOtherMember: (member: MemberWithProfiles) => {
+    setOtherMember: (member: MemberWithProfiles | null) => {
       set((state) => {
         state.otherMember = member;
       });
@@ -372,15 +372,17 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.groupPrayCardList = groupPrayCardList;
         groupPrayCardList?.forEach((prayCard) => {
-          const todayPray = prayCard.pray.find(
-            (pray) =>
-              pray.user_id === currentUserId &&
-              new Date(pray.created_at) >= startOfDay &&
-              new Date(pray.created_at) <= endOfDay
-          );
-          state.todayPrayTypeHash[prayCard.id] = todayPray
-            ? (todayPray.pray_type as PrayType)
-            : null;
+          if (!state.todayPrayTypeHash[prayCard.id]) {
+            const todayPray = prayCard.pray.find(
+              (pray) =>
+                pray.user_id === currentUserId &&
+                new Date(pray.created_at) >= startOfDay &&
+                new Date(pray.created_at) <= endOfDay
+            );
+            state.todayPrayTypeHash[prayCard.id] = todayPray
+              ? (todayPray.pray_type as PrayType)
+              : null;
+          }
         });
       });
       return groupPrayCardList;
@@ -400,18 +402,20 @@ const useBaseStore = create<BaseStore>()(
       const endOfDay = new Date(today.setHours(23, 59, 59, 999));
 
       set((state) => {
-        state.otherPrayCardList = otherPrayCardList;
         otherPrayCardList?.forEach((prayCard) => {
-          const todayPray = prayCard.pray.find(
-            (pray) =>
-              pray.user_id === currentUserId &&
-              new Date(pray.created_at) >= startOfDay &&
-              new Date(pray.created_at) <= endOfDay
-          );
-          state.todayPrayTypeHash[prayCard.id] = todayPray
-            ? (todayPray.pray_type as PrayType)
-            : null;
+          if (!state.todayPrayTypeHash[prayCard.id]) {
+            const todayPray = prayCard.pray.find(
+              (pray) =>
+                pray.user_id === currentUserId &&
+                new Date(pray.created_at) >= startOfDay &&
+                new Date(pray.created_at) <= endOfDay
+            );
+            state.todayPrayTypeHash[prayCard.id] = todayPray
+              ? (todayPray.pray_type as PrayType)
+              : null;
+          }
         });
+        state.otherPrayCardList = otherPrayCardList;
       });
       return otherPrayCardList;
     },
