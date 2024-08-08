@@ -46,7 +46,7 @@ interface KakaoShareButtonProps {
   id: string;
   img?: string;
   eventOption: EventOption;
-  option?: string;
+  type?: string;
 }
 
 const getContentByOption = (option?: string) => {
@@ -74,7 +74,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   id,
   img,
   eventOption,
-  option,
+  type,
 }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -88,7 +88,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
       }
-      const content = getContentByOption(option);
+      const content = getContentByOption(type);
       window.Kakao.Share.createDefaultButton({
         container: `#${id}`,
         objectType: "feed",
