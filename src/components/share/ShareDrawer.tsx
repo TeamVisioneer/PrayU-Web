@@ -1,5 +1,11 @@
 import useBaseStore from "@/stores/baseStore";
 import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import {
   Drawer,
   DrawerContent,
   DrawerDescription,
@@ -10,8 +16,8 @@ import { getDomainUrl } from "@/lib/utils";
 import { KakaoShareButton } from "./KakaoShareBtn";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
-import KakaoShareImageUrl from "/images/KakaoShare.png";
 import { analyticsTrack } from "@/analytics/analytics";
+import { useEffect, useState } from "react";
 
 const ShareDrawer: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -27,7 +33,7 @@ const ShareDrawer: React.FC = () => {
       .writeText(currentUrl)
       .then(() => {
         toast({
-          description: "🔗 그룹 링크가 복사되었어요",
+          description: "그룹 링크가 복사되었어요 🔗",
         });
       })
       .catch((err) => {
@@ -36,16 +42,102 @@ const ShareDrawer: React.FC = () => {
     analyticsTrack("클릭_공유_링크복사", {});
   };
 
+  const [api, setApi] = useState<CarouselApi>();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    setCurrentIndex(api.selectedScrollSnap());
+    api.on("select", () => {
+      setCurrentIndex(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  const handleDotsClick = (index: number) => {
+    if (!api) return;
+    setCurrentIndex(index);
+    api.scrollTo(index);
+  };
+
+  const CarouselDots = () => (
+    <div className="flex justify-center items-center mt-4">
+      {Array.from({ length: 3 }, (_, index) => (
+        <span
+          key={index}
+          className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
+            currentIndex === index
+              ? "w-[6px] h-[6px] bg-mainBtn"
+              : "h-[4px] w-[4px] bg-gray-300"
+          }`}
+          onClick={() => handleDotsClick(index)}
+        ></span>
+      ))}
+    </div>
+  );
+
+  const ImageCerousel = (
+    <Carousel setApi={setApi}>
+      <CarouselContent>
+        <CarouselItem className="flex flex-col items-center gap-4">
+          <div className="h-[200px]  flex flex-col  items-center ">
+            <img className="h-full" src="/images/intro_square.png" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-base font-bold">함께하는 PrayU</p>
+            <div>
+              <p className="text-sm text-gray-500">그룹원들과 함께</p>
+              <p className="text-sm text-gray-500">
+                오늘의 기도를 진행해 보아요
+              </p>
+            </div>
+          </div>
+        </CarouselItem>
+        <CarouselItem className="flex flex-col items-center gap-4">
+          <div className="h-[200px] flex flex-col items-center">
+            <img
+              className="h-full rounded-md shadow-prayCard"
+              src="/images/KakaoShare.png"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-base font-bold">카카오톡 초대 전송</p>
+            <div>
+              <p className="text-sm text-gray-500">카카오톡 초대하기를 통해</p>
+              <p className="text-sm text-gray-500">
+                그룹 입장 카드를 전송할 수 있어요
+              </p>
+            </div>
+          </div>
+        </CarouselItem>
+        <CarouselItem className="flex flex-col items-center gap-4">
+          <div className="h-[200px] flex flex-col  items-center">
+            <img
+              className="h-full rounded-md shadow-prayCard"
+              src="/images/KakaoNotification.png"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-base font-bold">그룹 링크 공지</p>
+            <div>
+              <p className="text-sm text-gray-500">링크를 공지에 등록하고</p>
+              <p className="text-sm text-gray-500">
+                채팅방에서 편하게 접근해요
+              </p>
+            </div>
+          </div>
+        </CarouselItem>
+      </CarouselContent>
+      <CarouselDots />
+    </Carousel>
+  );
+
   const DrawerBody = (
-    <div className="h-[80vh] flex flex-col items-center gap-4">
-      <div className="flex flex-col items-center gap-1">
-        <p className="text-lg font-bold">그룹원들과 함께 기도할 수 있어요!</p>
-        <p className="text-gray-500"> 새 그룹원들을 초대해 보아요 📮</p>
+    <div className="h-[80vh] flex flex-col items-center text-center gap-6">
+      <div className="flex flex-col items-center">
+        <p className="text-base font-bold">새 그룹원들을 초대해 보아요 📮</p>
       </div>
 
-      <div className="h-[300px] flex flex-col items-center">
-        <img className="h-full rounded-md" src={KakaoShareImageUrl} />
-      </div>
+      {ImageCerousel}
       <div className="flex flex-col gap-2">
         <KakaoShareButton
           groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
