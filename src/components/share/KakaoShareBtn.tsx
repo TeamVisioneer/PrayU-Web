@@ -57,10 +57,7 @@ const getContentByOption = (option?: string) => {
   switch (option) {
     case "bible":
       return {
-        title: `${today.year}.${parseInt(
-          today.month,
-          10
-        ).toString()}.${parseInt(today.day, 10).toString()} 오늘의 말씀`,
+        title: `${today.year}.${today.month}.${today.day} 오늘의 말씀`,
         description: "PrayU에서 오늘의 말씀과 함께 기도해요!",
         imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`,
       };
