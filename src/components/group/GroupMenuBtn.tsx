@@ -25,7 +25,6 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   targetGroup,
 }) => {
   const user = useBaseStore((state) => state.user);
-  const memberList = useBaseStore((state) => state.memberList);
   const deleteMemberbyGroupId = useBaseStore(
     (state) => state.deleteMemberbyGroupId
   );
@@ -59,11 +58,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
       actionText: "나가기",
       cancelText: "취소",
       onAction: async () => {
-        await deleteMemberbyGroupId(
-          user!.id,
-          targetGroup.id,
-          memberList!.length
-        );
+        await deleteMemberbyGroupId(user!.id, targetGroup.id);
         await deletePrayCardByGroupId(user!.id, targetGroup.id);
         window.location.href = "/";
       },

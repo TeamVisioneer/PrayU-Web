@@ -13,12 +13,7 @@ import {
   TodayPrayTypeHash,
   PrayWithProfiles,
 } from "../../supabase/types/tables";
-import {
-  fetchGroupListByUserId,
-  getGroup,
-  createGroup,
-  deleteGroup,
-} from "@/apis/group";
+import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import {
   createMember,
   deleteMemberbyGroupId,
@@ -91,11 +86,7 @@ export interface BaseStore {
   setOtherMember: (member: MemberWithProfiles | null) => void;
   isOpenMyMemberDrawer: boolean;
   setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
-  deleteMemberbyGroupId: (
-    userId: string,
-    groupId: string,
-    numMember: number
-  ) => Promise<void>;
+  deleteMemberbyGroupId: (userId: string, groupId: string) => Promise<void>;
 
   // prayCard
   groupPrayCardList: PrayCardWithProfiles[] | null;
@@ -331,14 +322,7 @@ const useBaseStore = create<BaseStore>()(
         state.isOpenMyMemberDrawer = isOpenMyMemberDrawer;
       });
     },
-    deleteMemberbyGroupId: async (
-      userId: string,
-      groupId: string,
-      numMember: number
-    ) => {
-      if (numMember <= 1) {
-        await deleteGroup(groupId);
-      }
+    deleteMemberbyGroupId: async (userId: string, groupId: string) => {
       await deleteMemberbyGroupId(userId, groupId);
     },
 
