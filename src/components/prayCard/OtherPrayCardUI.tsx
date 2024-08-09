@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import ReactionWithCalendar from "./ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import { ClipLoader } from "react-spinners";
 
@@ -46,7 +46,9 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   if (!otherMember) return null;
 
   const prayCard = otherPrayCardList[0];
-  const isExpiredOtherMember = otherMember.updated_at < getISOTodayDate(-6);
+  const createdAt = prayCard.created_at;
+  const createdDateYMD = getISODateYMD(createdAt);
+  const isExpiredOtherMember = otherMember!.updated_at < getISOTodayDate(-6);
 
   const PrayCardUI = () => (
     <div className="flex flex-col gap-6 min-h-[80vh] max-h-[80vh]">
@@ -60,7 +62,8 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
             <p className="text-white text-lg">{prayCard.profiles.full_name}</p>
           </div>
           <p className="text-sm text-white w-full text-left">
-            시작일 : {prayCard.created_at.split("T")[0]}
+            시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
+            {createdDateYMD.day}
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">

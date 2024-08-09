@@ -8,19 +8,42 @@ import {
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
 import { PrayWithProfiles } from "supabase/types/tables";
+import { Button } from "../ui/button";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface PrayListProps {
   prayData: PrayWithProfiles[];
 }
 
 const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
+  const setIsOpenMyPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenMyPrayDrawer
+  );
+  const setIsOpenMyMemberDrawer = useBaseStore(
+    (state) => state.setIsOpenMyMemberDrawer
+  );
+  const setIsOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenTodayPrayDrawer
+  );
+
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const groupAndSortByUserId = useBaseStore(
     (state) => state.groupAndSortByUserId
   );
 
   const prayerList = groupAndSortByUserId(prayData);
-  const isPrayerListEmpty = !prayerList || Object.keys(prayerList).length === 0;
+  const lenPrayerList = Object.keys(prayerList).length;
+  const isPrayerListEmpty = !prayerList || lenPrayerList === 0;
+
+  const onClickTodayPrayBtn = () => {
+    setIsOpenMyPrayDrawer(false);
+    setIsOpenMyMemberDrawer(false);
+    setIsOpenTodayPrayDrawer(true);
+    analyticsTrack("클릭_오늘의기도_시작", {
+      len_prayer_list: lenPrayerList,
+      where: "PrayList",
+    });
+  };
 
   return (
     <DrawerContent className="max-w-[480px] mx-auto w-full h-[400px] focus:outline-none">
@@ -82,12 +105,17 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
               </div>
             ))}
             {!isPrayToday && (
-              <div className="absolute inset-0 flex items-center justify-center z-10 bg-black bg-opacity-20">
-                <div className="bg-blue-950 text-white p-4 rounded-xl">
-                  <p className="text-lg text-white font-semibold">
-                    오늘의 기도를 완료해주세요
-                  </p>
-                </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-5">
+                <Button
+                  variant="primary"
+                  className="w-[166px] h-[48px] text-md font-bold rounded-[10px]"
+                  onClick={() => onClickTodayPrayBtn()}
+                >
+                  기도 시작하기
+                </Button>
+                <p className="text-gray-500 text-sm">
+                  오늘의 기도를 완료해야 볼 수 있어요!
+                </p>
               </div>
             )}
           </>

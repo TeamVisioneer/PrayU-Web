@@ -28,6 +28,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   groupList,
   targetGroup,
 }) => {
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const isOpenTodayPrayDrawer = useBaseStore(
     (state) => state.isOpenTodayPrayDrawer
   );
@@ -85,7 +86,9 @@ const GroupBody: React.FC<GroupBodyProps> = ({
         <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full pb-5">
           <DrawerHeader className="p-2">
             <DrawerTitle></DrawerTitle>
-            <DrawerDescription></DrawerDescription>
+            <DrawerDescription className="text-gray-300 text-xs">
+              {isPrayToday ? <br /> : "반응을 누르면 다음 기도로 넘어가요"}
+            </DrawerDescription>
           </DrawerHeader>
           {/* TodayPrayCardList */}
           <TodayPrayCardList

@@ -12,6 +12,7 @@ import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate } from "@/lib/utils";
+import PrayListDrawer from "../pray/PrayListDrawer";
 
 interface MemberProps {
   currentUserId: string;
@@ -39,16 +40,12 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
     (state) => state.setIsOpenMyPrayDrawer
   );
 
-  const onClickMyMemberReaction = () => {
+  const onClickMyMemberReaction = (event: { stopPropagation: () => void }) => {
+    setIsOpenMyPrayDrawer(true);
+    event.stopPropagation();
     analyticsTrack("클릭_기도카드_반응결과", {
       where: "MyMember",
     });
-  };
-
-  const handleClick = () => {
-    setIsOpenMyMemberDrawer(true);
-    setIsOpenMyPrayDrawer(true);
-    onClickMyMemberReaction();
   };
 
   useEffect(() => {
@@ -78,7 +75,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
       <div className="flex gap-2">
         <div
           className="w-fit flex bg-gray-100 rounded-lg px-[14px] py-2 gap-[18px]"
-          onClick={() => handleClick()}
+          onClick={(event) => onClickMyMemberReaction(event)}
         >
           {Object.values(PrayType).map((type) => {
             return (
@@ -115,28 +112,34 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   };
 
   return (
-    <Drawer open={isOpenMyMemberDrawer} onOpenChange={setIsOpenMyMemberDrawer}>
-      <DrawerTrigger
-        className="focus:outline-none"
-        onClick={() => onClickMyMember()}
+    <>
+      <Drawer
+        open={isOpenMyMemberDrawer}
+        onOpenChange={setIsOpenMyMemberDrawer}
       >
-        <div className="flex flex-col items-start gap-2">{MyMemberUI}</div>
-      </DrawerTrigger>
+        <DrawerTrigger
+          className="focus:outline-none"
+          onClick={() => onClickMyMember()}
+        >
+          <div className="flex flex-col items-start gap-2">{MyMemberUI}</div>
+        </DrawerTrigger>
 
-      <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-20 focus:outline-none">
-        <DrawerHeader className="p-2">
-          <DrawerTitle></DrawerTitle>
-          <DrawerDescription></DrawerDescription>
-        </DrawerHeader>
-        {/* PrayCard */}
-        <MyPrayCardUI
-          currentUserId={currentUserId}
-          groupId={groupId}
-          member={member}
-        />
-        {/* PrayCard */}
-      </DrawerContent>
-    </Drawer>
+        <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-20 focus:outline-none">
+          <DrawerHeader className="p-2">
+            <DrawerTitle></DrawerTitle>
+            <DrawerDescription></DrawerDescription>
+          </DrawerHeader>
+          {/* PrayCard */}
+          <MyPrayCardUI
+            currentUserId={currentUserId}
+            groupId={groupId}
+            member={member}
+          />
+          {/* PrayCard */}
+        </DrawerContent>
+      </Drawer>
+      <PrayListDrawer currentUserId={currentUserId} groupId={groupId} />
+    </>
   );
 };
 

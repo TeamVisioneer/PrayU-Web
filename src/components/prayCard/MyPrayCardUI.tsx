@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { MemberWithProfiles } from "supabase/types/tables";
-import { Drawer, DrawerTrigger } from "../ui/drawer";
+
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import PrayList from "../pray/PrayList";
+
 import { getDateDistance } from "@toss/date";
-import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
@@ -41,8 +41,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   const updatePrayCardContent = useBaseStore(
     (state) => state.updatePrayCardContent
   );
-
-  const isOpenMyPrayDrawer = useBaseStore((state) => state.isOpenMyPrayDrawer);
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
   );
@@ -51,6 +49,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   const [isDivVisible, setIsDivVisible] = useState(true);
 
   const onClickPrayerList = () => {
+    setIsOpenMyPrayDrawer(true);
     analyticsTrack("클릭_기도카드_반응결과", { where: "MyPrayCard" });
   };
 
@@ -89,9 +88,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   }
 
   const prayCard = userPrayCardList[0];
+  const createdAt = prayCard.created_at;
+  const createdDateYMD = getISODateYMD(createdAt);
 
   const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(prayCard.created_at)),
+    new Date(getISOOnlyDate(createdAt)),
     new Date(getISOTodayDate())
   );
 
@@ -107,7 +108,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             </div>
           </div>
           <p className="text-xs text-white w-full text-left">
-            시작일 : {prayCard.created_at.split("T")[0]}
+            시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
+            {createdDateYMD.day}
           </p>
         </div>
       )}
@@ -157,39 +159,33 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   return (
     <div className="flex flex-col gap-6 h-[70vh]">
       {MyPrayCardBody}
-      <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
-        <DrawerTrigger
-          className="w-full focus:outline-none"
-          onClick={() => onClickPrayerList()}
-        >
-          <div className="flex justify-center gap-2">
-            {Object.values(PrayType).map((type) => (
-              <div
-                key={type}
-                className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
-              >
-                <div className="text-sm w-5 h-5">
-                  <img
-                    src={PrayTypeDatas[type].img}
-                    alt={PrayTypeDatas[type].emoji}
-                    className="w-5 h-5"
-                  />
-                </div>
-                <div className="text-sm">
-                  {
-                    prayCard.pray.filter((pray) => pray.pray_type === type)
-                      .length
-                  }
-                </div>
+      <div
+        className="w-full focus:outline-none"
+        onClick={() => onClickPrayerList()}
+      >
+        <div className="flex justify-center gap-2">
+          {Object.values(PrayType).map((type) => (
+            <div
+              key={type}
+              className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
+            >
+              <div className="text-sm w-5 h-5">
+                <img
+                  src={PrayTypeDatas[type].img}
+                  alt={PrayTypeDatas[type].emoji}
+                  className="w-5 h-5"
+                />
               </div>
-            ))}
-            <div className="bg-white rounded-lg flex justify-center items-center p-1">
-              <img className="w-5" src={iconUserMono} alt="user-icon" />
+              <div className="text-sm">
+                {prayCard.pray.filter((pray) => pray.pray_type === type).length}
+              </div>
             </div>
+          ))}
+          <div className="bg-white rounded-lg flex justify-center items-center p-1">
+            <img className="w-5" src={iconUserMono} alt="user-icon" />
           </div>
-        </DrawerTrigger>
-        <PrayList prayData={prayCard.pray} />
-      </Drawer>
+        </div>
+      </div>
     </div>
   );
 };

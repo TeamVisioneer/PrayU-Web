@@ -1,6 +1,7 @@
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
+import { getISODateYMD } from "@/lib/utils";
 
 interface EventOption {
   where: string;
@@ -13,6 +14,8 @@ interface PrayCardProps {
 
 // TODO: 현재 TodayPray 에서의 PrayCard 를 위한 컴포넌트로 사용중, 이후 이름 수정 및 폴더링 예정
 const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
+  const createdAt = prayCard.created_at;
+  const createdDateYMD = getISODateYMD(createdAt);
   return (
     <div className="flex flex-col gap-6 min-h-[80vh] max-h-[80vh]">
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
@@ -25,7 +28,8 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
             <p className="text-white text-lg">{prayCard.profiles.full_name}</p>
           </div>
           <p className="text-sm text-white w-full text-left">
-            시작일 : {prayCard.created_at.split("T")[0]}
+            시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
+            {createdDateYMD.day}
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">

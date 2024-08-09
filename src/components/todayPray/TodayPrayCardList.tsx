@@ -110,6 +110,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
       prayCard.user_id !== currentUserId &&
       prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length === 0
   );
+
   return (
     <Carousel
       setApi={setPrayCardCarouselApi}

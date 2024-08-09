@@ -1,6 +1,6 @@
 import { Textarea } from "../ui/textarea";
 import { getDateDistance } from "@toss/date";
-import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
 import useBaseStore from "@/stores/baseStore";
 
@@ -8,6 +8,9 @@ const ExpiredPrayCardUI: React.FC = () => {
   const otherMember = useBaseStore((state) => state.otherMember);
 
   if (!otherMember) return null;
+
+  const updatedAt = otherMember.updated_at;
+  const updatedDateYMD = getISODateYMD(updatedAt);
 
   const dateDistance = getDateDistance(
     new Date(getISOOnlyDate(otherMember.updated_at)),
@@ -28,7 +31,8 @@ const ExpiredPrayCardUI: React.FC = () => {
             </p>
           </div>
           <p className="text-sm text-white w-full text-left">
-            시작일 : {otherMember.updated_at.split("T")[0]}
+            시작일 : {updatedDateYMD.year}.{updatedDateYMD.month}.
+            {updatedDateYMD.day}
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
