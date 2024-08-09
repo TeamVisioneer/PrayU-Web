@@ -39,12 +39,14 @@ const MainPage: React.FC = () => {
   };
 
   const CarouselDots = () => (
-    <div className="flex justify-center mt-4">
+    <div className="flex justify-center items-center mt-4">
       {Array.from({ length: 4 }, (_, index) => (
         <span
           key={index}
-          className={`h-2 w-2 mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
-            currentIndex === index ? "bg-gray-800" : "bg-gray-400"
+          className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
+            currentIndex === index
+              ? "w-[6px] h-[6px] bg-mainBtn"
+              : "h-[4px] w-[4px] bg-gray-300"
           }`}
           onClick={() => handleDotsClick(index)}
         ></span>

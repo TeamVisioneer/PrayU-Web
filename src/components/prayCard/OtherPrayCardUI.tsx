@@ -36,7 +36,7 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   if (!otherPrayCardList) {
     return (
       <div className="flex justify-center items-center min-h-[80vh] max-h-[80vh]">
-        <ClipLoader size={20} color={"#123abc"} loading={true} />
+        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
       </div>
     );
   }
