@@ -5,7 +5,7 @@ import { MemberWithProfiles } from "supabase/types/tables";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 
 import { getDateDistance } from "@toss/date";
-import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
@@ -89,9 +89,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   }
 
   const prayCard = userPrayCardList[0];
+  const createdAt = prayCard.created_at;
+  const createdDateYMD = getISODateYMD(createdAt);
 
   const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(prayCard.created_at)),
+    new Date(getISOOnlyDate(createdAt)),
     new Date(getISOTodayDate())
   );
 
@@ -107,7 +109,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             </div>
           </div>
           <p className="text-xs text-white w-full text-left">
-            시작일 : {prayCard.created_at.split("T")[0]}
+            시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
+            {createdDateYMD.day}
           </p>
         </div>
       )}

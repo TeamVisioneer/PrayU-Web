@@ -29,7 +29,7 @@ const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
     return (
       <Button
         variant="primary"
-        className="w-32"
+        className="w-[166px] h-[48px] text-md font-bold rounded-[10px]"
         onClick={() => handleClickSharBtn()}
       >
         {text}

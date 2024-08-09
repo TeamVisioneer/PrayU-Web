@@ -59,6 +59,12 @@ export const getISOTodayDateYMD = () => {
   return { year, month, day };
 };
 
+export const getISODateYMD = (dateString: string) => {
+  const [datePart] = dateString.split("T");
+  const [year, month, day] = datePart.split("-");
+  return { year, month, day };
+};
+
 // sleep 함수
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
