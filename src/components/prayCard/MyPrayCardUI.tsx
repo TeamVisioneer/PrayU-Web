@@ -11,7 +11,6 @@ import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
-import { Button } from "../ui/button";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -160,8 +159,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   return (
     <div className="flex flex-col gap-6 h-[70vh]">
       {MyPrayCardBody}
-      <Button
-        className="w-full focus:outline-none bg-mainBg hover:bg-mainBg "
+      <div
+        className="w-full focus:outline-none"
         onClick={() => onClickPrayerList()}
       >
         <div className="flex justify-center gap-2">
@@ -186,7 +185,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             <img className="w-5" src={iconUserMono} alt="user-icon" />
           </div>
         </div>
-      </Button>
+      </div>
     </div>
   );
 };
