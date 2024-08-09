@@ -96,7 +96,7 @@ const ShareDrawer: React.FC = () => {
           <div className="h-[200px] flex flex-col items-center">
             <img
               className="h-full rounded-md shadow-prayCard"
-              src="/images/KakaoShare.png"
+              src="/images/KakaoShareMessage.png"
             />
           </div>
           <div className="flex flex-col gap-2">
