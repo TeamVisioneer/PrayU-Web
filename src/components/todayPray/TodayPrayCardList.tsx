@@ -23,6 +23,8 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   groupId,
 }) => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
+  const lenGroupPrayCardList = groupPrayCardList?.length;
+
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
   );
@@ -82,7 +84,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
       </div>
     );
 
-  if (groupPrayCardList.length == 1) {
+  if (lenGroupPrayCardList == 1) {
     return (
       <div className="flex flex-col justify-center items-center px-10 gap-4">
         <p className="text-lg font-bold">아직 올라온 기도제목이 없어요 😭</p>
@@ -110,6 +112,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
       prayCard.user_id !== currentUserId &&
       prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length === 0
   );
+
   return (
     <Carousel
       setApi={setPrayCardCarouselApi}
