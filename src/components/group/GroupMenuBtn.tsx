@@ -61,6 +61,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
         await deleteMemberbyGroupId(user!.id, targetGroup.id);
         await deletePrayCardByGroupId(user!.id, targetGroup.id);
         window.location.href = "/";
+        analyticsTrack("클릭_그룹_나가기", { group_id: targetGroup.id });
       },
     });
     setIsConfirmAlertOpen(true);
@@ -141,7 +142,9 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           </a>
 
           <hr />
-          <a href="/">PrayU 공유하기</a>
+          <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
+            PrayU 공유하기
+          </a>
           <a
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
             onClick={() => onClickContactUs()}
