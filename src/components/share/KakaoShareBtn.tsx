@@ -62,7 +62,7 @@ const getContentByOption = (option?: string) => {
           10
         ).toString()}.${parseInt(today.day, 10).toString()} 오늘의 말씀`,
         description: "PrayU에서 오늘의 말씀과 함께 기도해요!",
-        imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${contentNumber}.png`,
+        imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`,
       };
     default:
       return {
