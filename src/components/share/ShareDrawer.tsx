@@ -39,10 +39,8 @@ const ShareDrawer: React.FC = () => {
   const DrawerBody = (
     <div className="h-[80vh] flex flex-col items-center gap-4">
       <div className="flex flex-col items-center gap-1">
-        <p className="text-lg font-bold">
-          그룹에 참여하면 함께 기도할 수 있어요!
-        </p>
-        <p className="text-gray-500"> 새 구성원을 초대해봐요 📮</p>
+        <p className="text-lg font-bold">그룹원들과 함께 기도할 수 있어요!</p>
+        <p className="text-gray-500"> 새 그룹원들을 초대해 보아요 📮</p>
       </div>
 
       <div className="h-[300px] flex flex-col items-center">
@@ -68,7 +66,7 @@ const ShareDrawer: React.FC = () => {
   return (
     <Drawer open={isOpenShareDrawer} onOpenChange={setIsOpenShareDrawer}>
       <DrawerContent className="bg-mainBg focus:outline-none">
-        <DrawerHeader>
+        <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>

@@ -86,13 +86,13 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
     <div className="flex flex-col items-center min-h-screen gap-3">
       <div className="flex flex-col items-center gap-2 p-2">
         <p className="text-xl font-bold">이번 주 기도제목을 알려주세요 😁</p>
+        <p
+          className="text-sm text-gray-500 underline"
+          onClick={() => onClickPrayCardTemplate()}
+        >
+          기도카드 템플릿 사용하기
+        </p>
       </div>
-      <p
-        className="text-sm text-gray-500 underline"
-        onClick={() => onClickPrayCardTemplate()}
-      >
-        기도카드 템플릿 사용하기
-      </p>
 
       <Textarea
         className="h-80 p-5 text-[16px]"
