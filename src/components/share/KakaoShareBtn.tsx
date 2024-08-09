@@ -51,17 +51,18 @@ interface KakaoShareButtonProps {
 }
 
 const today = getISOTodayDateYMD();
+const contentNumber = parseInt(today.day, 10) % 10;
 
 const getContentByOption = (option?: string) => {
   switch (option) {
     case "bible":
       return {
-        title: `${parseInt(today.month, 10).toString()}월 ${parseInt(
-          today.day,
+        title: `${today.year}.${parseInt(
+          today.month,
           10
-        ).toString()}일 오늘의 말씀`,
+        ).toString()}.${parseInt(today.day, 10).toString()} 오늘의 말씀`,
         description: "PrayU에서 오늘의 말씀과 함께 기도해요!",
-        imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${today.year}${today.month}${today.day}.png`,
+        imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${contentNumber}.png`,
       };
     default:
       return {
