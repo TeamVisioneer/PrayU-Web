@@ -12,7 +12,7 @@ const OpenContentDrawerBtn: React.FC = () => {
   const onClickOpenContentDrawerBtn = () => {
     setIsOpenTodayPrayDrawer(false);
     setIsOpenContentDrawer(true);
-    analyticsTrack("클릭_오늘의말씀_보기", {
+    analyticsTrack("클릭_컨텐츠_오늘의말씀", {
       where: "OpenContentDrawerBtn",
     });
   };
