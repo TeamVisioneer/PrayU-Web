@@ -33,7 +33,7 @@ const ContentDrawer = () => {
       <div className="h-[300px] flex flex-col items-center">
         <img
           className="h-full rounded-md"
-          src={`https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${contentNumber}.png`}
+          src={`https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`}
         />
       </div>
       <KakaoShareButton
