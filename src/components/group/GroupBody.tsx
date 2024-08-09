@@ -86,7 +86,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
         <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full pb-5">
           <DrawerHeader className="p-2">
             <DrawerTitle></DrawerTitle>
-            <DrawerDescription className="text-gray-300 text-xs">
+            <DrawerDescription className="text-gray-300 text-xs text-center">
               {isPrayToday ? <br /> : "반응을 누르면 다음 기도로 넘어가요"}
             </DrawerDescription>
           </DrawerHeader>
