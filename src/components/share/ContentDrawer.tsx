@@ -10,7 +10,6 @@ import { KakaoShareButton } from "./KakaoShareBtn";
 import { getDomainUrl, getISOTodayDateYMD } from "@/lib/utils";
 
 const ContentDrawer = () => {
-  const today = getISOTodayDateYMD();
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const isOpenContentDrawer = useBaseStore(
     (state) => state.isOpenContentDrawer
@@ -18,6 +17,8 @@ const ContentDrawer = () => {
   const setIsOpenContentDrawer = useBaseStore(
     (state) => state.setIsOpenContentDrawer
   );
+  const today = getISOTodayDateYMD();
+  const contentNumber = parseInt(today.day, 10) % 10;
   const domainUrl = getDomainUrl();
 
   const DrawerBody = (
@@ -32,7 +33,7 @@ const ContentDrawer = () => {
       <div className="h-[300px] flex flex-col items-center">
         <img
           className="h-full rounded-md"
-          src={`https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${today.year}${today.month}${today.day}.png`}
+          src={`https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/${contentNumber}.png`}
         />
       </div>
       <KakaoShareButton
