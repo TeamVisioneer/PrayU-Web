@@ -25,7 +25,6 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   targetGroup,
 }) => {
   const user = useBaseStore((state) => state.user);
-  const memberList = useBaseStore((state) => state.memberList);
   const deleteMemberbyGroupId = useBaseStore(
     (state) => state.deleteMemberbyGroupId
   );
