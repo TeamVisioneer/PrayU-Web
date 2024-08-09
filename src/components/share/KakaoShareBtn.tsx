@@ -1,4 +1,5 @@
 import { analyticsTrack } from "@/analytics/analytics";
+import { getISOTodayDateYMD } from "@/lib/utils";
 import { useEffect, useRef } from "react";
 declare global {
   interface Window {
@@ -46,7 +47,29 @@ interface KakaoShareButtonProps {
   id: string;
   img?: string;
   eventOption: EventOption;
+  type?: string;
 }
+
+const today = getISOTodayDateYMD();
+const contentNumber = parseInt(today.day, 10) % 10;
+
+const getContentByOption = (option?: string) => {
+  switch (option) {
+    case "bible":
+      return {
+        title: `${today.year}.${today.month}.${today.day} 오늘의 말씀`,
+        description: "PrayU에서 오늘의 말씀과 함께 기도해요!",
+        imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`,
+      };
+    default:
+      return {
+        title: "PrayU 우리만의 기도제목 나눔 공간",
+        description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
+        imageUrl:
+          "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png",
+      };
+  }
+};
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   groupPageUrl,
@@ -54,6 +77,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   id,
   img,
   eventOption,
+  type,
 }) => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -67,14 +91,14 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
       }
+      const content = getContentByOption(type);
       window.Kakao.Share.createDefaultButton({
         container: `#${id}`,
         objectType: "feed",
         content: {
-          title: "PrayU 우리만의 기도제목 나눔 공간",
-          description: "기도제목을 기록하고\n매일 반응하며 함께 기도해요!",
-          imageUrl:
-            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/prayCard.png",
+          title: content.title,
+          description: content.description,
+          imageUrl: content.imageUrl,
           link: {
             mobileWebUrl: groupPageUrl,
             webUrl: groupPageUrl,
@@ -97,7 +121,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     return () => {
       document.body.removeChild(script);
     };
-  }, [groupPageUrl, id]);
+  }, [groupPageUrl, id, type]);
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
