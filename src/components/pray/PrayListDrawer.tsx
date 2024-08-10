@@ -27,7 +27,7 @@ const PrayListDrawer: React.FC<PrayListDrawerProps> = ({
   if (!userPrayCardList) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
+        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
       </div>
     );
   }
