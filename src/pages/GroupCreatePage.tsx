@@ -60,17 +60,7 @@ const GroupCreatePage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6 items-center">
-      <div className="text-lg font-bold">
-        PrayU 그룹{" "}
-        <button
-          onClick={() => {
-            throw new Error("버그 테스트");
-          }}
-        >
-          만들기
-        </button>
-      </div>
-
+      <div className="text-lg font-bold">PrayU 그룹 만들기</div>
       <div className="flex justify-center h-[300px] w-max">
         <img
           className="h-full object-cover"
@@ -83,7 +73,7 @@ const GroupCreatePage: React.FC = () => {
           value={inputGroupName}
           onChange={(e) => setGroupName(e.target.value)}
           placeholder="그룹 이름을 입력해 주세요"
-          maxLength={15}
+          maxLength={12}
         />
         <Button
           onClick={() => handleCreateGroup(user!.id, inputGroupName)}

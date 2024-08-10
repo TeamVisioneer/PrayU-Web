@@ -67,11 +67,11 @@ const GroupPage: React.FC = () => {
           type="tag"
         />
 
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-1">
-          <div className="text-lg font-bold flex items-center gap-1">
+        <div className="text-lg font-bold flex items-center gap-1">
+          <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
             {targetGroup.name}
-            <span className="text-sm text-gray-500">{memberList.length}</span>
           </div>
+          <span className="text-sm text-gray-500">{memberList.length}</span>
         </div>
 
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
