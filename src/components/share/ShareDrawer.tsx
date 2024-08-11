@@ -53,6 +53,17 @@ const ShareDrawer: React.FC = () => {
     });
   }, [api]);
 
+  useEffect(() => {
+    const handlePopState = () => {
+      setIsOpenShareDrawer(false);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isOpenShareDrawer, setIsOpenShareDrawer]);
+
   const handleDotsClick = (index: number) => {
     if (!api) return;
     setCurrentIndex(index);
