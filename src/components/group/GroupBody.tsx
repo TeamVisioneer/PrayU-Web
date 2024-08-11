@@ -4,13 +4,7 @@ import TodayPrayCardList from "@/components/todayPray/TodayPrayCardList";
 import MyMember from "@/components/member/MyMember";
 import GroupLimitCard from "@/components/group/GroupLimitCard";
 import OtherMemberList from "@/components/member/OtherMemberList";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+
 import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
 import { getISOTodayDate } from "@/lib/utils";
 
@@ -28,13 +22,6 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   groupList,
   targetGroup,
 }) => {
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const isOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.isOpenTodayPrayDrawer
-  );
-  const setIsOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenTodayPrayDrawer
-  );
   const isParamsGroupIdinGroupList = groupList.some(
     (group) => group.id === targetGroup.id
   );
@@ -71,34 +58,14 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   }
 
   return (
-    <>
-      <div className="flex flex-col h-full gap-4">
-        <MyMember currentUserId={currentUserId} groupId={targetGroup.id} />
-        <OtherMemberList
-          currentUserId={currentUserId}
-          groupId={targetGroup.id}
-        />
-      </div>
-      <Drawer
-        open={isOpenTodayPrayDrawer}
-        onOpenChange={setIsOpenTodayPrayDrawer}
-      >
-        <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full pb-5">
-          <DrawerHeader className="p-2">
-            <DrawerTitle></DrawerTitle>
-            <DrawerDescription className="text-gray-300 text-xs text-center">
-              {isPrayToday ? <br /> : "반응을 누르면 다음 기도로 넘어가요"}
-            </DrawerDescription>
-          </DrawerHeader>
-          {/* TodayPrayCardList */}
-          <TodayPrayCardList
-            currentUserId={currentUserId}
-            groupId={targetGroup.id}
-          />
-          {/* TodayPrayCardList */}
-        </DrawerContent>
-      </Drawer>
-    </>
+    <div className="flex flex-col h-full gap-4">
+      <MyMember currentUserId={currentUserId} groupId={targetGroup.id} />
+      <OtherMemberList currentUserId={currentUserId} groupId={targetGroup.id} />
+      <TodayPrayCardList
+        currentUserId={currentUserId}
+        groupId={targetGroup.id}
+      />
+    </div>
   );
 };
 
