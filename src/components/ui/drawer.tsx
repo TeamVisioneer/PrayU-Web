@@ -3,6 +3,8 @@ import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 
+const controller = new AbortController();
+
 const Drawer = ({
   shouldScaleBackground = true,
   ...props
@@ -12,13 +14,12 @@ const Drawer = ({
   useEffect(() => {
     const handlePopState = () => {
       if (onOpenChange) onOpenChange(false);
+      controller.abort();
     };
 
     window.addEventListener("popstate", handlePopState);
     return () => {
       window.removeEventListener("popstate", handlePopState);
-      const controller = new AbortController();
-      controller.abort();
     };
   }, [onOpenChange]);
   // Drawer Custom End
