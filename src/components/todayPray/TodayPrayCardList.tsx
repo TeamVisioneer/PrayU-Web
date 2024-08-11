@@ -166,9 +166,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
             )}
           </DrawerDescription>
         </DrawerHeader>
-        {filterdGroupPrayCardList.length === 0
-          ? emptyPrayCardList
-          : todayPrayCardList}
+        {groupPrayCardList.length === 1 ? emptyPrayCardList : todayPrayCardList}
       </DrawerContent>
     </Drawer>
   );
