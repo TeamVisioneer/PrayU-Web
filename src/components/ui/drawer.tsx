@@ -13,9 +13,12 @@ const Drawer = ({
     const handlePopState = () => {
       if (onOpenChange) onOpenChange(false);
     };
+
     window.addEventListener("popstate", handlePopState);
     return () => {
       window.removeEventListener("popstate", handlePopState);
+      const controller = new AbortController();
+      controller.abort();
     };
   }, [onOpenChange]);
   // Drawer Custom End
