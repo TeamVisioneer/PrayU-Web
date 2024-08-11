@@ -35,7 +35,9 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
   const lenPrayerList = Object.keys(prayerList).length;
   const isPrayerListEmpty = !prayerList || lenPrayerList === 0;
 
+  // TODO: TodayPrayBtn 으로 통일하기
   const onClickTodayPrayBtn = () => {
+    window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyPrayDrawer(false);
     setIsOpenMyMemberDrawer(false);
     setIsOpenTodayPrayDrawer(true);
