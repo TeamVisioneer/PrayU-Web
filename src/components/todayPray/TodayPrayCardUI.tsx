@@ -23,7 +23,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
           <div className="flex items-center gap-2">
             <img
               src={prayCard.profiles.avatar_url || ""}
-              className="w-7 h-7 rounded-full"
+              className="w-7 h-7 rounded-full object-cover"
             />
             <p className="text-white text-lg">{prayCard.profiles.full_name}</p>
           </div>

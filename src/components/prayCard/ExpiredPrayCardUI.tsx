@@ -24,7 +24,7 @@ const ExpiredPrayCardUI: React.FC = () => {
           <div className="flex items-center gap-2">
             <img
               src={otherMember.profiles.avatar_url || ""}
-              className="w-7 h-7 rounded-full"
+              className="w-7 h-7 rounded-full object-cover"
             />
             <p className="text-white text-lg">
               {otherMember.profiles.full_name}
