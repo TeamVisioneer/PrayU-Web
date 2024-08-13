@@ -62,15 +62,7 @@ const MainPage: React.FC = () => {
     const isKakao = navigator.userAgent.match("KAKAOTALK");
 
     return (
-      <div className="relative">
-        {!isKakao && (
-          <div
-            className="absolute w-full h-full "
-            onClick={() =>
-              (window.location.href = `kakaotalk://inappbrowser?url=${baseUrl}`)
-            }
-          ></div>
-        )}
+      <div>
         <Auth
           redirectTo={redirectUrl}
           supabaseClient={supabase}
@@ -93,6 +85,14 @@ const MainPage: React.FC = () => {
           onlyThirdPartyProviders={true}
           providers={["kakao"]}
         />
+        {!isKakao && (
+          <a
+            className="text-sm text-gray-500 underline"
+            href={`kakaotalk://inappbrowser?url=${baseUrl}`}
+          >
+            카카오톡 앱에서 바로 시작
+          </a>
+        )}
       </div>
     );
   };
