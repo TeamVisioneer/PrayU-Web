@@ -2,6 +2,7 @@ import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
+import { useRef } from "react";
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -9,17 +10,34 @@ const Drawer = ({
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
   // Drawer Custom Start
   const { onOpenChange } = props;
+  const isBackKeyPressedRef = useRef(-1);
+
   useEffect(() => {
     const handlePopState = () => {
-      if (onOpenChange) onOpenChange(false);
+      if (onOpenChange) {
+        onOpenChange(false);
+        isBackKeyPressedRef.current = 1;
+      }
       window.stop();
     };
-
     window.addEventListener("popstate", handlePopState);
     return () => {
       window.removeEventListener("popstate", handlePopState);
+      isBackKeyPressedRef.current = -1;
     };
   }, [onOpenChange]);
+
+  useEffect(() => {
+    if (props.open == true && isBackKeyPressedRef.current === -1)
+      isBackKeyPressedRef.current = 0;
+    else if (props.open == false && isBackKeyPressedRef.current === 0) {
+      isBackKeyPressedRef.current = -1;
+      window.history.go(-1);
+    } else if (props.open == false && isBackKeyPressedRef.current === 1) {
+      isBackKeyPressedRef.current = -1;
+    }
+  }, [props.open]);
+
   // Drawer Custom End
 
   return (
