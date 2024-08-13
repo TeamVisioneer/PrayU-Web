@@ -60,14 +60,14 @@ const ShareDrawer: React.FC = () => {
   };
 
   const CarouselDots = () => (
-    <div className="flex justify-center items-center mt-4">
+    <div className="flex justify-center items-center mt-6">
       {Array.from({ length: 2 }, (_, index) => (
         <span
           key={index}
           className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
             currentIndex === index
-              ? "w-[6px] h-[6px] bg-mainBtn"
-              : "h-[4px] w-[4px] bg-gray-300"
+              ? "w-[8px] h-[8px] bg-mainBtn"
+              : "h-[6px] w-[6px] bg-gray-400"
           }`}
           onClick={() => handleDotsClick(index)}
         ></span>
