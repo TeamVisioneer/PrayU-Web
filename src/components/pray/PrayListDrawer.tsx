@@ -1,4 +1,3 @@
-import { ClipLoader } from "react-spinners";
 import { Drawer } from "../ui/drawer";
 import PrayList from "./PrayList";
 import useBaseStore from "@/stores/baseStore";
@@ -10,6 +9,7 @@ interface PrayListDrawerProps {
   groupId: string;
 }
 
+// TODO: PrayList 랑 합치고 prayCard.pray 를 props 로 받기, 렌더링 언제 되는지 확인
 const PrayListDrawer: React.FC<PrayListDrawerProps> = ({
   currentUserId,
   groupId,
@@ -24,15 +24,7 @@ const PrayListDrawer: React.FC<PrayListDrawerProps> = ({
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [currentUserId, groupId]);
 
-  if (!userPrayCardList) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
-  }
-
-  if (userPrayCardList.length === 0) {
+  if (!userPrayCardList || userPrayCardList.length === 0) {
     return null;
   }
   const prayCard = userPrayCardList[0];

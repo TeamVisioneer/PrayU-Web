@@ -70,9 +70,16 @@ export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
+export const isIpAddress = (hostname: string) => {
+  const ipv4Pattern =
+    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+  const ipv6Pattern = /^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/;
+  return ipv4Pattern.test(hostname) || ipv6Pattern.test(hostname);
+};
+
 export const getDomainUrl = () => {
   const { protocol, hostname, port } = window.location;
-  return hostname === "localhost"
+  return hostname === "localhost" || isIpAddress(hostname)
     ? `${protocol}//${hostname}:${port}`
     : `${protocol}//${hostname}`;
 };

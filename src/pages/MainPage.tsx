@@ -59,29 +59,41 @@ const MainPage: React.FC = () => {
     const baseUrl = getDomainUrl();
     const from = location.state?.from?.pathname || "/group";
     const redirectUrl = `${baseUrl}${from}`;
+    const isKakao = navigator.userAgent.match("KAKAOTALK");
+
     return (
-      <Auth
-        redirectTo={redirectUrl}
-        supabaseClient={supabase}
-        appearance={{
-          theme: ThemeSupa,
-          style: {
-            button: { background: "#FFE237", color: "black" },
-          },
-        }}
-        localization={{
-          variables: {
-            sign_in: {
-              social_provider_text: "카카오로 시작하기",
+      <div>
+        <Auth
+          redirectTo={redirectUrl}
+          supabaseClient={supabase}
+          appearance={{
+            theme: ThemeSupa,
+            style: {
+              button: { background: "#FFE237", color: "black" },
             },
-            sign_up: {
-              social_provider_text: "카카오로 시작하기",
+          }}
+          localization={{
+            variables: {
+              sign_in: {
+                social_provider_text: "카카오로 시작하기",
+              },
+              sign_up: {
+                social_provider_text: "카카오로 시작하기",
+              },
             },
-          },
-        }}
-        onlyThirdPartyProviders={true}
-        providers={["kakao"]}
-      />
+          }}
+          onlyThirdPartyProviders={true}
+          providers={["kakao"]}
+        />
+        {!isKakao && (
+          <a
+            className="text-sm text-gray-500 underline"
+            href={`kakaotalk://inappbrowser?url=${baseUrl}`}
+          >
+            카카오톡 앱에서 바로 시작
+          </a>
+        )}
+      </div>
     );
   };
 
