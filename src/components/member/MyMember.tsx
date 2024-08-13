@@ -41,6 +41,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   );
 
   const onClickMyMemberReaction = (event: { stopPropagation: () => void }) => {
+    window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyPrayDrawer(true);
     event.stopPropagation();
     analyticsTrack("클릭_기도카드_반응결과", {
@@ -105,6 +106,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   );
 
   const onClickMyMember = () => {
+    window.history.pushState(null, "", window.location.pathname);
+    setIsOpenMyMemberDrawer(true);
     analyticsTrack("클릭_멤버_본인", {
       group_id: groupId,
       where: "MyMember",
@@ -121,7 +124,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
           className="focus:outline-none"
           onClick={() => onClickMyMember()}
         >
-          <div className="flex flex-col items-start gap-2">{MyMemberUI}</div>
+          {MyMemberUI}
         </DrawerTrigger>
 
         <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-20 focus:outline-none">

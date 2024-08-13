@@ -24,9 +24,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
-  const setIsOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenTodayPrayDrawer
-  );
 
   const createPray = useBaseStore((state) => state.createPray);
   const updatePray = useBaseStore((state) => state.updatePray);
@@ -35,27 +32,20 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard.id]);
 
   const handleClick = (prayType: PrayType) => () => {
+    if (!isPrayToday) setIsPrayToday(true);
+
     if (!hasPrayed) createPray(prayCard.id, currentUserId, prayType);
     else updatePray(prayCard.id, currentUserId, prayType);
 
-    if (!isPrayToday) setIsPrayToday(true);
+    if (prayCardCarouselApi) {
+      sleep(500).then(() => {
+        prayCardCarouselApi.scrollNext();
+      });
+    }
     analyticsTrack("클릭_기도카드_반응", {
       pray_type: prayType,
       where: eventOption.where,
     });
-    if (prayCardCarouselApi) {
-      sleep(500).then(() => {
-        if (
-          prayCardCarouselApi.selectedScrollSnap() ==
-          prayCardCarouselApi.scrollSnapList().length - 2
-        ) {
-          setIsOpenTodayPrayDrawer(false);
-          return null;
-        } else {
-          prayCardCarouselApi.scrollNext();
-        }
-      });
-    }
   };
 
   return (

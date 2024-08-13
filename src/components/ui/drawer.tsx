@@ -1,18 +1,34 @@
 import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
-
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 const Drawer = ({
   shouldScaleBackground = true,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
-  <DrawerPrimitive.Root
-    shouldScaleBackground={shouldScaleBackground}
-    {...props}
-  />
-);
-Drawer.displayName = "Drawer";
+}: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
+  // Drawer Custom Start
+  const { onOpenChange } = props;
+  useEffect(() => {
+    const handlePopState = () => {
+      if (onOpenChange) onOpenChange(false);
+      window.stop();
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [onOpenChange]);
+  // Drawer Custom End
+
+  return (
+    <DrawerPrimitive.Root
+      shouldScaleBackground={shouldScaleBackground}
+      {...props}
+    />
+  );
+};
 
 const DrawerTrigger = DrawerPrimitive.Trigger;
 

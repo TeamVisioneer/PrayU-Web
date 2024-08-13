@@ -11,6 +11,7 @@ const MyMemberBtn: React.FC = () => {
   );
 
   const onClickMyMemberBtn = () => {
+    window.history.pushState(null, "", window.location.pathname);
     setIsOpenTodayPrayDrawer(false);
     setIsOpenMyMemberDrawer(true);
     analyticsTrack("클릭_멤버_본인", { where: "PrayCardList" });
