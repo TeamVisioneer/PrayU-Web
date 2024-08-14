@@ -10,7 +10,7 @@ import { getISOTodayDate } from "@/lib/utils";
 
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
-
+//TODO: 삭제
 interface GroupBodyProps {
   currentUserId: string;
   groupList: Group[];
