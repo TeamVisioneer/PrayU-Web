@@ -32,6 +32,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   const getMember = useBaseStore((state) => state.getMember);
   const userPlan = useBaseStore((state) => state.userPlan);
 
+  // TODO: 삭제
   useEffect(() => {
     if (targetGroup) getMember(currentUserId, targetGroup.id);
   }, [currentUserId, targetGroup, getMember]);
