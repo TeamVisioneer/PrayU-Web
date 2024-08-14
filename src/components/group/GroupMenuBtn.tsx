@@ -92,7 +92,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
       >
         <img src={menuIcon} className="w-8 h-8" />
       </SheetTrigger>
-      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end">
+      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="text-end">PrayU 그룹</SheetTitle>
           <SheetDescription></SheetDescription>

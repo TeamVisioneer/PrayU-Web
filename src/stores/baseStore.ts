@@ -225,14 +225,14 @@ const useBaseStore = create<BaseStore>()(
         state.user = null;
       });
     },
-    // TODO: 나중에 여기에 api를 가져와서 쓰겠지?
+    // TODO: 나중에 여기에 api를 가져와서 쓰면 될 것 같다.
     setUserPlan: (userId: string) => {
-      const userListString = import.meta.env.VITE_PREMIUM_PLAN_USERLIST_JSON;
+      const userListString = import.meta.env.VITE_PREMIUM_PLAN_USERLIST;
       const userList: Record<string, string> = JSON.parse(
-        userListString.replace(/'/g, '"') // JSON.parse를 사용하려면 작은따옴표를 큰따옴표로 바꿔야 함
+        userListString.replace(/'/g, '"')
       );
 
-      if (import.meta.env.VITE_PREMIUM_PLAN_USERLIST_JSON) {
+      if (import.meta.env.VITE_PREMIUM_PLAN_USERLIST) {
         set((state) => {
           if (userId in userList) {
             state.userPlan = "Premium";
