@@ -227,6 +227,9 @@ const useBaseStore = create<BaseStore>()(
     },
     // TODO: 나중에 여기에 api를 가져와서 쓰면 될 것 같다.
     setUserPlan: (userId: string) => {
+      if (!import.meta.env.VITE_PREMIUM_PLAN_USERLIST) {
+        return null;
+      }
       const userListString = import.meta.env.VITE_PREMIUM_PLAN_USERLIST;
       const userList: Record<string, string> = JSON.parse(
         userListString.replace(/'/g, '"')
