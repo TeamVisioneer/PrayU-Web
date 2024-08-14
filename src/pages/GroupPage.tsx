@@ -25,10 +25,8 @@ const GroupPage: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
-  const setUserPlan = useBaseStore((state) => state.setUserPlan);
 
   useEffect(() => {
-    setUserPlan(user!.id);
     fetchGroupListByUserId(user!.id);
     if (paramsGroupId) getGroup(paramsGroupId);
     if (paramsGroupId) fetchMemberListByGroupId(paramsGroupId);
@@ -38,7 +36,6 @@ const GroupPage: React.FC = () => {
     user,
     paramsGroupId,
     getGroup,
-    setUserPlan,
   ]);
 
   useEffect(() => {

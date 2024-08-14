@@ -235,14 +235,12 @@ const useBaseStore = create<BaseStore>()(
         userListString.replace(/'/g, '"')
       );
 
-      if (import.meta.env.VITE_PREMIUM_PLAN_USERLIST) {
-        set((state) => {
-          if (userId in userList) {
-            state.userPlan = "Premium";
-          }
-          return state;
-        });
-      }
+      set((state) => {
+        if (userId in userList) {
+          state.userPlan = "Premium";
+        }
+        return state;
+      });
     },
 
     // group
