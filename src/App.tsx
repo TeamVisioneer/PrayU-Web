@@ -8,6 +8,7 @@ import GroupCreatePage from "./pages/GroupCreatePage";
 import { analytics } from "@/analytics/analytics";
 import ConfirmAlert from "./components/alert/ConfirmAlert";
 import { Toaster } from "./components/ui/toaster";
+import PrayCardCreatePage from "./pages/PrayCardCreatePayge";
 
 const App = () => {
   useEffect(() => {
@@ -51,6 +52,14 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <GroupPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/praycard/new"
+                element={
+                  <PrivateRoute>
+                    <PrayCardCreatePage />
                   </PrivateRoute>
                 }
               />
