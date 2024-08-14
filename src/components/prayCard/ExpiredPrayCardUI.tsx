@@ -5,6 +5,7 @@ import { KakaoShareButton } from "../share/KakaoShareBtn";
 import useBaseStore from "@/stores/baseStore";
 
 const ExpiredPrayCardUI: React.FC = () => {
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const otherMember = useBaseStore((state) => state.otherMember);
 
   if (!otherMember) return null;
@@ -52,7 +53,7 @@ const ExpiredPrayCardUI: React.FC = () => {
         </div>
 
         <KakaoShareButton
-          groupPageUrl={window.location.href}
+          targetGroup={targetGroup}
           message="카카오톡으로 요청하기"
           id="prayCardUIToOther"
           eventOption={{ where: "ReactionWithCalendar" }}

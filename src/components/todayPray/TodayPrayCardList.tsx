@@ -29,6 +29,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   currentUserId,
   groupId,
 }) => {
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
@@ -101,7 +102,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
         </p>
       </div>
       <KakaoShareButton
-        groupPageUrl={window.location.href}
+        targetGroup={targetGroup}
         id="paryTodayIntro"
         message="카카오톡으로 초대하기"
         eventOption={{ where: "PrayCardList" }}

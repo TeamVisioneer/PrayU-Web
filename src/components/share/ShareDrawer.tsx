@@ -12,7 +12,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
-import { getDomainUrl } from "@/lib/utils";
 import { KakaoShareButton } from "./KakaoShareBtn";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
@@ -25,7 +24,6 @@ const ShareDrawer: React.FC = () => {
   const setIsOpenShareDrawer = useBaseStore(
     (state) => state.setIsOpenShareDrawer
   );
-  const domainUrl = getDomainUrl();
 
   const onClickCopyLink = () => {
     const currentUrl = window.location.href;
@@ -140,7 +138,7 @@ const ShareDrawer: React.FC = () => {
       {ImageCerousel}
       <div className="flex flex-col gap-2">
         <KakaoShareButton
-          groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
+          targetGroup={targetGroup}
           id="groupPage"
           message="카카오톡으로 초대하기"
           eventOption={{ where: "GroupPage" }}
