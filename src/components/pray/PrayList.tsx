@@ -10,12 +10,14 @@ import { KakaoShareButton } from "../share/KakaoShareBtn";
 import { PrayWithProfiles } from "supabase/types/tables";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
+import { getDomainUrl } from "@/lib/utils";
 
 interface PrayListProps {
   prayData: PrayWithProfiles[];
 }
 
 const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
   );
@@ -67,7 +69,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
               <p>그룹 채팅방에 오늘의 기도 링크를 공유해 보아요</p>
             </div>
             <KakaoShareButton
-              groupPageUrl={window.location.href}
+              targetGroup={targetGroup}
               message="카카오톡 링크 공유"
               id="prayList"
               eventOption={{ where: "PrayList" }}

@@ -1,6 +1,7 @@
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDateYMD } from "@/lib/utils";
+import { getDomainUrl, getISOTodayDateYMD } from "@/lib/utils";
 import { useEffect, useRef } from "react";
+import { Group } from "supabase/types/tables";
 declare global {
   interface Window {
     Kakao: Kakao;
@@ -42,19 +43,17 @@ interface EventOption {
 }
 
 interface KakaoShareButtonProps {
-  groupPageUrl: string;
-  message?: string;
+  targetGroup: Group | null;
+  message: string;
   id: string;
-  img?: string;
   eventOption: EventOption;
   type?: string;
 }
 
-const today = getISOTodayDateYMD();
-const contentNumber = parseInt(today.day, 10) % 10;
-
-const getContentByOption = (option?: string) => {
-  switch (option) {
+const getContent = (groupName: string, type: string) => {
+  const today = getISOTodayDateYMD();
+  const contentNumber = parseInt(today.day, 10) % 10;
+  switch (type) {
     case "bible":
       return {
         title: `${today.year}.${today.month}.${today.day} 오늘의 말씀`,
@@ -63,8 +62,8 @@ const getContentByOption = (option?: string) => {
       };
     default:
       return {
-        title: "PrayU",
-        description: "우리만의 기도제목 나눔 공간",
+        title: `PrayU - ${groupName}`,
+        description: "우리만의 기도제목 나눔 공간\nPrayU에서 함께 기도해요!",
         imageUrl:
           "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/introImage.png",
       };
@@ -72,13 +71,13 @@ const getContentByOption = (option?: string) => {
 };
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
-  groupPageUrl,
-  message,
+  targetGroup,
   id,
-  img,
+  message,
+  type = "default",
   eventOption,
-  type,
 }) => {
+  const groupUrl = `${getDomainUrl()}/${targetGroup!.id}`;
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js";
@@ -91,7 +90,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
       }
-      const content = getContentByOption(type);
+      const content = getContent(targetGroup!.name!, type);
       window.Kakao.Share.createDefaultButton({
         container: `#${id}`,
         objectType: "feed",
@@ -100,16 +99,16 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
           description: content.description,
           imageUrl: content.imageUrl,
           link: {
-            mobileWebUrl: groupPageUrl,
-            webUrl: groupPageUrl,
+            mobileWebUrl: groupUrl,
+            webUrl: groupUrl,
           },
         },
         buttons: [
           {
             title: "오늘의 기도",
             link: {
-              mobileWebUrl: groupPageUrl,
-              webUrl: groupPageUrl,
+              mobileWebUrl: groupUrl,
+              webUrl: groupUrl,
             },
           },
         ],
@@ -121,45 +120,27 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
     return () => {
       document.body.removeChild(script);
     };
-  }, [groupPageUrl, id, type]);
+  }, [targetGroup, groupUrl, id, type]);
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const kakaoDefaultImage = "/images/kakaotalk_sharing_btn_medium.png";
-
-  if (message) {
-    return (
-      <div className="relative">
-        <div
-          className="absolute w-full h-full "
-          onClick={() => {
-            analyticsTrack("클릭_카카오_공유", {
-              where: eventOption.where,
-            });
-            buttonRef.current?.click();
-          }}
-        ></div>
-        <button
-          ref={buttonRef}
-          id={id}
-          className="bg-yellow-300 px-10 py-2 rounded-md text-sm"
-        >
-          <p className="text-black">{message}</p>
-        </button>
-      </div>
-    );
-  }
   return (
     <div className="relative">
       <div
         className="absolute w-full h-full "
         onClick={() => {
-          analyticsTrack("클릭_카카오_공유", { where: eventOption.where });
+          analyticsTrack("클릭_카카오_공유", {
+            where: eventOption.where,
+          });
           buttonRef.current?.click();
         }}
       ></div>
-      <button ref={buttonRef} id={id} className="bg-mainBg p-2 rounded-md">
-        <img src={img ?? kakaoDefaultImage} className="w-5 h-5" />
+      <button
+        ref={buttonRef}
+        id={id}
+        className="bg-yellow-300 px-10 py-2 rounded-md text-sm"
+      >
+        <p className="text-black">{message}</p>
       </button>
     </div>
   );

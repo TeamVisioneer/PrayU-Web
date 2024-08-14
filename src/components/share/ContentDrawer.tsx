@@ -37,7 +37,7 @@ const ContentDrawer = () => {
         />
       </div>
       <KakaoShareButton
-        groupPageUrl={`${domainUrl}/group/${targetGroup?.id}`}
+        targetGroup={targetGroup}
         id="ContentDrawer"
         message="카카오톡으로 공유하기"
         eventOption={{ where: "ContentDrawer" }}
