@@ -84,7 +84,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
               >
                 <div className="flex items-center gap-2">
                   <img
-                    className="w-8 h-8 rounded-full border"
+                    className="w-8 h-8 rounded-full border object-cover"
                     src={prayerList[user_id][0].profiles.avatar_url ?? ""}
                     alt={`${prayerList[user_id][0].profiles.full_name} avatar`}
                   />

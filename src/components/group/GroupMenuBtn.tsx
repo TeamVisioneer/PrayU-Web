@@ -143,7 +143,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
 
           <hr />
           <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
-            PrayU 공유하기
+            PrayU 홈
           </a>
           <a
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}

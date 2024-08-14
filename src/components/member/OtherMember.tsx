@@ -33,7 +33,7 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
       <div className="flex items-center gap-2">
         <img
           src={member.profiles.avatar_url || ""}
-          className="w-8 h-8 rounded-full"
+          className="w-8 h-8 rounded-full object-cover"
         />
         <h3>{member.profiles.full_name}</h3>
       </div>

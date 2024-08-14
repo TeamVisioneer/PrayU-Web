@@ -22,7 +22,7 @@ export const MemberInviteCard = () => {
             <img
               key={index}
               src={myMember?.profiles.avatar_url || ""}
-              className="w-14 h-14 rounded-full ring-2 ring-[#FFBFBD]/50 drop-shadow-[0_0_10px_rgb(255,148,146,0.8)]"
+              className="w-14 h-14 rounded-full ring-2 ring-[#FFBFBD]/50 drop-shadow-[0_0_10px_rgb(255,148,146,0.8)] object-cover"
             />
           ) : (
             <img
