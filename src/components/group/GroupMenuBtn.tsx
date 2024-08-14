@@ -39,9 +39,10 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const setIsConfirmAlertOpen = useBaseStore(
     (state) => state.setIsConfirmAlertOpen
   );
+  const userPlan = useBaseStore((state) => state.userPlan);
 
   const handleClickCreateGroup = () => {
-    if (userGroupList.length < maxGroupCount) {
+    if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
       navigate("/group/new");
       analyticsTrack("클릭_그룹_추가", { group_length: userGroupList.length });
     } else {

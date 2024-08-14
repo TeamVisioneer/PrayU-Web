@@ -40,8 +40,10 @@ export interface BaseStore {
   // user
   user: User | null;
   userLoading: boolean;
+  userPlan: string;
   getUser: () => void;
   signOut: () => Promise<void>;
+  setUserPlan: (userId: string) => void;
 
   // group
   groupList: Group[] | null;
@@ -180,6 +182,7 @@ const useBaseStore = create<BaseStore>()(
     // user
     user: null,
     userLoading: true,
+    userPlan: "",
     getUser: async () => {
       const {
         data: { session },
@@ -221,6 +224,22 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.user = null;
       });
+    },
+    // TODO: 나중에 여기에 api를 가져와서 쓰겠지?
+    setUserPlan: (userId: string) => {
+      const userListString = import.meta.env.VITE_PREMIUM_PLAN_USERLIST_JSON;
+      const userList: Record<string, string> = JSON.parse(
+        userListString.replace(/'/g, '"') // JSON.parse를 사용하려면 작은따옴표를 큰따옴표로 바꿔야 함
+      );
+
+      if (import.meta.env.VITE_PREMIUM_PLAN_USERLIST_JSON) {
+        set((state) => {
+          if (userId in userList) {
+            state.userPlan = "Premium";
+          }
+          return state;
+        });
+      }
     },
 
     // group
