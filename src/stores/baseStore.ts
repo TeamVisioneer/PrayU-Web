@@ -233,8 +233,8 @@ const useBaseStore = create<BaseStore>()(
       const userList = import.meta.env.VITE_PREMIUM_PLAN_USERLIST.split(
         ","
       ).reduce((acc: Record<string, string>, item: string) => {
-        const [key, value] = item.split(":");
-        acc[key] = value;
+        const [userId, userName] = item.split(":");
+        acc[userId] = userName;
         return acc;
       }, {} as Record<string, string>);
 
