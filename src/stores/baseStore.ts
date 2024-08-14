@@ -230,10 +230,13 @@ const useBaseStore = create<BaseStore>()(
       if (!import.meta.env.VITE_PREMIUM_PLAN_USERLIST) {
         return null;
       }
-      const userListString = import.meta.env.VITE_PREMIUM_PLAN_USERLIST;
-      const userList: Record<string, string> = JSON.parse(
-        userListString.replace(/'/g, '"')
-      );
+      const userList = import.meta.env.VITE_PREMIUM_PLAN_USERLIST.split(
+        ","
+      ).reduce((acc: Record<string, string>, item: string) => {
+        const [key, value] = item.split(":");
+        acc[key] = value;
+        return acc;
+      }, {} as Record<string, string>);
 
       set((state) => {
         if (userId in userList) {
