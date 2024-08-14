@@ -7,7 +7,7 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 import { KakaoShareButton } from "./KakaoShareBtn";
-import { getDomainUrl, getISOTodayDateYMD } from "@/lib/utils";
+import { getISOTodayDateYMD } from "@/lib/utils";
 
 const ContentDrawer = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -19,7 +19,6 @@ const ContentDrawer = () => {
   );
   const today = getISOTodayDateYMD();
   const contentNumber = parseInt(today.day, 10) % 10;
-  const domainUrl = getDomainUrl();
 
   const DrawerBody = (
     <div className="h-[80vh] flex flex-col items-center gap-6">

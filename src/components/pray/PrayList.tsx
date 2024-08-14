@@ -10,7 +10,6 @@ import { KakaoShareButton } from "../share/KakaoShareBtn";
 import { PrayWithProfiles } from "supabase/types/tables";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getDomainUrl } from "@/lib/utils";
 
 interface PrayListProps {
   prayData: PrayWithProfiles[];
