@@ -75,7 +75,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
 
       <div className="flex gap-2">
         <div
-          className="w-fit flex bg-gray-100 rounded-lg px-[14px] py-2 gap-[18px]"
+          className="w-fit flex bg-gray-100 rounded-lg px-[12px] py-2 gap-[18px]"
           onClick={(event) => onClickMyMemberReaction(event)}
         >
           {Object.values(PrayType).map((type) => {
@@ -97,7 +97,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
           })}
         </div>
         {prayDatasForMeToday && prayDatasForMeToday.length > 0 && (
-          <p className=" flex items-center text-gray-500 text-[10px]">
+          <p className="flex items-center text-gray-500 text-[10px]">
             오늘 기도해 준 사람이 있어요😊
           </p>
         )}

@@ -35,7 +35,7 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
 
   if (!otherPrayCardList) {
     return (
-      <div className="flex justify-center items-center min-h-[80vh] max-h-[80vh]">
+      <div className="flex justify-center items-center min-h-80vh max-h-80vh">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
       </div>
     );
@@ -51,7 +51,7 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   const isExpiredOtherMember = otherMember!.updated_at < getISOTodayDate(-6);
 
   const PrayCardUI = () => (
-    <div className="flex flex-col gap-6 min-h-[80vh] max-h-[80vh]">
+    <div className="flex flex-col gap-6 min-h-80vh max-h-80vh">
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
           <div className="flex items-center gap-2">

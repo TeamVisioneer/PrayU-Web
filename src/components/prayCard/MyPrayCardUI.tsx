@@ -158,7 +158,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   return (
-    <div className="flex flex-col gap-6 h-[70vh]">
+    <div className="flex flex-col gap-6 min-h-80vh max-h-80vh">
       {MyPrayCardBody}
       <div
         className="w-full focus:outline-none"

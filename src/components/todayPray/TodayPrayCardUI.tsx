@@ -17,7 +17,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
   const createdAt = prayCard.created_at;
   const createdDateYMD = getISODateYMD(createdAt);
   return (
-    <div className="flex flex-col gap-6 min-h-[80vh] max-h-[80vh]">
+    <div className="flex flex-col gap-6 min-h-80vh max-h-80vh">
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
