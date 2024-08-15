@@ -1,4 +1,3 @@
-import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import useBaseStore from "@/stores/baseStore";
 import { Member, MemberWithProfiles } from "supabase/types/tables";
@@ -82,9 +81,7 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   };
 
   useEffect(() => {
-    setPrayCardContent(
-      member?.pray_summary || "1. PrayU와 함께 기도할 수 있기를\n2. "
-    );
+    setPrayCardContent(member?.pray_summary || "");
   }, [member, setPrayCardContent]);
 
   const PrayCardUI = () => (
@@ -104,13 +101,21 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
             시작일 :{todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
           </p>
         </div>
-        <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
+        <div className="flex flex-col flex-grow min-h-full max-h-full px-[10px] py-[10px] overflow-y-auto no-scrollbar items-center">
           <textarea
             className="text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
             value={inputPrayCardContent}
             onChange={(e) => setPrayCardContent(e.target.value)}
-            placeholder="기도제목은 언제든지 수정할 수 있어요 :)"
+            placeholder={`기도제목은  수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
           />
+          {!inputPrayCardContent && (
+            <p
+              className="text-xs text-gray-500 underline"
+              onClick={() => onClickPrayCardTemplate()}
+            >
+              기도카드 템플릿 사용하기
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -123,12 +128,6 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
           {/* TODO: 줄바꿈 처리 */}
           당신의 기도제목을 알려주세요 😁
         </p>
-        {/* <p
-          className="text-sm text-gray-500 underline"
-          onClick={() => onClickPrayCardTemplate()}
-        >
-          기도카드 템플릿 사용하기
-        </p> */}
       </div>
       <div className="w-full px-5">{PrayCardUI()}</div>
 
@@ -141,9 +140,9 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
         >
           그룹 참여하기
         </Button>
-        <p className="text-center text-sm text-gray-500">
+        {/* <p className="text-center text-sm text-gray-500">
           기도제목을 작성하면 그룹에 참여할 수 있어요
-        </p>
+        </p> */}
       </div>
     </div>
   );
