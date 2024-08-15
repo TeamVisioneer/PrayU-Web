@@ -98,60 +98,64 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   const MyPrayCardBody = (
-    <div
-      className={`flex flex-col bg-white rounded-2xl shadow-prayCard ${
-        isDivVisible ? "flex-grow" : "h-[300px]"
-      }`}
-    >
-      {isDivVisible && (
-        <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
-          <div className="flex items-center gap-2 w-full">
-            <div className="flex gap-2 items-center">
-              <p className="text-xl text-white">
-                기도 {dateDistance.days + 1}일차
-              </p>
+    <div className="flex flex-col flex-grow">
+      <div
+        className={`flex flex-col bg-white rounded-2xl shadow-prayCard ${
+          isDivVisible ? "flex-grow" : "h-[300px]"
+        }`}
+      >
+        {isDivVisible && (
+          <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+            <div className="flex items-center gap-2 w-full">
+              <div className="flex gap-2 items-center">
+                <p className="text-xl text-white">
+                  기도 {dateDistance.days + 1}일차
+                </p>
+              </div>
             </div>
+            <p className="text-xs text-white w-full text-left">
+              시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
+              {createdDateYMD.day}
+            </p>
           </div>
-          <p className="text-xs text-white w-full text-left">
-            시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
-            {createdDateYMD.day}
-          </p>
-        </div>
-      )}
-      <div className="flex flex-col flex-grow px-[20px] py-[20px] relative">
-        <Textarea
-          className={`flex-grow w-full p-2 rounded-md overflow-y-auto  text-black !opacity-100 ${
-            isEditingPrayCard ? " border-gray-300" : "border-none no-scrollbar"
-          }`}
-          value={inputPrayCardContent}
-          onChange={(e) => setPrayCardContent(e.target.value)}
-          disabled={!isEditingPrayCard}
-          onFocus={() => setIsDivVisible(false)}
-          onBlur={() =>
-            handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
-          }
-        />
-        <div className="absolute top-2 right-2">
-          {isEditingPrayCard ? (
-            <button
-              className={`text-white rounded-full bg-middle/90 w-8 h-8 flex justify-center items-center ${
-                !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={() =>
-                handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
-              }
-              disabled={!inputPrayCardContent}
-            >
-              <FaSave className="text-white w-4 h-4" />
-            </button>
-          ) : (
-            <button
-              className="text-white rounded-full bg-end/90 w-8 h-8 flex justify-center items-center"
-              onClick={() => handleEditClick()}
-            >
-              <FaEdit className="text-white w-4 h-4" />
-            </button>
-          )}
+        )}
+        <div className="flex flex-col flex-grow px-[20px] py-[20px] relative">
+          <Textarea
+            className={`flex-grow w-full p-2 rounded-md overflow-y-auto  text-black !opacity-100 ${
+              isEditingPrayCard
+                ? " border-gray-300"
+                : "border-none no-scrollbar"
+            }`}
+            value={inputPrayCardContent}
+            onChange={(e) => setPrayCardContent(e.target.value)}
+            disabled={!isEditingPrayCard}
+            onFocus={() => setIsDivVisible(false)}
+            onBlur={() =>
+              handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
+            }
+          />
+          <div className="absolute top-2 right-2">
+            {isEditingPrayCard ? (
+              <button
+                className={`text-white rounded-full bg-middle/90 w-8 h-8 flex justify-center items-center ${
+                  !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={() =>
+                  handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
+                }
+                disabled={!inputPrayCardContent}
+              >
+                <FaSave className="text-white w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                className="text-white rounded-full bg-end/90 w-8 h-8 flex justify-center items-center"
+                onClick={() => handleEditClick()}
+              >
+                <FaEdit className="text-white w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
