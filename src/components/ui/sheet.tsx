@@ -1,17 +1,64 @@
-import * as React from "react"
-import * as SheetPrimitive from "@radix-ui/react-dialog"
-import { cva, type VariantProps } from "class-variance-authority"
-import { X } from "lucide-react"
+import * as React from "react";
+import * as SheetPrimitive from "@radix-ui/react-dialog";
+import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "lucide-react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
 
-const Sheet = SheetPrimitive.Root
+// Sheet Custom Start
+const Sheet = ({
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Root>) => {
+  const { onOpenChange } = props;
+  // "notReady" : sheet가 열리기 전, "notPressed" : 드로어가 열린 후(바탕 눌러 드로어가 꺼질때), "pressed" : 뒤로가기 버튼을 누른 후
+  const sheetBackKeyStatusRef = useRef("notReady");
 
-const SheetTrigger = SheetPrimitive.Trigger
+  useEffect(() => {
+    const handlePopState = () => {
+      if (onOpenChange) {
+        onOpenChange(false);
+        sheetBackKeyStatusRef.current = "pressed";
+      }
+      window.stop();
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      sheetBackKeyStatusRef.current = "notReady";
+    };
+  }, [onOpenChange]);
 
-const SheetClose = SheetPrimitive.Close
+  useEffect(() => {
+    if (
+      props.open == true &&
+      (sheetBackKeyStatusRef.current === "notReady" ||
+        sheetBackKeyStatusRef.current === "pressed")
+    ) {
+      sheetBackKeyStatusRef.current = "notPressed";
+    } else if (
+      props.open == false &&
+      sheetBackKeyStatusRef.current === "notPressed"
+    ) {
+      window.history.go(-1);
+      sheetBackKeyStatusRef.current = "notReady";
+    } else if (
+      props.open == false &&
+      sheetBackKeyStatusRef.current === "pressed"
+    ) {
+      sheetBackKeyStatusRef.current = "notReady";
+    }
+  }, [props.open]);
 
-const SheetPortal = SheetPrimitive.Portal
+  return <SheetPrimitive.Root {...props} />;
+};
+// Sheet Custom End
+
+const SheetTrigger = SheetPrimitive.Trigger;
+
+const SheetClose = SheetPrimitive.Close;
+
+const SheetPortal = SheetPrimitive.Portal;
 
 const SheetOverlay = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Overlay>,
@@ -25,8 +72,8 @@ const SheetOverlay = React.forwardRef<
     {...props}
     ref={ref}
   />
-))
-SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
+));
+SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
 const sheetVariants = cva(
   "fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
@@ -45,7 +92,7 @@ const sheetVariants = cva(
       side: "right",
     },
   }
-)
+);
 
 interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
@@ -69,8 +116,8 @@ const SheetContent = React.forwardRef<
       </SheetPrimitive.Close>
     </SheetPrimitive.Content>
   </SheetPortal>
-))
-SheetContent.displayName = SheetPrimitive.Content.displayName
+));
+SheetContent.displayName = SheetPrimitive.Content.displayName;
 
 const SheetHeader = ({
   className,
@@ -83,8 +130,8 @@ const SheetHeader = ({
     )}
     {...props}
   />
-)
-SheetHeader.displayName = "SheetHeader"
+);
+SheetHeader.displayName = "SheetHeader";
 
 const SheetFooter = ({
   className,
@@ -97,8 +144,8 @@ const SheetFooter = ({
     )}
     {...props}
   />
-)
-SheetFooter.displayName = "SheetFooter"
+);
+SheetFooter.displayName = "SheetFooter";
 
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
@@ -109,8 +156,8 @@ const SheetTitle = React.forwardRef<
     className={cn("text-lg font-semibold text-foreground", className)}
     {...props}
   />
-))
-SheetTitle.displayName = SheetPrimitive.Title.displayName
+));
+SheetTitle.displayName = SheetPrimitive.Title.displayName;
 
 const SheetDescription = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Description>,
@@ -121,8 +168,8 @@ const SheetDescription = React.forwardRef<
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
-))
-SheetDescription.displayName = SheetPrimitive.Description.displayName
+));
+SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
 export {
   Sheet,
@@ -135,4 +182,4 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
-}
+};

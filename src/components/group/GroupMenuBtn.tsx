@@ -40,6 +40,12 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
     (state) => state.setIsConfirmAlertOpen
   );
   const userPlan = useBaseStore((state) => state.userPlan);
+  const isOpenGroupMenuSheet = useBaseStore(
+    (state) => state.isOpenGroupMenuSheet
+  );
+  const setIsOpenGroupMenuSheet = useBaseStore(
+    (state) => state.setIsOpenGroupMenuSheet
+  );
 
   const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
@@ -78,6 +84,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   };
 
   const onClickSheetTrigeer = () => {
+    window.history.pushState(null, "", window.location.pathname);
     analyticsTrack("클릭_그룹_메뉴", {
       group_id: targetGroup.id,
       group_name: targetGroup.name,
@@ -85,7 +92,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   };
 
   return (
-    <Sheet>
+    <Sheet open={isOpenGroupMenuSheet} onOpenChange={setIsOpenGroupMenuSheet}>
       <SheetTrigger
         className="flex flex-col items-end focus:outline-none"
         onClick={() => onClickSheetTrigeer()}

@@ -106,7 +106,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   );
 
   const onClickMyMember = () => {
-    window.history.pushState(null, "", window.location.pathname + "#drawer");
+    window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyMemberDrawer(true);
     analyticsTrack("클릭_멤버_본인", {
       group_id: groupId,

@@ -10,34 +10,44 @@ const Drawer = ({
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
   // Drawer Custom Start
   const { onOpenChange } = props;
-  const isBackKeyPressedRef = useRef(-1);
+  // "notReady" : drawer가 열리기 전, "notPressed" : 드로어가 열린 후(바탕 눌러 드로어가 꺼질때), "pressed" : 뒤로가기 버튼을 누른 후
+  const drawerBackKeyStatusRef = useRef("notReady");
 
   useEffect(() => {
     const handlePopState = () => {
       if (onOpenChange) {
         onOpenChange(false);
-        isBackKeyPressedRef.current = 1;
+        drawerBackKeyStatusRef.current = "pressed";
       }
       window.stop();
     };
     window.addEventListener("popstate", handlePopState);
     return () => {
       window.removeEventListener("popstate", handlePopState);
-      isBackKeyPressedRef.current = -1;
+      drawerBackKeyStatusRef.current = "notReady";
     };
   }, [onOpenChange]);
 
   useEffect(() => {
-    if (props.open == true && isBackKeyPressedRef.current === -1)
-      isBackKeyPressedRef.current = 0;
-    else if (props.open == false && isBackKeyPressedRef.current === 0) {
-      isBackKeyPressedRef.current = -1;
+    if (
+      props.open == true &&
+      (drawerBackKeyStatusRef.current === "notReady" ||
+        drawerBackKeyStatusRef.current === "pressed")
+    ) {
+      drawerBackKeyStatusRef.current = "notPressed";
+    } else if (
+      props.open == false &&
+      drawerBackKeyStatusRef.current === "notPressed"
+    ) {
       window.history.go(-1);
-    } else if (props.open == false && isBackKeyPressedRef.current === 1) {
-      isBackKeyPressedRef.current = -1;
+      drawerBackKeyStatusRef.current = "notReady";
+    } else if (
+      props.open == false &&
+      drawerBackKeyStatusRef.current === "pressed"
+    ) {
+      drawerBackKeyStatusRef.current = "notReady";
     }
   }, [props.open]);
-
   // Drawer Custom End
 
   return (
