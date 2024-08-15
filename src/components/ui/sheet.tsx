@@ -30,22 +30,9 @@ const Sheet = ({
   }, [onOpenChange]);
 
   useEffect(() => {
-    if (
-      props.open == true &&
-      (sheetBackKeyStatusRef.current === "notReady" ||
-        sheetBackKeyStatusRef.current === "pressed")
-    ) {
-      sheetBackKeyStatusRef.current = "notPressed";
-    } else if (
-      props.open == false &&
-      sheetBackKeyStatusRef.current === "notPressed"
-    ) {
-      window.history.go(-1);
-      sheetBackKeyStatusRef.current = "notReady";
-    } else if (
-      props.open == false &&
-      sheetBackKeyStatusRef.current === "pressed"
-    ) {
+    if (props.open == true) sheetBackKeyStatusRef.current = "notPressed";
+    else {
+      if (sheetBackKeyStatusRef.current === "notPressed") window.history.go(-1);
       sheetBackKeyStatusRef.current = "notReady";
     }
   }, [props.open]);

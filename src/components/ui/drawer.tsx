@@ -29,22 +29,10 @@ const Drawer = ({
   }, [onOpenChange]);
 
   useEffect(() => {
-    if (
-      props.open == true &&
-      (drawerBackKeyStatusRef.current === "notReady" ||
-        drawerBackKeyStatusRef.current === "pressed")
-    ) {
-      drawerBackKeyStatusRef.current = "notPressed";
-    } else if (
-      props.open == false &&
-      drawerBackKeyStatusRef.current === "notPressed"
-    ) {
-      window.history.go(-1);
-      drawerBackKeyStatusRef.current = "notReady";
-    } else if (
-      props.open == false &&
-      drawerBackKeyStatusRef.current === "pressed"
-    ) {
+    if (props.open == true) drawerBackKeyStatusRef.current = "notPressed";
+    else {
+      if (drawerBackKeyStatusRef.current === "notPressed")
+        window.history.go(-1);
       drawerBackKeyStatusRef.current = "notReady";
     }
   }, [props.open]);
