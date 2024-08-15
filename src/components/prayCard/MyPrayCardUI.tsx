@@ -98,7 +98,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   const MyPrayCardBody = (
-    <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+    <div
+      className={`flex flex-col bg-white rounded-2xl shadow-prayCard ${
+        isDivVisible ? "flex-grow" : "h-[300px]"
+      }`}
+    >
       {isDivVisible && (
         <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
           <div className="flex items-center gap-2 w-full">
@@ -114,13 +118,9 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
           </p>
         </div>
       )}
-      <div
-        className={`flex flex-col px-[20px] py-[20px] relative ${
-          isDivVisible ? "h-full" : "h-[300px]"
-        }`}
-      >
+      <div className="flex flex-col flex-grow px-[20px] py-[20px] relative">
         <Textarea
-          className={`h-full w-full p-2 rounded-md overflow-y-auto  text-black !opacity-100 ${
+          className={`flex-grow w-full p-2 rounded-md overflow-y-auto  text-black !opacity-100 ${
             isEditingPrayCard ? " border-gray-300" : "border-none no-scrollbar"
           }`}
           value={inputPrayCardContent}
