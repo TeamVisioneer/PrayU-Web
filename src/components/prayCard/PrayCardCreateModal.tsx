@@ -18,6 +18,7 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   groupId,
   member,
 }) => {
+  const user = useBaseStore((state) => state.user);
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
@@ -82,10 +83,39 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
     setPrayCardContent(member?.pray_summary || "");
   }, [member, setPrayCardContent]);
 
+  const PrayCardUI = () => (
+    <div className="flex flex-col gap-6 min-h-[50vh] max-h-[50vh] justify-center">
+      <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
+        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
+          <div className="flex items-center gap-2">
+            <img
+              src={user?.user_metadata.avatar_url || ""}
+              className="w-7 h-7 rounded-full object-cover"
+            />
+            <p className="text-white text-lg">
+              {user?.user_metadata.full_name}
+            </p>
+          </div>
+          <p className="text-sm text-white w-full text-left">시작일 :</p>
+        </div>
+        <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
+          <Textarea
+            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
+            value={inputPrayCardContent || ""}
+            disabled={true}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex flex-col items-center min-h-screen gap-3">
       <div className="flex flex-col items-center gap-2 p-2">
-        <p className="text-xl font-bold">이번 주 기도제목을 알려주세요 😁</p>
+        <p className="text-xl font-bold break-normal text-center">
+          {/* TODO: 줄바꿈 처리 */}
+          {user?.user_metadata.full_name}님의 기도제목을 알려주세요 😁
+        </p>
         <p
           className="text-sm text-gray-500 underline"
           onClick={() => onClickPrayCardTemplate()}
@@ -93,13 +123,14 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
           기도카드 템플릿 사용하기
         </p>
       </div>
+      <div className="w-full px-5">{PrayCardUI()}</div>
 
-      <Textarea
+      {/* <Textarea
         className="h-80 p-5 text-[16px]"
         placeholder="일주일 간 그룹원들이 볼 수 있어요! :)"
         value={inputPrayCardContent}
         onChange={(e) => setPrayCardContent(e.target.value)}
-      />
+      /> */}
 
       <Button
         className="w-full"
