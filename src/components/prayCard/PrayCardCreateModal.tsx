@@ -85,7 +85,7 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   }, [member, setPrayCardContent]);
 
   const PrayCardUI = () => (
-    <div className="flex flex-col gap-6 min-h-[50vh] max-h-[50vh] justify-center">
+    <div className="flex flex-col gap-6 justify-center">
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
@@ -103,7 +103,7 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full px-[10px] py-[10px] overflow-y-auto no-scrollbar items-center">
           <textarea
-            className="text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
+            className="min-h-[300px] text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
             value={inputPrayCardContent}
             onChange={(e) => setPrayCardContent(e.target.value)}
             placeholder={`기도제목은  수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
