@@ -2,7 +2,6 @@ import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
-import { useRef } from "react";
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -10,32 +9,18 @@ const Drawer = ({
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
   // Drawer Custom Start
   const { onOpenChange } = props;
-  // "notReady" : drawer가 열리기 전, "notPressed" : 드로어가 열린 후(바탕 눌러 드로어가 꺼질때), "pressed" : 뒤로가기 버튼을 누른 후
-  const drawerBackKeyStatusRef = useRef("notReady");
 
   useEffect(() => {
     const handlePopState = () => {
       if (onOpenChange) {
         onOpenChange(false);
-        drawerBackKeyStatusRef.current = "pressed";
       }
-      window.stop();
     };
     window.addEventListener("popstate", handlePopState);
     return () => {
       window.removeEventListener("popstate", handlePopState);
-      drawerBackKeyStatusRef.current = "notReady";
     };
   }, [onOpenChange]);
-
-  useEffect(() => {
-    if (props.open == true) drawerBackKeyStatusRef.current = "notPressed";
-    else {
-      if (drawerBackKeyStatusRef.current === "notPressed")
-        window.history.go(-1);
-      drawerBackKeyStatusRef.current = "notReady";
-    }
-  }, [props.open]);
   // Drawer Custom End
 
   return (

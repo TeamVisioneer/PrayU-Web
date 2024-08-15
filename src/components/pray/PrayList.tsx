@@ -10,6 +10,7 @@ import { KakaoShareButton } from "../share/KakaoShareBtn";
 import { PrayWithProfiles } from "supabase/types/tables";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
+import { isToday } from "@/lib/utils";
 
 interface PrayListProps {
   prayData: PrayWithProfiles[];
@@ -93,16 +94,17 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
                     {prayerList[user_id][0].profiles.full_name}
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-1">
                   {prayerList[user_id].map((pray) => (
-                    <p key={pray.id} className="text-xl text-gray-500">
-                      {
-                        <img
-                          src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
-                          alt={PrayTypeDatas[pray.pray_type as PrayType]?.emoji}
-                        ></img>
-                      }
-                    </p>
+                    <img
+                      src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
+                      className={`rounded-full  border-2
+                          ${
+                            isToday(pray.created_at)
+                              ? "border-yellow-300"
+                              : "border-transparent"
+                          }`}
+                    />
                   ))}
                 </div>
               </div>

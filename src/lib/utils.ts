@@ -65,6 +65,13 @@ export const getISODateYMD = (dateString: string) => {
   return { year, month, day };
 };
 
+export const isToday = (dateString: string) => {
+  const today = getISOTodayDate();
+  const [todayDt] = today.split("T");
+  const [targetDt] = dateString.split("T");
+  return todayDt === targetDt;
+};
+
 // sleep 함수
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));

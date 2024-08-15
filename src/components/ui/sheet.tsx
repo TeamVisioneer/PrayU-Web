@@ -4,38 +4,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 // Sheet Custom Start
 const Sheet = ({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Root>) => {
   const { onOpenChange } = props;
-  // "notReady" : sheet가 열리기 전, "notPressed" : 드로어가 열린 후(바탕 눌러 드로어가 꺼질때), "pressed" : 뒤로가기 버튼을 누른 후
-  const sheetBackKeyStatusRef = useRef("notReady");
 
   useEffect(() => {
     const handlePopState = () => {
       if (onOpenChange) {
         onOpenChange(false);
-        sheetBackKeyStatusRef.current = "pressed";
       }
-      window.stop();
     };
     window.addEventListener("popstate", handlePopState);
     return () => {
       window.removeEventListener("popstate", handlePopState);
-      sheetBackKeyStatusRef.current = "notReady";
     };
   }, [onOpenChange]);
-
-  useEffect(() => {
-    if (props.open == true) sheetBackKeyStatusRef.current = "notPressed";
-    else {
-      if (sheetBackKeyStatusRef.current === "notPressed") window.history.go(-1);
-      sheetBackKeyStatusRef.current = "notReady";
-    }
-  }, [props.open]);
 
   return <SheetPrimitive.Root {...props} />;
 };
