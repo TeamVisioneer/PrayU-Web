@@ -21,7 +21,7 @@ const ContentDrawer = () => {
   const contentNumber = parseInt(today.day, 10) % 10;
 
   const DrawerBody = (
-    <div className="h-[80vh] flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-6">
       <div className="flex flex-col items-center gap-2">
         <p className="text-xl font-bold">오늘의 말씀이 도착했어요 🎁</p>
         <p className="text-sm text-gray-500">
