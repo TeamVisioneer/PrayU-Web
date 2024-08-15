@@ -10,7 +10,6 @@ import {
 import { useToast } from "../ui/use-toast";
 import menuIcon from "@/assets/menuIcon.svg";
 import { Group } from "supabase/types/tables";
-import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
@@ -32,7 +31,6 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
     (state) => state.deletePrayCardByGroupId
   );
   const setAlertData = useBaseStore((state) => state.setAlertData);
-  const navigate = useNavigate();
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
   const signOut = useBaseStore((state) => state.signOut);
