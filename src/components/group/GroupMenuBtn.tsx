@@ -49,7 +49,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
 
   const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
-      navigate("/group/new");
+      window.location.href = "/group/new";
       analyticsTrack("클릭_그룹_추가", { group_length: userGroupList.length });
     } else {
       toast({
