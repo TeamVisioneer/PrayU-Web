@@ -62,6 +62,8 @@ export interface BaseStore {
   ) => Promise<Group | null>;
   isOpenTodayPrayDrawer: boolean;
   setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
+  isOpenGroupMenuSheet: boolean;
+  setIsOpenGroupMenuSheet: (isOpenGroupMenuSheet: boolean) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -289,6 +291,12 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => {
       set((state) => {
         state.isOpenTodayPrayDrawer = isOpenTodayPrayDrawer;
+      });
+    },
+    isOpenGroupMenuSheet: false,
+    setIsOpenGroupMenuSheet: (isOpenGroupMenuSheet: boolean) => {
+      set((state) => {
+        state.isOpenGroupMenuSheet = isOpenGroupMenuSheet;
       });
     },
 
