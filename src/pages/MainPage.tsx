@@ -168,7 +168,7 @@ const MainPage: React.FC = () => {
               <img className="h-full" src="/images/MainPageIntro4.png" />
             </div>
             <div className="flex flex-col gap-2">
-              <p className="text-lg font-bold"> 4. 내게 기도해준 친구</p>
+              <p className="text-lg font-bold"> 4. 내게 기도해 준 친구</p>
               <div>
                 <p className="text-sm text-gray-500">
                   내 기도제목이 오늘의 기도에 있는 동안

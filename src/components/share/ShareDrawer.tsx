@@ -76,20 +76,6 @@ const ShareDrawer: React.FC = () => {
   const ImageCerousel = (
     <Carousel setApi={setApi}>
       <CarouselContent>
-        {/* <CarouselItem className="flex flex-col items-center gap-4">
-          <div className="h-[200px]  flex flex-col  items-center ">
-            <img className="h-full" src="/images/intro_square.png" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-base font-bold">함께하는 PrayU</p>
-            <div>
-              <p className="text-sm text-gray-500">그룹원들과 함께</p>
-              <p className="text-sm text-gray-500">
-                오늘의 기도를 진행해 보아요
-              </p>
-            </div>
-          </div>
-        </CarouselItem> */}
         <CarouselItem className="flex flex-col items-center gap-4">
           <div className="h-[200px] flex flex-col  items-center">
             <img
@@ -130,7 +116,7 @@ const ShareDrawer: React.FC = () => {
   );
 
   const DrawerBody = (
-    <div className="h-[80vh] flex flex-col items-center text-center gap-6">
+    <div className="flex flex-col items-center text-center gap-6 pb-10">
       <div className="flex flex-col items-center">
         <p className="text-base font-bold">새 그룹원들을 초대해 보아요 📮</p>
       </div>
