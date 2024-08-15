@@ -31,9 +31,6 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
   const groupAndSortByUserId = useBaseStore(
     (state) => state.groupAndSortByUserId
   );
-  // const setIsOpenMyPrayDrawer = useBaseStore(
-  //   (state) => state.setIsOpenMyPrayDrawer
-  // );
 
   const prayerList = groupAndSortByUserId(prayData);
   const lenPrayerList = Object.keys(prayerList).length;
@@ -52,11 +49,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
   };
 
   return (
-    <DrawerContent
-      className="max-w-[480px] mx-auto w-full h-[400px] focus:outline-none"
-      //onOpenChange={setIsOpenMyPrayDrawer}
-      // onOpenChange={() => {}}
-    >
+    <DrawerContent className="max-w-[480px] mx-auto w-full h-[400px] focus:outline-none">
       <DrawerHeader>
         <DrawerTitle>기도해 준 친구</DrawerTitle>
         <DrawerDescription></DrawerDescription>

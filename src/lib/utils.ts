@@ -83,8 +83,3 @@ export const getDomainUrl = () => {
     ? `${protocol}//${hostname}:${port}`
     : `${protocol}//${hostname}`;
 };
-
-export const navigateToSectionWithHash = (section: string) => {
-  const currentUrl = window.location.href;
-  window.location.href = `${currentUrl}#${section}`;
-};
