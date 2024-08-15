@@ -4,7 +4,7 @@ import useBaseStore from "@/stores/baseStore";
 import { Member, MemberWithProfiles } from "supabase/types/tables";
 import { useEffect } from "react";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISOTodayDate, getISOTodayDateYMD } from "@/lib/utils";
 import prayerVerses from "@/data/prayCardTemplate.json";
 
 interface PrayCardCreateModalProps {
@@ -32,6 +32,8 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   const createMember = useBaseStore((state) => state.createMember);
   const updateMember = useBaseStore((state) => state.updateMember);
   const createPrayCard = useBaseStore((state) => state.createPrayCard);
+
+  const todayDateYMD = getISOTodayDateYMD();
 
   const getRandomVerse = () => {
     const randomIndex = Math.floor(Math.random() * prayerVerses.length);
@@ -80,7 +82,9 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
   };
 
   useEffect(() => {
-    setPrayCardContent(member?.pray_summary || "");
+    setPrayCardContent(
+      member?.pray_summary || "1. PrayU와 함께 기도할 수 있기를\n2. "
+    );
   }, [member, setPrayCardContent]);
 
   const PrayCardUI = () => (
@@ -92,17 +96,20 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
               src={user?.user_metadata.avatar_url || ""}
               className="w-7 h-7 rounded-full object-cover"
             />
-            <p className="text-white text-lg">
+            <p className="text-white text-lg ">
               {user?.user_metadata.full_name}
             </p>
           </div>
-          <p className="text-sm text-white w-full text-left">시작일 :</p>
+          <p className="text-sm text-white w-full text-left">
+            시작일 :{todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
+          </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-          <Textarea
-            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
-            value={inputPrayCardContent || ""}
-            disabled={true}
+          <textarea
+            className="text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
+            value={inputPrayCardContent}
+            onChange={(e) => setPrayCardContent(e.target.value)}
+            placeholder="기도제목은 언제든지 수정할 수 있어요 :)"
           />
         </div>
       </div>
@@ -114,34 +121,29 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
       <div className="flex flex-col items-center gap-2 p-2">
         <p className="text-xl font-bold break-normal text-center">
           {/* TODO: 줄바꿈 처리 */}
-          {user?.user_metadata.full_name}님의 기도제목을 알려주세요 😁
+          당신의 기도제목을 알려주세요 😁
         </p>
-        <p
+        {/* <p
           className="text-sm text-gray-500 underline"
           onClick={() => onClickPrayCardTemplate()}
         >
           기도카드 템플릿 사용하기
-        </p>
+        </p> */}
       </div>
       <div className="w-full px-5">{PrayCardUI()}</div>
 
-      {/* <Textarea
-        className="h-80 p-5 text-[16px]"
-        placeholder="일주일 간 그룹원들이 볼 수 있어요! :)"
-        value={inputPrayCardContent}
-        onChange={(e) => setPrayCardContent(e.target.value)}
-      /> */}
-
-      <Button
-        className="w-full"
-        onClick={() => handleCreatePrayCard(currentUserId, groupId)}
-        disabled={isDisabledPrayCardCreateBtn}
-        variant="primary"
-      >
-        그룹 참여하기
-      </Button>
-      <div className="text-sm text-gray-500">
-        기도제목을 작성하면 그룹에 참여할 수 있어요
+      <div className="flex flex-col w-full p-5 gap-2">
+        <Button
+          className="w-full"
+          onClick={() => handleCreatePrayCard(currentUserId, groupId)}
+          disabled={isDisabledPrayCardCreateBtn}
+          variant="primary"
+        >
+          그룹 참여하기
+        </Button>
+        <p className="text-center text-sm text-gray-500">
+          기도제목을 작성하면 그룹에 참여할 수 있어요
+        </p>
       </div>
     </div>
   );
