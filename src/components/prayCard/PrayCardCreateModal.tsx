@@ -125,7 +125,6 @@ const PrayCardCreateModal: React.FC<PrayCardCreateModalProps> = ({
     <div className="flex flex-col items-center min-h-screen gap-3">
       <div className="flex flex-col items-center gap-2 p-2">
         <p className="text-xl font-bold break-normal text-center">
-          {/* TODO: 줄바꿈 처리 */}
           당신의 기도제목을 알려주세요 😁
         </p>
       </div>
