@@ -40,8 +40,10 @@ export interface BaseStore {
   // user
   user: User | null;
   userLoading: boolean;
+  userPlan: string;
   getUser: () => void;
   signOut: () => Promise<void>;
+  setUserPlan: (userId: string) => void;
 
   // group
   groupList: Group[] | null;
@@ -180,6 +182,7 @@ const useBaseStore = create<BaseStore>()(
     // user
     user: null,
     userLoading: true,
+    userPlan: "",
     getUser: async () => {
       const {
         data: { session },
@@ -220,6 +223,26 @@ const useBaseStore = create<BaseStore>()(
       await supabase.auth.signOut();
       set((state) => {
         state.user = null;
+      });
+    },
+    // TODO: 나중에 여기에 api를 가져와서 쓰면 될 것 같다.
+    setUserPlan: (userId: string) => {
+      if (!import.meta.env.VITE_PREMIUM_PLAN_USERLIST) {
+        return null;
+      }
+      const userList = import.meta.env.VITE_PREMIUM_PLAN_USERLIST.split(
+        ","
+      ).reduce((acc: Record<string, string>, item: string) => {
+        const [userId, userName] = item.split(":");
+        acc[userId] = userName;
+        return acc;
+      }, {} as Record<string, string>);
+
+      set((state) => {
+        if (userId in userList) {
+          state.userPlan = "Premium";
+        }
+        return state;
       });
     },
 

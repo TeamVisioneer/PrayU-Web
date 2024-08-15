@@ -10,7 +10,6 @@ import { getISOTodayDate } from "@/lib/utils";
 
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
-
 interface GroupBodyProps {
   currentUserId: string;
   groupList: Group[];
@@ -30,6 +29,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   const member = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
   const getMember = useBaseStore((state) => state.getMember);
+  const userPlan = useBaseStore((state) => state.userPlan);
 
   useEffect(() => {
     if (targetGroup) getMember(currentUserId, targetGroup.id);
@@ -43,7 +43,11 @@ const GroupBody: React.FC<GroupBodyProps> = ({
     );
   }
 
-  if (groupList.length == maxGroupCount && !isParamsGroupIdinGroupList) {
+  if (
+    groupList.length == maxGroupCount &&
+    !isParamsGroupIdinGroupList &&
+    userPlan != "Premium"
+  ) {
     return <GroupLimitCard />;
   }
 

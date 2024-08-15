@@ -39,9 +39,10 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const setIsConfirmAlertOpen = useBaseStore(
     (state) => state.setIsConfirmAlertOpen
   );
+  const userPlan = useBaseStore((state) => state.userPlan);
 
   const handleClickCreateGroup = () => {
-    if (userGroupList.length < maxGroupCount) {
+    if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
       navigate("/group/new");
       analyticsTrack("클릭_그룹_추가", { group_length: userGroupList.length });
     } else {
@@ -91,7 +92,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
       >
         <img src={menuIcon} className="w-8 h-8" />
       </SheetTrigger>
-      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end">
+      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end overflow-y-auto no-scrollbar">
         <SheetHeader>
           <SheetTitle className="text-end">PrayU 그룹</SheetTitle>
           <SheetDescription></SheetDescription>
