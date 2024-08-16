@@ -30,7 +30,7 @@ const GroupCreatePage: React.FC = () => {
   const userPlan = useBaseStore((state) => state.userPlan);
 
   const handleCreateGroup = async (userId: string, inputGroupName: string) => {
-    if (groupList!.length == maxGroupCount && userPlan != "Premium") {
+    if (groupList!.length >= maxGroupCount && userPlan != "Premium") {
       toast({
         description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
       });
