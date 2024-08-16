@@ -44,7 +44,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   }
 
   if (
-    groupList.length == maxGroupCount &&
+    groupList.length >= maxGroupCount &&
     !isParamsGroupIdinGroupList &&
     userPlan != "Premium"
   ) {
