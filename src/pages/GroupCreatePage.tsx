@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "../components/ui/use-toast";
 import { ClipLoader } from "react-spinners";
 import { analyticsTrack } from "@/analytics/analytics";
+import { IoChevronBack } from "react-icons/io5";
+import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -22,29 +24,14 @@ const GroupCreatePage: React.FC = () => {
   const setIsDisabledGroupCreateBtn = useBaseStore(
     (state) => state.setIsDisabledGroupCreateBtn
   );
+  const createMember = useBaseStore((state) => state.createMember);
+  const createPrayCard = useBaseStore((state) => state.createPrayCard);
   const groupList = useBaseStore((state) => state.groupList);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
   const userPlan = useBaseStore((state) => state.userPlan);
-
-  const handleCreateGroup = async (userId: string, inputGroupName: string) => {
-    if (groupList!.length >= maxGroupCount && userPlan != "Premium") {
-      toast({
-        description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
-      });
-      return;
-    }
-    setIsDisabledGroupCreateBtn(true);
-    analyticsTrack("클릭_그룹_생성", { group_name: inputGroupName });
-    const targetGroup = await createGroup(userId, inputGroupName, "intro");
-    if (!targetGroup || !targetGroup.id) {
-      setIsDisabledGroupCreateBtn(false);
-      return;
-    }
-    navigate("/group/" + targetGroup.id, { replace: true });
-  };
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
@@ -59,9 +46,41 @@ const GroupCreatePage: React.FC = () => {
     );
   }
 
+  const handleCreateGroup = async (userId: string, inputGroupName: string) => {
+    if (groupList.length >= maxGroupCount && userPlan != "Premium") {
+      toast({
+        description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
+      });
+      return;
+    }
+    setIsDisabledGroupCreateBtn(true);
+    analyticsTrack("클릭_그룹_생성", { group_name: inputGroupName });
+    const targetGroup = await createGroup(userId, inputGroupName, "intro");
+    if (!targetGroup) {
+      setIsDisabledGroupCreateBtn(false);
+      return;
+    }
+    const myMember = await createMember(
+      targetGroup.id,
+      userId,
+      " ✏️ 기도카드를 작성해주세요"
+    );
+    if (!myMember) {
+      setIsDisabledGroupCreateBtn(false);
+      return;
+    }
+    await createPrayCard(targetGroup.id, userId, " ✏️ 기도카드를 작성해주세요");
+
+    navigate("/group/" + targetGroup.id, { replace: true });
+  };
+
   return (
     <div className="flex flex-col gap-6 items-center">
-      <div className="text-lg font-bold">PrayU 그룹 만들기</div>
+      <div className="w-full flex justify-between items-center">
+        <IoChevronBack size={20} onClick={() => window.history.back()} />
+        <span className="text-xl font-bold">그룹 만들기</span>
+        <GroupMenuBtn userGroupList={groupList} />
+      </div>
       <div className="flex justify-center h-[300px] w-max">
         <img className="h-full object-cover" src="/images/intro_square.png" />
       </div>

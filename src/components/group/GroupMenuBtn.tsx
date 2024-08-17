@@ -8,15 +8,16 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useToast } from "../ui/use-toast";
-import menuIcon from "@/assets/menuIcon.svg";
 import { Group } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
+import { SlMenu } from "react-icons/sl";
+
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
 interface GroupManuBtnProps {
   userGroupList: Group[];
-  targetGroup: Group;
+  targetGroup?: Group;
 }
 
 const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
@@ -56,17 +57,17 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
     }
   };
 
-  const handleClickExitGroup = () => {
+  const handleClickExitGroup = (groupId: string, groupName: string | null) => {
     setAlertData({
       title: "그룹 나가기",
-      description: `더 이상 ${targetGroup.name}의\n기도를 받을 수 없게 돼요 :(`,
+      description: `더 이상 ${groupName}의\n기도를 받을 수 없게 돼요 :(`,
       actionText: "나가기",
       cancelText: "취소",
       onAction: async () => {
-        await deleteMemberbyGroupId(user!.id, targetGroup.id);
-        await deletePrayCardByGroupId(user!.id, targetGroup.id);
+        await deleteMemberbyGroupId(user!.id, groupId);
+        await deletePrayCardByGroupId(user!.id, groupId);
         window.location.href = "/";
-        analyticsTrack("클릭_그룹_나가기", { group_id: targetGroup.id });
+        analyticsTrack("클릭_그룹_나가기", { group_id: groupId });
       },
     });
     setIsConfirmAlertOpen(true);
@@ -83,10 +84,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
 
   const onClickSheetTrigeer = () => {
     window.history.pushState(null, "", window.location.pathname);
-    analyticsTrack("클릭_그룹_메뉴", {
-      group_id: targetGroup.id,
-      group_name: targetGroup.name,
-    });
+    analyticsTrack("클릭_그룹_메뉴", {});
   };
 
   return (
@@ -95,7 +93,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
         className="flex flex-col items-end focus:outline-none"
         onClick={() => onClickSheetTrigeer()}
       >
-        <img src={menuIcon} className="w-8 h-8" />
+        <SlMenu size={20} />
       </SheetTrigger>
       <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end overflow-y-auto no-scrollbar">
         <SheetHeader>
@@ -104,7 +102,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
         </SheetHeader>
         <div className="flex flex-col gap-4 items-end text-gray-500">
           {userGroupList.map((group) => {
-            if (group.id === targetGroup.id)
+            if (group.id === targetGroup?.id)
               return (
                 <div
                   key={group.id}
@@ -134,18 +132,25 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
               </a>
             );
           })}
-          <a
-            className="cursor-pointer text-green-900"
-            onClick={() => handleClickCreateGroup()}
-          >
-            + 그룹 만들기
-          </a>
-          <a
-            className="cursor-pointer text-red-900"
-            onClick={() => handleClickExitGroup()}
-          >
-            - 그룹 나가기
-          </a>
+          <hr />
+          {targetGroup && (
+            <>
+              <a
+                className="cursor-pointer text-green-900"
+                onClick={() => handleClickCreateGroup()}
+              >
+                + 그룹 만들기
+              </a>
+              <a
+                className="cursor-pointer text-red-900"
+                onClick={() =>
+                  handleClickExitGroup(targetGroup.id, targetGroup.name)
+                }
+              >
+                - 그룹 나가기
+              </a>
+            </>
+          )}
 
           <hr />
           <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
