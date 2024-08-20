@@ -97,6 +97,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
                 <div className="flex items-center gap-1">
                   {prayerList[user_id].map((pray) => (
                     <img
+                      key={pray.id}
                       src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
                       className={`rounded-full  border-2
                           ${

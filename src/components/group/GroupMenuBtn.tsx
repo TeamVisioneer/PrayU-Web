@@ -45,6 +45,9 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const setIsOpenGroupMenuSheet = useBaseStore(
     (state) => state.setIsOpenGroupMenuSheet
   );
+  const setIsOpenEventDialog = useBaseStore(
+    (state) => state.setIsOpenEventDialog
+  );
 
   const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
@@ -85,6 +88,10 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const onClickSheetTrigeer = () => {
     window.history.pushState(null, "", window.location.pathname);
     analyticsTrack("클릭_그룹_메뉴", {});
+  };
+
+  const onClickOpenEventDialog = () => {
+    setIsOpenEventDialog(true);
   };
 
   return (
@@ -160,8 +167,9 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
             onClick={() => onClickContactUs()}
           >
-            피드백 & 버그제보
+            PrayU 채널
           </a>
+          <a onClick={() => onClickOpenEventDialog()}>공지사항</a>
           <a className="cursor-pointer" onClick={() => signOut()}>
             로그아웃
           </a>
