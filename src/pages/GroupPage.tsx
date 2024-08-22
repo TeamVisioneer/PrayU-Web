@@ -8,6 +8,8 @@ import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 import { ClipLoader } from "react-spinners";
 import ContentDrawer from "@/components/share/ContentDrawer";
+import OpenEventDialogBtn from "@/components/notice/OpenEventDialogBtn";
+import EventDialog from "@/components/notice/EventDialog";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -66,15 +68,16 @@ const GroupPage: React.FC = () => {
           eventOption={{ where: "GroupPage" }}
           type="tag"
         />
-
         <div className="text-lg font-bold flex items-center gap-1">
           <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
             {targetGroup.name}
           </div>
           <span className="text-sm text-gray-500">{memberList.length}</span>
         </div>
-
-        <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
+        <div className="w-[48px] flex gap-2">
+          <OpenEventDialogBtn />
+          <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
+        </div>
       </div>
 
       <GroupBody
@@ -85,6 +88,7 @@ const GroupPage: React.FC = () => {
 
       <ShareDrawer />
       <ContentDrawer />
+      <EventDialog />
     </div>
   );
 };

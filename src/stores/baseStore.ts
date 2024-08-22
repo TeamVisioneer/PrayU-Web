@@ -159,6 +159,10 @@ export interface BaseStore {
   setIsOpenShareDrawer: (isOpenShareDrawer: boolean) => void;
   setIsOpenContentDrawer: (isContentShareDrawer: boolean) => void;
 
+  // event
+  isOpenEventDialog: boolean;
+  setIsOpenEventDialog: (isOpenEventDialog: boolean) => void;
+
   // etc
   isConfirmAlertOpen: boolean;
   setIsConfirmAlertOpen: (isGroupAlertOpen: boolean) => void;
@@ -572,6 +576,14 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenContentDrawer: (isOpenContentDrawer: boolean) => {
       set((state) => {
         state.isOpenContentDrawer = isOpenContentDrawer;
+      });
+    },
+
+    // event
+    isOpenEventDialog: false,
+    setIsOpenEventDialog: (isOpenEventDialog: boolean) => {
+      set((state) => {
+        state.isOpenEventDialog = isOpenEventDialog;
       });
     },
 

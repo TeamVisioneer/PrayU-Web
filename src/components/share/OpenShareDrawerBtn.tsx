@@ -40,7 +40,7 @@ const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
   if (type == "tag")
     return (
       <div
-        className="flex items-center gap-1 text-[12px] cursor-pointer"
+        className="w-[48px] flex items-center gap-1 text-[12px] cursor-pointer"
         onClick={() => handleClickSharBtn()}
       >
         <img src={inviteIcon} className="w-[10px] h-[10px]" />
