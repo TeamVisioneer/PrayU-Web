@@ -162,14 +162,14 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             PrayU 홈
           </a>
           <div className="flex gap-2 items-center">
-            <p className="text-xs flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
+            <p className="text-xs flex flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
               new
             </p>
             <a onClick={() => onClickOpenNotice()}>PrayU 소식</a>
           </div>
 
           <div className="flex gap-2 items-center">
-            <p className="text-xs flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
+            <p className="text-xs flex flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
               new
             </p>
             <a
