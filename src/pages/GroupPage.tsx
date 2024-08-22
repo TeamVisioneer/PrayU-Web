@@ -62,23 +62,19 @@ const GroupPage: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full gap-5">
-      <div className="relative flex justify-center items-center">
-        <div className="absolute left-0">
-          <OpenShareDrawerBtn
-            text="초대"
-            eventOption={{ where: "GroupPage" }}
-            type="tag"
-          />
-        </div>
-
+      <div className="relative flex justify-between items-center">
+        <OpenShareDrawerBtn
+          text="초대"
+          eventOption={{ where: "GroupPage" }}
+          type="tag"
+        />
         <div className="text-lg font-bold flex items-center gap-1">
           <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
             {targetGroup.name}
           </div>
           <span className="text-sm text-gray-500">{memberList.length}</span>
         </div>
-
-        <div className="flex absolute right-0 gap-3">
+        <div className="w-[48px] flex gap-2">
           <OpenEventDialogBtn />
           <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
         </div>
