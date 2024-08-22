@@ -47,7 +47,7 @@ const EventDialog = () => {
     </div>
   );
 
-  const onClickEvent = (url: string, eventName: string) => {
+  const onClickEventImg = (url: string, eventName: string) => {
     analytics.track("클릭_이벤트_자세히", { title: eventName });
     window.location.href = url;
   };
@@ -75,7 +75,7 @@ const EventDialog = () => {
             <CarouselItem className="w-full h-full">
               <img
                 onClick={() =>
-                  onClickEvent(
+                  onClickEventImg(
                     "http://pf.kakao.com/_XaHDG/106447699",
                     "Open_Event"
                   )
