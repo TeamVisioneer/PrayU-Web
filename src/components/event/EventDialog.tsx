@@ -57,12 +57,14 @@ const EventDialog = () => {
     <Dialog open={isOpenEventDialog} onOpenChange={setIsOpenEventDialog}>
       <DialogContent className="w-full aspect-[1/1] bg-mainBg">
         <DialogHeader>
-          <DialogTitle className="text-md "> 🎉 진행중인 이벤트</DialogTitle>
-          <DialogDescription className="text-xs text-gray-400">
+          <DialogTitle className="text-md text-center">
+            🎉 진행중인 이벤트
+          </DialogTitle>
+          <DialogDescription className="text-center text-xs text-gray-400">
             클릭하고 경품 받아가세요!!
           </DialogDescription>
         </DialogHeader>
-        <Carousel className="flex w-full h-full" setApi={setApi}>
+        <Carousel className="flex w-full h-full justify-center" setApi={setApi}>
           <CarouselContent>
             <CarouselItem className="w-full h-full">
               <img
