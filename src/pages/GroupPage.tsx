@@ -8,8 +8,8 @@ import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 import { ClipLoader } from "react-spinners";
 import ContentDrawer from "@/components/share/ContentDrawer";
-import OpenEventDialogBtn from "@/components/event/OpenEventDialogBtn";
-import EventDialog from "@/components/event/EventDialog";
+import OpenEventDialogBtn from "@/components/notice/OpenEventDialogBtn";
+import EventDialog from "@/components/notice/EventDialog";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
