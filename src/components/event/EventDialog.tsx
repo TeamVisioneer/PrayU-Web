@@ -15,6 +15,7 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import imgEventOpen from "@/assets/event_open.svg";
 import { useEffect, useState } from "react";
+import { analytics } from "@/analytics/analytics";
 
 const EventDialog = () => {
   const isOpenEventDialog = useBaseStore((state) => state.isOpenEventDialog);
@@ -46,6 +47,11 @@ const EventDialog = () => {
     </div>
   );
 
+  const onClickEvent = (url: string, eventName: string) => {
+    analytics.track("클릭_이벤트_자세히", { title: eventName });
+    window.location.href = url;
+  };
+
   useEffect(() => {
     if (!api) return;
     setCurrentIndex(api.selectedScrollSnap());
@@ -69,8 +75,10 @@ const EventDialog = () => {
             <CarouselItem className="w-full h-full">
               <img
                 onClick={() =>
-                  (window.location.href =
-                    "http://pf.kakao.com/_XaHDG/106447699")
+                  onClickEvent(
+                    "http://pf.kakao.com/_XaHDG/106447699",
+                    "Open_Event"
+                  )
                 }
                 className="w-[350px] h-[350px] rounded-xl"
                 src={imgEventOpen}

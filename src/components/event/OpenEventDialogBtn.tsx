@@ -1,3 +1,4 @@
+import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { AiTwotoneNotification } from "react-icons/ai";
 
@@ -8,6 +9,7 @@ const OpenEventDialogBtn = () => {
 
   const onClickEventDialogBtn = () => {
     setIsOpenEventDialog(true);
+    analyticsTrack("클릭_이벤트", {});
   };
 
   return (
