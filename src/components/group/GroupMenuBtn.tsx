@@ -87,7 +87,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
     analyticsTrack("클릭_그룹_메뉴", {});
   };
 
-  const onClickOpenAnnounce = () => {
+  const onClickOpenNotice = () => {
     analyticsTrack("클릭_카카오_소식", {});
     window.location.href = "http://pf.kakao.com/_XaHDG/posts";
   };
@@ -162,14 +162,14 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             PrayU 홈
           </a>
           <div className="flex gap-2 items-center">
-            <p className="text-xs flex-col bg-mainBtn rounded-xl px-1 h-fit text-white">
+            <p className="text-xs flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
               new
             </p>
-            <a onClick={() => onClickOpenAnnounce()}>PrayU 소식</a>
+            <a onClick={() => onClickOpenNotice()}>PrayU 소식</a>
           </div>
 
           <div className="flex gap-2 items-center">
-            <p className="text-xs flex-col bg-mainBtn rounded-xl px-1 h-fit text-white">
+            <p className="text-xs flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
               new
             </p>
             <a

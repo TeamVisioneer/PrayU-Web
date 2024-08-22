@@ -48,7 +48,7 @@ const EventDialog = () => {
   );
 
   const onClickEventImg = (url: string, eventName: string) => {
-    analytics.track("클릭_이벤트_자세히", { title: eventName });
+    analytics.track("클릭_공지_이벤트카드", { title: eventName });
     window.location.href = url;
   };
 

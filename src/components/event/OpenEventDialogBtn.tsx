@@ -9,7 +9,7 @@ const OpenEventDialogBtn = () => {
 
   const onClickEventDialogBtn = () => {
     setIsOpenEventDialog(true);
-    analyticsTrack("클릭_이벤트", {});
+    analyticsTrack("클릭_공지", {});
   };
 
   return (
