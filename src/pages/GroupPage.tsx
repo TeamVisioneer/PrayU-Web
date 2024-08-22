@@ -78,7 +78,7 @@ const GroupPage: React.FC = () => {
           <span className="text-sm text-gray-500">{memberList.length}</span>
         </div>
 
-        <div className="flex absolute right-0 gap-1">
+        <div className="flex absolute right-0 gap-3">
           <OpenEventDialogBtn />
           <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
         </div>

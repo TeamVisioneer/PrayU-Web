@@ -1,5 +1,5 @@
 import useBaseStore from "@/stores/baseStore";
-import giftIcon from "@/assets/gift.svg";
+import { AiTwotoneNotification } from "react-icons/ai";
 
 const OpenEventDialogBtn = () => {
   const setIsOpenEventDialog = useBaseStore(
@@ -11,8 +11,12 @@ const OpenEventDialogBtn = () => {
   };
 
   return (
-    <div className="w-8 h-8" onClick={() => onClickEventDialogBtn()}>
-      <img className="w-full h-fulll" src={giftIcon}></img>
+    <div
+      className="relative w-fit h-fit cursor-pointer"
+      onClick={onClickEventDialogBtn}
+    >
+      <AiTwotoneNotification size={20} />
+      <div className="absolute top-0 right-0 w-1.5 h-1.5 bg-red-500 rounded-full "></div>
     </div>
   );
 };
