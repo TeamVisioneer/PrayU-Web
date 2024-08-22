@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/carousel";
 
 import useBaseStore from "@/stores/baseStore";
-import eventExample from "@/assets/event_example.svg";
+import imgEventOpen from "@/assets/event_open.svg";
 import { useEffect, useState } from "react";
 
 const EventDialog = () => {
@@ -32,7 +32,7 @@ const EventDialog = () => {
 
   const CarouselDots = () => (
     <div className="flex justify-center items-center">
-      {Array.from({ length: 2 }, (_, index) => (
+      {Array.from({ length: 1 }, (_, index) => (
         <span
           key={index}
           className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
@@ -71,17 +71,7 @@ const EventDialog = () => {
                     "http://pf.kakao.com/_XaHDG/106447699")
                 }
                 className="w-[350px] h-[350px] rounded-xl"
-                src={eventExample}
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <img
-                onClick={() =>
-                  (window.location.href =
-                    "https://slashpage.com/prayu-blog/dwy5rvmj18q972p46zn9")
-                }
-                className="w-[350px] h-[350px] rounded-xl"
-                src={eventExample}
+                src={imgEventOpen}
               />
             </CarouselItem>
           </CarouselContent>

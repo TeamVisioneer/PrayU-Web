@@ -45,9 +45,6 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   const setIsOpenGroupMenuSheet = useBaseStore(
     (state) => state.setIsOpenGroupMenuSheet
   );
-  const setIsOpenEventDialog = useBaseStore(
-    (state) => state.setIsOpenEventDialog
-  );
 
   const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
@@ -91,7 +88,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   };
 
   const onClickOpenEventDialog = () => {
-    setIsOpenEventDialog(true);
+    window.location.href = "http://pf.kakao.com/_XaHDG/posts";
   };
 
   return (
@@ -163,13 +160,25 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
             PrayU 홈
           </a>
-          <a
-            href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
-            onClick={() => onClickContactUs()}
-          >
-            PrayU 채널
-          </a>
-          <a onClick={() => onClickOpenEventDialog()}>공지사항</a>
+          <div className="flex gap-2 items-center">
+            <p className="text-xs flex-col bg-mainBtn rounded-lg p-0.5 h-fit text-white">
+              new
+            </p>
+            <a onClick={() => onClickOpenEventDialog()}>PrayU 소식</a>
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <p className="text-xs flex-col bg-mainBtn rounded-lg p-0.5 h-fit text-white">
+              new
+            </p>
+            <a
+              href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
+              onClick={() => onClickContactUs()}
+            >
+              PrayU 문의
+            </a>
+          </div>
+
           <a className="cursor-pointer" onClick={() => signOut()}>
             로그아웃
           </a>
