@@ -24,7 +24,13 @@ const ExpiredPrayCardUI: React.FC = () => {
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
             <img
-              src={otherMember.profiles.avatar_url || ""}
+              src={
+                otherMember.profiles.avatar_url ||
+                "/images/defaultProfileImage.png"
+              }
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                e.currentTarget.src = "/images/defaultProfileImage.png";
+              }}
               className="w-7 h-7 rounded-full object-cover"
             />
             <p className="text-white text-lg">

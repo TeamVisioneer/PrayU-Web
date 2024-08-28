@@ -87,8 +87,15 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
                 <div className="flex items-center gap-2">
                   <img
                     className="w-8 h-8 rounded-full border object-cover"
-                    src={prayerList[user_id][0].profiles.avatar_url ?? ""}
-                    alt={`${prayerList[user_id][0].profiles.full_name} avatar`}
+                    src={
+                      prayerList[user_id][0].profiles.avatar_url ||
+                      "/images/defaultProfileImage.png"
+                    }
+                    onError={(
+                      e: React.SyntheticEvent<HTMLImageElement, Event>
+                    ) => {
+                      e.currentTarget.src = "/images/defaultProfileImage.png";
+                    }}
                   />
                   <p className="font-medium">
                     {prayerList[user_id][0].profiles.full_name}

@@ -32,7 +32,10 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
     >
       <div className="flex items-center gap-2">
         <img
-          src={member.profiles.avatar_url || ""}
+          src={member.profiles.avatar_url || "/images/defaultProfileImage.png"}
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+            e.currentTarget.src = "/images/defaultProfileImage.png";
+          }}
           className="w-8 h-8 rounded-full object-cover"
         />
         <h3>{member.profiles.full_name}</h3>
