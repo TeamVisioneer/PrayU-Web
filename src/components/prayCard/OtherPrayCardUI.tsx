@@ -19,8 +19,6 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   currentUserId,
   eventOption,
 }) => {
-  const navigate = useNavigate();
-
   const otherPrayCardList = useBaseStore((state) => state.otherPrayCardList);
   const fetchOtherPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchOtherPrayCardListByGroupId
@@ -44,10 +42,7 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   }
 
   if (!otherMember) return null;
-  if (otherPrayCardList.length === 0) {
-    navigate("/praycard/new", { replace: true });
-    return;
-  }
+  if (otherPrayCardList.length === 0) window.location.href = "/praycard/new";
 
   const prayCard = otherPrayCardList[0];
   const createdAt = prayCard.created_at;
