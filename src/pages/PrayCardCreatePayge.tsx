@@ -1,18 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { analyticsTrack } from "@/analytics/analytics";
-import { Textarea } from "@/components/ui/textarea";
 import useAuth from "@/hooks/useAuth";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISOTodayDate, getISOTodayDateYMD } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { Member } from "supabase/types/tables";
 import prayerVerses from "@/data/prayCardTemplate.json";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const myMember = useBaseStore((state) => state.myMember);
+  const memberList = useBaseStore((state) => state.memberList);
+
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
@@ -75,7 +80,11 @@ const PrayCardCreatePage: React.FC = () => {
     navigate("/group/" + groupId, { replace: true });
   };
 
-  if (targetGroup == null) {
+  useEffect(() => {
+    setPrayCardContent(myMember?.pray_summary || "");
+  }, [myMember, setPrayCardContent]);
+
+  if (targetGroup == null || memberList == null || myMember == null) {
     return (
       <div className="h-screen flex flex-col justify-center items-center gap-2">
         <div>그룹을 찾을 수 없어요😂</div>
@@ -86,35 +95,79 @@ const PrayCardCreatePage: React.FC = () => {
     );
   }
 
+  const todayDateYMD = getISOTodayDateYMD();
+
+  const PrayCardUI = (
+    <div className="flex flex-col gap-6 justify-center">
+      <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
+        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
+          <div className="flex items-center gap-2">
+            <img
+              src={
+                myMember.profiles.avatar_url ||
+                "/images/defaultProfileImage.png"
+              }
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                e.currentTarget.src = "/images/defaultProfileImage.png";
+              }}
+              className="w-7 h-7 rounded-full object-cover"
+            />
+            <p className="text-white text-lg ">{myMember.profiles.full_name}</p>
+          </div>
+          <p className="text-sm text-white w-full text-left">
+            시작일 :{todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
+          </p>
+        </div>
+        <div className="flex flex-col flex-grow min-h-full max-h-full px-[10px] py-[10px] overflow-y-auto no-scrollbar items-center">
+          <textarea
+            className="min-h-[300px] text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
+            value={inputPrayCardContent}
+            onChange={(e) => setPrayCardContent(e.target.value)}
+            placeholder={`기도제목은 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
+          />
+          {!inputPrayCardContent && (
+            <p
+              className="text-xs text-gray-500 underline"
+              onClick={() => onClickPrayCardTemplate()}
+            >
+              기도카드 템플릿 사용하기
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex flex-col items-center min-h-screen gap-3">
-      <div className="flex flex-col items-center gap-2 p-2">
-        <p className="text-xl font-bold">이번 주 기도제목을 알려주세요 😁</p>
-        <p
-          className="text-sm text-gray-500 underline"
-          onClick={() => onClickPrayCardTemplate()}
-        >
-          기도카드 템플릿 사용하기
-        </p>
+      <div className="w-full flex justify-between items-center">
+        <div className="w-[48px]"></div>
+        <div className="text-lg font-bold flex items-center gap-1">
+          <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
+            {targetGroup.name}
+          </div>
+          <span className="text-sm text-gray-500">{memberList.length}</span>
+        </div>
+        <div className="w-[48px] flex justify-center">
+          <GroupMenuBtn
+            userGroupList={groupList || []}
+            targetGroup={targetGroup}
+          />
+        </div>
       </div>
 
-      <Textarea
-        className="h-80 p-5 text-[16px]"
-        placeholder="일주일 간 그룹원들이 볼 수 있어요! :)"
-        value={inputPrayCardContent}
-        onChange={(e) => setPrayCardContent(e.target.value)}
-      />
+      <p>당신의 기도제목을 알려주세요 😁</p>
+      <div className="w-full px-5">{PrayCardUI}</div>
 
-      <Button
-        className="w-full"
-        onClick={() => handleCreatePrayCard(user!.id, targetGroup.id)}
-        disabled={isDisabledPrayCardCreateBtn}
-        variant="primary"
-      >
-        그룹 참여하기
-      </Button>
-      <div className="text-sm text-gray-500">
-        기도제목을 작성하면 그룹에 참여할 수 있어요
+      <div className="flex flex-col w-full p-5 gap-2">
+        <Button
+          className="w-full"
+          onClick={() => handleCreatePrayCard(user!.id, targetGroup.id)}
+          disabled={isDisabledPrayCardCreateBtn}
+          variant="primary"
+        >
+          그룹 참여하기
+        </Button>
       </div>
     </div>
   );

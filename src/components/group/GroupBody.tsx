@@ -4,12 +4,10 @@ import TodayPrayCardList from "@/components/todayPray/TodayPrayCardList";
 import MyMember from "@/components/member/MyMember";
 import GroupLimitCard from "@/components/group/GroupLimitCard";
 import OtherMemberList from "@/components/member/OtherMemberList";
-
-import PrayCardCreateModal from "../prayCard/PrayCardCreateModal";
 import { getISOTodayDate } from "@/lib/utils";
-
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 interface GroupBodyProps {
   currentUserId: string;
   groupList: Group[];
@@ -21,6 +19,8 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   groupList,
   targetGroup,
 }) => {
+  const navigate = useNavigate();
+
   const isParamsGroupIdinGroupList = groupList.some(
     (group) => group.id === targetGroup.id
   );
@@ -52,13 +52,8 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   }
 
   if (member == null || member.updated_at < getISOTodayDate(-6)) {
-    return (
-      <PrayCardCreateModal
-        currentUserId={currentUserId}
-        groupId={targetGroup.id}
-        member={member}
-      />
-    );
+    navigate("/praycard/new", { replace: true });
+    return;
   }
 
   return (

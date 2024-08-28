@@ -85,6 +85,11 @@ const AnalyticsTracker = () => {
       case "/group/new":
         analytics.track("페이지_그룹_생성", { title: "Group Create Page" });
         break;
+      case "/praycard/new":
+        analytics.track("페이지_기도카드_생성", {
+          title: "PrayCard Create Page",
+        });
+        break;
       default:
         if (location.pathname.startsWith("/group/")) {
           analytics.track("페이지_그룹_홈", {

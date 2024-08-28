@@ -19,6 +19,8 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   currentUserId,
   eventOption,
 }) => {
+  const navigate = useNavigate();
+
   const otherPrayCardList = useBaseStore((state) => state.otherPrayCardList);
   const fetchOtherPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchOtherPrayCardListByGroupId
@@ -41,9 +43,11 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     );
   }
 
-  // TODO: PrayCardCreateModal 로 반환하기 ( 이미 GroupBody 에서 member.updated_at 으로 처리중 )
-  if (otherPrayCardList.length === 0) return null;
   if (!otherMember) return null;
+  if (otherPrayCardList.length === 0) {
+    navigate("/praycard/new", { replace: true });
+    return;
+  }
 
   const prayCard = otherPrayCardList[0];
   const createdAt = prayCard.created_at;

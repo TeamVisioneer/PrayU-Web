@@ -11,6 +11,7 @@ import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -23,6 +24,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   groupId,
   member,
 }) => {
+  const navigate = useNavigate();
+
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
@@ -83,9 +86,9 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     );
   }
 
-  // TODO: PrayCardCreateModal 로 반환하기 ( 이미 GroupBody 에서 member.updated_at 으로 처리중 )
   if (userPrayCardList.length === 0) {
-    return null;
+    navigate("/praycard/new", { replace: true });
+    return;
   }
 
   const prayCard = userPrayCardList[0];
