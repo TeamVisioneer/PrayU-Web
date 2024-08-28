@@ -118,9 +118,9 @@ const PrayCardCreatePage: React.FC = () => {
             시작일 :{todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
           </p>
         </div>
-        <div className="flex flex-col flex-grow min-h-full max-h-full px-[10px] py-[10px] overflow-y-auto no-scrollbar items-center">
+        <div className="flex flex-col flex-grow min-h-[300px] px-[10px] py-[10px] overflow-y-auto no-scrollbar items-center">
           <textarea
-            className="min-h-[300px] text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
+            className="text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
             value={inputPrayCardContent}
             onChange={(e) => setPrayCardContent(e.target.value)}
             placeholder={`기도제목은 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
