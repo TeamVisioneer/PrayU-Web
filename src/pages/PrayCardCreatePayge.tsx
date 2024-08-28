@@ -139,7 +139,7 @@ const PrayCardCreatePage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col items-center min-h-screen gap-3">
+    <div className="flex flex-col items-center gap-3">
       <div className="w-full flex justify-between items-center">
         <div className="w-[48px]"></div>
         <div className="text-lg font-bold flex items-center gap-1">
