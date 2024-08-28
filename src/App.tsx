@@ -67,11 +67,34 @@ const App = () => {
 
 const AnalyticsTracker = () => {
   const location = useLocation();
+  function getUTMParameters() {
+    const params: { [key: string]: string | null } = {};
+    const searchParams = new URLSearchParams(window.location.search);
+    [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_term",
+      "utm_content",
+    ].forEach((param) => {
+      if (searchParams.has(param)) {
+        params[param] = searchParams.get(param);
+      }
+    });
+    return params;
+  }
+
+  const utmParams = getUTMParameters();
 
   useEffect(() => {
     switch (location.pathname) {
       case "/":
-        analytics.track("페이지_메인", { title: "Main Page" });
+        analytics.track("페이지_메인", {
+          title: "Main Page",
+          utm_source: utmParams.utm_source || "",
+          utm_medium: utmParams.utm_medium || "",
+          utm_campaign: utmParams.utm_campaign || "",
+        });
         break;
       case "/group/new":
         analytics.track("페이지_그룹_생성", { title: "Group Create Page" });
