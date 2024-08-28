@@ -24,6 +24,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   groupId,
   member,
 }) => {
+  const navigate = useNavigate();
+
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
@@ -76,6 +78,12 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
+  useEffect(() => {
+    if (userPrayCardList && userPrayCardList.length === 0) {
+      navigate("/praycard/new", { replace: true });
+    }
+  }, [userPrayCardList, navigate]);
+
   if (!userPrayCardList || !member) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -84,7 +92,9 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     );
   }
 
-  if (userPrayCardList.length === 0) window.location.href = "/praycard/new";
+  if (userPrayCardList.length === 0) {
+    return;
+  }
 
   const prayCard = userPrayCardList[0];
   const createdAt = prayCard.created_at;
