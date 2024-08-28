@@ -30,11 +30,11 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
-  const isOpenMyMemberDrawer = useBaseStore(
-    (state) => state.isOpenMyMemberDrawer
+  const isOpenMyMemberDialog = useBaseStore(
+    (state) => state.isOpenMyMemberDialog
   );
-  const setIsOpenMyMemberDrawer = useBaseStore(
-    (state) => state.setIsOpenMyMemberDrawer
+  const setIsOpenMyMemberDialog = useBaseStore(
+    (state) => state.setIsOpenMyMemberDialog
   );
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
@@ -107,7 +107,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
 
   const onClickMyMember = () => {
     window.history.pushState(null, "", window.location.pathname);
-    setIsOpenMyMemberDrawer(true);
+    setIsOpenMyMemberDialog(true);
     analyticsTrack("클릭_멤버_본인", {
       group_id: groupId,
       where: "MyMember",
@@ -117,8 +117,8 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   return (
     <>
       <Dialog
-        open={isOpenMyMemberDrawer}
-        onOpenChange={setIsOpenMyMemberDrawer}
+        open={isOpenMyMemberDialog}
+        onOpenChange={setIsOpenMyMemberDialog}
       >
         <DialogTrigger
           className="focus:outline-none"

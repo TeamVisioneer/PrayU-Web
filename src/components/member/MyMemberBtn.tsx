@@ -3,8 +3,8 @@ import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 
 const MyMemberBtn: React.FC = () => {
-  const setIsOpenMyMemberDrawer = useBaseStore(
-    (state) => state.setIsOpenMyMemberDrawer
+  const setIsOpenMyMemberDialog = useBaseStore(
+    (state) => state.setIsOpenMyMemberDialog
   );
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
@@ -13,7 +13,7 @@ const MyMemberBtn: React.FC = () => {
   const onClickMyMemberBtn = () => {
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenTodayPrayDrawer(false);
-    setIsOpenMyMemberDrawer(true);
+    setIsOpenMyMemberDialog(true);
     analyticsTrack("클릭_멤버_본인", { where: "PrayCardList" });
     analyticsTrack("클릭_오늘의기도_완료", {});
   };

@@ -21,8 +21,8 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
   );
-  const setIsOpenMyMemberDrawer = useBaseStore(
-    (state) => state.setIsOpenMyMemberDrawer
+  const setIsOpenMyMemberDialog = useBaseStore(
+    (state) => state.setIsOpenMyMemberDialog
   );
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
@@ -41,7 +41,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
   const onClickTodayPrayBtn = () => {
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyPrayDrawer(false);
-    setIsOpenMyMemberDrawer(false);
+    setIsOpenMyMemberDialog(false);
     setIsOpenTodayPrayDrawer(true);
     analyticsTrack("클릭_오늘의기도_시작", {
       len_prayer_list: lenPrayerList,

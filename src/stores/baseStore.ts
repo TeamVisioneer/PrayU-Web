@@ -88,8 +88,8 @@ export interface BaseStore {
     groupId: string
   ) => Promise<MemberWithProfiles | null>;
   setOtherMember: (member: MemberWithProfiles | null) => void;
-  isOpenMyMemberDrawer: boolean;
-  setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => void;
+  isOpenMyMemberDialog: boolean;
+  setIsOpenMyMemberDialog: (isOpenMyMemberDialog: boolean) => void;
   deleteMemberbyGroupId: (userId: string, groupId: string) => Promise<void>;
 
   // prayCard
@@ -351,10 +351,10 @@ const useBaseStore = create<BaseStore>()(
         state.otherMember = member;
       });
     },
-    isOpenMyMemberDrawer: false,
-    setIsOpenMyMemberDrawer: (isOpenMyMemberDrawer: boolean) => {
+    isOpenMyMemberDialog: false,
+    setIsOpenMyMemberDialog: (isOpenMyMemberDialog: boolean) => {
       set((state) => {
-        state.isOpenMyMemberDrawer = isOpenMyMemberDrawer;
+        state.isOpenMyMemberDialog = isOpenMyMemberDialog;
       });
     },
     deleteMemberbyGroupId: async (userId: string, groupId: string) => {
