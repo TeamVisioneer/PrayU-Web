@@ -98,7 +98,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   const MyPrayCardBody = (
-    <div className="flex flex-col flex-grow">
+    <div className="flex flex-col flex-grow z-100">
       <div
         className={`flex flex-col bg-white rounded-2xl shadow-prayCard ${
           isDivVisible ? "flex-grow" : "h-[300px]"
