@@ -127,7 +127,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
           {MyMemberUI}
         </DialogTrigger>
 
-        <DialogContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
+        <DialogContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none draggable-element">
           <DialogHeader className="p-2">
             <DialogTitle></DialogTitle>
             <DialogDescription></DialogDescription>
