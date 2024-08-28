@@ -5,18 +5,23 @@ env:
 on:
   push:
     tags:
-      - "v*" # Push events to every tag not containing /
+      - "v*"
+    branches:
+      - "v*"
   pull_request:
     types: [closed]
     branches:
       - main
 jobs:
+  # 배포 CI/CD
+  # 1. v 로 시작하는 tag 생성
+  # 2. v 로 시작하는 branch 생성(cherry-pick 을 사용하여 main 의 특정 커밋만 배포할 경우)
+  # 3. hotfix 로 시작하는 PR 이 main 에 병합(main 최신 내용을 빠르게 배포할 경우)
   Deploy-Production:
     if: |
-      (github.event_name == 'pull_request' && 
-       github.event.pull_request.merged == true &&
-       startsWith(github.event.pull_request.head.ref, 'hotfix')) ||
-      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || 
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/v'))||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
