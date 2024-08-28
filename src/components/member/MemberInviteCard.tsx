@@ -21,7 +21,13 @@ export const MemberInviteCard = () => {
           reaction.profile ? (
             <img
               key={index}
-              src={myMember?.profiles.avatar_url || ""}
+              src={
+                myMember?.profiles.avatar_url ||
+                "/images/defaultProfileImage.png"
+              }
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                e.currentTarget.src = "/images/defaultProfileImage.png";
+              }}
               className="w-14 h-14 rounded-full ring-2 ring-[#FFBFBD]/50 drop-shadow-[0_0_10px_rgb(255,148,146,0.8)] object-cover"
             />
           ) : (

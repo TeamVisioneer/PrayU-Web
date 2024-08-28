@@ -75,7 +75,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
 
       <div className="flex gap-2">
         <div
-          className="w-fit flex bg-gray-100 rounded-lg px-[12px] py-2 gap-[18px]"
+          className="w-fit flex bg-gray-100 rounded-lg px-[12px] py-2 gap-[16px]"
           onClick={(event) => onClickMyMemberReaction(event)}
         >
           {Object.values(PrayType).map((type) => {
