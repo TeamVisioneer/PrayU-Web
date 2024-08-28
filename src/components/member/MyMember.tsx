@@ -1,11 +1,3 @@
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
@@ -13,6 +5,14 @@ import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate } from "@/lib/utils";
 import PrayListDrawer from "../pray/PrayListDrawer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 interface MemberProps {
   currentUserId: string;
@@ -116,31 +116,30 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
 
   return (
     <>
-      <Drawer
+      <Dialog
         open={isOpenMyMemberDrawer}
         onOpenChange={setIsOpenMyMemberDrawer}
       >
-        <DrawerTrigger
+        <DialogTrigger
           className="focus:outline-none"
           onClick={() => onClickMyMember()}
         >
           {MyMemberUI}
-        </DrawerTrigger>
+        </DialogTrigger>
 
-        <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
-          <DrawerHeader className="p-2">
-            <DrawerTitle></DrawerTitle>
-            <DrawerDescription></DrawerDescription>
-          </DrawerHeader>
-          {/* PrayCard */}
+        <DialogContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
+          <DialogHeader className="p-2">
+            <DialogTitle></DialogTitle>
+            <DialogDescription></DialogDescription>
+          </DialogHeader>
           <MyPrayCardUI
             currentUserId={currentUserId}
             groupId={groupId}
             member={member}
           />
           {/* PrayCard */}
-        </DrawerContent>
-      </Drawer>
+        </DialogContent>
+      </Dialog>
       <PrayListDrawer currentUserId={currentUserId} groupId={groupId} />
     </>
   );
