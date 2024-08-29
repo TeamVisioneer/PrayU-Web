@@ -13,7 +13,6 @@ import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const createGroup = useBaseStore((state) => state.createGroup);
   const inputGroupName = useBaseStore((state) => state.inputGroupName);
@@ -65,6 +64,7 @@ const GroupCreatePage: React.FC = () => {
       setIsDisabledGroupCreateBtn(false);
       return;
     }
+    await createPrayCard(targetGroup.id, userId, "");
 
     window.location.replace(`/group/${targetGroup.id}`);
   };
