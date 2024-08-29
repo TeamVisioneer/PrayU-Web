@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       "import.meta.env": env,
+      WEB_VERSION: JSON.stringify(process.env.npm_package_version),
     },
   };
 });

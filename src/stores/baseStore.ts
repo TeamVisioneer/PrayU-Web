@@ -201,22 +201,34 @@ const useBaseStore = create<BaseStore>()(
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange((_event, session) => {
-        set((state) => {
-          state.user = session?.user || null;
-        });
-        // Sentry, Event 설정
-        if (
-          import.meta.env.VITE_ENV === "staging" ||
-          import.meta.env.VITE_ENV === "prod"
-        ) {
-          Sentry.setUser({
-            id: session?.user.id,
-            email: session?.user.email,
+        if (!session) {
+          set((state) => {
+            state.user = null;
           });
-          analytics.identify(session?.user.id || "", {
-            email: session?.user.user_metadata?.email,
-            full_name: session?.user.user_metadata?.full_name,
-            user_name: session?.user.user_metadata?.user_name,
+          return;
+        }
+        set((state) => {
+          state.user = session.user;
+        });
+
+        // Sentry, Event 설정
+        const ENV = import.meta.env.VITE_ENV;
+        const WEB_VERSION = import.meta.env.WEB_VERSION;
+        const userId = session.user.id;
+        const { email, full_name, user_name } = session.user.user_metadata;
+
+        if (ENV === "staging" || ENV === "prod") {
+          Sentry.setUser({
+            WEB_VERSION: WEB_VERSION,
+            id: userId,
+            email: email,
+            user_name: user_name,
+          });
+          analytics.identify(session.user.id, {
+            WEB_VERSION: WEB_VERSION,
+            email: email,
+            full_name: full_name,
+            user_name: user_name,
           });
         }
       });

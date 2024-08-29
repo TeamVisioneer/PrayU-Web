@@ -22,6 +22,9 @@ export function analyticsTrack(eventName: string, eventProperties: object) {
     import.meta.env.VITE_ENV == "staging" ||
     import.meta.env.VITE_ENV == "prod"
   ) {
-    analytics.track(eventName, eventProperties);
+    analytics.track(eventName, {
+      ...eventProperties,
+      WEB_VERSION: WEB_VERSION,
+    });
   }
 }
