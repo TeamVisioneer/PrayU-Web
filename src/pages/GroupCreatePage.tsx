@@ -60,18 +60,13 @@ const GroupCreatePage: React.FC = () => {
       setIsDisabledGroupCreateBtn(false);
       return;
     }
-    const myMember = await createMember(
-      targetGroup.id,
-      userId,
-      " ✏️ 기도카드를 작성해주세요"
-    );
+    const myMember = await createMember(targetGroup.id, userId, "");
     if (!myMember) {
       setIsDisabledGroupCreateBtn(false);
       return;
     }
-    await createPrayCard(targetGroup.id, userId, " ✏️ 기도카드를 작성해주세요");
 
-    navigate("/group/" + targetGroup.id, { replace: true });
+    window.location.replace(`/group/${targetGroup.id}`);
   };
 
   return (
