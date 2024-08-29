@@ -35,6 +35,16 @@ const GroupBody: React.FC<GroupBodyProps> = ({
     if (targetGroup) getMember(currentUserId, targetGroup.id);
   }, [currentUserId, targetGroup, getMember]);
 
+  useEffect(() => {
+    if (
+      !memberLoading &&
+      (member == null || member.updated_at < getISOTodayDate(-6))
+    ) {
+      navigate("/praycard/new", { replace: true });
+      return;
+    }
+  }, [member, memberLoading, navigate]);
+
   if (memberLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -49,11 +59,6 @@ const GroupBody: React.FC<GroupBodyProps> = ({
     userPlan != "Premium"
   ) {
     return <GroupLimitCard />;
-  }
-
-  if (member == null || member.updated_at < getISOTodayDate(-6)) {
-    navigate("/praycard/new", { replace: true });
-    return;
   }
 
   return (
