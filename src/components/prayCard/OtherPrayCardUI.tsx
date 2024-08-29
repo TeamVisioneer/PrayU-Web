@@ -5,6 +5,7 @@ import { Textarea } from "../ui/textarea";
 import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 interface EventOption {
   where: string;
@@ -19,6 +20,8 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   currentUserId,
   eventOption,
 }) => {
+  const navigate = useNavigate();
+
   const otherPrayCardList = useBaseStore((state) => state.otherPrayCardList);
   const fetchOtherPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchOtherPrayCardListByGroupId
@@ -33,6 +36,12 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     );
   }, [fetchOtherPrayCardListByGroupId, currentUserId, otherMember]);
 
+  useEffect(() => {
+    if (otherPrayCardList && otherPrayCardList.length === 0) {
+      navigate("/praycard/new", { replace: true });
+    }
+  }, [otherPrayCardList, navigate]);
+
   if (!otherPrayCardList) {
     return (
       <div className="flex justify-center items-center min-h-80vh max-h-80vh">
@@ -41,8 +50,6 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     );
   }
 
-  // TODO: PrayCardCreateModal 로 반환하기 ( 이미 GroupBody 에서 member.updated_at 으로 처리중 )
-  if (otherPrayCardList.length === 0) return null;
   if (!otherMember) return null;
 
   const prayCard = otherPrayCardList[0];

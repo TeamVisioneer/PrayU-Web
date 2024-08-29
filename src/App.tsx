@@ -8,6 +8,7 @@ import GroupCreatePage from "./pages/GroupCreatePage";
 import { analytics } from "@/analytics/analytics";
 import ConfirmAlert from "./components/alert/ConfirmAlert";
 import { Toaster } from "./components/ui/toaster";
+import PrayCardCreatePage from "./pages/PrayCardCreatePage";
 
 const App = () => {
   useEffect(() => {
@@ -54,6 +55,14 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/praycard/new"
+                element={
+                  <PrivateRoute>
+                    <PrayCardCreatePage />
+                  </PrivateRoute>
+                }
+              />
               {/* <Route path="*" element={<NotFound />} /> */}
             </Routes>
           </AuthProvider>
@@ -75,6 +84,11 @@ const AnalyticsTracker = () => {
         break;
       case "/group/new":
         analytics.track("페이지_그룹_생성", { title: "Group Create Page" });
+        break;
+      case "/praycard/new":
+        analytics.track("페이지_기도카드_생성", {
+          title: "PrayCard Create Page",
+        });
         break;
       default:
         if (location.pathname.startsWith("/group/")) {
