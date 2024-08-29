@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import useAuth from "../hooks/useAuth";
 import { Button } from "@/components/ui/button";
