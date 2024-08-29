@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { MemberWithProfiles } from "supabase/types/tables";
-
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-
 import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
-import { Textarea } from "../ui/textarea";
 import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -25,7 +23,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   member,
 }) => {
   const navigate = useNavigate();
-
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
@@ -48,9 +46,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     (state) => state.setIsOpenMyPrayDrawer
   );
 
-  // TODO: 전역으로 변경 예정
-  const [isDivVisible, setIsDivVisible] = useState(true);
-
   const onClickPrayerList = () => {
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyPrayDrawer(true);
@@ -58,6 +53,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   };
 
   const handleEditClick = () => {
+    if (textareaRef.current) textareaRef.current.focus();
     setIsEditingPrayCard(true);
     analyticsTrack("클릭_기도카드_수정", {});
   };
@@ -70,7 +66,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     updatePrayCardContent(prayCardId, content);
     updateMember(memberId, content);
     setIsEditingPrayCard(false);
-    setIsDivVisible(true);
     analyticsTrack("클릭_기도카드_저장", {});
   };
 
@@ -92,10 +87,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     );
   }
 
-  if (userPrayCardList.length === 0) {
-    return;
-  }
-
   const prayCard = userPrayCardList[0];
   const createdAt = prayCard.created_at;
   const createdDateYMD = getISODateYMD(createdAt);
@@ -109,10 +100,10 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     <div className="flex flex-col flex-grow">
       <div
         className={`flex flex-col bg-white rounded-2xl shadow-prayCard ${
-          isDivVisible ? "flex-grow" : "h-[300px]"
+          isEditingPrayCard ? "h-[300px]" : "flex-grow"
         }`}
       >
-        {isDivVisible && (
+        {!isEditingPrayCard && (
           <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
             <div className="flex items-center gap-2 w-full">
               <div className="flex gap-2 items-center">
@@ -128,16 +119,13 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
           </div>
         )}
         <div className="flex flex-col flex-grow px-[20px] py-[20px] relative">
-          <Textarea
-            className={`flex-grow w-full p-2 rounded-md overflow-y-auto  text-black !opacity-100 ${
-              isEditingPrayCard
-                ? " border-gray-300"
-                : "border-none no-scrollbar"
-            }`}
+          <textarea
+            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar focus:outline-gray-200 text-black !opacity-100"
+            ref={textareaRef}
             value={inputPrayCardContent}
+            placeholder="기도카드를 작성해주세요"
             onChange={(e) => setPrayCardContent(e.target.value)}
-            disabled={!isEditingPrayCard}
-            onFocus={() => setIsDivVisible(false)}
+            onFocus={() => setIsEditingPrayCard(true)}
             onBlur={() =>
               handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
             }
