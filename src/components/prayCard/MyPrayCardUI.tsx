@@ -123,7 +123,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar focus:outline-gray-200 text-black !opacity-100"
             ref={textareaRef}
             value={inputPrayCardContent}
-            placeholder="기도카드를 작성해주세요"
+            placeholder="기도카드를 작성해주세요 ✏️"
             onChange={(e) => setPrayCardContent(e.target.value)}
             onFocus={() => setIsEditingPrayCard(true)}
             onBlur={() =>
