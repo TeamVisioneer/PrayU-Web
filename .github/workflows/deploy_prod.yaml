@@ -3,9 +3,9 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
+  release:
+    types: [published]
   push:
-    tags:
-      - "v*"
     branches:
       - "v*"
   pull_request:
@@ -14,14 +14,14 @@ on:
       - main
 jobs:
   # 배포 CI/CD
-  # 1. v 로 시작하는 tag 생성
-  # 2. v 로 시작하는 branch 생성(cherry-pick 을 사용하여 main 의 특정 커밋만 배포할 경우)
+  # 1. Github 에서 수동으로 release 발행할 경우
+  # 2. v0.0.0-patch 형식의 branch 생성(cherry-pick 을 사용하여 main 의 특정 커밋만 배포할 경우)
   # 3. hotfix 로 시작하는 PR 이 main 에 병합(main 최신 내용을 빠르게 배포할 경우)
   Deploy-Production:
     if: |
-      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || 
-      (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/v'))||
-      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix'))
+      github.event.action == 'published' || 
+      github.event_name == 'push' && startsWith(github.ref, 'refs/heads/v')||
+      github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,3 +33,23 @@ jobs:
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+  Version-Patch:
+    if: github.event.action == 'published'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure Git for CI
+        run: |
+          git config --global user.name "TeamVisioneer"
+          git config --global user.email "team.visioneer15@gmail.com"
+          git clone https://x-access-token:${{ secrets.PERSONAL_GITHUB_ADMIN_TOKEN }}@github.com/${{ github.repository }} ${{ github.repository }}
+
+      - name: version patch
+        run: |
+          cd ${{ github.repository }}
+          npm version patch
+          git push origin main
+          git push origin --tags
