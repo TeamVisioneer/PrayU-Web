@@ -65,7 +65,8 @@ const MainPage: React.FC = () => {
     const isKakaoBrowser = navigator.userAgent.match("KAKAOTALK");
 
     const handleKakaoLoginBtnClick = () => {
-      window.location.href = `kakaotalk://inappbrowser?url=${baseUrl}`;
+      const encodedBaseUrl = encodeURIComponent(baseUrl);
+      window.location.href = `kakaotalk://inappbrowser?url=${encodedBaseUrl}`;
       setIsClickedKaKaoBtn(true);
       analytics.track("클릭_카카오_딥링크", { where: "KakaoLoginBtn" });
     };
