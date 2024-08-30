@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { analyticsTrack } from "@/analytics/analytics";
 import useAuth from "@/hooks/useAuth";
 import { getISOTodayDate, getISOTodayDateYMD } from "@/lib/utils";
@@ -11,7 +10,6 @@ import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -77,7 +75,7 @@ const PrayCardCreatePage: React.FC = () => {
       setIsDisabledPrayCardCreateBtn(false);
       return;
     }
-    navigate("/group/" + groupId, { replace: true });
+    window.location.replace(`/group/${groupId}`);
   };
 
   useEffect(() => {

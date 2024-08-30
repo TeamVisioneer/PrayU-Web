@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import useAuth from "../hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,6 @@ import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const createGroup = useBaseStore((state) => state.createGroup);
   const inputGroupName = useBaseStore((state) => state.inputGroupName);
@@ -60,18 +58,14 @@ const GroupCreatePage: React.FC = () => {
       setIsDisabledGroupCreateBtn(false);
       return;
     }
-    const myMember = await createMember(
-      targetGroup.id,
-      userId,
-      " ✏️ 기도카드를 작성해주세요"
-    );
+    const myMember = await createMember(targetGroup.id, userId, "");
     if (!myMember) {
       setIsDisabledGroupCreateBtn(false);
       return;
     }
-    await createPrayCard(targetGroup.id, userId, " ✏️ 기도카드를 작성해주세요");
+    await createPrayCard(targetGroup.id, userId, "");
 
-    navigate("/group/" + targetGroup.id, { replace: true });
+    window.location.replace(`/group/${targetGroup.id}`);
   };
 
   return (
