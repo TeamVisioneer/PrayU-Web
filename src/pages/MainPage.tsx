@@ -65,7 +65,7 @@ const MainPage: React.FC = () => {
     const isKakaoBrowser = navigator.userAgent.match("KAKAOTALK");
 
     const handleKakaoLoginBtnClick = () => {
-      window.open(`kakaotalk://inappbrowser?url=${baseUrl}`);
+      window.location.replace(`kakaotalk://inappbrowser?url=${baseUrl}`);
       setIsClickedKaKaoBtn(true);
       analytics.track("클릭_카카오_딥링크", { where: "KakaoLoginBtn" });
     };
