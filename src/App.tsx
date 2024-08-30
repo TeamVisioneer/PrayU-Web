@@ -71,9 +71,7 @@ const AnalyticsTracker = () => {
   useEffect(() => {
     switch (location.pathname) {
       case "/":
-        analytics.track("페이지_메인", {
-          title: "Main Page",
-        });
+        analytics.track("페이지_메인", { title: "Main Page" });
         break;
       case "/group/new":
         analytics.track("페이지_그룹_생성", { title: "Group Create Page" });

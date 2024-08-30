@@ -2,14 +2,14 @@ import Analytics from "analytics";
 import amplitudePlugin from "@analytics/amplitude";
 import googleAnalytics from "@analytics/google-analytics";
 
-const VITE_AMPLITUDE_API_KEY = import.meta.env.VITE_AMPLITUDE_API_KEY;
-const VITE_GOOGLE_ANALYTICS_ID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
+const AMPLITUDE_API_KEY = import.meta.env.VITE_AMPLITUDE_API_KEY;
+const GOOGLE_ANALYTICS_ID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
 
 export const analytics = Analytics({
   app: "awesome-app",
   plugins: [
     amplitudePlugin({
-      apiKey: VITE_AMPLITUDE_API_KEY,
+      apiKey: AMPLITUDE_API_KEY,
       options: {
         includeUtm: true,
         includeReferrer: true,
@@ -19,7 +19,7 @@ export const analytics = Analytics({
       },
     }),
     googleAnalytics({
-      measurementIds: [VITE_GOOGLE_ANALYTICS_ID],
+      measurementIds: [GOOGLE_ANALYTICS_ID],
     }),
   ],
 });
