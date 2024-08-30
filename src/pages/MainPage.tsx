@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { useLocation } from "react-router-dom";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
+import { analytics } from "@/analytics/analytics";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -19,6 +20,8 @@ const MainPage: React.FC = () => {
 
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [isClickedKakaoBtn, setIsClickedKaKaoBtn] = useState(false);
 
   useEffect(() => {
     if (!api) return;
@@ -59,18 +62,22 @@ const MainPage: React.FC = () => {
     const baseUrl = getDomainUrl();
     const from = location.state?.from?.pathname || "/group";
     const redirectUrl = `${baseUrl}${from}`;
-    const handleKakaoLoginBtnClick = (
-      event: React.MouseEvent<HTMLDivElement, MouseEvent>
-    ) => {
-      const isKakaoBrowser = navigator.userAgent.match("KAKAOTALK");
-      if (!isKakaoBrowser) {
-        window.open(`kakaotalk://inappbrowser?url=${baseUrl}`);
-        event.stopPropagation();
-      }
+    const isKakaoBrowser = navigator.userAgent.match("KAKAOTALK");
+
+    const handleKakaoLoginBtnClick = () => {
+      window.open(`kakaotalk://inappbrowser?url=${baseUrl}`);
+      setIsClickedKaKaoBtn(true);
+      analytics.track("클릭_카카오_딥링크", { where: "KakaoLoginBtn" });
     };
 
     return (
-      <div onClickCapture={handleKakaoLoginBtnClick}>
+      <div className="relative">
+        {!isKakaoBrowser && !isClickedKakaoBtn && (
+          <div
+            className="absolute w-full h-full"
+            onClick={handleKakaoLoginBtnClick}
+          ></div>
+        )}
         <Auth
           redirectTo={redirectUrl}
           supabaseClient={supabase}
