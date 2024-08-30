@@ -120,7 +120,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
         )}
         <div className="flex flex-col flex-grow px-[20px] py-[20px] relative">
           <textarea
-            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar focus:outline-gray-200 text-black !opacity-100"
+            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar focus:outline-gray-200 text-black placeholder-gray-400 !opacity-100"
             ref={textareaRef}
             value={inputPrayCardContent}
             placeholder="기도카드를 작성해주세요 ✏️"
