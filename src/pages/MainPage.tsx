@@ -110,7 +110,12 @@ const MainPage: React.FC = () => {
         <Button
           variant="primary"
           className="w-32"
-          onClick={() => (window.location.href = "/group")}
+          onClick={() => {
+            window.location.href = "/group";
+            analytics.track("클릭_도메인_시작하기", {
+              where: "PrayUStartBtn",
+            });
+          }}
         >
           PrayU 시작하기
         </Button>
