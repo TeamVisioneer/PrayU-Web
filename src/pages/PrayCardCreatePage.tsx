@@ -82,7 +82,7 @@ const PrayCardCreatePage: React.FC = () => {
     setPrayCardContent(myMember?.pray_summary || "");
   }, [myMember, setPrayCardContent]);
 
-  if (targetGroup == null || memberList == null || myMember == null) {
+  if (targetGroup == null || memberList == null) {
     return (
       <div className="h-screen flex flex-col justify-center items-center gap-2">
         <div>그룹을 찾을 수 없어요😂</div>
@@ -94,6 +94,7 @@ const PrayCardCreatePage: React.FC = () => {
   }
 
   const todayDateYMD = getISOTodayDateYMD();
+  console.log(user?.user_metadata);
 
   const PrayCardUI = (
     <div className="flex flex-col gap-6 justify-center">
@@ -102,7 +103,7 @@ const PrayCardCreatePage: React.FC = () => {
           <div className="flex items-center gap-2">
             <img
               src={
-                myMember.profiles.avatar_url ||
+                user?.user_metadata.avatar_url ||
                 "/images/defaultProfileImage.png"
               }
               onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -110,7 +111,9 @@ const PrayCardCreatePage: React.FC = () => {
               }}
               className="w-7 h-7 rounded-full object-cover"
             />
-            <p className="text-white text-lg ">{myMember.profiles.full_name}</p>
+            <p className="text-white text-lg ">
+              {user?.user_metadata.full_name}
+            </p>
           </div>
           <p className="text-sm text-white w-full text-left">
             시작일 :{todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
