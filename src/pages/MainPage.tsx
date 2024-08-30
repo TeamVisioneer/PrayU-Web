@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Auth } from "@supabase/auth-ui-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../../supabase/client";
 import { getDomainUrl } from "@/lib/utils";
@@ -10,8 +10,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { Button } from "@/components/ui/button";
 import useBaseStore from "@/stores/baseStore";
+import { Button } from "@/components/ui/button";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -43,7 +43,7 @@ const MainPage: React.FC = () => {
       {Array.from({ length: 4 }, (_, index) => (
         <span
           key={index}
-          className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
+          className={`mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
             currentIndex === index
               ? "w-[8px] h-[8px] bg-mainBtn"
               : "h-[6px] w-[6px] bg-gray-400"
@@ -59,17 +59,25 @@ const MainPage: React.FC = () => {
     const baseUrl = getDomainUrl();
     const from = location.state?.from?.pathname || "/group";
     const redirectUrl = `${baseUrl}${from}`;
-    const isKakao = navigator.userAgent.match("KAKAOTALK");
+    const handleKakaoLoginBtnClick = (
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+      const isKakaoBrowser = navigator.userAgent.match("KAKAOTALK");
+      if (!isKakaoBrowser) {
+        window.open(`kakaotalk://inappbrowser?url=${baseUrl}`);
+        event.stopPropagation();
+      }
+    };
 
     return (
-      <div>
+      <div onClickCapture={handleKakaoLoginBtnClick}>
         <Auth
           redirectTo={redirectUrl}
           supabaseClient={supabase}
           appearance={{
             theme: ThemeSupa,
             style: {
-              button: { background: "#FFE237", color: "black" },
+              button: { background: "#FFE812", color: "black" },
             },
           }}
           localization={{
@@ -85,26 +93,17 @@ const MainPage: React.FC = () => {
           onlyThirdPartyProviders={true}
           providers={["kakao"]}
         />
-        {!isKakao && (
-          <a
-            className="text-sm text-gray-500 underline"
-            href={`kakaotalk://inappbrowser?url=${baseUrl}`}
-          >
-            카카오톡 앱에서 바로 시작
-          </a>
-        )}
       </div>
     );
   };
 
   const PrayUStartBtn = () => {
-    const navigate = useNavigate();
     return (
       <div className="flex items-center h-[75px]">
         <Button
           variant="primary"
           className="w-32"
-          onClick={() => navigate("/group")}
+          onClick={() => (window.location.href = "/group")}
         >
           PrayU 시작하기
         </Button>
