@@ -167,6 +167,9 @@ export interface BaseStore {
   isConfirmAlertOpen: boolean;
   setIsConfirmAlertOpen: (isGroupAlertOpen: boolean) => void;
 
+  isDefaultAlertOpen: boolean;
+  setIsDefaultAlertOpen: (isDefaultAlertOpen: boolean) => void;
+
   alertData: {
     title: string;
     description: string;
@@ -606,6 +609,14 @@ const useBaseStore = create<BaseStore>()(
         state.isConfirmAlertOpen = isGroupAlertOpen;
       });
     },
+
+    isDefaultAlertOpen: false,
+    setIsDefaultAlertOpen(isDefaultAlertOpen) {
+      set((state) => {
+        state.isDefaultAlertOpen = isDefaultAlertOpen;
+      });
+    },
+
     alertData: {
       title: "",
       description: "",

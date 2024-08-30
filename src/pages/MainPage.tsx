@@ -21,8 +21,6 @@ const MainPage: React.FC = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [isClickedKakaoBtn, setIsClickedKaKaoBtn] = useState(false);
-
   useEffect(() => {
     if (!api) return;
     setCurrentIndex(api.selectedScrollSnap());
@@ -62,23 +60,13 @@ const MainPage: React.FC = () => {
     const baseUrl = getDomainUrl();
     const from = location.state?.from?.pathname || "/group";
     const redirectUrl = `${baseUrl}${from}`;
-    const isKakaoBrowser = navigator.userAgent.match("KAKAOTALK");
 
     const handleKakaoLoginBtnClick = () => {
-      const encodedBaseUrl = encodeURIComponent(baseUrl);
-      window.location.href = `kakaotalk://inappbrowser?url=${encodedBaseUrl}`;
-      setIsClickedKaKaoBtn(true);
-      analytics.track("클릭_카카오_딥링크", { where: "KakaoLoginBtn" });
+      analytics.track("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
     };
 
     return (
-      <div className="relative">
-        {!isKakaoBrowser && !isClickedKakaoBtn && (
-          <div
-            className="absolute w-full h-full"
-            onClick={handleKakaoLoginBtnClick}
-          ></div>
-        )}
+      <div onClick={handleKakaoLoginBtnClick}>
         <Auth
           redirectTo={redirectUrl}
           supabaseClient={supabase}
@@ -113,7 +101,7 @@ const MainPage: React.FC = () => {
           className="w-32"
           onClick={() => {
             window.location.href = "/group";
-            analytics.track("클릭_도메인_시작하기", {
+            analytics.track("클릭_메인_시작하기", {
               where: "PrayUStartBtn",
             });
           }}
