@@ -2,22 +2,24 @@ import Analytics from "analytics";
 import amplitudePlugin from "@analytics/amplitude";
 import googleAnalytics from "@analytics/google-analytics";
 
-const apiKeyAmplitude = import.meta.env.VITE_AMPLITUDE_API_KEY;
-const IdGA = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
+const VITE_AMPLITUDE_API_KEY = import.meta.env.VITE_AMPLITUDE_API_KEY;
+const VITE_GOOGLE_ANALYTICS_ID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
 
 export const analytics = Analytics({
   app: "awesome-app",
   plugins: [
     amplitudePlugin({
-      apiKey: apiKeyAmplitude,
+      apiKey: VITE_AMPLITUDE_API_KEY,
       options: {
+        includeUtm: true,
+        includeReferrer: true,
         trackingOptions: {
           ip_address: false,
         },
       },
     }),
     googleAnalytics({
-      measurementIds: [IdGA],
+      measurementIds: [VITE_GOOGLE_ANALYTICS_ID],
     }),
   ],
 });
