@@ -125,7 +125,6 @@ const ShareDrawer: React.FC = () => {
       <div className="flex flex-col gap-2">
         <KakaoShareButton
           targetGroup={targetGroup}
-          id="groupPage"
           message="카카오톡으로 초대하기"
           eventOption={{ where: "GroupPage" }}
         />

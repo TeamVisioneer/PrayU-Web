@@ -10,12 +10,27 @@ interface Kakao {
   init: (apiKey: string) => void;
   isInitialized: () => boolean;
   Share: {
-    createDefaultButton: (options: KakaoLinkObject) => void;
+    sendDefault: (options: KakaoLinkObject) => void;
+    sendScrap: (options: { requestUrl: string }) => void;
   };
+  API: KakaoAPI;
+}
+interface KakaoAPI {
+  request: (params: KakaoAPIRequestParams) => Promise<KakaoAPIResponse>;
+}
+
+interface KakaoAPIRequestParams {
+  url: string;
+  data?: Record<string, unknown>;
+}
+
+interface KakaoAPIResponse {
+  nickname?: string;
+  profile_image_url?: string;
+  thumbnail_image_url?: string;
 }
 
 interface KakaoLinkObject {
-  container: string;
   objectType: string;
   content: {
     title: string;

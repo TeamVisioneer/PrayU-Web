@@ -61,7 +61,6 @@ const ExpiredPrayCardUI: React.FC = () => {
         <KakaoShareButton
           targetGroup={targetGroup}
           message="카카오톡으로 요청하기"
-          id="prayCardUIToOther"
           eventOption={{ where: "ReactionWithCalendar" }}
         ></KakaoShareButton>
       </div>

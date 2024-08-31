@@ -103,7 +103,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
       </div>
       <KakaoShareButton
         targetGroup={targetGroup}
-        id="paryTodayIntro"
         message="카카오톡으로 초대하기"
         eventOption={{ where: "PrayCardList" }}
       ></KakaoShareButton>
