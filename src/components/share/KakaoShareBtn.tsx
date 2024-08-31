@@ -44,47 +44,29 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
 }) => {
   const groupUrl = `${getDomainUrl()}/group/${targetGroup!.id}`;
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js";
-    script.integrity =
-      "sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4";
-    script.crossOrigin = "anonymous";
-    script.async = true;
-
-    script.onload = () => {
-      if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
-      }
-      const content = getContent(targetGroup!.name!, type);
-      window.Kakao.Share.createDefaultButton({
-        container: `#${id}`,
-        objectType: "feed",
-        content: {
-          title: content.title,
-          description: content.description,
-          imageUrl: content.imageUrl,
+    const content = getContent(targetGroup!.name!, type);
+    window.Kakao.Share.createDefaultButton({
+      container: `#${id}`,
+      objectType: "feed",
+      content: {
+        title: content.title,
+        description: content.description,
+        imageUrl: content.imageUrl,
+        link: {
+          mobileWebUrl: groupUrl,
+          webUrl: groupUrl,
+        },
+      },
+      buttons: [
+        {
+          title: "오늘의 기도",
           link: {
             mobileWebUrl: groupUrl,
             webUrl: groupUrl,
           },
         },
-        buttons: [
-          {
-            title: "오늘의 기도",
-            link: {
-              mobileWebUrl: groupUrl,
-              webUrl: groupUrl,
-            },
-          },
-        ],
-      });
-    };
-
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
+      ],
+    });
   }, [targetGroup, groupUrl, id, type]);
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
