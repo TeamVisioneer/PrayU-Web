@@ -2,41 +2,6 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { getDomainUrl, getISOTodayDateYMD } from "@/lib/utils";
 import { useEffect, useRef } from "react";
 import { Group } from "supabase/types/tables";
-declare global {
-  interface Window {
-    Kakao: Kakao;
-  }
-}
-
-interface Kakao {
-  init: (apiKey: string) => void;
-  isInitialized: () => boolean;
-  Share: {
-    createDefaultButton: (options: KakaoLinkObject) => void;
-  };
-}
-
-interface KakaoLinkObject {
-  container: string;
-  objectType: string;
-  content: {
-    title: string;
-    description: string;
-    imageUrl: string;
-    link: {
-      mobileWebUrl: string;
-      webUrl: string;
-    };
-  };
-
-  buttons: Array<{
-    title: string;
-    link: {
-      mobileWebUrl: string;
-      webUrl: string;
-    };
-  }>;
-}
 
 interface EventOption {
   where: string;
