@@ -47,7 +47,6 @@ const KakaoInit: React.FC = () => {
     script.onload = () => {
       if (window.Kakao) {
         window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
-        console.log(window.Kakao.isInitialized());
       }
     };
     document.head.appendChild(script);

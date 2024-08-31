@@ -42,8 +42,8 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   type = "default",
   eventOption,
 }) => {
-  const groupUrl = `${getDomainUrl()}/group/${targetGroup!.id}`;
   useEffect(() => {
+    const groupUrl = `${getDomainUrl()}/group/${targetGroup!.id}`;
     const content = getContent(targetGroup!.name!, type);
     window.Kakao.Share.createDefaultButton({
       container: `#${id}`,
@@ -67,7 +67,7 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
         },
       ],
     });
-  }, [targetGroup, groupUrl, id, type]);
+  }, [targetGroup, id, type]);
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
