@@ -28,13 +28,13 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
     (state) => state.fetchUserPrayCardListByGroupId
   );
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
-  const isOpenMyMemberDrawer = useBaseStore(
-    (state) => state.isOpenMyMemberDrawer
-  );
+  const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
-  const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
+  const isOpenMyMemberDrawer = useBaseStore(
+    (state) => state.isOpenMyMemberDrawer
+  );
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
