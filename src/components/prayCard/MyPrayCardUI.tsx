@@ -74,7 +74,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
   useEffect(() => {
-    if (userPrayCardList && userPrayCardList.length === 0) {
+    if (
+      userPrayCardList &&
+      (userPrayCardList.length === 0 ||
+        userPrayCardList[0].created_at < getISOTodayDate(-6))
+    ) {
       navigate("/praycard/new", { replace: true });
     }
   }, [userPrayCardList, navigate]);
@@ -87,12 +91,16 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     );
   }
 
+  if (userPrayCardList && userPrayCardList.length == 0) {
+    // TODO: 예외처리 필요
+    return null;
+  }
+
   const prayCard = userPrayCardList[0];
-  const createdAt = prayCard.created_at;
-  const createdDateYMD = getISODateYMD(createdAt);
+  const createdDateYMD = getISODateYMD(prayCard.created_at);
 
   const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(createdAt)),
+    new Date(getISOOnlyDate(prayCard.created_at)),
     new Date(getISOTodayDate())
   );
 

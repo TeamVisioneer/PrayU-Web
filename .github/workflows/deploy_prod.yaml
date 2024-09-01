@@ -34,22 +34,22 @@ jobs:
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-  Version-Patch:
-    if: github.event.action == 'published'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # Version-Patch:
+  #   if: github.event.action == 'published'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Configure Git for CI
-        run: |
-          git config --global user.name "TeamVisioneer"
-          git config --global user.email "team.visioneer15@gmail.com"
-          git clone https://x-access-token:${{ secrets.PERSONAL_GITHUB_ADMIN_TOKEN }}@github.com/${{ github.repository }} ${{ github.repository }}
+  #     - name: Configure Git for CI
+  #       run: |
+  #         git config --global user.name "TeamVisioneer"
+  #         git config --global user.email "team.visioneer15@gmail.com"
+  #         git clone https://x-access-token:${{ secrets.PERSONAL_GITHUB_ADMIN_TOKEN }}@github.com/${{ github.repository }} ${{ github.repository }}
 
-      - name: version patch
-        run: |
-          cd ${{ github.repository }}
-          npm version patch
-          git push origin main
-          git push origin --tags
+  #     - name: version patch
+  #       run: |
+  #         cd ${{ github.repository }}
+  #         npm version patch
+  #         git push origin main
+  #         git push origin --tags
