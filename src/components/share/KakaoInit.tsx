@@ -13,10 +13,20 @@ interface Kakao {
     sendDefault: (options: KakaoLinkObject) => void;
     sendScrap: (options: { requestUrl: string }) => void;
   };
-  API: KakaoAPI;
-}
-interface KakaoAPI {
-  request: (params: KakaoAPIRequestParams) => Promise<KakaoAPIResponse>;
+  API: {
+    request: (params: KakaoAPIRequestParams) => Promise<KakaoAPIResponse>;
+  };
+  Auth: {
+    authorize: (options: { redirectUri: string; scope: string }) => void;
+    setAccessToken: (token: string) => void;
+  };
+  Picker: {
+    selectFriends: (options: {
+      title: string;
+      maxPickableCount: number;
+      minPickableCount: number;
+    }) => Promise<SelectedUsers>;
+  };
 }
 
 interface KakaoAPIRequestParams {
@@ -49,6 +59,19 @@ interface KakaoLinkObject {
       webUrl: string;
     };
   }>;
+}
+
+interface SelectedUser {
+  uuid: string; // 친구마다 고유한 값을 가지는 참고용 코드
+  id?: string; // 친구의 회원번호 (선택 필드)
+  profile_nickname?: string; // 카카오톡 프로필 닉네임 (선택 필드)
+  profile_thumbnail_image?: string; // 카카오톡 프로필 썸네일 이미지 (선택 필드)
+  favorite?: boolean; // 카카오톡 친구 즐겨찾기 설정 여부 (선택 필드)
+}
+
+interface SelectedUsers {
+  selectedTotalCount: number; // 친구 피커에서 사용자가 선택한 친구 수
+  users?: SelectedUser[]; // 선택한 친구 정보 목록 (선택 필드)
 }
 
 const KakaoInit: React.FC = () => {

@@ -18,6 +18,8 @@ const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
 
+  const baseUrl = getDomainUrl();
+
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -58,7 +60,6 @@ const MainPage: React.FC = () => {
 
   const KakaoLoginBtn = () => {
     const location = useLocation();
-    const baseUrl = getDomainUrl();
     const from = location.state?.from?.pathname || "/group";
     const redirectUrl = `${baseUrl}${from}`;
 
@@ -185,6 +186,16 @@ const MainPage: React.FC = () => {
       </Carousel>
 
       {user ? <PrayUStartBtn /> : <KakaoLoginBtn />}
+      <Button
+        onClick={() => {
+          window.Kakao.Auth.authorize({
+            redirectUri: `${baseUrl}/auth/kakao/callback`,
+            scope: "friends,talk_message",
+          });
+        }}
+      >
+        카카오 선택 동의 및 프로필
+      </Button>
     </div>
   );
 };
