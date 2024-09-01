@@ -4,7 +4,6 @@ import TodayPrayCardList from "@/components/todayPray/TodayPrayCardList";
 import MyMember from "@/components/member/MyMember";
 import GroupLimitCard from "@/components/group/GroupLimitCard";
 import OtherMemberList from "@/components/member/OtherMemberList";
-import { getISOTodayDate } from "@/lib/utils";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
