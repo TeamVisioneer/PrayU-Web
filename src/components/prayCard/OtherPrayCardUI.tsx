@@ -42,11 +42,14 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   }
 
   if (!otherMember) return null;
+  if (otherPrayCardList && otherPrayCardList.length == 0) {
+    // TODO: 예외처리 필요
+    return null;
+  }
 
   const prayCard = otherPrayCardList[0];
-  const createdAt = prayCard.created_at;
-  const createdDateYMD = getISODateYMD(createdAt);
-  const isExpiredOtherMember = otherMember!.updated_at < getISOTodayDate(-6);
+  const isExpiredOtherMember = prayCard.created_at < getISOTodayDate(-6);
+  const createdDateYMD = getISODateYMD(prayCard.created_at);
 
   const PrayCardUI = () => (
     <div className="flex flex-col gap-6 min-h-80vh max-h-80vh">
