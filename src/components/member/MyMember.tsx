@@ -13,32 +13,37 @@ import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate } from "@/lib/utils";
 import PrayListDrawer from "../pray/PrayListDrawer";
+import { MemberWithProfiles } from "supabase/types/tables";
+import { useNavigate } from "react-router-dom";
 
 interface MemberProps {
-  currentUserId: string;
-  groupId: string;
+  myMember: MemberWithProfiles;
 }
 
-const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
-  const member = useBaseStore((state) => state.myMember);
+const MyMember: React.FC<MemberProps> = ({ myMember }) => {
+  const navigate = useNavigate();
+
   const getMember = useBaseStore((state) => state.getMember);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
   );
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
-  const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
-  const inputPrayCardContent = useBaseStore(
-    (state) => state.inputPrayCardContent
-  );
   const isOpenMyMemberDrawer = useBaseStore(
     (state) => state.isOpenMyMemberDrawer
   );
+  const inputPrayCardContent = useBaseStore(
+    (state) => state.inputPrayCardContent
+  );
+  const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
   );
+
+  const currentUserId = myMember.user_id!;
+  const groupId = myMember.group_id!;
 
   const onClickMyMemberReaction = (event: { stopPropagation: () => void }) => {
     window.history.pushState(null, "", window.location.pathname);
@@ -50,15 +55,25 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
   };
 
   useEffect(() => {
-    getMember(currentUserId, groupId);
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [getMember, fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
   useEffect(() => {
-    if (member) setPrayCardContent(member.pray_summary || "");
-  }, [setPrayCardContent, member]);
+    if (
+      userPrayCardList &&
+      (userPrayCardList.length == 0 ||
+        userPrayCardList[0].created_at < getISOTodayDate(-6))
+    ) {
+      navigate("/praycard/new", { replace: true });
+      return;
+    }
+  });
 
-  const prayCard = userPrayCardList?.[0] || null;
+  useEffect(() => {
+    setPrayCardContent(myMember.pray_summary || "");
+  }, [setPrayCardContent, myMember]);
+
+  const prayCard = userPrayCardList?.[0];
   const prayDatasForMe = prayCard?.pray;
   const prayDatasForMeToday = prayDatasForMe?.filter(
     (pray) => pray.created_at > getISOTodayDate()
@@ -136,7 +151,7 @@ const MyMember: React.FC<MemberProps> = ({ currentUserId, groupId }) => {
           <MyPrayCardUI
             currentUserId={currentUserId}
             groupId={groupId}
-            member={member}
+            member={myMember}
           />
           {/* PrayCard */}
         </DrawerContent>

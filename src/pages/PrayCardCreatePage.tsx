@@ -94,7 +94,6 @@ const PrayCardCreatePage: React.FC = () => {
   }
 
   const todayDateYMD = getISOTodayDateYMD();
-  console.log(user?.user_metadata);
 
   const PrayCardUI = (
     <div className="flex flex-col gap-6 justify-center">

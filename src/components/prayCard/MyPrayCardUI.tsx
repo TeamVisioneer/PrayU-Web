@@ -8,13 +8,12 @@ import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
-import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 
 interface PrayCardProps {
   currentUserId: string;
   groupId: string;
-  member: MemberWithProfiles | null;
+  member: MemberWithProfiles;
 }
 
 const MyPrayCardUI: React.FC<PrayCardProps> = ({
@@ -22,7 +21,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   groupId,
   member,
 }) => {
-  const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
   const fetchUserPrayCardListByGroupId = useBaseStore(
@@ -73,17 +71,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
-  useEffect(() => {
-    if (
-      userPrayCardList &&
-      (userPrayCardList.length === 0 ||
-        userPrayCardList[0].created_at < getISOTodayDate(-6))
-    ) {
-      navigate("/praycard/new", { replace: true });
-    }
-  }, [userPrayCardList, navigate]);
-
-  if (!userPrayCardList || !member) {
+  if (!userPrayCardList) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />

@@ -8,6 +8,7 @@ import { getISOTodayDate } from "@/lib/utils";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+
 interface GroupBodyProps {
   currentUserId: string;
   groupList: Group[];
@@ -26,7 +27,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   );
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
 
-  const member = useBaseStore((state) => state.myMember);
+  const myMember = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
   const memberList = useBaseStore((state) => state.memberList);
   const getMember = useBaseStore((state) => state.getMember);
@@ -38,16 +39,16 @@ const GroupBody: React.FC<GroupBodyProps> = ({
 
   useEffect(() => {
     if (
-      !memberLoading &&
       memberList &&
-      (member == null || member.updated_at < getISOTodayDate(-6))
+      !memberLoading &&
+      (myMember == null || myMember.updated_at < getISOTodayDate(-6))
     ) {
       navigate("/praycard/new", { replace: true });
       return;
     }
-  }, [member, memberLoading, memberList, navigate]);
+  }, [myMember, memberLoading, memberList, navigate]);
 
-  if (memberLoading) {
+  if (!myMember) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
@@ -65,7 +66,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
 
   return (
     <div className="flex flex-col h-full gap-4">
-      <MyMember currentUserId={currentUserId} groupId={targetGroup.id} />
+      <MyMember myMember={myMember} />
       <OtherMemberList currentUserId={currentUserId} groupId={targetGroup.id} />
       <TodayPrayCardList
         currentUserId={currentUserId}
