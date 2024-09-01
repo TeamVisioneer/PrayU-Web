@@ -184,22 +184,6 @@ const MainPage: React.FC = () => {
       </Carousel>
 
       {user ? <PrayUStartBtn /> : <KakaoLoginBtn />}
-
-      <Button
-        onClick={() => {
-          window.Kakao.API.request({
-            url: "/v1/api/talk/profile",
-          })
-            .then(function (response) {
-              console.log(response);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        }}
-      >
-        카카오 프로필
-      </Button>
     </div>
   );
 };
