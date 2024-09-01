@@ -4,10 +4,8 @@ import TodayPrayCardList from "@/components/todayPray/TodayPrayCardList";
 import MyMember from "@/components/member/MyMember";
 import GroupLimitCard from "@/components/group/GroupLimitCard";
 import OtherMemberList from "@/components/member/OtherMemberList";
-import { getISOTodayDate } from "@/lib/utils";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
-import { useNavigate } from "react-router-dom";
 
 interface GroupBodyProps {
   currentUserId: string;
@@ -20,33 +18,18 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   groupList,
   targetGroup,
 }) => {
-  const navigate = useNavigate();
-
   const isParamsGroupIdinGroupList = groupList.some(
     (group) => group.id === targetGroup.id
   );
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
 
   const myMember = useBaseStore((state) => state.myMember);
-  const memberLoading = useBaseStore((state) => state.memberLoading);
-  const memberList = useBaseStore((state) => state.memberList);
   const getMember = useBaseStore((state) => state.getMember);
   const userPlan = useBaseStore((state) => state.userPlan);
 
   useEffect(() => {
     if (targetGroup) getMember(currentUserId, targetGroup.id);
   }, [currentUserId, targetGroup, getMember]);
-
-  useEffect(() => {
-    if (
-      memberList &&
-      !memberLoading &&
-      (myMember == null || myMember.updated_at < getISOTodayDate(-6))
-    ) {
-      navigate("/praycard/new", { replace: true });
-      return;
-    }
-  }, [myMember, memberLoading, memberList, navigate]);
 
   if (!myMember) {
     return (
