@@ -7,6 +7,7 @@ import OtherMemberList from "@/components/member/OtherMemberList";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import { getISOTodayDate } from "@/lib/utils";
 
 interface GroupBodyProps {
   currentUserId: string;
@@ -37,7 +38,11 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   }, [currentUserId, targetGroup, getMember]);
 
   useEffect(() => {
-    if (memberList && !memberLoading && myMember == null) {
+    if (
+      memberList &&
+      !memberLoading &&
+      (myMember == null || myMember.updated_at < getISOTodayDate(-6))
+    ) {
       navigate("/praycard/new", { replace: true });
       return;
     }
