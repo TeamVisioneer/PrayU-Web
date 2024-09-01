@@ -94,7 +94,6 @@ export const fetchUserPrayCardListByGroupId = async (
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
-    console.log(data);
     if (error) {
       Sentry.captureException(error.message);
       return null;
