@@ -28,6 +28,7 @@ const GroupBody: React.FC<GroupBodyProps> = ({
 
   const member = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
+  const memberList = useBaseStore((state) => state.memberList);
   const getMember = useBaseStore((state) => state.getMember);
   const userPlan = useBaseStore((state) => state.userPlan);
 
@@ -38,12 +39,13 @@ const GroupBody: React.FC<GroupBodyProps> = ({
   useEffect(() => {
     if (
       !memberLoading &&
+      memberList &&
       (member == null || member.updated_at < getISOTodayDate(-6))
     ) {
       navigate("/praycard/new", { replace: true });
       return;
     }
-  }, [member, memberLoading, navigate]);
+  }, [member, memberLoading, memberList, navigate]);
 
   if (memberLoading) {
     return (
