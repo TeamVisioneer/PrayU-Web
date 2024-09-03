@@ -38,6 +38,7 @@ const KakaoCallBack = () => {
       url: "/v1/api/talk/friends",
     })
       .then(function (response) {
+        console.log(response);
         alert("success: " + JSON.stringify(response));
       })
       .catch(function (error) {
@@ -85,6 +86,7 @@ const KakaoCallBack = () => {
           console.log(data);
           // 리프레시 토큰을 통한 관리 필요, 쿠키를 통한 관리 필요
           window.Kakao.Auth.setAccessToken(data.access_token);
+          fetchFriends();
         } catch (error) {
           console.error("토큰 요청 실패:", error);
         }
