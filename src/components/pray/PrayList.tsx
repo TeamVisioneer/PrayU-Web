@@ -71,7 +71,6 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
             <KakaoShareButton
               targetGroup={targetGroup}
               message="카카오톡 링크 공유"
-              id="prayList"
               eventOption={{ where: "PrayList" }}
             />
           </div>
