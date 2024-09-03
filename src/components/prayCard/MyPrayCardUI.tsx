@@ -10,6 +10,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { Textarea } from "../ui/textarea";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -127,8 +128,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
           </div>
         )}
         <div className="flex flex-col flex-grow px-[20px] py-[20px] relative">
-          <textarea
-            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar focus:outline-gray-200 text-black placeholder-gray-400 !opacity-100"
+          <Textarea
+            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar border-none focus:outline-gray-200 text-black"
             ref={textareaRef}
             value={inputPrayCardContent}
             placeholder="기도카드를 작성해주세요 ✏️"
