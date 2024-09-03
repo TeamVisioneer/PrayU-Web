@@ -26,7 +26,7 @@ const KakaoCallBack = () => {
       minPickableCount: 1,
     })
       .then(function (response) {
-        alert("success: " + JSON.stringify(response));
+        console.log(response);
       })
       .catch(function (error) {
         console.log(error);
