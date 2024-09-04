@@ -21,7 +21,8 @@ export const PrayTypeDatas = {
     emoji: "🙏",
     text: "기도해요",
     icon: prayIconOnly,
-    bgColor: "bg-[#6DCAEC]",
+    bgColor: "bg-gradient-to-br from-[#6DCAEC] to-[#1EA6D8]",
+    shadowColor: "shadow-[0_5px_5px_rgb(50,175,221,0.25)]",
   },
   [PrayType.GOOD]: {
     img: goodIcon,
@@ -29,7 +30,8 @@ export const PrayTypeDatas = {
     emoji: "👍",
     text: "힘내세요",
     icon: goodIconOnly,
-    bgColor: "bg-[#9A7FFF]",
+    bgColor: "bg-gradient-to-br from-[#A58DFF] to-[#8163EE]",
+    shadowColor: "shadow-[0_5px_5px_rgb(129,100,238,0.25)]",
   },
   [PrayType.LIKE]: {
     img: likeIcon,
@@ -37,6 +39,7 @@ export const PrayTypeDatas = {
     emoji: "❤️",
     text: "응원해요",
     icon: likeIconOnly,
-    bgColor: "bg-[#FF888C]",
+    bgColor: "bg-gradient-to-br from-[#FF878C] to-[#F14950]",
+    shadowColor: "shadow-[0_5px_5px_rgb(235,87,93,0.25)]",
   },
 };
