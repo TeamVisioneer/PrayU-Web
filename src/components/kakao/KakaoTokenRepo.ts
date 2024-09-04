@@ -1,17 +1,9 @@
 import * as Sentry from "@sentry/react";
-
-export interface KakaoTokenResponse {
-  access_token: string;
-  expires_in: number;
-  refresh_token: string;
-  refresh_token_expires_in: number;
-  scope: string;
-  token_type: string;
-}
-export interface KakaoTokens {
-  accessToken: string | null;
-  refreshToken: string | null;
-}
+import {
+  KakaoTokenRefreshResponse,
+  KakaoTokenResponse,
+  KakaoTokens,
+} from "./Kakao";
 
 export class KakaoTokenRepo {
   private static readonly ACCESS_TOKEN_COOKIE_NAME = "kakao_access_token";
@@ -40,7 +32,7 @@ export class KakaoTokenRepo {
         },
         body: new URLSearchParams(data).toString(),
       });
-      const responseData = await response.json();
+      const responseData: KakaoTokenResponse = await response.json();
       return responseData;
     } catch (error) {
       Sentry.captureException(error);
@@ -48,11 +40,14 @@ export class KakaoTokenRepo {
     }
   }
 
-  static async refreshKakaoToken(refreshToken: string) {
+  static async refreshKakaoToken(
+    refreshToken: string
+  ): Promise<KakaoTokenRefreshResponse | null> {
     const data = {
       grant_type: "refresh_token",
       client_id: this.CLIENT_ID,
       refresh_token: refreshToken,
+      client_secret: this.CLIENT_SECRET,
     };
 
     try {
@@ -63,12 +58,10 @@ export class KakaoTokenRepo {
         },
         body: new URLSearchParams(data),
       });
-
-      const responseData = await response.json();
+      const responseData: KakaoTokenResponse = await response.json();
       return responseData;
     } catch (error) {
       Sentry.captureException(error);
-
       return null;
     }
   }
@@ -93,7 +86,9 @@ export class KakaoTokenRepo {
     return kakaoTokens;
   }
 
-  static setKakaoTokensInCookie(kakaoTokenResponse: KakaoTokenResponse) {
+  static setKakaoTokensInCookie(
+    kakaoTokenResponse: KakaoTokenResponse | KakaoTokenRefreshResponse
+  ) {
     const now = new Date();
 
     const accessTokenExpires = new Date(
@@ -103,7 +98,10 @@ export class KakaoTokenRepo {
       kakaoTokenResponse.access_token
     }; expires=${accessTokenExpires.toUTCString()}; path=/; secure; HttpOnly`;
 
-    if (kakaoTokenResponse.refresh_token) {
+    if (
+      kakaoTokenResponse.refresh_token &&
+      kakaoTokenResponse.refresh_token_expires_in
+    ) {
       const refreshTokenExpires = new Date(
         now.getTime() + kakaoTokenResponse.refresh_token_expires_in * 1000
       );

@@ -1,6 +1,9 @@
 import { getDomainUrl } from "@/lib/utils";
 import { KakaoTokenRepo, KakaoTokens } from "./KakaoTokenRepo";
+import * as Sentry from "@sentry/react";
+import { KakaoTokenRefreshResponse } from "./Kakao";
 
+// 본 컨트롤러 사용처에서 로그인 페이지로 이동 할 수 있다는 것 인지
 export class KakaoController {
   private kakaoTokens: KakaoTokens;
   private baseUrl: string;
@@ -13,15 +16,14 @@ export class KakaoController {
       window.Kakao.Auth.setAccessToken(this.kakaoTokens.accessToken);
     } else if (this.kakaoTokens.refreshToken) {
       KakaoTokenRepo.refreshKakaoToken(this.kakaoTokens.refreshToken)
-        .then((newAccessToken) => {
-          if (newAccessToken) {
-            window.Kakao.Auth.setAccessToken(newAccessToken);
-          } else {
-            console.error("Failed to refresh access token.");
+        .then((response: KakaoTokenRefreshResponse | null) => {
+          if (response) {
+            KakaoTokenRepo.setKakaoTokensInCookie(response);
+            window.Kakao.Auth.setAccessToken(response.access_token);
           }
         })
         .catch((error) => {
-          console.error("Error while refreshing access token:", error);
+          Sentry.captureException(error);
         });
     } else {
       window.Kakao.Auth.authorize({
@@ -38,8 +40,8 @@ export class KakaoController {
       .then((response) => {
         alert("success: " + JSON.stringify(response));
       })
-      .catch((error: Error) => {
-        console.log(error);
+      .catch((error) => {
+        Sentry.captureException(error);
       });
   }
 
@@ -53,7 +55,7 @@ export class KakaoController {
         console.log(response);
       })
       .catch((error: Error) => {
-        console.log(error);
+        Sentry.captureException(error);
       });
   }
 
@@ -66,7 +68,7 @@ export class KakaoController {
         alert("success: " + JSON.stringify(response));
       })
       .catch((error: Error) => {
-        console.log(error);
+        Sentry.captureException(error);
       });
   }
 
@@ -81,7 +83,7 @@ export class KakaoController {
         alert("success: " + JSON.stringify(response));
       })
       .catch((error: Error) => {
-        console.log(error);
+        Sentry.captureException(error);
       });
   }
 }

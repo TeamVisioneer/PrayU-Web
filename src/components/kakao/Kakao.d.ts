@@ -32,7 +32,28 @@ interface KakaoAPIRequestParams {
   data?: Record<string, unknown>;
 }
 
-interface KakaoAPIResponse {}
+export interface KakaoTokenResponse {
+  token_type: string;
+  access_token: string;
+  id_token?: string;
+  expires_in: number;
+  refresh_token: string;
+  refresh_token_expires_in: number;
+  scope?: string;
+}
+
+export interface KakaoTokenRefreshResponse {
+  token_type: string;
+  access_token: string;
+  id_token?: string;
+  expires_in: number;
+  refresh_token?: string;
+  refresh_token_expires_in?: number;
+}
+export interface KakaoTokens {
+  accessToken: string | null;
+  refreshToken: string | null;
+}
 
 interface KakaoProfileResponse extends KakaoAPIResponse {
   id: number;

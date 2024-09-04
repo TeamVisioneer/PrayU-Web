@@ -2,6 +2,7 @@ import { getDomainUrl } from "@/lib/utils";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { KakaoTokenRepo } from "./KakaoTokenRepo";
+import { KakaoTokenResponse } from "./Kakao";
 
 const KakaoCallBack = () => {
   const location = useLocation();
@@ -15,9 +16,9 @@ const KakaoCallBack = () => {
       KakaoTokenRepo.fetchKakaoToken(
         code,
         `${baseUrl}/auth/kakao/callback`
-      ).then((tokenResponse) => {
-        if (tokenResponse) {
-          KakaoTokenRepo.setKakaoTokensInCookie(tokenResponse);
+      ).then((response: KakaoTokenResponse | null) => {
+        if (response) {
+          KakaoTokenRepo.setKakaoTokensInCookie(response);
         }
       });
     }
