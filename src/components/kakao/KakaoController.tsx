@@ -1,7 +1,11 @@
 import { getDomainUrl } from "@/lib/utils";
 
 import * as Sentry from "@sentry/react";
-import { KakaoTokenRefreshResponse, KakaoTokens } from "./Kakao";
+import {
+  KakaoLinkObject,
+  KakaoTokenRefreshResponse,
+  KakaoTokens,
+} from "./Kakao";
 import { KakaoTokenRepo } from "./KakaoTokenRepo";
 
 // 본 컨트롤러 사용처에서 로그인 페이지로 이동 할 수 있다는 것 인지
@@ -34,26 +38,27 @@ export class KakaoController {
     }
   }
 
-  public getMyProfiles(): void {
+  public getMyProfiles() {
     window.Kakao.API.request({
       url: "/v1/api/talk/profile",
     })
       .then((response) => {
-        alert("success: " + JSON.stringify(response));
+        return response;
       })
       .catch((error) => {
         Sentry.captureException(error);
+        return null;
       });
   }
 
-  public selectUsers(): void {
+  public selectUsers() {
     window.Kakao.Picker.selectFriends({
       title: "친구 선택",
       maxPickableCount: 10,
       minPickableCount: 1,
     })
       .then((response) => {
-        console.log(response);
+        return response;
       })
       .catch((error: Error) => {
         Sentry.captureException(error);
@@ -65,23 +70,39 @@ export class KakaoController {
       url: "/v1/api/talk/friends",
     })
       .then((response) => {
-        console.log(response);
-        alert("success: " + JSON.stringify(response));
+        return response;
       })
       .catch((error: Error) => {
         Sentry.captureException(error);
       });
   }
 
-  public sendMessage(baseUrl: string): void {
+  public sendMessageForMe(kakaoLinkObject: KakaoLinkObject): void {
     window.Kakao.API.request({
-      url: "/v2/api/talk/memo/scrap/send",
+      url: "/v2/api/talk/memo/default/send",
+      data: { template_object: kakaoLinkObject },
+    })
+      .then((response) => {
+        return response;
+      })
+      .catch((error: Error) => {
+        Sentry.captureException(error);
+      });
+  }
+
+  public sendMessageForFriend(
+    kakaoLinkObject: KakaoLinkObject,
+    friendUUID: string[]
+  ): void {
+    window.Kakao.API.request({
+      url: "/v1/api/talk/friends/message/default/send",
       data: {
-        request_url: baseUrl,
+        receiver_uuids: friendUUID,
+        template_object: kakaoLinkObject,
       },
     })
       .then((response) => {
-        alert("success: " + JSON.stringify(response));
+        return response;
       })
       .catch((error: Error) => {
         Sentry.captureException(error);

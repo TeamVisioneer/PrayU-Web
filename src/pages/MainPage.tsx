@@ -186,16 +186,6 @@ const MainPage: React.FC = () => {
       </Carousel>
 
       {user ? <PrayUStartBtn /> : <KakaoLoginBtn />}
-      <Button
-        onClick={() => {
-          window.Kakao.Auth.authorize({
-            redirectUri: `${baseUrl}/auth/kakao/callback`,
-            scope: "friends,talk_message",
-          });
-        }}
-      >
-        카카오 선택 동의 및 프로필
-      </Button>
     </div>
   );
 };
