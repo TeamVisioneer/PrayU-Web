@@ -119,3 +119,20 @@ interface KakaoLinkObject {
     };
   }>;
 }
+
+interface KakaoMessageObject {
+  object_type: "feed"; // 'feed'로 고정
+  content: KakaoContent;
+}
+
+interface KakaoContent {
+  title: string;
+  description: string;
+  image_url: string;
+  link: KakaoLink;
+}
+
+interface KakaoLink {
+  web_url: string;
+  mobile_web_url: string;
+}

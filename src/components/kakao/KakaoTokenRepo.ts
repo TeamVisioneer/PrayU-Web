@@ -4,13 +4,41 @@ import {
   KakaoTokenResponse,
   KakaoTokens,
 } from "./Kakao";
+import { getDomainUrl } from "@/lib/utils";
 
 export class KakaoTokenRepo {
+  private static KAKAOTOKENS: KakaoTokens;
+  private static BASEURL: string;
   private static readonly ACCESS_TOKEN_COOKIE_NAME = "kakao_access_token";
   private static readonly REFRESH_TOKEN_COOKIE_NAME = "kakao_refresh_token";
   private static readonly CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
   private static readonly CLIENT_SECRET = import.meta.env
     .VITE_KAKAO_CLIENT_SECRET_KEY;
+
+  static async init() {
+    this.KAKAOTOKENS = KakaoTokenRepo.getKakaoTokensInCookie();
+    this.BASEURL = getDomainUrl();
+
+    if (this.KAKAOTOKENS.accessToken) {
+      window.Kakao.Auth.setAccessToken(this.KAKAOTOKENS.accessToken);
+    } else if (this.KAKAOTOKENS.refreshToken) {
+      KakaoTokenRepo.refreshKakaoToken(this.KAKAOTOKENS.refreshToken)
+        .then((response: KakaoTokenRefreshResponse | null) => {
+          if (response) {
+            KakaoTokenRepo.setKakaoTokensInCookie(response);
+            window.Kakao.Auth.setAccessToken(response.access_token);
+          }
+        })
+        .catch((error) => {
+          Sentry.captureException(error);
+        });
+    } else {
+      window.Kakao.Auth.authorize({
+        redirectUri: `${this.BASEURL}/auth/kakao/callback`,
+        scope: "friends,talk_message",
+      });
+    }
+  }
 
   static async fetchKakaoToken(
     code: string,
@@ -96,7 +124,7 @@ export class KakaoTokenRepo {
     );
     document.cookie = `${this.ACCESS_TOKEN_COOKIE_NAME}=${
       kakaoTokenResponse.access_token
-    }; expires=${accessTokenExpires.toUTCString()}; path=/; secure; HttpOnly`;
+    }; expires=${accessTokenExpires.toUTCString()}; path=/`;
 
     if (
       kakaoTokenResponse.refresh_token &&
@@ -107,7 +135,7 @@ export class KakaoTokenRepo {
       );
       document.cookie = `${this.REFRESH_TOKEN_COOKIE_NAME}=${
         kakaoTokenResponse.refresh_token
-      }; expires=${refreshTokenExpires.toUTCString()}; path=/; secure; HttpOnly`;
+      }; expires=${refreshTokenExpires.toUTCString()}; path=/`;
     }
   }
 }
