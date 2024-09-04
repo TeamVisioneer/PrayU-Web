@@ -1,7 +1,8 @@
 import { getDomainUrl } from "@/lib/utils";
-import { KakaoTokenRepo, KakaoTokens } from "./KakaoTokenRepo";
+
 import * as Sentry from "@sentry/react";
-import { KakaoTokenRefreshResponse } from "./Kakao";
+import { KakaoTokenRefreshResponse, KakaoTokens } from "./Kakao";
+import { KakaoTokenRepo } from "./KakaoTokenRepo";
 
 // 본 컨트롤러 사용처에서 로그인 페이지로 이동 할 수 있다는 것 인지
 export class KakaoController {

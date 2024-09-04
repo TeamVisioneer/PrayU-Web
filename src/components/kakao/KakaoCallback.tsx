@@ -17,9 +17,7 @@ const KakaoCallBack = () => {
         code,
         `${baseUrl}/auth/kakao/callback`
       ).then((response: KakaoTokenResponse | null) => {
-        if (response) {
-          KakaoTokenRepo.setKakaoTokensInCookie(response);
-        }
+        if (response) KakaoTokenRepo.setKakaoTokensInCookie(response);
       });
     }
   }, [location.search, baseUrl]);
