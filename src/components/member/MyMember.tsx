@@ -100,7 +100,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
                 <img
                   src={PrayTypeDatas[type].img}
                   alt={PrayTypeDatas[type].emoji}
-                  className="w-4 h-4 opacity-90"
+                  className="w-5 h-5 opacity-90"
                 />
                 <p className="text-sm text-dark">
                   {prayCard
