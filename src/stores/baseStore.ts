@@ -37,6 +37,8 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
 import { analytics } from "@/analytics/analytics";
 import { updateProfile } from "@/apis/profiles";
+import { Friend } from "@/components/kakao/Kakao";
+import { KakaoController } from "@/components/kakao/KakaoController";
 
 export interface BaseStore {
   // user
@@ -47,6 +49,8 @@ export interface BaseStore {
   signOut: () => Promise<void>;
   setUserPlan: (userId: string) => void;
   updateProfile: (userId: string, kakaoId: string) => Promise<Profiles | null>;
+  kakaoFriendList: Friend[];
+  fetchKakaoFriendList: () => void;
 
   // group
   groupList: Group[] | null;
@@ -275,6 +279,14 @@ const useBaseStore = create<BaseStore>()(
     ): Promise<Profiles | null> => {
       const profile = await updateProfile(userId, kakaoId);
       return profile;
+    },
+
+    kakaoFriendList: [],
+    fetchKakaoFriendList: async () => {
+      const response = await KakaoController.fetchFriends();
+      set((state) => {
+        if (response) state.kakaoFriendList = response.elements;
+      });
     },
 
     // group

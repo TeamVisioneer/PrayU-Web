@@ -7,8 +7,6 @@ import {
 import { getDomainUrl } from "@/lib/utils";
 
 export class KakaoTokenRepo {
-  private static KAKAOTOKENS: KakaoTokens;
-  private static BASEURL: string;
   private static readonly ACCESS_TOKEN_COOKIE_NAME = "kakao_access_token";
   private static readonly REFRESH_TOKEN_COOKIE_NAME = "kakao_refresh_token";
   private static readonly CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
@@ -16,13 +14,13 @@ export class KakaoTokenRepo {
     .VITE_KAKAO_CLIENT_SECRET_KEY;
 
   static async init() {
-    this.KAKAOTOKENS = KakaoTokenRepo.getKakaoTokensInCookie();
-    this.BASEURL = getDomainUrl();
+    const KAKAOTOKENS = KakaoTokenRepo.getKakaoTokensInCookie();
+    const BASEURL = getDomainUrl();
 
-    if (this.KAKAOTOKENS.accessToken) {
-      window.Kakao.Auth.setAccessToken(this.KAKAOTOKENS.accessToken);
-    } else if (this.KAKAOTOKENS.refreshToken) {
-      KakaoTokenRepo.refreshKakaoToken(this.KAKAOTOKENS.refreshToken)
+    if (KAKAOTOKENS.accessToken) {
+      window.Kakao.Auth.setAccessToken(KAKAOTOKENS.accessToken);
+    } else if (KAKAOTOKENS.refreshToken) {
+      KakaoTokenRepo.refreshKakaoToken(KAKAOTOKENS.refreshToken)
         .then((response: KakaoTokenRefreshResponse | null) => {
           if (response) {
             KakaoTokenRepo.setKakaoTokensInCookie(response);
@@ -34,7 +32,7 @@ export class KakaoTokenRepo {
         });
     } else {
       window.Kakao.Auth.authorize({
-        redirectUri: `${this.BASEURL}/auth/kakao/callback`,
+        redirectUri: `${BASEURL}/auth/kakao/callback`,
         scope: "friends,talk_message",
       });
     }

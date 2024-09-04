@@ -121,18 +121,23 @@ interface KakaoLinkObject {
 }
 
 interface KakaoMessageObject {
-  object_type: "feed"; // 'feed'로 고정
-  content: KakaoContent;
-}
-
-interface KakaoContent {
-  title: string;
-  description: string;
-  image_url: string;
-  link: KakaoLink;
-}
-
-interface KakaoLink {
-  web_url: string;
-  mobile_web_url: string;
+  object_type: "feed";
+  content: {
+    title: string;
+    description: string;
+    image_url: string;
+    link: {
+      web_url: string;
+      mobile_web_url: string;
+    };
+  };
+  buttons: [
+    {
+      title: string;
+      link: {
+        mobile_web_url: string;
+        web_url: string;
+      };
+    }
+  ];
 }

@@ -9,7 +9,7 @@ export const fetchMemberListByGroupId = async (
   try {
     const { data, error } = await supabase
       .from("member")
-      .select(`*, profiles (id, full_name, avatar_url)`)
+      .select(`*, profiles (id, full_name, avatar_url, kakao_id)`)
       .eq("group_id", groupId)
       .is("deleted_at", null)
       .order("updated_at", { ascending: false });
@@ -54,7 +54,7 @@ export const getMember = async (
   try {
     const { data, error } = await supabase
       .from("member")
-      .select(`*, profiles (id, full_name, avatar_url)`)
+      .select(`*, profiles (id, full_name, avatar_url, kakao_id)`)
       .eq("user_id", userId)
       .eq("group_id", groupId)
       .is("deleted_at", null);

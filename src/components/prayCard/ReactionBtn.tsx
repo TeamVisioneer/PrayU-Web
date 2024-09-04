@@ -3,6 +3,8 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { sleep } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
+import { KakaoMessageObject } from "../kakao/Kakao";
+import { KakaoController } from "../kakao/KakaoController";
 
 interface EventOption {
   where: string;
@@ -29,13 +31,45 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const updatePray = useBaseStore((state) => state.updatePray);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
 
+  const kakaoFriendList = useBaseStore((state) => state.kakaoFriendList);
+  const targetFriend = kakaoFriendList.find(
+    (friend) => String(friend.id) === prayCard.profiles.kakao_id
+  );
+  const kakaoMessage: KakaoMessageObject = {
+    object_type: "feed",
+    content: {
+      title: "🔔 PrayU 기도 알림",
+      description: "당신을 위해 기도해주었어요",
+      image_url: "",
+      link: {
+        web_url: "https://prayu-staging.vercel.app",
+        mobile_web_url: "https://prayu-staging.vercel.app",
+      },
+    },
+    buttons: [
+      {
+        title: "오늘의 기도 시작",
+        link: {
+          mobile_web_url: "https://prayu-staging.vercel.app",
+          web_url: "https://prayu-staging.vercel.app",
+        },
+      },
+    ],
+  };
+
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard.id]);
 
   const handleClick = (prayType: PrayType) => () => {
     if (!isPrayToday) setIsPrayToday(true);
 
-    if (!hasPrayed) createPray(prayCard.id, currentUserId, prayType);
-    else updatePray(prayCard.id, currentUserId, prayType);
+    if (!hasPrayed) {
+      createPray(prayCard.id, currentUserId, prayType);
+      if (targetFriend) {
+        KakaoController.sendMessageForFriends(kakaoMessage, [
+          targetFriend.uuid,
+        ]);
+      }
+    } else updatePray(prayCard.id, currentUserId, prayType);
 
     if (prayCardCarouselApi) {
       sleep(500).then(() => {

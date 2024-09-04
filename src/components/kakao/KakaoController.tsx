@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/react";
-import { KakaoMessageObject } from "./Kakao";
+import { KakaoFriendsResponse, KakaoMessageObject } from "./Kakao";
 import { KakaoTokenRepo } from "./KakaoTokenRepo";
 
 // 본 컨트롤러 사용처에서 로그인 페이지로 이동 할 수 있다는 것 인지
@@ -8,50 +8,49 @@ export class KakaoController {
     KakaoTokenRepo.init();
   }
 
-  public getMyProfiles() {
-    window.Kakao.API.request({
-      url: "/v1/api/talk/profile",
-    })
-      .then((response) => {
-        console.log(response);
-        return response;
-      })
-      .catch((error) => {
-        Sentry.captureException(error);
-        return null;
+  static async getMyProfiles() {
+    try {
+      const response = await window.Kakao.API.request({
+        url: "/v1/api/talk/profile",
       });
+      return response;
+    } catch (error) {
+      Sentry.captureException(error);
+      console.error(error);
+      return null;
+    }
   }
 
-  public selectUsers() {
-    window.Kakao.Picker.selectFriends({
-      title: "친구 선택",
-      maxPickableCount: 10,
-      minPickableCount: 1,
-    })
-      .then((response) => {
-        return response;
-      })
-      .catch((error: Error) => {
-        Sentry.captureException(error);
+  static async selectUsers() {
+    try {
+      const response = await window.Kakao.Picker.selectFriends({
+        title: "친구 선택",
+        maxPickableCount: 10,
+        minPickableCount: 1,
       });
+      return response;
+    } catch (error) {
+      Sentry.captureException(error);
+      console.error(error);
+      return null;
+    }
   }
 
-  public fetchFriends() {
-    window.Kakao.API.request({
-      url: "/v1/api/talk/friends",
-    })
-      .then((response) => {
-        console.log(response);
-        return response;
-      })
-      .catch((error: Error) => {
-        console.error(error);
-        Sentry.captureException(error);
-        return null;
+  static async fetchFriends(): Promise<KakaoFriendsResponse | null> {
+    try {
+      const response = await window.Kakao.API.request({
+        url: "/v1/api/talk/friends",
+        data: { offset: 0, limit: 100 },
       });
+      return response as KakaoFriendsResponse;
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      return null;
+    }
   }
 
-  public sendMessageForMe(message: KakaoMessageObject) {
+  static async sendMessageForMe(message: KakaoMessageObject) {
     window.Kakao.API.request({
       url: "/v2/api/talk/memo/default/send",
       data: { template_object: message },
@@ -64,7 +63,7 @@ export class KakaoController {
       });
   }
 
-  public sendMessageForFriends(
+  static async sendMessageForFriends(
     message: KakaoMessageObject,
     friendsUUID: string[]
   ) {
