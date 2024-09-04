@@ -10,6 +10,18 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
 import { useRef } from "react";
 import { Textarea } from "../ui/textarea";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { RiMoreFill } from "react-icons/ri";
+import { FiEdit } from "react-icons/fi";
+import { LuCopy } from "react-icons/lu";
+import { RiDeleteBack2Line } from "react-icons/ri";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -155,32 +167,60 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   return (
-    <div className="flex flex-col gap-6 h-70vh ">
-      {MyPrayCardBody}
-      <div
-        className="w-full focus:outline-none"
-        onClick={() => onClickPrayerList()}
-      >
-        <div className="flex justify-center gap-2">
-          {Object.values(PrayType).map((type) => (
-            <div
-              key={type}
-              className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
-            >
-              <div className="text-sm w-5 h-5">
-                <img
-                  src={PrayTypeDatas[type].img}
-                  alt={PrayTypeDatas[type].emoji}
-                  className="w-5 h-5"
-                />
+    <div>
+      <div className="flex justify-end px-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <RiMoreFill className="text-2xl" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem className="flex justify-between">
+              <FiEdit />
+              수정하기
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="flex justify-between">
+              <LuCopy />
+              복사하기
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="flex justify-between text-red-600">
+              <RiDeleteBin6Line />
+              삭제하기
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="flex flex-col gap-6 h-70vh ">
+        {MyPrayCardBody}
+        <div
+          className="w-full focus:outline-none"
+          onClick={() => onClickPrayerList()}
+        >
+          <div className="flex justify-center gap-2">
+            {Object.values(PrayType).map((type) => (
+              <div
+                key={type}
+                className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
+              >
+                <div className="text-sm w-5 h-5">
+                  <img
+                    src={PrayTypeDatas[type].img}
+                    alt={PrayTypeDatas[type].emoji}
+                    className="w-5 h-5"
+                  />
+                </div>
+                <div className="text-sm">
+                  {
+                    prayCard.pray.filter((pray) => pray.pray_type === type)
+                      .length
+                  }
+                </div>
               </div>
-              <div className="text-sm">
-                {prayCard.pray.filter((pray) => pray.pray_type === type).length}
-              </div>
+            ))}
+            <div className="bg-white rounded-lg flex justify-center items-center p-1">
+              <img className="w-5" src={iconUserMono} alt="user-icon" />
             </div>
-          ))}
-          <div className="bg-white rounded-lg flex justify-center items-center p-1">
-            <img className="w-5" src={iconUserMono} alt="user-icon" />
           </div>
         </div>
       </div>

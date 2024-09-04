@@ -27,5 +27,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "supabase", "analytics", "analytics/amplitude.d.ts"]
+  "include": [
+    "src",
+    "supabase",
+    "analytics",
+    "analytics/amplitude.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ]
 }
