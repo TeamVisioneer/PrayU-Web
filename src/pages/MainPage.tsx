@@ -37,7 +37,7 @@ const MainPage: React.FC = () => {
     if (!api) return;
     setCurrentIndex(index);
     api.scrollTo(index);
-    analyticsTrack("클릭_메인_카로셀_도트", { index });
+    analyticsTrack("클릭_메인_캐러셀도트", { index });
   };
 
   const CarouselDots = () => (
