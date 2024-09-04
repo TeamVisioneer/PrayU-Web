@@ -1,6 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
+import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 
 interface EventOption {
   where: string;
@@ -14,9 +15,14 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     (state) => state.setIsOpenTodayPrayDrawer
   );
   const onClickTodayPrayBtn = () => {
-    window.history.pushState(null, "", window.location.pathname);
-    setIsOpenTodayPrayDrawer(true);
-    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
+    if (!KakaoTokenRepo.isInit()) {
+      analyticsTrack("페이지_카카오_로그인", { where: eventOption.where });
+      KakaoTokenRepo.init();
+    } else {
+      window.history.pushState(null, "", window.location.pathname);
+      setIsOpenTodayPrayDrawer(true);
+      analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
+    }
   };
 
   return (

@@ -40,6 +40,11 @@ export class KakaoTokenRepo {
     }
   }
 
+  static isInit() {
+    const kakaoTokens = KakaoTokenRepo.getKakaoTokensInCookie();
+    return Boolean(kakaoTokens.accessToken) || Boolean(kakaoTokens.accessToken);
+  }
+
   static async fetchKakaoToken(
     code: string,
     redirectUri: string

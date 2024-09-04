@@ -12,6 +12,7 @@ import {
   PrayCardWithProfiles,
   TodayPrayTypeHash,
   PrayWithProfiles,
+  Profiles,
 } from "../../supabase/types/tables";
 import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
 import {
@@ -35,6 +36,7 @@ import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
 import { analytics } from "@/analytics/analytics";
+import { updateProfile } from "@/apis/profiles";
 
 export interface BaseStore {
   // user
@@ -44,6 +46,7 @@ export interface BaseStore {
   getUser: () => void;
   signOut: () => Promise<void>;
   setUserPlan: (userId: string) => void;
+  updateProfile: (userId: string, kakaoId: string) => Promise<Profiles>;
 
   // group
   groupList: Group[] | null;
@@ -265,6 +268,10 @@ const useBaseStore = create<BaseStore>()(
         }
         return state;
       });
+    },
+    updateProfile: async (userId: string, kakaoId: string) => {
+      const profile = await updateProfile(userId, kakaoId);
+      return profile;
     },
 
     // group
