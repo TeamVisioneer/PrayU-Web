@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      letterSpacing: {
+        tightest: "-0.05em", // 자간 -5% 설정
+      },
       boxShadow: {
         button: "0 10px 10px rgba(188, 190, 208, 0.8)",
         // custom
