@@ -46,7 +46,7 @@ export interface BaseStore {
   getUser: () => void;
   signOut: () => Promise<void>;
   setUserPlan: (userId: string) => void;
-  updateProfile: (userId: string, kakaoId: string) => Promise<Profiles>;
+  updateProfile: (userId: string, kakaoId: string) => Promise<Profiles | null>;
 
   // group
   groupList: Group[] | null;
@@ -269,7 +269,10 @@ const useBaseStore = create<BaseStore>()(
         return state;
       });
     },
-    updateProfile: async (userId: string, kakaoId: string) => {
+    updateProfile: async (
+      userId: string,
+      kakaoId: string
+    ): Promise<Profiles | null> => {
       const profile = await updateProfile(userId, kakaoId);
       return profile;
     },
