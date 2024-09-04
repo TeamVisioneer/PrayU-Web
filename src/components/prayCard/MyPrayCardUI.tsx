@@ -101,7 +101,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
         }`}
       >
         {!isEditingPrayCard && (
-          <div className="bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+          <div className="bg-gradient-to-r from-start via-middle via-52% to-end flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
             <div className="flex items-center gap-2 w-full">
               <div className="flex gap-2 items-center">
                 <p className="text-xl text-white">

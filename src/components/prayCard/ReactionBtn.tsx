@@ -63,7 +63,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
               !hasPrayed
                 ? `opacity-90 ${emojiData.shadowColor}`
                 : todayPrayTypeHash[prayCard.id] == type
-                ? "opacity-90 inner-shadow"
+                ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
                 : `opacity-20 ${emojiData.shadowColor}`
             }`}
             disabled={todayPrayTypeHash[prayCard.id] == type}
