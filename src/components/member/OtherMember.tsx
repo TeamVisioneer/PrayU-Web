@@ -20,7 +20,6 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
 
   const onClickOtherMember = () => {
     window.history.pushState(null, "", window.location.pathname);
-    analyticsTrack("드로어_멤버_구성원", { member: member.user_id });
     analyticsTrack("클릭_멤버_구성원", { member: member.user_id });
     setOtherMember(member);
     setIsOpenOtherMemberDrawer(true);

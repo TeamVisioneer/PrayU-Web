@@ -49,9 +49,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyPrayDrawer(true);
     event.stopPropagation();
-    analyticsTrack("드로어_기도카드_반응결과", {
-      where: "MyMember",
-    });
+
     analyticsTrack("클릭_기도카드_반응결과", {
       where: "MyMember",
     });
@@ -126,10 +124,6 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   const onClickMyMember = () => {
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyMemberDrawer(true);
-    analyticsTrack("드로어_멤버_본인", {
-      group_id: groupId,
-      where: "MyMember",
-    });
     analyticsTrack("클릭_멤버_본인", {
       group_id: groupId,
       where: "MyMember",

@@ -79,15 +79,14 @@ const App = () => {
 const AnalyticsTracker = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname;
-  console.log("from", from);
 
   useEffect(() => {
     switch (location.pathname) {
       case "/":
         if (from)
-          analytics.track("페이지_메인_리다이렉트", {
+          analytics.track("페이지_메인", {
             title: "Main Page",
-            from,
+            where: from,
           });
         else analytics.track("페이지_메인", { title: "Main Page" });
         break;
