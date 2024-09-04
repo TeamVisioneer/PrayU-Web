@@ -1,9 +1,5 @@
 import * as Sentry from "@sentry/react";
-import {
-  KakaoFriendsResponse,
-  KakaoLinkObject,
-  KakaoMessageObject,
-} from "./Kakao";
+import { KakaoMessageObject } from "./Kakao";
 import { KakaoTokenRepo } from "./KakaoTokenRepo";
 
 // 본 컨트롤러 사용처에서 로그인 페이지로 이동 할 수 있다는 것 인지
