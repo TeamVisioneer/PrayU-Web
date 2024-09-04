@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
-import { analytics } from "@/analytics/analytics";
+import { analytics, analyticsTrack } from "@/analytics/analytics";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -37,6 +37,7 @@ const MainPage: React.FC = () => {
     if (!api) return;
     setCurrentIndex(index);
     api.scrollTo(index);
+    analyticsTrack("클릭_메인_캐러셀도트", { index });
   };
 
   const CarouselDots = () => (

@@ -49,6 +49,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyPrayDrawer(true);
     event.stopPropagation();
+
     analyticsTrack("클릭_기도카드_반응결과", {
       where: "MyMember",
     });

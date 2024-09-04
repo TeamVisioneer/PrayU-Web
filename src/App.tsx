@@ -78,24 +78,33 @@ const App = () => {
 
 const AnalyticsTracker = () => {
   const location = useLocation();
+  const from = location.state?.from?.pathname;
 
   useEffect(() => {
     switch (location.pathname) {
       case "/":
-        analytics.track("페이지_메인", { title: "Main Page" });
+        analytics.track("페이지_메인", {
+          title: "Main Page",
+          where: from,
+        });
         break;
       case "/group/new":
-        analytics.track("페이지_그룹_생성", { title: "Group Create Page" });
+        analytics.track("페이지_그룹_생성", {
+          title: "Group Create Page",
+          where: from,
+        });
         break;
       case "/praycard/new":
         analytics.track("페이지_기도카드_생성", {
           title: "PrayCard Create Page",
+          where: from,
         });
         break;
       default:
         if (location.pathname.startsWith("/group/")) {
           analytics.track("페이지_그룹_홈", {
             title: "Group Page",
+            where: from,
           });
         }
         break;

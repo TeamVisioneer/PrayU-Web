@@ -55,6 +55,7 @@ const ShareDrawer: React.FC = () => {
     if (!api) return;
     setCurrentIndex(index);
     api.scrollTo(index);
+    analyticsTrack("클릭_공유_캐러셀도트", { index });
   };
 
   const CarouselDots = () => (
