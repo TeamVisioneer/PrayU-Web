@@ -105,15 +105,17 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     analyticsTrack("클릭_기도카드_복사", {});
   };
 
+  const onClickDeletePrayCard = () => {
+    toast({
+      description: "아직 개발중이에요 👀",
+    });
+    analyticsTrack("클릭_기도카드_삭제", {});
+    return;
+  };
+
   useEffect(() => {
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
-
-  useEffect(() => {
-    if (isEditingPrayCard && textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  }, [isEditingPrayCard]);
 
   if (!userPrayCardList) {
     return (
@@ -229,7 +231,10 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
               복사하기
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex justify-between text-red-600">
+            <DropdownMenuItem
+              className="flex justify-between text-red-600"
+              onClick={() => onClickDeletePrayCard()}
+            >
               <RiDeleteBin6Line />
               삭제하기
             </DropdownMenuItem>
