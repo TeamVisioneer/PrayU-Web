@@ -4,7 +4,7 @@ import { MemberWithProfiles } from "supabase/types/tables";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
-import { FaEdit, FaSave } from "react-icons/fa";
+//import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
@@ -20,8 +20,8 @@ import {
 import { RiMoreFill } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
 import { LuCopy } from "react-icons/lu";
-import { RiDeleteBack2Line } from "react-icons/ri";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { toast } from "../ui/use-toast";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -80,9 +80,40 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     analyticsTrack("클릭_기도카드_저장", {});
   };
 
+  const onClickCopyPrayCard = () => {
+    let prayCardContent = "";
+    if (textareaRef.current) prayCardContent = textareaRef.current.value;
+
+    if (!prayCardContent) {
+      toast({
+        description: "⚠︎ 기도제목을 작성해주세요",
+      });
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(prayCardContent)
+      .then(() => {
+        toast({
+          description: "기도제목이 복사되었어요 🔗",
+        });
+      })
+      .catch((err) => {
+        console.error("복사하는 중 오류가 발생했습니다: ", err);
+      });
+
+    analyticsTrack("클릭_기도카드_복사", {});
+  };
+
   useEffect(() => {
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
+
+  useEffect(() => {
+    if (isEditingPrayCard && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [isEditingPrayCard]);
 
   if (!userPrayCardList) {
     return (
@@ -139,7 +170,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
               handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
             }
           />
-          <div className="absolute top-2 right-2">
+          {/* <div className="absolute top-2 right-2">
             {isEditingPrayCard ? (
               <button
                 className={`text-white rounded-full bg-middle/90 w-8 h-8 flex justify-center items-center ${
@@ -160,7 +191,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
                 <FaEdit className="text-white w-4 h-4" />
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -170,16 +201,30 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     <div>
       <div className="flex justify-end px-2">
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            onClick={() => {
+              analyticsTrack("클릭_기도카드_더보기", {});
+            }}
+          >
             <RiMoreFill className="text-2xl" />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem className="flex justify-between">
+            <DropdownMenuItem
+              className="flex justify-between"
+              onClick={() => {
+                setTimeout(() => {
+                  handleEditClick();
+                }, 180);
+              }}
+            >
               <FiEdit />
               수정하기
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex justify-between">
+            <DropdownMenuItem
+              className="flex justify-between"
+              onClick={() => onClickCopyPrayCard()}
+            >
               <LuCopy />
               복사하기
             </DropdownMenuItem>
