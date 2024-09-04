@@ -78,11 +78,18 @@ const App = () => {
 
 const AnalyticsTracker = () => {
   const location = useLocation();
+  const from = location.state?.from?.pathname;
+  console.log("from", from);
 
   useEffect(() => {
     switch (location.pathname) {
       case "/":
-        analytics.track("페이지_메인", { title: "Main Page" });
+        if (from)
+          analytics.track("페이지_메인_리다이렉트", {
+            title: "Main Page",
+            from,
+          });
+        else analytics.track("페이지_메인", { title: "Main Page" });
         break;
       case "/group/new":
         analytics.track("페이지_그룹_생성", { title: "Group Create Page" });
