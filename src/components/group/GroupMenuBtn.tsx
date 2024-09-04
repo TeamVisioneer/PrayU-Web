@@ -92,6 +92,11 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
     window.location.href = "http://pf.kakao.com/_XaHDG/posts";
   };
 
+  const onClickSignOut = () => {
+    analyticsTrack("클릭_로그아웃", {});
+    signOut();
+  };
+
   return (
     <Sheet open={isOpenGroupMenuSheet} onOpenChange={setIsOpenGroupMenuSheet}>
       <SheetTrigger
@@ -180,7 +185,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
             </a>
           </div>
 
-          <a className="cursor-pointer" onClick={() => signOut()}>
+          <a className="cursor-pointer" onClick={() => onClickSignOut()}>
             로그아웃
           </a>
         </div>

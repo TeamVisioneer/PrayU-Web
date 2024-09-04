@@ -16,6 +16,9 @@ const OpenContentDrawerBtn: React.FC = () => {
     analyticsTrack("클릭_컨텐츠_오늘의말씀", {
       where: "OpenContentDrawerBtn",
     });
+    analyticsTrack("클릭_오늘의기도_완료", {
+      where: "OpenContentDrawerBtn",
+    });
   };
 
   return (

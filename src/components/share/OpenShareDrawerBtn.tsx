@@ -24,6 +24,7 @@ const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
   const handleClickSharBtn = () => {
     window.history.pushState("", "", window.location.pathname);
     setIsOpenShareDrawer(true);
+    analyticsTrack("드로어_공유_그룹초대", { where: eventOption.where });
     analyticsTrack("클릭_공유_그룹초대", { where: eventOption.where });
   };
 

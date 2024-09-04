@@ -16,6 +16,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const onClickTodayPrayBtn = () => {
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenTodayPrayDrawer(true);
+    analyticsTrack("드로어_오늘의기도_시작", { where: eventOption.where });
     analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
   };
 
