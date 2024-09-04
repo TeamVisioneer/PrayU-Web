@@ -4,24 +4,13 @@ import { MemberWithProfiles } from "supabase/types/tables";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
-//import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
 import { useRef } from "react";
 import { Textarea } from "../ui/textarea";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { RiMoreFill } from "react-icons/ri";
-import { FiEdit } from "react-icons/fi";
-import { LuCopy } from "react-icons/lu";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { toast } from "../ui/use-toast";
+import MyPrayCardMoreBtn from "./MyPrayCardMoreBtn";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -81,18 +70,14 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   };
 
   const onClickCopyPrayCard = () => {
-    let prayCardContent = "";
-    if (textareaRef.current) prayCardContent = textareaRef.current.value;
-
-    if (!prayCardContent) {
+    if (!inputPrayCardContent) {
       toast({
         description: "⚠︎ 기도제목을 작성해주세요",
       });
       return;
     }
-
     navigator.clipboard
-      .writeText(prayCardContent)
+      .writeText(inputPrayCardContent)
       .then(() => {
         toast({
           description: "기도제목이 복사되었어요 🔗",
@@ -172,28 +157,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
               handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
             }
           />
-          {/* <div className="absolute top-2 right-2">
-            {isEditingPrayCard ? (
-              <button
-                className={`text-white rounded-full bg-middle/90 w-8 h-8 flex justify-center items-center ${
-                  !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={() =>
-                  handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
-                }
-                disabled={!inputPrayCardContent}
-              >
-                <FaSave className="text-white w-4 h-4" />
-              </button>
-            ) : (
-              <button
-                className="text-white rounded-full bg-end/90 w-8 h-8 flex justify-center items-center"
-                onClick={() => handleEditClick()}
-              >
-                <FaEdit className="text-white w-4 h-4" />
-              </button>
-            )}
-          </div> */}
         </div>
       </div>
     </div>
@@ -202,44 +165,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   return (
     <div>
       <div className="flex justify-end px-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            onClick={() => {
-              analyticsTrack("클릭_기도카드_더보기", {});
-            }}
-          >
-            <RiMoreFill className="text-2xl" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem
-              className="flex justify-between"
-              onClick={() => {
-                setTimeout(() => {
-                  handleEditClick();
-                }, 180);
-              }}
-            >
-              <FiEdit />
-              수정하기
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="flex justify-between"
-              onClick={() => onClickCopyPrayCard()}
-            >
-              <LuCopy />
-              복사하기
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="flex justify-between text-red-600"
-              onClick={() => onClickDeletePrayCard()}
-            >
-              <RiDeleteBin6Line />
-              삭제하기
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <MyPrayCardMoreBtn
+          handleEditClick={handleEditClick}
+          onClickCopyPrayCard={onClickCopyPrayCard}
+          onClickDeletePrayCard={onClickDeletePrayCard}
+        />
       </div>
       <div className="flex flex-col gap-6 h-70vh ">
         {MyPrayCardBody}
