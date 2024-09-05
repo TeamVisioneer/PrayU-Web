@@ -37,6 +37,7 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
 import { analytics } from "@/analytics/analytics";
 import { updateProfile } from "@/apis/profiles";
+import { fetchProfilesByUserId, updateProfileName } from "@/apis/profiles";
 
 export interface BaseStore {
   // user
@@ -155,6 +156,14 @@ export interface BaseStore {
 
   isOpenMyPrayDrawer: boolean;
   setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
+
+  // profiles
+  profile: Profiles | null;
+  fetchProfilesByUserId: (userId: string) => Promise<Profiles[] | null>;
+  updateProfileName: (
+    userId: string,
+    userName: string
+  ) => Promise<Profiles | null>;
 
   // share
   isOpenShareDrawer: boolean;
@@ -589,7 +598,19 @@ const useBaseStore = create<BaseStore>()(
         state.isOpenMyPrayDrawer = isOpenTodayPrayDrawer;
       });
     },
-
+    // profiles
+    profile: null,
+    fetchProfilesByUserId: async (userId: string) => {
+      const data = await fetchProfilesByUserId(userId);
+      set((state) => {
+        state.profile = data?.[0] || null;
+      });
+      return data;
+    },
+    updateProfileName: async (userId: string, userName: string) => {
+      const data = await updateProfileName(userId, userName);
+      return data;
+    },
     // share
     isOpenShareDrawer: false,
     isOpenContentDrawer: false,

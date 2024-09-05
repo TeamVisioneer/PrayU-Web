@@ -102,8 +102,11 @@ const PrayCardCreatePage: React.FC = () => {
           <div className="flex items-center gap-2">
             <img
               src={
-                user?.user_metadata.avatar_url ||
-                "/images/defaultProfileImage.png"
+                myMember
+                  ? myMember?.profiles.avatar_url ||
+                    "/images/defaultProfileImage.png"
+                  : user?.user_metadata.avatar_url ||
+                    "/images/defaultProfileImage.png"
               }
               onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                 e.currentTarget.src = "/images/defaultProfileImage.png";
@@ -111,7 +114,9 @@ const PrayCardCreatePage: React.FC = () => {
               className="w-7 h-7 rounded-full object-cover"
             />
             <p className="text-white text-lg ">
-              {user?.user_metadata.full_name}
+              {myMember
+                ? myMember?.profiles.full_name
+                : user?.user_metadata.full_name}
             </p>
           </div>
           <p className="text-sm text-white w-full text-left">

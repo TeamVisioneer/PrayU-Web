@@ -163,6 +163,12 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           )}
 
           <hr />
+          <a
+            href="/myProfile"
+            onClick={() => analyticsTrack("클릭_프로필_나", {})}
+          >
+            내 정보
+          </a>
           <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
             PrayU 홈
           </a>
