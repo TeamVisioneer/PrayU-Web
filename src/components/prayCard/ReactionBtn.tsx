@@ -5,6 +5,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { KakaoMessageObject } from "../kakao/Kakao";
 import { KakaoController } from "../kakao/KakaoController";
 import { getDomainUrl, sleep } from "@/lib/utils";
+import { useToast } from "../ui/use-toast";
 
 interface EventOption {
   where: string;
@@ -21,6 +22,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   prayCard,
   eventOption,
 }) => {
+  const { toast } = useToast();
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const prayCardCarouselApi = useBaseStore(
@@ -73,7 +75,11 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
       if (targetFriend) {
         KakaoController.sendMessageForFriends(kakaoMessage, [
           targetFriend.uuid,
-        ]);
+        ]).then(() => {
+          toast({
+            description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
+          });
+        });
       }
     } else updatePray(prayCard.id, currentUserId, prayType);
 
