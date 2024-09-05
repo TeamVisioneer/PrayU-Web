@@ -135,7 +135,10 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   return (
     <div>
       <div className="flex justify-end px-2">
-        <MyPrayCardMenuBtn handleEditClick={handleEditClick} />
+        <MyPrayCardMenuBtn
+          handleEditClick={handleEditClick}
+          prayCardId={prayCard.id}
+        />
       </div>
       <div className="flex flex-col gap-6 h-70vh ">
         {MyPrayCardBody}
