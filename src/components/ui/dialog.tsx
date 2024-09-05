@@ -1,10 +1,31 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { useEffect } from "react";
 
 import { cn } from "@/lib/utils";
 
-const Dialog = DialogPrimitive.Root;
+const Dialog = ({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Root>) => {
+  // Dialog Custom Start
+  const { onOpenChange } = props;
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (onOpenChange) {
+        onOpenChange(false);
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [onOpenChange]);
+  // Dialog Custom End
+
+  return <DialogPrimitive.Root {...props} />;
+};
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
