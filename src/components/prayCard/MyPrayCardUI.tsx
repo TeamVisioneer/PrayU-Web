@@ -9,7 +9,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
 import { useRef } from "react";
 import { Textarea } from "../ui/textarea";
-import MyPrayCardMoreBtn from "./MyPrayCardMoreBtn";
+import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -135,7 +135,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   return (
     <div>
       <div className="flex justify-end px-2">
-        <MyPrayCardMoreBtn handleEditClick={handleEditClick} />
+        <MyPrayCardMenuBtn handleEditClick={handleEditClick} />
       </div>
       <div className="flex flex-col gap-6 h-70vh ">
         {MyPrayCardBody}
