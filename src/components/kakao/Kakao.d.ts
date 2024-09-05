@@ -23,11 +23,7 @@ interface Kakao {
     setAccessToken: (token: string) => void;
   };
   Picker: {
-    selectFriends: (options: {
-      title: string;
-      maxPickableCount: number;
-      minPickableCount: number;
-    }) => Promise<SelectedUsers>;
+    selectFriends: (options: { title: string }) => Promise<SelectedUsers>;
   };
 }
 
