@@ -4,12 +4,12 @@ import { MemberWithProfiles } from "supabase/types/tables";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
-import { FaEdit, FaSave } from "react-icons/fa";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
 import { useRef } from "react";
 import { Textarea } from "../ui/textarea";
+import MyPrayCardMoreBtn from "./MyPrayCardMoreBtn";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -127,60 +127,46 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
               handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
             }
           />
-          <div className="absolute top-2 right-2">
-            {isEditingPrayCard ? (
-              <button
-                className={`text-white rounded-full bg-middle/90 w-8 h-8 flex justify-center items-center ${
-                  !inputPrayCardContent ? " opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={() =>
-                  handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
-                }
-                disabled={!inputPrayCardContent}
-              >
-                <FaSave className="text-white w-4 h-4" />
-              </button>
-            ) : (
-              <button
-                className="text-white rounded-full bg-end/90 w-8 h-8 flex justify-center items-center"
-                onClick={() => handleEditClick()}
-              >
-                <FaEdit className="text-white w-4 h-4" />
-              </button>
-            )}
-          </div>
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="flex flex-col gap-6 h-70vh ">
-      {MyPrayCardBody}
-      <div
-        className="w-full focus:outline-none"
-        onClick={() => onClickPrayerList()}
-      >
-        <div className="flex justify-center gap-2">
-          {Object.values(PrayType).map((type) => (
-            <div
-              key={type}
-              className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
-            >
-              <div className="text-sm w-5 h-5">
-                <img
-                  src={PrayTypeDatas[type].img}
-                  alt={PrayTypeDatas[type].emoji}
-                  className="w-5 h-5"
-                />
+    <div>
+      <div className="flex justify-end px-2">
+        <MyPrayCardMoreBtn handleEditClick={handleEditClick} />
+      </div>
+      <div className="flex flex-col gap-6 h-70vh ">
+        {MyPrayCardBody}
+        <div
+          className="w-full focus:outline-none"
+          onClick={() => onClickPrayerList()}
+        >
+          <div className="flex justify-center gap-2">
+            {Object.values(PrayType).map((type) => (
+              <div
+                key={type}
+                className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
+              >
+                <div className="text-sm w-5 h-5">
+                  <img
+                    src={PrayTypeDatas[type].img}
+                    alt={PrayTypeDatas[type].emoji}
+                    className="w-5 h-5"
+                  />
+                </div>
+                <div className="text-sm">
+                  {
+                    prayCard.pray.filter((pray) => pray.pray_type === type)
+                      .length
+                  }
+                </div>
               </div>
-              <div className="text-sm">
-                {prayCard.pray.filter((pray) => pray.pray_type === type).length}
-              </div>
+            ))}
+            <div className="bg-white rounded-lg flex justify-center items-center p-1">
+              <img className="w-5" src={iconUserMono} alt="user-icon" />
             </div>
-          ))}
-          <div className="bg-white rounded-lg flex justify-center items-center p-1">
-            <img className="w-5" src={iconUserMono} alt="user-icon" />
           </div>
         </div>
       </div>
