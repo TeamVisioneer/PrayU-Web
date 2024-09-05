@@ -4,7 +4,7 @@ import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import { KakaoMessageObject } from "../kakao/Kakao";
 import { KakaoController } from "../kakao/KakaoController";
-import { sleep } from "@/lib/utils";
+import { getDomainUrl, sleep } from "@/lib/utils";
 
 interface EventOption {
   where: string;
@@ -21,7 +21,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   prayCard,
   eventOption,
 }) => {
-  const user = useBaseStore((state) => state.user);
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const prayCardCarouselApi = useBaseStore(
@@ -34,26 +33,24 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
 
   const kakaoFriendList = useBaseStore((state) => state.kakaoFriendList);
 
+  const baseUrl = getDomainUrl();
   const currentUrl = window.location.href;
   const targetFriend = kakaoFriendList.find(
     (friend) => String(friend.id) === prayCard.profiles.kakao_id
   );
   const kakaoMessage: KakaoMessageObject = {
-    object_type: "commerce",
+    object_type: "feed",
     content: {
       title: "📮 PrayU 기도 알림",
-      description: `${
-        user && `${user.user_metadata.full_name}님이 `
-      }당신을 위해 기도해주었어요`,
+      description: "그룹장이 당신을 위해 기도해주었어요",
       image_url:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/ReactionIcon.png",
+      image_width: 800,
+      image_height: 400,
       link: {
-        web_url: "https://prayu-staging.vercel.app",
-        mobile_web_url: "https://prayu-staging.vercel.app",
+        web_url: baseUrl,
+        mobile_web_url: baseUrl,
       },
-    },
-    commerce: {
-      regular_price: 10000, // 필수 항목이므로 더미 가격을 넣어줍니다.
     },
     buttons: [
       {
@@ -73,6 +70,11 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
 
     if (!hasPrayed) {
       createPray(prayCard.id, currentUserId, prayType);
+      if (targetFriend) {
+        KakaoController.sendMessageForFriends(kakaoMessage, [
+          targetFriend.uuid,
+        ]);
+      }
     } else updatePray(prayCard.id, currentUserId, prayType);
 
     if (prayCardCarouselApi) {
@@ -81,9 +83,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
       });
     }
 
-    if (targetFriend) {
-      KakaoController.sendMessageForFriends(kakaoMessage, [targetFriend.uuid]);
-    }
     analyticsTrack("클릭_기도카드_반응", {
       pray_type: prayType,
       where: eventOption.where,

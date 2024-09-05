@@ -126,6 +126,8 @@ interface KakaoMessageObject {
     title: string;
     description: string;
     image_url: string;
+    image_width?: number;
+    image_height?: number;
     link: {
       web_url: string;
       mobile_web_url: string;
