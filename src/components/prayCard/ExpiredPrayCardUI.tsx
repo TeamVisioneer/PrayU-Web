@@ -21,7 +21,7 @@ const ExpiredPrayCardUI: React.FC = () => {
   return (
     <div className="flex flex-col gap-6 min-h-80vh max-h-80vh">
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
-        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start/60 via-middle/60 via-30% to-end/60 rounded-t-2xl p-5">
+        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-30% to-end rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
             <img
               src={
@@ -52,9 +52,13 @@ const ExpiredPrayCardUI: React.FC = () => {
       </div>
       <div className="flex flex-col items-center justify-center p-4 gap-4">
         <div className="flex flex-col items-center gap-1">
-          <p className="font-bold">
-            작성 된 지 {dateDistance.days}일이 되었어요 😂
-          </p>
+          {dateDistance.days >= 7 ? (
+            <p className="font-bold">
+              작성 된 지 {dateDistance.days}일이 되었어요 😂
+            </p>
+          ) : (
+            <p className="font-bold">기도제목이 만료되었어요 😂</p>
+          )}
           <p className="text-sm">기도제목을 요청해봐요!</p>
         </div>
 
