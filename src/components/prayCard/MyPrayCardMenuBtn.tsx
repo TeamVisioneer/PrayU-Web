@@ -75,8 +75,8 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
         description: "오늘의 기도를 통해 공유된 기도제목을 확인해 주세요",
         image_url:
           "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayCardPrayU.png",
-        image_width: 400,
-        image_height: 300,
+        image_width: 800,
+        image_height: 400,
         link: {
           web_url: baseUrl,
           mobile_web_url: baseUrl,
