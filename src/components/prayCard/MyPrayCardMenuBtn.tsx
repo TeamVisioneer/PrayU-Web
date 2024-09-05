@@ -40,6 +40,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   const setIsConfirmAlertOpen = useBaseStore(
     (state) => state.setIsConfirmAlertOpen
   );
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const onClickCopyPrayCard = () => {
     if (!inputPrayCardContent) {
       toast({
@@ -61,8 +62,8 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
     analyticsTrack("클릭_기도카드_복사", {});
   };
 
-  const onClickSharePrayCard = async () => {
-    await KakaoTokenRepo.init();
+  const onClickSharePrayCard = async (targetGroupId: string) => {
+    await KakaoTokenRepo.init(`groupId:${targetGroupId};from:MyPrayCard`);
     const baseUrl = getDomainUrl();
     const kakaoMessage: KakaoMessageObject = {
       object_type: "feed",
@@ -153,7 +154,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="flex justify-between"
-          onClick={() => onClickSharePrayCard()}
+          onClick={() => onClickSharePrayCard(targetGroup!.id)}
         >
           <MdIosShare />
           공유하기

@@ -17,7 +17,9 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
-    const kakaoToken = await KakaoTokenRepo.init(`groupId:${targetGroupId}`);
+    const kakaoToken = await KakaoTokenRepo.init(
+      `groupId:${targetGroupId};from:TodayPrayDrawer`
+    );
     if (!kakaoToken) return null;
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenTodayPrayDrawer(true);
