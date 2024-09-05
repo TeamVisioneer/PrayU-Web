@@ -14,33 +14,37 @@ export class KakaoTokenRepo {
     .VITE_KAKAO_CLIENT_SECRET_KEY;
 
   static async init() {
-    const KAKAOTOKENS = KakaoTokenRepo.getKakaoTokensInCookie();
-    const BASEURL = getDomainUrl();
+    const KAKAOTOKENS = this.getKakaoTokensInCookie();
 
     if (KAKAOTOKENS.accessToken) {
       window.Kakao.Auth.setAccessToken(KAKAOTOKENS.accessToken);
     } else if (KAKAOTOKENS.refreshToken) {
       const response: KakaoTokenRefreshResponse | null =
-        await KakaoTokenRepo.refreshKakaoToken(KAKAOTOKENS.refreshToken);
+        await this.refreshKakaoToken(KAKAOTOKENS.refreshToken);
       if (response) {
-        KakaoTokenRepo.setKakaoTokensInCookie(response);
+        this.setKakaoTokensInCookie(response);
         window.Kakao.Auth.setAccessToken(response.access_token);
       }
     } else {
-      try {
-        window.Kakao.Auth.authorize({
-          redirectUri: `${BASEURL}/auth/kakao/callback`,
-          scope: "friends,talk_message",
-        });
-      } catch (error) {
-        Sentry.captureException(error);
-      }
+      this.openKakaoLoginPage();
     }
   }
 
   static isInit() {
-    const kakaoTokens = KakaoTokenRepo.getKakaoTokensInCookie();
+    const kakaoTokens = this.getKakaoTokensInCookie();
     return Boolean(kakaoTokens.accessToken);
+  }
+
+  static openKakaoLoginPage() {
+    const BASEURL = getDomainUrl();
+    try {
+      window.Kakao.Auth.authorize({
+        redirectUri: `${BASEURL}/auth/kakao/callback`,
+        scope: "friends,talk_message",
+      });
+    } catch (error) {
+      Sentry.captureException(error);
+    }
   }
 
   static async fetchKakaoToken(
