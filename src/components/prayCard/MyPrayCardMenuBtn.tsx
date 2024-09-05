@@ -13,14 +13,23 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { toast } from "../ui/use-toast";
+import { deletePrayCard } from "@/apis/prayCard";
 
 interface MyMoreBtnProps {
   handleEditClick: () => void;
+  prayCardId: string;
 }
 
-const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({ handleEditClick }) => {
+const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
+  handleEditClick,
+  prayCardId,
+}) => {
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
+  );
+  const setAlertData = useBaseStore((state) => state.setAlertData);
+  const setIsConfirmAlertOpen = useBaseStore(
+    (state) => state.setIsConfirmAlertOpen
   );
   const onClickCopyPrayCard = () => {
     if (!inputPrayCardContent) {
@@ -44,10 +53,18 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({ handleEditClick }) => {
   };
 
   const onClickDeletePrayCard = () => {
-    toast({
-      description: "아직 개발중이에요 👀",
+    setAlertData({
+      title: "내 기도제목 삭제하기",
+      description: `내 기도제목이 없으면 친구들에게 기도를 해줄 수 없어요! \n삭제한 후 새로 작성해 보아요:)`,
+      actionText: "삭제하기",
+      cancelText: "취소",
+      onAction: async () => {
+        await deletePrayCard(prayCardId);
+        window.location.reload();
+        analyticsTrack("클릭_기도카드_삭제", {});
+      },
     });
-    analyticsTrack("클릭_기도카드_삭제", {});
+    setIsConfirmAlertOpen(true);
     return;
   };
   return (
