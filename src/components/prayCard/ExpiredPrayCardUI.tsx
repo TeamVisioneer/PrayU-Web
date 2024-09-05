@@ -52,7 +52,7 @@ const ExpiredPrayCardUI: React.FC = () => {
       </div>
       <div className="flex flex-col items-center justify-center p-4 gap-4">
         <div className="flex flex-col items-center gap-1">
-          {dateDistance.days > 7 ? (
+          {dateDistance.days >= 7 ? (
             <p className="font-bold">
               작성 된 지 {dateDistance.days}일이 되었어요 😂
             </p>
