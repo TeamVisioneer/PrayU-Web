@@ -76,7 +76,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
         image_url:
           "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayCardPrayU.png",
         image_width: 800,
-        image_height: 400,
+        image_height: 600,
         link: {
           web_url: baseUrl,
           mobile_web_url: baseUrl,
