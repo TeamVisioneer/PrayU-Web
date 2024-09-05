@@ -57,14 +57,14 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           <button
             key={type}
             onClick={handleClick(type as PrayType)}
-            className={`flex justify-center items-center w-[60px] h-[60px] rounded-lg ${
+            className={`flex justify-center items-center w-[65px] h-[65px] rounded-full ${
               emojiData.bgColor
             } ${
               !hasPrayed
-                ? "opacity-90 shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
+                ? `opacity-90 ${emojiData.shadowColor}`
                 : todayPrayTypeHash[prayCard.id] == type
-                ? "opacity-90 inner-shadow"
-                : "opacity-20 shadow-[0_4px_2px_rgb(0,0,0,0.3)]"
+                ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
+                : `opacity-20 ${emojiData.shadowColor}`
             }`}
             disabled={todayPrayTypeHash[prayCard.id] == type}
           >

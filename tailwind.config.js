@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      letterSpacing: {
+        tightest: "-0.05em", // 자간 -5% 설정
+      },
       boxShadow: {
         button: "0 10px 10px rgba(188, 190, 208, 0.8)",
         // custom
@@ -37,9 +40,9 @@ module.exports = {
         prayCardStart: "#B7DFFF",
         prayCardMiddle: "#F3E5FF",
         prayCardMiddle2: "#F9E9F5",
-        start: "#4B93FF",
-        middle: "#B095FF",
-        end: "#FFC7B4",
+        start: "#73ABFF",
+        middle: "#CFBFFF",
+        end: "#FFD7C9",
         grayText: "#4A4A4A",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

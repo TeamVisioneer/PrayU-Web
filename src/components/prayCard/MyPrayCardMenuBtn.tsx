@@ -18,7 +18,7 @@ interface MyMoreBtnProps {
   handleEditClick: () => void;
 }
 
-const MyPrayCardMoreBtn: React.FC<MyMoreBtnProps> = ({ handleEditClick }) => {
+const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({ handleEditClick }) => {
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
@@ -94,4 +94,4 @@ const MyPrayCardMoreBtn: React.FC<MyMoreBtnProps> = ({ handleEditClick }) => {
   );
 };
 
-export default MyPrayCardMoreBtn;
+export default MyPrayCardMenuBtn;

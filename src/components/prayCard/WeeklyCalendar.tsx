@@ -48,7 +48,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
         const isToday = date.date === currentDate;
         const day = new Date(date.date).getDate(); // Extract the day part of the date
         return (
-          <div key={date.date} className="flex flex-col items-center gap-2">
+          <div key={date.date} className="flex flex-col items-center gap-1">
             <span
               className={`text-sm ${
                 isToday ? "font-bold text-black" : "text-deactivate"
@@ -57,9 +57,9 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
               {day}
             </span>
             <div
-              className={`w-7 h-7 flex items-center justify-center rounded-[5px] ${
-                isToday ? "bg-red-100" : "bg-gray-200"
-              }`}
+              className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
+                isToday ? "border-[1.5px] border-[#BBBED4]" : ""
+              } ${todayPrayTypeHash[prayCard.id] ? "border-none" : ""}`}
             >
               {isToday
                 ? getReactionEmoticon(todayPrayTypeHash[prayCard.id])

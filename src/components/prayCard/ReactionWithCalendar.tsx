@@ -19,7 +19,7 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({
   const currentUserId = useBaseStore((state) => state.user?.id);
 
   return (
-    <div className="flex flex-col gap-[33px] p-2">
+    <div className="flex flex-col gap-6 p-2">
       <WeeklyCalendar prayCard={prayCard} />
       <ReactionBtn
         currentUserId={currentUserId!}
