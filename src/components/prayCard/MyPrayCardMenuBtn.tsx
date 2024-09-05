@@ -63,7 +63,10 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   };
 
   const onClickSharePrayCard = async (targetGroupId: string) => {
-    await KakaoTokenRepo.init(`groupId:${targetGroupId};from:MyPrayCard`);
+    const kakaoToken = await KakaoTokenRepo.init(
+      `groupId:${targetGroupId};from:MyPrayCard`
+    );
+    if (!kakaoToken) return null;
     const baseUrl = getDomainUrl();
     const kakaoMessage: KakaoMessageObject = {
       object_type: "feed",
