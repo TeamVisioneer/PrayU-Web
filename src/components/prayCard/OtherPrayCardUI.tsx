@@ -42,13 +42,13 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   }
 
   if (!otherMember) return null;
-
   const isExpiredOtherMember = otherMember.updated_at < getISOTodayDate(-6);
-  if (isExpiredOtherMember) return <ExpiredPrayCardUI />;
 
-  if (otherPrayCardList && otherPrayCardList.length == 0) {
-    // TODO: 예외처리 필요
-    return null;
+  if (
+    (otherPrayCardList && otherPrayCardList.length == 0) ||
+    isExpiredOtherMember
+  ) {
+    return <ExpiredPrayCardUI />;
   }
 
   const prayCard = otherPrayCardList[0];
