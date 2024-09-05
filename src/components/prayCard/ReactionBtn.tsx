@@ -69,24 +69,23 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     if (!hasPrayed) {
       const newPray = await createPray(prayCard.id, currentUserId, prayType);
       if (!newPray) return null;
+      if (prayCard.profiles.kakao_id) {
+        const kakaoMessageResponse = await KakaoController.sendDirectMessage(
+          kakaoMessage,
+          prayCard.profiles.kakao_id
+        );
+        if (kakaoMessageResponse) {
+          toast({
+            description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
+          });
+        }
+      }
     } else updatePray(prayCard.id, currentUserId, prayType);
 
     if (prayCardCarouselApi) {
       sleep(500).then(() => {
         prayCardCarouselApi.scrollNext();
       });
-    }
-
-    if (prayCard.profiles.kakao_id) {
-      const kakaoMessageResponse = await KakaoController.sendDirectMessage(
-        kakaoMessage,
-        prayCard.profiles.kakao_id
-      );
-      if (kakaoMessageResponse) {
-        toast({
-          description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
-        });
-      }
     }
 
     analyticsTrack("클릭_기도카드_반응", {
