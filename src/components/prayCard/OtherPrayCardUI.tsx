@@ -46,12 +46,13 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     // TODO: 예외처리 필요
     return null;
   }
+  const isExpiredOtherMember = otherMember.updated_at < getISOTodayDate(-6);
+  if (isExpiredOtherMember) return <ExpiredPrayCardUI />;
 
   const prayCard = otherPrayCardList[0];
-  const isExpiredOtherMember = prayCard.created_at < getISOTodayDate(-6);
   const createdDateYMD = getISODateYMD(prayCard.created_at);
 
-  const PrayCardUI = () => (
+  return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
@@ -84,8 +85,6 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
       <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />
     </div>
   );
-
-  return isExpiredOtherMember ? <ExpiredPrayCardUI /> : <PrayCardUI />;
 };
 
 export default OtherPrayCardUI;
