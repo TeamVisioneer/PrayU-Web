@@ -92,7 +92,6 @@ export class KakaoController {
     try {
       const kakaoFriendsResponse: KakaoFriendsResponse | null =
         await this.fetchFriends();
-      console.log("kakaoFriendsResponse", kakaoFriendsResponse);
       if (!kakaoFriendsResponse) return null;
       const targetFriend = kakaoFriendsResponse.elements.find(
         (friend) => String(friend.id) === kakaoId
@@ -100,7 +99,6 @@ export class KakaoController {
       if (!targetFriend) return null;
       const kakaoMessageResponse: KakaoSendMessageResponse | null =
         await this.sendMessageForFriends(message, [targetFriend.uuid]);
-      console.log("kakaoMessageResponse", kakaoMessageResponse);
       return kakaoMessageResponse;
     } catch (error) {
       Sentry.captureException(error);

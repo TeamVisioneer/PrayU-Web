@@ -83,7 +83,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
         prayCard.profiles.kakao_id
       );
       if (kakaoMessageResponse) {
-        console.log(kakaoMessageResponse);
         toast({
           description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
         });
