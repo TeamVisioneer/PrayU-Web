@@ -15,15 +15,10 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     (state) => state.setIsOpenTodayPrayDrawer
   );
   const onClickTodayPrayBtn = async () => {
-    if (!KakaoTokenRepo.isInit()) {
-      analyticsTrack("페이지_카카오_로그인", { where: eventOption.where });
-      KakaoTokenRepo.openKakaoLoginPage();
-    } else {
-      window.history.pushState(null, "", window.location.pathname);
-      await KakaoTokenRepo.init();
-      setIsOpenTodayPrayDrawer(true);
-      analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
-    }
+    await KakaoTokenRepo.init();
+    window.history.pushState(null, "", window.location.pathname);
+    setIsOpenTodayPrayDrawer(true);
+    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
   };
 
   return (
