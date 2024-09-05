@@ -33,13 +33,9 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const updatePray = useBaseStore((state) => state.updatePray);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
 
-  const kakaoFriendList = useBaseStore((state) => state.kakaoFriendList);
-
   const baseUrl = getDomainUrl();
   const currentUrl = window.location.href;
-  const targetFriend = kakaoFriendList.find(
-    (friend) => String(friend.id) === prayCard.profiles.kakao_id
-  );
+
   const kakaoMessage: KakaoMessageObject = {
     object_type: "feed",
     content: {
@@ -67,26 +63,31 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
 
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard.id]);
 
-  const handleClick = (prayType: PrayType) => () => {
+  const handleClick = async (prayType: PrayType) => {
     if (!isPrayToday) setIsPrayToday(true);
 
     if (!hasPrayed) {
-      createPray(prayCard.id, currentUserId, prayType);
-      if (targetFriend) {
-        KakaoController.sendMessageForFriends(kakaoMessage, [
-          targetFriend.uuid,
-        ]).then(() => {
-          toast({
-            description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
-          });
-        });
-      }
+      const newPray = await createPray(prayCard.id, currentUserId, prayType);
+      if (!newPray) return null;
     } else updatePray(prayCard.id, currentUserId, prayType);
 
     if (prayCardCarouselApi) {
       sleep(500).then(() => {
         prayCardCarouselApi.scrollNext();
       });
+    }
+
+    if (prayCard.profiles.kakao_id) {
+      const kakaoMessageResponse = await KakaoController.sendDirectMessage(
+        kakaoMessage,
+        prayCard.profiles.kakao_id
+      );
+      if (kakaoMessageResponse) {
+        console.log(kakaoMessageResponse);
+        toast({
+          description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
+        });
+      }
     }
 
     analyticsTrack("클릭_기도카드_반응", {
@@ -103,7 +104,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
         return (
           <button
             key={type}
-            onClick={handleClick(type as PrayType)}
+            onClick={() => handleClick(type as PrayType)}
             className={`flex justify-center items-center w-[65px] h-[65px] rounded-full ${
               emojiData.bgColor
             } ${

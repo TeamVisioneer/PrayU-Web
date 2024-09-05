@@ -84,4 +84,27 @@ export class KakaoController {
       return null;
     }
   }
+
+  static async sendDirectMessage(
+    message: KakaoMessageObject,
+    kakaoId: string
+  ): Promise<KakaoSendMessageResponse | null> {
+    try {
+      const kakaoFriendsResponse: KakaoFriendsResponse | null =
+        await this.fetchFriends();
+      console.log("kakaoFriendsResponse", kakaoFriendsResponse);
+      if (!kakaoFriendsResponse) return null;
+      const targetFriend = kakaoFriendsResponse.elements.find(
+        (friend) => String(friend.id) === kakaoId
+      );
+      if (!targetFriend) return null;
+      const kakaoMessageResponse: KakaoSendMessageResponse | null =
+        await this.sendMessageForFriends(message, [targetFriend.uuid]);
+      console.log("kakaoMessageResponse", kakaoMessageResponse);
+      return kakaoMessageResponse;
+    } catch (error) {
+      Sentry.captureException(error);
+      return null;
+    }
+  }
 }

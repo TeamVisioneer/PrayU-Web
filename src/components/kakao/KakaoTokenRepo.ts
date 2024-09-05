@@ -20,27 +20,27 @@ export class KakaoTokenRepo {
     if (KAKAOTOKENS.accessToken) {
       window.Kakao.Auth.setAccessToken(KAKAOTOKENS.accessToken);
     } else if (KAKAOTOKENS.refreshToken) {
-      KakaoTokenRepo.refreshKakaoToken(KAKAOTOKENS.refreshToken)
-        .then((response: KakaoTokenRefreshResponse | null) => {
-          if (response) {
-            KakaoTokenRepo.setKakaoTokensInCookie(response);
-            window.Kakao.Auth.setAccessToken(response.access_token);
-          }
-        })
-        .catch((error) => {
-          Sentry.captureException(error);
-        });
+      const response: KakaoTokenRefreshResponse | null =
+        await KakaoTokenRepo.refreshKakaoToken(KAKAOTOKENS.refreshToken);
+      if (response) {
+        KakaoTokenRepo.setKakaoTokensInCookie(response);
+        window.Kakao.Auth.setAccessToken(response.access_token);
+      }
     } else {
-      window.Kakao.Auth.authorize({
-        redirectUri: `${BASEURL}/auth/kakao/callback`,
-        scope: "friends,talk_message",
-      });
+      try {
+        window.Kakao.Auth.authorize({
+          redirectUri: `${BASEURL}/auth/kakao/callback`,
+          scope: "friends,talk_message",
+        });
+      } catch (error) {
+        Sentry.captureException(error);
+      }
     }
   }
 
   static isInit() {
     const kakaoTokens = KakaoTokenRepo.getKakaoTokensInCookie();
-    return Boolean(kakaoTokens.accessToken) || Boolean(kakaoTokens.accessToken);
+    return Boolean(kakaoTokens.accessToken);
   }
 
   static async fetchKakaoToken(
@@ -89,7 +89,7 @@ export class KakaoTokenRepo {
         },
         body: new URLSearchParams(data),
       });
-      const responseData: KakaoTokenResponse = await response.json();
+      const responseData: KakaoTokenRefreshResponse = await response.json();
       return responseData;
     } catch (error) {
       Sentry.captureException(error);
@@ -122,13 +122,14 @@ export class KakaoTokenRepo {
   ) {
     const now = new Date();
 
-    const accessTokenExpires = new Date(
-      now.getTime() + kakaoTokenResponse.expires_in * 1000
-    );
-    document.cookie = `${this.ACCESS_TOKEN_COOKIE_NAME}=${
-      kakaoTokenResponse.access_token
-    }; expires=${accessTokenExpires.toUTCString()}; path=/`;
-
+    if (kakaoTokenResponse.access_token && kakaoTokenResponse.expires_in) {
+      const accessTokenExpires = new Date(
+        now.getTime() + kakaoTokenResponse.expires_in * 1000
+      );
+      document.cookie = `${this.ACCESS_TOKEN_COOKIE_NAME}=${
+        kakaoTokenResponse.access_token
+      }; expires=${accessTokenExpires.toUTCString()}; path=/`;
+    }
     if (
       kakaoTokenResponse.refresh_token &&
       kakaoTokenResponse.refresh_token_expires_in

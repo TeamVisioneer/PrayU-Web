@@ -34,9 +34,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
   );
-  const fetchKakaoFriendList = useBaseStore(
-    (state) => state.fetchKakaoFriendList
-  );
 
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const isOpenTodayPrayDrawer = useBaseStore(
@@ -59,7 +56,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
 
   useEffect(() => {
     fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
-    fetchKakaoFriendList();
 
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
@@ -72,7 +68,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   }, [
     prayCardCarouselApi,
     fetchGroupPrayCardList,
-    fetchKakaoFriendList,
     groupId,
     currentUserId,
     startDt,

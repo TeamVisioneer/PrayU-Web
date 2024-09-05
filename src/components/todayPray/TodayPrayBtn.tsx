@@ -14,10 +14,10 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
-  const onClickTodayPrayBtn = () => {
+  const onClickTodayPrayBtn = async () => {
     if (!KakaoTokenRepo.isInit()) {
       analyticsTrack("페이지_카카오_로그인", { where: eventOption.where });
-      KakaoTokenRepo.init();
+      await KakaoTokenRepo.init();
     } else {
       window.history.pushState(null, "", window.location.pathname);
       setIsOpenTodayPrayDrawer(true);
