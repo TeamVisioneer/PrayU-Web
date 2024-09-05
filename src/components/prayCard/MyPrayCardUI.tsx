@@ -9,7 +9,6 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { ClipLoader } from "react-spinners";
 import { useRef } from "react";
 import { Textarea } from "../ui/textarea";
-import { toast } from "../ui/use-toast";
 import MyPrayCardMoreBtn from "./MyPrayCardMoreBtn";
 
 interface PrayCardProps {
@@ -67,35 +66,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     updateMember(memberId, content);
     setIsEditingPrayCard(false);
     analyticsTrack("클릭_기도카드_저장", {});
-  };
-
-  const onClickCopyPrayCard = () => {
-    if (!inputPrayCardContent) {
-      toast({
-        description: "⚠︎ 기도제목을 작성해주세요",
-      });
-      return;
-    }
-    navigator.clipboard
-      .writeText(inputPrayCardContent)
-      .then(() => {
-        toast({
-          description: "기도제목이 복사되었어요 🔗",
-        });
-      })
-      .catch((err) => {
-        console.error("복사하는 중 오류가 발생했습니다: ", err);
-      });
-
-    analyticsTrack("클릭_기도카드_복사", {});
-  };
-
-  const onClickDeletePrayCard = () => {
-    toast({
-      description: "아직 개발중이에요 👀",
-    });
-    analyticsTrack("클릭_기도카드_삭제", {});
-    return;
   };
 
   useEffect(() => {
@@ -165,11 +135,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   return (
     <div>
       <div className="flex justify-end px-2">
-        <MyPrayCardMoreBtn
-          handleEditClick={handleEditClick}
-          onClickCopyPrayCard={onClickCopyPrayCard}
-          onClickDeletePrayCard={onClickDeletePrayCard}
-        />
+        <MyPrayCardMoreBtn handleEditClick={handleEditClick} />
       </div>
       <div className="flex flex-col gap-6 h-70vh ">
         {MyPrayCardBody}

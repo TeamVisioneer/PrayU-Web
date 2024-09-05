@@ -11,18 +11,45 @@ import { FiEdit } from "react-icons/fi";
 import { LuCopy } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { analyticsTrack } from "@/analytics/analytics";
+import useBaseStore from "@/stores/baseStore";
+import { toast } from "../ui/use-toast";
 
 interface MyMoreBtnProps {
   handleEditClick: () => void;
-  onClickCopyPrayCard: () => void;
-  onClickDeletePrayCard: () => void;
 }
 
-const MyPrayCardMoreBtn: React.FC<MyMoreBtnProps> = ({
-  handleEditClick,
-  onClickCopyPrayCard,
-  onClickDeletePrayCard,
-}) => {
+const MyPrayCardMoreBtn: React.FC<MyMoreBtnProps> = ({ handleEditClick }) => {
+  const inputPrayCardContent = useBaseStore(
+    (state) => state.inputPrayCardContent
+  );
+  const onClickCopyPrayCard = () => {
+    if (!inputPrayCardContent) {
+      toast({
+        description: "⚠︎ 기도제목을 작성해주세요",
+      });
+      return;
+    }
+    navigator.clipboard
+      .writeText(inputPrayCardContent)
+      .then(() => {
+        toast({
+          description: "기도제목이 복사되었어요 🔗",
+        });
+      })
+      .catch((err) => {
+        console.error("복사하는 중 오류가 발생했습니다: ", err);
+      });
+
+    analyticsTrack("클릭_기도카드_복사", {});
+  };
+
+  const onClickDeletePrayCard = () => {
+    toast({
+      description: "아직 개발중이에요 👀",
+    });
+    analyticsTrack("클릭_기도카드_삭제", {});
+    return;
+  };
   return (
     <>
       <DropdownMenu>
