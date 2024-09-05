@@ -13,21 +13,24 @@ export class KakaoTokenRepo {
   private static readonly CLIENT_SECRET = import.meta.env
     .VITE_KAKAO_CLIENT_SECRET_KEY;
 
-  static async init() {
+  static async init(state: string = ""): Promise<string | null> {
     const KAKAOTOKENS = this.getKakaoTokensInCookie();
 
     if (KAKAOTOKENS.accessToken) {
       window.Kakao.Auth.setAccessToken(KAKAOTOKENS.accessToken);
+      return KAKAOTOKENS.accessToken;
     } else if (KAKAOTOKENS.refreshToken) {
       const response: KakaoTokenRefreshResponse | null =
         await this.refreshKakaoToken(KAKAOTOKENS.refreshToken);
       if (response) {
         this.setKakaoTokensInCookie(response);
         window.Kakao.Auth.setAccessToken(response.access_token);
+        return KAKAOTOKENS.accessToken;
       }
     } else {
-      this.openKakaoLoginPage();
+      this.openKakaoLoginPage(state);
     }
+    return null;
   }
 
   static isInit() {
@@ -35,12 +38,13 @@ export class KakaoTokenRepo {
     return Boolean(kakaoTokens.accessToken);
   }
 
-  static openKakaoLoginPage() {
+  static openKakaoLoginPage(state: string) {
     const BASEURL = getDomainUrl();
     try {
       window.Kakao.Auth.authorize({
         redirectUri: `${BASEURL}/auth/kakao/callback`,
         scope: "friends,talk_message",
+        state: state,
       });
     } catch (error) {
       Sentry.captureException(error);

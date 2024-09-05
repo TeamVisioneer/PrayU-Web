@@ -15,7 +15,11 @@ interface Kakao {
     request: (params: KakaoAPIRequestParams) => Promise<KakaoAPIResponse>;
   };
   Auth: {
-    authorize: (options: { redirectUri: string; scope: string }) => void;
+    authorize: (options: {
+      redirectUri: string;
+      scope: string;
+      state: string;
+    }) => void;
     setAccessToken: (token: string) => void;
   };
   Picker: {

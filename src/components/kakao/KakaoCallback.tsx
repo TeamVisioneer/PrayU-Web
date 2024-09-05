@@ -13,10 +13,16 @@ const KakaoCallBack = () => {
   const location = useLocation();
   const baseUrl = getDomainUrl();
   const updateProfile = useBaseStore((state) => state.updateProfile);
+  const setIsOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenTodayPrayDrawer
+  );
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const code = params.get("code");
+    const state = params.get("state");
+    const groupPageUrl =
+      state && state.includes(":") ? `/group/${state.split(":")[1]}` : "/group";
 
     if (code) {
       KakaoTokenRepo.fetchKakaoToken(
@@ -33,9 +39,16 @@ const KakaoCallBack = () => {
         }
       });
     }
-    // TODO 그룹 아이디 가져와서 리다이렉트 필요
-    navigate("/group", { replace: true });
-  }, [navigate, location.search, baseUrl, updateProfile, user]);
+    setIsOpenTodayPrayDrawer(true);
+    navigate(groupPageUrl, { replace: true });
+  }, [
+    navigate,
+    location.search,
+    baseUrl,
+    updateProfile,
+    user,
+    setIsOpenTodayPrayDrawer,
+  ]);
   return null;
 };
 

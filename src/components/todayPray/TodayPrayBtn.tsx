@@ -14,8 +14,11 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
-  const onClickTodayPrayBtn = async () => {
-    await KakaoTokenRepo.init();
+  const targetGroup = useBaseStore((state) => state.targetGroup);
+
+  const onClickTodayPrayBtn = async (targetGroupId: string) => {
+    const kakaoToken = await KakaoTokenRepo.init(`groupId:${targetGroupId}`);
+    if (!kakaoToken) return null;
     window.history.pushState(null, "", window.location.pathname);
     setIsOpenTodayPrayDrawer(true);
     analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
@@ -25,7 +28,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     <Button
       variant="primary"
       className="w-[166px] h-[48px] text-md font-bold rounded-[10px]"
-      onClick={() => onClickTodayPrayBtn()}
+      onClick={() => onClickTodayPrayBtn(targetGroup!.id)}
     >
       기도 시작하기
     </Button>
