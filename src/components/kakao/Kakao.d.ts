@@ -121,7 +121,7 @@ interface KakaoLinkObject {
 }
 
 interface KakaoMessageObject {
-  object_type: "feed";
+  object_type: string;
   content: {
     title: string;
     description: string;
@@ -140,4 +140,5 @@ interface KakaoMessageObject {
       };
     }
   ];
+  commerce?: { regular_price: number };
 }

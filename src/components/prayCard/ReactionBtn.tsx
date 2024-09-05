@@ -1,10 +1,10 @@
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
-import { sleep } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
 import { KakaoMessageObject } from "../kakao/Kakao";
 import { KakaoController } from "../kakao/KakaoController";
+import { sleep } from "@/lib/utils";
 
 interface EventOption {
   where: string;
@@ -21,6 +21,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   prayCard,
   eventOption,
 }) => {
+  const user = useBaseStore((state) => state.user);
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const prayCardCarouselApi = useBaseStore(
@@ -32,26 +33,34 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
 
   const kakaoFriendList = useBaseStore((state) => state.kakaoFriendList);
+
+  const currentUrl = window.location.href;
   const targetFriend = kakaoFriendList.find(
     (friend) => String(friend.id) === prayCard.profiles.kakao_id
   );
   const kakaoMessage: KakaoMessageObject = {
-    object_type: "feed",
+    object_type: "commerce",
     content: {
-      title: "🔔 PrayU 기도 알림",
-      description: "당신을 위해 기도해주었어요",
-      image_url: "",
+      title: "📮 PrayU 기도 알림",
+      description: `${
+        user && `${user.user_metadata.full_name}님이 `
+      }당신을 위해 기도해주었어요`,
+      image_url:
+        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/ReactionIcon.png",
       link: {
         web_url: "https://prayu-staging.vercel.app",
         mobile_web_url: "https://prayu-staging.vercel.app",
       },
     },
+    commerce: {
+      regular_price: 10000, // 필수 항목이므로 더미 가격을 넣어줍니다.
+    },
     buttons: [
       {
         title: "오늘의 기도 시작",
         link: {
-          mobile_web_url: "https://prayu-staging.vercel.app",
-          web_url: "https://prayu-staging.vercel.app",
+          mobile_web_url: currentUrl,
+          web_url: currentUrl,
         },
       },
     ],
@@ -64,17 +73,16 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
 
     if (!hasPrayed) {
       createPray(prayCard.id, currentUserId, prayType);
-      if (targetFriend) {
-        KakaoController.sendMessageForFriends(kakaoMessage, [
-          targetFriend.uuid,
-        ]);
-      }
     } else updatePray(prayCard.id, currentUserId, prayType);
 
     if (prayCardCarouselApi) {
       sleep(500).then(() => {
         prayCardCarouselApi.scrollNext();
       });
+    }
+
+    if (targetFriend) {
+      KakaoController.sendMessageForFriends(kakaoMessage, [targetFriend.uuid]);
     }
     analyticsTrack("클릭_기도카드_반응", {
       pray_type: prayType,
