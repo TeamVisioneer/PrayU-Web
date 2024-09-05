@@ -10,6 +10,7 @@ import { ClipLoader } from "react-spinners";
 import { useRef } from "react";
 import { Textarea } from "../ui/textarea";
 import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
+import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -80,9 +81,9 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     );
   }
 
-  if (userPrayCardList && userPrayCardList.length == 0) {
-    // TODO: 예외처리 필요
-    return null;
+  const isExpiredMyMember = member.updated_at < getISOTodayDate(-6);
+  if ((userPrayCardList && userPrayCardList.length == 0) || isExpiredMyMember) {
+    return <ExpiredPrayCardUI />;
   }
 
   const prayCard = userPrayCardList[0];
