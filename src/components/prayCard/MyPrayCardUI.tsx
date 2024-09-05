@@ -81,8 +81,11 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     );
   }
 
-  const isExpiredMyMember = member.updated_at < getISOTodayDate(-6);
-  if ((userPrayCardList && userPrayCardList.length == 0) || isExpiredMyMember) {
+  if (
+    userPrayCardList &&
+    (userPrayCardList.length == 0 ||
+      userPrayCardList[0].created_at < getISOTodayDate(-6))
+  ) {
     return <ExpiredPrayCardUI />;
   }
 

@@ -41,12 +41,10 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     );
   }
 
-  if (!otherMember) return null;
-  const isExpiredOtherMember = otherMember.updated_at < getISOTodayDate(-6);
-
   if (
-    (otherPrayCardList && otherPrayCardList.length == 0) ||
-    isExpiredOtherMember
+    otherPrayCardList &&
+    (otherPrayCardList.length == 0 ||
+      otherPrayCardList[0].created_at < getISOTodayDate(-6))
   ) {
     return <ExpiredPrayCardUI />;
   }
