@@ -9,7 +9,8 @@ import { analytics } from "@/analytics/analytics";
 import ConfirmAlert from "./components/alert/ConfirmAlert";
 import { Toaster } from "./components/ui/toaster";
 import PrayCardCreatePage from "./pages/PrayCardCreatePage";
-import KakaoInit from "./components/share/KakaoInit";
+import KakaoInit from "./components/kakao/KakaoInit";
+import KakaoCallBack from "./components/kakao/KakaoCallback";
 
 const App = () => {
   useEffect(() => {
@@ -32,6 +33,10 @@ const App = () => {
               import.meta.env.VITE_ENV === "prod") && <AnalyticsTracker />}
             <Routes>
               <Route path="/" element={<MainPage />} />
+              <Route
+                path="/auth/kakao/callback"
+                element={<KakaoCallBack />}
+              ></Route>
               <Route
                 path="/group"
                 element={

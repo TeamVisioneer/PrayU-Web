@@ -18,6 +18,8 @@ const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
 
+  const baseUrl = getDomainUrl();
+
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -58,7 +60,6 @@ const MainPage: React.FC = () => {
 
   const KakaoLoginBtn = () => {
     const location = useLocation();
-    const baseUrl = getDomainUrl();
     const from = location.state?.from?.pathname || "/group";
     const redirectUrl = `${baseUrl}${from}`;
 
