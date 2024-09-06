@@ -14,9 +14,9 @@ export const fetchGroupPrayCardList = async (
       .from("pray_card")
       .select(
         `*,
-      profiles (id, full_name, avatar_url),
+      profiles (id, full_name, avatar_url, kakao_id),
       pray (*, 
-        profiles (id, full_name, avatar_url)
+        profiles (id, full_name, avatar_url, kakao_id)
       )`
       )
       .eq("group_id", groupId)
@@ -49,9 +49,9 @@ export const fetchOtherPrayCardListByGroupId = async (
       .from("pray_card")
       .select(
         `*,
-        profiles (id, full_name, avatar_url),
+        profiles (id, full_name, avatar_url, kakao_id),
         pray (*, 
-          profiles (id, full_name, avatar_url)
+          profiles (id, full_name, avatar_url, kakao_id)
         )`
       )
       .eq("user_id", userId)
@@ -83,9 +83,9 @@ export const fetchUserPrayCardListByGroupId = async (
       .from("pray_card")
       .select(
         `*,
-      profiles (id, full_name, avatar_url),
+      profiles (id, full_name, avatar_url, kakao_id),
       pray (*, 
-        profiles (id, full_name, avatar_url)
+        profiles (id, full_name, avatar_url, kakao_id)
       )`
       )
       .eq("user_id", currentUserId)

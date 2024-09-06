@@ -7,36 +7,47 @@ import {
 import { getDomainUrl } from "@/lib/utils";
 
 export class KakaoTokenRepo {
-  private static KAKAOTOKENS: KakaoTokens;
-  private static BASEURL: string;
   private static readonly ACCESS_TOKEN_COOKIE_NAME = "kakao_access_token";
   private static readonly REFRESH_TOKEN_COOKIE_NAME = "kakao_refresh_token";
   private static readonly CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
   private static readonly CLIENT_SECRET = import.meta.env
     .VITE_KAKAO_CLIENT_SECRET_KEY;
 
-  static async init() {
-    this.KAKAOTOKENS = KakaoTokenRepo.getKakaoTokensInCookie();
-    this.BASEURL = getDomainUrl();
+  static async init(state: string = ""): Promise<string | null> {
+    const KAKAOTOKENS = this.getKakaoTokensInCookie();
 
-    if (this.KAKAOTOKENS.accessToken) {
-      window.Kakao.Auth.setAccessToken(this.KAKAOTOKENS.accessToken);
-    } else if (this.KAKAOTOKENS.refreshToken) {
-      KakaoTokenRepo.refreshKakaoToken(this.KAKAOTOKENS.refreshToken)
-        .then((response: KakaoTokenRefreshResponse | null) => {
-          if (response) {
-            KakaoTokenRepo.setKakaoTokensInCookie(response);
-            window.Kakao.Auth.setAccessToken(response.access_token);
-          }
-        })
-        .catch((error) => {
-          Sentry.captureException(error);
-        });
+    if (KAKAOTOKENS.accessToken) {
+      window.Kakao.Auth.setAccessToken(KAKAOTOKENS.accessToken);
+      return KAKAOTOKENS.accessToken;
+    } else if (KAKAOTOKENS.refreshToken) {
+      const response: KakaoTokenRefreshResponse | null =
+        await this.refreshKakaoToken(KAKAOTOKENS.refreshToken);
+      if (response) {
+        this.setKakaoTokensInCookie(response);
+        window.Kakao.Auth.setAccessToken(response.access_token);
+        return KAKAOTOKENS.accessToken;
+      }
     } else {
+      this.openKakaoLoginPage(state);
+    }
+    return null;
+  }
+
+  static isInit() {
+    const kakaoTokens = this.getKakaoTokensInCookie();
+    return Boolean(kakaoTokens.accessToken);
+  }
+
+  static openKakaoLoginPage(state: string) {
+    const BASEURL = getDomainUrl();
+    try {
       window.Kakao.Auth.authorize({
-        redirectUri: `${this.BASEURL}/auth/kakao/callback`,
+        redirectUri: `${BASEURL}/auth/kakao/callback`,
         scope: "friends,talk_message",
+        state: state,
       });
+    } catch (error) {
+      Sentry.captureException(error);
     }
   }
 
@@ -86,7 +97,7 @@ export class KakaoTokenRepo {
         },
         body: new URLSearchParams(data),
       });
-      const responseData: KakaoTokenResponse = await response.json();
+      const responseData: KakaoTokenRefreshResponse = await response.json();
       return responseData;
     } catch (error) {
       Sentry.captureException(error);
@@ -119,13 +130,14 @@ export class KakaoTokenRepo {
   ) {
     const now = new Date();
 
-    const accessTokenExpires = new Date(
-      now.getTime() + kakaoTokenResponse.expires_in * 1000
-    );
-    document.cookie = `${this.ACCESS_TOKEN_COOKIE_NAME}=${
-      kakaoTokenResponse.access_token
-    }; expires=${accessTokenExpires.toUTCString()}; path=/`;
-
+    if (kakaoTokenResponse.access_token && kakaoTokenResponse.expires_in) {
+      const accessTokenExpires = new Date(
+        now.getTime() + kakaoTokenResponse.expires_in * 1000
+      );
+      document.cookie = `${this.ACCESS_TOKEN_COOKIE_NAME}=${
+        kakaoTokenResponse.access_token
+      }; expires=${accessTokenExpires.toUTCString()}; path=/`;
+    }
     if (
       kakaoTokenResponse.refresh_token &&
       kakaoTokenResponse.refresh_token_expires_in

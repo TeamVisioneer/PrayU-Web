@@ -15,7 +15,11 @@ interface Kakao {
     request: (params: KakaoAPIRequestParams) => Promise<KakaoAPIResponse>;
   };
   Auth: {
-    authorize: (options: { redirectUri: string; scope: string }) => void;
+    authorize: (options: {
+      redirectUri: string;
+      scope: string;
+      state: string;
+    }) => void;
     setAccessToken: (token: string) => void;
   };
   Picker: {
@@ -121,18 +125,26 @@ interface KakaoLinkObject {
 }
 
 interface KakaoMessageObject {
-  object_type: "feed"; // 'feed'로 고정
-  content: KakaoContent;
-}
-
-interface KakaoContent {
-  title: string;
-  description: string;
-  image_url: string;
-  link: KakaoLink;
-}
-
-interface KakaoLink {
-  web_url: string;
-  mobile_web_url: string;
+  object_type: string;
+  content: {
+    title: string;
+    description: string;
+    image_url: string;
+    image_width?: number;
+    image_height?: number;
+    link: {
+      web_url: string;
+      mobile_web_url: string;
+    };
+  };
+  buttons: [
+    {
+      title: string;
+      link: {
+        mobile_web_url: string;
+        web_url: string;
+      };
+    }
+  ];
+  commerce?: { regular_price: number };
 }

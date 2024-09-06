@@ -1,8 +1,11 @@
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
-import { sleep } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
+import { KakaoMessageObject } from "../kakao/Kakao";
+import { KakaoController } from "../kakao/KakaoController";
+import { getDomainUrl, sleep } from "@/lib/utils";
+import { useToast } from "../ui/use-toast";
 
 interface EventOption {
   where: string;
@@ -19,6 +22,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   prayCard,
   eventOption,
 }) => {
+  const { toast } = useToast();
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const prayCardCarouselApi = useBaseStore(
@@ -29,19 +33,61 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const updatePray = useBaseStore((state) => state.updatePray);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
 
+  const baseUrl = getDomainUrl();
+  const currentUrl = window.location.href;
+
+  const kakaoMessage: KakaoMessageObject = {
+    object_type: "feed",
+    content: {
+      title: "📮 PrayU 기도 알림",
+      description: "그룹장이 당신을 위해 기도해주었어요",
+      image_url:
+        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/ReactionIcon.png",
+      image_width: 800,
+      image_height: 400,
+      link: {
+        web_url: baseUrl,
+        mobile_web_url: baseUrl,
+      },
+    },
+    buttons: [
+      {
+        title: "오늘의 기도 시작",
+        link: {
+          mobile_web_url: currentUrl,
+          web_url: currentUrl,
+        },
+      },
+    ],
+  };
+
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard.id]);
 
-  const handleClick = (prayType: PrayType) => () => {
+  const handleClick = async (prayType: PrayType) => {
     if (!isPrayToday) setIsPrayToday(true);
 
-    if (!hasPrayed) createPray(prayCard.id, currentUserId, prayType);
-    else updatePray(prayCard.id, currentUserId, prayType);
+    if (!hasPrayed) {
+      const newPray = await createPray(prayCard.id, currentUserId, prayType);
+      if (!newPray) return null;
+      if (prayCard.profiles.kakao_id) {
+        const kakaoMessageResponse = await KakaoController.sendDirectMessage(
+          kakaoMessage,
+          prayCard.profiles.kakao_id
+        );
+        if (kakaoMessageResponse) {
+          toast({
+            description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
+          });
+        }
+      }
+    } else updatePray(prayCard.id, currentUserId, prayType);
 
     if (prayCardCarouselApi) {
       sleep(500).then(() => {
         prayCardCarouselApi.scrollNext();
       });
     }
+
     analyticsTrack("클릭_기도카드_반응", {
       pray_type: prayType,
       where: eventOption.where,
@@ -56,7 +102,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
         return (
           <button
             key={type}
-            onClick={handleClick(type as PrayType)}
+            onClick={() => handleClick(type as PrayType)}
             className={`flex justify-center items-center w-[65px] h-[65px] rounded-full ${
               emojiData.bgColor
             } ${

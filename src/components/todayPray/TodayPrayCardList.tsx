@@ -56,10 +56,10 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
 
   useEffect(() => {
     fetchGroupPrayCardList(groupId, currentUserId, startDt, endDt);
+
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
-
       if (currentIndex === 0) prayCardCarouselApi.scrollNext();
       if (currentIndex === carouselLength - 1) {
         prayCardCarouselApi.scrollPrev();
