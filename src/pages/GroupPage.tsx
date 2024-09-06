@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import GroupMenuBtn from "../components/group/GroupMenuBtn";
@@ -13,7 +13,6 @@ import EventDialog from "@/components/notice/EventDialog";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const { groupId: paramsGroupId } = useParams();
   const groupList = useBaseStore((state) => state.groupList);
