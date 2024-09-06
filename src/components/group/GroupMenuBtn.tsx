@@ -14,6 +14,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { SlMenu } from "react-icons/sl";
 
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
+import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 
 interface GroupManuBtnProps {
   userGroupList: Group[];
@@ -94,6 +95,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
 
   const onClickSignOut = () => {
     analyticsTrack("클릭_로그아웃", {});
+    KakaoTokenRepo.cleanKakaoTokensInCookies();
     signOut();
   };
 

@@ -150,4 +150,10 @@ export class KakaoTokenRepo {
       }; expires=${refreshTokenExpires.toUTCString()}; path=/`;
     }
   }
+
+  static cleanKakaoTokensInCookies() {
+    const pastDate = new Date(0).toUTCString();
+    document.cookie = `${this.ACCESS_TOKEN_COOKIE_NAME}=; expires=${pastDate}; path=/`;
+    document.cookie = `${this.REFRESH_TOKEN_COOKIE_NAME}=; expires=${pastDate}; path=/`;
+  }
 }
