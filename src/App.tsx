@@ -118,7 +118,7 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
-      case "/myProfile":
+      case "/profile/me":
         analytics.track("페이지_프로필_나", {
           title: "PrayCard Create Page",
           where: from,
