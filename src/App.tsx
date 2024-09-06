@@ -19,6 +19,7 @@ import KakaoInit from "./components/kakao/KakaoInit";
 import KakaoCallBack from "./components/kakao/KakaoCallback";
 import MyProfilePage from "./pages/MyProfilePage";
 import GroupNotFoundPage from "./pages/GroupNotFoundPage";
+import GroupRedirectPage from "./pages/GroupRedirectPage";
 
 const App = () => {
   useEffect(() => {
@@ -48,12 +49,12 @@ const App = () => {
                     <KakaoCallBack />
                   </PrivateRoute>
                 }
-              ></Route>
+              />
               <Route
                 path="/group"
                 element={
                   <PrivateRoute>
-                    <GroupPage />
+                    <GroupRedirectPage />
                   </PrivateRoute>
                 }
               />
