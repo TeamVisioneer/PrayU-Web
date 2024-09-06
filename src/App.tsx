@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  matchPath,
+} from "react-router-dom";
 import { useEffect } from "react";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import PrivateRoute from "./components/auth/PrivateRoute";
@@ -12,6 +18,7 @@ import PrayCardCreatePage from "./pages/PrayCardCreatePage";
 import KakaoInit from "./components/kakao/KakaoInit";
 import KakaoCallBack from "./components/kakao/KakaoCallback";
 import MyProfilePage from "./pages/MyProfilePage";
+import GroupNotFoundPage from "./pages/GroupNotFoundPage";
 
 const App = () => {
   useEffect(() => {
@@ -67,13 +74,14 @@ const App = () => {
                 }
               />
               <Route
-                path="/praycard/new"
+                path="/group/:groupId/praycard/new"
                 element={
                   <PrivateRoute>
                     <PrayCardCreatePage />
                   </PrivateRoute>
                 }
               />
+              <Route path="group/not-found" element={<GroupNotFoundPage />} />
               <Route
                 path="/profile/me"
                 element={
@@ -82,7 +90,6 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
-              {/* <Route path="*" element={<NotFound />} /> */}
             </Routes>
           </AuthProvider>
         </BrowserRouter>
@@ -97,7 +104,7 @@ const App = () => {
 const AnalyticsTracker = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname;
-
+  const match = matchPath("/group/:groupId/praycard/new", location.pathname);
   useEffect(() => {
     switch (location.pathname) {
       case "/":
@@ -109,12 +116,6 @@ const AnalyticsTracker = () => {
       case "/group/new":
         analytics.track("페이지_그룹_생성", {
           title: "Group Create Page",
-          where: from,
-        });
-        break;
-      case "/praycard/new":
-        analytics.track("페이지_기도카드_생성", {
-          title: "PrayCard Create Page",
           where: from,
         });
         break;
@@ -131,9 +132,17 @@ const AnalyticsTracker = () => {
             where: from,
           });
         }
+
+        if (match) {
+          analytics.track("페이지_기도카드_생성", {
+            title: "PrayCard Create Page with Group ID",
+            groupId: match.params.groupId,
+            where: from,
+          });
+        }
         break;
     }
-  }, [location.pathname, from]);
+  }, [match, location.pathname, from]);
 
   return null;
 };

@@ -7,14 +7,29 @@ import prayerVerses from "@/data/prayCardTemplate.json";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import GroupMenuBtn from "@/components/group/GroupMenuBtn";
+import { useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
+  const { groupId } = useParams<{ groupId: string }>();
 
-  const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const getGroup = useBaseStore((state) => state.getGroup);
+  const fetchGroupListByUserId = useBaseStore(
+    (state) => state.fetchGroupListByUserId
+  );
+  const groupList = useBaseStore((state) => state.groupList);
+
   const myMember = useBaseStore((state) => state.myMember);
   const memberList = useBaseStore((state) => state.memberList);
+  const fetchMemberListByGroupId = useBaseStore(
+    (state) => state.fetchMemberListByGroupId
+  );
+  const getMember = useBaseStore((state) => state.getMember);
+  const createMember = useBaseStore((state) => state.createMember);
+  const updateMember = useBaseStore((state) => state.updateMember);
+  const createPrayCard = useBaseStore((state) => state.createPrayCard);
 
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
@@ -26,10 +41,6 @@ const PrayCardCreatePage: React.FC = () => {
   const setIsDisabledPrayCardCreateBtn = useBaseStore(
     (state) => state.setIsDisabledGroupCreateBtn
   );
-  const getMember = useBaseStore((state) => state.getMember);
-  const createMember = useBaseStore((state) => state.createMember);
-  const updateMember = useBaseStore((state) => state.updateMember);
-  const createPrayCard = useBaseStore((state) => state.createPrayCard);
 
   const getRandomVerse = () => {
     const randomIndex = Math.floor(Math.random() * prayerVerses.length);
@@ -79,16 +90,25 @@ const PrayCardCreatePage: React.FC = () => {
   };
 
   useEffect(() => {
+    fetchGroupListByUserId(user!.id);
+    if (groupId) getGroup(groupId);
+    if (groupId) fetchMemberListByGroupId(groupId);
+  }, [
+    fetchGroupListByUserId,
+    fetchMemberListByGroupId,
+    getGroup,
+    user,
+    groupId,
+  ]);
+
+  useEffect(() => {
     setPrayCardContent(myMember?.pray_summary || "");
   }, [myMember, setPrayCardContent]);
 
-  if (targetGroup == null || memberList == null) {
+  if (!groupList || !targetGroup || !memberList) {
     return (
-      <div className="h-screen flex flex-col justify-center items-center gap-2">
-        <div>그룹을 찾을 수 없어요😂</div>
-        <a href="/" className="text-sm underline text-gray-400">
-          PrayU 홈으로
-        </a>
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
       </div>
     );
   }
@@ -154,10 +174,7 @@ const PrayCardCreatePage: React.FC = () => {
           <span className="text-sm text-gray-500">{memberList.length}</span>
         </div>
         <div className="w-[48px] flex justify-center">
-          <GroupMenuBtn
-            userGroupList={groupList || []}
-            targetGroup={targetGroup}
-          />
+          <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
         </div>
       </div>
 

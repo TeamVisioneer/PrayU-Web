@@ -43,10 +43,10 @@ const GroupBody: React.FC<GroupBodyProps> = ({
       !memberLoading &&
       (myMember == null || myMember.updated_at < getISOTodayDate(-6))
     ) {
-      navigate("/praycard/new", { replace: true });
+      navigate(`/group/${targetGroup.id}/praycard/new`, { replace: true });
       return;
     }
-  }, [myMember, memberLoading, memberList, navigate]);
+  }, [myMember, memberLoading, memberList, navigate, targetGroup]);
 
   if (!myMember) {
     return (
