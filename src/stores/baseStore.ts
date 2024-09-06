@@ -54,7 +54,7 @@ export interface BaseStore {
   targetGroup: Group | null;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
-
+  targetGroupLoading: boolean;
   fetchGroupListByUserId: (userId: string) => Promise<void>;
   getGroup: (groupId: string) => Promise<void>;
   setGroupName: (groupName: string) => void;
@@ -297,10 +297,12 @@ const useBaseStore = create<BaseStore>()(
         state.groupList = data;
       });
     },
+    targetGroupLoading: true,
     getGroup: async (groupId: string) => {
       const data = await getGroup(groupId);
       set((state) => {
         state.targetGroup = data;
+        state.targetGroupLoading = false;
       });
     },
     createGroup: async (

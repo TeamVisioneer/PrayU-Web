@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import GroupMenuBtn from "../components/group/GroupMenuBtn";
@@ -13,16 +13,17 @@ import EventDialog from "@/components/notice/EventDialog";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const { groupId: paramsGroupId } = useParams();
   const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const targetGroupLoading = useBaseStore((state) => state.targetGroupLoading);
   const getGroup = useBaseStore((state) => state.getGroup);
   const memberList = useBaseStore((state) => state.memberList) || [];
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
-
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
@@ -39,7 +40,10 @@ const GroupPage: React.FC = () => {
     getGroup,
   ]);
 
-  if (!groupList || !memberList || !targetGroup) {
+  if (targetGroupLoading == false && targetGroup == null)
+    window.location.replace("/group/not-found");
+
+  if (!targetGroup || !memberList || !groupList) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
