@@ -168,7 +168,7 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
               new
             </p>
             <a
-              href="/myProfile"
+              href="/profile/me"
               onClick={() => analyticsTrack("클릭_프로필_나", {})}
             >
               내 정보

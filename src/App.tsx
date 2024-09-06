@@ -75,7 +75,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/myProfile"
+                path="/profile/me"
                 element={
                   <PrivateRoute>
                     <MyProfilePage />
