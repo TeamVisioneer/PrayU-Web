@@ -27,9 +27,7 @@ export class KakaoController {
   static async selectUsers() {
     try {
       const response = await window.Kakao.Picker.selectFriends({
-        title: "친구 선택",
-        maxPickableCount: 10,
-        minPickableCount: 1,
+        title: "공유할 친구 선택",
       });
       return response;
     } catch (error) {

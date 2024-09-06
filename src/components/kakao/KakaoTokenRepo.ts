@@ -25,7 +25,7 @@ export class KakaoTokenRepo {
       if (response) {
         this.setKakaoTokensInCookie(response);
         window.Kakao.Auth.setAccessToken(response.access_token);
-        return KAKAOTOKENS.accessToken;
+        return response.access_token;
       }
     } else {
       this.openKakaoLoginPage(state);

@@ -16,13 +16,33 @@ const KakaoCallBack = () => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
+  const setIsOpenMyMemberDrawer = useBaseStore(
+    (state) => state.setIsOpenMyMemberDrawer
+  );
+  const parseState = (state: string | null) => {
+    const stateObj: { [key: string]: string } = {};
+    if (!state) return stateObj;
+
+    // ';'로 구분하여 split하고, 각 key-value를 처리
+    const parts = state.split(";");
+    parts.forEach((part) => {
+      const [key, value] = part.split(":");
+      if (key && value) {
+        stateObj[key.trim()] = value.trim();
+      }
+    });
+    return stateObj;
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const code = params.get("code");
     const state = params.get("state");
-    const groupPageUrl =
-      state && state.includes(":") ? `/group/${state.split(":")[1]}` : "/group";
+    const stateObj = parseState(state);
+
+    const groupPageUrl = stateObj["groupId"]
+      ? `/group/${stateObj["groupId"]}`
+      : "/group";
 
     if (code) {
       KakaoTokenRepo.fetchKakaoToken(
@@ -39,7 +59,8 @@ const KakaoCallBack = () => {
         }
       });
     }
-    setIsOpenTodayPrayDrawer(true);
+    if (stateObj["from"] == "TodayPrayDrawer") setIsOpenTodayPrayDrawer(true);
+    if (stateObj["from"] == "MyPrayCard") setIsOpenMyMemberDrawer(true);
     navigate(groupPageUrl, { replace: true });
   }, [
     navigate,
@@ -48,6 +69,7 @@ const KakaoCallBack = () => {
     updateProfile,
     user,
     setIsOpenTodayPrayDrawer,
+    setIsOpenMyMemberDrawer,
   ]);
   return null;
 };
