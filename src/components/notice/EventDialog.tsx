@@ -14,6 +14,7 @@ import {
 
 import useBaseStore from "@/stores/baseStore";
 import imgEventOpen from "@/assets/event_open.svg";
+import imgUpdate from "@/assets/update_0906.svg";
 import { useEffect, useState } from "react";
 import { analytics } from "@/analytics/analytics";
 
@@ -33,7 +34,7 @@ const EventDialog = () => {
 
   const CarouselDots = () => (
     <div className="flex justify-center items-center">
-      {Array.from({ length: 1 }, (_, index) => (
+      {Array.from({ length: 2 }, (_, index) => (
         <span
           key={index}
           className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
@@ -64,7 +65,7 @@ const EventDialog = () => {
       <DialogContent className="w-full aspect-[1/1] bg-mainBg">
         <DialogHeader>
           <DialogTitle className="text-md text-center">
-            🎉 진행중인 이벤트
+            🎉 진행중인 소식
           </DialogTitle>
           <DialogDescription className="text-center text-xs text-gray-400">
             클릭하고 경품 받아가세요!!
@@ -72,6 +73,9 @@ const EventDialog = () => {
         </DialogHeader>
         <Carousel className="flex w-full h-full justify-center" setApi={setApi}>
           <CarouselContent>
+            <CarouselItem className="w-full h-full">
+              <img className="w-[350px] h-[350px] rounded-xl" src={imgUpdate} />
+            </CarouselItem>
             <CarouselItem className="w-full h-full">
               <img
                 onClick={() =>

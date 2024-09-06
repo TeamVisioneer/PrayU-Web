@@ -11,6 +11,7 @@ import { Toaster } from "./components/ui/toaster";
 import PrayCardCreatePage from "./pages/PrayCardCreatePage";
 import KakaoInit from "./components/kakao/KakaoInit";
 import KakaoCallBack from "./components/kakao/KakaoCallback";
+import MyProfilePage from "./pages/MyProfilePage";
 
 const App = () => {
   useEffect(() => {
@@ -73,6 +74,14 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/profile/me"
+                element={
+                  <PrivateRoute>
+                    <MyProfilePage />
+                  </PrivateRoute>
+                }
+              />
               {/* <Route path="*" element={<NotFound />} /> */}
             </Routes>
           </AuthProvider>
@@ -109,6 +118,12 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
+      case "/profile/me":
+        analytics.track("페이지_프로필_나", {
+          title: "PrayCard Create Page",
+          where: from,
+        });
+        break;
       default:
         if (location.pathname.startsWith("/group/")) {
           analytics.track("페이지_그룹_홈", {
@@ -118,7 +133,7 @@ const AnalyticsTracker = () => {
         }
         break;
     }
-  }, [location.pathname]);
+  }, [location.pathname, from]);
 
   return null;
 };

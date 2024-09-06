@@ -163,6 +163,18 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           )}
 
           <hr />
+          <div className="flex gap-2 items-center">
+            <p className="text-xs flex flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
+              new
+            </p>
+            <a
+              href="/profile/me"
+              onClick={() => analyticsTrack("클릭_프로필_나", {})}
+            >
+              내 정보
+            </a>
+          </div>
+
           <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
             PrayU 홈
           </a>
@@ -174,9 +186,6 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
           </div>
 
           <div className="flex gap-2 items-center">
-            <p className="text-xs flex flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
-              new
-            </p>
             <a
               href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
               onClick={() => onClickContactUs()}
