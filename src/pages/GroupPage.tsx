@@ -40,7 +40,7 @@ const GroupPage: React.FC = () => {
   ]);
 
   if (targetGroupLoading == false && targetGroup == null)
-    window.location.replace("/group/not-found");
+    window.location.href = "/group/not-found";
 
   if (!targetGroup || !memberList || !groupList) {
     return (
