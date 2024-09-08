@@ -8,6 +8,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 const MyProfilePage = () => {
   const { user } = useAuth();
 
+  const setAlertData = useBaseStore((state) => state.setAlertData);
+  const setIsConfirmAlertOpen = useBaseStore(
+    (state) => state.setIsConfirmAlertOpen
+  );
+
   const fetchProfilesByUserId = useBaseStore(
     (state) => state.fetchProfilesByUserId
   );
@@ -21,6 +26,21 @@ const MyProfilePage = () => {
   const onBlutUpdateName = () => {
     if (name.trim() === "") setName(profile?.full_name || "");
     else updateProfileName(user!.id, name);
+  };
+
+  const onClickExitPrayU = () => {
+    setAlertData({
+      title: "PrayU 탈퇴하기",
+      description: `더 이상 기도 나눔을 할 수 없게 돼요 :(`,
+      actionText: "탈퇴하기",
+      cancelText: "취소",
+      onAction: async () => {
+        //탈퇴api
+        //signOut???
+        console.log("탈퇴하기");
+      },
+    });
+    setIsConfirmAlertOpen(true);
   };
 
   useEffect(() => {
@@ -65,18 +85,26 @@ const MyProfilePage = () => {
         {loading ? (
           <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
         ) : (
-          <div className="w-full h-[55px] flex items-center gap-4 p-4 bg-white rounded-xl">
-            <span className="text-md font-bold">이름</span>
-            <Input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onBlur={() => onBlutUpdateName()}
-              placeholder="이름을 입력해주세요!"
-              maxLength={12}
-              className="text-md flex-1 border-none text-right"
-            />
-          </div>
+          <>
+            <div className="w-full h-[55px] flex items-center gap-4 p-4 bg-white rounded-xl">
+              <span className="text-md font-bold">이름</span>
+              <Input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onBlur={() => onBlutUpdateName()}
+                placeholder="이름을 입력해주세요!"
+                maxLength={12}
+                className="text-md flex-1 border-none text-right"
+              />
+            </div>
+            <p
+              className="text-sm text-gray-600 underline p-3"
+              onClick={() => onClickExitPrayU()}
+            >
+              회원 탈퇴하기
+            </p>
+          </>
         )}
       </div>
     </div>
