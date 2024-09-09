@@ -4,9 +4,11 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
+import { helloUser } from "@/apis/user";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
+  const signOut = useBaseStore((state) => state.signOut);
 
   const setAlertData = useBaseStore((state) => state.setAlertData);
   const setIsConfirmAlertOpen = useBaseStore(
@@ -35,8 +37,8 @@ const MyProfilePage = () => {
       actionText: "탈퇴하기",
       cancelText: "취소",
       onAction: async () => {
-        //탈퇴api
-        //signOut???
+        helloUser();
+        //signOut();
         console.log("탈퇴하기");
       },
     });
