@@ -37,7 +37,7 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
 import { analytics } from "@/analytics/analytics";
 import { updateProfile, updateProfilesParams } from "@/apis/profiles";
-import { fetchProfilesByUserId } from "@/apis/profiles";
+import { getProfile } from "@/apis/profiles";
 
 export interface BaseStore {
   // user
@@ -50,7 +50,7 @@ export interface BaseStore {
 
   // profiles
   profile: Profiles | null;
-  fetchProfilesByUserId: (userId: string) => Promise<Profiles[] | null>;
+  getProfile: (userId: string) => Promise<Profiles[] | null>;
   updateProfile: (
     userId: string,
     params: updateProfilesParams
@@ -107,7 +107,6 @@ export interface BaseStore {
   groupPrayCardList: PrayCardWithProfiles[] | null;
   otherPrayCardList: PrayCardWithProfiles[] | null;
   userPrayCardList: PrayCardWithProfiles[] | null;
-  targetPrayCard: PrayCardWithProfiles | null;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
   isDisabledPrayCardCreateBtn: boolean;
@@ -285,8 +284,8 @@ const useBaseStore = create<BaseStore>()(
 
     // profiles
     profile: null,
-    fetchProfilesByUserId: async (userId: string) => {
-      const data = await fetchProfilesByUserId(userId);
+    getProfile: async (userId: string) => {
+      const data = await getProfile(userId);
       set((state) => {
         state.profile = data?.[0] || null;
       });
@@ -415,7 +414,6 @@ const useBaseStore = create<BaseStore>()(
     groupPrayCardList: null,
     userPrayCardList: null,
     otherPrayCardList: null,
-    targetPrayCard: null,
     inputPrayCardContent: "",
     isEditingPrayCard: false,
     isDisabledPrayCardCreateBtn: false,

@@ -4,6 +4,7 @@ import { Textarea } from "../ui/textarea";
 import { getISODateYMD } from "@/lib/utils";
 import OtherPrayCardMenuBtn from "../prayCard/OtherPrayCardMenuBtn";
 import useBaseStore from "@/stores/baseStore";
+import { useEffect } from "react";
 
 interface EventOption {
   where: string;
@@ -14,11 +15,19 @@ interface PrayCardProps {
   eventOption: EventOption;
 }
 
-// TODO: 현재 TodayPray 에서의 PrayCard 를 위한 컴포넌트로 사용중, 이후 이름 수정 및 폴더링 예정
 const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
   const createdAt = prayCard.created_at;
   const createdDateYMD = getISODateYMD(createdAt);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const setOtherMember = useBaseStore((state) => state.setOtherMember);
+  const memberList = useBaseStore((state) => state.memberList);
+
+  useEffect(() => {
+    if (memberList)
+      setOtherMember(
+        memberList.find((member) => member?.user_id == prayCard.user_id) || null
+      );
+  }, [setOtherMember, memberList, prayCard]);
 
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">

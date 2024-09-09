@@ -19,6 +19,7 @@ import * as Sentry from "@sentry/react";
 const ReportAlert: React.FC = () => {
   const { toast } = useToast();
 
+  const myMember = useBaseStore((state) => state.myMember);
   const otherMember = useBaseStore((state) => state.otherMember);
 
   const isReportAlertOpen = useBaseStore((state) => state.isReportAlertOpen);
@@ -72,18 +73,10 @@ const ReportAlert: React.FC = () => {
           description: reportCategories.join(", "),
           color: null,
           fields: [
-            {
-              name: "UserId",
-              value: reportUserId,
-            },
-            {
-              name: "PrayContent",
-              value: reportPrayContent,
-            },
-            {
-              name: "Reason",
-              value: reportContent,
-            },
+            { name: "제보 유저 ID", value: myMember?.user_id || "" },
+            { name: "신고 유저 ID", value: reportUserId },
+            { name: "신고 내용", value: reportPrayContent },
+            { name: "신고 사유", value: reportContent },
           ],
         },
       ],

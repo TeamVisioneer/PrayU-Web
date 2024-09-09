@@ -55,7 +55,9 @@ export const getMember = async (
   try {
     const { data, error } = await supabase
       .from("member")
-      .select(`*, profiles (id, full_name, avatar_url, kakao_id)`)
+      .select(
+        `*, profiles (id, full_name, avatar_url, kakao_id, blocking_users)`
+      )
       .eq("user_id", userId)
       .eq("group_id", groupId)
       .not("user_id", "is", null)

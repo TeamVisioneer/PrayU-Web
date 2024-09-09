@@ -33,7 +33,7 @@ export const updateProfile = async (
   }
 };
 
-export const fetchProfilesByUserId = async (
+export const getProfile = async (
   userId: string
 ): Promise<Profiles[] | null> => {
   try {
