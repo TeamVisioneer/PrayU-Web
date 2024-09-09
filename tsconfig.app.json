@@ -28,7 +28,6 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src",
     "supabase",
     "analytics",
     "analytics/amplitude.d.ts",

@@ -35,7 +35,6 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
     (state) => state.fetchGroupPrayCardList
   );
 
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const isOpenTodayPrayDrawer = useBaseStore(
     (state) => state.isOpenTodayPrayDrawer
   );
@@ -158,13 +157,7 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
       <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full pb-5">
         <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
-          <DrawerDescription className="text-gray-300 text-xs text-center">
-            {!isPrayToday && filterdGroupPrayCardList.length > 0 ? (
-              "반응을 누르면 다음 기도로 넘어가요"
-            ) : (
-              <br />
-            )}
-          </DrawerDescription>
+          <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {groupPrayCardList.length === 1 ? emptyPrayCardList : todayPrayCardList}
       </DrawerContent>

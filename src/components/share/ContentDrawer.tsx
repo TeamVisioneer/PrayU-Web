@@ -47,7 +47,7 @@ const ContentDrawer = () => {
   return (
     <Drawer open={isOpenContentDrawer} onOpenChange={setIsOpenContentDrawer}>
       <DrawerContent className="bg-mainBg focus:outline-none">
-        <DrawerHeader>
+        <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
