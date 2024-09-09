@@ -82,7 +82,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
-              <Route path="group/not-found" element={<GroupNotFoundPage />} />
+              <Route path="/group/not-found" element={<GroupNotFoundPage />} />
               <Route
                 path="/profile/me"
                 element={
