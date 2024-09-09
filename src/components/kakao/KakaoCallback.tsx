@@ -51,7 +51,7 @@ const KakaoCallBack = () => {
       ).then((response: KakaoTokenResponse | null) => {
         if (user) {
           const kakaoId = user.user_metadata.sub;
-          updateProfile(user.id, kakaoId);
+          updateProfile(user.id, { kakao_id: kakaoId });
         }
         if (response) {
           KakaoTokenRepo.setKakaoTokensInCookie(response);

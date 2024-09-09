@@ -23,11 +23,11 @@ const MyProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
 
-  const updateProfileName = useBaseStore((state) => state.updateProfileName);
+  const updateProfile = useBaseStore((state) => state.updateProfile);
 
   const onBlutUpdateName = () => {
     if (name.trim() === "") setName(profile?.full_name || "");
-    else updateProfileName(user!.id, name);
+    else updateProfile(user!.id, { full_name: name });
   };
 
   const onClickExitPrayU = () => {
