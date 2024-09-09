@@ -54,7 +54,7 @@ export interface BaseStore {
   targetGroup: Group | null;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
-
+  targetGroupLoading: boolean;
   fetchGroupListByUserId: (userId: string) => Promise<void>;
   getGroup: (groupId: string) => Promise<void>;
   setGroupName: (groupName: string) => void;
@@ -104,6 +104,7 @@ export interface BaseStore {
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
   isDisabledPrayCardCreateBtn: boolean;
+  isDisabledSkipPrayCardBtn: boolean;
   prayCardCarouselApi: CarouselApi | null;
   fetchGroupPrayCardList: (
     groupId: string,
@@ -129,6 +130,7 @@ export interface BaseStore {
   setIsDisabledPrayCardCreateBtn: (
     isDisabledPrayCardCreateBtn: boolean
   ) => void;
+  setIsDisabledSkipPrayCardBtn: (isDisabledSkipPrayCardBtn: boolean) => void;
   updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
   setPrayCardContent: (content: string) => void;
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
@@ -297,10 +299,12 @@ const useBaseStore = create<BaseStore>()(
         state.groupList = data;
       });
     },
+    targetGroupLoading: true,
     getGroup: async (groupId: string) => {
       const data = await getGroup(groupId);
       set((state) => {
         state.targetGroup = data;
+        state.targetGroupLoading = false;
       });
     },
     createGroup: async (
@@ -403,6 +407,7 @@ const useBaseStore = create<BaseStore>()(
     inputPrayCardContent: "",
     isEditingPrayCard: false,
     isDisabledPrayCardCreateBtn: false,
+    isDisabledSkipPrayCardBtn: true,
     prayCardCarouselApi: null,
     setIsEditingPrayCard: (isEditingPrayCard: boolean) => {
       set((state) => {
@@ -514,6 +519,11 @@ const useBaseStore = create<BaseStore>()(
     setIsDisabledPrayCardCreateBtn: (isDisabled: boolean) => {
       set((state) => {
         state.isDisabledPrayCardCreateBtn = isDisabled;
+      });
+    },
+    setIsDisabledSkipPrayCardBtn: (isDisabled: boolean) => {
+      set((state) => {
+        state.isDisabledSkipPrayCardBtn = isDisabled;
       });
     },
     setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => {

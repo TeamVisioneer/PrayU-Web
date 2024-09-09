@@ -7,14 +7,31 @@ import prayerVerses from "@/data/prayCardTemplate.json";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import GroupMenuBtn from "@/components/group/GroupMenuBtn";
+import { useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
+  const { groupId } = useParams<{ groupId: string }>();
 
-  const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
-  const myMember = useBaseStore((state) => state.myMember);
+  const targetGroupLoading = useBaseStore((state) => state.targetGroupLoading);
+  const getGroup = useBaseStore((state) => state.getGroup);
+  const fetchGroupListByUserId = useBaseStore(
+    (state) => state.fetchGroupListByUserId
+  );
+  const groupList = useBaseStore((state) => state.groupList);
+
   const memberList = useBaseStore((state) => state.memberList);
+  const fetchMemberListByGroupId = useBaseStore(
+    (state) => state.fetchMemberListByGroupId
+  );
+  const myMember = useBaseStore((state) => state.myMember);
+  const memberLoading = useBaseStore((state) => state.memberLoading);
+  const getMember = useBaseStore((state) => state.getMember);
+  const createMember = useBaseStore((state) => state.createMember);
+  const updateMember = useBaseStore((state) => state.updateMember);
+  const createPrayCard = useBaseStore((state) => state.createPrayCard);
 
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
@@ -26,72 +43,101 @@ const PrayCardCreatePage: React.FC = () => {
   const setIsDisabledPrayCardCreateBtn = useBaseStore(
     (state) => state.setIsDisabledGroupCreateBtn
   );
-  const getMember = useBaseStore((state) => state.getMember);
-  const createMember = useBaseStore((state) => state.createMember);
-  const updateMember = useBaseStore((state) => state.updateMember);
-  const createPrayCard = useBaseStore((state) => state.createPrayCard);
+  const IsDisabledSkipPrayCardBtn = useBaseStore(
+    (state) => state.isDisabledSkipPrayCardBtn
+  );
+  const setIsDisabledSkipPrayCardBtn = useBaseStore(
+    (state) => state.setIsDisabledSkipPrayCardBtn
+  );
+
+  useEffect(() => {
+    fetchGroupListByUserId(user!.id);
+    if (groupId) getGroup(groupId);
+    if (groupId) getMember(user!.id, groupId);
+    if (groupId) fetchMemberListByGroupId(groupId);
+  }, [
+    getMember,
+    fetchGroupListByUserId,
+    fetchMemberListByGroupId,
+    getGroup,
+    user,
+    groupId,
+  ]);
+
+  useEffect(() => {
+    setPrayCardContent(myMember?.pray_summary || "");
+  }, [myMember, setPrayCardContent]);
+
+  if (targetGroupLoading == false && targetGroup == null)
+    window.location.href = "/group/not-found";
+
+  if (!groupList || !targetGroup || !memberList || memberLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
+      </div>
+    );
+  }
 
   const getRandomVerse = () => {
     const randomIndex = Math.floor(Math.random() * prayerVerses.length);
     return `(${prayerVerses[randomIndex].verse})\n${prayerVerses[randomIndex].text}`;
   };
 
-  const onClickPrayCardTemplate = () => {
-    analyticsTrack("클릭_기도카드_템플릿", {});
-    setPrayCardContent(getRandomVerse());
-  };
-
   const handleCreatePrayCard = async (
     currentUserId: string,
-    groupId: string
+    groupId: string,
+    content: string
   ) => {
-    setIsDisabledPrayCardCreateBtn(true);
-    analyticsTrack("클릭_기도카드_생성", { group_id: groupId });
-    const member = await getMember(currentUserId, groupId);
     let updatedMember: Member | null;
-    if (!member) {
-      updatedMember = await createMember(
-        groupId,
-        currentUserId,
-        inputPrayCardContent
-      );
+    if (!myMember) {
+      updatedMember = await createMember(groupId, currentUserId, content);
     } else {
       updatedMember = await updateMember(
-        member.id,
-        inputPrayCardContent,
+        myMember.id,
+        content,
         getISOTodayDate()
       );
     }
-    if (!updatedMember) {
-      setIsDisabledPrayCardCreateBtn(false);
-      return;
-    }
-    const newPrayCard = await createPrayCard(
-      groupId,
+    if (!updatedMember) return;
+
+    const newPrayCard = await createPrayCard(groupId, currentUserId, content);
+    return newPrayCard;
+  };
+
+  const onClickSkipPrayCard = async (
+    currentUserId: string,
+    groupId: string
+  ) => {
+    setIsDisabledSkipPrayCardBtn(true);
+    analyticsTrack("클릭_기도카드_다음에작성", {});
+    const randomContent = getRandomVerse();
+    const newPrayCard = await handleCreatePrayCard(
       currentUserId,
-      inputPrayCardContent
+      groupId,
+      randomContent
     );
     if (!newPrayCard) {
-      setIsDisabledPrayCardCreateBtn(false);
-      return;
+      setIsDisabledSkipPrayCardBtn(false);
+      return null;
     }
     window.location.replace(`/group/${groupId}`);
   };
 
-  useEffect(() => {
-    setPrayCardContent(myMember?.pray_summary || "");
-  }, [myMember, setPrayCardContent]);
-
-  if (targetGroup == null || memberList == null) {
-    return (
-      <div className="h-screen flex flex-col justify-center items-center gap-2">
-        <div>그룹을 찾을 수 없어요😂</div>
-        <a href="/" className="text-sm underline text-gray-400">
-          PrayU 홈으로
-        </a>
-      </div>
+  const onClickJoinGroup = async (currentUserId: string, groupId: string) => {
+    setIsDisabledPrayCardCreateBtn(true);
+    analyticsTrack("클릭_기도카드_생성", { group_id: groupId });
+    const newPrayCard = await handleCreatePrayCard(
+      currentUserId,
+      groupId,
+      inputPrayCardContent
     );
-  }
+    if (!newPrayCard) {
+      setIsDisabledPrayCardCreateBtn(false);
+      return null;
+    }
+    window.location.replace(`/group/${groupId}`);
+  };
 
   const todayDateYMD = getISOTodayDateYMD();
 
@@ -130,14 +176,6 @@ const PrayCardCreatePage: React.FC = () => {
             onChange={(e) => setPrayCardContent(e.target.value)}
             placeholder={`기도제목은 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
           />
-          {!inputPrayCardContent && (
-            <p
-              className="text-xs text-gray-500 underline"
-              onClick={() => onClickPrayCardTemplate()}
-            >
-              기도카드 템플릿 사용하기
-            </p>
-          )}
         </div>
       </div>
     </div>
@@ -154,25 +192,31 @@ const PrayCardCreatePage: React.FC = () => {
           <span className="text-sm text-gray-500">{memberList.length}</span>
         </div>
         <div className="w-[48px] flex justify-center">
-          <GroupMenuBtn
-            userGroupList={groupList || []}
-            targetGroup={targetGroup}
-          />
+          <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
         </div>
       </div>
 
       <p>당신의 기도제목을 알려주세요 😁</p>
       <div className="w-full px-5">{PrayCardUI}</div>
 
-      <div className="flex flex-col w-full p-5 gap-2">
+      <div className="flex flex-col items-center w-full p-5 gap-4">
         <Button
           className="w-full"
-          onClick={() => handleCreatePrayCard(user!.id, targetGroup.id)}
+          onClick={() => onClickJoinGroup(user!.id, targetGroup.id)}
           disabled={isDisabledPrayCardCreateBtn}
           variant="primary"
         >
           그룹 참여하기
         </Button>
+        {!inputPrayCardContent && (
+          <button
+            className="text-sm text-gray-500 underline"
+            onClick={() => onClickSkipPrayCard(user!.id, targetGroup.id)}
+            disabled={IsDisabledSkipPrayCardBtn}
+          >
+            다음에 작성하기
+          </button>
+        )}
       </div>
     </div>
   );

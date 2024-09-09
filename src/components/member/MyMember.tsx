@@ -65,7 +65,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       (userPrayCardList.length == 0 ||
         userPrayCardList[0].created_at < getISOTodayDate(-6))
     ) {
-      navigate("/praycard/new", { replace: true });
+      navigate(`/group/${groupId}/praycard/new`, { replace: true });
       return;
     }
   });

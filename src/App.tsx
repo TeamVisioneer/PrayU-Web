@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  matchPath,
+} from "react-router-dom";
 import { useEffect } from "react";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import PrivateRoute from "./components/auth/PrivateRoute";
@@ -12,6 +18,8 @@ import PrayCardCreatePage from "./pages/PrayCardCreatePage";
 import KakaoInit from "./components/kakao/KakaoInit";
 import KakaoCallBack from "./components/kakao/KakaoCallback";
 import MyProfilePage from "./pages/MyProfilePage";
+import GroupNotFoundPage from "./pages/GroupNotFoundPage";
+import GroupRedirectPage from "./pages/GroupRedirectPage";
 
 const App = () => {
   useEffect(() => {
@@ -41,12 +49,12 @@ const App = () => {
                     <KakaoCallBack />
                   </PrivateRoute>
                 }
-              ></Route>
+              />
               <Route
                 path="/group"
                 element={
                   <PrivateRoute>
-                    <GroupPage />
+                    <GroupRedirectPage />
                   </PrivateRoute>
                 }
               />
@@ -67,13 +75,14 @@ const App = () => {
                 }
               />
               <Route
-                path="/praycard/new"
+                path="/group/:groupId/praycard/new"
                 element={
                   <PrivateRoute>
                     <PrayCardCreatePage />
                   </PrivateRoute>
                 }
               />
+              <Route path="/group/not-found" element={<GroupNotFoundPage />} />
               <Route
                 path="/profile/me"
                 element={
@@ -82,7 +91,6 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
-              {/* <Route path="*" element={<NotFound />} /> */}
             </Routes>
           </AuthProvider>
         </BrowserRouter>
@@ -97,7 +105,11 @@ const App = () => {
 const AnalyticsTracker = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname;
-
+  const matchPraycardNew = matchPath(
+    "/group/:groupId/praycard/new",
+    location.pathname
+  );
+  const matchGroup = matchPath("/group/:groupId", location.pathname);
   useEffect(() => {
     switch (location.pathname) {
       case "/":
@@ -112,12 +124,6 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
-      case "/praycard/new":
-        analytics.track("페이지_기도카드_생성", {
-          title: "PrayCard Create Page",
-          where: from,
-        });
-        break;
       case "/profile/me":
         analytics.track("페이지_프로필_나", {
           title: "PrayCard Create Page",
@@ -125,15 +131,21 @@ const AnalyticsTracker = () => {
         });
         break;
       default:
-        if (location.pathname.startsWith("/group/")) {
+        if (matchGroup) {
           analytics.track("페이지_그룹_홈", {
-            title: "Group Page",
+            title: "Group Home Page",
+            groupId: matchGroup.params.groupId,
+            where: from,
+          });
+        } else if (matchPraycardNew) {
+          analytics.track("페이지_기도카드_생성", {
+            title: "PrayCard Create Page with Group ID",
+            groupId: matchPraycardNew.params.groupId,
             where: from,
           });
         }
-        break;
     }
-  }, [location.pathname, from]);
+  }, [matchPraycardNew, matchGroup, location.pathname, from]);
 
   return null;
 };

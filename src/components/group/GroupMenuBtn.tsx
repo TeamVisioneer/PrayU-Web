@@ -16,12 +16,12 @@ import { SlMenu } from "react-icons/sl";
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 
-interface GroupManuBtnProps {
+interface GroupMenuBtnProps {
   userGroupList: Group[];
   targetGroup?: Group;
 }
 
-const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
+const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   userGroupList,
   targetGroup,
 }) => {
@@ -206,4 +206,4 @@ const GroupManuBtn: React.FC<GroupManuBtnProps> = ({
   );
 };
 
-export default GroupManuBtn;
+export default GroupMenuBtn;

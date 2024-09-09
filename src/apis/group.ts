@@ -33,6 +33,8 @@ export const getGroup = async (groupId: string): Promise<Group | null> => {
       .eq("id", groupId)
       .single();
     if (error) {
+      if (error.code == "22P02") return null; // groupId가 uuid 가 아닌경우
+      if (error.code == "PGRST116") return null; // 해당 row 가 없는 경우
       Sentry.captureException(error.message);
       return null;
     }
