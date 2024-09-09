@@ -7,16 +7,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MdBlock } from "react-icons/md";
-
 import { RiMoreFill } from "react-icons/ri";
 import { MdReportGmailerrorred } from "react-icons/md";
 
 import { analyticsTrack } from "@/analytics/analytics";
+import useBaseStore from "@/stores/baseStore";
+
 const OtherPrayCardMenuBtn: React.FC = () => {
+  const setIsReportAlertOpen = useBaseStore(
+    (state) => state.setIsReportAlertOpen
+  );
+
   const onClickReportPrayCard = () => {
+    analyticsTrack("클릭_기도카드_신고", {});
+    setIsReportAlertOpen(true);
     return;
   };
   const onClickBlockUser = () => {
+    analyticsTrack("클릭_프로필_차단", {});
     return;
   };
   return (

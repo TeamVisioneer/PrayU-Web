@@ -10,6 +10,7 @@ import { ClipLoader } from "react-spinners";
 import ContentDrawer from "@/components/share/ContentDrawer";
 import OpenEventDialogBtn from "@/components/notice/OpenEventDialogBtn";
 import EventDialog from "@/components/notice/EventDialog";
+import ReportAlert from "@/components/alert/ReportAlert";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -79,6 +80,7 @@ const GroupPage: React.FC = () => {
       <ShareDrawer />
       <ContentDrawer />
       <EventDialog />
+      <ReportAlert />
     </div>
   );
 };
