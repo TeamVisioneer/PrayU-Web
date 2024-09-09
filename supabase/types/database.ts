@@ -231,6 +231,7 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          blocking_users: string[]
           full_name: string | null
           id: string
           kakao_id: string | null
@@ -240,6 +241,7 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          blocking_users?: string[]
           full_name?: string | null
           id: string
           kakao_id?: string | null
@@ -249,6 +251,7 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          blocking_users?: string[]
           full_name?: string | null
           id?: string
           kakao_id?: string | null
