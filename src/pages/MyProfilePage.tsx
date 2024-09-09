@@ -6,6 +6,8 @@ import { IoChevronBack } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
 import { helloUser } from "@/apis/user";
 
+import { createClient } from "@supabase/supabase-js";
+
 const MyProfilePage = () => {
   const { user } = useAuth();
   const signOut = useBaseStore((state) => state.signOut);
@@ -38,8 +40,16 @@ const MyProfilePage = () => {
       cancelText: "취소",
       onAction: async () => {
         helloUser();
-        //signOut();
+        const supabaseAdminKey = import.meta.env.VITE_SUPA_SERVICE_ROLE;
+        const supabaseUrl = import.meta.env.VITE_SUPA_PROJECT_URL;
+
+        const supabase = createClient(supabaseUrl, supabaseAdminKey);
+
+        const { data, error } = await supabase.auth.admin.deleteUser(user!.id);
+        console.log(data, error);
+
         console.log("탈퇴하기");
+        signOut();
       },
     });
     setIsConfirmAlertOpen(true);
