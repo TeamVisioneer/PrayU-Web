@@ -33,8 +33,10 @@ module.exports = {
         mainBtn: "#70AAFF",
 
         black: "#020202",
+        liteBlack: "#4A4A4A",
         dark: "#6A6A6A",
         deactivate: "#BFBFBF",
+        liteRed: "#EE7470",
         // custom
 
         prayCardStart: "#B7DFFF",
