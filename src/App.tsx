@@ -105,7 +105,11 @@ const App = () => {
 const AnalyticsTracker = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname;
-  const match = matchPath("/group/:groupId/praycard/new", location.pathname);
+  const matchPraycardNew = matchPath(
+    "/group/:groupId/praycard/new",
+    location.pathname
+  );
+  const matchGroup = matchPath("/group/:groupId", location.pathname);
   useEffect(() => {
     switch (location.pathname) {
       case "/":
@@ -127,23 +131,21 @@ const AnalyticsTracker = () => {
         });
         break;
       default:
-        if (location.pathname.startsWith("/group/")) {
+        if (matchGroup) {
           analytics.track("페이지_그룹_홈", {
-            title: "Group Page",
+            title: "Group Home Page",
+            groupId: matchGroup.params.groupId,
             where: from,
           });
-        }
-
-        if (match) {
+        } else if (matchPraycardNew) {
           analytics.track("페이지_기도카드_생성", {
             title: "PrayCard Create Page with Group ID",
-            groupId: match.params.groupId,
+            groupId: matchPraycardNew.params.groupId,
             where: from,
           });
         }
-        break;
     }
-  }, [match, location.pathname, from]);
+  }, [matchPraycardNew, matchGroup, location.pathname, from]);
 
   return null;
 };

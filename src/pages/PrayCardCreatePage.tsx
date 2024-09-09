@@ -43,6 +43,12 @@ const PrayCardCreatePage: React.FC = () => {
   const setIsDisabledPrayCardCreateBtn = useBaseStore(
     (state) => state.setIsDisabledGroupCreateBtn
   );
+  const IsDisabledSkipPrayCardBtn = useBaseStore(
+    (state) => state.isDisabledSkipPrayCardBtn
+  );
+  const setIsDisabledSkipPrayCardBtn = useBaseStore(
+    (state) => state.setIsDisabledSkipPrayCardBtn
+  );
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
@@ -103,7 +109,7 @@ const PrayCardCreatePage: React.FC = () => {
     currentUserId: string,
     groupId: string
   ) => {
-    setIsDisabledPrayCardCreateBtn(true);
+    setIsDisabledSkipPrayCardBtn(true);
     analyticsTrack("클릭_기도카드_다음에작성", {});
     const randomContent = getRandomVerse();
     const newPrayCard = await handleCreatePrayCard(
@@ -112,7 +118,7 @@ const PrayCardCreatePage: React.FC = () => {
       randomContent
     );
     if (!newPrayCard) {
-      setIsDisabledPrayCardCreateBtn(false);
+      setIsDisabledSkipPrayCardBtn(false);
       return null;
     }
     window.location.replace(`/group/${groupId}`);
@@ -206,7 +212,7 @@ const PrayCardCreatePage: React.FC = () => {
           <button
             className="text-sm text-gray-500 underline"
             onClick={() => onClickSkipPrayCard(user!.id, targetGroup.id)}
-            disabled={isDisabledPrayCardCreateBtn}
+            disabled={IsDisabledSkipPrayCardBtn}
           >
             다음에 작성하기
           </button>
