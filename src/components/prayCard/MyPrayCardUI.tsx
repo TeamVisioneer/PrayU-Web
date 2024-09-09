@@ -137,7 +137,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   return (
-    <div>
+    <div className="flex flex-col gap-2 h-70vh">
       <div className="flex justify-end px-2">
         {!isEditingPrayCard && (
           <MyPrayCardMenuBtn
@@ -146,37 +146,30 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
           />
         )}
       </div>
-      <div className="flex flex-col gap-6 h-70vh ">
-        {MyPrayCardBody}
-        <div
-          className="w-full focus:outline-none"
-          onClick={() => onClickPrayerList()}
-        >
-          <div className="flex justify-center gap-2">
-            {Object.values(PrayType).map((type) => (
-              <div
-                key={type}
-                className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
-              >
-                <div className="text-sm w-5 h-5">
-                  <img
-                    src={PrayTypeDatas[type].img}
-                    alt={PrayTypeDatas[type].emoji}
-                    className="w-5 h-5"
-                  />
-                </div>
-                <div className="text-sm">
-                  {
-                    prayCard.pray.filter((pray) => pray.pray_type === type)
-                      .length
-                  }
-                </div>
-              </div>
-            ))}
-            <div className="bg-white rounded-lg flex justify-center items-center p-1">
-              <img className="w-5" src={iconUserMono} alt="user-icon" />
+      {MyPrayCardBody}
+      <div
+        className="flex justify-center focus:outline-none gap-2 mt-4"
+        onClick={() => onClickPrayerList()}
+      >
+        {Object.values(PrayType).map((type) => (
+          <div
+            key={type}
+            className="w-[60px] py-1 px-2 flex rounded-lg bg-white text-black gap-2"
+          >
+            <div className="text-sm w-5 h-5">
+              <img
+                src={PrayTypeDatas[type].img}
+                alt={PrayTypeDatas[type].emoji}
+                className="w-5 h-5"
+              />
+            </div>
+            <div className="text-sm">
+              {prayCard.pray.filter((pray) => pray.pray_type === type).length}
             </div>
           </div>
+        ))}
+        <div className="bg-white rounded-lg flex justify-center items-center p-1">
+          <img className="w-5" src={iconUserMono} alt="user-icon" />
         </div>
       </div>
     </div>

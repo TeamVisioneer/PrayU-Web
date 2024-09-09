@@ -5,6 +5,7 @@ import { Textarea } from "../ui/textarea";
 import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import { ClipLoader } from "react-spinners";
+import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 
 interface EventOption {
   where: string;
@@ -54,6 +55,9 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
 
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
+      <div className="flex justify-end px-2">
+        <OtherPrayCardMenuBtn />
+      </div>
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
           <div className="flex items-center gap-2">

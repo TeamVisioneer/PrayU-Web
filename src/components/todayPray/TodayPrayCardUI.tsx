@@ -2,6 +2,8 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
 import { getISODateYMD } from "@/lib/utils";
+import OtherPrayCardMenuBtn from "../prayCard/OtherPrayCardMenuBtn";
+import useBaseStore from "@/stores/baseStore";
 
 interface EventOption {
   where: string;
@@ -16,8 +18,20 @@ interface PrayCardProps {
 const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
   const createdAt = prayCard.created_at;
   const createdDateYMD = getISODateYMD(createdAt);
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
+
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
+      <div className="flex justify-between px-2">
+        <div className="w-6"></div>
+        {!isPrayToday && (
+          <p className="text-sm text-gray-400">
+            반응을 누르면 다음 기도로 넘어가요
+          </p>
+        )}
+        <OtherPrayCardMenuBtn />
+      </div>
+
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
