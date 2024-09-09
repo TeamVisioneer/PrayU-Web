@@ -11,6 +11,7 @@ export const fetchMemberListByGroupId = async (
       .from("member")
       .select(`*, profiles (id, full_name, avatar_url, kakao_id)`)
       .eq("group_id", groupId)
+      .not("user_id", "is", null)
       .is("deleted_at", null)
       .order("updated_at", { ascending: false });
     if (error) {
@@ -57,6 +58,7 @@ export const getMember = async (
       .select(`*, profiles (id, full_name, avatar_url, kakao_id)`)
       .eq("user_id", userId)
       .eq("group_id", groupId)
+      .not("user_id", "is", null)
       .is("deleted_at", null);
     if (error) {
       Sentry.captureException(error.message);
