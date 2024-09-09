@@ -654,7 +654,7 @@ const useBaseStore = create<BaseStore>()(
       });
     },
 
-    isReportAlertOpen: true,
+    isReportAlertOpen: false,
     setIsReportAlertOpen(isOpen) {
       set((state) => {
         state.isReportAlertOpen = isOpen;
