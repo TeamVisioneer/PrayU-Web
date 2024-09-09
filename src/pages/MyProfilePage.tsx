@@ -4,9 +4,7 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
-import { helloUser } from "@/apis/user";
-
-import { createClient } from "@supabase/supabase-js";
+import { deleteUser } from "../apis/user.ts";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -39,13 +37,13 @@ const MyProfilePage = () => {
       actionText: "탈퇴하기",
       cancelText: "취소",
       onAction: async () => {
-        helloUser();
-        const supabaseAdminKey = import.meta.env.VITE_SUPA_SERVICE_ROLE;
-        const supabaseUrl = import.meta.env.VITE_SUPA_PROJECT_URL;
+        deleteUser(user!.id);
+        // const supabaseAdminKey = import.meta.env.VITE_SUPA_SERVICE_ROLE;
+        // const supabaseUrl = import.meta.env.VITE_SUPA_PROJECT_URL;
 
-        const supabase = createClient(supabaseUrl, supabaseAdminKey);
+        // const supabase = createClient(supabaseUrl, supabaseAdminKey);
 
-        const { data, error } = await supabase.auth.admin.deleteUser(user!.id);
+        // const { data, error } = await supabase.auth.admin.deleteUser(user!.id);
         console.log(data, error);
 
         console.log("탈퇴하기");
