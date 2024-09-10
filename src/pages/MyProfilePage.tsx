@@ -69,8 +69,6 @@ const MyProfilePage = () => {
     getProfile(user!.id);
   }, [user, getProfile]);
 
-  useEffect(() => {}, [user, getProfile]);
-
   useEffect(() => {
     if (myProfile) setName(myProfile.full_name!);
     if (myProfile) fetchProfileList(myProfile.blocking_users);
