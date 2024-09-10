@@ -25,7 +25,7 @@ interface PrayCardListProps {
   groupId: string;
 }
 
-const TodayPrayCardList: React.FC<PrayCardListProps> = ({
+const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   currentUserId,
   groupId,
 }) => {
@@ -165,4 +165,4 @@ const TodayPrayCardList: React.FC<PrayCardListProps> = ({
   );
 };
 
-export default TodayPrayCardList;
+export default TodayPrayCardListDrawer;

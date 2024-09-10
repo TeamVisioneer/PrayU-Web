@@ -20,6 +20,7 @@ import KakaoCallBack from "./components/kakao/KakaoCallback";
 import MyProfilePage from "./pages/MyProfilePage";
 import GroupNotFoundPage from "./pages/GroupNotFoundPage";
 import GroupRedirectPage from "./pages/GroupRedirectPage";
+import GroupLimitPage from "./pages/GropuLimitPage";
 
 const App = () => {
   useEffect(() => {
@@ -83,6 +84,7 @@ const App = () => {
                 }
               />
               <Route path="/group/not-found" element={<GroupNotFoundPage />} />
+              <Route path="/group/limit" element={<GroupLimitPage />} />
               <Route
                 path="/profile/me"
                 element={
@@ -121,6 +123,18 @@ const AnalyticsTracker = () => {
       case "/group/new":
         analytics.track("페이지_그룹_생성", {
           title: "Group Create Page",
+          where: from,
+        });
+        break;
+      case "/group/limit":
+        analytics.track("페이지_그룹_제한", {
+          title: "Group Limit Page",
+          where: from,
+        });
+        break;
+      case "/group/not-found":
+        analytics.track("페이지_그룹_404", {
+          title: "Group 404 Page",
           where: from,
         });
         break;
