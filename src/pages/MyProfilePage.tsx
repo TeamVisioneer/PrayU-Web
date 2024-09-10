@@ -15,19 +15,16 @@ const MyProfilePage = () => {
     (state) => state.setIsConfirmAlertOpen
   );
 
-  const fetchProfilesByUserId = useBaseStore(
-    (state) => state.fetchProfilesByUserId
-  );
+  const getProfile = useBaseStore((state) => state.getProfile);
   const profile = useBaseStore((state) => state.profile);
 
-  const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
 
-  const updateProfileName = useBaseStore((state) => state.updateProfileName);
+  const updateProfile = useBaseStore((state) => state.updateProfile);
 
   const onBlutUpdateName = () => {
     if (name.trim() === "") setName(profile?.full_name || "");
-    else updateProfileName(user!.id, name);
+    else updateProfile(user!.id, { full_name: name });
   };
 
   const onClickExitPrayU = () => {
@@ -47,21 +44,11 @@ const MyProfilePage = () => {
   };
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      if (user) {
-        setLoading(true);
-        await fetchProfilesByUserId(user.id);
-        setLoading(false);
-      }
-    };
-
-    fetchProfileData();
-  }, [user, fetchProfilesByUserId]);
+    getProfile(user!.id);
+  }, [user, getProfile]);
 
   useEffect(() => {
-    if (profile) {
-      setName(profile.full_name!);
-    }
+    if (profile) setName(profile.full_name!);
   }, [profile]);
 
   return (
@@ -75,39 +62,37 @@ const MyProfilePage = () => {
         <p className="w-[28px]"></p>
       </div>
       <div className="flex justify-center h-[80px] w-max">
-        {loading ? (
-          <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
-        ) : (
+        {profile ? (
           <img
             className="h-full object-cover rounded-full"
-            src={profile?.avatar_url || "/images/defaultProfileImage.png"}
+            src={profile.avatar_url || "/images/defaultProfileImage.png"}
           />
+        ) : (
+          <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
         )}
       </div>
       <div className="flex flex-col items-center gap-4 w-full ">
-        {loading ? (
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-        ) : (
-          <>
-            <div className="w-full h-[55px] flex items-center gap-4 p-4 bg-white rounded-xl">
-              <span className="text-md font-bold">이름</span>
-              <Input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={() => onBlutUpdateName()}
-                placeholder="이름을 입력해주세요!"
-                maxLength={12}
-                className="text-md flex-1 border-none text-right"
-              />
-            </div>
+        {profile ? (
+          <div className="w-full h-[55px] flex items-center gap-4 p-4 bg-white rounded-xl">
+            <span className="text-md font-bold">이름</span>
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={() => onBlutUpdateName()}
+              placeholder="이름을 입력해주세요!"
+              maxLength={12}
+              className="text-md flex-1 border-none text-right"
+            />
             <p
               className="text-sm text-gray-600 underline"
               onClick={() => onClickExitPrayU()}
             >
               회원 탈퇴
             </p>
-          </>
+          </div>
+        ) : (
+          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
         )}
       </div>
     </div>

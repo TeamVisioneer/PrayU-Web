@@ -19,12 +19,11 @@ import * as Sentry from "@sentry/react";
 const ReportAlert: React.FC = () => {
   const { toast } = useToast();
 
-  const otherMember = useBaseStore((state) => state.otherMember);
-
   const isReportAlertOpen = useBaseStore((state) => state.isReportAlertOpen);
   const setIsReportAlertOpen = useBaseStore(
     (state) => state.setIsReportAlertOpen
   );
+  const reportData = useBaseStore((state) => state.reportData);
 
   const [reportContent, setReportContent] = useState("");
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({
@@ -61,8 +60,6 @@ const ReportAlert: React.FC = () => {
     const reportCategories = reportSelectList
       .filter((item) => trueKeys.includes(item.id))
       .map((item) => item.label);
-    const reportUserId = otherMember?.user_id || "Unknown";
-    const reportPrayContent = otherMember?.pray_summary || "";
     const DISCORD_REPORT_WEBHOOK = import.meta.env.VITE_DISCORD_REPORT_WEBHOOK;
     const payload = {
       content: null,
@@ -72,18 +69,10 @@ const ReportAlert: React.FC = () => {
           description: reportCategories.join(", "),
           color: null,
           fields: [
-            {
-              name: "UserId",
-              value: reportUserId,
-            },
-            {
-              name: "PrayContent",
-              value: reportPrayContent,
-            },
-            {
-              name: "Reason",
-              value: reportContent,
-            },
+            { name: "제보 유저 ID", value: reportData.currentUserId },
+            { name: "신고 유저 ID", value: reportData.targetUserId },
+            { name: "신고 내용", value: reportData.content },
+            { name: "신고 사유", value: reportContent },
           ],
         },
       ],
@@ -93,16 +82,12 @@ const ReportAlert: React.FC = () => {
     try {
       const response = await fetch(DISCORD_REPORT_WEBHOOK, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        toast({
-          description: "🚨 신고가 완료되었습니다.",
-        });
+        toast({ description: "🚨 신고가 완료되었습니다." });
       } else {
         Sentry.captureException(response.statusText);
       }

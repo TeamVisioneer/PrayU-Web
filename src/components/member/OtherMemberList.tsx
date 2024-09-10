@@ -40,7 +40,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   if (isPrayToday == null || !memberList) return null;
 
   const otherMemberList = memberList.filter(
-    (member) => member.user_id !== currentUserId
+    (member) => member.user_id && member.user_id !== currentUserId
   );
   const isExpiredAllMember = otherMemberList.every(
     (member) => member.updated_at < getISOTodayDate(-6)
