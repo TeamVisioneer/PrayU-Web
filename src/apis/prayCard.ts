@@ -33,7 +33,6 @@ export const fetchGroupPrayCardList = async (
       Sentry.captureException(error.message);
       return null;
     }
-    console.log("data", data);
     return data as PrayCardWithProfiles[];
   } catch (error) {
     Sentry.captureException(error);
