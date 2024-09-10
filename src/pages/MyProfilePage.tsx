@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Profiles } from "supabase/types/tables.ts";
-import { UserProfile } from "@/components/auth/userProfile.tsx";
+import { UserProfile } from "@/components/profile/UserProfile.tsx";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
