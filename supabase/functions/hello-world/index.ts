@@ -14,29 +14,3 @@ serve(async (req) => {
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 });
-
-// import { createClient } from "@supabase/supabase-js";
-
-// Deno.serve(req, res) {
-//   console.log("deleteUser");
-//   const { userId } = req.body;
-//   const supabaseAdminKey = process.env.VITE_SUPA_SERVICE_ROLE;
-//   const supabaseUrl = process.env.VITE_SUPA_PROJECT_URL;
-//   if (!supabaseUrl) {
-//     return res.status(500).json({ error: "Supabase URL is not defined." });
-//   }
-//   if (!supabaseAdminKey) {
-//     return res
-//       .status(500)
-//       .json({ error: "Supabase Admin Key is not defined." });
-//   }
-//   const supabase = createClient(supabaseUrl, supabaseAdminKey);
-
-//   const { data, error } = await supabase.auth.admin.deleteUser(userId);
-
-//   if (error) {
-//     return res.status(500).json({ error: error.message });
-//   }
-
-//   res.status(200).json({ message: "User deleted successfully", data });
-// }

@@ -1,14 +1,15 @@
 export const deleteUser = async (userId: string): Promise<any> => {
   try {
     const response = await fetch(
-      `https://cguxpeghdqcqfdhvkmyv.supabase.co/functions/v1/delete-user?userId=${userId}`,
+      `https://cguxpeghdqcqfdhvkmyv.supabase.co/functions/v1/delete-user`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPA_ANON_KEY, // API 키를 설정합니다.
-          Authorization: `Bearer ${import.meta.env.VITE_SUPA_ANON_KEY}`, // Bearer 토큰을 설정합니다.
+          apikey: import.meta.env.VITE_SUPA_ANON_KEY,
+          authorization: `Bearer ${import.meta.env.VITE_SUPA_ANON_KEY}`,
         },
+        body: JSON.stringify({ userId }), // userId를 body에 포함시킴
       }
     );
 

@@ -38,15 +38,7 @@ const MyProfilePage = () => {
       cancelText: "취소",
       onAction: async () => {
         deleteUser(user!.id);
-        // const supabaseAdminKey = import.meta.env.VITE_SUPA_SERVICE_ROLE;
-        // const supabaseUrl = import.meta.env.VITE_SUPA_PROJECT_URL;
 
-        // const supabase = createClient(supabaseUrl, supabaseAdminKey);
-
-        // const { data, error } = await supabase.auth.admin.deleteUser(user!.id);
-        console.log(data, error);
-
-        console.log("탈퇴하기");
         signOut();
       },
     });
