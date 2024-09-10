@@ -33,14 +33,32 @@ export const updateProfile = async (
   }
 };
 
-export const getProfile = async (
-  userId: string
+export const getProfile = async (userId: string): Promise<Profiles | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select(`*`)
+      .eq("id", userId)
+      .single();
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const fetchProfileList = async (
+  userIds: string[]
 ): Promise<Profiles[] | null> => {
   try {
     const { data, error } = await supabase
       .from("profiles")
       .select(`*`)
-      .eq("id", userId);
+      .in("id", userIds);
     if (error) {
       Sentry.captureException(error.message);
       return null;

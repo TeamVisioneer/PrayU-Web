@@ -36,7 +36,11 @@ import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
 import { analytics } from "@/analytics/analytics";
-import { updateProfile, updateProfilesParams } from "@/apis/profiles";
+import {
+  fetchProfileList,
+  updateProfile,
+  updateProfilesParams,
+} from "@/apis/profiles";
 import { getProfile } from "@/apis/profiles";
 
 export interface BaseStore {
@@ -49,8 +53,10 @@ export interface BaseStore {
   setUserPlan: (userId: string) => void;
 
   // profiles
-  profile: Profiles | null;
-  getProfile: (userId: string) => Promise<Profiles[] | null>;
+  myProfile: Profiles | null;
+  profileList: Profiles[] | null;
+  getProfile: (userId: string) => Promise<Profiles | null>;
+  fetchProfileList: (userIds: string[]) => Promise<Profiles[] | null>;
   updateProfile: (
     userId: string,
     params: updateProfilesParams
@@ -294,11 +300,19 @@ const useBaseStore = create<BaseStore>()(
     },
 
     // profiles
-    profile: null,
+    myProfile: null,
+    profileList: null,
     getProfile: async (userId: string) => {
       const data = await getProfile(userId);
       set((state) => {
-        state.profile = data?.[0] || null;
+        state.myProfile = data;
+      });
+      return data;
+    },
+    fetchProfileList: async (userIds: string[]) => {
+      const data = await fetchProfileList(userIds);
+      set((state) => {
+        state.profileList = data;
       });
       return data;
     },
@@ -306,8 +320,8 @@ const useBaseStore = create<BaseStore>()(
       userId: string,
       params: updateProfilesParams
     ): Promise<Profiles | null> => {
-      const profile = await updateProfile(userId, params);
-      return profile;
+      const myProfile = await updateProfile(userId, params);
+      return myProfile;
     },
 
     // group
