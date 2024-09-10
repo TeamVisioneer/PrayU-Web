@@ -4,7 +4,7 @@ interface UserProfileProps {
   profile: Profiles;
 }
 
-export const UserProfile: React.FC<UserProfileProps> = ({ profile }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ profile }) => {
   return (
     <div className="flex items-center gap-2">
       <img
@@ -18,3 +18,5 @@ export const UserProfile: React.FC<UserProfileProps> = ({ profile }) => {
     </div>
   );
 };
+
+export default UserProfile;
