@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom"; // react-router-dom을 사용하여 링크를 처리
+import { Link } from "react-router-dom";
 
 const GroupLimitPage: React.FC = () => {
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);

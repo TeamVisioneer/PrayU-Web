@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { Link } from "react-router-dom"; // react-router-dom을 사용하여 링크를 처리
+import { Link } from "react-router-dom";
 
 const GroupNotFoundPage: React.FC = () => {
   return (
