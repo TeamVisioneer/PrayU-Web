@@ -1,7 +1,7 @@
 export const deleteUser = async (userId: string): Promise<boolean> => {
   try {
     const response = await fetch(
-      `https://cguxpeghdqcqfdhvkmyv.supabase.co/functions/v1/delete-user`,
+      `${import.meta.env.VITE_SUPA_PROJECT_URL}/functions/v1/delete-user`,
       {
         method: "DELETE",
         headers: {
