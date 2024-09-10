@@ -140,6 +140,13 @@ const PrayCardCreatePage: React.FC = () => {
   };
 
   const todayDateYMD = getISOTodayDateYMD();
+  const filteredMemberList = myMember?.profiles.blocking_users
+    ? memberList.filter(
+        (member) =>
+          member.user_id &&
+          !myMember.profiles.blocking_users.includes(member.user_id)
+      )
+    : memberList;
 
   const PrayCardUI = (
     <div className="flex flex-col gap-6 justify-center">
@@ -189,7 +196,9 @@ const PrayCardCreatePage: React.FC = () => {
           <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
             {targetGroup.name}
           </div>
-          <span className="text-sm text-gray-500">{memberList.length}</span>
+          <span className="text-sm text-gray-500">
+            {filteredMemberList.length}
+          </span>
         </div>
         <div className="w-[48px] flex justify-center">
           <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />

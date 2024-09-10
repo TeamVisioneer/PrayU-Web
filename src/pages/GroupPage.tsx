@@ -18,6 +18,7 @@ import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDra
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
+  const currentUserId = user!.id;
   const navigate = useNavigate();
 
   const { groupId } = useParams();
@@ -39,15 +40,15 @@ const GroupPage: React.FC = () => {
   const userPlan = useBaseStore((state) => state.userPlan);
 
   useEffect(() => {
-    fetchGroupListByUserId(user!.id);
-    if (groupId) getMember(user!.id, groupId);
+    fetchGroupListByUserId(currentUserId);
+    if (groupId) getMember(currentUserId, groupId);
     if (groupId) getGroup(groupId);
     if (groupId) fetchMemberListByGroupId(groupId);
   }, [
     fetchGroupListByUserId,
     fetchMemberListByGroupId,
     getMember,
-    user,
+    currentUserId,
     groupId,
     getGroup,
   ]);
@@ -93,6 +94,12 @@ const GroupPage: React.FC = () => {
     );
   }
 
+  const filteredMemberList = memberList.filter(
+    (member) =>
+      member.user_id &&
+      !myMember.profiles.blocking_users.includes(member.user_id)
+  );
+
   return (
     <div className="flex flex-col h-full gap-5">
       <div className="relative flex justify-between items-center">
@@ -105,7 +112,9 @@ const GroupPage: React.FC = () => {
           <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
             {targetGroup.name}
           </div>
-          <span className="text-sm text-gray-500">{memberList.length}</span>
+          <span className="text-sm text-gray-500">
+            {filteredMemberList.length}
+          </span>
         </div>
         <div className="w-[48px] flex justify-between">
           <OpenEventDialogBtn />
@@ -114,7 +123,11 @@ const GroupPage: React.FC = () => {
       </div>
       <div className="flex flex-col h-full gap-4">
         <MyMember myMember={myMember} />
-        <OtherMemberList currentUserId={user!.id} groupId={targetGroup.id} />
+        <OtherMemberList
+          currentUserId={user!.id}
+          groupId={targetGroup.id}
+          memberList={filteredMemberList}
+        />
       </div>
 
       <TodayPrayCardListDrawer
