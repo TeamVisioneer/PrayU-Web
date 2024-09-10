@@ -61,6 +61,7 @@ const OtherPrayCardMenuBtn: React.FC<OtherPrayCardMenuBtnProps> = ({
         await updateProfile(myMember.user_id, {
           blocking_users: [...blockingUsers, targetUserId],
         });
+        window.location.reload();
       },
     });
     return;

@@ -29,6 +29,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   currentUserId,
   groupId,
 }) => {
+  const myMember = useBaseStore((state) => state.myMember);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchGroupPrayCardList = useBaseStore(
@@ -73,6 +74,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
     endDt,
   ]);
 
+  if (!myMember) return null;
   if (!groupPrayCardList)
     return (
       <div className="flex justify-center items-center min-h-80vh max-h-80vh">
@@ -82,8 +84,10 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
 
   const filterdGroupPrayCardList = groupPrayCardList?.filter(
     (prayCard) =>
+      prayCard.user_id &&
       prayCard.user_id !== currentUserId &&
-      prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length === 0
+      prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length == 0 &&
+      !myMember.profiles.blocking_users.includes(prayCard.user_id)
   );
 
   const emptyPrayCardList = (
