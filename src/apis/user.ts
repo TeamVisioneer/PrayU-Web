@@ -20,7 +20,7 @@ export const deleteUser = async (userId: string): Promise<boolean> => {
     const data = await response.json();
     if (!data) return false;
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };

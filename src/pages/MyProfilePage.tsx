@@ -37,8 +37,10 @@ const MyProfilePage = () => {
       actionText: "탈퇴하기",
       cancelText: "취소",
       onAction: async () => {
-        signOut();
-        deleteUser(user!.id);
+        const userId = user!.id;
+        await signOut();
+        await deleteUser(userId);
+        window.location.href = "/";
       },
     });
     setIsConfirmAlertOpen(true);
@@ -100,10 +102,10 @@ const MyProfilePage = () => {
               />
             </div>
             <p
-              className="text-sm text-gray-600 underline p-3"
+              className="text-sm text-gray-600 underline"
               onClick={() => onClickExitPrayU()}
             >
-              회원 탈퇴하기
+              회원 탈퇴
             </p>
           </>
         )}
