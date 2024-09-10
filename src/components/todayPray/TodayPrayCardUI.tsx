@@ -4,7 +4,6 @@ import { Textarea } from "../ui/textarea";
 import { getISODateYMD } from "@/lib/utils";
 import OtherPrayCardMenuBtn from "../prayCard/OtherPrayCardMenuBtn";
 import useBaseStore from "@/stores/baseStore";
-import { useEffect } from "react";
 
 interface EventOption {
   where: string;
@@ -19,14 +18,6 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
   const createdAt = prayCard.created_at;
   const createdDateYMD = getISODateYMD(createdAt);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const setOtherMember = useBaseStore((state) => state.setOtherMember);
-  const memberList = useBaseStore((state) => state.memberList);
-
-  useEffect(() => {
-    setOtherMember(
-      memberList?.find((member) => member.user_id == prayCard.user_id) || null
-    );
-  }, [setOtherMember, memberList, prayCard]);
 
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">

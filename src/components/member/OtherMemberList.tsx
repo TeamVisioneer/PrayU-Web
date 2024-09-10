@@ -25,6 +25,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
 }) => {
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
+  const myMember = useBaseStore((state) => state.myMember);
   const memberList = useBaseStore((state) => state.memberList);
   const isOpenOtherMemberDrawer = useBaseStore(
     (state) => state.isOpenOtherMemberDrawer
@@ -39,8 +40,12 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
 
   if (isPrayToday == null || !memberList) return null;
 
+  const blockingUsers = myMember?.profiles.blocking_users || [];
   const otherMemberList = memberList.filter(
-    (member) => member.user_id !== currentUserId
+    (member) =>
+      member.user_id &&
+      member.user_id !== currentUserId &&
+      !blockingUsers.includes(member.user_id)
   );
   const isExpiredAllMember = otherMemberList.every(
     (member) => member.updated_at < getISOTodayDate(-6)
