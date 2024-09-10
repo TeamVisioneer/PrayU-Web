@@ -37,8 +37,8 @@ const MyProfilePage = () => {
       actionText: "탈퇴하기",
       cancelText: "취소",
       onAction: async () => {
-        deleteUser(user!.id);
         signOut();
+        deleteUser(user!.id);
       },
     });
     setIsConfirmAlertOpen(true);

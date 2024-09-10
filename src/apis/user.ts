@@ -1,4 +1,4 @@
-export const deleteUser = async (userId: string): Promise<any> => {
+export const deleteUser = async (userId: string): Promise<boolean> => {
   try {
     const response = await fetch(
       `https://cguxpeghdqcqfdhvkmyv.supabase.co/functions/v1/delete-user`,
@@ -14,14 +14,13 @@ export const deleteUser = async (userId: string): Promise<any> => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch the delete-user function");
+      return false;
     }
 
     const data = await response.json();
-    console.log("Data from delete-user function:", data);
-    return data;
-  } catch (error: any) {
-    console.error("Error in delete-user function:", error.message);
-    throw new Error(error.message || "Failed to call function");
+    if (!data) return false;
+    return true;
+  } catch (error) {
+    return false;
   }
 };

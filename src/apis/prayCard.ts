@@ -21,6 +21,7 @@ export const fetchGroupPrayCardList = async (
       )
       .eq("group_id", groupId)
       .eq("pray.user_id", currentUserId)
+      .not("user_id", "is", null)
       .not("profiles.id", "is", null)
       .not("pray.user_id", "is", null)
       .gte("created_at", startDt)
@@ -32,6 +33,7 @@ export const fetchGroupPrayCardList = async (
       Sentry.captureException(error.message);
       return null;
     }
+    console.log("data", data);
     return data as PrayCardWithProfiles[];
   } catch (error) {
     Sentry.captureException(error);
@@ -58,6 +60,7 @@ export const fetchOtherPrayCardListByGroupId = async (
       )
       .eq("user_id", userId)
       .eq("group_id", groupId)
+      .not("user_id", "is", null)
       .not("profiles.id", "is", null)
       .not("pray.user_id", "is", null)
       .eq("pray.user_id", currentUserId)
@@ -94,6 +97,7 @@ export const fetchUserPrayCardListByGroupId = async (
       )
       .eq("user_id", currentUserId)
       .eq("group_id", groupId)
+      .not("user_id", "is", null)
       .not("profiles.id", "is", null)
       .not("pray.user_id", "is", null)
       .is("deleted_at", null)
