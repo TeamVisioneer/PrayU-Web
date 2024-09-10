@@ -23,10 +23,9 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
   const memberList = useBaseStore((state) => state.memberList);
 
   useEffect(() => {
-    if (memberList)
-      setOtherMember(
-        memberList.find((member) => member?.user_id == prayCard.user_id) || null
-      );
+    setOtherMember(
+      memberList?.find((member) => member.user_id == prayCard.user_id) || null
+    );
   }, [setOtherMember, memberList, prayCard]);
 
   return (
