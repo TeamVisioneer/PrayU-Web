@@ -5,6 +5,12 @@ import { useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
 import { deleteUser } from "../apis/user.ts";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -22,7 +28,7 @@ const MyProfilePage = () => {
 
   const updateProfile = useBaseStore((state) => state.updateProfile);
 
-  const onBlutUpdateName = () => {
+  const onBlurUpdateName = () => {
     if (name.trim() === "") setName(profile?.full_name || "");
     else updateProfile(user!.id, { full_name: name });
   };
@@ -52,7 +58,7 @@ const MyProfilePage = () => {
   }, [profile]);
 
   return (
-    <div className="flex flex-col gap-6 items-center">
+    <div className="w-ful flex flex-col gap-6 items-center">
       <div className="w-full flex justify-between items-center">
         <div className="w-[28px]">
           <IoChevronBack size={20} onClick={() => window.history.back()} />
@@ -71,30 +77,77 @@ const MyProfilePage = () => {
           <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
         )}
       </div>
-      <div className="flex flex-col items-center gap-4 w-full ">
-        {profile ? (
-          <div className="w-full h-[55px] flex items-center gap-4 p-4 bg-white rounded-xl">
-            <span className="text-md font-bold">이름</span>
+      {profile ? (
+        <div className="w-full flex flex-col items-center gap-4 ">
+          <div className="w-full h-14 flex items-center px-4 py-2 bg-white rounded-xl">
+            <span className="text-md font-semibold">이름</span>
             <Input
+              className="flex-1 p-0 text-md border-none text-right"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              onBlur={() => onBlutUpdateName()}
+              onBlur={() => onBlurUpdateName()}
               placeholder="이름을 입력해주세요!"
               maxLength={12}
-              className="text-md flex-1 border-none text-right"
             />
-            <p
-              className="text-sm text-gray-600 underline"
-              onClick={() => onClickExitPrayU()}
-            >
-              회원 탈퇴
-            </p>
           </div>
-        ) : (
+
+          <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>
+                  <div className="w-full h-10 flex flex-grow justify-between items-center">
+                    <span className="font-semibold">차단친구 관리</span>
+                    <span className="p-2">
+                      {profile.blocking_users.length} 명
+                    </span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="w-full py-2">
+                    sdfdddddddddddsdfddddddddddd
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+          <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>
+                  <div className="w-full h-10 flex flex-grow justify-between items-center">
+                    <span className="font-semibold">계정 관리</span>
+                    <span className="text-sm p-2">
+                      {user!.user_metadata.email}
+                    </span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="w-full flex flex-col py-2 gap-2">
+                    <p
+                      className="text-sm text-gray-400 underline"
+                      onClick={() => onClickExitPrayU()}
+                    >
+                      회원 탈퇴
+                    </p>
+                    <p
+                      className="text-sm text-gray-400 underline"
+                      onClick={() => onClickExitPrayU()}
+                    >
+                      회원 탈퇴
+                    </p>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+      ) : (
+        <div className="w-full flex flex-col gap-2">
           <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-        )}
-      </div>
+          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
+        </div>
+      )}
     </div>
   );
 };
