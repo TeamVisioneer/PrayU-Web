@@ -38,7 +38,6 @@ const MyProfilePage = () => {
       cancelText: "취소",
       onAction: async () => {
         deleteUser(user!.id);
-
         signOut();
       },
     });
