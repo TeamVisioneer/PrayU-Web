@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +13,17 @@ import { MdReportGmailerrorred } from "react-icons/md";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 
-const OtherPrayCardMenuBtn: React.FC = () => {
+interface OtherPrayCardMenuBtnProps {
+  targetUserId: string;
+  prayContent: string;
+}
+
+const OtherPrayCardMenuBtn: React.FC<OtherPrayCardMenuBtnProps> = ({
+  targetUserId,
+  prayContent,
+}) => {
   const myMember = useBaseStore((state) => state.myMember);
-  const otherMember = useBaseStore((state) => state.otherMember);
+  const setReportData = useBaseStore((state) => state.setReportData);
   const setIsReportAlertOpen = useBaseStore(
     (state) => state.setIsReportAlertOpen
   );
@@ -25,11 +33,20 @@ const OtherPrayCardMenuBtn: React.FC = () => {
   const setAlertData = useBaseStore((state) => state.setAlertData);
   const updateProfile = useBaseStore((state) => state.updateProfile);
 
+  useEffect(() => {
+    setReportData({
+      currentUserId: myMember?.user_id || "",
+      targetUserId: targetUserId,
+      content: prayContent,
+    });
+  }, [myMember, targetUserId, prayContent, setReportData]);
+
   const onClickReportPrayCard = () => {
     analyticsTrack("클릭_기도카드_신고", {});
     setIsReportAlertOpen(true);
     return;
   };
+
   const onClickBlockUser = () => {
     analyticsTrack("클릭_프로필_차단", {});
     setIsConfirmAlertOpen(true);
@@ -39,16 +56,16 @@ const OtherPrayCardMenuBtn: React.FC = () => {
       cancelText: "취소",
       actionText: "차단",
       onAction: async () => {
-        if (!myMember || !otherMember) return;
+        if (!myMember?.user_id) return;
         const blockingUsers = myMember.profiles.blocking_users;
-        const response = await updateProfile(myMember.user_id!, {
-          blocking_users: [...blockingUsers, otherMember.user_id!],
+        await updateProfile(myMember.user_id, {
+          blocking_users: [...blockingUsers, targetUserId],
         });
-        console.log(response);
       },
     });
     return;
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger

@@ -185,6 +185,17 @@ export interface BaseStore {
   isReportAlertOpen: boolean;
   setIsReportAlertOpen: (isReportAlertOpen: boolean) => void;
 
+  reportData: {
+    currentUserId: string;
+    targetUserId: string;
+    content: string;
+  };
+  setReportData: (reportData: {
+    currentUserId: string;
+    targetUserId: string;
+    content: string;
+  }) => void;
+
   alertData: {
     title: string;
     description: string;
@@ -650,6 +661,16 @@ const useBaseStore = create<BaseStore>()(
     },
 
     isReportAlertOpen: false,
+    reportData: {
+      currentUserId: "",
+      targetUserId: "",
+      content: "",
+    },
+    setReportData: (reportData) => {
+      set((state) => {
+        state.reportData = reportData;
+      });
+    },
     setIsReportAlertOpen(isOpen) {
       set((state) => {
         state.isReportAlertOpen = isOpen;

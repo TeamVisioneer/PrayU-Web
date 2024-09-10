@@ -37,7 +37,10 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
             반응을 누르면 다음 기도로 넘어가요
           </p>
         )}
-        <OtherPrayCardMenuBtn />
+        <OtherPrayCardMenuBtn
+          targetUserId={prayCard.user_id || ""}
+          prayContent={prayCard.content || ""}
+        />
       </div>
 
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
