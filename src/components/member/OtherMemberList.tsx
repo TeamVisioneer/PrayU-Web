@@ -13,19 +13,21 @@ import TodayPrayBtn from "../todayPray/TodayPrayBtn";
 import TodayPrayStartCard from "../todayPray/TodayPrayStartCard";
 import { getISOTodayDate } from "@/lib/utils";
 import OtherPrayCardUI from "../prayCard/OtherPrayCardUI";
+import { MemberWithProfiles } from "supabase/types/tables";
 
 interface OtherMembersProps {
   currentUserId: string;
   groupId: string;
+  memberList: MemberWithProfiles[];
 }
 
 const OtherMemberList: React.FC<OtherMembersProps> = ({
   currentUserId,
   groupId,
+  memberList,
 }) => {
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
-  const memberList = useBaseStore((state) => state.memberList);
   const isOpenOtherMemberDrawer = useBaseStore(
     (state) => state.isOpenOtherMemberDrawer
   );
@@ -37,8 +39,6 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
     fetchIsPrayToday(currentUserId, groupId);
   }, [currentUserId, fetchIsPrayToday, groupId]);
 
-  if (isPrayToday == null || !memberList) return null;
-
   const otherMemberList = memberList.filter(
     (member) => member.user_id && member.user_id !== currentUserId
   );
@@ -46,6 +46,7 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
     (member) => member.updated_at < getISOTodayDate(-6)
   );
 
+  if (isPrayToday == null) return null;
   if (otherMemberList.length === 0) return <MemberInviteCard />;
   if (!isPrayToday && !isExpiredAllMember) return <TodayPrayStartCard />;
 
