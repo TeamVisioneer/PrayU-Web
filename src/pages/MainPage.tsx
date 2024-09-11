@@ -25,7 +25,7 @@ const MainPage: React.FC = () => {
 
   const location = useLocation();
   const from = location.state?.from?.pathname || "/group";
-  const redirectUrl = `${baseUrl}${from}`;
+  const redirectUrl = `${baseUrl}/term?from=${from}`;
 
   useEffect(() => {
     if (!api) return;
@@ -70,7 +70,7 @@ const MainPage: React.FC = () => {
     return (
       <div onClick={handleKakaoLoginBtnClick}>
         <Auth
-          redirectTo={"/term"}
+          redirectTo={redirectUrl}
           supabaseClient={supabase}
           appearance={{
             theme: ThemeSupa,
