@@ -69,12 +69,12 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     if (!hasPrayed) {
       const newPray = await createPray(prayCard.id, currentUserId, prayType);
       if (!newPray) return null;
-      if (prayCard.profiles.kakao_id) {
-        const kakaoMessageResponse = await KakaoController.sendDirectMessage(
+      if (prayCard.profiles.kakao_id && prayCard.profiles.kakao_notification) {
+        const response = await KakaoController.sendDirectMessage(
           kakaoMessage,
           prayCard.profiles.kakao_id
         );
-        if (kakaoMessageResponse) {
+        if (response && response.successful_receiver_uuids.length > 0) {
           toast({
             description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
           });
