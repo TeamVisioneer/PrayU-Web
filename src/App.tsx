@@ -21,6 +21,7 @@ import MyProfilePage from "./pages/MyProfilePage";
 import GroupNotFoundPage from "./pages/GroupNotFoundPage";
 import GroupRedirectPage from "./pages/GroupRedirectPage";
 import GroupLimitPage from "./pages/GropuLimitPage";
+import TermServicePage from "./pages/TermServicePage";
 
 const App = () => {
   useEffect(() => {
@@ -48,6 +49,14 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <KakaoCallBack />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/term"
+                element={
+                  <PrivateRoute>
+                    <TermServicePage />
                   </PrivateRoute>
                 }
               />

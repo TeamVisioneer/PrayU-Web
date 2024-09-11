@@ -60,8 +60,12 @@ const MainPage: React.FC = () => {
 
   const KakaoLoginBtn = () => {
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/group";
-    const redirectUrl = `${baseUrl}${from}`;
+    const pathname = location.state?.from?.pathname || "";
+
+    const pathParts = pathname.split("/");
+
+    const groupId =
+      pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
 
     const handleKakaoLoginBtnClick = () => {
       analytics.track("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
@@ -70,7 +74,7 @@ const MainPage: React.FC = () => {
     return (
       <div onClick={handleKakaoLoginBtnClick}>
         <Auth
-          redirectTo={redirectUrl}
+          redirectTo={`${baseUrl}/term?groupId=${groupId}`}
           supabaseClient={supabase}
           appearance={{
             theme: ThemeSupa,
