@@ -71,6 +71,10 @@ export class KakaoTokenRepo {
         },
         body: new URLSearchParams(data).toString(),
       });
+      if (response.status !== 200) {
+        this.cleanKakaoTokensInCookies();
+        return null;
+      }
       const responseData: KakaoTokenResponse = await response.json();
       return responseData;
     } catch (error) {
@@ -97,6 +101,10 @@ export class KakaoTokenRepo {
         },
         body: new URLSearchParams(data),
       });
+      if (response.status !== 200) {
+        this.cleanKakaoTokensInCookies();
+        return null;
+      }
       const responseData: KakaoTokenRefreshResponse = await response.json();
       return responseData;
     } catch (error) {

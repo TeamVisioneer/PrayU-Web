@@ -442,7 +442,7 @@ const useBaseStore = create<BaseStore>()(
     inputPrayCardContent: "",
     isEditingPrayCard: false,
     isDisabledPrayCardCreateBtn: false,
-    isDisabledSkipPrayCardBtn: true,
+    isDisabledSkipPrayCardBtn: false,
     prayCardCarouselApi: null,
     setIsEditingPrayCard: (isEditingPrayCard: boolean) => {
       set((state) => {
