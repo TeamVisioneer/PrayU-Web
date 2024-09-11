@@ -10,6 +10,8 @@ export interface updateProfilesParams {
   updated_at?: string;
   username?: string;
   website?: string;
+  kakao_notification?: boolean;
+  terms_agreed_at?: string;
 }
 
 export const updateProfile = async (
