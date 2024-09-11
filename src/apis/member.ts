@@ -60,8 +60,7 @@ export const getMember = async (
       )
       .eq("user_id", userId)
       .eq("group_id", groupId)
-      .not("user_id", "is", null)
-      .is("deleted_at", null);
+      .not("user_id", "is", null);
     if (error) {
       Sentry.captureException(error.message);
       return null;
@@ -80,6 +79,7 @@ export const updateMember = async (
 ): Promise<Member | null> => {
   try {
     const updateParams = {
+      deleted_at: null,
       pray_summary: praySummary,
       ...(updatedAt && { updated_at: getISOToday() }),
     };
@@ -106,7 +106,7 @@ export const deleteMemberbyGroupId = async (
   try {
     const { error } = await supabase
       .from("member")
-      .update({ deleted_at: getISOToday() })
+      .update({ pray_summary: null, deleted_at: getISOToday() })
       .eq("user_id", userId)
       .eq("group_id", groupId);
     if (error) {
