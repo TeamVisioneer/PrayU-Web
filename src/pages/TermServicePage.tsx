@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IoIosArrowForward } from "react-icons/io";
 import { analyticsTrack } from "@/analytics/analytics";
+import { getISOTodayDate } from "@/lib/utils";
 
 const TermServicePage: React.FC = () => {
   const getProfile = useBaseStore((state) => state.getProfile);
@@ -40,7 +41,7 @@ const TermServicePage: React.FC = () => {
   const onClickAgreeStart = () => {
     analyticsTrack("클릭_동의_완료", {});
     updateProfile(profile.id, {
-      terms_agreed_at: new Date().toISOString(),
+      terms_agreed_at: getISOTodayDate(),
     });
     navigate(from!, { replace: true });
   };
@@ -62,14 +63,12 @@ const TermServicePage: React.FC = () => {
       </div>
 
       <div className="flex flex-col w-full gap-5">
-        <div className="w-full h-10 py-2 px-3 bg-white rounded-md flex items-center justify-between">
+        <div className="w-full h-11 py-2 px-3 bg-white rounded-md flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <div
               className="flex items-center gap-2"
               onClick={() => {
-                analyticsTrack("클릭_동의_서비스이용_자세히", {
-                  element: "term_service_agree",
-                });
+                analyticsTrack("클릭_동의_서비스이용_자세히", {});
                 window.open(
                   "https://mmyeong.notion.site/PrayU-ee61275fa48842cda5a5f2ed5b608ec0?pvs=4",
                   "_blank",
@@ -89,15 +88,13 @@ const TermServicePage: React.FC = () => {
             checked={isChecked}
             onCheckedChange={(checked) => {
               setIsChecked(checked === true);
-              analyticsTrack("클릭_동의_서비스이용", {
-                element: "term_service_agree",
-              });
+              analyticsTrack("클릭_동의_서비스이용", {});
             }}
           />
         </div>
 
         <Button
-          className="w-full bottom-0 left-0"
+          className="w-full h-11 bottom-0 left-0"
           variant="primary"
           disabled={!isChecked}
           onClick={() => onClickAgreeStart()}
