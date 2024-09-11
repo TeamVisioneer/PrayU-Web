@@ -60,7 +60,12 @@ const MainPage: React.FC = () => {
 
   const KakaoLoginBtn = () => {
     const location = useLocation();
-    const groupId = location.state?.from?.pathname.split("/")[2] || "";
+    const pathname = location.state?.from?.pathname || "";
+
+    const pathParts = pathname.split("/");
+
+    const groupId =
+      pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
 
     const handleKakaoLoginBtnClick = () => {
       analytics.track("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
