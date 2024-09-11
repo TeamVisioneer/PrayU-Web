@@ -19,21 +19,21 @@ const TermServicePage: React.FC = () => {
   const from = queryParams.get("from");
 
   const [isChecked, setIsChecked] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const emojiData = PrayTypeDatas["pray"];
 
   useEffect(() => {
     if (user && !profile) {
-      getProfile(user.id); // 프로필을 가져오는 함수는 한 번만 호출
+      getProfile(user.id);
     }
   }, [user, profile, getProfile]);
 
   useEffect(() => {
     if (profile && profile.website !== null) {
-      navigate(from!, { replace: true }); // 프로필에 웹사이트가 있으면 리다이렉션
+      navigate(from!, { replace: true });
     }
   }, [profile, navigate, from]);
 
-  // 프로필이 로드되지 않았을 때는 아무것도 렌더링하지 않음
   if (!profile) return null;
 
   return (
@@ -55,7 +55,16 @@ const TermServicePage: React.FC = () => {
       <div className="flex flex-col w-full gap-5">
         <div className="w-full h-10 py-2 px-3 bg-white rounded-md flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <div className="flex items-center gap-2">
+            <div
+              className="flex items-center gap-2"
+              onClick={() =>
+                window.open(
+                  "https://mmyeong.notion.site/PrayU-ee61275fa48842cda5a5f2ed5b608ec0?pvs=4",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+            >
               <p className="text-sm font-medium">
                 [필수] 해당 서비스 이용 약관 동의
               </p>
@@ -78,6 +87,28 @@ const TermServicePage: React.FC = () => {
           동의하고 시작해요
         </Button>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-4xl h-4/5">
+            <h2 className="text-xl font-bold mb-4">서비스 이용 약관</h2>
+            <div className="relative w-full h-full">
+              <iframe
+                src="https://mmyeong.notion.site/PrayU-ee61275fa48842cda5a5f2ed5b608ec0?pvs=4"
+                title="서비스 이용 약관"
+                className="w-full h-full border-0"
+              />
+            </div>
+            <Button
+              className="mt-4"
+              variant="secondary"
+              onClick={() => setIsModalOpen(false)} // 모달 닫기
+            >
+              닫기
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
