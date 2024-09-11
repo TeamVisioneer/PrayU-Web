@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PrayTypeDatas } from "@/Enums/prayType";
 import useAuth from "@/hooks/useAuth";
@@ -5,17 +6,19 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
+import { IoIosArrowForward } from "react-icons/io";
 
 const TermServicePage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const getProfile = useBaseStore((state) => state.getProfile);
-  const profile = useBaseStore((state) => state.profile);
+  const profile = useBaseStore((state) => state.myProfile);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const from = queryParams.get("from");
 
+  const [isChecked, setIsChecked] = useState(false);
   const emojiData = PrayTypeDatas["pray"];
 
   useEffect(() => {
@@ -50,12 +53,28 @@ const TermServicePage: React.FC = () => {
       </div>
 
       <div className="flex flex-col w-full gap-5">
-        <div className="flex items-center justify-between">
-          <p>[필수] 해당 서비스 이용 약관 동의</p>
-          <Checkbox />
+        <div className="w-full h-10 py-2 px-3 bg-white rounded-md flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium">
+                [필수] 해당 서비스 이용 약관 동의
+              </p>
+              <IoIosArrowForward className="text-gray-500" />
+            </div>
+          </div>
+
+          <Checkbox
+            className="w-5 h-5 border-2"
+            checked={isChecked}
+            onCheckedChange={(checked) => setIsChecked(checked === true)}
+          />
         </div>
 
-        <Button className="w-full bottom-0 left-0" variant="primary">
+        <Button
+          className="w-full bottom-0 left-0"
+          variant="primary"
+          disabled={!isChecked}
+        >
           동의하고 시작해요
         </Button>
       </div>
