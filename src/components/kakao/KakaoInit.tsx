@@ -9,7 +9,7 @@ const KakaoInit: React.FC = () => {
     script.crossOrigin = "anonymous";
     script.async = true;
     script.onload = () => {
-      if (window.Kakao) {
+      if (window.Kakao && !window.Kakao.isInitialized()) {
         window.Kakao.init(`${import.meta.env.VITE_KAKAO_JS_KEY}`);
       }
     };
