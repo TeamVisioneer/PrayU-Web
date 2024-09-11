@@ -23,6 +23,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   eventOption,
 }) => {
   const { toast } = useToast();
+  const myMember = useBaseStore((state) => state.myMember);
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const prayCardCarouselApi = useBaseStore(
@@ -69,7 +70,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     if (!hasPrayed) {
       const newPray = await createPray(prayCard.id, currentUserId, prayType);
       if (!newPray) return null;
-      if (prayCard.profiles.kakao_id && prayCard.profiles.kakao_notification) {
+      if (prayCard.profiles.kakao_id && myMember?.profiles.kakao_notification) {
         const response = await KakaoController.sendDirectMessage(
           kakaoMessage,
           prayCard.profiles.kakao_id
