@@ -23,10 +23,6 @@ const MainPage: React.FC = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/group";
-  const redirectUrl = `${baseUrl}/term?from=${from}`;
-
   useEffect(() => {
     if (!api) return;
     setCurrentIndex(api.selectedScrollSnap());
@@ -63,6 +59,9 @@ const MainPage: React.FC = () => {
   );
 
   const KakaoLoginBtn = () => {
+    const location = useLocation();
+    const groupId = location.state?.from?.pathname.split("/")[2] || "";
+
     const handleKakaoLoginBtnClick = () => {
       analytics.track("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
     };
@@ -70,7 +69,7 @@ const MainPage: React.FC = () => {
     return (
       <div onClick={handleKakaoLoginBtnClick}>
         <Auth
-          redirectTo={redirectUrl}
+          redirectTo={`${baseUrl}/term?groupId=${groupId}`}
           supabaseClient={supabase}
           appearance={{
             theme: ThemeSupa,
@@ -102,7 +101,7 @@ const MainPage: React.FC = () => {
           variant="primary"
           className="w-32"
           onClick={() => {
-            window.location.href = redirectUrl;
+            window.location.href = "/group";
             analytics.track("클릭_메인_시작하기", {
               where: "PrayUStartBtn",
             });

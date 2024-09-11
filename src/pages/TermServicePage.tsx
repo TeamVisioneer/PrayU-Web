@@ -19,7 +19,8 @@ const TermServicePage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const from = queryParams.get("from");
+  const groupId = queryParams.get("groupId");
+  const redirectUrl = groupId ? `/group/${groupId}` : "/group";
 
   const [isChecked, setIsChecked] = useState(false);
   const emojiData = PrayTypeDatas["pray"];
@@ -32,9 +33,9 @@ const TermServicePage: React.FC = () => {
 
   useEffect(() => {
     if (profile && profile.terms_agreed_at !== null) {
-      navigate(from!, { replace: true });
+      navigate(redirectUrl, { replace: true });
     }
-  }, [profile, navigate, from]);
+  }, [profile, redirectUrl, navigate]);
 
   if (!profile) return null;
 
@@ -43,7 +44,7 @@ const TermServicePage: React.FC = () => {
     updateProfile(profile.id, {
       terms_agreed_at: getISOTodayDate(),
     });
-    navigate(from!, { replace: true });
+    navigate(redirectUrl, { replace: true });
   };
 
   return (
