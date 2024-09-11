@@ -14,6 +14,7 @@ import TodayPrayStartCard from "../todayPray/TodayPrayStartCard";
 import { getISOTodayDate } from "@/lib/utils";
 import OtherPrayCardUI from "../prayCard/OtherPrayCardUI";
 import { MemberWithProfiles } from "supabase/types/tables";
+import { ClipLoader } from "react-spinners";
 
 interface OtherMembersProps {
   currentUserId: string;
@@ -31,6 +32,10 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   const isOpenOtherMemberDrawer = useBaseStore(
     (state) => state.isOpenOtherMemberDrawer
   );
+
+  const myMember = useBaseStore((state) => state.myMember);
+  const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
+
   const setIsOpenOtherMemberDrawer = useBaseStore(
     (state) => state.setIsOpenOtherMemberDrawer
   );
@@ -46,9 +51,30 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
     (member) => member.updated_at < getISOTodayDate(-6)
   );
 
+  if (!myMember) return null;
+  if (!groupPrayCardList)
+    return (
+      <div className="flex justify-center items-center min-h-80vh max-h-80vh">
+        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
+      </div>
+    );
+
+  const filterdGroupPrayCardList = groupPrayCardList?.filter(
+    (prayCard) =>
+      prayCard.user_id &&
+      prayCard.user_id !== currentUserId &&
+      prayCard.deleted_at == null &&
+      !myMember.profiles.blocking_users.includes(prayCard.user_id)
+  );
+
   if (isPrayToday == null) return null;
   if (otherMemberList.length === 0) return <MemberInviteCard />;
-  if (!isPrayToday && !isExpiredAllMember) return <TodayPrayStartCard />;
+  if (
+    !isPrayToday &&
+    !isExpiredAllMember &&
+    filterdGroupPrayCardList.length != 0
+  )
+    return <TodayPrayStartCard />;
 
   return (
     <>
