@@ -7,19 +7,20 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IoIosArrowForward } from "react-icons/io";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const TermServicePage: React.FC = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
   const getProfile = useBaseStore((state) => state.getProfile);
   const profile = useBaseStore((state) => state.myProfile);
+  const updateProfile = useBaseStore((state) => state.updateProfile);
+
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const from = queryParams.get("from");
 
   const [isChecked, setIsChecked] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const emojiData = PrayTypeDatas["pray"];
 
   useEffect(() => {
@@ -29,12 +30,20 @@ const TermServicePage: React.FC = () => {
   }, [user, profile, getProfile]);
 
   useEffect(() => {
-    if (profile && profile.website !== null) {
+    if (profile && profile.terms_agreed_at !== null) {
       navigate(from!, { replace: true });
     }
   }, [profile, navigate, from]);
 
   if (!profile) return null;
+
+  const onClickAgreeStart = () => {
+    analyticsTrack("클릭_동의_완료", {});
+    updateProfile(profile.id, {
+      terms_agreed_at: new Date().toISOString(),
+    });
+    navigate(from!, { replace: true });
+  };
 
   return (
     <div className="flex flex-col justify-between items-center h-full">
@@ -57,13 +66,16 @@ const TermServicePage: React.FC = () => {
           <div className="flex items-center gap-1.5">
             <div
               className="flex items-center gap-2"
-              onClick={() =>
+              onClick={() => {
+                analyticsTrack("클릭_동의_서비스이용_자세히", {
+                  element: "term_service_agree",
+                });
                 window.open(
                   "https://mmyeong.notion.site/PrayU-ee61275fa48842cda5a5f2ed5b608ec0?pvs=4",
                   "_blank",
                   "noopener,noreferrer"
-                )
-              }
+                );
+              }}
             >
               <p className="text-sm font-medium">
                 [필수] 해당 서비스 이용 약관 동의
@@ -75,7 +87,12 @@ const TermServicePage: React.FC = () => {
           <Checkbox
             className="w-5 h-5 border-2"
             checked={isChecked}
-            onCheckedChange={(checked) => setIsChecked(checked === true)}
+            onCheckedChange={(checked) => {
+              setIsChecked(checked === true);
+              analyticsTrack("클릭_동의_서비스이용", {
+                element: "term_service_agree",
+              });
+            }}
           />
         </div>
 
@@ -83,32 +100,11 @@ const TermServicePage: React.FC = () => {
           className="w-full bottom-0 left-0"
           variant="primary"
           disabled={!isChecked}
+          onClick={() => onClickAgreeStart()}
         >
           동의하고 시작해요
         </Button>
       </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-4xl h-4/5">
-            <h2 className="text-xl font-bold mb-4">서비스 이용 약관</h2>
-            <div className="relative w-full h-full">
-              <iframe
-                src="https://mmyeong.notion.site/PrayU-ee61275fa48842cda5a5f2ed5b608ec0?pvs=4"
-                title="서비스 이용 약관"
-                className="w-full h-full border-0"
-              />
-            </div>
-            <Button
-              className="mt-4"
-              variant="secondary"
-              onClick={() => setIsModalOpen(false)} // 모달 닫기
-            >
-              닫기
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
