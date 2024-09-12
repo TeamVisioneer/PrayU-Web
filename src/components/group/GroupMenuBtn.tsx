@@ -12,8 +12,12 @@ import { Group } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import { SlMenu } from "react-icons/sl";
+import addGroup from "@/assets/addGroup.svg";
+import minusGroup from "@/assets/minusGroup.svg";
+import newIcon from "@/assets/newIcon.svg";
+import groupIcon from "@/assets/groupIcon.svg";
 
-import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
+//import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 
 interface GroupMenuBtnProps {
@@ -107,84 +111,89 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
       >
         <SlMenu size={20} />
       </SheetTrigger>
-      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-end overflow-y-auto no-scrollbar">
-        <SheetHeader>
-          <SheetTitle className="text-end">PrayU 그룹</SheetTitle>
+      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-start overflow-y-auto no-scrollbar">
+        <SheetHeader className="w-full">
+          <SheetTitle className="flex items-center gap-2 text-left text-[#222222]">
+            <img src={groupIcon} />
+            <p>PrayU 그룹</p>
+          </SheetTitle>
+          <hr className="w-full" />
           <SheetDescription></SheetDescription>
         </SheetHeader>
-        <div className="flex flex-col gap-4 items-end text-gray-500">
+        <div className="flex flex-col gap-4 items-start text-gray-500 w-full">
           {userGroupList.map((group) => {
             if (group.id === targetGroup?.id)
               return (
                 <div
                   key={group.id}
-                  className="flex items-center gap-3 text-black"
+                  className="w-full flex items-center gap-3 text-[#222222]"
                 >
-                  <OpenShareDrawerBtn
-                    text="초대"
-                    type="tag"
-                    eventOption={{ where: "GroupMenuBtn" }}
-                  />
                   <a
                     key={group.id}
                     onClick={() => onClickOtherGroup(group.id)}
-                    className="cursor-pointer font-bold underline max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="w-full cursor-pointer font-bold underline max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
                   >
                     {group.name}
                   </a>
+                  {/* <OpenShareDrawerBtn
+                    text="초대"
+                    type="tag"
+                    eventOption={{ where: "GroupMenuBtn" }}
+                  /> */}
                 </div>
               );
             return (
               <a
                 key={group.id}
                 onClick={() => onClickOtherGroup(group.id)}
-                className="cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
+                className="w-full cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
               >
                 {group.name}
               </a>
             );
           })}
-          <hr />
+          <hr className="w-full" />
           {targetGroup && (
             <>
-              <a
-                className="cursor-pointer text-green-900"
-                onClick={() => handleClickCreateGroup()}
-              >
-                + 그룹 만들기
-              </a>
-              <a
-                className="cursor-pointer text-red-900"
-                onClick={() =>
-                  handleClickExitGroup(targetGroup.id, targetGroup.name)
-                }
-              >
-                - 그룹 나가기
-              </a>
+              <div className="flex items-center gap-2">
+                <img src={addGroup} />
+                <a
+                  className="cursor-pointer text-[#222222] font-medium"
+                  onClick={() => handleClickCreateGroup()}
+                >
+                  그룹 만들기
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
+                <img src={minusGroup} />
+                <a
+                  className="cursor-pointer text-[#222222] font-medium"
+                  onClick={() =>
+                    handleClickExitGroup(targetGroup.id, targetGroup.name)
+                  }
+                >
+                  그룹 나가기
+                </a>
+              </div>
             </>
           )}
-
-          <hr />
+          <hr className="w-full" />
           <div className="flex gap-2 items-center">
-            <p className="text-xs flex flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
-              new
-            </p>
             <a
               href="/profile/me"
               onClick={() => analyticsTrack("클릭_프로필_나", {})}
             >
               내 정보
             </a>
+            <img src={newIcon} />
           </div>
 
           <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
             PrayU 홈
           </a>
-          <div className="flex gap-2 items-center">
-            <p className="text-xs flex flex-col justify-center items-center bg-mainBtn rounded-xl px-1 h-fit text-white">
-              new
-            </p>
+          <div className="flex gap-1 items-center">
             <a onClick={() => onClickOpenNotice()}>PrayU 소식</a>
+            <img src={newIcon} />
           </div>
 
           <div className="flex gap-2 items-center">
