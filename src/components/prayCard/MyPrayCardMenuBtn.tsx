@@ -6,25 +6,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { RiMoreFill } from "react-icons/ri";
+import useBaseStore from "@/stores/baseStore";
 import { FiEdit } from "react-icons/fi";
 import { LuCopy } from "react-icons/lu";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { RiMoreFill, RiDeleteBin6Line } from "react-icons/ri";
 import { analyticsTrack } from "@/analytics/analytics";
-import useBaseStore from "@/stores/baseStore";
 import { toast } from "../ui/use-toast";
 import { deletePrayCard } from "@/apis/prayCard";
 import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 import { KakaoController } from "../kakao/KakaoController";
-import {
-  KakaoMessageObject,
-  KakaoSendMessageResponse,
-  SelectedUsers,
-} from "../kakao/Kakao";
+import { KakaoSendMessageResponse, SelectedUsers } from "../kakao/Kakao";
 import { MdMailOutline } from "react-icons/md";
-import { getDomainUrl } from "@/lib/utils";
 import { PrayCardWithProfiles } from "supabase/types/tables";
-import { RequestPrayMessage } from "../kakao/KakaoMessage";
+import { PrayRequestMessage } from "../kakao/KakaoMessage";
 
 interface MyMoreBtnProps {
   handleEditClick: () => void;
@@ -43,6 +37,9 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
     (state) => state.setIsConfirmAlertOpen
   );
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const myMember = useBaseStore((state) => state.myMember);
+  if (!targetGroup || !myMember) return null;
+
   const onClickCopyPrayCard = () => {
     if (!inputPrayCardContent) {
       toast({
@@ -64,13 +61,31 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
     analyticsTrack("클릭_기도카드_복사", {});
   };
 
-  const onClickPrayRequest = async (targetGroupId: string) => {
+  const onClickPrayRequest = async () => {
+    if (myMember.profiles.kakao_id) {
+      await sendPrayRequestMessage();
+    } else {
+      setAlertData({
+        color: "bg-mainBtn",
+        title: "메세지 전송 동의",
+        description: `메세지 전송을 동의한 그룹원들과\n카카오톡 기도요청 메세지를 보낼 수 있어요!`,
+        actionText: "계속하기",
+        cancelText: "취소",
+        onAction: async () => {
+          await sendPrayRequestMessage();
+        },
+      });
+      setIsConfirmAlertOpen(true);
+    }
+    analyticsTrack("클릭_기도카드_기도요청", {});
+  };
+
+  const sendPrayRequestMessage = async () => {
     const kakaoToken = await KakaoTokenRepo.init(
-      `groupId:${targetGroupId};from:MyPrayCard`
+      `groupId:${targetGroup.id};from:MyPrayCard`
     );
     if (!kakaoToken) return null;
-
-    const message = RequestPrayMessage(targetGroup!.name);
+    const message = PrayRequestMessage(myMember.profiles.full_name);
     const selectFriendsResponse: SelectedUsers | null =
       await KakaoController.selectUsers();
     if (selectFriendsResponse?.users) {
@@ -94,11 +109,10 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
             ? friendsMessageResponse.successful_receiver_uuids.length
             : 0);
         toast({
-          description: `📮 ${successedCount}명의 친구들에게 기도제목 요청 메세지를 보냈어요`,
+          description: `📮 ${successedCount}명의 친구들에게 기도요청 메세지를 보냈어요`,
         });
       }
     }
-    analyticsTrack("클릭_기도카드_공유", {});
   };
 
   const onClickDeletePrayCard = () => {
@@ -116,6 +130,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
     setIsConfirmAlertOpen(true);
     return;
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -148,7 +163,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="flex justify-between"
-          onClick={() => onClickPrayRequest(targetGroup!.id)}
+          onClick={() => onClickPrayRequest()}
         >
           <MdMailOutline />
           기도요청

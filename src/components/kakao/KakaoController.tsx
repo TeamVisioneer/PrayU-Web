@@ -58,7 +58,6 @@ export class KakaoController {
         url: "/v2/api/talk/memo/default/send",
         data: { template_object: message },
       });
-      console.log("sendMessageForMe response", response);
       return response as KakaoSendMessageResponse;
     } catch (error) {
       Sentry.captureException(error);
@@ -79,7 +78,6 @@ export class KakaoController {
           template_object: message,
         },
       });
-      console.log("sendMessageForFriends response", response);
       return response as KakaoSendMessageResponse;
     } catch (error) {
       Sentry.captureException(error);
