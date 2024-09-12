@@ -4,6 +4,7 @@ import ReactionWithCalendar from "./ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
 import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
+import DeletedPrayCardUI from "./DeletedPrayCardUI";
 import { ClipLoader } from "react-spinners";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 
@@ -42,13 +43,9 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     );
   }
 
-  if (
-    otherPrayCardList &&
-    (otherPrayCardList.length == 0 ||
-      otherPrayCardList[0].created_at < getISOTodayDate(-6))
-  ) {
+  if (otherPrayCardList.length == 0) return <DeletedPrayCardUI />;
+  if (otherPrayCardList[0].created_at < getISOTodayDate(-6))
     return <ExpiredPrayCardUI />;
-  }
 
   const prayCard = otherPrayCardList[0];
   const createdDateYMD = getISODateYMD(prayCard.created_at);

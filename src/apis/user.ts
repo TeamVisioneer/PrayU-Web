@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/react";
+
 export const deleteUser = async (userId: string): Promise<boolean> => {
   try {
     const response = await fetch(
@@ -17,10 +19,14 @@ export const deleteUser = async (userId: string): Promise<boolean> => {
       return false;
     }
 
-    const data = await response.json();
-    if (!data) return false;
-    return true;
-  } catch {
+    const { error, data } = await response.json();
+    if (error) {
+      Sentry.captureException(error.message);
+      return false;
+    }
+    return data ? true : false;
+  } catch (error) {
+    Sentry.captureException(error);
     return false;
   }
 };
