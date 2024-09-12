@@ -14,7 +14,7 @@ import {
 
 import useBaseStore from "@/stores/baseStore";
 import imgEventOpen from "@/assets/event_open.svg";
-import imgUpdate from "@/assets/update_0906.svg";
+// import imgUpdate from "@/assets/update_0906.svg";
 import { useEffect, useState } from "react";
 import { analytics } from "@/analytics/analytics";
 
@@ -73,9 +73,9 @@ const EventDialog = () => {
         </DialogHeader>
         <Carousel className="flex w-full h-full justify-center" setApi={setApi}>
           <CarouselContent>
-            <CarouselItem className="w-full h-full">
+            {/* <CarouselItem className="w-full h-full">
               <img className="w-[350px] h-[350px] rounded-xl" src={imgUpdate} />
-            </CarouselItem>
+            </CarouselItem> */}
             <CarouselItem className="w-full h-full">
               <img
                 onClick={() =>
