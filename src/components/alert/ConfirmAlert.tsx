@@ -19,7 +19,7 @@ const ConfirmAlert: React.FC = () => {
 
   return (
     <AlertDialog open={isConfirmAlertOpen} onOpenChange={setIsConfirmAlertOpen}>
-      <AlertDialogContent>
+      <AlertDialogContent className="w-11/12 rounded-xl">
         <AlertDialogHeader>
           <AlertDialogTitle>{alertData.title}</AlertDialogTitle>
           <AlertDialogDescription className="whitespace-pre-wrap">
@@ -28,7 +28,7 @@ const ConfirmAlert: React.FC = () => {
         </AlertDialogHeader>
         <AlertDialogFooter className="flex flex-col items-center">
           <AlertDialogAction
-            className="bg-red-400 w-3/4"
+            className={`w-3/4 ${alertData.color}`}
             onClick={() => alertData.onAction()}
           >
             {alertData.actionText}

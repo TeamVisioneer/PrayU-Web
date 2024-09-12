@@ -203,6 +203,7 @@ export interface BaseStore {
   }) => void;
 
   alertData: {
+    color?: string;
     title: string;
     description: string;
     cancelText: string;
@@ -210,6 +211,7 @@ export interface BaseStore {
     onAction: () => void;
   };
   setAlertData: (alertData: {
+    color?: string;
     title: string;
     description: string;
     cancelText: string;
@@ -699,6 +701,7 @@ const useBaseStore = create<BaseStore>()(
     },
 
     alertData: {
+      color: "bg-red-400",
       title: "",
       description: "",
       cancelText: "",

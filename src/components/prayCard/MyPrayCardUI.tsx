@@ -142,7 +142,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
         {!isEditingPrayCard && (
           <MyPrayCardMenuBtn
             handleEditClick={handleEditClick}
-            prayCardId={prayCard.id}
+            prayCard={prayCard}
           />
         )}
       </div>
