@@ -102,6 +102,9 @@ const MyProfilePage = () => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
   }, [myProfile, fetchProfileList]);
 
+  // TODO: 카카오 메세지 재기획 이후 진행
+  const kakaoMessageEnabled = false;
+
   return (
     <div className="w-ful flex flex-col gap-6 items-center">
       <div className="w-full flex justify-between items-center">
@@ -183,49 +186,54 @@ const MyProfilePage = () => {
             </Accordion>
           </div>
 
-          <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger
-                  onClick={() => analyticsTrack("클릭_프로필_환경설정", {})}
-                >
-                  <div className="w-full h-10 flex flex-grow justify-between items-center">
-                    <span className="font-semibold">환경 설정</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="w-full flex flex-col p-2 gap-2 text-sm">
-                    <div className="w-full flex justify-between items-center bg-white rounded-xl">
-                      <div className="flex items-center gap-1">
-                        <span>카카오 메세지 전송</span>
-                        <Popover>
-                          <PopoverTrigger
-                            onClick={() =>
-                              analyticsTrack("클릭_프로필_카카오메세지설명", {})
-                            }
-                          >
-                            <LuInfo size={16} color="gray" />
-                          </PopoverTrigger>
-                          <PopoverContent>
-                            <span className="text-sm text-gray-500">
-                              기도 반응 할 때 상대방에게 카카오 메세지가
-                              전송됩니다
-                            </span>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-                      <Switch
-                        defaultChecked={myProfile.kakao_notification}
-                        onCheckedChange={() =>
-                          onChangeKakaoNotificationToggle()
-                        }
-                      />
+          {kakaoMessageEnabled && (
+            <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger
+                    onClick={() => analyticsTrack("클릭_프로필_환경설정", {})}
+                  >
+                    <div className="w-full h-10 flex flex-grow justify-between items-center">
+                      <span className="font-semibold">환경 설정</span>
                     </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="w-full flex flex-col p-2 gap-2 text-sm">
+                      <div className="w-full flex justify-between items-center bg-white rounded-xl">
+                        <div className="flex items-center gap-1">
+                          <span>카카오 메세지 전송</span>
+                          <Popover>
+                            <PopoverTrigger
+                              onClick={() =>
+                                analyticsTrack(
+                                  "클릭_프로필_카카오메세지설명",
+                                  {}
+                                )
+                              }
+                            >
+                              <LuInfo size={16} color="gray" />
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <span className="text-sm text-gray-500">
+                                기도 반응 할 때 상대방에게 카카오 메세지가
+                                전송됩니다
+                              </span>
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                        <Switch
+                          defaultChecked={myProfile.kakao_notification}
+                          onCheckedChange={() =>
+                            onChangeKakaoNotificationToggle()
+                          }
+                        />
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          )}
 
           <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
             <Accordion type="single" collapsible className="w-full">
