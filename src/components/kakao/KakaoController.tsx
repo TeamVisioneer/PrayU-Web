@@ -28,6 +28,7 @@ export class KakaoController {
     try {
       const response = await window.Kakao.Picker.selectFriends({
         title: "공유할 친구 선택",
+        showFavorite: false,
       });
       return response;
     } catch (error) {
@@ -57,6 +58,7 @@ export class KakaoController {
         url: "/v2/api/talk/memo/default/send",
         data: { template_object: message },
       });
+      console.log("sendMessageForMe response", response);
       return response as KakaoSendMessageResponse;
     } catch (error) {
       Sentry.captureException(error);
@@ -69,6 +71,7 @@ export class KakaoController {
     friendsUUID: string[]
   ): Promise<KakaoSendMessageResponse | null> {
     try {
+      if (friendsUUID.length == 0) return null;
       const response = await window.Kakao.API.request({
         url: "/v1/api/talk/friends/message/default/send",
         data: {
@@ -76,6 +79,7 @@ export class KakaoController {
           template_object: message,
         },
       });
+      console.log("sendMessageForFriends response", response);
       return response as KakaoSendMessageResponse;
     } catch (error) {
       Sentry.captureException(error);
