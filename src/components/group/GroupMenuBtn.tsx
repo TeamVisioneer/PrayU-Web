@@ -124,7 +124,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
             return (
               <a
                 onClick={() => onClickOtherGroup(group.id)}
-                className={`w-full cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis ${
+                className={`cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis ${
                   group.id == targetGroup?.id
                     ? "font-bold underline text-[#222222]"
                     : ""
