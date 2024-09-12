@@ -90,7 +90,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
       await KakaoController.selectUsers();
     if (selectFriendsResponse?.users) {
       const myUUID = selectFriendsResponse.users.find(
-        (user) => user.id == prayCard.profiles.kakao_id
+        (user) => user.id == myMember.profiles.kakao_id
       )?.uuid;
       const friendsUUID = selectFriendsResponse.users
         .filter((user) => user.uuid != myUUID)
