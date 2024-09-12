@@ -45,7 +45,7 @@ const ExpiredPrayCardUI: React.FC = () => {
       </div>
       <div className="flex flex-col items-center justify-center p-4 gap-4">
         <div className="flex flex-col items-center gap-1">
-          {<p className="font-bold">기도제목이 삭제되었어요 😂</p>}
+          <p className="font-bold">기도제목이 아직 없어요 😂</p>
           <p className="text-sm">기도제목을 요청해봐요!</p>
         </div>
 
