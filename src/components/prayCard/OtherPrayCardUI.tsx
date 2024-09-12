@@ -43,16 +43,9 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     );
   }
 
-  if (otherPrayCardList && otherPrayCardList.length == 0) {
-    return <DeletedPrayCardUI />;
-  }
-
-  if (
-    otherPrayCardList &&
-    otherPrayCardList[0].created_at < getISOTodayDate(-6)
-  ) {
+  if (otherPrayCardList.length == 0) return <DeletedPrayCardUI />;
+  if (otherPrayCardList[0].created_at < getISOTodayDate(-6))
     return <ExpiredPrayCardUI />;
-  }
 
   const prayCard = otherPrayCardList[0];
   const createdDateYMD = getISODateYMD(prayCard.created_at);
