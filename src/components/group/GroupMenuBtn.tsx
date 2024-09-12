@@ -17,7 +17,6 @@ import minusGroup from "@/assets/minusGroup.svg";
 import newIcon from "@/assets/newIcon.svg";
 import groupIcon from "@/assets/groupIcon.svg";
 
-//import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 
 interface GroupMenuBtnProps {
@@ -122,31 +121,14 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
         </SheetHeader>
         <div className="flex flex-col gap-4 items-start text-gray-500 w-full">
           {userGroupList.map((group) => {
-            if (group.id === targetGroup?.id)
-              return (
-                <div
-                  key={group.id}
-                  className="w-full flex items-center gap-3 text-[#222222]"
-                >
-                  <a
-                    key={group.id}
-                    onClick={() => onClickOtherGroup(group.id)}
-                    className="w-full cursor-pointer font-bold underline max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
-                  >
-                    {group.name}
-                  </a>
-                  {/* <OpenShareDrawerBtn
-                    text="초대"
-                    type="tag"
-                    eventOption={{ where: "GroupMenuBtn" }}
-                  /> */}
-                </div>
-              );
             return (
               <a
-                key={group.id}
                 onClick={() => onClickOtherGroup(group.id)}
-                className="w-full cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
+                className={`w-full cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis ${
+                  group.id == targetGroup?.id
+                    ? "font-bold underline text-[#222222]"
+                    : ""
+                }`}
               >
                 {group.name}
               </a>
