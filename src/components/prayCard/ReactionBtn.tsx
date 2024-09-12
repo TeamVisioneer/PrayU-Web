@@ -41,7 +41,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     object_type: "feed",
     content: {
       title: "📮 PrayU 기도 알림",
-      description: "그룹장이 당신을 위해 기도해주었어요",
+      description: `${myMember?.profiles.full_name}님이 당신을 위해 기도해주었어요`,
       image_url:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/ReactionIcon.png",
       image_width: 800,
@@ -70,6 +70,10 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     if (!hasPrayed) {
       const newPray = await createPray(prayCard.id, currentUserId, prayType);
       if (!newPray) return null;
+
+      // TODO: 카카오 메세지 재기획 이후 진행
+      const kakaoMessageEnabled = false;
+      if (!kakaoMessageEnabled) return null;
       if (prayCard.profiles.kakao_id && myMember?.profiles.kakao_notification) {
         const response = await KakaoController.sendDirectMessage(
           kakaoMessage,

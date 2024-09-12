@@ -17,13 +17,17 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
+    window.history.pushState(null, "", window.location.pathname);
+    setIsOpenTodayPrayDrawer(true);
+    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
+
+    // TODO: 카카오 메세지 재기획 이후 진행
+    const kakaoMessageEnabled = false;
+    if (!kakaoMessageEnabled) return null;
     const kakaoToken = await KakaoTokenRepo.init(
       `groupId:${targetGroupId};from:TodayPrayDrawer`
     );
     if (!kakaoToken) return null;
-    window.history.pushState(null, "", window.location.pathname);
-    setIsOpenTodayPrayDrawer(true);
-    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
   };
 
   return (
