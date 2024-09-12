@@ -4,6 +4,7 @@ import ReactionWithCalendar from "./ReactionWithCalendar";
 import { Textarea } from "../ui/textarea";
 import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
+import DeletedPrayCardUI from "./DeletedPrayCardUI";
 import { ClipLoader } from "react-spinners";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 
@@ -40,6 +41,13 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
       </div>
     );
+  }
+
+  if (
+    otherPrayCardList &&
+    (otherPrayCardList.length == 0 || otherPrayCardList[0].deleted_at != null)
+  ) {
+    return <DeletedPrayCardUI />;
   }
 
   if (

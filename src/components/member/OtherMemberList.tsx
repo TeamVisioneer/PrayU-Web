@@ -58,12 +58,13 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
       </div>
     );
+  const todayDt = getISOTodayDate();
 
   const filterdGroupPrayCardList = groupPrayCardList?.filter(
     (prayCard) =>
       prayCard.user_id &&
       prayCard.user_id !== currentUserId &&
-      prayCard.deleted_at == null &&
+      prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length == 0 &&
       !myMember.profiles.blocking_users.includes(prayCard.user_id)
   );
 
