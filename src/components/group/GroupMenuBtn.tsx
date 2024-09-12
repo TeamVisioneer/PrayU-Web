@@ -63,6 +63,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
 
   const handleClickExitGroup = (groupId: string, groupName: string | null) => {
     setAlertData({
+      color: "bg-red-400",
       title: "그룹 나가기",
       description: `더 이상 ${groupName}의 기도를 받을 수 없어요 😭`,
       actionText: "나가기",
