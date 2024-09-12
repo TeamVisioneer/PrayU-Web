@@ -117,6 +117,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
 
   const onClickDeletePrayCard = () => {
     setAlertData({
+      color: "bg-red-400",
       title: "내 기도제목 삭제하기",
       description: `내 기도제목이 없으면 친구들에게 기도를 해줄 수 없어요! \n삭제한 후 새로 작성해 보아요:)`,
       actionText: "삭제하기",

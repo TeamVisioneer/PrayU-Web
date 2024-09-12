@@ -63,6 +63,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
 
   const handleClickExitGroup = (groupId: string, groupName: string | null) => {
     setAlertData({
+      color: "bg-red-400",
       title: "그룹 나가기",
       description: `더 이상 ${groupName}의 기도를 받을 수 없어요 😭`,
       actionText: "나가기",
@@ -120,20 +121,19 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
           <SheetDescription></SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-4 items-start text-gray-500 w-full">
-          {userGroupList.map((group) => {
-            return (
-              <a
-                onClick={() => onClickOtherGroup(group.id)}
-                className={`cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis ${
-                  group.id == targetGroup?.id
-                    ? "font-bold underline text-[#222222]"
-                    : ""
-                }`}
-              >
-                {group.name}
-              </a>
-            );
-          })}
+          {userGroupList.map((group) => (
+            <a
+              key={group.id}
+              onClick={() => onClickOtherGroup(group.id)}
+              className={`cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis ${
+                group.id == targetGroup?.id
+                  ? "font-bold underline text-[#222222]"
+                  : ""
+              }`}
+            >
+              {group.name}
+            </a>
+          ))}
           <hr className="w-full" />
           {targetGroup && (
             <>

@@ -57,6 +57,7 @@ const MyProfilePage = () => {
   const onClickExitPrayU = () => {
     analyticsTrack("클릭_프로필_회원탈퇴", {});
     setAlertData({
+      color: "bg-red-400",
       title: "PrayU 탈퇴하기",
       description: `더 이상 기도 나눔을 할 수 없게 돼요 :(`,
       actionText: "탈퇴하기",

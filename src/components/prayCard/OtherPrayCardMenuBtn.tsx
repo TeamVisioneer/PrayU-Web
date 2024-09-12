@@ -51,6 +51,7 @@ const OtherPrayCardMenuBtn: React.FC<OtherPrayCardMenuBtnProps> = ({
     analyticsTrack("클릭_프로필_차단", {});
     setIsConfirmAlertOpen(true);
     setAlertData({
+      color: "bg-red-400",
       title: "유저 차단",
       description: "해당 유저를 차단하시겠습니까?",
       cancelText: "취소",
