@@ -73,8 +73,11 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
 
       // TODO: 카카오 메세지 재기획 이후 진행
       const kakaoMessageEnabled = false;
-      if (!kakaoMessageEnabled) return null;
-      if (prayCard.profiles.kakao_id && myMember?.profiles.kakao_notification) {
+      if (
+        prayCard.profiles.kakao_id &&
+        myMember?.profiles.kakao_notification &&
+        kakaoMessageEnabled
+      ) {
         const response = await KakaoController.sendDirectMessage(
           kakaoMessage,
           prayCard.profiles.kakao_id
