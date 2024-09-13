@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { analytics, analyticsTrack } from "@/analytics/analytics";
 import kakaoIcon from "@/assets/kakaoIcon.svg";
 import appleIcon from "@/assets/appleIcon.svg";
+import * as Sentry from "@sentry/react";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -82,7 +83,10 @@ const MainPage: React.FC = () => {
           redirectTo: `${baseUrl}/term?groupId=${groupId}`,
         },
       });
-      if (error) console.error("Kakao login error:", error.message);
+      if (error) {
+        console.error("Kakao login error:", error.message);
+        Sentry.captureException(error.message);
+      }
     };
 
     const handleAppleLoginBtnClick = async () => {
@@ -93,7 +97,10 @@ const MainPage: React.FC = () => {
           redirectTo: `${baseUrl}/term?groupId=${groupId}`,
         },
       });
-      if (error) console.error("Apple login error:", error.message);
+      if (error) {
+        console.error("Apple login error:", error.message);
+        Sentry.captureException(error.message);
+      }
     };
 
     return (
