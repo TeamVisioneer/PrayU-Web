@@ -11,6 +11,7 @@ import { Textarea } from "../ui/textarea";
 import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import { Badge } from "../ui/badge";
+import { Skeleton } from "../ui/skeleton";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -73,7 +74,14 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
-  if (!userPrayCardList) return null;
+  if (!userPrayCardList) {
+    return (
+      <div className="flex justify-center items-center min-h-80vh max-h-80vh px-10 pt-[68px]">
+        <Skeleton className="w-full h-[300px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
+      </div>
+    );
+  }
+
   if (
     userPrayCardList &&
     (userPrayCardList.length == 0 ||
