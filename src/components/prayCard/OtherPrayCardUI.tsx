@@ -37,8 +37,8 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
 
   if (!otherPrayCardList) {
     return (
-      <div className="flex justify-center items-center min-h-80vh max-h-80vh px-10 pt-[68px]">
-        <Skeleton className="w-full h-[300px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
+      <div className="flex justify-center min-h-80vh max-h-80vh px-10 pt-[32px]">
+        <Skeleton className="w-full h-[400px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
       </div>
     );
   }
