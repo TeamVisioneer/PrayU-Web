@@ -122,17 +122,22 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
         </SheetHeader>
         <div className="flex flex-col gap-4 items-start text-gray-500 w-full">
           {userGroupList.map((group) => (
-            <a
-              key={group.id}
-              onClick={() => onClickOtherGroup(group.id)}
-              className={`cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis ${
-                group.id == targetGroup?.id
-                  ? "font-bold underline text-[#222222]"
-                  : ""
-              }`}
-            >
-              {group.name}
-            </a>
+            <div className="flex items-center gap-1">
+              <span
+                className={`w-[5px] h-[18px]  rounded-md ${
+                  group.id == targetGroup?.id ? "bg-mainBtn" : ""
+                }`}
+              ></span>
+              <a
+                key={group.id}
+                onClick={() => onClickOtherGroup(group.id)}
+                className={`cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis ${
+                  group.id == targetGroup?.id ? "font-bold text-[#222222]" : ""
+                }`}
+              >
+                {group.name}
+              </a>
+            </div>
           ))}
           <hr className="w-full" />
           {targetGroup && (
