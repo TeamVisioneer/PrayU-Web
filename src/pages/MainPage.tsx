@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { Auth } from "@supabase/auth-ui-react";
 import { useLocation } from "react-router-dom";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../../supabase/client";
 import { getDomainUrl } from "@/lib/utils";
 import {
@@ -13,6 +11,8 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
 import { analytics, analyticsTrack } from "@/analytics/analytics";
+import kakaoIcon from "@/assets/kakaoIcon.svg";
+import appleIcon from "@/assets/appleIcon.svg";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -59,6 +59,15 @@ const MainPage: React.FC = () => {
   );
 
   const KakaoLoginBtn = () => {
+    const [isAppleDevice, setIsAppleDevice] = useState(false);
+
+    useEffect(() => {
+      // 사용자 기기 감지 (iOS, macOS인지 확인)
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      const isApple = /iphone|ipad|ipod|macintosh|mac os x/i.test(userAgent);
+      setIsAppleDevice(isApple);
+    }, []);
+
     const location = useLocation();
     const pathname = location.state?.from?.pathname || "";
 
@@ -67,35 +76,52 @@ const MainPage: React.FC = () => {
     const groupId =
       pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
 
-    const handleKakaoLoginBtnClick = () => {
+    const handleKakaoLoginBtnClick = async () => {
       analytics.track("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "kakao",
+        options: {
+          redirectTo: `${baseUrl}/term?groupId=${groupId}`,
+        },
+      });
+      if (error) console.error("Kakao login error:", error.message);
+    };
+
+    const handleAppleLoginBtnClick = async () => {
+      analytics.track("클릭_애플_로그인", { where: "AppleLoginBtn" });
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "apple",
+        options: {
+          redirectTo: `${baseUrl}/term?groupId=${groupId}`,
+        },
+      });
+      if (error) console.error("Apple login error:", error.message);
     };
 
     return (
-      <div onClick={handleKakaoLoginBtnClick}>
-        <Auth
-          redirectTo={`${baseUrl}/term?groupId=${groupId}`}
-          supabaseClient={supabase}
-          appearance={{
-            theme: ThemeSupa,
-            style: {
-              button: { background: "#FFE812", color: "black" },
-            },
-          }}
-          localization={{
-            variables: {
-              sign_in: {
-                social_provider_text: "카카오로 시작하기",
-              },
-              sign_up: {
-                social_provider_text: "카카오로 시작하기",
-              },
-            },
-          }}
-          onlyThirdPartyProviders={true}
-          providers={["kakao", "apple"]}
-        />
-      </div>
+      <>
+        <div className="flex flex-col gap-2">
+          <button
+            className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
+            onClick={handleKakaoLoginBtnClick}
+            style={{ background: "#FEE500", color: "black" }}
+          >
+            <img src={kakaoIcon} className="w-4 h-4" />
+            카카오로 시작하기
+          </button>
+
+          {isAppleDevice && (
+            <button
+              className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
+              onClick={handleAppleLoginBtnClick}
+              style={{ background: "#222222", color: "white" }}
+            >
+              <img src={appleIcon} className="w-4 h-4" />
+              Apple로 시작하기
+            </button>
+          )}
+        </div>
+      </>
     );
   };
 
