@@ -22,6 +22,13 @@ const MainPage: React.FC = () => {
 
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAppleDevice, setIsAppleDevice] = useState(false);
+
+  useEffect(() => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isApple = /iphone|ipad|ipod|macintosh|mac os x/i.test(userAgent);
+    setIsAppleDevice(isApple);
+  }, []);
 
   useEffect(() => {
     if (!api) return;
@@ -59,15 +66,6 @@ const MainPage: React.FC = () => {
   );
 
   const KakaoLoginBtn = () => {
-    const [isAppleDevice, setIsAppleDevice] = useState(false);
-
-    useEffect(() => {
-      // 사용자 기기 감지 (iOS, macOS인지 확인)
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      const isApple = /iphone|ipad|ipod|macintosh|mac os x/i.test(userAgent);
-      setIsAppleDevice(isApple);
-    }, []);
-
     const location = useLocation();
     const pathname = location.state?.from?.pathname || "";
 
