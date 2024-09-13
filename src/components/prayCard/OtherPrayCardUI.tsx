@@ -51,7 +51,7 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   const createdDateYMD = getISODateYMD(prayCard.created_at);
 
   return (
-    <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
+    <div className="flex flex-col px-10 gap-2 min-h-80vh max-h-80vh">
       <div className="flex justify-end px-2">
         <OtherPrayCardMenuBtn
           targetUserId={prayCard.user_id || ""}

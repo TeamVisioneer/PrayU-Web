@@ -94,8 +94,8 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
         open={isOpenOtherMemberDrawer}
         onOpenChange={setIsOpenOtherMemberDrawer}
       >
-        <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
-          <DrawerHeader className="p-0">
+        <DrawerContent className="bg-mainBg pb-5">
+          <DrawerHeader>
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
