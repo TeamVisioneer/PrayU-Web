@@ -2,7 +2,6 @@ import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
-import { IoClose } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 
 const Drawer = ({
