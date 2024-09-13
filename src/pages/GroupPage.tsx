@@ -5,7 +5,6 @@ import useBaseStore from "@/stores/baseStore";
 import GroupMenuBtn from "../components/group/GroupMenuBtn";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
-import { ClipLoader } from "react-spinners";
 import ContentDrawer from "@/components/share/ContentDrawer";
 import OpenEventDialogBtn from "@/components/notice/OpenEventDialogBtn";
 import EventDialog from "@/components/notice/EventDialog";
@@ -15,6 +14,7 @@ import { getISOTodayDate } from "@/lib/utils";
 import MyMember from "@/components/member/MyMember";
 import OtherMemberList from "@/components/member/OtherMemberList";
 import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDrawer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -88,8 +88,9 @@ const GroupPage: React.FC = () => {
 
   if (!targetGroup || !memberList || !groupList || !myMember) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
+      <div className="flex flex-col h-full gap-4 pt-[48px]">
+        <Skeleton className="w-full h-[150px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
+        <Skeleton className="w-full flex-grow flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
       </div>
     );
   }

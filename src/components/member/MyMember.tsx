@@ -41,6 +41,9 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
   );
+  const setIsEditingPrayCard = useBaseStore(
+    (state) => state.setIsEditingPrayCard
+  );
 
   const currentUserId = myMember.user_id!;
   const groupId = myMember.group_id!;
@@ -135,6 +138,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       <Drawer
         open={isOpenMyMemberDrawer}
         onOpenChange={setIsOpenMyMemberDrawer}
+        onClose={() => setIsEditingPrayCard(false)}
       >
         <DrawerTrigger
           className="focus:outline-none"
@@ -142,8 +146,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
         >
           {MyMemberUI}
         </DrawerTrigger>
-
-        <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
+        <DrawerContent className="bg-mainBg pb-10">
           <DrawerHeader className="p-0">
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>

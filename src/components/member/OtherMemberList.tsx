@@ -14,7 +14,6 @@ import TodayPrayStartCard from "../todayPray/TodayPrayStartCard";
 import { getISOTodayDate } from "@/lib/utils";
 import OtherPrayCardUI from "../prayCard/OtherPrayCardUI";
 import { MemberWithProfiles } from "supabase/types/tables";
-import { ClipLoader } from "react-spinners";
 
 interface OtherMembersProps {
   currentUserId: string;
@@ -52,12 +51,8 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   );
 
   if (!myMember) return null;
-  if (!groupPrayCardList)
-    return (
-      <div className="flex justify-center items-center min-h-80vh max-h-80vh">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
+  if (!groupPrayCardList) return null;
+
   const todayDt = getISOTodayDate();
 
   const filterdGroupPrayCardList = groupPrayCardList?.filter(
@@ -68,7 +63,6 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
       !myMember.profiles.blocking_users.includes(prayCard.user_id)
   );
 
-  if (isPrayToday == null) return null;
   if (otherMemberList.length === 0) return <MemberInviteCard />;
   if (
     !isPrayToday &&
@@ -94,8 +88,8 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
         open={isOpenOtherMemberDrawer}
         onOpenChange={setIsOpenOtherMemberDrawer}
       >
-        <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full px-10 pb-10 focus:outline-none">
-          <DrawerHeader className="p-0">
+        <DrawerContent className="bg-mainBg pb-5">
+          <DrawerHeader>
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>

@@ -1,8 +1,14 @@
-import { Drawer } from "../ui/drawer";
 import PrayList from "./PrayList";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { fetchUserPrayCardListByGroupId } from "@/apis/prayCard";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer";
 
 interface PrayListDrawerProps {
   currentUserId: string;
@@ -31,7 +37,13 @@ const PrayListDrawer: React.FC<PrayListDrawerProps> = ({
 
   return (
     <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
-      <PrayList prayData={prayCard.pray} />
+      <DrawerContent className="h-[400px]">
+        <DrawerHeader>
+          <DrawerTitle className="p-4">기도해 준 친구</DrawerTitle>
+          <DrawerDescription></DrawerDescription>
+        </DrawerHeader>
+        <PrayList prayData={prayCard.pray} />
+      </DrawerContent>
     </Drawer>
   );
 };

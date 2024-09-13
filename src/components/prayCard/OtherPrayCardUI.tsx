@@ -5,7 +5,6 @@ import { Textarea } from "../ui/textarea";
 import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import DeletedPrayCardUI from "./DeletedPrayCardUI";
-import { ClipLoader } from "react-spinners";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 
 interface EventOption {
@@ -35,14 +34,7 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     );
   }, [fetchOtherPrayCardListByGroupId, currentUserId, otherMember]);
 
-  if (!otherPrayCardList) {
-    return (
-      <div className="flex justify-center items-center min-h-80vh max-h-80vh">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
-  }
-
+  if (!otherPrayCardList) return null;
   if (otherPrayCardList.length == 0) return <DeletedPrayCardUI />;
   if (otherPrayCardList[0].created_at < getISOTodayDate(-6))
     return <ExpiredPrayCardUI />;
@@ -51,7 +43,7 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
   const createdDateYMD = getISODateYMD(prayCard.created_at);
 
   return (
-    <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
+    <div className="flex flex-col px-10 gap-2 min-h-80vh max-h-80vh">
       <div className="flex justify-end px-2">
         <OtherPrayCardMenuBtn
           targetUserId={prayCard.user_id || ""}

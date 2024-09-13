@@ -6,11 +6,11 @@ import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
-import { ClipLoader } from "react-spinners";
 import { useRef } from "react";
 import { Textarea } from "../ui/textarea";
 import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
+import { Badge } from "../ui/badge";
 
 interface PrayCardProps {
   currentUserId: string;
@@ -73,14 +73,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
-  if (!userPrayCardList) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
-  }
-
+  if (!userPrayCardList) return null;
   if (
     userPrayCardList &&
     (userPrayCardList.length == 0 ||
@@ -119,9 +112,9 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             </p>
           </div>
         )}
-        <div className="flex flex-col flex-grow px-[20px] py-[20px] relative">
+        <div className="flex flex-col flex-grow relative">
           <Textarea
-            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar border-none focus:outline-gray-200 text-black"
+            className="flex-grow w-full p-4  rounded-md overflow-y-auto no-scrollbar border-none focus:outline-gray-200 text-black"
             ref={textareaRef}
             value={inputPrayCardContent}
             placeholder="기도카드를 작성해주세요 ✏️"
@@ -137,13 +130,17 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   return (
-    <div className="flex flex-col gap-2 h-70vh">
+    <div className="flex flex-col px-10 gap-2 h-70vh">
       <div className="flex justify-end px-2">
-        {!isEditingPrayCard && (
+        {!isEditingPrayCard ? (
           <MyPrayCardMenuBtn
             handleEditClick={handleEditClick}
             prayCard={prayCard}
           />
+        ) : (
+          <Badge className="absolute top-3 right-3 w-12 px-0 flex items-center justify-center">
+            완료
+          </Badge>
         )}
       </div>
       {MyPrayCardBody}

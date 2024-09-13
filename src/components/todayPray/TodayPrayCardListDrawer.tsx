@@ -6,7 +6,6 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import PrayCardUI from "./TodayPrayCardUI";
 import { useEffect } from "react";
-import { ClipLoader } from "react-spinners";
 import { getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
 import MyMemberBtn from "../member/MyMemberBtn";
@@ -75,12 +74,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   ]);
 
   if (!myMember) return null;
-  if (!groupPrayCardList)
-    return (
-      <div className="flex justify-center items-center min-h-80vh max-h-80vh">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
+  if (!groupPrayCardList) return null;
 
   const filterdGroupPrayCardList = groupPrayCardList?.filter(
     (prayCard) =>
@@ -158,8 +152,8 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
       open={isOpenTodayPrayDrawer}
       onOpenChange={setIsOpenTodayPrayDrawer}
     >
-      <DrawerContent className="bg-mainBg max-w-[480px] mx-auto w-full pb-5">
-        <DrawerHeader className="p-2">
+      <DrawerContent className="bg-mainBg pb-5">
+        <DrawerHeader className="pt-2">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
