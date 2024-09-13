@@ -244,7 +244,7 @@ const MyProfilePage = () => {
                 >
                   <div className="w-full h-10 flex flex-grow justify-between items-center">
                     <span className="font-semibold">계정 관리</span>
-                    <span className="text-sm p-2">
+                    <span className="text-sm p-2 max-w-56 whitespace-nowrap overflow-hidden text-ellipsis">
                       {user!.user_metadata.email}
                     </span>
                   </div>
