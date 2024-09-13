@@ -6,6 +6,7 @@ import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import DeletedPrayCardUI from "./DeletedPrayCardUI";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
+import { Skeleton } from "../ui/skeleton";
 
 interface EventOption {
   where: string;
@@ -34,7 +35,13 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
     );
   }, [fetchOtherPrayCardListByGroupId, currentUserId, otherMember]);
 
-  if (!otherPrayCardList) return null;
+  if (!otherPrayCardList) {
+    return (
+      <div className="flex justify-center items-center min-h-80vh max-h-80vh px-10 pt-[68px]">
+        <Skeleton className="w-full h-[300px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
+      </div>
+    );
+  }
   if (otherPrayCardList.length == 0) return <DeletedPrayCardUI />;
   if (otherPrayCardList[0].created_at < getISOTodayDate(-6))
     return <ExpiredPrayCardUI />;
