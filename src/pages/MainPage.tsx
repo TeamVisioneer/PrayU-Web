@@ -93,7 +93,7 @@ const MainPage: React.FC = () => {
             },
           }}
           onlyThirdPartyProviders={true}
-          providers={["kakao"]}
+          providers={["kakao", "apple"]}
         />
       </div>
     );
