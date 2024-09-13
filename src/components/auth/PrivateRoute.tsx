@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 
 import { Navigate, useLocation } from "react-router-dom";
-import ClipLoader from "react-spinners/ClipLoader";
 import useBaseStore from "../../stores/baseStore";
 
 interface PrivateRouteProps {
@@ -13,13 +12,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
 
   const location = useLocation();
 
-  if (userLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
-  }
+  if (userLoading) return null;
 
   if (!user) {
     return <Navigate to="/" state={{ from: location }} replace />; // 로그인되지 않은 경우 리다이렉트

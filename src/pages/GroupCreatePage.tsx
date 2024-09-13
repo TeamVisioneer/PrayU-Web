@@ -4,7 +4,6 @@ import useAuth from "../hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "../components/ui/use-toast";
-import { ClipLoader } from "react-spinners";
 import { analyticsTrack } from "@/analytics/analytics";
 import { IoChevronBack } from "react-icons/io5";
 import GroupMenuBtn from "@/components/group/GroupMenuBtn";
@@ -36,13 +35,7 @@ const GroupCreatePage: React.FC = () => {
     setGroupName("");
   }, [fetchGroupListByUserId, user, setGroupName]);
 
-  if (!groupList) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
-  }
+  if (!groupList) return null;
 
   const handleCreateGroup = async (userId: string, inputGroupName: string) => {
     if (groupList.length >= maxGroupCount && userPlan != "Premium") {

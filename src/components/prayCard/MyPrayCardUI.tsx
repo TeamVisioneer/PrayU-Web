@@ -6,7 +6,6 @@ import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
-import { ClipLoader } from "react-spinners";
 import { useRef } from "react";
 import { Textarea } from "../ui/textarea";
 import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
@@ -74,14 +73,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
   }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
-  if (!userPrayCardList) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
-  }
-
+  if (!userPrayCardList) return null;
   if (
     userPrayCardList &&
     (userPrayCardList.length == 0 ||
