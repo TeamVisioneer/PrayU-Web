@@ -66,13 +66,15 @@ const DrawerContent = React.forwardRef<
         {...props}
       >
         <div className="px-3 mt-4 flex justify-between items-center">
-          <IoClose
-            //close drawer
-            onClick={() => {}}
-            className="w-8"
-            size={20}
-            color={"#728091"}
-          />
+          <DrawerClose>
+            <IoClose
+              //close drawer
+              onClick={() => {}}
+              className="w-8"
+              size={20}
+              color={"#728091"}
+            />
+          </DrawerClose>
           <div className="h-[4px] w-[70px] rounded-full bg-[#728091]" />
           <div className="w-8" />
         </div>
