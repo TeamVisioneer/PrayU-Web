@@ -1,10 +1,4 @@
 import useBaseStore from "@/stores/baseStore";
-import {
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "../ui/drawer";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
 import { PrayWithProfiles } from "supabase/types/tables";
