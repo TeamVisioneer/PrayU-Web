@@ -10,7 +10,7 @@ const ExpiredPrayCardUI: React.FC = () => {
   if (!otherMember) return null;
 
   return (
-    <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
+    <div className="flex flex-col gap-2 min-h-80vh max-h-80vh px-10">
       <div className="flex justify-end px-2">
         <OtherPrayCardMenuBtn
           targetUserId={otherMember.user_id || ""}
