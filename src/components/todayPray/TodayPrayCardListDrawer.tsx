@@ -159,7 +159,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
       onOpenChange={setIsOpenTodayPrayDrawer}
     >
       <DrawerContent className="bg-mainBg pb-5">
-        <DrawerHeader>
+        <DrawerHeader className="pt-2">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
