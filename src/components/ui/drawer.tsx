@@ -3,6 +3,7 @@ import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
+import { IoIosArrowDown } from "react-icons/io";
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -67,13 +68,7 @@ const DrawerContent = React.forwardRef<
       >
         <div className="px-3 mt-4 flex justify-between items-center">
           <DrawerClose>
-            <IoClose
-              //close drawer
-              onClick={() => {}}
-              className="w-8"
-              size={20}
-              color={"#728091"}
-            />
+            <IoIosArrowDown className="w-8" size={20} color={"#728091"} />
           </DrawerClose>
           <div className="h-[4px] w-[70px] rounded-full bg-[#728091]" />
           <div className="w-8" />
