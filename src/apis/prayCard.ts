@@ -21,12 +21,10 @@ export const fetchGroupPrayCardList = async (
       )
       .eq("group_id", groupId)
       .eq("pray.user_id", currentUserId)
-      .not("user_id", "is", null)
-      .not("profiles.id", "is", null)
-      .not("pray.user_id", "is", null)
       .gte("created_at", startDt)
       .lt("created_at", endDt)
       .is("deleted_at", null)
+      .is("pray.deleted_at", null)
       .order("updated_at", { ascending: false });
 
     if (error) {
@@ -59,11 +57,9 @@ export const fetchOtherPrayCardListByGroupId = async (
       )
       .eq("user_id", userId)
       .eq("group_id", groupId)
-      .not("user_id", "is", null)
-      .not("profiles.id", "is", null)
-      .not("pray.user_id", "is", null)
       .eq("pray.user_id", currentUserId)
       .is("deleted_at", null)
+      .is("pray.deleted_at", null)
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
@@ -96,10 +92,8 @@ export const fetchUserPrayCardListByGroupId = async (
       )
       .eq("user_id", currentUserId)
       .eq("group_id", groupId)
-      .not("user_id", "is", null)
-      .not("profiles.id", "is", null)
-      .not("pray.user_id", "is", null)
       .is("deleted_at", null)
+      .is("pray.deleted_at", null)
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
