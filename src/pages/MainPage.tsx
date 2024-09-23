@@ -23,13 +23,9 @@ const MainPage: React.FC = () => {
 
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAppleDevice, setIsAppleDevice] = useState(false);
 
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIOSApp = userAgent.includes("ios_app");
-    setIsAppleDevice(isIOSApp);
-  }, []);
+  const urlParams = new URLSearchParams(window.location.search);
+  const platform = urlParams.get("platform");
 
   useEffect(() => {
     if (!api) return;
@@ -114,7 +110,7 @@ const MainPage: React.FC = () => {
           카카오로 시작하기
         </button>
 
-        {isAppleDevice && (
+        {platform === "ios" && (
           <button
             className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
             onClick={handleAppleLoginBtnClick}
