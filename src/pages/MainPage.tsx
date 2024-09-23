@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { getDomainUrl } from "@/lib/utils";
 import {
   Carousel,
   CarouselApi,
@@ -10,24 +8,18 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
 import { analytics, analyticsTrack } from "@/analytics/analytics";
-import KakaoLoginBtn from "@/components/kakao/KakaoLoginBtn";
-import AppleLoginBtn from "@/components/auth/AppleLoginBtn";
+import TodayPrayOnboardingDrawer from "@/components/todayPray/TodayPrayOnboardingDrawer";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
 
-  const baseUrl = getDomainUrl();
+
+  const setIsOpenOnboardingDrawer = useBaseStore((state) => state.setIsOpenOnboardingDrawer);
 
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isIOSApp, setIsIOSApp] = useState(false);
-
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIOSApp = userAgent.includes("prayu-ios");
-    setIsIOSApp(isIOSApp);
-  }, []);
+  
 
   useEffect(() => {
     if (!api) return;
@@ -64,20 +56,10 @@ const MainPage: React.FC = () => {
     </div>
   );
 
-  const LoginBtnList = () => {
-    const location = useLocation();
-    const pathname = location.state?.from?.pathname || "";
-    const pathParts = pathname.split("/");
-    const groupId =
-      pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
-    const redirectUrl = `${baseUrl}/term?groupId=${groupId}`;
-
-    return (
-      <div className="flex flex-col gap-2">
-        <KakaoLoginBtn redirectUrl={redirectUrl} />
-        {isIOSApp &&  <AppleLoginBtn redirectUrl={redirectUrl} /> }
-      </div>
-    );
+  const handlePrayUStartBtnClick = () => {
+    analytics.track("클릭_메인_시작하기", { where: "PrayUStartBtn"});
+    if (user) window.location.href = "/group";
+    else setIsOpenOnboardingDrawer(true);
   };
 
   const PrayUStartBtn = () => {
@@ -86,12 +68,7 @@ const MainPage: React.FC = () => {
         <Button
           variant="primary"
           className="w-32"
-          onClick={() => {
-            window.location.href = "/group";
-            analytics.track("클릭_메인_시작하기", {
-              where: "PrayUStartBtn",
-            });
-          }}
+          onClick={() => handlePrayUStartBtnClick()}
         >
           PrayU 시작하기
         </Button>
@@ -170,7 +147,8 @@ const MainPage: React.FC = () => {
         <CarouselDots />
       </Carousel>
 
-      {user ? <PrayUStartBtn /> : <LoginBtnList />}
+      <PrayUStartBtn />
+      <TodayPrayOnboardingDrawer />
     </div>
   );
 };

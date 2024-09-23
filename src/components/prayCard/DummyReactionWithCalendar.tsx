@@ -9,6 +9,7 @@ import { analyticsTrack } from "@/analytics/analytics";
     const prayCardCarouselApi = useBaseStore(
       (state) => state.prayCardCarouselApi
     );
+    const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
 
     const [todayPrayType, setTodayPrayType] = useState("");
     const handleClick = (type: PrayType) => {
@@ -16,6 +17,7 @@ import { analyticsTrack } from "@/analytics/analytics";
         where: "DummyReactionBtnWithCalendar",
       });
       setTodayPrayType(type);
+      setIsPrayToday(true);
       if (prayCardCarouselApi) {
         sleep(500).then(() => {
           prayCardCarouselApi.scrollNext();

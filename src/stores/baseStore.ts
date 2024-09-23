@@ -218,6 +218,10 @@ export interface BaseStore {
     actionText: string;
     onAction: () => void;
   }) => void;
+
+  // drawer
+  isOpenOnboardingDrawer: boolean;
+  setIsOpenOnboardingDrawer: (isOpenOnboardingDrawer: boolean) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -665,6 +669,14 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenEventDialog: (isOpenEventDialog: boolean) => {
       set((state) => {
         state.isOpenEventDialog = isOpenEventDialog;
+      });
+    },
+
+    //drawer
+    isOpenOnboardingDrawer: false,
+    setIsOpenOnboardingDrawer: (isOpenOnboardingDrawer: boolean) => {
+      set((state) => {
+        state.isOpenOnboardingDrawer = isOpenOnboardingDrawer;
       });
     },
 

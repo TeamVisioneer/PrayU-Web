@@ -22,6 +22,7 @@ import GroupNotFoundPage from "./pages/GroupNotFoundPage";
 import GroupRedirectPage from "./pages/GroupRedirectPage";
 import GroupLimitPage from "./pages/GropuLimitPage";
 import TermServicePage from "./pages/TermServicePage";
+import LoginPage from "./pages/LoginPage";
 
 const App = () => {
   useEffect(() => {
@@ -44,6 +45,10 @@ const App = () => {
               import.meta.env.VITE_ENV === "prod") && <AnalyticsTracker />}
             <Routes>
               <Route path="/" element={<MainPage />} />
+              <Route
+                path="/login"
+                element={ <LoginPage /> }
+              />
               <Route
                 path="/auth/kakao/callback"
                 element={
