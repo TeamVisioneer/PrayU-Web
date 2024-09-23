@@ -1,7 +1,7 @@
 import React from "react";
 import { Textarea } from "../ui/textarea";
 import { getISOTodayDateYMD } from "@/lib/utils";
-import DumyReactionBtnWithCalendar from "./DumyReactionWithCalendar";
+import DumyReactionBtnWithCalendar from "./DummyReactionWithCalendar";
 
 
 interface DumyPrayCardProps {
@@ -45,7 +45,7 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
           <Textarea
             className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
-            value={content || ""}
+            value={content}
             disabled={true}
           />
         </div>

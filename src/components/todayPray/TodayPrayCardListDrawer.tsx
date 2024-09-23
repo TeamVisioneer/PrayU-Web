@@ -18,7 +18,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import DumyPrayCardUI from "../prayCard/DumyPrayCardUI";
+import TodayPrayCardDummyList from "./TodayPrayCardDummyList";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -147,39 +147,6 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
     </Carousel>
   );
 
-  const todayPrayCardDumyList = (
-    <Carousel
-      setApi={setPrayCardCarouselApi}
-      opts={{ startIndex: 1 }}
-    >
-      <CarouselContent>
-        <CarouselItem className="basis-5/6"></CarouselItem>
-        <CarouselItem className="basis-5/6">
-          <DumyPrayCardUI 
-            profileImage=""
-            name="기도친구 1"
-            content="가족의 건강을 위해 기도해주세요."
-          />
-        </CarouselItem>
-        <CarouselItem className="basis-5/6">
-          <DumyPrayCardUI 
-            profileImage=""
-            name="기도친구 2"
-            content="직장에서의 스트레스를 이겨낼 수 있도록 기도해주세요."
-          />
-        </CarouselItem>
-        <CarouselItem className="basis-5/6">
-          <DumyPrayCardUI 
-            profileImage=""
-            name="기도친구 3"
-            content="친구의 병이 빨리 낫도록 기도해주세요."
-          />
-        </CarouselItem>
-        <CarouselItem className="basis-5/6">{completedItem}</CarouselItem>
-        <CarouselItem className="basis-5/6"></CarouselItem>
-      </CarouselContent>
-    </Carousel>
-  );
 
   return (
     <Drawer
@@ -194,7 +161,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
         {groupPrayCardList.length !== 1 
           ? todayPrayCardList 
           : memberList.length == 1
-          ? todayPrayCardDumyList 
+          ? <TodayPrayCardDummyList />
           : emptyPrayCardList
         }
       </DrawerContent>
