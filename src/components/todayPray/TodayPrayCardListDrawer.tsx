@@ -18,6 +18,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import DumyPrayCardUI from "../prayCard/DumyPrayCardUI";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -29,6 +30,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   groupId,
 }) => {
   const myMember = useBaseStore((state) => state.myMember);
+  const memberList = useBaseStore((state) => state.memberList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchGroupPrayCardList = useBaseStore(
@@ -73,10 +75,10 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
     endDt,
   ]);
 
-  if (!myMember) return null;
+  if (!myMember || !memberList) return null;
   if (!groupPrayCardList) return null;
 
-  const filterdGroupPrayCardList = groupPrayCardList?.filter(
+  const filterdGroupPrayCardList = groupPrayCardList.filter(
     (prayCard) =>
       prayCard.user_id &&
       prayCard.user_id !== currentUserId &&
@@ -147,6 +149,40 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
     </Carousel>
   );
 
+  const todayPrayCardDumyList = (
+    <Carousel
+      setApi={setPrayCardCarouselApi}
+      opts={{ startIndex: 1 }}
+    >
+      <CarouselContent>
+        <CarouselItem className="basis-5/6"></CarouselItem>
+        <CarouselItem className="basis-5/6">
+          <DumyPrayCardUI 
+            profileImage=""
+            name="기도친구 1"
+            content="가족의 건강을 위해 기도해주세요."
+          />
+        </CarouselItem>
+        <CarouselItem className="basis-5/6">
+          <DumyPrayCardUI 
+            profileImage=""
+            name="기도친구 2"
+            content="직장에서의 스트레스를 이겨낼 수 있도록 기도해주세요."
+          />
+        </CarouselItem>
+        <CarouselItem className="basis-5/6">
+          <DumyPrayCardUI 
+            profileImage=""
+            name="기도친구 3"
+            content="친구의 병이 빨리 낫도록 기도해주세요."
+          />
+        </CarouselItem>
+        <CarouselItem className="basis-5/6">{completedItem}</CarouselItem>
+        <CarouselItem className="basis-5/6"></CarouselItem>
+      </CarouselContent>
+    </Carousel>
+  );
+
   return (
     <Drawer
       open={isOpenTodayPrayDrawer}
@@ -157,7 +193,12 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        {groupPrayCardList.length === 1 ? emptyPrayCardList : todayPrayCardList}
+        {groupPrayCardList.length !== 1 
+          ? todayPrayCardList 
+          : memberList.length == 1
+          ? todayPrayCardDumyList 
+          : emptyPrayCardList
+        }
       </DrawerContent>
     </Drawer>
   );
