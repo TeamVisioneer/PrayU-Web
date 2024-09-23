@@ -27,8 +27,8 @@ const MainPage: React.FC = () => {
 
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
-    const isApple = /iphone|ipad|ipod|macintosh|mac os x/i.test(userAgent);
-    setIsAppleDevice(isApple);
+    const isIOSApp = userAgent.includes("ios_app");
+    setIsAppleDevice(isIOSApp);
   }, []);
 
   useEffect(() => {
@@ -104,29 +104,27 @@ const MainPage: React.FC = () => {
     };
 
     return (
-      <>
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
+        <button
+          className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
+          onClick={handleKakaoLoginBtnClick}
+          style={{ background: "#FEE500", color: "black" }}
+        >
+          <img src={kakaoIcon} className="w-4 h-4" />
+          카카오로 시작하기
+        </button>
+
+        {isAppleDevice && (
           <button
             className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
-            onClick={handleKakaoLoginBtnClick}
-            style={{ background: "#FEE500", color: "black" }}
+            onClick={handleAppleLoginBtnClick}
+            style={{ background: "#222222", color: "white" }}
           >
-            <img src={kakaoIcon} className="w-4 h-4" />
-            카카오로 시작하기
+            <img src={appleIcon} className="w-4 h-4" />
+            Apple로 시작하기
           </button>
-
-          {isAppleDevice && (
-            <button
-              className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
-              onClick={handleAppleLoginBtnClick}
-              style={{ background: "#222222", color: "white" }}
-            >
-              <img src={appleIcon} className="w-4 h-4" />
-              Apple로 시작하기
-            </button>
-          )}
-        </div>
-      </>
+        )}
+      </div>
     );
   };
 
