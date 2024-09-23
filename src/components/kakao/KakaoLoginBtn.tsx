@@ -25,12 +25,12 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
 
   return (
       <button
-        className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
+        className="w-56 flex justify-between items-center gap-3 px-4 py-2 rounded-lg text-sm"
         onClick={handleKakaoLoginBtnClick}
         style={{ background: "#FEE500", color: "black" }}
       >
         <img src={kakaoIcon} className="w-4 h-4" />
-        카카오로 시작하기
+        <div className="flex-grow">카카오로 시작하기</div>
       </button>
 
   );
