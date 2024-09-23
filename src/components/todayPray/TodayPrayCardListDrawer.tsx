@@ -129,9 +129,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   const todayPrayCardList = (
     <Carousel
       setApi={setPrayCardCarouselApi}
-      opts={{
-        startIndex: 1,
-      }}
+      opts={{ startIndex: 1 }}
     >
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
