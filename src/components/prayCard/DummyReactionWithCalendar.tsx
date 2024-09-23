@@ -2,6 +2,7 @@ import { getISODate, getISOToday, getISOTodayDate, sleep } from "@/lib/utils";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { useState } from "react";
 import useBaseStore from "@/stores/baseStore";
+import { analyticsTrack } from "@/analytics/analytics";
 
 
   const DumyReactionBtnWithCalendar = () => {
@@ -11,6 +12,9 @@ import useBaseStore from "@/stores/baseStore";
 
     const [todayPrayType, setTodayPrayType] = useState("");
     const handleClick = (type: PrayType) => {
+      analyticsTrack("클릭_기도카드_반응", {
+        where: "DummyReactionBtnWithCalendar",
+      });
       setTodayPrayType(type);
       if (prayCardCarouselApi) {
         sleep(500).then(() => {
