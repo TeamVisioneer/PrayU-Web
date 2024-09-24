@@ -218,13 +218,14 @@ const PrayCardCreatePage: React.FC = () => {
           그룹 참여하기
         </Button>
         {!inputPrayCardContent && (
-          <button
-            className="text-sm text-gray-500 underline"
+          <Button
+            className="w-full"
             onClick={() => onClickSkipPrayCard(user!.id, targetGroup.id)}
             disabled={IsDisabledSkipPrayCardBtn}
+            variant="primaryLight"
           >
             다음에 작성하기
-          </button>
+          </Button>
         )}
       </div>
     </div>
