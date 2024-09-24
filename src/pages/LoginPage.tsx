@@ -36,9 +36,6 @@ const LoginPage: React.FC = () => {
           <div className="flex flex-col justify-center gap-2">
             <KakaoLoginBtn redirectUrl={redirectUrl} />
             {isIOSApp && <AppleLoginBtn redirectUrl={redirectUrl} />}
-            <a href="/" className="text-sm text-center text-gray-500 underline">
-              PrayU 홈으로
-            </a>
           </div>
         </div>
       </div>
