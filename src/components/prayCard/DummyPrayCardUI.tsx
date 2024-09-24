@@ -3,7 +3,6 @@ import { Textarea } from "../ui/textarea";
 import { getISOTodayDateYMD } from "@/lib/utils";
 import DumyReactionBtnWithCalendar from "./DummyReactionWithCalendar";
 
-
 interface DumyPrayCardProps {
   profileImage: string;
   name: string;
@@ -15,16 +14,10 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
   name,
   content,
 }) => {
-  
   const createdDateYMD = getISOTodayDateYMD();
 
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
-      <div className="flex justify-center">
-        <p className="text-sm text-gray-400">
-          반응을 누르면 다음 기도로 넘어가요
-        </p>
-      </div>
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
           <div className="flex items-center gap-2">

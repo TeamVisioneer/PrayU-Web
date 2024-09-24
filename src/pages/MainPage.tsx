@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { supabase } from "../../supabase/client";
-import { getDomainUrl } from "@/lib/utils";
 import {
   Carousel,
   CarouselApi,
@@ -11,25 +8,18 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
 import { analytics, analyticsTrack } from "@/analytics/analytics";
-import kakaoIcon from "@/assets/kakaoIcon.svg";
-import appleIcon from "@/assets/appleIcon.svg";
-import * as Sentry from "@sentry/react";
+import TodayPrayOnboardingDrawer from "@/components/todayPray/TodayPrayOnboardingDrawer";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
 
-  const baseUrl = getDomainUrl();
+  const setIsOpenOnboardingDrawer = useBaseStore(
+    (state) => state.setIsOpenOnboardingDrawer
+  );
 
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isIOSApp, setIsIOSApp] = useState(false);
-
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIOSApp = userAgent.includes("prayu-ios");
-    setIsIOSApp(isIOSApp);
-  }, []);
 
   useEffect(() => {
     if (!api) return;
@@ -52,7 +42,7 @@ const MainPage: React.FC = () => {
 
   const CarouselDots = () => (
     <div className="flex justify-center items-center mt-6">
-      {Array.from({ length: 4 }, (_, index) => (
+      {Array.from({ length: 3 }, (_, index) => (
         <span
           key={index}
           className={`mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
@@ -66,95 +56,48 @@ const MainPage: React.FC = () => {
     </div>
   );
 
-  const KakaoLoginBtn = () => {
-    const location = useLocation();
-    const pathname = location.state?.from?.pathname || "";
-
-    const pathParts = pathname.split("/");
-
-    const groupId =
-      pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
-
-    const handleKakaoLoginBtnClick = async () => {
-      analytics.track("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "kakao",
-        options: {
-          redirectTo: `${baseUrl}/term?groupId=${groupId}`,
-        },
-      });
-      if (error) {
-        console.error("Kakao login error:", error.message);
-        Sentry.captureException(error.message);
-      }
-    };
-
-    const handleAppleLoginBtnClick = async () => {
-      analytics.track("클릭_애플_로그인", { where: "AppleLoginBtn" });
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "apple",
-        options: {
-          redirectTo: `${baseUrl}/term?groupId=${groupId}`,
-        },
-      });
-      if (error) {
-        console.error("Apple login error:", error.message);
-        Sentry.captureException(error.message);
-      }
-    };
-
-    return (
-      <div className="flex flex-col gap-2">
-        <button
-          className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
-          onClick={handleKakaoLoginBtnClick}
-          style={{ background: "#FEE500", color: "black" }}
-        >
-          <img src={kakaoIcon} className="w-4 h-4" />
-          카카오로 시작하기
-        </button>
-
-        {isIOSApp && (
-          <button
-            className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
-            onClick={handleAppleLoginBtnClick}
-            style={{ background: "#222222", color: "white" }}
-          >
-            <img src={appleIcon} className="w-4 h-4" />
-            Apple로 시작하기
-          </button>
-        )}
-      </div>
-    );
+  const handlePrayUStartBtnClick = () => {
+    analytics.track("클릭_메인_시작하기", { where: "PrayUStartBtn" });
+    window.location.href = "/group";
   };
 
   const PrayUStartBtn = () => {
     return (
-      <div className="flex items-center h-[75px]">
-        <Button
-          variant="primary"
-          className="w-32"
-          onClick={() => {
-            window.location.href = "/group";
-            analytics.track("클릭_메인_시작하기", {
-              where: "PrayUStartBtn",
-            });
-          }}
-        >
-          PrayU 시작하기
-        </Button>
-      </div>
+      <Button
+        variant="primary"
+        className="w-32"
+        onClick={() => handlePrayUStartBtnClick()}
+      >
+        PrayU 시작하기
+      </Button>
+    );
+  };
+
+  const handlePrayUOnboardingClick = () => {
+    analytics.track("클릭_메인_첫시작", { where: "PrayUOnboardingBtn" });
+    setIsOpenOnboardingDrawer(true);
+  };
+
+  const PrayUOnboardingBtn = () => {
+    return (
+      <Button
+        variant="primary"
+        className="w-32"
+        onClick={() => handlePrayUOnboardingClick()}
+      >
+        PrayU 첫 시작
+      </Button>
     );
   };
 
   return (
-    <div className="flex flex-col gap-6 items-center text-center">
+    <div className="flex flex-col pt-10 gap-6 items-center text-center">
       <div className="text-lg font-bold">우리만의 기도제목 나눔 공간 PrayU</div>
       <Carousel setApi={setApi}>
         <CarouselContent>
           <CarouselItem className="flex flex-col items-center gap-4">
             <div className="h-[300px] flex flex-col  items-center">
-              <img className="h-full" src="/images/MainPageIntro1.png" />
+              <img className="h-full" src="/images/MainImage.png" />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">1. 기도제목 나눔</p>
@@ -174,23 +117,7 @@ const MainPage: React.FC = () => {
               <p className="text-lg font-bold">2. 오늘의 기도</p>
               <div>
                 <p className="text-sm text-gray-500">
-                  기도제목은 일주일 동안 오늘의 기도에 올라가요
-                </p>
-                <p className="text-sm text-gray-500">
-                  매주 꾸준히 기도제목을 작성해 보아요
-                </p>
-              </div>
-            </div>
-          </CarouselItem>
-          <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="h-[300px]  flex flex-col  items-center ">
-              <img className="h-full" src="/images/MainPageIntro3.png" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-lg font-bold">3. 함께하는 기도</p>
-              <div>
-                <p className="text-sm text-gray-500">
-                  친구들의 기도제목을 볼 수 있어요
+                  오늘의 기도에서 서로의 기도제목을 확인해요
                 </p>
                 <p className="text-sm text-gray-500">
                   꾸준히 서로 반응하며 함께 기도해 보아요
@@ -203,13 +130,13 @@ const MainPage: React.FC = () => {
               <img className="h-full" src="/images/MainPageIntro4.png" />
             </div>
             <div className="flex flex-col gap-2">
-              <p className="text-lg font-bold"> 4. 내게 기도해 준 친구</p>
+              <p className="text-lg font-bold"> 3. 내게 기도해 준 친구</p>
               <div>
                 <p className="text-sm text-gray-500">
-                  내 기도제목이 오늘의 기도에 있는 동안
+                  기도해 준 친구들을 확인할 수 있어요
                 </p>
                 <p className="text-sm text-gray-500">
-                  내게 기도해 준 친구들을 확인할 수 있어요
+                  일주일 동안 서로를 위해 기도해요
                 </p>
               </div>
             </div>
@@ -217,8 +144,15 @@ const MainPage: React.FC = () => {
         </CarouselContent>
         <CarouselDots />
       </Carousel>
-
-      {user ? <PrayUStartBtn /> : <KakaoLoginBtn />}
+      <div className="flex flex-col gap-4">
+        {user ? <PrayUStartBtn /> : <PrayUOnboardingBtn />}
+        {!user && (
+          <a href="/login" className="text-sm text-gray-500 underline">
+            이미 계정이 있어요
+          </a>
+        )}
+      </div>
+      <TodayPrayOnboardingDrawer />
     </div>
   );
 };

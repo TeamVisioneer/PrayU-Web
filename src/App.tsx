@@ -22,6 +22,7 @@ import GroupNotFoundPage from "./pages/GroupNotFoundPage";
 import GroupRedirectPage from "./pages/GroupRedirectPage";
 import GroupLimitPage from "./pages/GropuLimitPage";
 import TermServicePage from "./pages/TermServicePage";
+import LoginPage from "./pages/LoginPage";
 
 const App = () => {
   useEffect(() => {
@@ -44,6 +45,7 @@ const App = () => {
               import.meta.env.VITE_ENV === "prod") && <AnalyticsTracker />}
             <Routes>
               <Route path="/" element={<MainPage />} />
+              <Route path="/login" element={<LoginPage />} />
               <Route
                 path="/auth/kakao/callback"
                 element={
@@ -126,6 +128,18 @@ const AnalyticsTracker = () => {
       case "/":
         analytics.track("페이지_메인", {
           title: "Main Page",
+          where: from,
+        });
+        break;
+      case "/login":
+        analytics.track("페이지_로그인", {
+          title: "Login Page",
+          where: from,
+        });
+        break;
+      case "/term":
+        analytics.track("페이지_약관", {
+          title: "Term Page",
           where: from,
         });
         break;

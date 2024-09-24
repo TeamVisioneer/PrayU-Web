@@ -15,7 +15,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   if (userLoading) return null;
 
   if (!user) {
-    return <Navigate to="/" state={{ from: location }} replace />; // 로그인되지 않은 경우 리다이렉트
+    return <Navigate to="/login" state={{ from: location }} replace />; // 로그인되지 않은 경우 리다이렉트
   }
 
   return children; // 로그인된 경우 자식 컴포넌트 렌더링

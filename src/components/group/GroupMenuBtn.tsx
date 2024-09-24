@@ -122,7 +122,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
         </SheetHeader>
         <div className="flex flex-col gap-4 items-start text-gray-500 w-full">
           {userGroupList.map((group) => (
-            <div className="flex items-center gap-1">
+            <div key={group.id} className="flex items-center gap-1">
               <span
                 className={`w-[5px] h-[18px]  rounded-md ${
                   group.id == targetGroup?.id ? "bg-mainBtn" : ""
