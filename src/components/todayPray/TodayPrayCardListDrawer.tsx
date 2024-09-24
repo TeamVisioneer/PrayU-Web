@@ -18,6 +18,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import TodayPrayCardDummyList from "./TodayPrayCardDummyList";
 
 interface PrayCardListProps {
   currentUserId: string;
@@ -29,6 +30,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   groupId,
 }) => {
   const myMember = useBaseStore((state) => state.myMember);
+  const memberList = useBaseStore((state) => state.memberList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchGroupPrayCardList = useBaseStore(
@@ -73,10 +75,10 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
     endDt,
   ]);
 
-  if (!myMember) return null;
+  if (!myMember || !memberList) return null;
   if (!groupPrayCardList) return null;
 
-  const filterdGroupPrayCardList = groupPrayCardList?.filter(
+  const filterdGroupPrayCardList = groupPrayCardList.filter(
     (prayCard) =>
       prayCard.user_id &&
       prayCard.user_id !== currentUserId &&
@@ -127,9 +129,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   const todayPrayCardList = (
     <Carousel
       setApi={setPrayCardCarouselApi}
-      opts={{
-        startIndex: 1,
-      }}
+      opts={{ startIndex: 1 }}
     >
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
@@ -147,6 +147,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
     </Carousel>
   );
 
+
   return (
     <Drawer
       open={isOpenTodayPrayDrawer}
@@ -157,7 +158,12 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        {groupPrayCardList.length === 1 ? emptyPrayCardList : todayPrayCardList}
+        {groupPrayCardList.length !== 1 
+          ? todayPrayCardList 
+          : memberList.length == 1
+          ? <TodayPrayCardDummyList />
+          : emptyPrayCardList
+        }
       </DrawerContent>
     </Drawer>
   );

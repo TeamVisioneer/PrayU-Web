@@ -8,7 +8,6 @@ import {
 import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import OtherMember from "./OtherMember";
-import MemberInviteCard from "./MemberInviteCard";
 import TodayPrayBtn from "../todayPray/TodayPrayBtn";
 import TodayPrayStartCard from "../todayPray/TodayPrayStartCard";
 import { getISOTodayDate } from "@/lib/utils";
@@ -33,7 +32,6 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
   );
 
   const myMember = useBaseStore((state) => state.myMember);
-  const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
 
   const setIsOpenOtherMemberDrawer = useBaseStore(
     (state) => state.setIsOpenOtherMemberDrawer
@@ -50,27 +48,10 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
     (member) => member.updated_at < getISOTodayDate(-6)
   );
 
+
   if (!myMember) return null;
-  if (!groupPrayCardList) return null;
-
-  const todayDt = getISOTodayDate();
-
-  const filterdGroupPrayCardList = groupPrayCardList?.filter(
-    (prayCard) =>
-      prayCard.user_id &&
-      prayCard.user_id !== currentUserId &&
-      prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length == 0 &&
-      !myMember.profiles.blocking_users.includes(prayCard.user_id)
-  );
-
-  if (otherMemberList.length === 0) return <MemberInviteCard />;
-  if (
-    !isPrayToday &&
-    !isExpiredAllMember &&
-    filterdGroupPrayCardList.length != 0
-  )
-    return <TodayPrayStartCard />;
-
+  if (!isPrayToday && !isExpiredAllMember || otherMemberList.length == 0) return <TodayPrayStartCard />;
+    
   return (
     <>
       <div className="flex flex-col gap-2 pb-10">
