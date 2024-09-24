@@ -74,7 +74,7 @@ const MainPage: React.FC = () => {
   };
 
   const handlePrayUOnboardingClick = () => {
-    analytics.track("클릭_메인_알아보기", { where: "PrayUOnboardingBtn" });
+    analytics.track("클릭_메인_첫시작", { where: "PrayUOnboardingBtn" });
     setIsOpenOnboardingDrawer(true);
   };
 
@@ -85,7 +85,7 @@ const MainPage: React.FC = () => {
         className="w-32"
         onClick={() => handlePrayUOnboardingClick()}
       >
-        PrayU 알아보기
+        PrayU 첫 시작
       </Button>
     );
   };
