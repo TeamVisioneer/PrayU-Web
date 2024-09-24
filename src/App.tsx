@@ -45,10 +45,7 @@ const App = () => {
               import.meta.env.VITE_ENV === "prod") && <AnalyticsTracker />}
             <Routes>
               <Route path="/" element={<MainPage />} />
-              <Route
-                path="/login"
-                element={ <LoginPage /> }
-              />
+              <Route path="/login" element={<LoginPage />} />
               <Route
                 path="/auth/kakao/callback"
                 element={

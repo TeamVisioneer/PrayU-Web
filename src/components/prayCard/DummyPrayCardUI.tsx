@@ -3,7 +3,6 @@ import { Textarea } from "../ui/textarea";
 import { getISOTodayDateYMD } from "@/lib/utils";
 import DumyReactionBtnWithCalendar from "./DummyReactionWithCalendar";
 
-
 interface DumyPrayCardProps {
   profileImage: string;
   name: string;
@@ -15,7 +14,6 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
   name,
   content,
 }) => {
-  
   const createdDateYMD = getISOTodayDateYMD();
 
   return (

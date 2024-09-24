@@ -14,12 +14,12 @@ const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
 
-
-  const setIsOpenOnboardingDrawer = useBaseStore((state) => state.setIsOpenOnboardingDrawer);
+  const setIsOpenOnboardingDrawer = useBaseStore(
+    (state) => state.setIsOpenOnboardingDrawer
+  );
 
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
-  
 
   useEffect(() => {
     if (!api) return;
@@ -57,7 +57,7 @@ const MainPage: React.FC = () => {
   );
 
   const handlePrayUStartBtnClick = () => {
-    analytics.track("클릭_메인_시작하기", { where: "PrayUStartBtn"});
+    analytics.track("클릭_메인_시작하기", { where: "PrayUStartBtn" });
     if (user) window.location.href = "/group";
     else setIsOpenOnboardingDrawer(true);
   };

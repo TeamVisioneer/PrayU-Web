@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { getDomainUrl } from '@/lib/utils';
-import { useLocation } from 'react-router-dom';
-import AppleLoginBtn from '@/components/auth/AppleLoginBtn';
-import KakaoLoginBtn from '@/components/kakao/KakaoLoginBtn';
+import React, { useEffect, useState } from "react";
+import { getDomainUrl } from "@/lib/utils";
+import { useLocation } from "react-router-dom";
+import AppleLoginBtn from "@/components/auth/AppleLoginBtn";
+import KakaoLoginBtn from "@/components/kakao/KakaoLoginBtn";
 
 const LoginPage: React.FC = () => {
   const location = useLocation();
@@ -10,7 +10,7 @@ const LoginPage: React.FC = () => {
   const pathname = location.state?.from?.pathname || "";
   const pathParts = pathname.split("/");
   const groupId =
-      pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
+    pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
   const redirectUrl = `${baseUrl}/term?groupId=${groupId}`;
 
   const [isIOSApp, setIsIOSApp] = useState(false);
@@ -30,13 +30,11 @@ const LoginPage: React.FC = () => {
         </div>
         <div className="flex flex-col gap-2">
           <KakaoLoginBtn redirectUrl={redirectUrl} />
-          {isIOSApp &&  <AppleLoginBtn redirectUrl={redirectUrl} /> }
+          {isIOSApp && <AppleLoginBtn redirectUrl={redirectUrl} />}
         </div>
       </div>
     </div>
-  )
-
-  
+  );
 };
 
 export default LoginPage;
