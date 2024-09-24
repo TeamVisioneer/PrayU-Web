@@ -91,13 +91,13 @@ const MainPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 items-center text-center">
+    <div className="flex flex-col pt-10 gap-6 items-center text-center">
       <div className="text-lg font-bold">우리만의 기도제목 나눔 공간 PrayU</div>
       <Carousel setApi={setApi}>
         <CarouselContent>
           <CarouselItem className="flex flex-col items-center gap-4">
             <div className="h-[300px] flex flex-col  items-center">
-              <img className="h-full" src="/images/MainPageIntro3.png" />
+              <img className="h-full" src="/images/MainImage.png" />
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-lg font-bold">1. 기도제목 나눔</p>
