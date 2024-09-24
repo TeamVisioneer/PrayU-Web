@@ -3,8 +3,10 @@ import { getDomainUrl } from "@/lib/utils";
 import { useLocation } from "react-router-dom";
 import AppleLoginBtn from "@/components/auth/AppleLoginBtn";
 import KakaoLoginBtn from "@/components/kakao/KakaoLoginBtn";
+import useBaseStore from "@/stores/baseStore";
 
 const LoginPage: React.FC = () => {
+  const user = useBaseStore((state) => state.user);
   const location = useLocation();
   const baseUrl = getDomainUrl();
   const pathname = location.state?.from?.pathname || "";
@@ -20,6 +22,8 @@ const LoginPage: React.FC = () => {
     const isIOSApp = userAgent.includes("prayu-ios");
     setIsIOSApp(isIOSApp);
   }, []);
+
+  if (user) window.location.replace("/group");
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex flex-col justify-end">

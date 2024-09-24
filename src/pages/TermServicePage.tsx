@@ -26,16 +26,11 @@ const TermServicePage: React.FC = () => {
   const emojiData = PrayTypeDatas["pray"];
 
   useEffect(() => {
-    if (user && !profile) {
-      getProfile(user.id);
-    }
-  }, [user, profile, getProfile]);
-
-  useEffect(() => {
+    if (user && !profile) getProfile(user.id);
     if (profile && profile.terms_agreed_at !== null) {
       navigate(redirectUrl, { replace: true });
     }
-  }, [profile, redirectUrl, navigate]);
+  }, [user, profile, getProfile, navigate, redirectUrl]);
 
   if (!profile) return null;
 

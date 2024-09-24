@@ -43,11 +43,9 @@ const TodayPrayCardOnboardingList = () => {
       <Button
         className="w-40"
         variant="primary"
-        onClick={() => {
-          window.location.href = "/group/create";
-        }}
+        onClick={() => (window.location.href = "/login")}
       >
-        그룹 만들기
+        PrayU 시작하기
       </Button>
     </div>
   );
