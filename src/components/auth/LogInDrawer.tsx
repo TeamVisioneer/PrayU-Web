@@ -37,7 +37,7 @@ const LogInDrawer = () => {
     <div className="flex flex-col gap-6 px-10">
       <div className="flex flex-col gap-1">
         <div className="text-lg font-bold">PrayU 로그인</div>
-        <p className="flex flex-col justify-center text-gray-400">
+        <p className="flex flex-col justify-center text-gray-700">
           기도제목을 올리고, 서로 함께 반응하며 기도해요
         </p>
       </div>
