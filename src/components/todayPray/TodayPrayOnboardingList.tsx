@@ -10,6 +10,12 @@ import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 
 const TodayPrayCardOnboardingList = () => {
+  const setIsOpenOnboardingDrawer = useBaseStore(
+    (state) => state.setIsOpenOnboardingDrawer
+  );
+  const setIsOpenLoginDrawer = useBaseStore(
+    (state) => state.setIsOpenLoginDrawer
+  );
   const setPrayCardCarouselApi = useBaseStore(
     (state) => state.setPrayCardCarouselApi
   );
@@ -43,7 +49,10 @@ const TodayPrayCardOnboardingList = () => {
       <Button
         className="w-40"
         variant="primary"
-        onClick={() => (window.location.href = "/login")}
+        onClick={() => {
+          setIsOpenOnboardingDrawer(false);
+          setIsOpenLoginDrawer(true);
+        }}
       >
         PrayU 시작하기
       </Button>

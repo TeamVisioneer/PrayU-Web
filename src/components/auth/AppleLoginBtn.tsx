@@ -24,12 +24,12 @@ const AppleLoginBtn: React.FC<AppleLoginBtnProps> = ({ redirectUrl }) => {
 
   return (
     <button
-      className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm"
+      className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm border-gray-700 border-2"
       onClick={handleAppleLoginBtnClick}
       style={{ background: "#222222", color: "white" }}
     >
       <img src={appleIcon} className="w-4 h-4" />
-      Apple로 시작하기
+      <div className="flex-grow">Apple로 시작하기</div>
     </button>
   );
 };

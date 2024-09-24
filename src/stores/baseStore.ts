@@ -222,6 +222,9 @@ export interface BaseStore {
   // drawer
   isOpenOnboardingDrawer: boolean;
   setIsOpenOnboardingDrawer: (isOpenOnboardingDrawer: boolean) => void;
+
+  isOpenLoginDrawer: boolean;
+  setIsOpenLoginDrawer: (isOpenLoginDrawer: boolean) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -677,6 +680,13 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenOnboardingDrawer: (isOpenOnboardingDrawer: boolean) => {
       set((state) => {
         state.isOpenOnboardingDrawer = isOpenOnboardingDrawer;
+      });
+    },
+
+    isOpenLoginDrawer: false,
+    setIsOpenLoginDrawer: (isOpenLoginDrawer: boolean) => {
+      set((state) => {
+        state.isOpenLoginDrawer = isOpenLoginDrawer;
       });
     },
 

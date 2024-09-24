@@ -9,6 +9,7 @@ import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
 import { analytics, analyticsTrack } from "@/analytics/analytics";
 import TodayPrayOnboardingDrawer from "@/components/todayPray/TodayPrayOnboardingDrawer";
+import LogInDrawer from "@/components/auth/LogInDrawer";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -16,6 +17,9 @@ const MainPage: React.FC = () => {
 
   const setIsOpenOnboardingDrawer = useBaseStore(
     (state) => state.setIsOpenOnboardingDrawer
+  );
+  const setIsOpenLoginDrawer = useBaseStore(
+    (state) => state.setIsOpenLoginDrawer
   );
 
   const [api, setApi] = useState<CarouselApi>();
@@ -91,7 +95,7 @@ const MainPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col pt-10 gap-6 items-center text-center">
+    <div className="flex flex-col pt-5 gap-6 items-center text-center">
       <div className="text-lg font-bold">우리만의 기도제목 나눔 공간 PrayU</div>
       <Carousel setApi={setApi}>
         <CarouselContent>
@@ -147,12 +151,16 @@ const MainPage: React.FC = () => {
       <div className="flex flex-col gap-4">
         {user ? <PrayUStartBtn /> : <PrayUOnboardingBtn />}
         {!user && (
-          <a href="/login" className="text-sm text-gray-500 underline">
+          <div
+            onClick={() => setIsOpenLoginDrawer(true)}
+            className="text-sm text-gray-500 underline"
+          >
             이미 계정이 있어요
-          </a>
+          </div>
         )}
       </div>
       <TodayPrayOnboardingDrawer />
+      <LogInDrawer />
     </div>
   );
 };
