@@ -27,7 +27,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex flex-col justify-end">
-      <div className="relative bg-mainBg p-10 rounded-tl-xl rounded-tr-xl z-20 w-full flex flex-col items-center gap-6">
+      <div className="relative bg-mainBg p-10 rounded-tl-xl rounded-tr-xl z-20 w-full max-w-[480px] mx-auto flex flex-col items-center gap-6">
         <h2 className="text-lg font-bold">PrayU 로그인</h2>
         <div className="h-[300px] flex flex-col items-center opacity-90">
           <img className="h-full" src="/images/intro_square.png" />
