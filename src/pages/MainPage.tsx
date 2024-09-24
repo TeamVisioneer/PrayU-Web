@@ -148,7 +148,7 @@ const MainPage: React.FC = () => {
         {user ? <PrayUStartBtn /> : <PrayUOnboardingBtn />}
         {!user && (
           <a href="/login" className="text-sm text-gray-500 underline">
-            로그인 하러가기
+            이미 계정이 있어요
           </a>
         )}
       </div>

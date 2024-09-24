@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getDomainUrl } from "@/lib/utils";
 import { useLocation } from "react-router-dom";
 import AppleLoginBtn from "@/components/auth/AppleLoginBtn";
-import KakaoLoginBtn from "@/components/kakao/KakaoLoginBtn";
+import KakaoLoginBtn from "@/components/auth/KakaoLoginBtn";
 import useBaseStore from "@/stores/baseStore";
 
 const LoginPage: React.FC = () => {
