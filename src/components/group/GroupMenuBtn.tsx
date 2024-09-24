@@ -172,7 +172,6 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
             >
               내 정보
             </a>
-            <img src={newIcon} />
           </div>
 
           <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
