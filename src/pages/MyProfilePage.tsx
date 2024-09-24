@@ -64,9 +64,11 @@ const MyProfilePage = () => {
       cancelText: "취소",
       onAction: async () => {
         const userId = user!.id;
-        await signOut();
-        await deleteUser(userId);
-        window.location.href = "/";
+        const success = await deleteUser(userId);
+        if (success) {
+          await signOut();
+          window.location.href = "/";
+        }
       },
     });
     setIsConfirmAlertOpen(true);
