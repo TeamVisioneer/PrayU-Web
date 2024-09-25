@@ -14,11 +14,13 @@ import { useEffect, useState } from "react";
 import EmailLoginBtn from "./EmailLoginBtn";
 
 const LogInDrawer = () => {
+  const user = useBaseStore((state) => state.user);
   const isOpenLoginDrawer = useBaseStore((state) => state.isOpenLoginDrawer);
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
   );
   const location = useLocation();
+  const navigate = useNavigate();
   const baseUrl = getDomainUrl();
   const pathname = location.state?.from?.pathname || "";
   const pathParts = pathname.split("/");
@@ -28,8 +30,6 @@ const LogInDrawer = () => {
 
   const [isIOSApp, setIsIOSApp] = useState(false);
 
-  const user = useBaseStore((state) => state.user);
-  const navigate = useNavigate(); // router v6
   useEffect(() => {
     if (user) {
       navigate("/group");
@@ -52,7 +52,7 @@ const LogInDrawer = () => {
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
         <KakaoLoginBtn redirectUrl={redirectUrl} />
-        {!isIOSApp && (
+        {isIOSApp && (
           <>
             <AppleLoginBtn redirectUrl={redirectUrl} />
             <EmailLoginBtn />
