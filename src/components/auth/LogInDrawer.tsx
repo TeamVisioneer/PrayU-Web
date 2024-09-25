@@ -11,6 +11,7 @@ import AppleLoginBtn from "./AppleLoginBtn";
 import { useLocation } from "react-router-dom";
 import { getDomainUrl } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import GoogleLoginBtn from "./GoogleLoginBtn";
 
 const LogInDrawer = () => {
   const isOpenLoginDrawer = useBaseStore((state) => state.isOpenLoginDrawer);
@@ -43,6 +44,7 @@ const LogInDrawer = () => {
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
         <KakaoLoginBtn redirectUrl={redirectUrl} />
+        <GoogleLoginBtn redirectUrl={redirectUrl} />
         {isIOSApp && <AppleLoginBtn redirectUrl={redirectUrl} />}
       </div>
       <div className="flex flex-col w-full justify-center gap-1 text-sm text-gray-400">
