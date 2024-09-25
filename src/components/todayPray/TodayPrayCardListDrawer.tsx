@@ -109,7 +109,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   );
 
   const completedItem = (
-    <div className="flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10 object-cover">
+    <div className="flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
       <img
         src={PrayTypeDatas["pray"].img}
         alt={PrayTypeDatas["pray"].emoji}
