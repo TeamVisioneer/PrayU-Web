@@ -12,12 +12,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getDomainUrl } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import EmailLoginBtn from "./EmailLoginBtn";
+import EmailLoginDialog from "./EmailLoginDialog";
 
 const LogInDrawer = () => {
   const user = useBaseStore((state) => state.user);
-  const isOpenEmailLoginAccordian = useBaseStore(
-    (state) => state.isOpenEmailLoginAccordian
-  );
   const isOpenLoginDrawer = useBaseStore((state) => state.isOpenLoginDrawer);
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
@@ -56,14 +54,10 @@ const LogInDrawer = () => {
         }
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
-        {!isOpenEmailLoginAccordian && (
-          <KakaoLoginBtn redirectUrl={redirectUrl} />
-        )}
-        {!isIOSApp && (
+        <KakaoLoginBtn redirectUrl={redirectUrl} />
+        {isIOSApp && (
           <>
-            {!isOpenEmailLoginAccordian && (
-              <AppleLoginBtn redirectUrl={redirectUrl} />
-            )}
+            <AppleLoginBtn redirectUrl={redirectUrl} />
             <EmailLoginBtn />
           </>
         )}
@@ -84,15 +78,18 @@ const LogInDrawer = () => {
   );
 
   return (
-    <Drawer open={isOpenLoginDrawer} onOpenChange={setIsOpenLoginDrawer}>
-      <DrawerContent className="bg-mainBg pb-5">
-        <DrawerHeader className="p-2">
-          <DrawerTitle></DrawerTitle>
-          <DrawerDescription></DrawerDescription>
-        </DrawerHeader>
-        {LoginContent}
-      </DrawerContent>
-    </Drawer>
+    <>
+      <Drawer open={isOpenLoginDrawer} onOpenChange={setIsOpenLoginDrawer}>
+        <DrawerContent className="bg-mainBg pb-5">
+          <DrawerHeader className="p-2">
+            <DrawerTitle></DrawerTitle>
+            <DrawerDescription></DrawerDescription>
+          </DrawerHeader>
+          {LoginContent}
+        </DrawerContent>
+      </Drawer>
+      <EmailLoginDialog />
+    </>
   );
 };
 

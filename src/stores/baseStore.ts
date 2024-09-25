@@ -218,8 +218,8 @@ export interface BaseStore {
     actionText: string;
     onAction: () => void;
   }) => void;
-  isOpenEmailLoginAccordian: boolean;
-  setIsOpenEmailLoginAccordian: (isOpenEmailLoginAccordian: boolean) => void;
+  isEmailLoginDialogOpen: boolean;
+  setIsEmailLoginDialogOpen: (isEmailLoginDialog: boolean) => void;
 
   // drawer
   isOpenOnboardingDrawer: boolean;
@@ -737,11 +737,10 @@ const useBaseStore = create<BaseStore>()(
         state.alertData = alertData;
       });
     },
-
-    isOpenEmailLoginAccordian: false,
-    setIsOpenEmailLoginAccordian: (isOpenEmailLoginAccordian: boolean) => {
+    isEmailLoginDialogOpen: false,
+    setIsEmailLoginDialogOpen(isOpen) {
       set((state) => {
-        state.isOpenEmailLoginAccordian = isOpenEmailLoginAccordian;
+        state.isEmailLoginDialogOpen = isOpen;
       });
     },
   }))
