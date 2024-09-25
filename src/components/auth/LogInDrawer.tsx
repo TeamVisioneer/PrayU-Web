@@ -8,10 +8,12 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import KakaoLoginBtn from "./KakaoLoginBtn";
 import AppleLoginBtn from "./AppleLoginBtn";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getDomainUrl } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import GoogleLoginBtn from "./GoogleLoginBtn";
+import { supabase } from "../../../supabase/client";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
 
 const LogInDrawer = () => {
   const isOpenLoginDrawer = useBaseStore((state) => state.isOpenLoginDrawer);
@@ -27,6 +29,14 @@ const LogInDrawer = () => {
   const redirectUrl = `${baseUrl}/term?groupId=${groupId}`;
 
   const [isIOSApp, setIsIOSApp] = useState(false);
+
+  const user = useBaseStore((state) => state.user);
+  const navigate = useNavigate(); // router v6
+  useEffect(() => {
+    if (user) {
+      navigate("/group");
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -44,8 +54,13 @@ const LogInDrawer = () => {
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
         <KakaoLoginBtn redirectUrl={redirectUrl} />
-        <GoogleLoginBtn redirectUrl={redirectUrl} />
         {isIOSApp && <AppleLoginBtn redirectUrl={redirectUrl} />}
+        <Auth
+          supabaseClient={supabase}
+          appearance={{ theme: ThemeSupa }}
+          providers={[]}
+          redirectTo="http://localhost:5173/auth/callback"
+        />
       </div>
       <div className="flex flex-col w-full justify-center gap-1 text-sm text-gray-400">
         <hr className="border-gray-300 mb-1" />
