@@ -99,8 +99,8 @@ const MainPage: React.FC = () => {
       <div className="text-lg font-bold">우리만의 기도제목 나눔 공간 PrayU</div>
       <Carousel setApi={setApi}>
         <CarouselContent>
-          <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="h-[300px] flex flex-col  items-center">
+          <CarouselItem className="w-full flex flex-col items-center gap-4">
+            <div className="h-[300px] flex flex-col  items-center object-cover">
               <img className="h-full" src="/images/MainImage.png" />
             </div>
             <div className="flex flex-col gap-2">
@@ -114,7 +114,7 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="h-[300px] flex flex-col  items-center">
+            <div className="h-[300px] flex flex-col  items-center object-cover">
               <img className="h-full" src="/images/MainPageIntro2.png" />
             </div>
             <div className="flex flex-col gap-2">
@@ -130,7 +130,7 @@ const MainPage: React.FC = () => {
             </div>
           </CarouselItem>
           <CarouselItem className="flex flex-col items-center gap-4">
-            <div className="h-[300px] flex flex-col  items-center ">
+            <div className="h-[300px] flex flex-col  items-center object-cover">
               <img className="h-full" src="/images/MainPageIntro4.png" />
             </div>
             <div className="flex flex-col gap-2">
