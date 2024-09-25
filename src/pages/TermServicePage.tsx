@@ -27,9 +27,9 @@ const TermServicePage: React.FC = () => {
 
   useEffect(() => {
     if (user && !profile) getProfile(user.id);
-    // if (profile && profile.terms_agreed_at !== null) {
-    //   navigate(redirectUrl, { replace: true });
-    // }
+    if (profile && profile.terms_agreed_at !== null) {
+      navigate(redirectUrl, { replace: true });
+    }
   }, [user, profile, getProfile, navigate, redirectUrl]);
 
   if (!profile) return null;
