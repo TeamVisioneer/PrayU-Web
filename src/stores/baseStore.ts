@@ -218,8 +218,6 @@ export interface BaseStore {
     actionText: string;
     onAction: () => void;
   }) => void;
-  isEmailLoginDialogOpen: boolean;
-  setIsEmailLoginDialogOpen: (isEmailLoginDialog: boolean) => void;
 
   // drawer
   isOpenOnboardingDrawer: boolean;
@@ -735,12 +733,6 @@ const useBaseStore = create<BaseStore>()(
     setAlertData: (alertData) => {
       set((state) => {
         state.alertData = alertData;
-      });
-    },
-    isEmailLoginDialogOpen: false,
-    setIsEmailLoginDialogOpen(isOpen) {
-      set((state) => {
-        state.isEmailLoginDialogOpen = isOpen;
       });
     },
   }))
