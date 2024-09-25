@@ -1,4 +1,9 @@
-import { createPray, fetchIsPrayToday, updatePray } from "./../apis/pray";
+import {
+  createPray,
+  fetchIsPrayToday,
+  fetchTotalPrayCount,
+  updatePray,
+} from "./../apis/pray";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { supabase } from "../../supabase/client";
@@ -152,8 +157,10 @@ export interface BaseStore {
   // pray
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean | null;
+  totalPrayCount: Pray[] | null;
   setIsPrayToday: (isPrayToday: boolean) => void;
   fetchIsPrayToday: (userId: string, groupId: string) => Promise<void>;
+  fetchTotalPrayCount: (userId?: string) => Promise<void>;
   createPray: (
     prayCardId: string,
     userId: string,
@@ -590,6 +597,13 @@ const useBaseStore = create<BaseStore>()(
     // pray
     todayPrayTypeHash: {},
     isPrayToday: null,
+    totalPrayCount: null,
+    fetchTotalPrayCount: async () => {
+      const totalPrayCount = await fetchTotalPrayCount();
+      set((state) => {
+        state.totalPrayCount = totalPrayCount;
+      });
+    },
     setIsPrayToday: (isPrayToday: boolean) => {
       set((state) => {
         state.isPrayToday = isPrayToday;
