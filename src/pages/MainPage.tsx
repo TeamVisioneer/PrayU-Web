@@ -70,14 +70,14 @@ const MainPage: React.FC = () => {
             <p>
               <CountUp
                 start={0}
-                end={5000}
+                end={totalPrayCount.length}
                 duration={1.5}
                 separator=","
                 className="text-mainBtn font-extrabold"
               />{" "}
               번의 기도가
             </p>
-            <p>PrayU 를 통해 진행되었어요</p>
+            <p>PrayU 를 통해 전달되었어요</p>
           </div>
           {user ? <PrayUStartBtn /> : <PrayUOnboardingBtn />}
         </div>

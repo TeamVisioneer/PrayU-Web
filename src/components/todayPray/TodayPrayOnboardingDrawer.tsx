@@ -15,7 +15,6 @@ const TodayPrayOnboardingDrawer = () => {
   const setIsOpenOnboardingDrawer = useBaseStore(
     (state) => state.setIsOpenOnboardingDrawer
   );
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   return (
     <Drawer
@@ -25,9 +24,7 @@ const TodayPrayOnboardingDrawer = () => {
       <DrawerContent className="bg-mainBg pb-5">
         <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
-          <DrawerDescription className="text-sm text-center text-gray-400">
-            {isPrayToday ? <br /> : "반응을 누르면 다음 기도로 넘어가요"}
-          </DrawerDescription>
+          <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         <TodayPrayCardOnboardingList />
       </DrawerContent>

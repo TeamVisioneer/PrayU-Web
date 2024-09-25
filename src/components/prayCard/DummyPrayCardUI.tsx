@@ -1,6 +1,5 @@
 import React from "react";
 import { Textarea } from "../ui/textarea";
-import { getISOTodayDateYMD } from "@/lib/utils";
 import DumyReactionBtnWithCalendar from "./DummyReactionWithCalendar";
 
 interface DumyPrayCardProps {
@@ -14,12 +13,10 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
   name,
   content,
 }) => {
-  const createdDateYMD = getISOTodayDateYMD();
-
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
-        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
+        <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
             <img
               src={profileImage || "/images/defaultProfileImage.png"}
@@ -30,9 +27,8 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
             />
             <p className="text-white text-lg">{name}</p>
           </div>
-          <p className="text-sm text-white w-full text-left">
-            시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
-            {createdDateYMD.day}
+          <p className="text-sm text-white text-left">
+            본 기도카드는 예시 기도카드입니다.
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
@@ -44,6 +40,9 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
         </div>
       </div>
       <DumyReactionBtnWithCalendar />
+      <div className="text-gray-400 text-sm text-center">
+        반응을 누르면 다음 기도로 넘어가요
+      </div>
     </div>
   );
 };

@@ -16,7 +16,7 @@ const FixedHeader: React.FC = () => {
         {!user && (
           <Button
             variant="primaryLight"
-            className="w-12 h-8 text-xs shadow-none"
+            className="h-8 text-xs shadow-none px-4 border border-gray-100"
             onClick={() => setIsOpenLoginDrawer(true)}
           >
             로그인
