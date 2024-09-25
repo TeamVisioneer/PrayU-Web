@@ -59,7 +59,7 @@ const MainPage: React.FC = () => {
       <MainHeader />
       <section className="w-full flex flex-col items-center ">
         <div className="flex flex-col gap-8 p-10 items-center justify-center ">
-          <div className="h-[80px] flex flex-col items-center">
+          <div className="h-[80px] flex flex-col items-center object-cover">
             <img className="h-full" src="/images/PrayULogo.png" />
           </div>
           <div className="text-2xl font-bold">

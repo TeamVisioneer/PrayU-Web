@@ -78,3 +78,11 @@
 .inner-shadow {
   box-shadow: rgb(114, 114, 114) 0px 2px 4px 0px inset;
 }
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+}
