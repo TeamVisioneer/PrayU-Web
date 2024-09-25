@@ -59,7 +59,7 @@ const LogInDrawer = () => {
         {!isOpenEmailLoginAccordian && (
           <KakaoLoginBtn redirectUrl={redirectUrl} />
         )}
-        {isIOSApp && (
+        {!isIOSApp && (
           <>
             {!isOpenEmailLoginAccordian && (
               <AppleLoginBtn redirectUrl={redirectUrl} />
