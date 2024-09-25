@@ -6,7 +6,6 @@ import GroupMenuBtn from "../components/group/GroupMenuBtn";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 import ContentDrawer from "@/components/share/ContentDrawer";
-import OpenEventDialogBtn from "@/components/notice/OpenEventDialogBtn";
 import EventDialog from "@/components/notice/EventDialog";
 import ReportAlert from "@/components/alert/ReportAlert";
 import { useNavigate } from "react-router-dom";
@@ -117,8 +116,8 @@ const GroupPage: React.FC = () => {
             {filteredMemberList.length}
           </span>
         </div>
-        <div className="w-[48px] flex justify-between">
-          <OpenEventDialogBtn />
+        <div className="w-[48px] flex justify-end">
+          {/* <OpenEventDialogBtn /> */}
           <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
         </div>
       </div>
