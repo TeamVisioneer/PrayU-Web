@@ -5,6 +5,7 @@ import TodayPrayOnboardingDrawer from "@/components/todayPray/TodayPrayOnboardin
 import LogInDrawer from "@/components/auth/LogInDrawer";
 import MainHeader from "./MainPage/MainHeader";
 import { useEffect } from "react";
+import CountUp from "react-countup";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -67,9 +68,13 @@ const MainPage: React.FC = () => {
           </div>
           <div className="text-lg">
             <p>
-              <span className="text-mainBtn font-extrabold">
-                {totalPrayCount.length}{" "}
-              </span>
+              <CountUp
+                start={0}
+                end={5000}
+                duration={1.5}
+                separator=","
+                className="text-mainBtn font-extrabold"
+              />{" "}
               번의 기도가
             </p>
             <p>PrayU 를 통해 진행되었어요</p>
