@@ -22,6 +22,7 @@ import GroupNotFoundPage from "./pages/GroupNotFoundPage";
 import GroupRedirectPage from "./pages/GroupRedirectPage";
 import GroupLimitPage from "./pages/GropuLimitPage";
 import TermServicePage from "./pages/TermServicePage";
+import EmailLoginPage from "./pages/EmailLoginPage";
 
 const App = () => {
   useEffect(() => {
@@ -102,6 +103,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route path="/login/email" element={<EmailLoginPage />} />
             </Routes>
           </AuthProvider>
         </BrowserRouter>
@@ -156,6 +158,12 @@ const AnalyticsTracker = () => {
       case "/profile/me":
         analytics.track("페이지_프로필_나", {
           title: "PrayCard Create Page",
+          where: from,
+        });
+        break;
+      case "/login/email":
+        analytics.track("페이지_이메일_로그인", {
+          title: "Email Login Page",
           where: from,
         });
         break;
