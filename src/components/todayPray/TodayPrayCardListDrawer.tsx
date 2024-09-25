@@ -89,7 +89,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   const emptyPrayCardList = (
     <div className="flex flex-col justify-center items-center px-10 gap-4">
       <p className="text-lg font-bold">아직 올라온 기도제목이 없어요 😭</p>
-      <div className="h-[300px] flex flex-col items-center">
+      <div className="h-[300px] flex flex-col items-center object-cover">
         <img
           className="h-full rounded-md"
           src="/images/KakaoShareMessage.png"
@@ -127,10 +127,7 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
   );
 
   const todayPrayCardList = (
-    <Carousel
-      setApi={setPrayCardCarouselApi}
-      opts={{ startIndex: 1 }}
-    >
+    <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
         {filterdGroupPrayCardList.map((prayCard) => (
@@ -147,7 +144,6 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
     </Carousel>
   );
 
-
   return (
     <Drawer
       open={isOpenTodayPrayDrawer}
@@ -158,12 +154,13 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        {groupPrayCardList.length !== 1 
-          ? todayPrayCardList 
-          : memberList.length == 1
-          ? <TodayPrayCardDummyList />
-          : emptyPrayCardList
-        }
+        {groupPrayCardList.length !== 1 ? (
+          todayPrayCardList
+        ) : memberList.length == 1 ? (
+          <TodayPrayCardDummyList />
+        ) : (
+          emptyPrayCardList
+        )}
       </DrawerContent>
     </Drawer>
   );

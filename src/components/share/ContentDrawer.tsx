@@ -29,7 +29,7 @@ const ContentDrawer = () => {
         </p>
       </div>
 
-      <div className="h-[300px] flex flex-col items-center">
+      <div className="h-[300px] flex flex-col items-center object-cover">
         <img
           className="h-full rounded-md"
           src={`https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`}

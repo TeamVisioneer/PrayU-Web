@@ -120,7 +120,7 @@ const MyProfilePage = () => {
           {isEditing && <Badge>완료</Badge>}
         </div>
       </div>
-      <div className="flex justify-center h-[80px]">
+      <div className="flex justify-center h-[80px] object-cover">
         {myProfile && profileList ? (
           <img
             className="h-full aspect-square rounded-full"
