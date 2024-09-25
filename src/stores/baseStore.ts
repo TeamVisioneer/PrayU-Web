@@ -218,6 +218,8 @@ export interface BaseStore {
     actionText: string;
     onAction: () => void;
   }) => void;
+  isOpenEmailLoginAccordian: boolean;
+  setIsOpenEmailLoginAccordian: (isOpenEmailLoginAccordian: boolean) => void;
 
   // drawer
   isOpenOnboardingDrawer: boolean;
@@ -733,6 +735,13 @@ const useBaseStore = create<BaseStore>()(
     setAlertData: (alertData) => {
       set((state) => {
         state.alertData = alertData;
+      });
+    },
+
+    isOpenEmailLoginAccordian: false,
+    setIsOpenEmailLoginAccordian: (isOpenEmailLoginAccordian: boolean) => {
+      set((state) => {
+        state.isOpenEmailLoginAccordian = isOpenEmailLoginAccordian;
       });
     },
   }))

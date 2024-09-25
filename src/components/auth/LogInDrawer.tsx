@@ -15,6 +15,9 @@ import EmailLoginBtn from "./EmailLoginBtn";
 
 const LogInDrawer = () => {
   const user = useBaseStore((state) => state.user);
+  const isOpenEmailLoginAccordian = useBaseStore(
+    (state) => state.isOpenEmailLoginAccordian
+  );
   const isOpenLoginDrawer = useBaseStore((state) => state.isOpenLoginDrawer);
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
@@ -46,15 +49,21 @@ const LogInDrawer = () => {
     <div className="flex flex-col gap-6 px-10">
       <div className="flex flex-col gap-1">
         <div className="text-lg font-bold">PrayU 로그인</div>
-        <p className="flex flex-col justify-center text-gray-700">
-          기도제목을 올리고, 서로 함께 반응하며 기도해요
-        </p>
+        {
+          <p className="flex flex-col justify-center text-gray-700">
+            기도제목을 올리고, 서로 함께 반응하며 기도해요
+          </p>
+        }
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
-        <KakaoLoginBtn redirectUrl={redirectUrl} />
+        {!isOpenEmailLoginAccordian && (
+          <KakaoLoginBtn redirectUrl={redirectUrl} />
+        )}
         {isIOSApp && (
           <>
-            <AppleLoginBtn redirectUrl={redirectUrl} />
+            {!isOpenEmailLoginAccordian && (
+              <AppleLoginBtn redirectUrl={redirectUrl} />
+            )}
             <EmailLoginBtn />
           </>
         )}
