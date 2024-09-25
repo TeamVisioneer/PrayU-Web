@@ -65,21 +65,21 @@ const TodayPrayCardOnboardingList = () => {
         <CarouselItem className="basis-5/6"></CarouselItem>
         <CarouselItem className="basis-5/6">
           <DummyPrayCardUI
-            profileImage=""
+            profileImage="/images/avatar/avatar_1.png"
             name="기도친구 1"
             content={`가족 모두가 건강하고 행복하게 지낼 수 있도록 기도해주세요.\n\n특히 부모님의 건강이 항상 좋기를 바랍니다.\n\n또한, 형제자매들이 서로 화목하게 지내며, 각자의 삶에서 성공과 기쁨을 누릴 수 있기를 기도합니다.`}
           />
         </CarouselItem>
         <CarouselItem className="basis-5/6">
           <DummyPrayCardUI
-            profileImage=""
+            profileImage="/images/avatar/avatar_2.png"
             name="기도친구 2"
             content={`직장에서 받는 스트레스를 잘 이겨낼 수 있도록 기도해주세요.\n\n업무가 순조롭게 진행되고, 마음의 평안을 찾을 수 있기를 바랍니다.\n\n동료들과의 관계가 원만하고, 상사와의 소통이 잘 이루어져서 직장 생활이 즐거울 수 있기를 기도합니다.`}
           />
         </CarouselItem>
         <CarouselItem className="basis-5/6">
           <DummyPrayCardUI
-            profileImage=""
+            profileImage="/images/avatar/avatar_3.png"
             name="기도친구 3"
             content={`친구의 병이 빨리 낫도록 기도해주세요.\n\n치료가 잘 되어 건강을 회복하고, 다시 일상으로 돌아올 수 있기를 바랍니다.\n\n친구가 힘든 시간을 잘 이겨내고, 가족과 친구들의 사랑과 지지를 받으며 회복할 수 있기를 기도합니다.`}
           />

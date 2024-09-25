@@ -35,6 +35,22 @@ export const fetchIsPrayToday = async (
   }
 };
 
+export const fetchTotalPrayCount = async (): Promise<number> => {
+  try {
+    const { count, error } = await supabase
+      .from("pray")
+      .select("id", { count: "exact", head: true });
+    if (error) {
+      Sentry.captureException(error.message);
+      return 0;
+    }
+    return count || 0;
+  } catch (error) {
+    Sentry.captureException(error);
+    return 0;
+  }
+};
+
 export const createPray = async (
   prayCardId: string,
   userId: string,
