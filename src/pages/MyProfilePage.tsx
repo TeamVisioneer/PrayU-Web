@@ -267,6 +267,19 @@ const MyProfilePage = () => {
           <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
         </div>
       )}
+
+      <footer className="absolute bottom-4 w-full px-6 flex justify-between text-gray-400 text-[10px]">
+        <span>© 2024 PrayU. All rights reserved.</span>
+        <div className="flex gap-2">
+          <a href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html">
+            개인정보 처리방침
+          </a>
+          <span>|</span>
+          <a href="https://mmyeong.notion.site/PrayU-ee61275fa48842cda5a5f2ed5b608ec0?pvs=4">
+            이용약관
+          </a>
+        </div>
+      </footer>
     </div>
   );
 };
