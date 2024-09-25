@@ -161,6 +161,12 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
+      case "/login/email":
+        analytics.track("페이지_이메일_로그인", {
+          title: "Email Login Page",
+          where: from,
+        });
+        break;
       default:
         if (matchGroup) {
           analytics.track("페이지_그룹_홈", {
