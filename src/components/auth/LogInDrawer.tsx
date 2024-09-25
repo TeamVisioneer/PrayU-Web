@@ -8,20 +8,17 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import KakaoLoginBtn from "./KakaoLoginBtn";
 import AppleLoginBtn from "./AppleLoginBtn";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { getDomainUrl } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import EmailLoginBtn from "./EmailLoginBtn";
-import EmailLoginDialog from "./EmailLoginDialog";
 
 const LogInDrawer = () => {
-  const user = useBaseStore((state) => state.user);
   const isOpenLoginDrawer = useBaseStore((state) => state.isOpenLoginDrawer);
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
   );
   const location = useLocation();
-  const navigate = useNavigate();
   const baseUrl = getDomainUrl();
   const pathname = location.state?.from?.pathname || "";
   const pathParts = pathname.split("/");
@@ -30,12 +27,6 @@ const LogInDrawer = () => {
   const redirectUrl = `${baseUrl}/term?groupId=${groupId}`;
 
   const [isIOSApp, setIsIOSApp] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      navigate("/group");
-    }
-  }, [user, navigate]);
 
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -78,18 +69,15 @@ const LogInDrawer = () => {
   );
 
   return (
-    <>
-      <Drawer open={isOpenLoginDrawer} onOpenChange={setIsOpenLoginDrawer}>
-        <DrawerContent className="bg-mainBg pb-5">
-          <DrawerHeader className="p-2">
-            <DrawerTitle></DrawerTitle>
-            <DrawerDescription></DrawerDescription>
-          </DrawerHeader>
-          {LoginContent}
-        </DrawerContent>
-      </Drawer>
-      <EmailLoginDialog />
-    </>
+    <Drawer open={isOpenLoginDrawer} onOpenChange={setIsOpenLoginDrawer}>
+      <DrawerContent className="bg-mainBg pb-5">
+        <DrawerHeader className="p-2">
+          <DrawerTitle></DrawerTitle>
+          <DrawerDescription></DrawerDescription>
+        </DrawerHeader>
+        {LoginContent}
+      </DrawerContent>
+    </Drawer>
   );
 };
 

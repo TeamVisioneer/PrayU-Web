@@ -1,20 +1,13 @@
 import { analytics } from "@/analytics/analytics";
-import useBaseStore from "@/stores/baseStore";
 import { MdEmail } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const EmailLoginBtn: React.FC = () => {
-  const setIsEmailLoginDialogOpen = useBaseStore(
-    (state) => state.setIsEmailLoginDialogOpen
-  );
-  const setIsOpenLoginDrawer = useBaseStore(
-    (state) => state.setIsOpenLoginDrawer
-  );
+  const navigate = useNavigate();
+
   const handleEmailLoginBtnClick = async () => {
     analytics.track("클릭_이메일_로그인", { where: "EmailLoginBtn" });
-    setIsOpenLoginDrawer(false);
-    setTimeout(() => {
-      setIsEmailLoginDialogOpen(true);
-    }, 100);
+    navigate("/login/email");
   };
 
   return (

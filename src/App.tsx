@@ -22,6 +22,7 @@ import GroupNotFoundPage from "./pages/GroupNotFoundPage";
 import GroupRedirectPage from "./pages/GroupRedirectPage";
 import GroupLimitPage from "./pages/GropuLimitPage";
 import TermServicePage from "./pages/TermServicePage";
+import EmailLoginPage from "./pages/EmailLoginPage";
 
 const App = () => {
   useEffect(() => {
@@ -102,6 +103,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route path="/login/email" element={<EmailLoginPage />} />
             </Routes>
           </AuthProvider>
         </BrowserRouter>
