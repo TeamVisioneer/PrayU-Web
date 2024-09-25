@@ -52,7 +52,7 @@ const MainPage: React.FC = () => {
     );
   };
 
-  if (!totalPrayCount || userLoading) return null;
+  if (userLoading) return null;
 
   return (
     <div className="flex flex-col items-center justify-center text-center h-full">
@@ -70,7 +70,7 @@ const MainPage: React.FC = () => {
             <p>
               <CountUp
                 start={0}
-                end={totalPrayCount.length}
+                end={totalPrayCount}
                 duration={1.5}
                 separator=","
                 className="text-mainBtn font-extrabold"

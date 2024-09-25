@@ -157,10 +157,10 @@ export interface BaseStore {
   // pray
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean | null;
-  totalPrayCount: Pray[] | null;
+  totalPrayCount: number;
   setIsPrayToday: (isPrayToday: boolean) => void;
   fetchIsPrayToday: (userId: string, groupId: string) => Promise<void>;
-  fetchTotalPrayCount: (userId?: string) => Promise<void>;
+  fetchTotalPrayCount: () => Promise<void>;
   createPray: (
     prayCardId: string,
     userId: string,
@@ -597,7 +597,7 @@ const useBaseStore = create<BaseStore>()(
     // pray
     todayPrayTypeHash: {},
     isPrayToday: null,
-    totalPrayCount: null,
+    totalPrayCount: 0,
     fetchTotalPrayCount: async () => {
       const totalPrayCount = await fetchTotalPrayCount();
       set((state) => {
