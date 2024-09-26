@@ -16,8 +16,8 @@ import addGroup from "@/assets/addGroup.svg";
 import minusGroup from "@/assets/minusGroup.svg";
 import newIcon from "@/assets/newIcon.svg";
 import groupIcon from "@/assets/groupIcon.svg";
-
 import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
+import { IoSettingsSharp } from "react-icons/io5";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -49,6 +49,10 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   const setIsOpenGroupMenuSheet = useBaseStore(
     (state) => state.setIsOpenGroupMenuSheet
   );
+  const setIsOpenGroupSettingsDialog = useBaseStore(
+    (state) => state.setIsOpenGroupSettingsDialog
+  );
+  const isGroupLeader = useBaseStore((state) => state.isGroupLeader);
 
   const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
@@ -76,6 +80,11 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
       },
     });
     setIsConfirmAlertOpen(true);
+  };
+
+  const handleClickUpdateGroup = () => {
+    setIsOpenGroupMenuSheet(false);
+    setIsOpenGroupSettingsDialog(true);
   };
 
   const onClickOtherGroup = (groupId: string) => {
@@ -162,6 +171,17 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
                   그룹 나가기
                 </a>
               </div>
+              {isGroupLeader && (
+                <div className="flex items-center gap-2">
+                  <IoSettingsSharp size={21} color="#6B94FF" />
+                  <a
+                    className="cursor-pointer text-[#222222] font-medium"
+                    onClick={() => handleClickUpdateGroup()}
+                  >
+                    그룹 설정
+                  </a>
+                </div>
+              )}
               <hr className="w-full" />
             </>
           )}

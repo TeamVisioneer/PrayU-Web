@@ -19,7 +19,13 @@ import {
   PrayWithProfiles,
   Profiles,
 } from "../../supabase/types/tables";
-import { fetchGroupListByUserId, getGroup, createGroup } from "@/apis/group";
+import {
+  fetchGroupListByUserId,
+  getGroup,
+  createGroup,
+  updateGroupParams,
+  updateGroup,
+} from "@/apis/group";
 import {
   createMember,
   deleteMemberbyGroupId,
@@ -72,15 +78,21 @@ export interface BaseStore {
   targetGroup: Group | null;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
+  isGroupLeader: boolean;
   targetGroupLoading: boolean;
   fetchGroupListByUserId: (userId: string) => Promise<void>;
   getGroup: (groupId: string) => Promise<void>;
   setGroupName: (groupName: string) => void;
   setIsDisabledGroupCreateBtn: (isDisabled: boolean) => void;
+  setIsGroupLeader: (isGroupLeader: boolean) => void;
   createGroup: (
     userId: string,
     name: string,
     intro: string
+  ) => Promise<Group | null>;
+  updateGroup: (
+    groupId: string,
+    params: updateGroupParams
   ) => Promise<Group | null>;
   isOpenTodayPrayDrawer: boolean;
   setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
@@ -232,6 +244,10 @@ export interface BaseStore {
 
   isOpenLoginDrawer: boolean;
   setIsOpenLoginDrawer: (isOpenLoginDrawer: boolean) => void;
+
+  //dialog
+  isOpenGroupSettingsDialog: boolean;
+  setIsOpenGroupSettingsDialog: (isOpenGroupSettingsDialog: boolean) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -345,6 +361,7 @@ const useBaseStore = create<BaseStore>()(
     targetGroup: null,
     inputGroupName: "",
     isDisabledGroupCreateBtn: false,
+    isGroupLeader: false,
     fetchGroupListByUserId: async (userId: string) => {
       const data = await fetchGroupListByUserId(userId);
       set((state) => {
@@ -370,10 +387,19 @@ const useBaseStore = create<BaseStore>()(
       });
       return group;
     },
+    updateGroup: async (groupId: string, params: updateGroupParams) => {
+      const group = await updateGroup(groupId, params);
+      return group;
+    },
     setGroupName: (groupName: string) => {
       set((state) => {
         state.inputGroupName = groupName;
         state.isDisabledGroupCreateBtn = groupName.trim() === "";
+      });
+    },
+    setIsGroupLeader: (isGroupLeader: boolean) => {
+      set((state) => {
+        state.isGroupLeader = isGroupLeader;
       });
     },
     setIsDisabledGroupCreateBtn: (isDisabled: boolean) => {
@@ -747,6 +773,14 @@ const useBaseStore = create<BaseStore>()(
     setAlertData: (alertData) => {
       set((state) => {
         state.alertData = alertData;
+      });
+    },
+
+    //dialog
+    isOpenGroupSettingsDialog: false,
+    setIsOpenGroupSettingsDialog: (isOpenGroupSettingsDialog: boolean) => {
+      set((state) => {
+        state.isOpenGroupSettingsDialog = isOpenGroupSettingsDialog;
       });
     },
   }))
