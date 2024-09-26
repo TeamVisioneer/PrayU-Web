@@ -8,7 +8,7 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import { Input } from "../ui/input";
 import { Group } from "supabase/types/tables";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 
