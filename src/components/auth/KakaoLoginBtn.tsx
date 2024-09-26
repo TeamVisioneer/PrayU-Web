@@ -1,5 +1,5 @@
 import kakaoIcon from "@/assets/kakaoIcon.svg";
-import { analytics } from "@/analytics/analytics";
+import { analyticsTrack } from "@/analytics/analytics";
 import * as Sentry from "@sentry/react";
 import { supabase } from "../../../supabase/client";
 
@@ -9,7 +9,7 @@ interface KakaoLoginBtnProps {
 
 const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
   const handleKakaoLoginBtnClick = async () => {
-    analytics.track("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
+    analyticsTrack("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {

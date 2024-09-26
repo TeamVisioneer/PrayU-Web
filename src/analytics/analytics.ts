@@ -7,7 +7,7 @@ const AMPLITUDE_API_KEY = import.meta.env.VITE_AMPLITUDE_API_KEY;
 const GOOGLE_ANALYTICS_ID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 
-export const analytics = Analytics({
+const analytics = Analytics({
   app: "awesome-app",
   plugins: [
     amplitudePlugin({
@@ -15,17 +15,11 @@ export const analytics = Analytics({
       options: {
         includeUtm: true,
         includeReferrer: true,
-        trackingOptions: {
-          ip_address: false,
-        },
+        trackingOptions: { ip_address: false },
       },
     }),
-    googleAnalytics({
-      measurementIds: [GOOGLE_ANALYTICS_ID],
-    }),
-    mixpanelPlugin({
-      token: MIXPANEL_TOKEN,
-    }),
+    googleAnalytics({ measurementIds: [GOOGLE_ANALYTICS_ID] }),
+    mixpanelPlugin({ token: MIXPANEL_TOKEN }),
   ],
 });
 
