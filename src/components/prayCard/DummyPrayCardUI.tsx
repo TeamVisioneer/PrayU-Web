@@ -6,12 +6,14 @@ interface DumyPrayCardProps {
   profileImage: string;
   name: string;
   content: string;
+  dayOffset: number;
 }
 
 const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
   profileImage,
   name,
   content,
+  dayOffset,
 }) => {
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
@@ -39,7 +41,7 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
           />
         </div>
       </div>
-      <DumyReactionBtnWithCalendar />
+      <DumyReactionBtnWithCalendar dayOffset={dayOffset} />
       <div className="text-gray-400 text-sm text-center">
         반응을 누르면 다음 기도로 넘어가요
       </div>

@@ -1,16 +1,30 @@
 import { getISODate, getISOToday, getISOTodayDate, sleep } from "@/lib/utils";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
+import React from "react";
 
-const DumyReactionBtnWithCalendar = () => {
+interface DumyReactionBtnWithCalendarProps {
+  dayOffset: number;
+}
+
+const DumyReactionBtnWithCalendar: React.FC<
+  DumyReactionBtnWithCalendarProps
+> = ({ dayOffset }) => {
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
 
   const [todayPrayType, setTodayPrayType] = useState("");
+  const [randomPrayTypes, setRandomPrayTypes] = useState<string[]>([]);
+
+  useEffect(() => {
+    const initialRandomPrayTypes = generateRandomPrayTypes();
+    setRandomPrayTypes(initialRandomPrayTypes);
+  }, []);
+
   const handleClick = (type: PrayType) => {
     analyticsTrack("클릭_기도카드_반응", {
       where: "DummyReactionBtnWithCalendar",
@@ -25,15 +39,29 @@ const DumyReactionBtnWithCalendar = () => {
   };
 
   const currentDate = getISOTodayDate();
+
   const generateDates = () => {
     const dateList = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = dayOffset; i > 0; i--) {
+      const newDate = new Date(currentDate);
+      newDate.setDate(new Date(currentDate).getDate() - i);
+      const newDateString = getISODate(newDate).split("T")[0];
+      dateList.push({ date: newDateString, emoji: "" });
+    }
+    for (let i = 0; i < 7 - dayOffset; i++) {
       const newDate = new Date(currentDate);
       newDate.setDate(new Date(currentDate).getDate() + i);
       const newDateString = getISODate(newDate).split("T")[0];
       dateList.push({ date: newDateString, emoji: "" });
     }
     return dateList;
+  };
+
+  const generateRandomPrayTypes = () => {
+    const prayTypes = Object.values(PrayType);
+    return Array(7)
+      .fill(null)
+      .map(() => prayTypes[Math.floor(Math.random() * prayTypes.length)]);
   };
 
   const getReactionEmoticon = (prayType: string | null) => {
@@ -50,8 +78,11 @@ const DumyReactionBtnWithCalendar = () => {
   return (
     <div className="flex flex-col gap-6 p-2">
       <div className="flex justify-center gap-[13px]">
-        {weeklyDays.map((date) => {
+        {weeklyDays.map((date, index) => {
           const isToday = date.date === getISOToday().split("T")[0];
+          const isPast =
+            new Date(date.date) < new Date(getISOToday().split("T")[0]);
+
           const day = new Date(date.date).getDate();
           return (
             <div key={date.date} className="flex flex-col items-center gap-1">
@@ -67,7 +98,11 @@ const DumyReactionBtnWithCalendar = () => {
                   isToday ? "border-[1.5px] border-[#BBBED4]" : ""
                 } ${todayPrayType ? "border-none" : ""}`}
               >
-                {isToday ? getReactionEmoticon(todayPrayType) : date.emoji}
+                {isToday
+                  ? getReactionEmoticon(todayPrayType)
+                  : isPast
+                  ? getReactionEmoticon(randomPrayTypes[index])
+                  : date.emoji}
               </div>
             </div>
           );
