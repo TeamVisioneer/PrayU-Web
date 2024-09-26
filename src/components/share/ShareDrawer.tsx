@@ -78,7 +78,7 @@ const ShareDrawer: React.FC = () => {
     <Carousel setApi={setApi}>
       <CarouselContent>
         <CarouselItem className="flex flex-col items-center gap-4">
-          <div className="h-[200px] flex flex-col  items-center object-cover">
+          <div className="h-[200px] w-full flex flex-col  items-center">
             <img
               className="h-full rounded-md shadow-prayCard"
               src="/images/KakaoNotification.png"
@@ -95,7 +95,7 @@ const ShareDrawer: React.FC = () => {
           </div>
         </CarouselItem>
         <CarouselItem className="flex flex-col items-center gap-4">
-          <div className="h-[200px] flex flex-col items-center object-cover">
+          <div className="h-[200px] w-full flex flex-col items-center">
             <img
               className="h-full rounded-md shadow-prayCard"
               src="/images/KakaoShareMessage.png"
