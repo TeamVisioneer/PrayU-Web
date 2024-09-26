@@ -69,11 +69,9 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
       </div>
       <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />
       <div className="text-gray-400 text-sm text-center">
-        {isPrayToday ? (
-          <div className="invisible">반응을 누르면 다음 기도로 넘어가요</div>
-        ) : (
-          <div>반응을 누르면 다음 기도로 넘어가요</div>
-        )}
+        <div className={isPrayToday ? "invisible" : ""}>
+          반응을 누르면 다음 기도로 넘어가요
+        </div>
       </div>
     </div>
   );
