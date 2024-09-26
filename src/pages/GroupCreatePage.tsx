@@ -68,7 +68,7 @@ const GroupCreatePage: React.FC = () => {
         <span className="text-xl font-bold">그룹 만들기</span>
         <GroupMenuBtn userGroupList={groupList} />
       </div>
-      <div className="flex justify-center h-[300px] w-max object-cover">
+      <div className="h-[300px] w-full flex justify-center">
         <img className="h-full object-cover" src="/images/intro_square.png" />
       </div>
       <div className="flex flex-col items-center gap-4 w-full ">
