@@ -15,6 +15,14 @@ const TermServicePage: React.FC = () => {
   const profile = useBaseStore((state) => state.myProfile);
   const updateProfile = useBaseStore((state) => state.updateProfile);
 
+  const createGroup = useBaseStore((state) => state.createGroup);
+  const createMember = useBaseStore((state) => state.createMember);
+  const createPrayCard = useBaseStore((state) => state.createPrayCard);
+  const groupList = useBaseStore((state) => state.groupList);
+  const fetchGroupListByUserId = useBaseStore(
+    (state) => state.fetchGroupListByUserId
+  );
+
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,23 +31,61 @@ const TermServicePage: React.FC = () => {
   const redirectUrl = groupId ? `/group/${groupId}` : "/group";
 
   const [isChecked, setIsChecked] = useState(false);
+  const [isDisabledAgreeBtn, setIsDisabledAgreeBtn] = useState(false);
   const emojiData = PrayTypeDatas["pray"];
 
   useEffect(() => {
+    if (user) fetchGroupListByUserId(user.id);
     if (user && !profile) getProfile(user.id);
     if (profile && profile.terms_agreed_at !== null) {
       navigate(redirectUrl, { replace: true });
     }
-  }, [user, profile, getProfile, navigate, redirectUrl]);
+  }, [
+    user,
+    profile,
+    getProfile,
+    navigate,
+    redirectUrl,
+    fetchGroupListByUserId,
+  ]);
 
-  if (!profile) return null;
+  if (!profile || !groupList) return null;
 
-  const onClickAgreeStart = () => {
+  const handleCreateGroup = async () => {
+    const groupName = profile.full_name
+      ? `${profile.full_name}의 그룹`
+      : "새 그룹";
+    const targetGroup = await createGroup(profile.id, groupName, "intro");
+    if (!targetGroup) return;
+    const myMember = await createMember(targetGroup.id, profile.id, "");
+    if (!myMember) return;
+
+    await createPrayCard(targetGroup.id, profile.id, "");
+    return targetGroup.id;
+  };
+
+  const onClickAgreeStart = async () => {
+    setIsDisabledAgreeBtn(true);
     analyticsTrack("클릭_동의_완료", {});
-    updateProfile(profile.id, {
+    const updatedProfile = await updateProfile(profile.id, {
       terms_agreed_at: getISOTodayDate(),
     });
-    navigate(redirectUrl, { replace: true });
+    if (!updatedProfile) {
+      setIsDisabledAgreeBtn(false);
+      return;
+    }
+
+    if (groupId) navigate(redirectUrl, { replace: true });
+    else {
+      if (groupList.length > 0)
+        navigate(`/group/${groupList[0].id}`, { replace: true });
+      const targetGroupId = await handleCreateGroup();
+      if (!targetGroupId) {
+        setIsDisabledAgreeBtn(false);
+        return;
+      }
+      navigate(`/group/${targetGroupId}`, { replace: true });
+    }
   };
 
   return (
@@ -92,7 +138,7 @@ const TermServicePage: React.FC = () => {
         <Button
           className="w-full h-11 bottom-0 left-0"
           variant="primary"
-          disabled={!isChecked}
+          disabled={!isChecked || isDisabledAgreeBtn}
           onClick={() => onClickAgreeStart()}
         >
           동의하고 시작해요
