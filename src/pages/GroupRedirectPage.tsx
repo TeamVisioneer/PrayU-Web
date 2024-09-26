@@ -13,7 +13,10 @@ const GroupRedirectPage: React.FC = () => {
   );
 
   useEffect(() => {
-    fetchGroupListByUserId(user!.id);
+    if (user) fetchGroupListByUserId(user.id);
+  }, [fetchGroupListByUserId, user]);
+
+  useEffect(() => {
     if (groupList) {
       if (groupList.length === 0) {
         navigate("/group/new", { replace: true });
