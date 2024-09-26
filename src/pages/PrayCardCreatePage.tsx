@@ -181,7 +181,7 @@ const PrayCardCreatePage: React.FC = () => {
             className="text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
             value={inputPrayCardContent}
             onChange={(e) => setPrayCardContent(e.target.value)}
-            placeholder={`기도카드를 작성해주세요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
+            placeholder={`기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
           />
         </div>
       </div>

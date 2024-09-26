@@ -88,7 +88,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       <div className="flex flex-col gap-1">
         <h3 className="flex font-bold text-lg">내 기도제목</h3>
         <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">
-          {inputPrayCardContent || "✏️ 기도카드를 작성해주세요"}
+          {inputPrayCardContent || "✏️ 기도카드를 작성해 보아요'"}
         </div>
       </div>
 
