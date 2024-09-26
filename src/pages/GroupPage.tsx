@@ -14,6 +14,7 @@ import MyMember from "@/components/member/MyMember";
 import OtherMemberList from "@/components/member/OtherMemberList";
 import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
+import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -27,6 +28,7 @@ const GroupPage: React.FC = () => {
   const getGroup = useBaseStore((state) => state.getGroup);
   const memberList = useBaseStore((state) => state.memberList);
   const getMember = useBaseStore((state) => state.getMember);
+  const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
   const fetchMemberListByGroupId = useBaseStore(
@@ -85,6 +87,12 @@ const GroupPage: React.FC = () => {
     userPlan,
   ]);
 
+  useEffect(() => {
+    if (targetGroup && targetGroup.user_id === currentUserId) {
+      setIsGroupLeader(true);
+    }
+  }, [targetGroup, currentUserId, setIsGroupLeader]);
+
   if (!targetGroup || !memberList || !groupList || !myMember) {
     return (
       <div className="flex flex-col h-full gap-4 pt-[48px]">
@@ -137,6 +145,7 @@ const GroupPage: React.FC = () => {
       <ShareDrawer />
       <ContentDrawer />
       <EventDialog />
+      <GroupSettingsDialog targetGroup={targetGroup} />
       <ReportAlert />
     </div>
   );
