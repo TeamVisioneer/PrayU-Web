@@ -85,7 +85,6 @@ export const updateGroup = async (
       Sentry.captureException(error.message);
       return null;
     }
-    console.log(data);
     return data ? data[0] : null;
   } catch (error) {
     Sentry.captureException(error);
