@@ -11,10 +11,17 @@ interface EventOption {
 
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles;
+  listLength: number;
+  listIndex: number;
   eventOption: EventOption;
 }
 
-const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
+const PrayCardUI: React.FC<PrayCardProps> = ({
+  prayCard,
+  listLength,
+  listIndex,
+  eventOption,
+}) => {
   const createdAt = prayCard.created_at;
   const createdDateYMD = getISODateYMD(createdAt);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
@@ -23,11 +30,9 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
       <div className="flex justify-between px-2">
         <div className="w-6"></div>
-        {!isPrayToday && (
-          <p className="text-sm text-gray-400">
-            반응을 누르면 다음 기도로 넘어가요
-          </p>
-        )}
+        <div className="text-sm text-gray-400">
+          {listLength}명 중 {listIndex + 1}번째 기도
+        </div>
         <OtherPrayCardMenuBtn
           targetUserId={prayCard.user_id || ""}
           prayContent={prayCard.content || ""}
@@ -63,6 +68,11 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
         </div>
       </div>
       <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />
+      <div className="text-gray-400 text-sm text-center">
+        <div className={isPrayToday ? "invisible" : ""}>
+          반응을 누르면 다음 기도로 넘어가요
+        </div>
+      </div>
     </div>
   );
 };
