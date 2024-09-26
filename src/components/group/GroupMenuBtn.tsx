@@ -162,9 +162,9 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
                   그룹 나가기
                 </a>
               </div>
+              <hr className="w-full" />
             </>
           )}
-          <hr className="w-full" />
           <div className="flex gap-2 items-center">
             <a
               href="/profile/me"

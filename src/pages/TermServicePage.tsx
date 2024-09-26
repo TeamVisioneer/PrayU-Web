@@ -37,9 +37,9 @@ const TermServicePage: React.FC = () => {
   useEffect(() => {
     if (user) fetchGroupListByUserId(user.id);
     if (user && !profile) getProfile(user.id);
-    // if (profile && profile.terms_agreed_at !== null) {
-    //   navigate(redirectUrl, { replace: true });
-    // }
+    if (profile && profile.terms_agreed_at !== null) {
+      navigate(redirectUrl, { replace: true });
+    }
   }, [
     user,
     profile,
@@ -51,19 +51,16 @@ const TermServicePage: React.FC = () => {
 
   if (!profile || !groupList) return null;
 
-  const handleCreateGroup = async (userId: string, groupName: string) => {
-    setIsDisabledAgreeBtn(true);
-    const targetGroup = await createGroup(userId, groupName, "intro");
-    if (!targetGroup) {
-      setIsDisabledAgreeBtn(false);
-      return;
-    }
-    const myMember = await createMember(targetGroup.id, userId, "");
-    if (!myMember) {
-      setIsDisabledAgreeBtn(false);
-      return;
-    }
-    await createPrayCard(targetGroup.id, userId, "");
+  const handleCreateGroup = async () => {
+    const groupName = profile.full_name
+      ? `${profile.full_name}의 그룹`
+      : "새 그룹";
+    const targetGroup = await createGroup(profile.id, groupName, "intro");
+    if (!targetGroup) return;
+    const myMember = await createMember(targetGroup.id, profile.id, "");
+    if (!myMember) return;
+
+    await createPrayCard(targetGroup.id, profile.id, "");
     return targetGroup.id;
   };
 
@@ -79,14 +76,15 @@ const TermServicePage: React.FC = () => {
     }
 
     if (groupId) navigate(redirectUrl, { replace: true });
-    else if (groupList.length > 0)
-      navigate(`/group/${groupList[0].id}`, { replace: true });
     else {
-      const groupName = profile.full_name
-        ? `${profile.full_name}의 그룹`
-        : "새 그룹";
-      const targetGroupId = await handleCreateGroup(profile.id, groupName);
-      if (targetGroupId) navigate(`/group/${targetGroupId}`, { replace: true });
+      if (groupList.length > 0)
+        navigate(`/group/${groupList[0].id}`, { replace: true });
+      const targetGroupId = await handleCreateGroup();
+      if (!targetGroupId) {
+        setIsDisabledAgreeBtn(false);
+        return;
+      }
+      navigate(`/group/${targetGroupId}`, { replace: true });
     }
   };
 
