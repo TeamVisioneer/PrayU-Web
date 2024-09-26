@@ -47,7 +47,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
     <div className="overflow-y-auto justify-center items-center">
       {isPrayerListEmpty ? (
         <div className="flex flex-col items-center gap-6 px-4">
-          <div className="h-[150px] flex flex-col items-center object-cover">
+          <div className="h-[150px] w-full flex flex-col items-center">
             <img
               className="h-full rounded-md shadow-prayCard"
               src="/images/prayList.png"
