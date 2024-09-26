@@ -66,6 +66,33 @@ export const createGroup = async (
   }
 };
 
+export interface updateGroupParams {
+  name?: string;
+  intro?: string;
+}
+
+export const updateGroup = async (
+  groupId: string,
+  params: updateGroupParams
+) => {
+  try {
+    const { error, data } = await supabase
+      .from("group")
+      .update(params)
+      .eq("id", groupId)
+      .select();
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    console.log(data);
+    return data ? data[0] : null;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const deleteGroup = async (groupId: string) => {
   try {
     const { error } = await supabase

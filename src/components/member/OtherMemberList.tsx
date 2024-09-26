@@ -48,10 +48,10 @@ const OtherMemberList: React.FC<OtherMembersProps> = ({
     (member) => member.updated_at < getISOTodayDate(-6)
   );
 
+  if (!myMember || isPrayToday == null) return null;
+  if ((!isPrayToday && !isExpiredAllMember) || otherMemberList.length == 0)
+    return <TodayPrayStartCard />;
 
-  if (!myMember) return null;
-  if (!isPrayToday && !isExpiredAllMember || otherMemberList.length == 0) return <TodayPrayStartCard />;
-    
   return (
     <>
       <div className="flex flex-col gap-2 pb-10">
