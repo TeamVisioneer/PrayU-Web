@@ -130,10 +130,12 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
-        {filterdGroupPrayCardList.map((prayCard) => (
+        {filterdGroupPrayCardList.map((prayCard, index) => (
           <CarouselItem key={prayCard.id} className="basis-5/6">
             <PrayCardUI
               prayCard={prayCard}
+              listLength={filterdGroupPrayCardList.length}
+              listIndex={index}
               eventOption={{ where: "PrayCardList" }}
             />
           </CarouselItem>
