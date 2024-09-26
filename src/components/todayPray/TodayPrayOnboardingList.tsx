@@ -8,6 +8,7 @@ import { PrayTypeDatas } from "@/Enums/prayType";
 import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const TodayPrayCardOnboardingList = () => {
   const setIsOpenOnboardingDrawer = useBaseStore(
@@ -52,6 +53,9 @@ const TodayPrayCardOnboardingList = () => {
         onClick={() => {
           setIsOpenOnboardingDrawer(false);
           setIsOpenLoginDrawer(true);
+          analyticsTrack("클릭_메인_시작하기", {
+            where: "TodayPrayCardOnboardingList",
+          });
         }}
       >
         PrayU 시작하기

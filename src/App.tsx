@@ -11,7 +11,7 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import MainPage from "./pages/MainPage";
 import GroupPage from "./pages/GroupPage";
 import GroupCreatePage from "./pages/GroupCreatePage";
-import { analytics } from "@/analytics/analytics";
+import { analyticsTrack } from "@/analytics/analytics";
 import ConfirmAlert from "./components/alert/ConfirmAlert";
 import { Toaster } from "./components/ui/toaster";
 import PrayCardCreatePage from "./pages/PrayCardCreatePage";
@@ -126,56 +126,56 @@ const AnalyticsTracker = () => {
   useEffect(() => {
     switch (location.pathname) {
       case "/":
-        analytics.track("페이지_메인", {
+        analyticsTrack("페이지_메인", {
           title: "Main Page",
           where: from,
         });
         break;
       case "/term":
-        analytics.track("페이지_약관", {
+        analyticsTrack("페이지_약관", {
           title: "Term Page",
           where: from,
         });
         break;
       case "/group/new":
-        analytics.track("페이지_그룹_생성", {
+        analyticsTrack("페이지_그룹_생성", {
           title: "Group Create Page",
           where: from,
         });
         break;
       case "/group/limit":
-        analytics.track("페이지_그룹_제한", {
+        analyticsTrack("페이지_그룹_제한", {
           title: "Group Limit Page",
           where: from,
         });
         break;
       case "/group/not-found":
-        analytics.track("페이지_그룹_404", {
+        analyticsTrack("페이지_그룹_404", {
           title: "Group 404 Page",
           where: from,
         });
         break;
       case "/profile/me":
-        analytics.track("페이지_프로필_나", {
+        analyticsTrack("페이지_프로필_나", {
           title: "PrayCard Create Page",
           where: from,
         });
         break;
       case "/login/email":
-        analytics.track("페이지_이메일_로그인", {
+        analyticsTrack("페이지_이메일_로그인", {
           title: "Email Login Page",
           where: from,
         });
         break;
       default:
         if (matchGroup) {
-          analytics.track("페이지_그룹_홈", {
+          analyticsTrack("페이지_그룹_홈", {
             title: "Group Home Page",
             groupId: matchGroup.params.groupId,
             where: from,
           });
         } else if (matchPraycardNew) {
-          analytics.track("페이지_기도카드_생성", {
+          analyticsTrack("페이지_기도카드_생성", {
             title: "PrayCard Create Page with Group ID",
             groupId: matchPraycardNew.params.groupId,
             where: from,

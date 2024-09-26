@@ -16,7 +16,7 @@ import useBaseStore from "@/stores/baseStore";
 import imgEventOpen from "@/assets/event_open.svg";
 // import imgUpdate from "@/assets/update_0906.svg";
 import { useEffect, useState } from "react";
-import { analytics } from "@/analytics/analytics";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const EventDialog = () => {
   const isOpenEventDialog = useBaseStore((state) => state.isOpenEventDialog);
@@ -49,7 +49,7 @@ const EventDialog = () => {
   );
 
   const onClickEventImg = (url: string, eventName: string) => {
-    analytics.track("클릭_공지_이벤트카드", { title: eventName });
+    analyticsTrack("클릭_공지_이벤트카드", { title: eventName });
     window.location.href = url;
   };
 

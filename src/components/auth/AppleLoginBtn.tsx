@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/react";
 import { supabase } from "../../../supabase/client";
 import appleIcon from "@/assets/appleIcon.svg";
-import { analytics } from "@/analytics/analytics";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface AppleLoginBtnProps {
   redirectUrl: string;
@@ -9,7 +9,7 @@ interface AppleLoginBtnProps {
 
 const AppleLoginBtn: React.FC<AppleLoginBtnProps> = ({ redirectUrl }) => {
   const handleAppleLoginBtnClick = async () => {
-    analytics.track("클릭_애플_로그인", { where: "AppleLoginBtn" });
+    analyticsTrack("클릭_애플_로그인", { where: "AppleLoginBtn" });
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "apple",
       options: {
