@@ -40,7 +40,7 @@ import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
-import { analytics } from "@/analytics/analytics";
+import { analyticsIdentify } from "@/analytics/analytics";
 import {
   fetchProfileList,
   updateProfile,
@@ -275,7 +275,7 @@ const useBaseStore = create<BaseStore>()(
             email: email,
             user_name: user_name,
           });
-          analytics.identify(session.user.id, {
+          analyticsIdentify(session.user.id, {
             WEB_VERSION: WEB_VERSION,
             email: email,
             full_name: full_name,

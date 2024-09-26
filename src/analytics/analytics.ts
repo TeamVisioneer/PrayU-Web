@@ -34,3 +34,7 @@ export function analyticsTrack(eventName: string, eventProperties: object) {
     });
   }
 }
+
+export function analyticsIdentify(userId: string, eventProperties: object) {
+  analytics.identify(userId, eventProperties);
+}
