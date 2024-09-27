@@ -97,7 +97,6 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   };
 
   const onClickSheetTrigeer = () => {
-    window.history.pushState(null, "", window.location.pathname);
     analyticsTrack("클릭_그룹_메뉴", {});
   };
 

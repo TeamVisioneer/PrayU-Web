@@ -49,7 +49,6 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   const groupId = myMember.group_id!;
 
   const onClickMyMemberReaction = (event: { stopPropagation: () => void }) => {
-    window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyPrayDrawer(true);
     event.stopPropagation();
 
@@ -125,7 +124,6 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   );
 
   const onClickMyMember = () => {
-    window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyMemberDrawer(true);
     analyticsTrack("클릭_멤버_본인", {
       group_id: groupId,
