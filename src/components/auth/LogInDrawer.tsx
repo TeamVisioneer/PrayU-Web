@@ -54,7 +54,9 @@ const LogInDrawer = () => {
       <div className="flex flex-col w-full justify-center gap-1 text-sm text-gray-400">
         <hr className="border-gray-300 mb-1" />
         <div className="flex gap-2">
-          <p>로그인/회원 관련 궁금하신 사항이 있다면?</p>
+          <p className="font-light">
+            로그인 / 회원 관련 궁금하신 사항이 있다면?
+          </p>
           <a
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
             className="text-blue-500 cursor-pointer"
