@@ -29,12 +29,16 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
   const setGroupName = useBaseStore((state) => state.setGroupName);
   const updateGroup = useBaseStore((state) => state.updateGroup);
   const memberList = useBaseStore((state) => state.memberList);
+  const getGroup = useBaseStore((state) => state.getGroup);
 
   const onClickSaveGroup = async () => {
     if (inputGroupName.trim() === "") return;
     analyticsTrack("클릭_그룹_이름변경", { group_name: GroupSettingsDialog });
     const group = await updateGroup(targetGroup.id, { name: inputGroupName });
-    if (group) window.location.reload();
+    if (group) {
+      getGroup(targetGroup.id);
+      setIsOpenGroupSettingsDialog(false);
+    }
   };
 
   useEffect(() => {

@@ -17,7 +17,6 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
-    window.history.pushState(null, "", window.location.pathname);
     setIsOpenTodayPrayDrawer(true);
     analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
 

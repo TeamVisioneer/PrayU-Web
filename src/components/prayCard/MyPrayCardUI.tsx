@@ -48,7 +48,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
   );
 
   const onClickPrayerList = () => {
-    window.history.pushState(null, "", window.location.pathname);
     setIsOpenMyPrayDrawer(true);
     analyticsTrack("클릭_기도카드_반응결과", { where: "MyPrayCard" });
   };

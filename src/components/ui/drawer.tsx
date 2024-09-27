@@ -9,13 +9,15 @@ const Drawer = ({
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
   // Drawer Custom Start
-  const { onOpenChange } = props;
+  const { onOpenChange, open } = props;
+
+  useEffect(() => {
+    if (open) window.history.pushState(null, "", window.location.pathname);
+  }, [open]);
 
   useEffect(() => {
     const handlePopState = () => {
-      if (onOpenChange) {
-        onOpenChange(false);
-      }
+      if (onOpenChange) onOpenChange(false);
     };
     window.addEventListener("popstate", handlePopState);
     return () => {
@@ -33,7 +35,6 @@ const Drawer = ({
 };
 
 const DrawerTrigger = DrawerPrimitive.Trigger;
-
 const DrawerPortal = DrawerPrimitive.Portal;
 
 const DrawerClose = DrawerPrimitive.Close;
