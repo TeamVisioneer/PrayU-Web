@@ -12,7 +12,7 @@ const EmailLoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/group");
+      navigate("/term");
     }
   }, [user, navigate]);
 
