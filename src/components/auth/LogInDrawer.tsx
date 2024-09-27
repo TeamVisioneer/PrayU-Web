@@ -37,12 +37,10 @@ const LogInDrawer = () => {
   const LoginContent = (
     <div className="flex flex-col gap-6 px-10">
       <div className="flex flex-col gap-1">
-        <div className="text-lg font-bold">PrayU 로그인</div>
-        {
-          <p className="flex flex-col justify-center text-gray-700">
-            기도제목을 올리고, 서로 함께 반응하며 기도해요
-          </p>
-        }
+        <div className="text-xl font-bold">로그인 / 회원가입</div>
+        <p className="flex flex-col justify-center font-thin">
+          기도제목을 올리고, 서로 함께 반응하며 기도해요
+        </p>
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
         <KakaoLoginBtn redirectUrl={redirectUrl} />
@@ -56,7 +54,9 @@ const LogInDrawer = () => {
       <div className="flex flex-col w-full justify-center gap-1 text-sm text-gray-400">
         <hr className="border-gray-300 mb-1" />
         <div className="flex gap-2">
-          <p>로그인/회원 관련 궁금하신 사항이 있다면?</p>
+          <p className="font-light">
+            로그인 / 회원 관련 궁금하신 사항이 있다면?
+          </p>
           <a
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
             className="text-blue-500 cursor-pointer"
