@@ -18,7 +18,7 @@ const ContentDrawer = () => {
     (state) => state.setIsOpenContentDrawer
   );
   const today = getISOTodayDateYMD();
-  const contentNumber = parseInt(today.day, 10) % 10;
+  const contentNumber = parseInt(today.day, 10) % 31;
 
   const DrawerBody = (
     <div className="flex flex-col items-center gap-6 pb-10">
