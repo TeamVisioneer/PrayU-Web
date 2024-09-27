@@ -15,7 +15,7 @@ interface KakaoShareButtonProps {
 
 const getContent = (groupName: string, type: string) => {
   const today = getISOTodayDateYMD();
-  const contentNumber = parseInt(today.day, 10) % 10;
+  const contentNumber = parseInt(today.day, 10) % 31;
   switch (type) {
     case "bible":
       return {
