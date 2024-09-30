@@ -23,19 +23,16 @@ const LoginRedirect = () => {
   const from = params.get("from");
   const groupPageUrl = groupId ? `/group/${groupId}` : "/group";
 
-  console.log(user);
-
   useEffect(() => {
     getProfile(currentUserId);
-  }, [currentUserId, getProfile]);
+    if (from == "MyPrayCard") setIsOpenMyMemberDrawer(true);
+  }, [currentUserId, getProfile, from, setIsOpenMyMemberDrawer]);
 
   useEffect(() => {
     if (!myProfile) return;
     if (!myProfile.kakao_id && provider == "kakao") {
       updateProfile(currentUserId, { kakao_id: kakaoId });
     }
-
-    if (from == "MyPrayCard") setIsOpenMyMemberDrawer(true);
 
     if (!myProfile.terms_agreed_at)
       navigate(`/term?groupId=${groupId}`, { replace: true });
@@ -47,9 +44,7 @@ const LoginRedirect = () => {
     provider,
     updateProfile,
     navigate,
-    from,
     groupId,
-    setIsOpenMyMemberDrawer,
     groupPageUrl,
   ]);
 
