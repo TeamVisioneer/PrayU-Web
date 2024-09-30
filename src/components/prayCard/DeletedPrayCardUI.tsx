@@ -1,4 +1,3 @@
-import { Textarea } from "../ui/textarea";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
 import useBaseStore from "@/stores/baseStore";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
@@ -36,11 +35,9 @@ const ExpiredPrayCardUI: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-          <Textarea
-            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
-            value={""}
-            disabled={true}
-          />
+          <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
+            {""}
+          </p>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center p-4 gap-4">
