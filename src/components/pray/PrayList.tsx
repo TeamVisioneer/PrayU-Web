@@ -41,8 +41,6 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
     });
   };
 
-  const kakaoLinkObject = TodayPrayLink();
-
   return (
     <div className="overflow-y-auto justify-center items-center">
       {isPrayerListEmpty ? (
@@ -59,7 +57,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
           </div>
           <KakaoShareButton
             buttonText="카카오톡 링크 공유"
-            kakaoLinkObject={kakaoLinkObject}
+            kakaoLinkObject={TodayPrayLink()}
             eventOption={{ where: "PrayList" }}
           />
         </div>

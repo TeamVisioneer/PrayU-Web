@@ -40,7 +40,7 @@ export const BibleCardLink = () => {
   return {
     objectType: "feed",
     content: {
-      title: `${today.year}.${today.month}.${today.day} PrayU 오늘의 말씀카드`,
+      title: `${today.year}.${today.month}.${today.day} 오늘의 말씀`,
       description: "PrayU 에서 오늘의 말씀과 함께 기도해요!",
       imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`,
       link: {
@@ -65,7 +65,7 @@ export const GroupInviteLink = (groupName: string) => {
     objectType: "feed",
     content: {
       title: "PrayU 그룹 초대 알림",
-      description: `${groupName} 그룹에 초대 되었어요!\nPrayU 와 함께 기도생활을 시작해보아요`,
+      description: `${groupName} 그룹에 초대 되었어요!\nPrayU 에서 매일의 기도를 시작해 보아요`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/intro_800_500.png",
       imageWidth: 800,
@@ -92,7 +92,7 @@ export const TodayPrayLink = () => {
     objectType: "feed",
     content: {
       title: "PrayU 오늘의 기도 알림",
-      description: `아직 오늘의 기도를 진행하지 않으셨나요?\n기도를 완료하고 내게 기도해준 친구를 확인해보아요!`,
+      description: `오늘의 기도를 기다리는 기도제목이 있어요!`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/notification.png",
       imageWidth: 400,
@@ -119,7 +119,7 @@ export const ExpiredMemberLink = () => {
     objectType: "feed",
     content: {
       title: "PrayU 기도카드 작성 알림",
-      description: `일주일이 지나 새로운 기도카드가 필요해요\n기도카드를 올리고 이번 주 기도를 받아 보아요!`,
+      description: `일주일이 지나 새로운 기도카드가 필요해요 😭`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/expired.png",
       imageWidth: 400,
