@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import ReactionWithCalendar from "./ReactionWithCalendar";
-import { Textarea } from "../ui/textarea";
 import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import DeletedPrayCardUI from "./DeletedPrayCardUI";
@@ -78,11 +77,9 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-          <Textarea
-            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
-            value={prayCard.content || ""}
-            disabled={true}
-          />
+          <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
+            {prayCard.content || ""}
+          </p>
         </div>
       </div>
       <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />

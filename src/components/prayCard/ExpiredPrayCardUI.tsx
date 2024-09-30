@@ -1,4 +1,3 @@
-import { Textarea } from "../ui/textarea";
 import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import { KakaoShareButton } from "../share/KakaoShareBtn";
@@ -50,11 +49,9 @@ const ExpiredPrayCardUI: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-          <Textarea
-            className="flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-black !opacity-100 !border-none !cursor-default"
-            value={otherMember.pray_summary || ""}
-            disabled={true}
-          />
+          <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
+            {otherMember.pray_summary || ""}
+          </p>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center p-4 gap-4">

@@ -21,7 +21,7 @@ jobs:
     if: |
       github.event.action == 'published' || 
       github.event_name == 'push' && startsWith(github.ref, 'refs/heads/v')||
-      github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'hotfix')
+      github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'hotfix')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
