@@ -24,6 +24,7 @@ import GroupLimitPage from "./pages/GropuLimitPage";
 import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
+import LoginRedirect from "./components/auth/LoginRedirect";
 
 const App = () => {
   useEffect(() => {
@@ -46,6 +47,14 @@ const App = () => {
               import.meta.env.VITE_ENV === "prod") && <AnalyticsTracker />}
             <Routes>
               <Route path="/" element={<MainPage />} />
+              <Route
+                path="/auth/redirect"
+                element={
+                  <PrivateRoute>
+                    <LoginRedirect />
+                  </PrivateRoute>
+                }
+              />
               <Route
                 path="/auth/kakao/callback"
                 element={

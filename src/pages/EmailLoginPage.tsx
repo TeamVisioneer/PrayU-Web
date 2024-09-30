@@ -12,7 +12,7 @@ const EmailLoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/term");
+      navigate("/auth/redirect");
     }
   }, [user, navigate]);
 
