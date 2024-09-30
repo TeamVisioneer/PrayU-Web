@@ -92,7 +92,7 @@ export const TodayPrayLink = () => {
     objectType: "feed",
     content: {
       title: "PrayU 오늘의 기도 알림",
-      description: `기도를 기다리는 기도제목들이 있어요`,
+      description: `기도를 기다리는 기도제목들이 있어요!`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/notification.png",
       imageWidth: 400,
