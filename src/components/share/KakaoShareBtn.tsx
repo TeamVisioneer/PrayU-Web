@@ -68,6 +68,8 @@ export const GroupInviteLink = (groupName: string) => {
       description: `${groupName} 그룹에 초대 되었어요!\nPrayU 와 함께 기도생활을 시작해보아요`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/intro_800_500.png",
+      imageWidth: 800,
+      imageHeight: 500,
       link: {
         webUrl: window.location.href,
         mobileWebUrl: window.location.href,
@@ -93,6 +95,8 @@ export const TodayPrayLink = () => {
       description: `아직 오늘의 기도를 진행하지 않으셨나요?\n기도를 완료하고 내게 기도해준 친구를 확인해보아요!`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/notification.png",
+      imageWidth: 400,
+      imageHeight: 240,
       link: {
         webUrl: window.location.href,
         mobileWebUrl: window.location.href,
@@ -118,6 +122,8 @@ export const ExpiredMemberLink = () => {
       description: `일주일이 지나 새로운 기도카드가 필요해요\n기도카드를 올리고 이번 주 기도를 받아 보아요!`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/expired.png",
+      imageWidth: 400,
+      imageHeight: 240,
       link: {
         webUrl: window.location.href,
         mobileWebUrl: window.location.href,
