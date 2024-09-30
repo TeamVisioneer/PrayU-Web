@@ -48,7 +48,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route
-                path="/auth/redirect"
+                path="/login-redirect"
                 element={
                   <PrivateRoute>
                     <LoginRedirect />

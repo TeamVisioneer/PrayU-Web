@@ -24,7 +24,7 @@ const LogInDrawer = () => {
   const pathParts = pathname.split("/");
   const groupId =
     pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
-  const redirectUrl = `${baseUrl}/auth/redirect?groupId=${groupId}&from=LogInDrawer`;
+  const redirectUrl = `${baseUrl}/login-redirect?groupId=${groupId}&from=LogInDrawer`;
 
   const [isIOSApp, setIsIOSApp] = useState(false);
 
