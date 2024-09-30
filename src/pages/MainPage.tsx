@@ -14,10 +14,9 @@ const MainPage: React.FC = () => {
   const fetchTotalPrayCount = useBaseStore(
     (state) => state.fetchTotalPrayCount
   );
-  const setIsOpenOnboardingDrawer = useBaseStore(
-    (state) => state.setIsOpenOnboardingDrawer
+  const setIsOpenLoginDrawer = useBaseStore(
+    (state) => state.setIsOpenLoginDrawer
   );
-
   useEffect(() => {
     fetchTotalPrayCount();
   }, [fetchTotalPrayCount]);
@@ -29,25 +28,11 @@ const MainPage: React.FC = () => {
         className="w-52"
         onClick={() => {
           analyticsTrack("클릭_메인_시작하기", { where: "PrayUStartBtn" });
-          window.location.href = "/group";
+          if (user) window.location.href = "/group";
+          else setIsOpenLoginDrawer(true);
         }}
       >
         PrayU 시작하기
-      </Button>
-    );
-  };
-
-  const PrayUOnboardingBtn = () => {
-    return (
-      <Button
-        variant="primary"
-        className="w-52"
-        onClick={() => {
-          analyticsTrack("클릭_메인_첫시작", { where: "PrayUOnboardingBtn" });
-          setIsOpenOnboardingDrawer(true);
-        }}
-      >
-        PrayU 알아보기
       </Button>
     );
   };
@@ -79,7 +64,7 @@ const MainPage: React.FC = () => {
             </p>
             <p>PrayU 를 통해 전달되었어요</p>
           </div>
-          {user ? <PrayUStartBtn /> : <PrayUOnboardingBtn />}
+          <PrayUStartBtn />
         </div>
       </section>
 
