@@ -23,6 +23,7 @@ import GroupRedirectPage from "./pages/GroupRedirectPage";
 import GroupLimitPage from "./pages/GropuLimitPage";
 import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
+import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 
 const App = () => {
   useEffect(() => {
@@ -52,6 +53,10 @@ const App = () => {
                     <KakaoCallBack />
                   </PrivateRoute>
                 }
+              />
+              <Route
+                path="/share/kakao/callback"
+                element={<KakaoShareCallBack />}
               />
               <Route
                 path="/term"
