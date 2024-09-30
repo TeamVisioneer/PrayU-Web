@@ -1,11 +1,10 @@
 import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
-import { KakaoShareButton } from "../share/KakaoShareBtn";
+import { ExpiredMemberLink, KakaoShareButton } from "../share/KakaoShareBtn";
 import useBaseStore from "@/stores/baseStore";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 
 const ExpiredPrayCardUI: React.FC = () => {
-  const targetGroup = useBaseStore((state) => state.targetGroup);
   const otherMember = useBaseStore((state) => state.otherMember);
 
   if (!otherMember) return null;
@@ -67,8 +66,8 @@ const ExpiredPrayCardUI: React.FC = () => {
         </div>
 
         <KakaoShareButton
-          targetGroup={targetGroup}
-          message="카카오톡으로 요청하기"
+          buttonText="카카오톡으로 요청하기"
+          kakaoLinkObject={ExpiredMemberLink()}
           eventOption={{ where: "ReactionWithCalendar" }}
         ></KakaoShareButton>
       </div>

@@ -12,7 +12,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
-import { KakaoShareButton } from "./KakaoShareBtn";
+import { GroupInviteLink, KakaoShareButton } from "./KakaoShareBtn";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -125,8 +125,8 @@ const ShareDrawer: React.FC = () => {
       {ImageCerousel}
       <div className="flex flex-col gap-2">
         <KakaoShareButton
-          targetGroup={targetGroup}
-          message="카카오톡으로 초대하기"
+          buttonText="카카오톡으로 초대하기"
+          kakaoLinkObject={GroupInviteLink(targetGroup?.name || "")}
           eventOption={{ where: "GroupPage" }}
         />
         <Button
