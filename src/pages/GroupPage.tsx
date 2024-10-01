@@ -138,10 +138,7 @@ const GroupPage: React.FC = () => {
         />
       </div>
 
-      <TodayPrayCardListDrawer
-        currentUserId={user!.id}
-        groupId={targetGroup.id}
-      />
+      <TodayPrayCardListDrawer />
       <ShareDrawer />
       <ContentDrawer />
       <EventDialog />

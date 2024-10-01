@@ -1,7 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
+import { getISOTodayDate } from "@/lib/utils";
 
 interface EventOption {
   where: string;
@@ -15,24 +15,24 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     (state) => state.setIsOpenTodayPrayDrawer
   );
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const fetchGroupPrayCardList = useBaseStore(
+    (state) => state.fetchGroupPrayCardList
+  );
+  const user = useBaseStore((state) => state.user);
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
     setIsOpenTodayPrayDrawer(true);
     analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
 
-    // TODO: 카카오 메세지 재기획 이후 진행
-    const kakaoMessageEnabled = false;
-    if (!kakaoMessageEnabled) return null;
-    const kakaoToken = await KakaoTokenRepo.init(
-      `groupId:${targetGroupId};from:TodayPrayDrawer`
-    );
-    if (!kakaoToken) return null;
+    const startDt = getISOTodayDate(-6);
+    const endDt = getISOTodayDate(1);
+    fetchGroupPrayCardList(targetGroupId, user!.id, startDt, endDt);
   };
 
   return (
     <Button
       variant="primary"
-      className="w-[166px] h-[48px] text-md font-bold rounded-[10px]"
+      className="w-[260px] h-[52px] text-md font-bold rounded-[10px]"
       onClick={() => onClickTodayPrayBtn(targetGroup!.id)}
     >
       기도 시작하기
