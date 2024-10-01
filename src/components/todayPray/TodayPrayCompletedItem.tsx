@@ -10,6 +10,12 @@ const TodayPrayCompletedItem = () => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
+  const prayCardCarouselIndex = useBaseStore(
+    (state) => state.prayCardCarouselIndex
+  );
+  const prayCardCarouselApi = useBaseStore(
+    (state) => state.prayCardCarouselApi
+  );
 
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [showImage, setShowImage] = useState(false);
@@ -17,26 +23,26 @@ const TodayPrayCompletedItem = () => {
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    if (isImageLoaded) {
+    if (
+      isImageLoaded &&
+      prayCardCarouselIndex === prayCardCarouselApi!.scrollSnapList().length - 2
+    ) {
       const imageTimeout = setTimeout(() => {
         setShowImage(true);
-      }, 1000);
-
+      }, 500);
       const textTimeout = setTimeout(() => {
         setShowTitleText(true);
-      }, 1500);
-
+      }, 1000);
       const buttonTimeout = setTimeout(() => {
         setShowButton(true);
-      }, 2000);
-
+      }, 1500);
       return () => {
         clearTimeout(imageTimeout);
         clearTimeout(textTimeout);
         clearTimeout(buttonTimeout);
       };
     }
-  }, [isImageLoaded]);
+  }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi]);
 
   return (
     <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
@@ -54,7 +60,7 @@ const TodayPrayCompletedItem = () => {
           showTitleText ? "opacity-100" : "opacity-0"
         }`}
       >
-        <h1 className="text-2xl">
+        <h1 className="text-xl">
           {today.year}.{today.month}.{today.day} 오늘의 말씀
         </h1>
         <p className="font-light">그룹원들에게 오늘의 말씀을 공유해 주세요</p>

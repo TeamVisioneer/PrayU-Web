@@ -16,6 +16,9 @@ const TodayPrayCardList = () => {
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
+  const setPrayCardCarouselIndex = useBaseStore(
+    (state) => state.setPrayCardCarouselIndex
+  );
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const user = useBaseStore((state) => state.user);
   const myMember = useBaseStore((state) => state.myMember);
@@ -23,13 +26,14 @@ const TodayPrayCardList = () => {
   useEffect(() => {
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
+      setPrayCardCarouselIndex(currentIndex);
       const carouselLength = prayCardCarouselApi.scrollSnapList().length;
       if (currentIndex === 0) prayCardCarouselApi.scrollNext();
       if (currentIndex === carouselLength - 1) {
         prayCardCarouselApi.scrollPrev();
       }
     });
-  }, [prayCardCarouselApi]);
+  }, [prayCardCarouselApi, setPrayCardCarouselIndex]);
 
   if (!myMember || !groupPrayCardList) return null;
 
