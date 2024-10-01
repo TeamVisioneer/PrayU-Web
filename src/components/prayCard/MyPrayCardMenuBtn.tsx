@@ -66,7 +66,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
     else {
       setAlertData({
         color: "bg-mainBtn",
-        title: "메세지 전송 동의",
+        title: "카카오톡 전송 동의",
         description: `그룹원들과 카카오톡으로 기도요청 메세지를 보내요!`,
         actionText: "계속하기",
         cancelText: "취소",
