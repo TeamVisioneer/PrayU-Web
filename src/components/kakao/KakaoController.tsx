@@ -2,14 +2,24 @@ import * as Sentry from "@sentry/react";
 import {
   KakaoFriendsResponse,
   KakaoMessageObject,
+  KakaoScopeResponse,
   KakaoSendMessageResponse,
 } from "./Kakao";
-import { KakaoTokenRepo } from "./KakaoTokenRepo";
 
-// 본 컨트롤러 사용처에서 로그인 페이지로 이동 할 수 있다는 것 인지
 export class KakaoController {
-  constructor() {
-    KakaoTokenRepo.init();
+  static async checkKakaoScope(): Promise<boolean> {
+    try {
+      const response: KakaoScopeResponse = await window.Kakao.API.request({
+        url: "/v2/user/scopes",
+        data: { scopes: ["friends", "talk_message"] },
+      });
+      const hasDisagreedScope = response.scopes.some((scope) => !scope.agreed);
+      if (hasDisagreedScope) return false;
+      else return true;
+    } catch (error) {
+      Sentry.captureException(error);
+      return false;
+    }
   }
 
   static async getMyProfiles() {

@@ -62,17 +62,17 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   };
 
   const onClickPrayRequest = async () => {
-    if (myMember.profiles.kakao_id) {
-      await sendPrayRequestMessage();
-    } else {
+    const hasKakaoScope = await KakaoController.checkKakaoScope();
+    if (hasKakaoScope) await sendPrayRequestMessage();
+    else {
       setAlertData({
         color: "bg-mainBtn",
         title: "메세지 전송 동의",
-        description: `메세지 전송을 동의한 그룹원들과\n카카오톡 기도요청 메세지를 보낼 수 있어요!`,
+        description: `그룹원들과 카카오톡 기도요청 메세지를 보내보아요!`,
         actionText: "계속하기",
         cancelText: "취소",
         onAction: async () => {
-          await sendPrayRequestMessage();
+          await KakaoTokenRepo.openKakaoLoginPage(targetGroup.id, "MyPrayCard");
         },
       });
       setIsConfirmAlertOpen(true);
@@ -81,13 +81,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   };
 
   const sendPrayRequestMessage = async () => {
-    const kakaoToken = await KakaoTokenRepo.init(
-      `groupId:${targetGroup.id};from:MyPrayCard`
-    );
-    if (!kakaoToken) return null;
-    const message = PrayRequestMessage(myMember.profiles.full_name);
-    const selectFriendsResponse: SelectedUsers | null =
-      await KakaoController.selectUsers();
+    const selectFriendsResponse = await KakaoController.selectUsers();
     if (selectFriendsResponse?.users) {
       const myUUID = selectFriendsResponse.users.find(
         (user) => user.id == myMember.profiles.kakao_id
@@ -96,10 +90,11 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
         .filter((user) => user.uuid != myUUID)
         .map((user) => user.uuid);
 
-      const myMessageResponse: KakaoSendMessageResponse | null = myUUID
+      const message = PrayRequestMessage(myMember.profiles.full_name);
+      const myMessageResponse = myUUID
         ? await KakaoController.sendMessageForMe(message)
         : null;
-      const friendsMessageResponse: KakaoSendMessageResponse | null =
+      const friendsMessageResponse =
         await KakaoController.sendMessageForFriends(message, friendsUUID);
 
       if (myMessageResponse || friendsMessageResponse) {

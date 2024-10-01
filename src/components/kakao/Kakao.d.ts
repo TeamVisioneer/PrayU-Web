@@ -81,6 +81,20 @@ interface KakaoSendMessageResponse extends KakaoAPIResponse {
   successful_receiver_uuids: string[];
 }
 
+interface KakaoScopeResponse extends KakaoAPIResponse {
+  id: number;
+  scopes: Scope[];
+}
+
+interface Scope {
+  id: string;
+  display_name: string;
+  type: "PRIVACY" | "SERVICE";
+  using: boolean;
+  agreed: boolean;
+  revocable?: boolean;
+}
+
 interface Friend {
   id: number;
   uuid: string;
