@@ -15,7 +15,6 @@ import { toast } from "../ui/use-toast";
 import { deletePrayCard } from "@/apis/prayCard";
 import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 import { KakaoController } from "../kakao/KakaoController";
-import { KakaoSendMessageResponse, SelectedUsers } from "../kakao/Kakao";
 import { MdMailOutline } from "react-icons/md";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { PrayRequestMessage } from "../kakao/KakaoMessage";
