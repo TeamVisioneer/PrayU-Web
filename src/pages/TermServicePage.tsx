@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IoIosArrowForward } from "react-icons/io";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOToday, getISOTodayDate } from "@/lib/utils";
+import { getISOToday } from "@/lib/utils";
 
 const TermServicePage: React.FC = () => {
   const getProfile = useBaseStore((state) => state.getProfile);
