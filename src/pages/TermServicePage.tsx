@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IoIosArrowForward } from "react-icons/io";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISOToday, getISOTodayDate } from "@/lib/utils";
 
 const TermServicePage: React.FC = () => {
   const getProfile = useBaseStore((state) => state.getProfile);
@@ -57,7 +57,7 @@ const TermServicePage: React.FC = () => {
     setIsDisabledAgreeBtn(true);
     analyticsTrack("클릭_동의_완료", {});
     const updatedProfile = await updateProfile(profile.id, {
-      terms_agreed_at: getISOTodayDate(),
+      terms_agreed_at: getISOToday(),
     });
     if (!updatedProfile) {
       setIsDisabledAgreeBtn(false);
