@@ -1,22 +1,79 @@
 import { getISOTodayDateYMD } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { BibleCardLink, KakaoShareButton } from "../share/KakaoShareBtn";
+import useBaseStore from "@/stores/baseStore";
 
 const TodayPrayCompletedItem = () => {
   const today = getISOTodayDateYMD();
   const contentNumber = parseInt(today.day, 10) % 31;
+  const setIsOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenTodayPrayDrawer
+  );
+
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+  const [showTitleText, setShowTitleText] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    if (isImageLoaded) {
+      const imageTimeout = setTimeout(() => {
+        setShowImage(true);
+      }, 1000);
+
+      const textTimeout = setTimeout(() => {
+        setShowTitleText(true);
+      }, 1500);
+
+      const buttonTimeout = setTimeout(() => {
+        setShowButton(true);
+      }, 2000);
+
+      return () => {
+        clearTimeout(imageTimeout);
+        clearTimeout(textTimeout);
+        clearTimeout(buttonTimeout);
+      };
+    }
+  }, [isImageLoaded]);
+
   return (
-    <div className="flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
+    <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
       <div className="h-[280px] w-full flex flex-col items-center">
         <img
-          className="h-full rounded-md"
+          className={`h-full rounded-2xl transition-opacity duration-1000 ease-in ${
+            showImage ? "opacity-100" : "opacity-0"
+          }`}
           src={`https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`}
+          onLoad={() => setIsImageLoaded(true)}
         />
       </div>
-      <h1 className="font-bold text-xl">오늘의 기도 완료!</h1>
-      <h3 className="text-gray-600">내일도 기도해 주실 거죠? 🤗</h3>
-      <div className="text-gray-400 text-center">
-        <h1>당신을 위해 기도한</h1>
-        <h1>친구들을 확인해 보아요</h1>
+      <div
+        className={`flex flex-col justify-center items-center gap-1 transition-opacity duration-1000 ease-in-out  ${
+          showTitleText ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <h1 className="text-2xl">
+          {today.year}.{today.month}.{today.day} 오늘의 말씀
+        </h1>
+        <p className="font-light">그룹원들에게 오늘의 말씀을 공유해 주세요</p>
       </div>
+      <KakaoShareButton
+        className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+          showButton ? "opacity-100" : "opacity-0"
+        }`}
+        buttonText="말씀카드 공유하기"
+        kakaoLinkObject={BibleCardLink()}
+        eventOption={{ where: "TodayPrayCompletedItem" }}
+      />
+      <button
+        className="absolute bottom-10 flex gap-1 items-center text-gray-400"
+        onClick={() => setIsOpenTodayPrayDrawer(false)}
+      >
+        <IoClose />
+        닫기
+      </button>
     </div>
   );
 };

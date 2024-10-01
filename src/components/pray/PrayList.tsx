@@ -53,10 +53,11 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
           </div>
           <div className="flex flex-col text-gray-400 text-sm text-center">
             <p>아직 기도해 준 친구가 없어요 😭</p>
-            <p>그룹 채팅방에 오늘의 기도 링크를 공유해 보아요</p>
+            <p>그룹 채팅방에 오늘의 기도 링크를 보내주세요</p>
           </div>
           <KakaoShareButton
-            buttonText="카카오톡 링크 공유"
+            className="w-48"
+            buttonText="오늘의 기도 링크 공유"
             kakaoLinkObject={TodayPrayLink()}
             eventOption={{ where: "PrayList" }}
           />

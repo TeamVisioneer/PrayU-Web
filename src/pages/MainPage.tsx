@@ -1,7 +1,6 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import TodayPrayOnboardingDrawer from "@/components/todayPray/TodayPrayOnboardingDrawer";
 import LogInDrawer from "@/components/auth/LogInDrawer";
 import MainHeader from "./MainPage/MainHeader";
 import { useEffect } from "react";
@@ -68,7 +67,6 @@ const MainPage: React.FC = () => {
         </div>
       </section>
 
-      <TodayPrayOnboardingDrawer />
       <LogInDrawer />
     </div>
   );
