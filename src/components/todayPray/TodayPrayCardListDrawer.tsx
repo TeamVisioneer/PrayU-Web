@@ -7,7 +7,7 @@ import useBaseStore from "@/stores/baseStore";
 import PrayCardUI from "./TodayPrayCardUI";
 import { useEffect } from "react";
 import { getISOTodayDate } from "@/lib/utils";
-import { KakaoShareButton } from "../share/KakaoShareBtn";
+import { KakaoShareButton, TodayPrayLink } from "../share/KakaoShareBtn";
 import MyMemberBtn from "../member/MyMemberBtn";
 import { PrayTypeDatas } from "@/Enums/prayType";
 import OpenContentDrawerBtn from "../share/OpenContentDrawerBtn";
@@ -31,7 +31,6 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
 }) => {
   const myMember = useBaseStore((state) => state.myMember);
   const memberList = useBaseStore((state) => state.memberList);
-  const targetGroup = useBaseStore((state) => state.targetGroup);
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
@@ -101,8 +100,8 @@ const TodayPrayCardListDrawer: React.FC<PrayCardListProps> = ({
         </p>
       </div>
       <KakaoShareButton
-        targetGroup={targetGroup}
-        message="카카오톡으로 초대하기"
+        buttonText="카카오톡으로 초대하기"
+        kakaoLinkObject={TodayPrayLink()}
         eventOption={{ where: "PrayCardList" }}
       ></KakaoShareButton>
     </div>

@@ -6,11 +6,10 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
-import { KakaoShareButton } from "./KakaoShareBtn";
+import { BibleCardLink, KakaoShareButton } from "./KakaoShareBtn";
 import { getISOTodayDateYMD } from "@/lib/utils";
 
 const ContentDrawer = () => {
-  const targetGroup = useBaseStore((state) => state.targetGroup);
   const isOpenContentDrawer = useBaseStore(
     (state) => state.isOpenContentDrawer
   );
@@ -36,10 +35,9 @@ const ContentDrawer = () => {
         />
       </div>
       <KakaoShareButton
-        targetGroup={targetGroup}
-        message="카카오톡으로 공유하기"
+        buttonText="카카오톡으로 공유하기"
+        kakaoLinkObject={BibleCardLink()}
         eventOption={{ where: "ContentDrawer" }}
-        type="bible"
       />
     </div>
   );
