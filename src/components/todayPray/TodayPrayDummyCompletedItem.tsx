@@ -24,8 +24,8 @@ const TodayPrayDummyCompletedItem = () => {
 
   useEffect(() => {
     if (
-      prayCardCarouselIndex !==
-      prayCardCarouselApi!.scrollSnapList().length - 2
+      prayCardCarouselApi &&
+      prayCardCarouselIndex !== prayCardCarouselApi!.scrollSnapList().length - 2
     ) {
       setShowImage(false);
       setShowTitleText(false);

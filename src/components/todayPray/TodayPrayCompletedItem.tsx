@@ -24,8 +24,8 @@ const TodayPrayCompletedItem = () => {
 
   useEffect(() => {
     if (
-      prayCardCarouselIndex !==
-      prayCardCarouselApi!.scrollSnapList().length - 2
+      prayCardCarouselApi &&
+      prayCardCarouselIndex !== prayCardCarouselApi!.scrollSnapList().length - 2
     ) {
       setShowImage(false);
       setShowTitleText(false);
@@ -63,7 +63,7 @@ const TodayPrayCompletedItem = () => {
         />
       </div>
       <div
-        className={`flex flex-col justify-center items-center gap-1 transition-opacity duration-1000 ease-in-out  ${
+        className={`flex flex-col justify-center items-center gap-1 transition-opacity duration-1000 ease-in-out ${
           showTitleText ? "opacity-100" : "opacity-0"
         }`}
       >
