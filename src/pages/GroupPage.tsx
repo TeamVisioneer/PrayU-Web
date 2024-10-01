@@ -5,7 +5,6 @@ import useBaseStore from "@/stores/baseStore";
 import GroupMenuBtn from "../components/group/GroupMenuBtn";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
-import ContentDrawer from "@/components/share/ContentDrawer";
 import EventDialog from "@/components/notice/EventDialog";
 import ReportAlert from "@/components/alert/ReportAlert";
 import { useNavigate } from "react-router-dom";
@@ -140,7 +139,6 @@ const GroupPage: React.FC = () => {
 
       <TodayPrayCardListDrawer />
       <ShareDrawer />
-      <ContentDrawer />
       <EventDialog />
       <GroupSettingsDialog targetGroup={targetGroup} />
       <ReportAlert />

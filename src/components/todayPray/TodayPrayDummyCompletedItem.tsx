@@ -1,10 +1,10 @@
 import { getISOTodayDateYMD } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { BibleCardLink, KakaoShareButton } from "../share/KakaoShareBtn";
 import useBaseStore from "@/stores/baseStore";
+import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
-const TodayPrayCompletedItem = () => {
+const TodayPrayDummyCompletedItem = () => {
   const today = getISOTodayDateYMD();
   const contentNumber = parseInt(today.day, 10) % 31;
   const setIsOpenTodayPrayDrawer = useBaseStore(
@@ -32,7 +32,6 @@ const TodayPrayCompletedItem = () => {
       setShowButton(false);
       return;
     }
-
     if (isImageLoaded) {
       const imageTimeout = setTimeout(() => {
         setShowImage(true);
@@ -70,15 +69,16 @@ const TodayPrayCompletedItem = () => {
         <h1 className="text-xl">
           {today.year}.{today.month}.{today.day} 오늘의 말씀
         </h1>
-        <p className="font-light">그룹원들에게 오늘의 말씀을 공유해 주세요</p>
+        <p className="font-light">
+          그룹원들과 함께 오늘의 기도를 진행해 보아요
+        </p>
       </div>
-      <KakaoShareButton
+      <OpenShareDrawerBtn
         className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
           showButton ? "opacity-100" : "opacity-0"
         }`}
-        buttonText="말씀카드 공유하기"
-        kakaoLinkObject={BibleCardLink()}
-        eventOption={{ where: "TodayPrayCompletedItem" }}
+        text="그룹원 초대하기"
+        eventOption={{ where: "TodayPrayDummyCompletedItem" }}
       />
       <button
         className="absolute bottom-10 flex gap-1 items-center text-gray-400"
@@ -91,4 +91,4 @@ const TodayPrayCompletedItem = () => {
   );
 };
 
-export default TodayPrayCompletedItem;
+export default TodayPrayDummyCompletedItem;
