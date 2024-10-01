@@ -6,6 +6,7 @@ import useAuth from "@/hooks/useAuth";
 
 const LoginRedirect = () => {
   const { user } = useAuth();
+  const session = useBaseStore((state) => state.session);
   const navigate = useNavigate();
   const myProfile = useBaseStore((state) => state.myProfile);
   const getProfile = useBaseStore((state) => state.getProfile);
@@ -30,8 +31,10 @@ const LoginRedirect = () => {
 
   useEffect(() => {
     if (!myProfile) return;
-    if (!myProfile.kakao_id && provider == "kakao") {
-      updateProfile(currentUserId, { kakao_id: kakaoId });
+    if (provider == "kakao") {
+      window.Kakao.Auth.setAccessToken(session?.provider_token || "");
+      if (!myProfile.kakao_id)
+        updateProfile(currentUserId, { kakao_id: kakaoId });
     }
 
     if (!myProfile.terms_agreed_at)
@@ -46,6 +49,7 @@ const LoginRedirect = () => {
     navigate,
     groupId,
     groupPageUrl,
+    session,
   ]);
 
   return null;

@@ -7,7 +7,7 @@ import {
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { supabase } from "../../supabase/client";
-import { User } from "@supabase/supabase-js";
+import { User, Session } from "@supabase/supabase-js";
 import {
   Group,
   Member,
@@ -56,6 +56,7 @@ import { getProfile } from "@/apis/profiles";
 
 export interface BaseStore {
   // user
+  session: Session | null;
   user: User | null;
   userLoading: boolean;
   userPlan: string;
@@ -253,6 +254,7 @@ export interface BaseStore {
 const useBaseStore = create<BaseStore>()(
   immer((set) => ({
     // user
+    session: null,
     user: null,
     userLoading: true,
     userPlan: "",
@@ -261,6 +263,7 @@ const useBaseStore = create<BaseStore>()(
         data: { session },
       } = await supabase.auth.getSession();
       set((state) => {
+        state.session = session;
         state.user = session?.user || null;
         state.userLoading = false;
       });

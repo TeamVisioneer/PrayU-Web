@@ -5,6 +5,7 @@ import {
   KakaoTokens,
 } from "./Kakao";
 import { getDomainUrl } from "@/lib/utils";
+import { supabase } from "../../../supabase/client";
 
 export class KakaoTokenRepo {
   private static readonly ACCESS_TOKEN_COOKIE_NAME = "kakao_access_token";
@@ -28,17 +29,12 @@ export class KakaoTokenRepo {
         return response.access_token;
       }
     } else {
-      this.openKakaoLoginPage(state);
+      this.openKakaoLoginPagePre(state);
     }
     return null;
   }
 
-  static isInit() {
-    const kakaoTokens = this.getKakaoTokensInCookie();
-    return Boolean(kakaoTokens.accessToken);
-  }
-
-  static openKakaoLoginPage(state: string) {
+  static openKakaoLoginPagePre(state: string) {
     const BASEURL = getDomainUrl();
     try {
       window.Kakao.Auth.authorize({
@@ -48,6 +44,21 @@ export class KakaoTokenRepo {
       });
     } catch (error) {
       Sentry.captureException(error);
+    }
+  }
+
+  static async openKakaoLoginPage(groupId: string = "", from: string = "") {
+    const BASEURL = getDomainUrl();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "kakao",
+      options: {
+        redirectTo: `${BASEURL}/login-redirect?groupId=${groupId}&from=${from}`,
+        scopes: "friends,talk_message",
+      },
+    });
+    if (error) {
+      console.error("Kakao login error:", error.message);
+      Sentry.captureException(error.message);
     }
   }
 
