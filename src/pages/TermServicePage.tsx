@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IoIosArrowForward } from "react-icons/io";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISOToday } from "@/lib/utils";
 
 const TermServicePage: React.FC = () => {
   const getProfile = useBaseStore((state) => state.getProfile);
@@ -28,7 +28,6 @@ const TermServicePage: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const groupId = queryParams.get("groupId");
-  const redirectUrl = groupId ? `/group/${groupId}` : "/group";
 
   const [isChecked, setIsChecked] = useState(false);
   const [isDisabledAgreeBtn, setIsDisabledAgreeBtn] = useState(false);
@@ -37,17 +36,7 @@ const TermServicePage: React.FC = () => {
   useEffect(() => {
     if (user) fetchGroupListByUserId(user.id);
     if (user && !profile) getProfile(user.id);
-    if (profile && profile.terms_agreed_at !== null) {
-      navigate(redirectUrl, { replace: true });
-    }
-  }, [
-    user,
-    profile,
-    getProfile,
-    navigate,
-    redirectUrl,
-    fetchGroupListByUserId,
-  ]);
+  }, [user, profile, getProfile, fetchGroupListByUserId]);
 
   if (!profile || !groupList) return null;
 
@@ -68,23 +57,25 @@ const TermServicePage: React.FC = () => {
     setIsDisabledAgreeBtn(true);
     analyticsTrack("클릭_동의_완료", {});
     const updatedProfile = await updateProfile(profile.id, {
-      terms_agreed_at: getISOTodayDate(),
+      terms_agreed_at: getISOToday(),
     });
     if (!updatedProfile) {
       setIsDisabledAgreeBtn(false);
       return;
     }
 
-    if (groupId) navigate(redirectUrl, { replace: true });
+    if (groupId) navigate(`/group/${groupId}`, { replace: true });
     else {
       if (groupList.length > 0)
         navigate(`/group/${groupList[0].id}`, { replace: true });
-      const targetGroupId = await handleCreateGroup();
-      if (!targetGroupId) {
-        setIsDisabledAgreeBtn(false);
-        return;
+      else {
+        const targetGroupId = await handleCreateGroup();
+        if (!targetGroupId) {
+          setIsDisabledAgreeBtn(false);
+          return;
+        }
+        navigate(`/group/${targetGroupId}`, { replace: true });
       }
-      navigate(`/group/${targetGroupId}`, { replace: true });
     }
   };
 
