@@ -7,6 +7,7 @@ import useBaseStore from "@/stores/baseStore";
 const TodayPrayCompletedItem = () => {
   const today = getISOTodayDateYMD();
   const contentNumber = parseInt(today.day, 10) % 31;
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
@@ -24,6 +25,7 @@ const TodayPrayCompletedItem = () => {
 
   useEffect(() => {
     if (
+      !isPrayToday &&
       prayCardCarouselApi &&
       prayCardCarouselIndex !== prayCardCarouselApi!.scrollSnapList().length - 2
     ) {
@@ -49,7 +51,7 @@ const TodayPrayCompletedItem = () => {
         clearTimeout(buttonTimeout);
       };
     }
-  }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi]);
+  }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi, isPrayToday]);
 
   return (
     <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">

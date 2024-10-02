@@ -73,25 +73,26 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
 
       // TODO: 카카오 메세지 재기획 이후 진행
       const kakaoMessageEnabled = false;
-      if (
-        prayCard.profiles.kakao_id &&
-        myMember?.profiles.kakao_notification &&
-        kakaoMessageEnabled
-      ) {
-        const response = await KakaoController.sendDirectMessage(
-          kakaoMessage,
-          prayCard.profiles.kakao_id
-        );
-        if (response && response.successful_receiver_uuids.length > 0) {
-          toast({
-            description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
-          });
+      if (kakaoMessageEnabled) {
+        if (
+          prayCard.profiles.kakao_id &&
+          myMember?.profiles.kakao_notification
+        ) {
+          const response = await KakaoController.sendDirectMessage(
+            kakaoMessage,
+            prayCard.profiles.kakao_id
+          );
+          if (response && response.successful_receiver_uuids.length > 0) {
+            toast({
+              description: `📮 ${prayCard.profiles.full_name}님에게 기도 알림 메세지를 보냈어요`,
+            });
+          }
         }
       }
     } else updatePray(prayCard.id, currentUserId, prayType);
 
     if (prayCardCarouselApi) {
-      sleep(500).then(() => {
+      sleep(1000).then(() => {
         prayCardCarouselApi.scrollNext();
       });
     }
@@ -111,7 +112,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           <button
             key={type}
             onClick={() => handleClick(type as PrayType)}
-            className={`flex justify-center items-center w-[65px] h-[65px] rounded-full ${
+            className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
               emojiData.bgColor
             } ${
               !hasPrayed
