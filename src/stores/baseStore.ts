@@ -136,6 +136,8 @@ export interface BaseStore {
   isDisabledPrayCardCreateBtn: boolean;
   isDisabledSkipPrayCardBtn: boolean;
   prayCardCarouselApi: CarouselApi | null;
+  prayCardCarouselIndex: number;
+  setPrayCardCarouselIndex: (index: number) => void;
   fetchGroupPrayCardList: (
     groupId: string,
     currentUserId: string,
@@ -489,6 +491,12 @@ const useBaseStore = create<BaseStore>()(
     isDisabledPrayCardCreateBtn: false,
     isDisabledSkipPrayCardBtn: false,
     prayCardCarouselApi: null,
+    prayCardCarouselIndex: 0,
+    setPrayCardCarouselIndex: (index: number) => {
+      set((state) => {
+        state.prayCardCarouselIndex = index;
+      });
+    },
     setIsEditingPrayCard: (isEditingPrayCard: boolean) => {
       set((state) => {
         state.isEditingPrayCard = isEditingPrayCard;

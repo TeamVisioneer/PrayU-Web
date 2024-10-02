@@ -1,18 +1,21 @@
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDateYMD } from "@/lib/utils";
 import { KakaoLinkObject } from "../kakao/Kakao";
+import { Button } from "../ui/button";
 
 interface EventOption {
   where: string;
 }
 
 interface KakaoShareButtonProps {
+  className?: string;
   buttonText: string;
   kakaoLinkObject: KakaoLinkObject;
   eventOption: EventOption;
 }
 
 export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
+  className,
   buttonText,
   kakaoLinkObject,
   eventOption,
@@ -23,12 +26,13 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
   };
 
   return (
-    <button
-      className="bg-yellow-300 px-10 py-2 rounded-md text-sm"
+    <Button
+      variant="primary"
+      className={className}
       onClick={() => handleClickKakaoBtn()}
     >
       {buttonText}
-    </button>
+    </Button>
   );
 };
 

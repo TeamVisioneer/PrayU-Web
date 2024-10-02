@@ -31,7 +31,7 @@ const ShareDrawer: React.FC = () => {
       .writeText(currentUrl)
       .then(() => {
         toast({
-          description: "그룹 링크가 복사되었어요 🔗",
+          description: "🔗 그룹 링크가 복사되었어요",
         });
       })
       .catch((err) => {
@@ -78,23 +78,6 @@ const ShareDrawer: React.FC = () => {
     <Carousel setApi={setApi}>
       <CarouselContent>
         <CarouselItem className="flex flex-col items-center gap-4">
-          <div className="h-[200px] w-full flex flex-col  items-center">
-            <img
-              className="h-full rounded-md shadow-prayCard"
-              src="/images/KakaoNotification.png"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-base font-bold">그룹 링크 공지</p>
-            <div>
-              <p className="text-sm text-gray-500">링크를 공지에 등록하고</p>
-              <p className="text-sm text-gray-500">
-                채팅방에서 편하게 접근해요
-              </p>
-            </div>
-          </div>
-        </CarouselItem>
-        <CarouselItem className="flex flex-col items-center gap-4">
           <div className="h-[200px] w-full flex flex-col items-center">
             <img
               className="h-full rounded-md shadow-prayCard"
@@ -111,6 +94,23 @@ const ShareDrawer: React.FC = () => {
             </div>
           </div>
         </CarouselItem>
+        <CarouselItem className="flex flex-col items-center gap-4">
+          <div className="h-[200px] w-full flex flex-col  items-center">
+            <img
+              className="h-full rounded-md shadow-prayCard"
+              src="/images/KakaoNotification.png"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-base font-bold">그룹 링크 공지</p>
+            <div>
+              <p className="text-sm text-gray-500">링크를 공지에 등록하고</p>
+              <p className="text-sm text-gray-500">
+                채팅방에서 편하게 접근해요
+              </p>
+            </div>
+          </div>
+        </CarouselItem>
       </CarouselContent>
       <CarouselDots />
     </Carousel>
@@ -119,20 +119,18 @@ const ShareDrawer: React.FC = () => {
   const DrawerBody = (
     <div className="flex flex-col items-center text-center gap-6 pb-10">
       <div className="flex flex-col items-center">
-        <p className="text-base font-bold">새 그룹원들을 초대해 보아요 📮</p>
+        <p className="text-xl font-bold">새 그룹원들을 초대해 보아요 📮</p>
       </div>
 
       {ImageCerousel}
       <div className="flex flex-col gap-2">
         <KakaoShareButton
-          buttonText="카카오톡으로 초대하기"
+          className="w-48"
+          buttonText="초대 메세지 보내기"
           kakaoLinkObject={GroupInviteLink(targetGroup?.name || "")}
           eventOption={{ where: "GroupPage" }}
         />
-        <Button
-          className="px-10 py-2 rounded-md"
-          onClick={() => onClickCopyLink()}
-        >
+        <Button variant="primaryLight" onClick={() => onClickCopyLink()}>
           그룹 링크 복사하기
         </Button>
       </div>

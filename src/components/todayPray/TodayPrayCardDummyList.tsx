@@ -4,33 +4,33 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import DummyPrayCardUI from "../prayCard/DummyPrayCardUI";
-import { PrayTypeDatas } from "@/Enums/prayType";
 import useBaseStore from "@/stores/baseStore";
-import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
+import TodayPrayDummyCompletedItem from "./TodayPrayDummyCompletedItem";
+import { useEffect } from "react";
 
 const TodayPrayCardDummyList = () => {
+  const prayCardCarouselApi = useBaseStore(
+    (state) => state.prayCardCarouselApi
+  );
+  const setPrayCardCarouselIndex = useBaseStore(
+    (state) => state.setPrayCardCarouselIndex
+  );
   const setPrayCardCarouselApi = useBaseStore(
     (state) => state.setPrayCardCarouselApi
   );
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
-  const completedItem = (
-    <div className="flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
-      <img
-        src={PrayTypeDatas["pray"].img}
-        alt={PrayTypeDatas["pray"].emoji}
-        className="w-16 h-16 opacity-100"
-      />
-      <h1 className="font-bold text-xl">오늘의 기도 완료!</h1>
-      <div className="text-gray-400 text-center">
-        <h1>그룹원들을 초대해 주세요</h1>
-        <h1>기도제목을 공유하고 매일 기도할 수 있어요</h1>
-      </div>
-      <OpenShareDrawerBtn
-        text="그룹원 초대하기"
-        eventOption={{ where: "TodayPrayCardDummyList" }}
-      />
-    </div>
-  );
+  useEffect(() => {
+    prayCardCarouselApi?.on("select", () => {
+      const currentIndex = prayCardCarouselApi.selectedScrollSnap();
+      setPrayCardCarouselIndex(currentIndex);
+      const carouselLength = prayCardCarouselApi.scrollSnapList().length;
+      if (currentIndex === 0) prayCardCarouselApi.scrollNext();
+      if (currentIndex === carouselLength - 1) {
+        prayCardCarouselApi.scrollPrev();
+      }
+    });
+  }, [prayCardCarouselApi, setPrayCardCarouselIndex]);
 
   return (
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
@@ -60,7 +60,11 @@ const TodayPrayCardDummyList = () => {
             dayOffset={3}
           />
         </CarouselItem>
-        <CarouselItem className="basis-5/6">{completedItem}</CarouselItem>
+        {isPrayToday && (
+          <CarouselItem className="basis-5/6">
+            <TodayPrayDummyCompletedItem />
+          </CarouselItem>
+        )}
         <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>
     </Carousel>

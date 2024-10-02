@@ -62,11 +62,14 @@ const ExpiredPrayCardUI: React.FC = () => {
           ) : (
             <p className="font-bold">기도제목이 만료되었어요 😂</p>
           )}
-          <p className="text-sm">기도제목을 요청해봐요!</p>
+          <p className="text-sm text-gray-400">
+            {otherMember.profiles.full_name}님에게 기도제목을 요청해 보아요
+          </p>
         </div>
 
         <KakaoShareButton
-          buttonText="카카오톡으로 요청하기"
+          className="w-48"
+          buttonText="요청 메세지 보내기"
           kakaoLinkObject={ExpiredMemberLink()}
           eventOption={{ where: "ReactionWithCalendar" }}
         ></KakaoShareButton>
