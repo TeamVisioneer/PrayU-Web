@@ -2,44 +2,21 @@ import useBaseStore from "@/stores/baseStore";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { KakaoShareButton, TodayPrayLink } from "../share/KakaoShareBtn";
 import { PrayWithProfiles } from "supabase/types/tables";
-import { Button } from "../ui/button";
-import { analyticsTrack } from "@/analytics/analytics";
 import { isToday } from "@/lib/utils";
+import TodayPrayBtn from "../todayPray/TodayPrayBtn";
 
 interface PrayListProps {
   prayData: PrayWithProfiles[];
 }
 
 const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
-  const setIsOpenMyPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenMyPrayDrawer
-  );
-  const setIsOpenMyMemberDrawer = useBaseStore(
-    (state) => state.setIsOpenMyMemberDrawer
-  );
-  const setIsOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenTodayPrayDrawer
-  );
-
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const groupAndSortByUserId = useBaseStore(
     (state) => state.groupAndSortByUserId
   );
-
   const prayerList = groupAndSortByUserId(prayData);
   const lenPrayerList = Object.keys(prayerList).length;
   const isPrayerListEmpty = !prayerList || lenPrayerList === 0;
-
-  // TODO: TodayPrayBtn 으로 통일하기
-  const onClickTodayPrayBtn = () => {
-    setIsOpenMyPrayDrawer(false);
-    setIsOpenMyMemberDrawer(false);
-    setIsOpenTodayPrayDrawer(true);
-    analyticsTrack("클릭_오늘의기도_시작", {
-      len_prayer_list: lenPrayerList,
-      where: "PrayList",
-    });
-  };
 
   return (
     <div className="overflow-y-auto justify-center items-center">
@@ -94,11 +71,11 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
                     key={pray.id}
                     src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
                     className={`rounded-full  border-2
-                          ${
-                            isToday(pray.created_at)
-                              ? "border-yellow-300"
-                              : "border-transparent"
-                          }`}
+                        ${
+                          isToday(pray.created_at)
+                            ? "border-yellow-300"
+                            : "border-transparent"
+                        }`}
                   />
                 ))}
               </div>
@@ -106,13 +83,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
           ))}
           {!isPrayToday && (
             <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-5">
-              <Button
-                variant="primary"
-                className="w-[166px] h-[48px] text-md font-bold rounded-[10px]"
-                onClick={() => onClickTodayPrayBtn()}
-              >
-                기도 시작하기
-              </Button>
+              <TodayPrayBtn eventOption={{ where: "PrayList" }} />
               <p className="text-gray-500 text-sm">
                 오늘의 기도를 완료해야 볼 수 있어요!
               </p>

@@ -11,17 +11,25 @@ interface TodayPrayBtnProps {
 }
 
 const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
-  const setIsOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenTodayPrayDrawer
-  );
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
   );
   const user = useBaseStore((state) => state.user);
+  const setIsOpenTodayPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenTodayPrayDrawer
+  );
+  const setIsOpenMyPrayDrawer = useBaseStore(
+    (state) => state.setIsOpenMyPrayDrawer
+  );
+  const setIsOpenMyMemberDrawer = useBaseStore(
+    (state) => state.setIsOpenMyMemberDrawer
+  );
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
     setIsOpenTodayPrayDrawer(true);
+    setIsOpenMyPrayDrawer(false);
+    setIsOpenMyMemberDrawer(false);
     analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
 
     const startDt = getISOTodayDate(-6);

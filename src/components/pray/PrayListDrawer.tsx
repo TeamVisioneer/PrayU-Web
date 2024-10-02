@@ -15,7 +15,6 @@ interface PrayListDrawerProps {
   groupId: string;
 }
 
-// TODO: PrayList 랑 합치고 prayCard.pray 를 props 로 받기, 렌더링 언제 되는지 확인
 const PrayListDrawer: React.FC<PrayListDrawerProps> = ({
   currentUserId,
   groupId,
@@ -39,7 +38,7 @@ const PrayListDrawer: React.FC<PrayListDrawerProps> = ({
     <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
       <DrawerContent className="h-[400px]">
         <DrawerHeader>
-          <DrawerTitle className="p-4">기도해 준 친구</DrawerTitle>
+          <DrawerTitle className="p-4 text-center">기도해 준 친구</DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         <PrayList prayData={prayCard.pray} />
