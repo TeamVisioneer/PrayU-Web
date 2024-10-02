@@ -41,7 +41,7 @@ export const TodayPrayStartCard = () => {
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <h1 className="font-bold text-xl">오늘의 기도를 시작해보세요</h1>
+        <h1 className="font-bold text-xl">오늘의 기도를 시작해 보세요</h1>
         <div className="text-grayText">
           <h1>친구의 기도제목이</h1>
           <h1>당신의 기도를 기다리고 있어요 :)</h1>
