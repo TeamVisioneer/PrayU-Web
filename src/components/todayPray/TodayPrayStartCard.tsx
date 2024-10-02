@@ -9,9 +9,9 @@ export const TodayPrayStartCard = () => {
         <div className="flex justify-center items-center gap-2"></div>
         <div className="flex flex-col gap-4">
           <h1 className="font-bold text-xl">오늘의 기도</h1>
-          <div className="">
+          <div className="text-grayText">
             <h1>당신의 기도가 필요한 오늘,</h1>
-            <h1>함께 기도하며 서로의 길을 비춰주세요.</h1>
+            <h1>서로를 위해 기도해 보아요</h1>
           </div>
         </div>
         <img src={"/images/Hand.png"} className="w-24 h-24 "></img>
