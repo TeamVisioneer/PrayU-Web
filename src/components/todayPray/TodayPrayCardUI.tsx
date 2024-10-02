@@ -1,6 +1,6 @@
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
-import { getISODateYMD } from "@/lib/utils";
+import { days, getISODateYMD } from "@/lib/utils";
 import OtherPrayCardMenuBtn from "../prayCard/OtherPrayCardMenuBtn";
 import useBaseStore from "@/stores/baseStore";
 
@@ -22,6 +22,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
   eventOption,
 }) => {
   const createdAt = prayCard.created_at;
+  const createdAtDate = new Date(createdAt);
   const createdDateYMD = getISODateYMD(createdAt);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
@@ -55,7 +56,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({
           </div>
           <p className="text-sm text-white w-full text-left">
             시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
-            {createdDateYMD.day}
+            {createdDateYMD.day} ({days[createdAtDate.getDay()]})
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
