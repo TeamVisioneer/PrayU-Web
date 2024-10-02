@@ -14,6 +14,7 @@ import OtherMemberList from "@/components/member/OtherMemberList";
 import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
+import PrayListDrawer from "@/components/pray/PrayListDrawer";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -138,6 +139,7 @@ const GroupPage: React.FC = () => {
       </div>
 
       <TodayPrayCardListDrawer />
+      <PrayListDrawer currentUserId={currentUserId} groupId={targetGroup.id} />
       <ShareDrawer />
       <EventDialog />
       <GroupSettingsDialog targetGroup={targetGroup} />

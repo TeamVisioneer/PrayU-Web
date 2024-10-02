@@ -12,7 +12,6 @@ import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate } from "@/lib/utils";
-import PrayListDrawer from "../pray/PrayListDrawer";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
 
@@ -132,34 +131,31 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   };
 
   return (
-    <>
-      <Drawer
-        open={isOpenMyMemberDrawer}
-        onOpenChange={setIsOpenMyMemberDrawer}
-        onClose={() => setIsEditingPrayCard(false)}
+    <Drawer
+      open={isOpenMyMemberDrawer}
+      onOpenChange={setIsOpenMyMemberDrawer}
+      onClose={() => setIsEditingPrayCard(false)}
+    >
+      <DrawerTrigger
+        className="focus:outline-none"
+        onClick={() => onClickMyMember()}
       >
-        <DrawerTrigger
-          className="focus:outline-none"
-          onClick={() => onClickMyMember()}
-        >
-          {MyMemberUI}
-        </DrawerTrigger>
-        <DrawerContent className="bg-mainBg pb-10">
-          <DrawerHeader className="p-0">
-            <DrawerTitle></DrawerTitle>
-            <DrawerDescription></DrawerDescription>
-          </DrawerHeader>
-          {/* PrayCard */}
-          <MyPrayCardUI
-            currentUserId={currentUserId}
-            groupId={groupId}
-            member={myMember}
-          />
-          {/* PrayCard */}
-        </DrawerContent>
-      </Drawer>
-      <PrayListDrawer currentUserId={currentUserId} groupId={groupId} />
-    </>
+        {MyMemberUI}
+      </DrawerTrigger>
+      <DrawerContent className="bg-mainBg pb-10">
+        <DrawerHeader className="p-0">
+          <DrawerTitle></DrawerTitle>
+          <DrawerDescription></DrawerDescription>
+        </DrawerHeader>
+        {/* PrayCard */}
+        <MyPrayCardUI
+          currentUserId={currentUserId}
+          groupId={groupId}
+          member={myMember}
+        />
+        {/* PrayCard */}
+      </DrawerContent>
+    </Drawer>
   );
 };
 
