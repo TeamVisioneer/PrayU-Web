@@ -1,5 +1,5 @@
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import { getISODate, getISOToday } from "@/lib/utils";
+import { getISODate, getISOToday, days } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 
@@ -46,7 +46,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
     <div className="flex justify-center gap-[13px]">
       {weeklyDays.map((date) => {
         const isToday = date.date === currentDate;
-        const day = new Date(date.date).getDate(); // Extract the day part of the date
+        const dayOfWeek = new Date(date.date).getDay();
         return (
           <div key={date.date} className="flex flex-col items-center gap-1">
             <span
@@ -54,7 +54,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
                 isToday ? "font-bold text-black" : "text-deactivate"
               }`}
             >
-              {day}
+              {days[dayOfWeek]}
             </span>
             <div
               className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${

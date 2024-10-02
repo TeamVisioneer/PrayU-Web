@@ -1,4 +1,10 @@
-import { getISODate, getISOToday, getISOTodayDate, sleep } from "@/lib/utils";
+import {
+  getISODate,
+  getISOToday,
+  getISOTodayDate,
+  sleep,
+  days,
+} from "@/lib/utils";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { useState, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
@@ -83,7 +89,7 @@ const DumyReactionBtnWithCalendar: React.FC<
           const isPast =
             new Date(date.date) < new Date(getISOToday().split("T")[0]);
 
-          const day = new Date(date.date).getDate();
+          const dayOfWeek = new Date(date.date).getDay();
           return (
             <div key={date.date} className="flex flex-col items-center gap-1">
               <span
@@ -91,7 +97,7 @@ const DumyReactionBtnWithCalendar: React.FC<
                   isToday ? "font-bold text-black" : "text-deactivate"
                 }`}
               >
-                {day}
+                {days[dayOfWeek]}
               </span>
               <div
                 className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
