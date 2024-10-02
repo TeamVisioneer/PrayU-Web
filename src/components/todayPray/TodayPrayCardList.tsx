@@ -22,6 +22,7 @@ const TodayPrayCardList = () => {
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const user = useBaseStore((state) => state.user);
   const myMember = useBaseStore((state) => state.myMember);
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   useEffect(() => {
     prayCardCarouselApi?.on("select", () => {
@@ -60,9 +61,11 @@ const TodayPrayCardList = () => {
             />
           </CarouselItem>
         ))}
-        <CarouselItem className="basis-5/6">
-          <TodayPrayCompletedItem />
-        </CarouselItem>
+        {isPrayToday && (
+          <CarouselItem className="basis-5/6">
+            <TodayPrayCompletedItem />
+          </CarouselItem>
+        )}
         <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>
     </Carousel>

@@ -18,6 +18,7 @@ const TodayPrayCardDummyList = () => {
   const setPrayCardCarouselApi = useBaseStore(
     (state) => state.setPrayCardCarouselApi
   );
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   useEffect(() => {
     prayCardCarouselApi?.on("select", () => {
@@ -59,9 +60,11 @@ const TodayPrayCardDummyList = () => {
             dayOffset={3}
           />
         </CarouselItem>
-        <CarouselItem className="basis-5/6">
-          <TodayPrayDummyCompletedItem />
-        </CarouselItem>
+        {isPrayToday && (
+          <CarouselItem className="basis-5/6">
+            <TodayPrayDummyCompletedItem />
+          </CarouselItem>
+        )}
         <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>
     </Carousel>
