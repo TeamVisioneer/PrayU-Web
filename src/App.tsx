@@ -25,6 +25,7 @@ import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
+import LandingPage from "./pages/LandingPage";
 
 const App = () => {
   useEffect(() => {
@@ -118,6 +119,7 @@ const App = () => {
                 }
               />
               <Route path="/login/email" element={<EmailLoginPage />} />
+              <Route path="/landing" element={<LandingPage />} />
             </Routes>
           </AuthProvider>
         </BrowserRouter>
