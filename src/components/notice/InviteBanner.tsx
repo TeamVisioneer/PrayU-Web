@@ -39,12 +39,12 @@ const InviteBanner = () => {
       onClick={() => onClickBanner()}
     >
       <p className="text-sm font-bold">
-        하루 안에 3명 초대 완료하면 기프티콘 증정!
+        하루 안에 2명 이상 초대 완료하면 그룹 개수 무한!
       </p>
       <div className="flex gap-1 items-center text-xs">
         <p>🚨 마감까지</p>
         <div className="flex items-center gap-1 font-extrabold text-red-500 text-center ">
-          <span className="w-10 bg-[#FBEBED]  p-1 rounded-sm">
+          <span className="w-11 bg-[#FBEBED]  p-1 rounded-sm">
             {dateDistance.hours}시간
           </span>
           <span className="w-10 bg-[#FBEBED]  p-1 rounded-sm">
@@ -54,7 +54,7 @@ const InviteBanner = () => {
             {dateDistance.seconds}초
           </span>
         </div>
-        <span className="text-end">남았습니다</span>
+        <span>남았습니다</span>
       </div>
     </div>
   );
