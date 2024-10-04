@@ -81,7 +81,7 @@ const TodayPrayDummyCompletedItem = () => {
         eventOption={{ where: "TodayPrayDummyCompletedItem" }}
       />
       <button
-        className="absolute bottom-10 flex gap-1 items-center text-gray-400"
+        className="absolute bottom-3 flex gap-1 items-center text-gray-400"
         onClick={() => setIsOpenTodayPrayDrawer(false)}
       >
         <IoClose />

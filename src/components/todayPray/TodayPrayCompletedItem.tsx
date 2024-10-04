@@ -54,6 +54,7 @@ const TodayPrayCompletedItem = () => {
 
   return (
     <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
+      s{" "}
       <div className="h-[280px] w-full flex flex-col items-center">
         <img
           className={`h-full rounded-2xl transition-opacity duration-1000 ease-in ${
@@ -82,7 +83,7 @@ const TodayPrayCompletedItem = () => {
         eventOption={{ where: "TodayPrayCompletedItem" }}
       />
       <button
-        className="absolute bottom-10 flex gap-1 items-center text-gray-400"
+        className="absolute bottom-3 flex gap-1 items-center text-gray-400"
         onClick={() => setIsOpenTodayPrayDrawer(false)}
       >
         <IoClose />
