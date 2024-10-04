@@ -54,7 +54,6 @@ const TodayPrayCompletedItem = () => {
 
   return (
     <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
-      s{" "}
       <div className="h-[280px] w-full flex flex-col items-center">
         <img
           className={`h-full rounded-2xl transition-opacity duration-1000 ease-in ${
