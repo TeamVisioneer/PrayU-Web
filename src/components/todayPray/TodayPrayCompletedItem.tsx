@@ -25,7 +25,6 @@ const TodayPrayCompletedItem = () => {
 
   useEffect(() => {
     if (
-      !isPrayToday &&
       prayCardCarouselApi &&
       prayCardCarouselIndex !== prayCardCarouselApi!.scrollSnapList().length - 2
     ) {
