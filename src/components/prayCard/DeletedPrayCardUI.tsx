@@ -46,7 +46,8 @@ const ExpiredPrayCardUI: React.FC = () => {
         </div>
 
         <KakaoShareButton
-          buttonText="카카오톡으로 요청하기"
+          className="w-48"
+          buttonText="요청 메세지 보내기"
           kakaoLinkObject={ExpiredMemberLink()}
           eventOption={{ where: "ReactionWithCalendar" }}
         ></KakaoShareButton>

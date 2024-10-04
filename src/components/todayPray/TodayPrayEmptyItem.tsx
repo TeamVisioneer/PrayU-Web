@@ -1,8 +1,8 @@
-import { KakaoShareButton, TodayPrayLink } from "../share/KakaoShareBtn";
+import { KakaoShareButton, ExpiredMemberLink } from "../share/KakaoShareBtn";
 
 const TodayPrayEmptyItem = () => {
   return (
-    <div className="flex flex-col justify-center items-center px-10 gap-4">
+    <div className="flex flex-col justify-center items-center px-10 pb-5 gap-4">
       <p className="text-lg font-bold">아직 올라온 기도제목이 없어요 😭</p>
       <div className="h-[300px] w-full flex flex-col items-center">
         <img
@@ -16,8 +16,9 @@ const TodayPrayEmptyItem = () => {
         </p>
       </div>
       <KakaoShareButton
-        buttonText="카카오톡으로 초대하기"
-        kakaoLinkObject={TodayPrayLink()}
+        className="w-64"
+        buttonText="요청 메세지 보내기"
+        kakaoLinkObject={ExpiredMemberLink()}
         eventOption={{ where: "PrayCardList" }}
       ></KakaoShareButton>
     </div>
