@@ -150,7 +150,7 @@ const GroupPage: React.FC = () => {
           <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
         </div>
       </div>
-      <div className="flex flex-col h-full gap-4">
+      <div className="flex flex-col flex-grow gap-4">
         <MyMember myMember={myMember} />
         {isTodayPrayStart ? (
           <TodayPrayStartCard />
@@ -158,7 +158,7 @@ const GroupPage: React.FC = () => {
           <OtherMemberList otherMemberList={otherMemberList} />
         )}
       </div>
-      <footer>{isTodayPrayStart && <InviteBanner />}</footer>
+      {isTodayPrayStart && <InviteBanner />}
 
       <TodayPrayCardListDrawer />
       <OtherMemberDrawer />

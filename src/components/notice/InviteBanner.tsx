@@ -31,17 +31,30 @@ const InviteBanner = () => {
   )
     return null;
 
+  const onClickBanner = () => {};
+
   return (
-    <div className="w-[calc(100% + 20rem)] -mx-10 flex flex-col items-center p-2 gap-1 rounded-xl bg-gradient-to-r from-start via-middle via-52% to-end">
-      <p className="text-sm">하루 안에 3명 초대 완료하면 기프티콘 증정!</p>
-      <div className="flex text-xs">
+    <div
+      className=" flex flex-col items-center p-2 gap-1 rounded-xl bg-gradient-to-r from-start via-middle via-52% to-end"
+      onClick={() => onClickBanner()}
+    >
+      <p className="text-sm font-bold">
+        하루 안에 3명 초대 완료하면 기프티콘 증정!
+      </p>
+      <div className="flex gap-1 items-center text-xs">
         <p>🚨 마감까지</p>
-        <div className="flex text-black">
-          <span className="w-10 text-end">{dateDistance.hours}시간</span>
-          <span className="w-7 text-end">{dateDistance.minutes}분</span>
-          <span className="w-7 text-end">{dateDistance.seconds}초</span>
-          <span className="w-7 text-end">남음</span>
+        <div className="flex items-center gap-1 font-extrabold text-red-500 text-center ">
+          <span className="w-10 bg-[#FBEBED]  p-1 rounded-sm">
+            {dateDistance.hours}시간
+          </span>
+          <span className="w-10 bg-[#FBEBED]  p-1 rounded-sm">
+            {dateDistance.minutes}분
+          </span>
+          <span className="w-10 bg-[#FBEBED]  p-1 rounded-sm">
+            {dateDistance.seconds}초
+          </span>
         </div>
+        <span className="text-end">남았습니다</span>
       </div>
     </div>
   );
