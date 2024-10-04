@@ -15,6 +15,8 @@ import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDra
 import { Skeleton } from "@/components/ui/skeleton";
 import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
+import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
+import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -37,18 +39,22 @@ const GroupPage: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
-  const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
+  const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
   const userPlan = useBaseStore((state) => state.userPlan);
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
 
   useEffect(() => {
     fetchGroupListByUserId(currentUserId);
     if (groupId) getMember(currentUserId, groupId);
     if (groupId) getGroup(groupId);
     if (groupId) fetchMemberListByGroupId(groupId);
+    if (groupId) fetchIsPrayToday(currentUserId, groupId);
   }, [
     fetchGroupListByUserId,
     fetchMemberListByGroupId,
     getMember,
+    fetchIsPrayToday,
     currentUserId,
     groupId,
     getGroup,
@@ -93,7 +99,13 @@ const GroupPage: React.FC = () => {
     }
   }, [targetGroup, currentUserId, setIsGroupLeader]);
 
-  if (!targetGroup || !memberList || !groupList || !myMember) {
+  if (
+    !targetGroup ||
+    !memberList ||
+    !groupList ||
+    !myMember ||
+    isPrayToday == null
+  ) {
     return (
       <div className="flex flex-col h-full gap-4 pt-[48px]">
         <Skeleton className="w-full h-[150px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
@@ -102,11 +114,17 @@ const GroupPage: React.FC = () => {
     );
   }
 
-  const filteredMemberList = memberList.filter(
+  const otherMemberList = memberList.filter(
     (member) =>
       member.user_id &&
+      member.user_id !== currentUserId &&
       !myMember.profiles.blocking_users.includes(member.user_id)
   );
+  const isExpiredAllMember = otherMemberList.every(
+    (member) => member.updated_at < getISOTodayDate(-6)
+  );
+  const isTodayPrayStart =
+    (!isPrayToday && !isExpiredAllMember) || otherMemberList.length == 0;
 
   return (
     <div className="flex flex-col h-full gap-5">
@@ -121,7 +139,7 @@ const GroupPage: React.FC = () => {
             {targetGroup.name}
           </div>
           <span className="text-sm text-gray-500">
-            {filteredMemberList.length}
+            {otherMemberList.length + 1}
           </span>
         </div>
         <div className="w-[48px] flex justify-end">
@@ -131,14 +149,15 @@ const GroupPage: React.FC = () => {
       </div>
       <div className="flex flex-col h-full gap-4">
         <MyMember myMember={myMember} />
-        <OtherMemberList
-          currentUserId={user!.id}
-          groupId={targetGroup.id}
-          memberList={filteredMemberList}
-        />
+        {isTodayPrayStart ? (
+          <TodayPrayStartCard />
+        ) : (
+          <OtherMemberList otherMemberList={otherMemberList} />
+        )}
       </div>
 
       <TodayPrayCardListDrawer />
+      <OtherMemberDrawer />
       <PrayListDrawer currentUserId={currentUserId} groupId={targetGroup.id} />
       <ShareDrawer />
       <EventDialog />
