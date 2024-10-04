@@ -25,7 +25,6 @@ const TodayPrayCompletedItem = () => {
 
   useEffect(() => {
     if (
-      !isPrayToday &&
       prayCardCarouselApi &&
       prayCardCarouselIndex !== prayCardCarouselApi!.scrollSnapList().length - 2
     ) {
@@ -83,7 +82,7 @@ const TodayPrayCompletedItem = () => {
         eventOption={{ where: "TodayPrayCompletedItem" }}
       />
       <button
-        className="absolute bottom-10 flex gap-1 items-center text-gray-400"
+        className="absolute bottom-3 flex gap-1 items-center text-gray-400"
         onClick={() => setIsOpenTodayPrayDrawer(false)}
       >
         <IoClose />

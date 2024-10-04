@@ -25,6 +25,7 @@ const TodayPrayCardList = () => {
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   useEffect(() => {
+    setPrayCardCarouselIndex(1);
     prayCardCarouselApi?.on("select", () => {
       const currentIndex = prayCardCarouselApi.selectedScrollSnap();
       setPrayCardCarouselIndex(currentIndex);
