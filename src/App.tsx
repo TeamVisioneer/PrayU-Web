@@ -25,7 +25,7 @@ import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
-import StoryPage from "./pages/LandingPage/StoryPage";
+import StoryPage from "./pages/StoryPage/StoryPage";
 
 const App = () => {
   useEffect(() => {

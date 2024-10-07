@@ -2,8 +2,11 @@ import StartPrayUBtn from "./StartPrayUBtn";
 
 const StoryPage = () => {
   return (
-    <div className="flex flex-grow flex-col justify-center text-center w-full  bg-white ">
-      <img src="/images/story/cover.png" className="w-full h-auto" />
+    <div className="flex flex-grow flex-col justify-center text-center w-full items-center bg-white ">
+      <img
+        src="/images/story/cover.png"
+        className="w-full max-w-[600px] h-auto"
+      />
       <div className="font-sans text-center">
         <div className="container max-w-screen-lg mx-auto px-4 py-10">
           <h1 className="text-2xl mt-6 font-bold">카톡방 속 답장 없는</h1>
@@ -28,10 +31,7 @@ const StoryPage = () => {
           <div className="h-8"></div>
 
           <div className="image-container mt-10">
-            <img
-              src="/images/story/tired.png"
-              className="mx-auto h-[168px] w-[168px] "
-            />
+            <img src="/images/story/tired.png" className="mx-auto h-[168px] " />
           </div>
 
           <p className="mt-6">오늘도 힘쓰고 계실 그룹장 및 리더 여러분</p>
@@ -58,10 +58,7 @@ const StoryPage = () => {
           <p className="mt-2">사실 이 고민 모두 제 이야기입니다...😂</p>
 
           <div className="image-container mt-8">
-            <img
-              src="/images/story/itsme.png"
-              className="mx-auto w-[192px] h-[108px]"
-            />
+            <img src="/images/story/itsme.png" className="mx-auto h-[108px]" />
           </div>
 
           <div className="h-20"></div>
@@ -82,7 +79,7 @@ const StoryPage = () => {
           <div className="image-container mt-8">
             <img
               src="/images/story/problem1.png"
-              className="mx-auto w-[240px] h-[217px]"
+              className="mx-auto h-[217px]"
             />
           </div>
 
@@ -99,7 +96,7 @@ const StoryPage = () => {
           <div className="image-container mt-8">
             <img
               src="/images/story/problem2.png"
-              className="mx-auto w-[240px] h-[200px]"
+              className="mx-auto  h-[200px]"
             />
           </div>
 
@@ -111,7 +108,7 @@ const StoryPage = () => {
           <div className="image-container mt-8">
             <img
               src="/images/story/problem3.png"
-              className="mx-auto w-[240px] h-[331px]"
+              className="mx-auto h-[331px]"
             />
           </div>
 
@@ -142,10 +139,7 @@ const StoryPage = () => {
             <h1 className="text-2xl font-semibold text-red-500">그.래.서</h1>
             <h3 className=" font-semibold mt-6 text-red-500">결심했습니다</h3>
             <div className="image-container mt-8">
-              <img
-                src="/images/story/nada.png"
-                className="mx-auto w-[128px] h-[128px]"
-              />
+              <img src="/images/story/nada.png" className="mx-auto h-[128px]" />
             </div>
 
             <p className="mt-7 ">기도제목의 공유를 위한 프로그램을</p>
@@ -175,7 +169,7 @@ const StoryPage = () => {
             <div className="image-container mt-8">
               <img
                 src="/images/story/solve1.png"
-                className="mx-auto w-[350px] h-[350px]"
+                className="mx-auto h-[350px]"
               />
             </div>
             <p className="mt-6">우리 소그룹 내에서 먼저 사용해보고자</p>
@@ -190,7 +184,7 @@ const StoryPage = () => {
             <div className="image-container mt-8">
               <img
                 src="/images/story/solve2.png"
-                className="mx-auto w-[350px] h-[350px]"
+                className="mx-auto h-[350px]"
               />
             </div>
             <p className="mt-6">그룹원들이 기도제목을 작성하면</p>
@@ -205,7 +199,7 @@ const StoryPage = () => {
             <div className="image-container mt-8">
               <img
                 src="/images/story/solve3.png"
-                className="mx-auto w-[350px] h-[350px]"
+                className="mx-auto h-[350px]"
               />
             </div>
             <p className="mt-6">
@@ -284,10 +278,7 @@ const StoryPage = () => {
             이런 목표를 갖고 있어요 😊
           </h2>
           <div className="image-container mt-8">
-            <img
-              src="/images/story/goal.png"
-              className="mx-auto w-[476px] h-[265px]"
-            />
+            <img src="/images/story/goal.png" className="mx-auto h-[265px]" />
           </div>
           <div className="h-11"></div>
           <p className="mt-6">매주 주일 기도제목을 나누고 끝나는 그룹에서</p>
