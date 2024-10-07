@@ -26,6 +26,7 @@ import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
 import StoryPage from "./pages/StoryPage/StoryPage";
+import TutorialPage from "./pages/TutorialPage";
 
 const App = () => {
   useEffect(() => {
@@ -60,6 +61,15 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/tutorial"
+                element={
+                  <PrivateRoute>
+                    <TutorialPage />
+                  </PrivateRoute>
+                }
+              />
+
               <Route
                 path="/auth/kakao/callback"
                 element={

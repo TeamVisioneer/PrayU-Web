@@ -1,0 +1,214 @@
+import inviteIcon from "@/assets/icon-invite.png";
+import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
+import useBaseStore from "@/stores/baseStore";
+import { SlMenu } from "react-icons/sl";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
+
+const TutorialPage: React.FC = () => {
+  const user = useBaseStore((state) => state.user);
+  const [index, setIndex] = useState(0);
+
+  const TutorialComponentProps = [
+    {
+      title: "1. 기도친구 초대",
+      description: "기도친구를 초대하여 기도제목을 나눌 수 있어요!",
+      textMarginTop: "mt-[220px]",
+    },
+    {
+      title: "2. 내 기도제목 보기",
+      description: "기도제목을 작성하고 기도를 요청해 보아요!",
+      textMarginTop: "mt-[220px]",
+    },
+    {
+      title: "3. 오늘의 기도 시작",
+      description: "친구들의 이번 주 기도제목을 볼 수 있어요!",
+      textMarginTop: "mt-[220px]",
+    },
+    {
+      title: "4. 기도 반응하기",
+      description: "친구들의 기도제목을 위해 기도하고 반응해요!",
+      textMarginTop: "mt-[220px]",
+    },
+  ];
+
+  const onClickLeft = () => {
+    if (index > 0) setIndex(index - 1);
+  };
+  const onClickRight = () => {
+    if (index == TutorialComponentProps.length - 1)
+      window.location.href = "/group";
+    if (index < TutorialComponentProps.length - 1) setIndex(index + 1);
+  };
+
+  const TopBar = (
+    <div className="relative flex justify-between items-center">
+      <div
+        className={`bg-mainBg w-[52px] flex items-center gap-1 text-[14px] p-1 rounded-sm ${
+          index === 0 && "z-40"
+        }`}
+      >
+        <img src={inviteIcon} className="w-[16px] h-[16px]" />
+        <span>초대</span>
+      </div>
+      <div
+        className={`bg-mainBg text-lg font-bold flex items-center gap-1 px-2 rounded-sm ${
+          index === 0 && "z-40"
+        }`}
+      >
+        <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
+          {user ? `${user.user_metadata.full_name}의 그룹` : "새 그룹"}
+        </div>
+        <span className="text-sm text-gray-500">1</span>
+      </div>
+      <div className="w-[52px] flex justify-end">
+        <SlMenu size={20} />
+      </div>
+    </div>
+  );
+
+  const MyMemberUI = (
+    <div
+      className={`w-full flex flex-col gap-3 cursor-pointer bg-white p-[25px] rounded-[15px] ${
+        index === 1 && "z-40"
+      }`}
+    >
+      <div className="flex flex-col gap-1">
+        <h3 className="flex font-bold text-lg">내 기도제목</h3>
+        <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">
+          ✏️ 기도카드를 작성해 보아요
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <div className="w-fit flex bg-gray-100 rounded-lg px-[12px] py-2 gap-[16px]">
+          {Object.values(PrayType).map((type) => {
+            return (
+              <div key={type} className="flex items-center gap-1 ">
+                <img
+                  src={PrayTypeDatas[type].img}
+                  alt={PrayTypeDatas[type].emoji}
+                  className="w-5 h-5 opacity-90"
+                />
+                <p className="text-sm text-dark">0</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  const TodayPrayStartCard = (
+    <div className={`w-full flex-grow flex flex-col items-center `}>
+      <div className="relative flex flex-col w-[85%] flex-grow justify-center items-center max-h-[500px]">
+        <div className="flex w-full flex-col flex-grow py-10 justify-center items-center text-center gap-6 border rounded-2xl bg-gradient-to-t from-[#FFF8F8] via-[#FFEBFA] via-41.75% to-[#AAC7FF] opacity-100">
+          <div className={`flex flex-col gap-4`}>
+            <h1 className="font-bold text-xl">오늘의 기도</h1>
+            <div className="text-grayText">
+              <h1>당신의 기도가 필요한 오늘,</h1>
+              <h1>서로를 위해 기도해 보아요</h1>
+            </div>
+          </div>
+          <img
+            src={"/images/Hand.png"}
+            className={`w-24 h-24 rounded-full bg-white ${
+              index === 2 && "z-40"
+            }`}
+          ></img>
+          <Button
+            onClick={() => (window.location.href = "/group")}
+            variant="primary"
+            className={`w-[188px] h-[46px] text-md font-bold rounded-[10px] ${
+              index === 2 && "z-40"
+            }`}
+          >
+            기도 시작하기
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const TodayPrayDrawer = (
+    <div
+      className={`absolute top-0 left-0 w-full h-full flex flex-col bg-black/85 ${
+        index === 3 && "z-20"
+      }`}
+    >
+      <div
+        className={`fixed inset-x-0 bottom-0 max-w-[480px] m-auto bg-mainBg rounded-t-2xl px-10 border-2 border-black ${
+          index === 3 && "z-30"
+        }`}
+      >
+        <div className="flex flex-col gap-2 min-h-80vh max-h-80vh py-10">
+          <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+            <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
+              <div className="flex items-center gap-2">
+                <img
+                  src="/images/defaultProfileImage.png"
+                  className="w-7 h-7 rounded-full object-cover"
+                />
+                <p className="text-white text-lg">기도친구</p>
+              </div>
+              <p className="text-sm text-white text-left">
+                시작일: 2021.08.01 (일)
+              </p>
+            </div>
+            <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
+              <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
+                기도친구와 함께 기도해요
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const DimUI = (
+    <div className="absolute z-30 top-0 left-0 w-full h-full bg-black/85 flex flex-col items-center p-5 text-white gap-10">
+      <div
+        className={`flex-grow flex flex-col gap-5 text-center ${TutorialComponentProps[index].textMarginTop}`}
+      >
+        <div>
+          <p className="text-lg font-bold">
+            {TutorialComponentProps[index].title}
+          </p>
+          <p className="font-light">
+            {TutorialComponentProps[index].description}
+          </p>
+        </div>
+        <footer className="text-white flex flex-col items-center gap-6">
+          <div className="flex items-center gap-4">
+            <FaAngleLeft size={24} onClick={() => onClickLeft()} />
+            <span>
+              {index + 1} / {TutorialComponentProps.length}
+            </span>
+            <FaAngleRight size={24} onClick={() => onClickRight()} />
+          </div>
+          <a
+            className="flex gap-1 items-center text-white underline"
+            href="/group"
+          >
+            스킵하기
+          </a>
+        </footer>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col w-full h-full gap-5">
+      {DimUI}
+      {TopBar}
+      <div className="flex flex-col h-full gap-4">
+        {MyMemberUI}
+        {TodayPrayStartCard}
+      </div>
+      {index === 3 && TodayPrayDrawer}
+    </div>
+  );
+};
+
+export default TutorialPage;
