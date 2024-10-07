@@ -11,7 +11,7 @@ interface StartPrayUBtnProps {
 const StartPrayUBtn: React.FC<StartPrayUBtnProps> = ({ eventOption }) => {
   const onClickStartPrayUBtn = async () => {
     analyticsTrack("클릭_PrayU_시작", { where: eventOption.where });
-    window.location.href = import.meta.env.VITE_LANDING_URL;
+    window.location.href = "/";
   };
 
   return (

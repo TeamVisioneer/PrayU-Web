@@ -69,15 +69,13 @@ const TodayPrayDummyCompletedItem = () => {
         <h1 className="text-xl">
           {today.year}.{today.month}.{today.day} 오늘의 말씀
         </h1>
-        <p className="font-light">
-          그룹원들과 함께 오늘의 기도를 진행해 보아요
-        </p>
+        <p className="font-light">친구들과 함께 오늘의 기도를 진행해 보아요</p>
       </div>
       <OpenShareDrawerBtn
         className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
           showButton ? "opacity-100" : "opacity-0"
         }`}
-        text="그룹원 초대하기"
+        text="친구 초대하기"
         eventOption={{ where: "TodayPrayDummyCompletedItem" }}
       />
       <button

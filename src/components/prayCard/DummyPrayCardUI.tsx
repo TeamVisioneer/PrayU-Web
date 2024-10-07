@@ -50,7 +50,7 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
       </div>
       <DumyReactionBtnWithCalendar dayOffset={dayOffset} />
       <div className="text-gray-400 text-sm text-center">
-        기도 반응을 통해 그룹원에게 마음을 전달해요
+        기도 반응을 통해 친구에게 마음을 전달해요
       </div>
     </div>
   );
