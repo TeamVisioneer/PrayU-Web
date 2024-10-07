@@ -3,7 +3,7 @@ import StartPrayUBtn from "./StartPrayUBtn";
 const StoryPage = () => {
   return (
     <div className="flex flex-grow flex-col justify-center text-center w-full  bg-white ">
-      <img src="/images/story/커버.png" className="w-full h-auto" />
+      <img src="/images/story/cover.png" className="w-full h-auto" />
       <div className="font-sans text-center">
         <div className="container max-w-screen-lg mx-auto px-4 py-10">
           <h1 className="text-2xl mt-6 font-bold">카톡방 속 답장 없는</h1>
@@ -29,7 +29,7 @@ const StoryPage = () => {
 
           <div className="image-container mt-10">
             <img
-              src="/images/story/힘들다.png"
+              src="/images/story/tired.png"
               className="mx-auto h-[168px] w-[168px] "
             />
           </div>
@@ -59,7 +59,7 @@ const StoryPage = () => {
 
           <div className="image-container mt-8">
             <img
-              src="/images/story/나야나.png"
+              src="/images/story/itsme.png"
               className="mx-auto w-[192px] h-[108px]"
             />
           </div>
@@ -81,7 +81,7 @@ const StoryPage = () => {
 
           <div className="image-container mt-8">
             <img
-              src="/images/story/문제1.png"
+              src="/images/story/problem1.png"
               className="mx-auto w-[240px] h-[217px]"
             />
           </div>
@@ -98,7 +98,7 @@ const StoryPage = () => {
 
           <div className="image-container mt-8">
             <img
-              src="/images/story/문제2.png"
+              src="/images/story/problem2.png"
               className="mx-auto w-[240px] h-[200px]"
             />
           </div>
@@ -110,7 +110,7 @@ const StoryPage = () => {
 
           <div className="image-container mt-8">
             <img
-              src="/images/story/문제3.png"
+              src="/images/story/problem3.png"
               className="mx-auto w-[240px] h-[331px]"
             />
           </div>
@@ -143,7 +143,7 @@ const StoryPage = () => {
             <h3 className=" font-semibold mt-6 text-red-500">결심했습니다</h3>
             <div className="image-container mt-8">
               <img
-                src="/images/story/나다싶은.png"
+                src="/images/story/nada.png"
                 className="mx-auto w-[128px] h-[128px]"
               />
             </div>
@@ -174,7 +174,7 @@ const StoryPage = () => {
             </h2>
             <div className="image-container mt-8">
               <img
-                src="/images/story/해결1.png"
+                src="/images/story/solve1.png"
                 className="mx-auto w-[350px] h-[350px]"
               />
             </div>
@@ -189,7 +189,7 @@ const StoryPage = () => {
           <div className="section mt-10">
             <div className="image-container mt-8">
               <img
-                src="/images/story/해결2.png"
+                src="/images/story/solve2.png"
                 className="mx-auto w-[350px] h-[350px]"
               />
             </div>
@@ -204,7 +204,7 @@ const StoryPage = () => {
           <div className="section mt-10">
             <div className="image-container mt-8">
               <img
-                src="/images/story/해결3.png"
+                src="/images/story/solve3.png"
                 className="mx-auto w-[350px] h-[350px]"
               />
             </div>
@@ -238,7 +238,7 @@ const StoryPage = () => {
             <div className="flex flex-row">
               <div className="flex flex-col">
                 <div className="image-container mt-8">
-                  <img src="/images/story/효과1.png" className="mx-auto " />
+                  <img src="/images/story/result1.png" className="mx-auto " />
                 </div>
                 <p className="mt-6 text-sm text-gray-500">
                   우리 소그룹원의 감사 인사❤
@@ -247,7 +247,7 @@ const StoryPage = () => {
               <div className="w-11"> </div>
               <div className="flex flex-col">
                 <div className="image-container mt-8">
-                  <img src="/images/story/효과2.png" className="mx-auto" />
+                  <img src="/images/story/result2.png" className="mx-auto" />
                 </div>
                 <p className="mt-6 text-sm text-gray-500">
                   일주일 사용해본 그룹장의 평가💛
@@ -256,7 +256,7 @@ const StoryPage = () => {
               <div className="w-11"> </div>
               <div className="flex flex-col">
                 <div className="image-container mt-8">
-                  <img src="/images/story/효과3.png" className="mx-auto" />
+                  <img src="/images/story/result3.png" className="mx-auto" />
                 </div>
                 <p className="mt-6 text-sm text-gray-500">
                   소문을 듣고 쓰고 싶다고 한 그룹장💙
@@ -285,7 +285,7 @@ const StoryPage = () => {
           </h2>
           <div className="image-container mt-8">
             <img
-              src="/images/story/목표.png"
+              src="/images/story/goal.png"
               className="mx-auto w-[476px] h-[265px]"
             />
           </div>
