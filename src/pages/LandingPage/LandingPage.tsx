@@ -1,33 +1,27 @@
 import React from "react";
+import StartPrayUBtn from "./StartPrayUBtn";
 
 const LandingPage = () => {
   return (
-    <div className="flex flex-grow flex-col justify-center text-center w-full bg-white">
-      <img
-        src="https://upload.cafenono.com/image/slashpageCoverImage/20240916/185050_YMqbXIJWrIVwvZeh02?q=90&s=1280x1&t=outside&f=webp"
-        className="w-full h-auto"
-        alt="ddd"
-      />
+    <div className="flex flex-grow flex-col justify-center text-center w-full  bg-white ">
+      <img src="/images/story/커버.png" className="w-full h-auto" />
       <div className="font-sans text-center">
         <div className="container max-w-screen-lg mx-auto px-4 py-10">
           <h1 className="text-2xl mt-6 font-bold">카톡방 속 답장 없는</h1>
           <h1 className="text-2xl font-bold">
-            <span className="underline text-purple-500">기도제목 나눔</span>은
+            <span className="underline text-purple-600">기도제목 나눔</span>은
             이제 그만!
           </h1>
           <h2 className="text-xl mt-5">이제는 그룹원들과</h2>
           <h2 className="text-xl">
-            <span className="text-purple-500">지속적으로 소통하며</span>{" "}
+            <span className="text-purple-600 font-bold">
+              지속적으로 소통하며
+            </span>{" "}
             기도해요
           </h2>
           <div className="h-20"></div>
 
-          <a
-            className="inline-block mt-6 px-8 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600"
-            href="https://prayu.vercel.app/?utm_source=slashpage&utm_medium=topBtn&utm_campaign=241001"
-          >
-            PrayU 지금 시작
-          </a>
+          <StartPrayUBtn eventOption={{ where: "topBtn" }} />
           <div className="h-8"></div>
           <h3 className="mt-6">.</h3>
           <h3 className="mt-3">.</h3>
@@ -36,9 +30,8 @@ const LandingPage = () => {
 
           <div className="image-container mt-10">
             <img
-              src="https://upload.cafenono.com/image/slashpageHome/20240621/140339_Lp0sfmrmhn1jJK0J9V?q=75&s=1280x180&t=outside&f=webp"
-              alt="Group Image"
-              className="mx-auto"
+              src="/images/story/힘들다.png"
+              className="mx-auto h-[168px] w-[168px] "
             />
           </div>
 
@@ -67,9 +60,8 @@ const LandingPage = () => {
 
           <div className="image-container mt-8">
             <img
-              src="https://upload.cafenono.com/image/slashpageHome/20240621/141105_TPaqZt9U34uMoIOS3e?q=75&s=1280x180&t=outside&f=webp"
-              alt="Prayer Image"
-              className="mx-auto"
+              src="/images/story/나야나.png"
+              className="mx-auto w-[192px] h-[108px]"
             />
           </div>
 
@@ -90,9 +82,8 @@ const LandingPage = () => {
 
           <div className="image-container mt-8">
             <img
-              src="https://upload.cafenono.com/image/slashpageHome/20240613/182804_cVpQpl2TZoFtOC8LIO?q=75&s=1280x180&t=outside&f=webp"
-              alt="Problem Analysis"
-              className="mx-auto"
+              src="/images/story/문제1.png"
+              className="mx-auto w-[240px] h-[217px]"
             />
           </div>
 
@@ -108,9 +99,8 @@ const LandingPage = () => {
 
           <div className="image-container mt-8">
             <img
-              src="https://upload.cafenono.com/image/slashpageHome/20240613/182741_SUzyHqwUSFe4XiBRon?q=75&s=1280x180&t=outside&f=webp"
-              alt="Problem Analysis2"
-              className="mx-auto"
+              src="/images/story/문제2.png"
+              className="mx-auto w-[240px] h-[200px]"
             />
           </div>
 
@@ -121,9 +111,8 @@ const LandingPage = () => {
 
           <div className="image-container mt-8">
             <img
-              src="https://upload.cafenono.com/image/slashpageHome/20240613/172549_K04oZXNB40ce6vzB0Q?q=75&s=1280x180&t=outside&f=webp"
-              alt="Problem Analysis3"
-              className="mx-auto"
+              src="/images/story/문제3.png"
+              className="mx-auto w-[240px] h-[331px]"
             />
           </div>
 
@@ -137,7 +126,7 @@ const LandingPage = () => {
           <p className="mt-6">최종적으로</p>
           <p className="mt-2">함께 기도하고자 하는 사람들을 위해서는</p>
           <p className="mt-2">
-            <span className="text-purple-500 font-bold">
+            <span className="text-purple-600 font-bold">
               다른 형태의 기도제목 공유
             </span>
             가
@@ -155,20 +144,19 @@ const LandingPage = () => {
             <h3 className=" font-semibold mt-6 text-red-500">결심했습니다</h3>
             <div className="image-container mt-8">
               <img
-                src="https://upload.cafenono.com/image/slashpageHome/20240621/140440_F05XjS6sm0Hf0Jtmgq?q=75&s=1280x180&t=outside&f=webp"
-                alt="Decision Image"
-                className="mx-auto"
+                src="/images/story/나다싶은.png"
+                className="mx-auto w-[128px] h-[128px]"
               />
             </div>
 
             <p className="mt-7 ">기도제목의 공유를 위한 프로그램을</p>
             <p className="mt-2">제가 직접 만들어보기로 ⭐</p>
             <p className="mt-7">
-              <span className="text-purple-500 font-bold">본업이 개발자</span>
+              <span className="text-purple-600 font-bold">본업이 개발자</span>
               이기도 하고
             </p>
             <p className="mt-2">
-              <span className="text-purple-500 font-bold">
+              <span className="text-purple-600 font-bold">
                 교회의 나눔 문화에 익숙
               </span>
               한 만큼
@@ -178,12 +166,7 @@ const LandingPage = () => {
 
             <div className="h-32 "></div>
 
-            <a
-              className="inline-block mt-6 px-8 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600"
-              href="https://prayu.vercel.app/?utm_source=slashpage&utm_medium=middleBtn&utm_campaign=241001"
-            >
-              PrayU 지금 시작
-            </a>
+            <StartPrayUBtn eventOption={{ where: "middleBtn" }} />
           </div>
 
           <div className="section mt-10">
@@ -192,9 +175,8 @@ const LandingPage = () => {
             </h2>
             <div className="image-container mt-8">
               <img
-                src="https://upload.cafenono.com/image/slashpageHome/20240916/182909_BRBek8IC3pfeJhBPMs?q=80&s=1280x180&t=outside&f=webp"
-                alt="Solution Image"
-                className="mx-auto"
+                src="/images/story/해결1.png"
+                className="mx-auto w-[350px] h-[350px]"
               />
             </div>
             <p className="mt-6">우리 소그룹 내에서 먼저 사용해보고자</p>
@@ -208,15 +190,14 @@ const LandingPage = () => {
           <div className="section mt-10">
             <div className="image-container mt-8">
               <img
-                src="https://upload.cafenono.com/image/slashpageHome/20240916/183039_Ufmrd2Tpbo1pKKWjX0?q=80&s=1280x180&t=outside&f=webp"
-                alt="Solution Image2"
-                className="mx-auto"
+                src="/images/story/해결2.png"
+                className="mx-auto w-[350px] h-[350px]"
               />
             </div>
             <p className="mt-6">그룹원들이 기도제목을 작성하면</p>
             <p className="mt-2">일주일 동안 기도제목을 넘기면서</p>
             <p className="mt-2">
-              <span className="text-purple-500 font-bold">매일매일</span> 서로를
+              <span className="text-purple-600 font-bold">매일매일</span> 서로를
               위해 기도해줄 수 있어요!
             </p>
           </div>
@@ -224,9 +205,8 @@ const LandingPage = () => {
           <div className="section mt-10">
             <div className="image-container mt-8">
               <img
-                src="https://upload.cafenono.com/image/slashpageHome/20240916/183138_GfKH43wKr05myxOxAN?q=80&s=1280x180&t=outside&f=webp"
-                alt="Solution Image3"
-                className="mx-auto"
+                src="/images/story/해결3.png"
+                className="mx-auto w-[350px] h-[350px]"
               />
             </div>
             <p className="mt-6">
@@ -259,35 +239,29 @@ const LandingPage = () => {
             <div className="flex flex-row">
               <div className="flex flex-col">
                 <div className="image-container mt-8">
-                  <img
-                    src="https://upload.cafenono.com/image/slashpageHome/20240621/154539_dA0JVrnt1lcWQAkCX3?q=90&s=1280x1&t=outside&f=webp"
-                    alt="Reference Image"
-                    className="mx-auto"
-                  />
+                  <img src="/images/story/효과1.png" className="mx-auto " />
                 </div>
-                <p className="mt-6">우리 소그룹원의 감사 인사❤</p>
+                <p className="mt-6 text-sm text-gray-500">
+                  우리 소그룹원의 감사 인사❤
+                </p>
               </div>
               <div className="w-11"> </div>
               <div className="flex flex-col">
                 <div className="image-container mt-8">
-                  <img
-                    src="https://upload.cafenono.com/image/slashpageHome/20240621/154552_ndJH8KhwBRrBmCRugy?q=90&s=1280x1&t=outside&f=webp"
-                    alt="Solution Image2"
-                    className="mx-auto"
-                  />
+                  <img src="/images/story/효과2.png" className="mx-auto" />
                 </div>
-                <p className="mt-6">일주일 사용해본 그룹장의 평가💛</p>
+                <p className="mt-6 text-sm text-gray-500">
+                  일주일 사용해본 그룹장의 평가💛
+                </p>
               </div>
               <div className="w-11"> </div>
               <div className="flex flex-col">
                 <div className="image-container mt-8">
-                  <img
-                    src="https://upload.cafenono.com/image/slashpageHome/20240621/154603_qi56DVLLqrK8kXptiZ?q=90&s=1280x1&t=outside&f=webp"
-                    alt="Solution Image3"
-                    className="mx-auto"
-                  />
+                  <img src="/images/story/효과3.png" className="mx-auto" />
                 </div>
-                <p className="mt-6">소문을 듣고 쓰고 싶다고 한 그룹장💙</p>
+                <p className="mt-6 text-sm text-gray-500">
+                  소문을 듣고 쓰고 싶다고 한 그룹장💙
+                </p>
               </div>
             </div>
           </div>
@@ -312,9 +286,8 @@ const LandingPage = () => {
           </h2>
           <div className="image-container mt-8">
             <img
-              src="https://upload.cafenono.com/image/slashpageHome/20240913/145610_gVpZYwWKqOAdxwNm0U?q=90&s=1920x1&t=outside&f=webp"
-              alt="Goal Image"
-              className="mx-auto"
+              src="/images/story/목표.png"
+              className="mx-auto w-[476px] h-[265px]"
             />
           </div>
           <div className="h-11"></div>
@@ -340,16 +313,15 @@ const LandingPage = () => {
 
           <p className="mt-14">모두를 위한 기도제목 공유앱 PrayU 을 위해</p>
           <p className="mt-2">함께 동참해 주시길 소망합니다 🙏</p>
-          <div className="h-7 "></div>
+          <div className="h-11 "></div>
 
-          <a
-            className="inline-block mt-6 px-8 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600"
-            href="https://prayu.vercel.app/?utm_source=slashpage&utm_medium=bottomBtn&utm_campaign=241001"
-          >
-            PrayU 지금 시작
-          </a>
+          <StartPrayUBtn eventOption={{ where: "bottomBtn" }} />
 
-          <p className="mt-6">문의: team.visioneer15@gmail.com</p>
+          <p className="mt-14">문의: team.visioneer15@gmail.com</p>
+          <div className="h-44  "></div>
+          <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
+            <StartPrayUBtn eventOption={{ where: "floatingBtn" }} />
+          </div>
         </div>
       </div>
     </div>
