@@ -119,7 +119,7 @@ const ShareDrawer: React.FC = () => {
   const DrawerBody = (
     <div className="flex flex-col items-center text-center gap-6 pb-10">
       <div className="flex flex-col items-center">
-        <p className="text-xl font-bold">새 그룹원들을 초대해 보아요 📮</p>
+        <p className="text-xl font-bold">새 친구들을 초대해 보아요 📮</p>
       </div>
 
       {ImageCerousel}

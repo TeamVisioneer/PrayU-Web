@@ -71,7 +71,7 @@ const TodayPrayCompletedItem = () => {
         <h1 className="text-xl">
           {today.year}.{today.month}.{today.day} 오늘의 말씀
         </h1>
-        <p className="font-light">그룹원들에게 오늘의 말씀을 공유해 주세요</p>
+        <p className="font-light">친구들에게 오늘의 말씀을 공유해 주세요</p>
       </div>
       <KakaoShareButton
         className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${

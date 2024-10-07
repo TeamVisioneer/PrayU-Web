@@ -25,6 +25,7 @@ import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
+import StoryPage from "./pages/StoryPage/StoryPage";
 
 const App = () => {
   useEffect(() => {
@@ -40,7 +41,11 @@ const App = () => {
   }, []);
   return (
     <div className="w-screen h-screen bg-mainBg ">
-      <div className="mx-auto max-w-[480px] h-full p-5 overflow-x-hidden no-scrollbar">
+      <div
+        className={`mx-auto ${
+          window.location.pathname === "/story" ? "w-full" : "max-w-[480px] p-5"
+        } h-full overflow-x-hidden no-scrollbar`}
+      >
         <BrowserRouter>
           <AuthProvider>
             {(import.meta.env.VITE_ENV === "staging" ||
@@ -118,6 +123,7 @@ const App = () => {
                 }
               />
               <Route path="/login/email" element={<EmailLoginPage />} />
+              <Route path="/story" element={<StoryPage />} />
             </Routes>
           </AuthProvider>
         </BrowserRouter>
