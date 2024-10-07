@@ -1,6 +1,6 @@
 import StartPrayUBtn from "./StartPrayUBtn";
 
-const LandingPage = () => {
+const StoryPage = () => {
   return (
     <div className="flex flex-grow flex-col justify-center text-center w-full  bg-white ">
       <img src="/images/story/커버.png" className="w-full h-auto" />
@@ -327,4 +327,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default StoryPage;

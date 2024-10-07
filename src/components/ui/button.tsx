@@ -22,7 +22,6 @@ const buttonVariants = cva(
         primary:
           "shadow-md bg-gradient-to-br from-[#608CFF] to-[#4574F1] text-white cursor-pointer",
         primaryLight: "shadow-md bg-white text-[#222222] cursor-pointer",
-        landing: "bg-yellow-300 hover:bg-yellow-400",
       },
       size: {
         default: "h-10 px-4 py-2",

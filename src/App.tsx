@@ -25,7 +25,7 @@ import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
-import LandingPage from "./pages/LandingPage/LandingPage";
+import StoryPage from "./pages/LandingPage/StoryPage";
 
 const App = () => {
   useEffect(() => {
@@ -43,9 +43,7 @@ const App = () => {
     <div className="w-screen h-screen bg-mainBg ">
       <div
         className={`mx-auto ${
-          window.location.pathname === "/landing"
-            ? "w-full"
-            : "max-w-[480px] p-5"
+          window.location.pathname === "/story" ? "w-full" : "max-w-[480px] p-5"
         } h-full overflow-x-hidden no-scrollbar`}
       >
         <BrowserRouter>
@@ -125,7 +123,7 @@ const App = () => {
                 }
               />
               <Route path="/login/email" element={<EmailLoginPage />} />
-              <Route path="/landing" element={<LandingPage />} />
+              <Route path="/story" element={<StoryPage />} />
             </Routes>
           </AuthProvider>
         </BrowserRouter>

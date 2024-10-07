@@ -16,7 +16,7 @@ const StartPrayUBtn: React.FC<StartPrayUBtnProps> = ({ eventOption }) => {
 
   return (
     <Button
-      variant="landing"
+      variant="primary"
       className={`w-[188px] h-[46px] text-md font-bold ${
         eventOption.where == "floatingBtn"
           ? "rounded-[100px]"
