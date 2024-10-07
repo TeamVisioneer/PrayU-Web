@@ -1,4 +1,3 @@
-import React from "react";
 import StartPrayUBtn from "./StartPrayUBtn";
 
 const LandingPage = () => {
