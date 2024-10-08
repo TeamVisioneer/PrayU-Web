@@ -1,21 +1,26 @@
 import inviteIcon from "@/assets/icon-invite.png";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import useBaseStore from "@/stores/baseStore";
 import { SlMenu } from "react-icons/sl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 import { days, getISOTodayDate } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
+import { useNavigate } from "react-router-dom";
+import useBaseStore from "@/stores/baseStore";
 
 const TutorialPage: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [todayPrayType, setTodayPrayType] = useState<PrayType | null>(null);
 
-  const user = useBaseStore((state) => state.user);
-
   const today = getISOTodayDate();
   const todayDt = new Date(today);
+
+  const navigate = useNavigate();
+  const user = useBaseStore((state) => state.user);
+  const userLoading = useBaseStore((state) => state.userLoading);
+
+  if (userLoading) return null;
 
   const TutorialComponentProps = [
     {
@@ -59,9 +64,13 @@ const TutorialPage: React.FC = () => {
 
   const onClickRight = (eventOption: { where: string }) => {
     analyticsTrack("클릭_튜토리얼_다음", eventOption);
-    if (index == TutorialComponentProps.length - 1)
-      window.location.href = "/group";
+    if (index == TutorialComponentProps.length - 1) navigate("/group");
     if (index < TutorialComponentProps.length - 1) setIndex(index + 1);
+  };
+
+  const onClickCompletedTutorial = () => {
+    analyticsTrack("클릭_튜토리얼_완료", {});
+    navigate("/group");
   };
 
   const TopBar = (
@@ -223,11 +232,7 @@ const TutorialPage: React.FC = () => {
                           ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
                           : `opacity-20 ${emojiData.shadowColor}`
                       }`}
-                      onClick={() =>
-                        setTimeout(() => {
-                          setTodayPrayType(type);
-                        }, 200)
-                      }
+                      onClick={() => setTodayPrayType(type)}
                     >
                       <img src={emojiData.icon} className="w-9 h-9" />
                     </button>
@@ -276,9 +281,8 @@ const TutorialPage: React.FC = () => {
             />
           </div>
           <a
-            className="flex gap-1 items-center text-white underline"
-            href="/group"
-            onClick={() => analyticsTrack("클릭_튜토리얼_완료", {})}
+            className="flex gap-1 items-center text-white underline cursor-pointer"
+            onClick={() => onClickCompletedTutorial()}
           >
             {index == TutorialComponentProps.length - 1
               ? "시작하기"
