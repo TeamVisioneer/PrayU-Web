@@ -14,34 +14,34 @@ const TutorialPage: React.FC = () => {
 
   const TutorialComponentProps = [
     {
-      title: "1. 첫 기도 그룹",
+      title: "튜토리얼 시작",
       description: [
-        "매 주 기도제목이 올라오는 기도그룹이에요",
+        "새로운 기도 그룹을 만들어 드렸어요",
         "기도친구를 초대하여 기도제목을 나눌 수 있어요!",
       ],
       textMarginTop: "mt-[230px]",
     },
     {
-      title: "2. 내 기도제목 보기",
+      title: "내 기도제목 보기",
       description: [
         "기도제목을 기록하는 곳이에요",
-        "기도제목은 그룹 친구들이 확인할 수 있어요!",
+        "친구들이 내 기도제목을 보고 기도해 줄 수 있어요!",
       ],
       textMarginTop: "mt-[230px]",
     },
     {
-      title: "3. 오늘의 기도",
+      title: "오늘의 기도",
       description: [
         "친구들의 이번 주 기도제목을 볼 수 있어요",
-        "오늘의 기도를 시작해보세요!",
+        "하루에 한 번 매일 친구들에게 기도해 보아요!",
       ],
       textMarginTop: "mt-[230px]",
     },
     {
-      title: "4. 기도 반응하기",
+      title: "기도 반응하기",
       description: [
-        "기도 버튼을 눌러 친구에게 반응을 남겨주세요",
-        "기도반응은 한 주 동안 매일 남길 수 있어요!",
+        "버튼을 눌러 반응을 남겨보세요",
+        "친구들이 내가 기도한 것을 알 수 있어요!",
       ],
       textMarginTop: "mt-[230px]",
     },
@@ -211,15 +211,15 @@ const TutorialPage: React.FC = () => {
       <div
         className={`flex-grow flex flex-col gap-5 text-center ${TutorialComponentProps[index].textMarginTop}`}
       >
-        <div>
-          <p className="text-lg font-bold">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-xl font-bold">
             {TutorialComponentProps[index].title}
-          </p>
-          {TutorialComponentProps[index].description.map((desc, index) => (
-            <p key={index} className="font-light">
-              {desc}
-            </p>
-          ))}
+          </h1>
+          <div className="font-light">
+            {TutorialComponentProps[index].description.map((desc, index) => (
+              <p key={index}>{desc}</p>
+            ))}
+          </div>
         </div>
         <footer className="text-white flex flex-col items-center gap-4">
           <div className="flex items-center gap-4">
