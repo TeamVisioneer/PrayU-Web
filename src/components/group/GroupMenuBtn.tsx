@@ -14,7 +14,6 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { SlMenu } from "react-icons/sl";
 import addGroup from "@/assets/addGroup.svg";
 import minusGroup from "@/assets/minusGroup.svg";
-import newIcon from "@/assets/newIcon.svg";
 import groupIcon from "@/assets/groupIcon.svg";
 import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -104,6 +103,10 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
     analyticsTrack("클릭_카카오_소식", {});
     window.location.href = "http://pf.kakao.com/_XaHDG/posts";
   };
+  const onClickOpenTutorial = () => {
+    analyticsTrack("클릭_튜토리얼", {});
+    window.location.href = "/tutorial";
+  };
 
   const onClickSignOut = () => {
     analyticsTrack("클릭_로그아웃", {});
@@ -184,32 +187,28 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
               <hr className="w-full" />
             </>
           )}
-          <div className="flex gap-2 items-center">
-            <a
-              href="/profile/me"
-              onClick={() => analyticsTrack("클릭_프로필_나", {})}
-            >
-              내 정보
-            </a>
-          </div>
+          <a
+            href="/profile/me"
+            onClick={() => analyticsTrack("클릭_프로필_나", {})}
+          >
+            내 정보
+          </a>
 
-          <a href="/" onClick={() => analyticsTrack("클릭_공유_도메인", {})}>
+          <a href="/" onClick={() => analyticsTrack("클릭_홈", {})}>
             PrayU 홈
           </a>
-          <div className="flex gap-1 items-center">
-            <a onClick={() => onClickOpenNotice()}>PrayU 소식</a>
-            <img src={newIcon} />
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <a
-              href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
-              onClick={() => onClickContactUs()}
-            >
-              PrayU 문의
-            </a>
-          </div>
-
+          <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
+            PrayU 소식
+          </a>
+          <a className="cursor-pointer" onClick={() => onClickOpenTutorial()}>
+            PrayU 튜토리얼
+          </a>
+          <a
+            href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
+            onClick={() => onClickContactUs()}
+          >
+            PrayU 문의
+          </a>
           <a className="cursor-pointer" onClick={() => onClickSignOut()}>
             로그아웃
           </a>

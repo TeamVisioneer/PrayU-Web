@@ -107,7 +107,6 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     <div className="flex justify-center gap-[30px]">
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
-
         return (
           <button
             key={type}

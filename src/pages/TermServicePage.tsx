@@ -42,8 +42,8 @@ const TermServicePage: React.FC = () => {
 
   const handleCreateGroup = async () => {
     const groupName = profile.full_name
-      ? `${profile.full_name}의 그룹`
-      : "새 그룹";
+      ? `${profile.full_name}의 기도그룹`
+      : "새 기도그룹";
     const targetGroup = await createGroup(profile.id, groupName, "intro");
     if (!targetGroup) return;
     const myMember = await createMember(targetGroup.id, profile.id, "");
@@ -67,14 +67,14 @@ const TermServicePage: React.FC = () => {
     if (groupId) navigate(`/group/${groupId}`, { replace: true });
     else {
       if (groupList.length > 0)
-        navigate(`/group/${groupList[0].id}`, { replace: true });
+        window.location.replace(`/group/${groupList[0].id}`);
       else {
         const targetGroupId = await handleCreateGroup();
         if (!targetGroupId) {
           setIsDisabledAgreeBtn(false);
           return;
         }
-        navigate(`/group/${targetGroupId}`, { replace: true });
+        window.location.replace("/tutorial");
       }
     }
   };

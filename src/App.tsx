@@ -26,6 +26,7 @@ import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
 import StoryPage from "./pages/StoryPage/StoryPage";
+import TutorialPage from "./pages/TutorialPage";
 
 const App = () => {
   useEffect(() => {
@@ -60,6 +61,8 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route path="/tutorial" element={<TutorialPage />} />
+
               <Route
                 path="/auth/kakao/callback"
                 element={
@@ -154,6 +157,12 @@ const AnalyticsTracker = () => {
       case "/term":
         analyticsTrack("페이지_약관", {
           title: "Term Page",
+          where: from,
+        });
+        break;
+      case "/tutorial":
+        analyticsTrack("페이지_튜토리얼", {
+          title: "Tutorial Page",
           where: from,
         });
         break;
