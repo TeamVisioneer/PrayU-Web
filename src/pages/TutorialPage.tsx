@@ -20,9 +20,6 @@ const TutorialPage: React.FC = () => {
   const navigate = useNavigate();
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
-  const setIsOpenShareDrawer = useBaseStore(
-    (state) => state.setIsOpenShareDrawer
-  );
 
   if (userLoading) return null;
 
