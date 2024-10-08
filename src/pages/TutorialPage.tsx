@@ -8,6 +8,7 @@ import { days, getISOTodayDate } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
+import completed from "@/assets/completed.svg";
 
 const TutorialPage: React.FC = () => {
   const [index, setIndex] = useState(0);
@@ -19,6 +20,9 @@ const TutorialPage: React.FC = () => {
   const navigate = useNavigate();
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
+  const setIsOpenShareDrawer = useBaseStore(
+    (state) => state.setIsOpenShareDrawer
+  );
 
   if (userLoading) return null;
 
@@ -55,6 +59,14 @@ const TutorialPage: React.FC = () => {
       ],
       textMarginTop: "mt-[230px]",
     },
+    {
+      title: "친구 초대하기",
+      description: [
+        "그룹에 친구를 초대해 주세요",
+        "함께 기도할 때 서로에게 더욱 힘이 되어요!",
+      ],
+      textMarginTop: "mt-[230px]",
+    },
   ];
 
   const onClickLeft = () => {
@@ -64,8 +76,8 @@ const TutorialPage: React.FC = () => {
 
   const onClickRight = (eventOption: { where: string }) => {
     analyticsTrack("클릭_튜토리얼_다음", eventOption);
-    if (index == TutorialComponentProps.length - 1) navigate("/group");
     if (index < TutorialComponentProps.length - 1) setIndex(index + 1);
+    if (index == TutorialComponentProps.length - 1) onClickCompletedTutorial();
   };
 
   const onClickCompletedTutorial = () => {
@@ -247,10 +259,35 @@ const TutorialPage: React.FC = () => {
     </div>
   );
 
+  const CompletedUI = (
+    <div className="relative flex flex-col justify-center items-center h-80vh">
+      <div className="flex flex-col gap-4 justify-center items-center">
+        <div className="flex flex-col gap-4 items-center ">
+          <h1 className="text-2xl font-bold">오늘의 기도 완료</h1>
+          <div className="h-[120px] w-[120px] flex flex-col items-center">
+            <img className="h-full w-full rounded-2xl" src={completed} />
+          </div>
+        </div>
+        <div className="flex flex-col justify-center items-center text-liteBlack">
+          <p>친구들의 기도제목으로</p>
+          <p>오늘의 기도를 시작해 보아요</p>
+        </div>
+        <Button
+          variant="primary"
+          className={`w-56 ${index === 4 && "z-40"}`}
+          onClick={() => onClickRight({ where: "CompletedUI" })}
+        >
+          친구 초대하기
+        </Button>
+      </div>
+    </div>
+  );
+
   const TodayPrayDrawer = (
     <div className="h-full -m-5 flex flex-col justify-end bg-black/50">
       <div className="bg-mainBg rounded-t-2xl px-10 pt-10 h-80vh border-2 border-gray">
-        {PrayCardUI}
+        {index == 3 && PrayCardUI}
+        {index == 4 && CompletedUI}
       </div>
     </div>
   );
