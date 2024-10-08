@@ -51,7 +51,7 @@ const TutorialPage: React.FC = () => {
       title: "기도 반응하기",
       description: [
         "버튼을 눌러 반응을 남겨보세요",
-        "친구들에게 기도반응이 전달되어요!",
+        "친구들에게 기도반응이 전달 되어요!",
       ],
       textMarginTop: "mt-[230px]",
     },
@@ -159,89 +159,98 @@ const TutorialPage: React.FC = () => {
     </div>
   );
 
-  const TodayPrayDrawer = (
-    <div className="h-full -m-5 flex flex-col justify-end bg-black/50">
-      <div className="bg-mainBg rounded-t-2xl px-10 border-2 border-gray">
-        <div className="flex flex-col gap-2 h-80vh  py-10">
-          <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
-            <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
-              <div className="flex items-center gap-2">
-                <img
-                  src="/images/defaultProfileImage.png"
-                  className="w-7 h-7 rounded-full object-cover"
-                />
-                <p className="text-white text-lg">기도친구</p>
-              </div>
-              <p className="text-sm text-white text-left">
-                시작일: 2021.08.01 (일)
-              </p>
-            </div>
-            <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-              <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
-                기도친구와 함께 기도해요
-              </p>
-            </div>
-          </div>
-          <div className={`${index === 3 ? "z-50" : ""}`}>
-            <div className="flex flex-col gap-6 p-2 bg-mainBg rounded-md">
-              <div className="flex justify-center gap-[13px]">
-                {days.map((day, index) => (
-                  <div key={index} className="flex flex-col items-center gap-1">
-                    <span
-                      className={`text-sm ${
-                        index == todayDt.getDay()
-                          ? "text-black font-bold"
-                          : "text-deactivate"
-                      }`}
-                    >
-                      {day}
-                    </span>
-                    <div
-                      className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
-                        index == todayDt.getDay() &&
-                        "border-[1.5px] border-[#BBBED4]"
-                      } 
+  const ReactionBtn = (
+    <div className="flex justify-center gap-[13px]">
+      {days.map((day, index) => (
+        <div key={index} className="flex flex-col items-center gap-1">
+          <span
+            className={`text-sm ${
+              index == todayDt.getDay()
+                ? "text-black font-bold"
+                : "text-deactivate"
+            }`}
+          >
+            {day}
+          </span>
+          <div
+            className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
+              index == todayDt.getDay() && "border-[1.5px] border-[#BBBED4]"
+            } 
                         ${todayPrayType && "border-none"}`}
-                    >
-                      {index == todayDt.getDay() && (
-                        <img
-                          className={`duration-1000 ease-in-out ${
-                            todayPrayType ? "opacity-100" : "opacity-0"
-                          }`}
-                          src={
-                            PrayTypeDatas[todayPrayType as PrayType]?.reactImg
-                          }
-                        />
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-center gap-[30px]">
-                {Object.values(PrayType).map((type) => {
-                  const emojiData = PrayTypeDatas[type];
-                  return (
-                    <button
-                      key={type}
-                      className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
-                        emojiData.bgColor
-                      } ${
-                        !todayPrayType
-                          ? `opacity-90 ${emojiData.shadowColor}`
-                          : todayPrayType == type
-                          ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
-                          : `opacity-20 ${emojiData.shadowColor}`
-                      }`}
-                      onClick={() => setTodayPrayType(type)}
-                    >
-                      <img src={emojiData.icon} className="w-9 h-9" />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+          >
+            {index == todayDt.getDay() && (
+              <img
+                className={`duration-1000 ease-in-out ${
+                  todayPrayType ? "opacity-100" : "opacity-0"
+                }`}
+                src={PrayTypeDatas[todayPrayType as PrayType]?.reactImg}
+              />
+            )}
           </div>
         </div>
+      ))}
+    </div>
+  );
+
+  const Calendar = (
+    <div className="flex justify-center gap-[30px]">
+      {Object.values(PrayType).map((type) => {
+        const emojiData = PrayTypeDatas[type];
+        return (
+          <button
+            key={type}
+            className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
+              emojiData.bgColor
+            } ${
+              !todayPrayType
+                ? `opacity-90 ${emojiData.shadowColor}`
+                : todayPrayType == type
+                ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
+                : `opacity-20 ${emojiData.shadowColor}`
+            }`}
+            onClick={() => setTodayPrayType(type)}
+          >
+            <img src={emojiData.icon} className="w-9 h-9" />
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  const PrayCardUI = (
+    <div className="h-full flex flex-col gap-2">
+      <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+        <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
+          <div className="flex items-center gap-2">
+            <img
+              src="/images/defaultProfileImage.png"
+              className="w-7 h-7 rounded-full object-cover"
+            />
+            <p className="text-white text-lg">기도친구</p>
+          </div>
+          <p className="text-sm text-white text-left">
+            시작일: 2021.08.01 (일)
+          </p>
+        </div>
+        <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
+          <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
+            기도친구와 함께 기도해요
+          </p>
+        </div>
+      </div>
+      <div className={`${index === 3 ? "z-50" : ""}`}>
+        <div className="flex flex-col gap-6 p-2 bg-mainBg rounded-md">
+          {ReactionBtn}
+          {Calendar}
+        </div>
+      </div>
+    </div>
+  );
+
+  const TodayPrayDrawer = (
+    <div className="h-full -m-5 flex flex-col justify-end bg-black/50">
+      <div className="bg-mainBg rounded-t-2xl px-10 pt-10 h-80vh border-2 border-gray">
+        {PrayCardUI}
       </div>
     </div>
   );
