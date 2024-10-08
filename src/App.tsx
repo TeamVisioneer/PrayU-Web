@@ -160,6 +160,12 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
+      case "/tutorial":
+        analyticsTrack("페이지_튜토리얼", {
+          title: "Tutorial Page",
+          where: from,
+        });
+        break;
       case "/group/new":
         analyticsTrack("페이지_그룹_생성", {
           title: "Group Create Page",
