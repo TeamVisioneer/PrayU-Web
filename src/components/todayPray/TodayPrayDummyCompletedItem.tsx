@@ -1,12 +1,10 @@
-import { getISOTodayDateYMD } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import useBaseStore from "@/stores/baseStore";
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
+import completed from "@/assets/completed.svg";
 
 const TodayPrayDummyCompletedItem = () => {
-  const today = getISOTodayDateYMD();
-  const contentNumber = parseInt(today.day, 10) % 31;
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
@@ -51,35 +49,41 @@ const TodayPrayDummyCompletedItem = () => {
   }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi]);
 
   return (
-    <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
-      <div className="h-[280px] w-full flex flex-col items-center">
-        <img
-          className={`h-full rounded-2xl transition-opacity duration-1000 ease-in ${
+    <div className="relative flex flex-col justify-between items-center h-80vh">
+      <div className=""></div>
+      <div className="flex flex-col gap-4 justify-center items-center">
+        <div
+          className={`flex flex-col gap-4 items-center transition-opacity duration-1000 ease-in ${
             showImage ? "opacity-100" : "opacity-0"
           }`}
-          src={`https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`}
-          onLoad={() => setIsImageLoaded(true)}
+        >
+          <h1 className="text-2xl font-bold">오늘의 기도 완료</h1>
+          <div className="h-[120px] w-[120px] flex flex-col items-center">
+            <img
+              className="h-full w-full rounded-2xl"
+              src={completed}
+              onLoad={() => setIsImageLoaded(true)}
+            />
+          </div>
+        </div>
+        <div
+          className={`flex flex-col justify-center items-center text-liteBlack transition-opacity duration-1000 ease-in-out  ${
+            showTitleText ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <p>친구들의 기도제목으로</p>
+          <p>오늘의 기도를 시작해 보아요</p>
+        </div>
+        <OpenShareDrawerBtn
+          className={`w-56 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+            showButton ? "opacity-100" : "opacity-0"
+          }`}
+          text="친구 초대하기"
+          eventOption={{ where: "TodayPrayDummyCompletedItem" }}
         />
       </div>
-      <div
-        className={`flex flex-col justify-center items-center gap-1 transition-opacity duration-1000 ease-in-out  ${
-          showTitleText ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <h1 className="text-xl">
-          {today.year}.{today.month}.{today.day} 오늘의 말씀
-        </h1>
-        <p className="font-light">친구들과 함께 오늘의 기도를 진행해 보아요</p>
-      </div>
-      <OpenShareDrawerBtn
-        className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
-          showButton ? "opacity-100" : "opacity-0"
-        }`}
-        text="친구 초대하기"
-        eventOption={{ where: "TodayPrayDummyCompletedItem" }}
-      />
       <button
-        className="absolute bottom-3 flex gap-1 items-center text-gray-400"
+        className="flex gap-1 items-center text-gray-400"
         onClick={() => setIsOpenTodayPrayDrawer(false)}
       >
         <IoClose />
