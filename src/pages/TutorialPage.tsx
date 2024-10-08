@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 import { days } from "@/lib/utils";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const TutorialPage: React.FC = () => {
   const [index, setIndex] = useState(0);
@@ -47,10 +48,12 @@ const TutorialPage: React.FC = () => {
   ];
 
   const onClickLeft = () => {
+    analyticsTrack("클릭_튜토리얼_이전", {});
     if (index > 0) setIndex(index - 1);
   };
 
-  const onClickRight = () => {
+  const onClickRight = (eventOption: { where: string }) => {
+    analyticsTrack("클릭_튜토리얼_다음", eventOption);
     if (index == TutorialComponentProps.length - 1)
       window.location.href = "/group";
     if (index < TutorialComponentProps.length - 1) setIndex(index + 1);
@@ -61,7 +64,7 @@ const TutorialPage: React.FC = () => {
       className={`flex justify-between items-center bg-mainBg p-2 rounded-md ${
         index === 0 && "z-40"
       }`}
-      onClick={() => onClickRight()}
+      onClick={() => onClickRight({ where: "TopBar" })}
     >
       <div className="bg-mainBg w-[52px] flex items-center gap-1 text-[14px] p-1 rounded-sm">
         <img src={inviteIcon} className="w-[16px] h-[16px]" />
@@ -84,7 +87,7 @@ const TutorialPage: React.FC = () => {
       className={`w-full flex flex-col gap-3 cursor-pointer bg-white p-[25px] rounded-[15px] ${
         index === 1 && "z-40"
       }`}
-      onClick={() => onClickRight()}
+      onClick={() => onClickRight({ where: "MyMemberUI" })}
     >
       <div className="flex flex-col gap-1">
         <h3 className="flex font-bold text-lg">내 기도제목</h3>
@@ -129,7 +132,7 @@ const TutorialPage: React.FC = () => {
             }`}
           ></img>
           <Button
-            onClick={() => onClickRight()}
+            onClick={() => onClickRight({ where: "TodayPrayStartCard" })}
             variant="primary"
             className={`w-[188px] h-[46px] text-md font-bold rounded-[10px] ${
               index === 2 && "z-40"
@@ -217,7 +220,7 @@ const TutorialPage: React.FC = () => {
         const clickedX = e.clientX;
         const windowWidth = window.innerWidth;
         if (clickedX < windowWidth / 2) onClickLeft();
-        else onClickRight();
+        else onClickRight({ where: "DimUI" });
       }}
     >
       <div
@@ -239,11 +242,15 @@ const TutorialPage: React.FC = () => {
             <span>
               {index + 1} / {TutorialComponentProps.length}
             </span>
-            <FaAngleRight size={24} onClick={() => onClickRight()} />
+            <FaAngleRight
+              size={24}
+              onClick={() => onClickRight({ where: "RightBtn" })}
+            />
           </div>
           <a
             className="flex gap-1 items-center text-white underline"
             href="/group"
+            onClick={() => analyticsTrack("클릭_튜토리얼_완료", {})}
           >
             {index == TutorialComponentProps.length - 1
               ? "시작하기"
