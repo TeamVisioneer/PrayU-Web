@@ -148,7 +148,7 @@ const TutorialPage: React.FC = () => {
   const TodayPrayDrawer = (
     <>
       <div
-        className={`absolute top-0 left-0 w-full h-full flex flex-col bg-black/85 ${
+        className={`fixed inset-x-0 top-0 w-full h-full mx-auto max-w-[480px] flex flex-col bg-black/85 ${
           index === 3 && "z-20"
         }`}
       >
@@ -215,7 +215,7 @@ const TutorialPage: React.FC = () => {
 
   const DimUI = (
     <div
-      className="absolute z-30 top-0 left-0 w-full h-full bg-black/85 flex flex-col items-center p-5 text-white gap-10"
+      className="fixed inset-x-0 z-30 top-0 mx-auto w-full h-full max-w-[480px] bg-black/85 flex flex-col items-center p-5 text-white gap-10"
       onClick={(e) => {
         const clickedX = e.clientX;
         const windowWidth = window.innerWidth;
