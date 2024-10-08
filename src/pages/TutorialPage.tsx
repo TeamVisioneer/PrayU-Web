@@ -5,12 +5,17 @@ import { SlMenu } from "react-icons/sl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
-import { days } from "@/lib/utils";
+import { days, getISOTodayDate } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
 
 const TutorialPage: React.FC = () => {
   const [index, setIndex] = useState(0);
+  const [todayPrayType, setTodayPrayType] = useState<PrayType | null>(null);
+
   const user = useBaseStore((state) => state.user);
+
+  const today = getISOTodayDate();
+  const todayDt = new Date(today);
 
   const TutorialComponentProps = [
     {
@@ -41,7 +46,7 @@ const TutorialPage: React.FC = () => {
       title: "기도 반응하기",
       description: [
         "버튼을 눌러 반응을 남겨보세요",
-        "친구들이 내가 기도한 것을 알 수 있어요!",
+        "친구들에게 기도반응이 전달되어요!",
       ],
       textMarginTop: "mt-[230px]",
     },
@@ -173,8 +178,33 @@ const TutorialPage: React.FC = () => {
               <div className="flex justify-center gap-[13px]">
                 {days.map((day, index) => (
                   <div key={index} className="flex flex-col items-center gap-1">
-                    <span className="text-sm text-deactivate">{day}</span>
-                    <div className="w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1]"></div>
+                    <span
+                      className={`text-sm ${
+                        index == todayDt.getDay()
+                          ? "text-black font-bold"
+                          : "text-deactivate"
+                      }`}
+                    >
+                      {day}
+                    </span>
+                    <div
+                      className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
+                        index == todayDt.getDay() &&
+                        "border-[1.5px] border-[#BBBED4]"
+                      } 
+                        ${todayPrayType && "border-none"}`}
+                    >
+                      {index == todayDt.getDay() && (
+                        <img
+                          className={`duration-1000 ease-in-out ${
+                            todayPrayType ? "opacity-100" : "opacity-0"
+                          }`}
+                          src={
+                            PrayTypeDatas[todayPrayType as PrayType]?.reactImg
+                          }
+                        />
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -184,7 +214,20 @@ const TutorialPage: React.FC = () => {
                   return (
                     <button
                       key={type}
-                      className={`flex justify-center items-center w-[65px] h-[65px] rounded-full opacity-90 ${emojiData.shadowColor} ${emojiData.bgColor}`}
+                      className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
+                        emojiData.bgColor
+                      } ${
+                        !todayPrayType
+                          ? `opacity-90 ${emojiData.shadowColor}`
+                          : todayPrayType == type
+                          ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
+                          : `opacity-20 ${emojiData.shadowColor}`
+                      }`}
+                      onClick={() =>
+                        setTimeout(() => {
+                          setTodayPrayType(type);
+                        }, 200)
+                      }
                     >
                       <img src={emojiData.icon} className="w-9 h-9" />
                     </button>
