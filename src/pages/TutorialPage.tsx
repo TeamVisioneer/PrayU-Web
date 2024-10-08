@@ -5,37 +5,51 @@ import { SlMenu } from "react-icons/sl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
+import { days } from "@/lib/utils";
 
 const TutorialPage: React.FC = () => {
-  const user = useBaseStore((state) => state.user);
   const [index, setIndex] = useState(0);
+  const user = useBaseStore((state) => state.user);
 
   const TutorialComponentProps = [
     {
-      title: "1. 기도친구 초대",
-      description: "기도친구를 초대하여 기도제목을 나눌 수 있어요!",
-      textMarginTop: "mt-[220px]",
+      title: "1. 첫 기도 그룹",
+      description: [
+        "매 주 기도제목이 올라오는 기도그룹이에요",
+        "기도친구를 초대하여 기도제목을 나눌 수 있어요!",
+      ],
+      textMarginTop: "mt-[230px]",
     },
     {
       title: "2. 내 기도제목 보기",
-      description: "기도제목을 작성하고 기도를 요청해 보아요!",
-      textMarginTop: "mt-[220px]",
+      description: [
+        "기도제목을 기록하는 곳이에요",
+        "기도제목은 그룹 친구들이 확인할 수 있어요!",
+      ],
+      textMarginTop: "mt-[230px]",
     },
     {
-      title: "3. 오늘의 기도 시작",
-      description: "친구들의 이번 주 기도제목을 볼 수 있어요!",
-      textMarginTop: "mt-[220px]",
+      title: "3. 오늘의 기도",
+      description: [
+        "친구들의 이번 주 기도제목을 볼 수 있어요",
+        "오늘의 기도를 시작해보세요!",
+      ],
+      textMarginTop: "mt-[230px]",
     },
     {
       title: "4. 기도 반응하기",
-      description: "친구들의 기도제목을 위해 기도하고 반응해요!",
-      textMarginTop: "mt-[220px]",
+      description: [
+        "기도 버튼을 눌러 친구에게 반응을 남겨주세요",
+        "기도반응은 한 주 동안 매일 남길 수 있어요!",
+      ],
+      textMarginTop: "mt-[230px]",
     },
   ];
 
   const onClickLeft = () => {
     if (index > 0) setIndex(index - 1);
   };
+
   const onClickRight = () => {
     if (index == TutorialComponentProps.length - 1)
       window.location.href = "/group";
@@ -43,22 +57,19 @@ const TutorialPage: React.FC = () => {
   };
 
   const TopBar = (
-    <div className="relative flex justify-between items-center">
-      <div
-        className={`bg-mainBg w-[52px] flex items-center gap-1 text-[14px] p-1 rounded-sm ${
-          index === 0 && "z-40"
-        }`}
-      >
+    <div
+      className={`flex justify-between items-center bg-mainBg p-2 rounded-md ${
+        index === 0 && "z-40"
+      }`}
+      onClick={() => onClickRight()}
+    >
+      <div className="bg-mainBg w-[52px] flex items-center gap-1 text-[14px] p-1 rounded-sm">
         <img src={inviteIcon} className="w-[16px] h-[16px]" />
         <span>초대</span>
       </div>
-      <div
-        className={`bg-mainBg text-lg font-bold flex items-center gap-1 px-2 rounded-sm ${
-          index === 0 && "z-40"
-        }`}
-      >
+      <div className="bg-mainBg text-lg font-bold flex items-center gap-1 px-2 rounded-sm">
         <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-          {user ? `${user.user_metadata.full_name}의 그룹` : "새 그룹"}
+          {user ? `${user.user_metadata.full_name}의 기도그룹` : "새 기도그룹"}
         </div>
         <span className="text-sm text-gray-500">1</span>
       </div>
@@ -73,6 +84,7 @@ const TutorialPage: React.FC = () => {
       className={`w-full flex flex-col gap-3 cursor-pointer bg-white p-[25px] rounded-[15px] ${
         index === 1 && "z-40"
       }`}
+      onClick={() => onClickRight()}
     >
       <div className="flex flex-col gap-1">
         <h3 className="flex font-bold text-lg">내 기도제목</h3>
@@ -100,10 +112,10 @@ const TutorialPage: React.FC = () => {
   );
 
   const TodayPrayStartCard = (
-    <div className={`w-full flex-grow flex flex-col items-center `}>
+    <div className="w-full flex-grow flex flex-col items-center">
       <div className="relative flex flex-col w-[85%] flex-grow justify-center items-center max-h-[500px]">
         <div className="flex w-full flex-col flex-grow py-10 justify-center items-center text-center gap-6 border rounded-2xl bg-gradient-to-t from-[#FFF8F8] via-[#FFEBFA] via-41.75% to-[#AAC7FF] opacity-100">
-          <div className={`flex flex-col gap-4`}>
+          <div className="flex flex-col gap-4">
             <h1 className="font-bold text-xl">오늘의 기도</h1>
             <div className="text-grayText">
               <h1>당신의 기도가 필요한 오늘,</h1>
@@ -117,7 +129,7 @@ const TutorialPage: React.FC = () => {
             }`}
           ></img>
           <Button
-            onClick={() => (window.location.href = "/group")}
+            onClick={() => onClickRight()}
             variant="primary"
             className={`w-[188px] h-[46px] text-md font-bold rounded-[10px] ${
               index === 2 && "z-40"
@@ -131,43 +143,83 @@ const TutorialPage: React.FC = () => {
   );
 
   const TodayPrayDrawer = (
-    <div
-      className={`absolute top-0 left-0 w-full h-full flex flex-col bg-black/85 ${
-        index === 3 && "z-20"
-      }`}
-    >
+    <>
       <div
-        className={`fixed inset-x-0 bottom-0 max-w-[480px] m-auto bg-mainBg rounded-t-2xl px-10 border-2 border-black ${
-          index === 3 && "z-30"
+        className={`absolute top-0 left-0 w-full h-full flex flex-col bg-black/85 ${
+          index === 3 && "z-20"
         }`}
       >
-        <div className="flex flex-col gap-2 min-h-80vh max-h-80vh py-10">
-          <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
-            <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
-              <div className="flex items-center gap-2">
-                <img
-                  src="/images/defaultProfileImage.png"
-                  className="w-7 h-7 rounded-full object-cover"
-                />
-                <p className="text-white text-lg">기도친구</p>
+        <div
+          className={`fixed inset-x-0 bottom-0 max-w-[480px] m-auto bg-mainBg rounded-t-2xl px-10 border-2 border-black ${
+            index === 3 && "z-20"
+          }`}
+        >
+          <div className="flex flex-col gap-2 min-h-80vh max-h-80vh py-10">
+            <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+              <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
+                <div className="flex items-center gap-2">
+                  <img
+                    src="/images/defaultProfileImage.png"
+                    className="w-7 h-7 rounded-full object-cover"
+                  />
+                  <p className="text-white text-lg">기도친구</p>
+                </div>
+                <p className="text-sm text-white text-left">
+                  시작일: 2021.08.01 (일)
+                </p>
               </div>
-              <p className="text-sm text-white text-left">
-                시작일: 2021.08.01 (일)
-              </p>
+              <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
+                <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
+                  기도친구와 함께 기도해요
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-              <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
-                기도친구와 함께 기도해요
-              </p>
-            </div>
+            <div className="h-[157px]"></div>
           </div>
         </div>
       </div>
-    </div>
+      <div
+        className={`fixed inset-x-0 bottom-10 max-w-[480px] m-auto px-10 ${
+          index === 3 && "z-50"
+        }`}
+      >
+        <div className="flex flex-col gap-6 p-2 bg-mainBg rounded-md">
+          <div className="flex justify-center gap-[13px]">
+            {days.map((day, index) => (
+              <div key={index} className="flex flex-col items-center gap-1">
+                <span className="text-sm text-deactivate">{day}</span>
+                <div className="w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1]"></div>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-center gap-[30px]">
+            {Object.values(PrayType).map((type) => {
+              const emojiData = PrayTypeDatas[type];
+              return (
+                <button
+                  key={type}
+                  className={`flex justify-center items-center w-[65px] h-[65px] rounded-full opacity-90 ${emojiData.shadowColor} ${emojiData.bgColor}`}
+                >
+                  <img src={emojiData.icon} className="w-9 h-9" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </>
   );
 
   const DimUI = (
-    <div className="absolute z-30 top-0 left-0 w-full h-full bg-black/85 flex flex-col items-center p-5 text-white gap-10">
+    <div
+      className="absolute z-30 top-0 left-0 w-full h-full bg-black/85 flex flex-col items-center p-5 text-white gap-10"
+      onClick={(e) => {
+        const clickedX = e.clientX;
+        const windowWidth = window.innerWidth;
+        if (clickedX < windowWidth / 2) onClickLeft();
+        else onClickRight();
+      }}
+    >
       <div
         className={`flex-grow flex flex-col gap-5 text-center ${TutorialComponentProps[index].textMarginTop}`}
       >
@@ -175,11 +227,13 @@ const TutorialPage: React.FC = () => {
           <p className="text-lg font-bold">
             {TutorialComponentProps[index].title}
           </p>
-          <p className="font-light">
-            {TutorialComponentProps[index].description}
-          </p>
+          {TutorialComponentProps[index].description.map((desc, index) => (
+            <p key={index} className="font-light">
+              {desc}
+            </p>
+          ))}
         </div>
-        <footer className="text-white flex flex-col items-center gap-6">
+        <footer className="text-white flex flex-col items-center gap-4">
           <div className="flex items-center gap-4">
             <FaAngleLeft size={24} onClick={() => onClickLeft()} />
             <span>
@@ -191,7 +245,9 @@ const TutorialPage: React.FC = () => {
             className="flex gap-1 items-center text-white underline"
             href="/group"
           >
-            스킵하기
+            {index == TutorialComponentProps.length - 1
+              ? "시작하기"
+              : "건너뛰기"}
           </a>
         </footer>
       </div>
