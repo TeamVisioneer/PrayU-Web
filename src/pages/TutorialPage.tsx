@@ -146,76 +146,61 @@ const TutorialPage: React.FC = () => {
   );
 
   const TodayPrayDrawer = (
-    <>
-      <div
-        className={`fixed inset-x-0 top-0 w-full h-full mx-auto max-w-[480px] flex flex-col bg-black/85 ${
-          index === 3 && "z-20"
-        }`}
-      >
-        <div
-          className={`fixed inset-x-0 bottom-0 max-w-[480px] m-auto bg-mainBg rounded-t-2xl px-10 border-2 border-black ${
-            index === 3 && "z-20"
-          }`}
-        >
-          <div className="flex flex-col gap-2 min-h-80vh max-h-80vh py-10">
-            <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
-              <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/images/defaultProfileImage.png"
-                    className="w-7 h-7 rounded-full object-cover"
-                  />
-                  <p className="text-white text-lg">기도친구</p>
-                </div>
-                <p className="text-sm text-white text-left">
-                  시작일: 2021.08.01 (일)
-                </p>
+    <div className="h-full -m-5 flex flex-col justify-end bg-black/50">
+      <div className="bg-mainBg rounded-t-2xl px-10 border-2 border-gray">
+        <div className="flex flex-col gap-2 h-80vh  py-10">
+          <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+            <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
+              <div className="flex items-center gap-2">
+                <img
+                  src="/images/defaultProfileImage.png"
+                  className="w-7 h-7 rounded-full object-cover"
+                />
+                <p className="text-white text-lg">기도친구</p>
               </div>
-              <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-                <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
-                  기도친구와 함께 기도해요
-                </p>
+              <p className="text-sm text-white text-left">
+                시작일: 2021.08.01 (일)
+              </p>
+            </div>
+            <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
+              <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
+                기도친구와 함께 기도해요
+              </p>
+            </div>
+          </div>
+          <div className={`${index === 3 ? "z-50" : ""}`}>
+            <div className="flex flex-col gap-6 p-2 bg-mainBg rounded-md">
+              <div className="flex justify-center gap-[13px]">
+                {days.map((day, index) => (
+                  <div key={index} className="flex flex-col items-center gap-1">
+                    <span className="text-sm text-deactivate">{day}</span>
+                    <div className="w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1]"></div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-center gap-[30px]">
+                {Object.values(PrayType).map((type) => {
+                  const emojiData = PrayTypeDatas[type];
+                  return (
+                    <button
+                      key={type}
+                      className={`flex justify-center items-center w-[65px] h-[65px] rounded-full opacity-90 ${emojiData.shadowColor} ${emojiData.bgColor}`}
+                    >
+                      <img src={emojiData.icon} className="w-9 h-9" />
+                    </button>
+                  );
+                })}
               </div>
             </div>
-            <div className="h-[157px]"></div>
           </div>
         </div>
       </div>
-      <div
-        className={`fixed inset-x-0 bottom-10 max-w-[480px] m-auto px-10 ${
-          index === 3 && "z-50"
-        }`}
-      >
-        <div className="flex flex-col gap-6 p-2 bg-mainBg rounded-md">
-          <div className="flex justify-center gap-[13px]">
-            {days.map((day, index) => (
-              <div key={index} className="flex flex-col items-center gap-1">
-                <span className="text-sm text-deactivate">{day}</span>
-                <div className="w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1]"></div>
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-center gap-[30px]">
-            {Object.values(PrayType).map((type) => {
-              const emojiData = PrayTypeDatas[type];
-              return (
-                <button
-                  key={type}
-                  className={`flex justify-center items-center w-[65px] h-[65px] rounded-full opacity-90 ${emojiData.shadowColor} ${emojiData.bgColor}`}
-                >
-                  <img src={emojiData.icon} className="w-9 h-9" />
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 
   const DimUI = (
     <div
-      className="fixed inset-x-0 z-30 top-0 mx-auto w-full h-full max-w-[480px] bg-black/85 flex flex-col items-center p-5 text-white gap-10"
+      className="fixed inset-x-0 z-30 top-0 mx-auto w-full h-full max-w-[480px] bg-black/80 flex flex-col items-center p-5 text-white gap-10"
       onClick={(e) => {
         const clickedX = e.clientX;
         const windowWidth = window.innerWidth;
@@ -262,14 +247,19 @@ const TutorialPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col w-full h-full gap-5">
+    <div className="flex flex-col w-full h-full">
       {DimUI}
-      {TopBar}
-      <div className="flex flex-col h-full gap-4">
-        {MyMemberUI}
-        {TodayPrayStartCard}
-      </div>
-      {index === 3 && TodayPrayDrawer}
+      {index < 3 ? (
+        <div className="flex flex-col w-full h-full gap-5">
+          {TopBar}
+          <div className="flex flex-col h-full gap-4">
+            {MyMemberUI}
+            {TodayPrayStartCard}
+          </div>
+        </div>
+      ) : (
+        TodayPrayDrawer
+      )}
     </div>
   );
 };
