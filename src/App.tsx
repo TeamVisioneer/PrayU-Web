@@ -61,14 +61,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
-              <Route
-                path="/tutorial"
-                element={
-                  <PrivateRoute>
-                    <TutorialPage />
-                  </PrivateRoute>
-                }
-              />
+              <Route path="/tutorial" element={<TutorialPage />} />
 
               <Route
                 path="/auth/kakao/callback"
