@@ -1,6 +1,6 @@
 import {
   createPray,
-  fetchIsPrayToday,
+  fetchTodayUserPrayByGroupId,
   fetchTotalPrayCount,
   updatePray,
 } from "./../apis/pray";
@@ -172,9 +172,14 @@ export interface BaseStore {
   // pray
   todayPrayTypeHash: TodayPrayTypeHash;
   isPrayToday: boolean | null;
+  isPrayTodayForMember: boolean | null;
   totalPrayCount: number;
   setIsPrayToday: (isPrayToday: boolean) => void;
-  fetchIsPrayToday: (userId: string, groupId: string) => Promise<void>;
+  setIsPrayTodayForMember: (isPrayTodayForMember: boolean) => void;
+  fetchTodayUserPrayByGroupId: (
+    userId: string,
+    groupId: string
+  ) => Promise<void>;
   fetchTotalPrayCount: () => Promise<void>;
   createPray: (
     prayCardId: string,
@@ -634,6 +639,7 @@ const useBaseStore = create<BaseStore>()(
     // pray
     todayPrayTypeHash: {},
     isPrayToday: null,
+    isPrayTodayForMember: null,
     totalPrayCount: 0,
     fetchTotalPrayCount: async () => {
       const totalPrayCount = await fetchTotalPrayCount();
@@ -646,10 +652,18 @@ const useBaseStore = create<BaseStore>()(
         state.isPrayToday = isPrayToday;
       });
     },
-    fetchIsPrayToday: async (userId: string, groupId: string) => {
-      const isPrayToday = await fetchIsPrayToday(userId, groupId);
+    setIsPrayTodayForMember: (isPrayTodayForMember: boolean) => {
       set((state) => {
-        state.isPrayToday = isPrayToday;
+        state.isPrayTodayForMember = isPrayTodayForMember;
+      });
+    },
+    fetchTodayUserPrayByGroupId: async (userId: string, groupId: string) => {
+      const userPrayList = await fetchTodayUserPrayByGroupId(userId, groupId);
+      set((state) => {
+        state.isPrayToday = Boolean(userPrayList.length);
+        state.isPrayTodayForMember = userPrayList.some(
+          (pray) => pray.pray_card.user_id !== userId
+        );
       });
     },
     groupAndSortByUserId: (data: PrayWithProfiles[]) => {

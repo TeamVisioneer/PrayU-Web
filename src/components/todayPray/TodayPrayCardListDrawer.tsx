@@ -6,9 +6,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import TodayPrayCardDummyList from "./TodayPrayCardDummyList";
 import TodayPrayCardList from "./TodayPrayCardList";
-import TodayPrayEmptyItem from "./TodayPrayEmptyItem";
 
 const TodayPrayCardListDrawer: React.FC = () => {
   const memberList = useBaseStore((state) => state.memberList);
@@ -32,13 +30,7 @@ const TodayPrayCardListDrawer: React.FC = () => {
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        {groupPrayCardList.length > 1 ? (
-          <TodayPrayCardList />
-        ) : memberList.length > 1 ? (
-          <TodayPrayEmptyItem />
-        ) : (
-          <TodayPrayCardDummyList />
-        )}
+        <TodayPrayCardList />
       </DrawerContent>
     </Drawer>
   );

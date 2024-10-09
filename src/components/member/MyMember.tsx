@@ -78,7 +78,8 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   const prayCard = userPrayCardList?.[0];
   const prayDatasForMe = prayCard?.pray;
   const prayDatasForMeToday = prayDatasForMe?.filter(
-    (pray) => pray.created_at > getISOTodayDate()
+    (pray) =>
+      pray.created_at > getISOTodayDate() && pray.user_id !== currentUserId
   );
 
   const MyMemberUI = (

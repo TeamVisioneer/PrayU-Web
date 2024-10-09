@@ -22,6 +22,9 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
 
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
+      <p className="text-gray-400 flex justify-center items-center text-sm h-6">
+        본 기도카드는 예시 기도카드 입니다.
+      </p>
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
@@ -44,9 +47,6 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
             {content}
           </p>
         </div>
-        <p className="text-gray-400 text-center text-xs mb-4">
-          본 기도카드는 예시 기도카드 입니다.
-        </p>
       </div>
       <DumyReactionBtnWithCalendar dayOffset={dayOffset} />
       <div className="text-gray-400 text-sm text-center">
