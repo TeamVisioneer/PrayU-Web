@@ -1,11 +1,13 @@
 import StartPrayUBtn from "./StartPrayUBtn";
+import MainHeader from "../MainPage/MainHeader";
 
 const StoryPage = () => {
   return (
     <div className="flex flex-grow flex-col justify-center text-center w-full items-center bg-white ">
+      <MainHeader className="bg-white" />
       <img
         src="/images/story/cover.png"
-        className="w-full max-w-[600px] h-auto"
+        className="w-full max-w-[480px] h-auto"
       />
       <div className="font-sans text-center">
         <div className="container max-w-screen-lg mx-auto px-4 py-10">
