@@ -52,14 +52,6 @@ const TodayPrayCardDummyList = () => {
             dayOffset={6}
           />
         </CarouselItem>
-        <CarouselItem className="basis-5/6">
-          <DummyPrayCardUI
-            profileImage="/images/avatar/avatar_3.png"
-            name="기도친구 3"
-            content={`친구의 병이 빨리 낫도록 기도해주세요.\n\n치료가 잘 되어 건강을 회복하고, 다시 일상으로 돌아올 수 있기를 바랍니다.\n\n친구가 힘든 시간을 잘 이겨내고, 가족과 친구들의 사랑과 지지를 받으며 회복할 수 있기를 기도합니다.`}
-            dayOffset={3}
-          />
-        </CarouselItem>
         {isPrayToday && (
           <CarouselItem className="basis-5/6">
             <TodayPrayDummyCompletedItem />
