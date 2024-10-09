@@ -3,7 +3,7 @@ import MainHeader from "../MainPage/MainHeader";
 
 const StoryPage = () => {
   return (
-    <div className="flex flex-grow flex-col justify-center text-center w-full items-center bg-white ">
+    <div className="flex flex-grow flex-col justify-center text-center w-full items-center bg-white pt-11">
       <MainHeader className="bg-white" />
       <img
         src="/images/story/cover.png"
