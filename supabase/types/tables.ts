@@ -31,3 +31,7 @@ export interface PrayWithProfiles extends Pray {
 export interface TodayPrayTypeHash {
   [prayCardId: string]: PrayType | null;
 }
+
+export interface PrayWithPrayCard extends Pray {
+  pray_card: PrayCard;
+}

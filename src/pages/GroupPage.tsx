@@ -39,7 +39,9 @@ const GroupPage: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
-  const fetchIsPrayToday = useBaseStore((state) => state.fetchIsPrayToday);
+  const fetchTodayUserPrayByGroupId = useBaseStore(
+    (state) => state.fetchTodayUserPrayByGroupId
+  );
   const userPlan = useBaseStore((state) => state.userPlan);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
@@ -49,12 +51,12 @@ const GroupPage: React.FC = () => {
     if (groupId) getMember(currentUserId, groupId);
     if (groupId) getGroup(groupId);
     if (groupId) fetchMemberListByGroupId(groupId);
-    if (groupId) fetchIsPrayToday(currentUserId, groupId);
+    if (groupId) fetchTodayUserPrayByGroupId(currentUserId, groupId);
   }, [
     fetchGroupListByUserId,
     fetchMemberListByGroupId,
     getMember,
-    fetchIsPrayToday,
+    fetchTodayUserPrayByGroupId,
     currentUserId,
     groupId,
     getGroup,

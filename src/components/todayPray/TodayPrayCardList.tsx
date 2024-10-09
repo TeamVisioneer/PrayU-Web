@@ -20,7 +20,6 @@ const TodayPrayCardList = () => {
     (state) => state.setPrayCardCarouselIndex
   );
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
-  const user = useBaseStore((state) => state.user);
   const myMember = useBaseStore((state) => state.myMember);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
@@ -40,13 +39,15 @@ const TodayPrayCardList = () => {
   if (!myMember || !groupPrayCardList) return null;
 
   const todayDt = getISOTodayDate();
-  const filterdGroupPrayCardList = groupPrayCardList.filter(
-    (prayCard) =>
-      prayCard.user_id &&
-      prayCard.user_id !== user!.id &&
-      prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length == 0 &&
-      !myMember.profiles.blocking_users.includes(prayCard.user_id)
-  );
+  const filterdGroupPrayCardList = groupPrayCardList
+    .filter(
+      (prayCard) =>
+        prayCard.user_id &&
+        prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length ==
+          0 &&
+        !myMember.profiles.blocking_users.includes(prayCard.user_id)
+    )
+    .sort((prayCard) => (prayCard.user_id === myMember.user_id ? -1 : 1));
 
   return (
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>

@@ -1,6 +1,6 @@
 import {
   createPray,
-  fetchIsPrayToday,
+  fetchTodayUserPrayByGroupId,
   fetchTotalPrayCount,
   updatePray,
 } from "./../apis/pray";
@@ -174,7 +174,10 @@ export interface BaseStore {
   isPrayToday: boolean | null;
   totalPrayCount: number;
   setIsPrayToday: (isPrayToday: boolean) => void;
-  fetchIsPrayToday: (userId: string, groupId: string) => Promise<void>;
+  fetchTodayUserPrayByGroupId: (
+    userId: string,
+    groupId: string
+  ) => Promise<void>;
   fetchTotalPrayCount: () => Promise<void>;
   createPray: (
     prayCardId: string,
@@ -646,10 +649,13 @@ const useBaseStore = create<BaseStore>()(
         state.isPrayToday = isPrayToday;
       });
     },
-    fetchIsPrayToday: async (userId: string, groupId: string) => {
-      const isPrayToday = await fetchIsPrayToday(userId, groupId);
+    fetchTodayUserPrayByGroupId: async (userId: string, groupId: string) => {
+      const userPrayList = await fetchTodayUserPrayByGroupId(userId, groupId);
+      const filteredPrayList = userPrayList.filter(
+        (pray) => pray.user_id !== pray.pray_card.user_id
+      );
       set((state) => {
-        state.isPrayToday = isPrayToday;
+        state.isPrayToday = Boolean(filteredPrayList.length);
       });
     },
     groupAndSortByUserId: (data: PrayWithProfiles[]) => {
