@@ -160,7 +160,7 @@ const GroupPage: React.FC = () => {
 
       <TodayPrayCardListDrawer />
       <OtherMemberDrawer />
-      <PrayListDrawer currentUserId={currentUserId} groupId={targetGroup.id} />
+      <PrayListDrawer />
       <ShareDrawer />
       <EventDialog />
       <GroupSettingsDialog targetGroup={targetGroup} />

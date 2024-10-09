@@ -1,15 +1,10 @@
 import useBaseStore from "@/stores/baseStore";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { KakaoShareButton, TodayPrayLink } from "../share/KakaoShareBtn";
-import { PrayWithProfiles } from "supabase/types/tables";
 import { isToday } from "@/lib/utils";
 import TodayPrayBtn from "../todayPray/TodayPrayBtn";
 
-interface PrayListProps {
-  prayData: PrayWithProfiles[];
-}
-
-const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
+const PrayList: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const isPrayTodayForMember = useBaseStore(
     (state) => state.isPrayTodayForMember
@@ -17,7 +12,11 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
   const groupAndSortByUserId = useBaseStore(
     (state) => state.groupAndSortByUserId
   );
-  const prayerList = groupAndSortByUserId(prayData);
+  const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
+
+  if (!userPrayCardList || userPrayCardList.length == 0) return null;
+
+  const prayerList = groupAndSortByUserId(userPrayCardList[0].pray);
   const lenPrayerList = Object.keys(prayerList).length;
   const isOnlyMyPrayInPrayerList =
     lenPrayerList == 1 && Object.keys(prayerList).includes(user!.id);

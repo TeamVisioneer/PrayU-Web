@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { BibleCardLink, KakaoShareButton } from "../share/KakaoShareBtn";
 import useBaseStore from "@/stores/baseStore";
+import TodayPrayReplayBtn from "./TodayPrayRePlayBtn";
 
 const TodayPrayCompletedItem = () => {
   const today = getISOTodayDateYMD();
@@ -73,14 +74,21 @@ const TodayPrayCompletedItem = () => {
         </h1>
         <p className="font-light">친구들에게 오늘의 말씀을 공유해 주세요</p>
       </div>
-      <KakaoShareButton
-        className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+      <section
+        className={`flex flex-col items-center gap-4 transition-opacity duration-1000 ease-in-out ${
           showButton ? "opacity-100" : "opacity-0"
         }`}
-        buttonText="말씀카드 공유하기"
-        kakaoLinkObject={BibleCardLink()}
-        eventOption={{ where: "TodayPrayCompletedItem" }}
-      />
+      >
+        <KakaoShareButton
+          className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+            showButton ? "opacity-100" : "opacity-0"
+          }`}
+          buttonText="말씀카드 공유하기"
+          kakaoLinkObject={BibleCardLink()}
+          eventOption={{ where: "TodayPrayCompletedItem" }}
+        />
+        <TodayPrayReplayBtn eventOption={{ where: "TodayPrayCompletedItem" }} />
+      </section>
       <button
         className="absolute bottom-3 flex gap-1 items-center text-gray-400"
         onClick={() => setIsOpenTodayPrayDrawer(false)}

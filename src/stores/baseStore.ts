@@ -136,6 +136,7 @@ export interface BaseStore {
   isDisabledPrayCardCreateBtn: boolean;
   isDisabledSkipPrayCardBtn: boolean;
   prayCardCarouselApi: CarouselApi | null;
+  prayCardCarouselList: PrayCardWithProfiles[];
   prayCardCarouselIndex: number;
   setPrayCardCarouselIndex: (index: number) => void;
   fetchGroupPrayCardList: (
@@ -149,6 +150,9 @@ export interface BaseStore {
     userId: string,
     groupId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
+  setPrayCardCarouselList: (
+    prayCardCarouselList: PrayCardWithProfiles[]
+  ) => void;
   fetchUserPrayCardListByGroupId: (
     currentUserId: string,
     groupId: string
@@ -496,6 +500,7 @@ const useBaseStore = create<BaseStore>()(
     isDisabledPrayCardCreateBtn: false,
     isDisabledSkipPrayCardBtn: false,
     prayCardCarouselApi: null,
+    prayCardCarouselList: [],
     prayCardCarouselIndex: 0,
     setPrayCardCarouselIndex: (index: number) => {
       set((state) => {
@@ -523,6 +528,7 @@ const useBaseStore = create<BaseStore>()(
       const startOfDay = new Date(today.setHours(0, 0, 0, 0));
       const endOfDay = new Date(today.setHours(23, 59, 59, 999));
       set((state) => {
+        state.groupPrayCardList = [];
         state.groupPrayCardList = groupPrayCardList;
         groupPrayCardList?.forEach((prayCard) => {
           if (!state.todayPrayTypeHash[prayCard.id]) {
@@ -539,6 +545,11 @@ const useBaseStore = create<BaseStore>()(
         });
       });
       return groupPrayCardList;
+    },
+    setPrayCardCarouselList: (prayCardCarouselList: PrayCardWithProfiles[]) => {
+      set((state) => {
+        state.prayCardCarouselList = prayCardCarouselList;
+      });
     },
     fetchOtherPrayCardListByGroupId: async (
       currentUserId: string,
