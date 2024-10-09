@@ -10,28 +10,32 @@ interface EventOption {
 
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles;
-  listLength: number;
-  listIndex: number;
   eventOption: EventOption;
 }
 
-const PrayCardUI: React.FC<PrayCardProps> = ({
-  prayCard,
-  listLength,
-  listIndex,
-  eventOption,
-}) => {
+const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
   const createdAt = prayCard.created_at;
   const createdAtDate = new Date(createdAt);
   const createdDateYMD = getISODateYMD(createdAt);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
+
+  const prayCardCarouselIndex = useBaseStore(
+    (state) => state.prayCardCarouselIndex
+  );
+  const prayCardCarouselApi = useBaseStore(
+    (state) => state.prayCardCarouselApi
+  );
 
   return (
     <div className="flex flex-col gap-2 min-h-80vh max-h-80vh">
       <div className="flex justify-between px-2">
         <div className="w-6"></div>
         <div className="text-sm text-gray-400">
-          {listLength}명 중 {listIndex + 1}번째 기도
+          {/* TODO: 캐러셀 API 로 수정 */}
+          {prayCardCarouselApi &&
+            prayCardCarouselApi?.scrollSnapList().length - 2}
+          명 중 {prayCardCarouselIndex}
+          번째 기도
         </div>
         <OtherPrayCardMenuBtn
           targetUserId={prayCard.user_id || ""}

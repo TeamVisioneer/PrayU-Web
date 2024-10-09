@@ -22,7 +22,6 @@ const DumyReactionBtnWithCalendar: React.FC<
     (state) => state.prayCardCarouselApi
   );
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   const [todayPrayType, setTodayPrayType] = useState("");
   const [randomPrayTypes, setRandomPrayTypes] = useState<string[]>([]);
@@ -124,9 +123,9 @@ const DumyReactionBtnWithCalendar: React.FC<
           return (
             <button
               key={type}
-              className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
-                !isPrayToday && "animate-bounce"
-              } ${emojiData.bgColor} ${
+              className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out  ${
+                emojiData.bgColor
+              } ${
                 isNotSelected
                   ? `opacity-20 ${emojiData.shadowColor}`
                   : `opacity-90 ${
