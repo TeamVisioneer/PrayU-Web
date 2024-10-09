@@ -116,7 +116,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
         </div>
         {prayDatasForMeToday && prayDatasForMeToday.length > 0 && (
           <p className="flex items-center text-gray-500 text-[10px]">
-            오늘 기도해 준 사람이 있어요 😊
+            오늘 기도해 준 사람이 있어요😊
           </p>
         )}
       </div>
