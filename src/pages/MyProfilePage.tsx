@@ -172,7 +172,11 @@ const MyProfilePage = () => {
                         key={blockedProfile.id}
                         className="w-full flex justify-between items-center bg-white rounded-xl"
                       >
-                        <UserProfile profile={blockedProfile} />
+                        <UserProfile
+                          profile={blockedProfile}
+                          imgSize="w-6 h-6"
+                          fontSize="font-medium"
+                        />
                         <Badge
                           variant="outline"
                           onClick={() =>
