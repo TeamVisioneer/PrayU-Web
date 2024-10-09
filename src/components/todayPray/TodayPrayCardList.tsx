@@ -8,6 +8,7 @@ import TodayPrayCompletedItem from "./TodayPrayCompletedItem";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { getISOTodayDate } from "@/lib/utils";
+import TodayPrayInviteCompletedItem from "./TodayPrayInviteCompletedItem";
 
 const TodayPrayCardList = () => {
   const setPrayCardCarouselApi = useBaseStore(
@@ -21,6 +22,7 @@ const TodayPrayCardList = () => {
   );
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const myMember = useBaseStore((state) => state.myMember);
+  const memberList = useBaseStore((state) => state.memberList);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const TodayPrayCardList = () => {
     });
   }, [prayCardCarouselApi, setPrayCardCarouselIndex]);
 
-  if (!myMember || !groupPrayCardList) return null;
+  if (!myMember || !memberList || !groupPrayCardList) return null;
 
   const todayDt = getISOTodayDate();
   const filterdGroupPrayCardList = groupPrayCardList
@@ -65,7 +67,11 @@ const TodayPrayCardList = () => {
         ))}
         {isPrayToday && (
           <CarouselItem className="basis-5/6">
-            <TodayPrayCompletedItem />
+            {memberList.length == 1 ? (
+              <TodayPrayInviteCompletedItem />
+            ) : (
+              <TodayPrayCompletedItem />
+            )}
           </CarouselItem>
         )}
         <CarouselItem className="basis-5/6"></CarouselItem>

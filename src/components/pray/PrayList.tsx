@@ -10,17 +10,21 @@ interface PrayListProps {
 }
 
 const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const user = useBaseStore((state) => state.user);
+  const isPrayTodayForMember = useBaseStore(
+    (state) => state.isPrayTodayForMember
+  );
   const groupAndSortByUserId = useBaseStore(
     (state) => state.groupAndSortByUserId
   );
   const prayerList = groupAndSortByUserId(prayData);
   const lenPrayerList = Object.keys(prayerList).length;
-  const isPrayerListEmpty = !prayerList || lenPrayerList === 0;
+  const isOnlyMyPrayInPrayerList =
+    lenPrayerList == 1 && Object.keys(prayerList).includes(user!.id);
 
   return (
     <div className="overflow-y-auto justify-center items-center">
-      {isPrayerListEmpty ? (
+      {lenPrayerList === 0 ? (
         <div className="flex flex-col items-center gap-6 px-4">
           <div className="h-[150px] w-full flex flex-col items-center">
             <img
@@ -45,7 +49,7 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
             <div
               key={user_id}
               className={`flex items-center justify-between p-3 px-4 ${
-                !isPrayToday ? "blur" : ""
+                !isPrayTodayForMember && !isOnlyMyPrayInPrayerList && "blur"
               }`}
             >
               <div className="flex items-center gap-2">
@@ -81,8 +85,8 @@ const PrayList: React.FC<PrayListProps> = ({ prayData }) => {
               </div>
             </div>
           ))}
-          {!isPrayToday && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-5">
+          {!isPrayTodayForMember && !isOnlyMyPrayInPrayerList && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-3">
               <TodayPrayBtn eventOption={{ where: "PrayList" }} />
               <p className="text-gray-500 text-sm">
                 오늘의 기도를 완료해야 볼 수 있어요!

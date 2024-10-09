@@ -26,7 +26,7 @@ const TodayPrayCompletedItem = () => {
   useEffect(() => {
     if (
       prayCardCarouselApi &&
-      prayCardCarouselIndex !== prayCardCarouselApi!.scrollSnapList().length - 2
+      prayCardCarouselIndex !== prayCardCarouselApi.scrollSnapList().length - 2
     ) {
       setShowImage(false);
       setShowTitleText(false);

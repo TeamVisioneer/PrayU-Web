@@ -26,6 +26,9 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const myMember = useBaseStore((state) => state.myMember);
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const isPrayTodayForMember = useBaseStore(
+    (state) => state.isPrayTodayForMember
+  );
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
@@ -33,6 +36,9 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const createPray = useBaseStore((state) => state.createPray);
   const updatePray = useBaseStore((state) => state.updatePray);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
+  const setIsPrayTodayForMember = useBaseStore(
+    (state) => state.setIsPrayTodayForMember
+  );
 
   const baseUrl = getDomainUrl();
   const currentUrl = window.location.href;
@@ -66,6 +72,9 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
 
   const handleClick = async (prayType: PrayType) => {
     if (!isPrayToday) setIsPrayToday(true);
+    if (!isPrayTodayForMember && prayCard.user_id !== currentUserId) {
+      setIsPrayTodayForMember(true);
+    }
 
     if (!hasPrayed) {
       const newPray = await createPray(prayCard.id, currentUserId, prayType);
