@@ -31,7 +31,6 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
       <div className="flex justify-between px-2">
         <div className="w-6"></div>
         <div className="text-sm text-gray-400">
-          {/* TODO: 캐러셀 API 로 수정 */}
           {prayCardCarouselApi &&
             prayCardCarouselApi?.scrollSnapList().length - 2}
           명 중 {prayCardCarouselIndex}
