@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
-import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate } from "@/lib/utils";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
+import ReactionResultType1 from "../pray/ReactionResultType1";
 
 interface MemberProps {
   myMember: MemberWithProfiles;
@@ -37,24 +37,12 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
-  const setIsOpenMyPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenMyPrayDrawer
-  );
   const setIsEditingPrayCard = useBaseStore(
     (state) => state.setIsEditingPrayCard
   );
 
   const currentUserId = myMember.user_id!;
   const groupId = myMember.group_id!;
-
-  const onClickMyMemberReaction = (event: { stopPropagation: () => void }) => {
-    setIsOpenMyPrayDrawer(true);
-    event.stopPropagation();
-
-    analyticsTrack("클릭_기도카드_반응결과", {
-      where: "MyMember",
-    });
-  };
 
   useEffect(() => {
     fetchUserPrayCardListByGroupId(currentUserId, groupId);
@@ -76,7 +64,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   }, [setPrayCardContent, myMember]);
 
   const prayCard = userPrayCardList?.[0];
-  const prayDatasForMe = prayCard?.pray;
+  const prayDatasForMe = prayCard ? prayCard.pray : [];
   const prayDatasForMeToday = prayDatasForMe?.filter(
     (pray) =>
       pray.created_at > getISOTodayDate() && pray.user_id !== currentUserId
@@ -92,28 +80,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       </div>
 
       <div className="flex gap-2">
-        <div
-          className="w-fit flex bg-gray-100 rounded-lg px-[12px] py-2 gap-[16px]"
-          onClick={(event) => onClickMyMemberReaction(event)}
-        >
-          {Object.values(PrayType).map((type) => {
-            return (
-              <div key={type} className="flex items-center gap-1 ">
-                <img
-                  src={PrayTypeDatas[type].img}
-                  alt={PrayTypeDatas[type].emoji}
-                  className="w-5 h-5 opacity-90"
-                />
-                <p className="text-sm text-dark">
-                  {prayCard
-                    ? prayCard.pray.filter((pray) => pray.pray_type === type)
-                        .length
-                    : 0}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+        <ReactionResultType1 prayData={prayDatasForMe} />
         {prayDatasForMeToday && prayDatasForMeToday.length > 0 && (
           <p className="flex items-center text-gray-500 text-[10px]">
             오늘 기도해 준 사람이 있어요😊
