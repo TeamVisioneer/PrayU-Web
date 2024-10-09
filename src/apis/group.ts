@@ -11,7 +11,8 @@ export const fetchGroupListByUserId = async (
       .from("member")
       .select(`group (*)`)
       .eq("user_id", userId)
-      .is("deleted_at", null);
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false });
     if (error) {
       Sentry.captureException(error.message);
       return null;
