@@ -9,6 +9,8 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import completed from "@/assets/completed.svg";
+import { MdOutlineTouchApp } from "react-icons/md";
+import { TbHandClick } from "react-icons/tb";
 
 const TutorialPage: React.FC = () => {
   const [index, setIndex] = useState(0);
@@ -168,7 +170,7 @@ const TutorialPage: React.FC = () => {
     </div>
   );
 
-  const ReactionBtn = (
+  const Calendar = (
     <div className="flex justify-center gap-[13px]">
       {days.map((day, index) => (
         <div key={index} className="flex flex-col items-center gap-1">
@@ -184,8 +186,7 @@ const TutorialPage: React.FC = () => {
           <div
             className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
               index == todayDt.getDay() && "border-[1.5px] border-[#BBBED4]"
-            } 
-                        ${todayPrayType && "border-none"}`}
+            } ${todayPrayType && "border-none"}`}
           >
             {index == todayDt.getDay() && (
               <img
@@ -201,8 +202,15 @@ const TutorialPage: React.FC = () => {
     </div>
   );
 
-  const Calendar = (
-    <div className="flex justify-center gap-[30px]">
+  const ReactionBtn = (
+    <div className="relative flex justify-center gap-[30px]">
+      {!todayPrayType && (
+        <TbHandClick
+          size={30}
+          className="absolute z-50 bottom-0 right-24 animate-pulse duration-1000 ease-in"
+        />
+      )}
+
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
@@ -249,8 +257,8 @@ const TutorialPage: React.FC = () => {
       </div>
       <div className={`${index === 3 ? "z-50" : ""}`}>
         <div className="flex flex-col gap-6 p-2 bg-mainBg rounded-md">
-          {ReactionBtn}
           {Calendar}
+          {ReactionBtn}
         </div>
       </div>
     </div>
@@ -312,25 +320,34 @@ const TutorialPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <footer className="text-white flex flex-col items-center gap-4">
-          <div className="flex items-center gap-4">
-            <FaAngleLeft size={24} onClick={() => onClickLeft()} />
-            <span>
-              {index + 1} / {TutorialComponentProps.length}
-            </span>
-            <FaAngleRight
-              size={24}
-              onClick={() => onClickRight({ where: "RightBtn" })}
-            />
+        <footer className="text-white flex justify-around items-center gap-4">
+          {index == 0 && <div className="w-8"></div>}
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex items-center gap-4">
+              <FaAngleLeft size={24} onClick={() => onClickLeft()} />
+              <span>
+                {index + 1} / {TutorialComponentProps.length}
+              </span>
+              <FaAngleRight
+                size={24}
+                onClick={() => onClickRight({ where: "RightBtn" })}
+              />
+            </div>
+            <a
+              className="flex gap-1 items-center text-white underline cursor-pointer"
+              onClick={() => onClickCompletedTutorial()}
+            >
+              {index == TutorialComponentProps.length - 1
+                ? "시작하기"
+                : "건너뛰기"}
+            </a>
           </div>
-          <a
-            className="flex gap-1 items-center text-white underline cursor-pointer"
-            onClick={() => onClickCompletedTutorial()}
-          >
-            {index == TutorialComponentProps.length - 1
-              ? "시작하기"
-              : "건너뛰기"}
-          </a>
+          {index == 0 && (
+            <div className="flex flex-col gap-1 animate-pulse">
+              <MdOutlineTouchApp size={32} />
+              <span className="text-sm font-light">다음</span>
+            </div>
+          )}
         </footer>
       </div>
     </div>
