@@ -80,7 +80,10 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       </div>
 
       <div className="flex gap-2">
-        <ReactionResultType1 prayData={prayDatasForMe} />
+        <ReactionResultType1
+          prayData={prayDatasForMe}
+          eventOption={{ where: "MyMember" }}
+        />
         {prayDatasForMeToday && prayDatasForMeToday.length > 0 && (
           <p className="flex items-center text-gray-500 text-[10px]">
             오늘 기도해 준 사람이 있어요😊

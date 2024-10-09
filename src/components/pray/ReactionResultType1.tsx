@@ -5,21 +5,29 @@ import { PrayWithProfiles } from "supabase/types/tables";
 
 interface ReactionResultType1Props {
   prayData: PrayWithProfiles[];
+  eventOption: { where: string };
 }
 
 const ReactionResultType1: React.FC<ReactionResultType1Props> = ({
   prayData,
+  eventOption,
 }) => {
+  const user = useBaseStore((state) => state.user);
+  const targetGroup = useBaseStore((state) => state.targetGroup);
+
+  const fetchUserPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchUserPrayCardListByGroupId
+  );
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
   );
+
   const onClickMyMemberReaction = (event: { stopPropagation: () => void }) => {
+    if (!user || !targetGroup) return;
+    fetchUserPrayCardListByGroupId(user.id, targetGroup.id);
     setIsOpenMyPrayDrawer(true);
     event.stopPropagation();
-
-    analyticsTrack("클릭_기도카드_반응결과", {
-      where: "MyMember",
-    });
+    analyticsTrack("클릭_기도카드_반응결과", eventOption);
   };
 
   return (
