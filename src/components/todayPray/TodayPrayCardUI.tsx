@@ -18,6 +18,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
   const createdAtDate = new Date(createdAt);
   const createdDateYMD = getISODateYMD(createdAt);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const user = useBaseStore((state) => state.user);
 
   const prayCardCarouselIndex = useBaseStore(
     (state) => state.prayCardCarouselIndex
@@ -63,9 +64,16 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-          <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
-            {prayCard.content || ""}
-          </p>
+          {!prayCard.content && prayCard.user_id == user!.id ? (
+            <p className="flex-grow w-full p-2 text-sm text-gray-400">
+              내 기도제목에서 <br />
+              이번 주 기도카드를 작성해 보아요✏️
+            </p>
+          ) : (
+            <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
+              {prayCard.content || ""}
+            </p>
+          )}
         </div>
       </div>
       <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />

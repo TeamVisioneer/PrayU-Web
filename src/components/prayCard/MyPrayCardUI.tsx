@@ -125,7 +125,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
             ref={textareaRef}
             value={inputPrayCardContent}
             placeholder={`기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
-            onChange={(e) => setPrayCardContent(e.target.value)}
+            onChange={(e) => setPrayCardContent(e.target.value.trim())}
             onFocus={() => setIsEditingPrayCard(true)}
             onBlur={() =>
               handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
