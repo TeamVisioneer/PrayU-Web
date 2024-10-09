@@ -7,7 +7,6 @@ import PrayCardUI from "./TodayPrayCardUI";
 import TodayPrayCompletedItem from "./TodayPrayCompletedItem";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
-import { getISOTodayDate } from "@/lib/utils";
 import TodayPrayInviteCompletedItem from "./TodayPrayInviteCompletedItem";
 import DummyPrayCardUI from "../prayCard/DummyPrayCardUI";
 
@@ -22,6 +21,9 @@ const TodayPrayCardList = () => {
     (state) => state.setPrayCardCarouselIndex
   );
   const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
+  const prayCardCarouselList = useBaseStore(
+    (state) => state.prayCardCarouselList
+  );
   const myMember = useBaseStore((state) => state.myMember);
   const memberList = useBaseStore((state) => state.memberList);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
@@ -41,22 +43,11 @@ const TodayPrayCardList = () => {
 
   if (!myMember || !memberList || !groupPrayCardList) return null;
 
-  const todayDt = getISOTodayDate();
-  const filterdGroupPrayCardList = groupPrayCardList
-    .filter(
-      (prayCard) =>
-        prayCard.user_id &&
-        prayCard.pray?.filter((pray) => pray.created_at >= todayDt).length ==
-          0 &&
-        !myMember.profiles.blocking_users.includes(prayCard.user_id)
-    )
-    .sort((prayCard) => (prayCard.user_id === myMember.user_id ? -1 : 1));
-
   return (
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
-        {filterdGroupPrayCardList?.map((prayCard) => (
+        {prayCardCarouselList.map((prayCard) => (
           <CarouselItem key={prayCard.id} className="basis-5/6">
             <PrayCardUI
               prayCard={prayCard}

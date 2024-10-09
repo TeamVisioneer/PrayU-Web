@@ -3,6 +3,7 @@ import { IoClose } from "react-icons/io5";
 import useBaseStore from "@/stores/baseStore";
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 import completed from "@/assets/completed.svg";
+import TodayPrayReplayBtn from "./TodayPrayRePlayBtn";
 
 const TodayPrayDummyCompletedItem = () => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
@@ -52,8 +53,8 @@ const TodayPrayDummyCompletedItem = () => {
     <div className="relative flex flex-col justify-between items-center h-80vh">
       <div className=""></div>
       <div className="flex flex-col gap-4 justify-center items-center">
-        <div
-          className={`flex flex-col gap-4 items-center transition-opacity duration-1000 ease-in ${
+        <section
+          className={`flex flex-col gap-6 items-center transition-opacity duration-1000 ease-in ${
             showImage ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -65,22 +66,29 @@ const TodayPrayDummyCompletedItem = () => {
               onLoad={() => setIsImageLoaded(true)}
             />
           </div>
-        </div>
-        <div
+        </section>
+        <section
           className={`flex flex-col justify-center items-center text-liteBlack transition-opacity duration-1000 ease-in-out  ${
             showTitleText ? "opacity-100" : "opacity-0"
           }`}
         >
           <p>친구들의 기도제목으로</p>
           <p>오늘의 기도를 시작해 보아요</p>
-        </div>
-        <OpenShareDrawerBtn
-          className={`w-56 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+        </section>
+        <section
+          className={`flex flex-col items-center gap-4 transition-opacity duration-1000 ease-in-out ${
             showButton ? "opacity-100" : "opacity-0"
           }`}
-          text="친구 초대하기"
-          eventOption={{ where: "TodayPrayDummyCompletedItem" }}
-        />
+        >
+          <OpenShareDrawerBtn
+            className="w-56 flex flex-col items-center gap-2"
+            text="친구 초대하기"
+            eventOption={{ where: "TodayPrayDummyCompletedItem" }}
+          />
+          <TodayPrayReplayBtn
+            eventOption={{ where: "TodayPrayDummyCompletedItem" }}
+          />
+        </section>
       </div>
       <button
         className="flex gap-1 items-center text-gray-400"
