@@ -38,9 +38,6 @@ const TodayPrayCardDummyList = () => {
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
         <CarouselItem className="basis-5/6">
-          <CarouselItem className="basis-5/6">
-            <PrayCardUI />
-          </CarouselItem>
           <DummyPrayCardUI
             profileImage="/images/avatar/avatar_1.png"
             name="기도친구 1"
