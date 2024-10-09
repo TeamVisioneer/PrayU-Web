@@ -8,7 +8,7 @@ interface ReactionResultType1Props {
   eventOption: { where: string };
 }
 
-const ReactionResultType1: React.FC<ReactionResultType1Props> = ({
+const ReactionResultBox: React.FC<ReactionResultType1Props> = ({
   prayData,
   eventOption,
 }) => {
@@ -53,4 +53,4 @@ const ReactionResultType1: React.FC<ReactionResultType1Props> = ({
   );
 };
 
-export default ReactionResultType1;
+export default ReactionResultBox;

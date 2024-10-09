@@ -13,7 +13,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate } from "@/lib/utils";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
-import ReactionResultType1 from "../pray/ReactionResultType1";
+import ReactionResultBox from "../pray/ReactionResultBox";
 
 interface MemberProps {
   myMember: MemberWithProfiles;
@@ -80,7 +80,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       </div>
 
       <div className="flex gap-2">
-        <ReactionResultType1
+        <ReactionResultBox
           prayData={prayDatasForMe}
           eventOption={{ where: "MyMember" }}
         />
