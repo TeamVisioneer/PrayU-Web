@@ -3,7 +3,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import PrayCardUI from "./TodayPrayCardUI";
+import TodayPrayCardUI from "./TodayPrayCardUI";
 import TodayPrayCompletedItem from "./TodayPrayCompletedItem";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
@@ -49,7 +49,7 @@ const TodayPrayCardList = () => {
         <CarouselItem className="basis-5/6"></CarouselItem>
         {prayCardCarouselList.map((prayCard) => (
           <CarouselItem key={prayCard.id} className="basis-5/6">
-            <PrayCardUI
+            <TodayPrayCardUI
               prayCard={prayCard}
               eventOption={{
                 where: "PrayCardList",
