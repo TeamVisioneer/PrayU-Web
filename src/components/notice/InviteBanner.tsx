@@ -41,7 +41,7 @@ const InviteBanner = () => {
         <img src="/images/PlayListCover.png" className="h-80" />
       </section>
       <section className="flex flex-col items-center gap-3">
-        <h1 className="text-lg font-bold">PrayU 초대 완료 이벤트</h1>
+        <h1 className="text-lg font-bold">PrayU 초대 이벤트</h1>
         <div className="text-sm text-gray-400 text-center">
           <p>24시간 내에 그룹원 초대를 완료할 경우</p>
           <p>PrayU PlayList Vol.1 PDF를 제공해 드립니다!</p>
