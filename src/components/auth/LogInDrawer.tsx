@@ -32,7 +32,12 @@ const LogInDrawer = () => {
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIOSApp = userAgent.includes("prayu-ios");
     setIsIOSApp(isIOSApp);
-  }, []);
+    if (groupId) {
+      document.cookie = `groupId=${groupId}; path=/; max-age=${
+        60 * 60 * 1 // 1 hour
+      }`;
+    }
+  }, [groupId]);
 
   const LoginContent = (
     <div className="flex flex-col gap-6 px-10">
@@ -43,7 +48,7 @@ const LogInDrawer = () => {
         </p>
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
-        <KakaoLoginBtn redirectUrl={redirectUrl} />
+        <KakaoLoginBtn />
         {isIOSApp && (
           <>
             <AppleLoginBtn redirectUrl={redirectUrl} />

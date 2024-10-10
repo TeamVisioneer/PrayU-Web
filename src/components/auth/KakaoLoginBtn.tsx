@@ -1,24 +1,22 @@
 import kakaoIcon from "@/assets/kakaoIcon.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import * as Sentry from "@sentry/react";
-import { supabase } from "../../../supabase/client";
+import { getDomainUrl } from "@/lib/utils";
 
-interface KakaoLoginBtnProps {
-  redirectUrl: string;
-}
+const KakaoLoginBtn: React.FC = () => {
+  const baseUrl = getDomainUrl();
 
-const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
   const handleKakaoLoginBtnClick = async () => {
     analyticsTrack("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "kakao",
-      options: {
-        redirectTo: redirectUrl,
-      },
-    });
-    if (error) {
-      console.error("Kakao login error:", error.message);
-      Sentry.captureException(error.message);
+    if (window?.Kakao?.Auth) {
+      try {
+        window?.Kakao.Auth.authorize({
+          redirectUri: `${baseUrl}/auth/kakao/callback`,
+        });
+      } catch (error) {
+        console.error("Kakao login error:", error);
+        Sentry.captureException(error);
+      }
     }
   };
 

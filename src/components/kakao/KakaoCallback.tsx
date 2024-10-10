@@ -1,14 +1,14 @@
-import { getDomainUrl } from "@/lib/utils";
+import { getCookie, getDomainUrl } from "@/lib/utils";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { KakaoTokenRepo } from "./KakaoTokenRepo";
 import { KakaoTokenResponse } from "./Kakao";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
-import useAuth from "@/hooks/useAuth";
+import { supabase } from "../../../supabase/client";
 
 const KakaoCallBack = () => {
-  const { user } = useAuth();
+  const user = useBaseStore((state) => state.user);
   const navigate = useNavigate();
   const location = useLocation();
   const baseUrl = getDomainUrl();
@@ -33,6 +33,7 @@ const KakaoCallBack = () => {
     });
     return stateObj;
   };
+  const groupId = getCookie("groupId");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -56,6 +57,20 @@ const KakaoCallBack = () => {
         if (response) {
           KakaoTokenRepo.setKakaoTokensInCookie(response);
           window.Kakao.Auth.setAccessToken(response.access_token);
+          if (response.id_token && !user) {
+            supabase.auth
+              .signInWithIdToken({
+                provider: "kakao",
+                token: response.id_token,
+              })
+              .then(({ error }) => {
+                if (error) {
+                  console.error("로그인 실패:", error);
+                } else {
+                  window.location.href = `${baseUrl}/login-redirect?groupId=${groupId}`;
+                }
+              });
+          }
         }
       });
     }
@@ -70,6 +85,7 @@ const KakaoCallBack = () => {
     user,
     setIsOpenTodayPrayDrawer,
     setIsOpenMyMemberDrawer,
+    groupId,
   ]);
   return null;
 };
