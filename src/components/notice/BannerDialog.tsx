@@ -8,7 +8,9 @@ import {
 import useBaseStore from "@/stores/baseStore";
 
 const BannerDialog = () => {
-  const bannerDialogData = useBaseStore((state) => state.bannerDialogData);
+  const bannerDialogContent = useBaseStore(
+    (state) => state.bannerDialogContent
+  );
   const isOpenBannerDialog = useBaseStore((state) => state.isOpenBannerDialog);
   const setIsOpenBannerDialog = useBaseStore(
     (state) => state.setIsOpenBannerDialog
@@ -26,7 +28,7 @@ const BannerDialog = () => {
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        {bannerDialogData}
+        {bannerDialogContent}
       </DialogContent>
     </Dialog>
   );

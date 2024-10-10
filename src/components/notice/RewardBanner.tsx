@@ -5,8 +5,8 @@ import { LuDownload } from "react-icons/lu";
 import { Badge } from "../ui/badge";
 
 const RewardBanner = () => {
-  const setBannerDialogData = useBaseStore(
-    (state) => state.setBannerDialogData
+  const setBannerDialogContent = useBaseStore(
+    (state) => state.setBannerDialogContent
   );
   const setIsOpenBannerDialog = useBaseStore(
     (state) => state.setIsOpenBannerDialog
@@ -68,7 +68,7 @@ const RewardBanner = () => {
 
   const onClickBanner = () => {
     analyticsTrack("클릭_베너_리워드", {});
-    setBannerDialogData(RewardContent);
+    setBannerDialogContent(RewardContent);
     setIsOpenBannerDialog(true);
   };
 

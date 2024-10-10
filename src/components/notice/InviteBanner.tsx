@@ -7,8 +7,8 @@ import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 const InviteBanner = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const groupList = useBaseStore((state) => state.groupList);
-  const setBannerDialogData = useBaseStore(
-    (state) => state.setBannerDialogData
+  const setBannerDialogContent = useBaseStore(
+    (state) => state.setBannerDialogContent
   );
   const setIsOpenBannerDialog = useBaseStore(
     (state) => state.setIsOpenBannerDialog
@@ -58,7 +58,7 @@ const InviteBanner = () => {
 
   const onClickBanner = () => {
     analyticsTrack("클릭_베너_초대", { group_id: targetGroup.id });
-    setBannerDialogData(EventContent);
+    setBannerDialogContent(EventContent);
     setIsOpenBannerDialog(true);
   };
 
