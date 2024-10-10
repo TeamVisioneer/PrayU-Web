@@ -17,8 +17,8 @@ interface Kakao {
   Auth: {
     authorize: (options: {
       redirectUri: string;
-      scope: string;
-      state: string;
+      scope?: string;
+      state?: string;
     }) => void;
     setAccessToken: (token: string) => void;
   };
