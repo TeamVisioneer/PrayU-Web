@@ -32,11 +32,6 @@ const LogInDrawer = () => {
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIOSApp = userAgent.includes("prayu-ios");
     setIsIOSApp(isIOSApp);
-    // if (groupId) {
-    //   document.cookie = `groupId=${groupId}; path=/; max-age=${
-    //     60 * 60 * 1 // 1 hour
-    //   }`;
-    // }
   }, [groupId]);
 
   const LoginContent = (

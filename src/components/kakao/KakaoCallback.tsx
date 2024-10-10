@@ -23,7 +23,6 @@ const KakaoCallBack = () => {
     const stateObj: { [key: string]: string } = {};
     if (!state) return stateObj;
 
-    // ';'로 구분하여 split하고, 각 key-value를 처리
     const parts = state.split(";");
     parts.forEach((part) => {
       const [key, value] = part.split(":");
@@ -60,24 +59,17 @@ const KakaoCallBack = () => {
                 provider: "kakao",
                 token: response.id_token,
               })
-              .then(async ({ error }) => {
-                if (error) {
+              .then(({ error }) => {
+                if (!error) {
+                  window.location.href = `${baseUrl}/login-redirect?groupId=${groupId}`;
+                } else {
                   console.error("로그인 실패:", error);
                   navigate("/", { replace: true });
-                } else {
-                  // const { user } = data;
-                  // const { error: updateError } = await supabase
-                  //   .from("profiles")
-                  //   .update({
-                  //     full_name: user.user_metadata?.name || "",
-                  //     avatar_url: user.user_metadata?.avatar_url || "",
-                  //   })
-                  //   .eq("id", user.id);
-                  // if (updateError) {
-                  //   console.error("프로필 업데이트 실패:", updateError);
-                  // }
-                  window.location.href = `${baseUrl}/login-redirect?groupId=${groupId}`;
                 }
+              })
+              .catch((err) => {
+                console.error("로그인 처리 중 오류 발생:", err);
+                navigate("/", { replace: true });
               });
           }
         }
