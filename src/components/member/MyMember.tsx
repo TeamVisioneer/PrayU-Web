@@ -10,7 +10,7 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISOTodayDate, sleep } from "@/lib/utils";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
 import ReactionResultBox from "../pray/ReactionResultBox";
@@ -99,6 +99,8 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       group_id: groupId,
       where: "MyMember",
     });
+    sleep(100);
+    fetchUserPrayCardListByGroupId(currentUserId, groupId);
   };
 
   return (
@@ -118,13 +120,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        {/* PrayCard */}
-        <MyPrayCardUI
-          currentUserId={currentUserId}
-          groupId={groupId}
-          member={myMember}
-        />
-        {/* PrayCard */}
+        <MyPrayCardUI member={myMember} />
       </DrawerContent>
     </Drawer>
   );

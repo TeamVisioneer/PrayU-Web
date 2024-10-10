@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
@@ -14,21 +13,13 @@ import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
 
 interface PrayCardProps {
-  currentUserId: string;
-  groupId: string;
   member: MemberWithProfiles;
 }
 
-const MyPrayCardUI: React.FC<PrayCardProps> = ({
-  currentUserId,
-  groupId,
-  member,
-}) => {
+const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
-  const fetchUserPrayCardListByGroupId = useBaseStore(
-    (state) => state.fetchUserPrayCardListByGroupId
-  );
+
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
@@ -68,10 +59,6 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({
     setIsEditingPrayCard(false);
     analyticsTrack("클릭_기도카드_저장", {});
   };
-
-  useEffect(() => {
-    fetchUserPrayCardListByGroupId(currentUserId, groupId);
-  }, [fetchUserPrayCardListByGroupId, currentUserId, groupId]);
 
   if (!userPrayCardList) {
     return (

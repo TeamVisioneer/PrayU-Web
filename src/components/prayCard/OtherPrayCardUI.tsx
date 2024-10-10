@@ -1,40 +1,21 @@
-import { useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import ReactionWithCalendar from "./ReactionWithCalendar";
 import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import DeletedPrayCardUI from "./DeletedPrayCardUI";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
-import { Skeleton } from "../ui/skeleton";
 
 interface OtherPrayCardProps {
   currentUserId: string;
   eventOption: { where: string; total_member: number };
 }
 
-const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
-  currentUserId,
-  eventOption,
-}) => {
+const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({ eventOption }) => {
   const otherPrayCardList = useBaseStore((state) => state.otherPrayCardList);
-  const fetchOtherPrayCardListByGroupId = useBaseStore(
-    (state) => state.fetchOtherPrayCardListByGroupId
-  );
-  const otherMember = useBaseStore((state) => state.otherMember);
-
-  useEffect(() => {
-    fetchOtherPrayCardListByGroupId(
-      currentUserId,
-      otherMember!.user_id!,
-      otherMember!.group_id!
-    );
-  }, [fetchOtherPrayCardListByGroupId, currentUserId, otherMember]);
 
   if (!otherPrayCardList) {
     return (
-      <div className="flex justify-center min-h-80vh max-h-80vh px-10 pt-[32px]">
-        <Skeleton className="w-full h-[400px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
-      </div>
+      <div className="flex justify-center min-h-80vh max-h-80vh px-10 pt-[32px]"></div>
     );
   }
   if (otherPrayCardList.length == 0) return <DeletedPrayCardUI />;
