@@ -46,7 +46,7 @@ const TodayPrayCardList = () => {
   return (
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
       <CarouselContent>
-        <CarouselItem className="basis-5/6"></CarouselItem>
+        <CarouselItem className="basis-5/6 min-h-80vh max-h-80vh"></CarouselItem>
         {prayCardCarouselList.map((prayCard) => (
           <CarouselItem key={prayCard.id} className="basis-5/6">
             <TodayPrayCardUI
@@ -77,7 +77,7 @@ const TodayPrayCardList = () => {
             )}
           </CarouselItem>
         )}
-        <CarouselItem className="basis-5/6"></CarouselItem>
+        <CarouselItem className="basis-5/6 min-h-80vh max-h-80vh"></CarouselItem>
       </CarouselContent>
     </Carousel>
   );
