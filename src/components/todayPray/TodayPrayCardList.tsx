@@ -3,7 +3,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import PrayCardUI from "./TodayPrayCardUI";
+import TodayPrayCardUI from "./TodayPrayCardUI";
 import TodayPrayCompletedItem from "./TodayPrayCompletedItem";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
@@ -46,12 +46,15 @@ const TodayPrayCardList = () => {
   return (
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
       <CarouselContent>
-        <CarouselItem className="basis-5/6"></CarouselItem>
+        <CarouselItem className="basis-5/6 min-h-80vh max-h-80vh"></CarouselItem>
         {prayCardCarouselList.map((prayCard) => (
           <CarouselItem key={prayCard.id} className="basis-5/6">
-            <PrayCardUI
+            <TodayPrayCardUI
               prayCard={prayCard}
-              eventOption={{ where: "PrayCardList" }}
+              eventOption={{
+                where: "PrayCardList",
+                total_member: memberList.length,
+              }}
             />
           </CarouselItem>
         ))}
@@ -74,7 +77,7 @@ const TodayPrayCardList = () => {
             )}
           </CarouselItem>
         )}
-        <CarouselItem className="basis-5/6"></CarouselItem>
+        <CarouselItem className="basis-5/6 min-h-80vh max-h-80vh"></CarouselItem>
       </CarouselContent>
     </Carousel>
   );
