@@ -19,10 +19,7 @@ const DummyOtherMember: React.FC = () => {
       <div className="flex items-center gap-2">
         <img
           className="w-8 h-8 rounded-full object-cover"
-          src={"/images/defaultProfileImage.png"}
-          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-            e.currentTarget.src = "/images/defaultProfileImage.png";
-          }}
+          src="/images/avatar/avatar_1.png"
         />
         <p>기도 친구</p>
       </div>
