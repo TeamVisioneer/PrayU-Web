@@ -6,7 +6,6 @@ import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
 const InviteBanner = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
-  const groupList = useBaseStore((state) => state.groupList);
   const setBannerDialogContent = useBaseStore(
     (state) => state.setBannerDialogContent
   );
@@ -21,8 +20,8 @@ const InviteBanner = () => {
   const { hours, minutes, seconds } = dateDistance;
 
   useEffect(() => {
-    if (!targetGroup) return;
     const updateDateDistance = () => {
+      if (!targetGroup) return;
       const createdAt = new Date(targetGroup.created_at);
       const deadline = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
       const dateDistance = getDateDistance(new Date(), deadline);
@@ -33,8 +32,7 @@ const InviteBanner = () => {
     return () => clearInterval(intervalId);
   }, [targetGroup]);
 
-  if (!targetGroup || !groupList) return null;
-  if (groupList.length > 1) return null;
+  if (!targetGroup) return null;
   if (hours == 0 && minutes == 0 && seconds == 0) return null;
 
   const EventContent = (
