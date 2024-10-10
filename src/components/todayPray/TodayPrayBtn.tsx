@@ -1,7 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISOTodayDate, sleep } from "@/lib/utils";
 
 interface EventOption {
   where: string;
@@ -38,6 +38,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     setIsOpenMyMemberDrawer(false);
     analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
 
+    sleep(100);
     setPrayCardCarouselList([]);
     const startDt = getISOTodayDate(-6);
     const todayDt = getISOTodayDate();
