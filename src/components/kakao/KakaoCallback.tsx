@@ -63,10 +63,24 @@ const KakaoCallBack = () => {
                 provider: "kakao",
                 token: response.id_token,
               })
-              .then(({ error }) => {
+              .then(async ({ data, error }) => {
                 if (error) {
                   console.error("로그인 실패:", error);
+                  navigate("/", { replace: true });
                 } else {
+                  const { user } = data;
+                  console.log(user);
+                  const { error: updateError } = await supabase
+                    .from("profiles")
+                    .update({
+                      full_name: user.user_metadata?.name || "",
+                      avatar_url: user.user_metadata?.avatar_url || "",
+                    })
+                    .eq("id", user.id);
+
+                  if (updateError) {
+                    console.error("프로필 업데이트 실패:", updateError);
+                  }
                   window.location.href = `${baseUrl}/login-redirect?groupId=${groupId}`;
                 }
               });
@@ -87,7 +101,7 @@ const KakaoCallBack = () => {
     setIsOpenMyMemberDrawer,
     groupId,
   ]);
-  return null;
+  return <div>KakaoCallback</div>;
 };
 
 export default KakaoCallBack;

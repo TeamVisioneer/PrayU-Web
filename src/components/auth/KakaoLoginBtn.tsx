@@ -3,7 +3,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import * as Sentry from "@sentry/react";
 import { getDomainUrl } from "@/lib/utils";
 
-const KakaoLoginBtn: React.FC = () => {
+const KakaoLoginBtn: React.FC<> = ({ redirectGroupId }) => {
   const baseUrl = getDomainUrl();
 
   const handleKakaoLoginBtnClick = async () => {
@@ -12,6 +12,7 @@ const KakaoLoginBtn: React.FC = () => {
       try {
         window?.Kakao.Auth.authorize({
           redirectUri: `${baseUrl}/auth/kakao/callback`,
+          state: `groupId:${groupId}`,
         });
       } catch (error) {
         console.error("Kakao login error:", error);
