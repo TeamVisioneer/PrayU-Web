@@ -48,7 +48,7 @@ const LogInDrawer = () => {
         </p>
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
-        <KakaoLoginBtn />
+        <KakaoLoginBtn redirectGroupId={groupId} />
         {isIOSApp && (
           <>
             <AppleLoginBtn redirectUrl={redirectUrl} />

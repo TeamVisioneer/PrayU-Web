@@ -43,6 +43,8 @@ const TermServicePage: React.FC = () => {
   const handleCreateGroup = async () => {
     const groupName = profile.full_name
       ? `${profile.full_name}의 기도그룹`
+      : user!.user_metadata.name
+      ? `${user!.user_metadata.name}의 기도그룹`
       : "새 기도그룹";
     const targetGroup = await createGroup(profile.id, groupName, "intro");
     if (!targetGroup) return;

@@ -33,7 +33,13 @@ const LoginRedirect = () => {
     if (!myProfile) return;
     if (provider == "kakao") {
       window.Kakao.Auth.setAccessToken(session?.provider_token || "");
-      if (!myProfile.kakao_id)
+      if (!myProfile.full_name) {
+        updateProfile(currentUserId, {
+          full_name: user!.user_metadata.name,
+          avatar_url: user!.user_metadata.picture,
+          kakao_id: kakaoId,
+        });
+      } else if (!myProfile.kakao_id)
         updateProfile(currentUserId, { kakao_id: kakaoId });
     }
 
@@ -50,6 +56,7 @@ const LoginRedirect = () => {
     groupId,
     groupPageUrl,
     session,
+    user,
   ]);
 
   return null;

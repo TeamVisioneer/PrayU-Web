@@ -1,4 +1,4 @@
-import { getCookie, getDomainUrl } from "@/lib/utils";
+import { getDomainUrl } from "@/lib/utils";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { KakaoTokenRepo } from "./KakaoTokenRepo";
@@ -33,17 +33,14 @@ const KakaoCallBack = () => {
     });
     return stateObj;
   };
-  const groupId = getCookie("groupId");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const code = params.get("code");
     const state = params.get("state");
     const stateObj = parseState(state);
-
-    const groupPageUrl = stateObj["groupId"]
-      ? `/group/${stateObj["groupId"]}`
-      : "/group";
+    const groupId = stateObj["groupId"] || "";
+    const groupPageUrl = groupId ? `/group/${groupId}` : "/group";
 
     if (code) {
       KakaoTokenRepo.fetchKakaoToken(
@@ -63,24 +60,22 @@ const KakaoCallBack = () => {
                 provider: "kakao",
                 token: response.id_token,
               })
-              .then(async ({ data, error }) => {
+              .then(async ({ error }) => {
                 if (error) {
                   console.error("로그인 실패:", error);
                   navigate("/", { replace: true });
                 } else {
-                  const { user } = data;
-                  console.log(user);
-                  const { error: updateError } = await supabase
-                    .from("profiles")
-                    .update({
-                      full_name: user.user_metadata?.name || "",
-                      avatar_url: user.user_metadata?.avatar_url || "",
-                    })
-                    .eq("id", user.id);
-
-                  if (updateError) {
-                    console.error("프로필 업데이트 실패:", updateError);
-                  }
+                  // const { user } = data;
+                  // const { error: updateError } = await supabase
+                  //   .from("profiles")
+                  //   .update({
+                  //     full_name: user.user_metadata?.name || "",
+                  //     avatar_url: user.user_metadata?.avatar_url || "",
+                  //   })
+                  //   .eq("id", user.id);
+                  // if (updateError) {
+                  //   console.error("프로필 업데이트 실패:", updateError);
+                  // }
                   window.location.href = `${baseUrl}/login-redirect?groupId=${groupId}`;
                 }
               });
@@ -99,7 +94,6 @@ const KakaoCallBack = () => {
     user,
     setIsOpenTodayPrayDrawer,
     setIsOpenMyMemberDrawer,
-    groupId,
   ]);
   return <div>KakaoCallback</div>;
 };
