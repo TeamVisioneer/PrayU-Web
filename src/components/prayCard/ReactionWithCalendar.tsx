@@ -3,13 +3,9 @@ import WeeklyCalendar from "./WeeklyCalendar";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import ReactionBtn from "./ReactionBtn";
 
-interface EventOption {
-  where: string;
-}
-
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles;
-  eventOption: EventOption;
+  eventOption: { where: string; total_member: number };
 }
 
 const ReactionWithCalendar: React.FC<PrayCardProps> = ({
