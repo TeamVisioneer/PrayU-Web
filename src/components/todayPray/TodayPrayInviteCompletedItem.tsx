@@ -50,7 +50,7 @@ const TodayPrayDummyCompletedItem = () => {
   }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi]);
 
   return (
-    <div className="relative flex flex-col justify-between items-center h-80vh">
+    <div className="relative flex flex-col justify-between items-center min-h-80vh max-h-80vh">
       <div className=""></div>
       <div className="flex flex-col gap-4 justify-center items-center">
         <section
