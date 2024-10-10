@@ -82,7 +82,7 @@ const TermServicePage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between items-center h-full">
+    <div className="flex flex-col justify-between items-center min-h-screen">
       <span></span>
       <div className="flex flex-col items-center text-center gap-8">
         <div
@@ -137,6 +137,7 @@ const TermServicePage: React.FC = () => {
           동의하고 시작해요
         </Button>
       </div>
+      <span></span>
     </div>
   );
 };
