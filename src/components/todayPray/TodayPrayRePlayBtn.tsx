@@ -18,6 +18,7 @@ const TodayPrayReplayBtn: React.FC<TodayPrayReplayBtnProps> = ({
   const setPrayCardCarouselIndex = useBaseStore(
     (state) => state.setPrayCardCarouselIndex
   );
+  const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
@@ -37,6 +38,7 @@ const TodayPrayReplayBtn: React.FC<TodayPrayReplayBtnProps> = ({
           .sort((prayCard) => (prayCard.user_id === myMember.user_id ? -1 : 1))
       : [];
     setPrayCardCarouselList(filterdGroupPrayCardList);
+    setIsPrayToday(false);
     sleep(50).then(() => {
       prayCardCarouselApi?.scrollTo(1);
       setPrayCardCarouselIndex(1);
