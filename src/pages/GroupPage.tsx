@@ -17,7 +17,6 @@ import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
-import InviteBanner from "@/components/notice/InviteBanner";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
