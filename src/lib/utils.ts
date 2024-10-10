@@ -92,11 +92,3 @@ export const getDomainUrl = () => {
 };
 
 export const days = ["일", "월", "화", "수", "목", "금", "토"];
-
-// cookie
-export const getCookie = (name: string) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(";").shift();
-  return "";
-};
