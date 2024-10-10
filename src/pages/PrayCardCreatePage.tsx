@@ -158,7 +158,7 @@ const PrayCardCreatePage: React.FC = () => {
                 myMember
                   ? myMember?.profiles.avatar_url ||
                     "/images/defaultProfileImage.png"
-                  : user?.user_metadata.avatar_url ||
+                  : user?.user_metadata.picture ||
                     "/images/defaultProfileImage.png"
               }
               onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -169,7 +169,7 @@ const PrayCardCreatePage: React.FC = () => {
             <p className="text-white text-lg ">
               {myMember
                 ? myMember?.profiles.full_name
-                : user?.user_metadata.full_name}
+                : user?.user_metadata.name}
             </p>
           </div>
           <p className="text-sm text-white w-full text-left">
