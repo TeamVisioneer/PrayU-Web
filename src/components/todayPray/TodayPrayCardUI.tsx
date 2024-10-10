@@ -4,13 +4,9 @@ import { days, getISODateYMD } from "@/lib/utils";
 import OtherPrayCardMenuBtn from "../prayCard/OtherPrayCardMenuBtn";
 import useBaseStore from "@/stores/baseStore";
 
-interface EventOption {
-  where: string;
-}
-
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles;
-  eventOption: EventOption;
+  eventOption: { where: string; total_member: number };
 }
 
 const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {

@@ -51,7 +51,10 @@ const TodayPrayCardList = () => {
           <CarouselItem key={prayCard.id} className="basis-5/6">
             <PrayCardUI
               prayCard={prayCard}
-              eventOption={{ where: "PrayCardList" }}
+              eventOption={{
+                where: "PrayCardList",
+                total_member: memberList.length,
+              }}
             />
           </CarouselItem>
         ))}

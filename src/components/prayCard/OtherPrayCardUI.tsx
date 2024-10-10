@@ -7,13 +7,9 @@ import DeletedPrayCardUI from "./DeletedPrayCardUI";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 import { Skeleton } from "../ui/skeleton";
 
-interface EventOption {
-  where: string;
-}
-
 interface OtherPrayCardProps {
   currentUserId: string;
-  eventOption: EventOption;
+  eventOption: { where: string; total_member: number };
 }
 
 const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({
