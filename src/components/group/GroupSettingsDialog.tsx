@@ -58,7 +58,7 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
     setAlertData({
       color: "bg-red-400",
       title: "그룹 내보내기",
-      description: `해당 그룹에서  ${member.profiles.full_name} 님을 내보내시겠습니까?\n*${member.profiles.full_name} 님의 기도카드는 모두 삭제됩니다`,
+      description: `해당 그룹에서  ${member.profiles.full_name} 님을 내보내시겠어요?\n*${member.profiles.full_name} 님의 기도카드는 모두 삭제되어요`,
       actionText: "내보내기",
       cancelText: "취소",
       onAction: async () => {
