@@ -33,13 +33,13 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   if (!myMember || !targetGroup) return null;
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
+    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
     setIsOpenTodayPrayDrawer(true);
     setIsOpenMyPrayDrawer(false);
     setIsOpenMyMemberDrawer(false);
-    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
+    setPrayCardCarouselList([]);
 
     sleep(100);
-    setPrayCardCarouselList([]);
     const startDt = getISOTodayDate(-6);
     const todayDt = getISOTodayDate();
     const endDt = getISOTodayDate(1);
