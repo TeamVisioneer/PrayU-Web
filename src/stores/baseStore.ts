@@ -212,10 +212,12 @@ export interface BaseStore {
   isOpenEventDialog: boolean;
   setIsOpenEventDialog: (isOpenEventDialog: boolean) => void;
 
-  bannerDialogContent: JSX.Element | null;
+  bannerDialogContentType: "invite" | "reward" | null;
   isOpenBannerDialog: boolean;
   setIsOpenBannerDialog: (isOpenBannerDialog: boolean) => void;
-  setBannerDialogContent: (bannerDialogContent: JSX.Element) => void;
+  setBannerDialogContent: (
+    bannerDialogContentType: "invite" | "reward"
+  ) => void;
 
   // etc
   isConfirmAlertOpen: boolean;
@@ -758,16 +760,16 @@ const useBaseStore = create<BaseStore>()(
       });
     },
 
-    bannerDialogContent: null,
+    bannerDialogContentType: null,
     isOpenBannerDialog: false,
     setIsOpenBannerDialog: (isOpenBannerDialog: boolean) => {
       set((state) => {
         state.isOpenBannerDialog = isOpenBannerDialog;
       });
     },
-    setBannerDialogContent: (bannerDialogContent: JSX.Element) => {
+    setBannerDialogContent: (bannerDialogContentType: "invite" | "reward") => {
       set((state) => {
-        state.bannerDialogContent = bannerDialogContent;
+        state.bannerDialogContentType = bannerDialogContentType;
       });
     },
 

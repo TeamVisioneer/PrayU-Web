@@ -2,7 +2,6 @@ import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { getDateDistance } from "@toss/date";
 import { useEffect, useState } from "react";
-import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
 const InviteBanner = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -35,28 +34,9 @@ const InviteBanner = () => {
   if (!targetGroup) return null;
   if (hours == 0 && minutes == 0 && seconds == 0) return null;
 
-  const EventContent = (
-    <div className="flex flex-col items-center">
-      <section className="h-80 w-full flex justify-center">
-        <img src="/images/PlayListCover.png" className="h-80" />
-      </section>
-      <section className="flex flex-col items-center gap-3">
-        <h1 className="text-lg font-bold">PrayU 초대 이벤트</h1>
-        <div className="text-sm text-gray-400 text-center">
-          <p>24시간 내에 그룹원 초대를 완료할 경우</p>
-          <p>PrayU PlayList Vol.1 PDF를 제공해 드립니다!</p>
-        </div>
-        <OpenShareDrawerBtn
-          text="친구 초대하기"
-          eventOption={{ where: "BannerDialog" }}
-        />
-      </section>
-    </div>
-  );
-
   const onClickBanner = () => {
     analyticsTrack("클릭_베너_초대", { group_id: targetGroup.id });
-    setBannerDialogContent(EventContent);
+    setBannerDialogContent("invite");
     setIsOpenBannerDialog(true);
   };
 
