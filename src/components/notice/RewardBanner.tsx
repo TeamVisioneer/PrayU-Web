@@ -20,6 +20,7 @@ const RewardBanner = () => {
 
   if (hours == 0 && minutes == 0 && seconds == 0) return null;
 
+  const playListShareLink = PlayListShareLink();
   const RewardContent = (
     <div className="flex flex-col items-center">
       <section className="h-80 w-full flex justify-center">
@@ -36,7 +37,7 @@ const RewardBanner = () => {
         </div>
         <KakaoShareButton
           buttonText="카카오톡으로 전달받기"
-          kakaoLinkObject={PlayListShareLink()}
+          kakaoLinkObject={playListShareLink}
           eventOption={{ where: "RewardBanner" }}
         />
       </section>
