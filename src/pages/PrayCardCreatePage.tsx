@@ -134,7 +134,7 @@ const PrayCardCreatePage: React.FC = () => {
     const newPrayCard = await handleCreatePrayCard(
       currentUserId,
       groupId,
-      inputPrayCardContent.trim()
+      inputPrayCardContent
     );
     if (!newPrayCard) {
       setIsDisabledPrayCardCreateBtn(false);
