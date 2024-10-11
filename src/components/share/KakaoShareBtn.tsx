@@ -169,9 +169,9 @@ export const PlayListShareLink = () => {
         title: "PDF 보기",
         link: {
           mobileWebUrl:
-            "https://www.youtube.com/playlist?list=PLMvKO5tSXWuyv_KRi49TQmZ82kd3s4OVq",
+            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayUPlayList/PrayU_PlayList_Vol_1.pdf",
           webUrl:
-            "https://www.youtube.com/playlist?list=PLMvKO5tSXWuyv_KRi49TQmZ82kd3s4OVq",
+            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayUPlayList/PrayU_PlayList_Vol_1.pdf",
         },
       },
     ],
