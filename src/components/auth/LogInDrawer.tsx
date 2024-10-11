@@ -43,7 +43,10 @@ const LogInDrawer = () => {
         </p>
       </div>
       <div className="flex flex-col w-full justify-center gap-2">
-        <KakaoLoginBtn redirectUrl={redirectUrl} />
+        <KakaoLoginBtn
+          redirectUri={`${baseUrl}/auth/kakao/callback`}
+          state={`groupId:${groupId}`}
+        />
         {isIOSApp && (
           <>
             <AppleLoginBtn redirectUrl={redirectUrl} />

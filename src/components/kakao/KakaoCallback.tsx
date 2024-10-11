@@ -5,10 +5,10 @@ import { KakaoTokenRepo } from "./KakaoTokenRepo";
 import { KakaoTokenResponse } from "./Kakao";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
-import useAuth from "@/hooks/useAuth";
+import { supabase } from "../../../supabase/client";
 
 const KakaoCallBack = () => {
-  const { user } = useAuth();
+  const user = useBaseStore((state) => state.user);
   const navigate = useNavigate();
   const location = useLocation();
   const baseUrl = getDomainUrl();
@@ -23,7 +23,6 @@ const KakaoCallBack = () => {
     const stateObj: { [key: string]: string } = {};
     if (!state) return stateObj;
 
-    // ';'로 구분하여 split하고, 각 key-value를 처리
     const parts = state.split(";");
     parts.forEach((part) => {
       const [key, value] = part.split(":");
@@ -39,10 +38,8 @@ const KakaoCallBack = () => {
     const code = params.get("code");
     const state = params.get("state");
     const stateObj = parseState(state);
-
-    const groupPageUrl = stateObj["groupId"]
-      ? `/group/${stateObj["groupId"]}`
-      : "/group";
+    const groupId = stateObj["groupId"] || "";
+    const groupPageUrl = groupId ? `/group/${groupId}` : "/group";
 
     if (code) {
       KakaoTokenRepo.fetchKakaoToken(
@@ -56,6 +53,25 @@ const KakaoCallBack = () => {
         if (response) {
           KakaoTokenRepo.setKakaoTokensInCookie(response);
           window.Kakao.Auth.setAccessToken(response.access_token);
+          if (response.id_token && !user) {
+            supabase.auth
+              .signInWithIdToken({
+                provider: "kakao",
+                token: response.id_token,
+              })
+              .then(({ error }) => {
+                if (!error) {
+                  window.location.href = `${baseUrl}/login-redirect?groupId=${groupId}`;
+                } else {
+                  console.error("로그인 실패:", error);
+                  navigate("/", { replace: true });
+                }
+              })
+              .catch((err) => {
+                console.error("로그인 처리 중 오류 발생:", err);
+                navigate("/", { replace: true });
+              });
+          }
         }
       });
     }
