@@ -147,6 +147,12 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
+      case "/story":
+        analyticsTrack("페이지_스토리", {
+          title: "Story Page",
+          where: from,
+        });
+        break;
       case "/term":
         analyticsTrack("페이지_약관", {
           title: "Term Page",
