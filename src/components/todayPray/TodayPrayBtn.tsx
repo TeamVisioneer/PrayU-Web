@@ -3,11 +3,8 @@ import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate, sleep } from "@/lib/utils";
 
-interface EventOption {
-  where: string;
-}
 interface TodayPrayBtnProps {
-  eventOption: EventOption;
+  eventOption: { where: string; total_member: number };
 }
 
 const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
@@ -66,7 +63,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   return (
     <Button
       variant="primary"
-      className="w-[188px] h-[46px] text-md font-bold rounded-[10px]"
+      className="w-48 h-12 text-md font-bold rounded-[10px]"
       onClick={() => onClickTodayPrayBtn(targetGroup.id)}
     >
       기도 시작하기
