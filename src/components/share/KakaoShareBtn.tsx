@@ -139,3 +139,39 @@ export const ExpiredMemberLink = () => {
     ],
   } as KakaoLinkObject;
 };
+
+export const PlayListShareLink = () => {
+  return {
+    objectType: "feed",
+    content: {
+      title: "PrayU PlayList Vol.1 도착 🎁",
+      description: `찬양을 들으면서 말씀과 묵상을 확인해보세요`,
+      imageUrl:
+        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayUPlayList/PlayListCover.png",
+      link: {
+        webUrl: getDomainUrl(),
+        mobileWebUrl: getDomainUrl(),
+      },
+    },
+    buttons: [
+      {
+        title: "YOUTUBE",
+        link: {
+          mobileWebUrl:
+            "https://www.youtube.com/playlist?list=PLMvKO5tSXWuyv_KRi49TQmZ82kd3s4OVq",
+          webUrl:
+            "https://www.youtube.com/playlist?list=PLMvKO5tSXWuyv_KRi49TQmZ82kd3s4OVq",
+        },
+      },
+      {
+        title: "PDF 보기",
+        link: {
+          mobileWebUrl:
+            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayUPlayList/PrayU_PlayList_Vol_1.pdf",
+          webUrl:
+            "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayUPlayList/PrayU_PlayList_Vol_1.pdf",
+        },
+      },
+    ],
+  } as KakaoLinkObject;
+};
