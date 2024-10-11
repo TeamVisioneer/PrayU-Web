@@ -6,6 +6,7 @@ import TodayPrayBtn from "../todayPray/TodayPrayBtn";
 
 const PrayList: React.FC = () => {
   const user = useBaseStore((state) => state.user);
+  const memberList = useBaseStore((state) => state.memberList);
   const isPrayTodayForMember = useBaseStore(
     (state) => state.isPrayTodayForMember
   );
@@ -14,7 +15,8 @@ const PrayList: React.FC = () => {
   );
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
 
-  if (!userPrayCardList || userPrayCardList.length == 0) return null;
+  if (!memberList || !userPrayCardList || userPrayCardList.length == 0)
+    return null;
 
   const prayerList = groupAndSortByUserId(userPrayCardList[0].pray);
   const lenPrayerList = Object.keys(prayerList).length;
@@ -86,7 +88,12 @@ const PrayList: React.FC = () => {
           ))}
           {!isPrayTodayForMember && !isOnlyMyPrayInPrayerList && (
             <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-3">
-              <TodayPrayBtn eventOption={{ where: "PrayList" }} />
+              <TodayPrayBtn
+                eventOption={{
+                  where: "PrayList",
+                  total_member: memberList.length,
+                }}
+              />
               <p className="text-gray-500 text-sm">
                 오늘의 기도를 완료해야 볼 수 있어요!
               </p>

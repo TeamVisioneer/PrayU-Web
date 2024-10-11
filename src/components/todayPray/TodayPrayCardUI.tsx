@@ -4,16 +4,15 @@ import { days, getISODateYMD } from "@/lib/utils";
 import OtherPrayCardMenuBtn from "../prayCard/OtherPrayCardMenuBtn";
 import useBaseStore from "@/stores/baseStore";
 
-interface EventOption {
-  where: string;
-}
-
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles;
-  eventOption: EventOption;
+  eventOption: { where: string; total_member: number };
 }
 
-const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
+const TodayPrayCardUI: React.FC<PrayCardProps> = ({
+  prayCard,
+  eventOption,
+}) => {
   const createdAt = prayCard.created_at;
   const createdAtDate = new Date(createdAt);
   const createdDateYMD = getISODateYMD(createdAt);
@@ -84,4 +83,4 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard, eventOption }) => {
   );
 };
 
-export default PrayCardUI;
+export default TodayPrayCardUI;

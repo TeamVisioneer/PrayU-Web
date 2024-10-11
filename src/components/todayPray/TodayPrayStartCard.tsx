@@ -1,6 +1,10 @@
+import useBaseStore from "@/stores/baseStore";
 import TodayPrayBtn from "./TodayPrayBtn";
 
 export const TodayPrayStartCard = () => {
+  const memberList = useBaseStore((state) => state.memberList);
+
+  if (!memberList) return null;
   return (
     <div className="w-full flex-grow flex flex-col items-center">
       <div className="relative flex flex-col w-[85%] flex-grow justify-center items-center max-h-[500px]">
@@ -15,7 +19,12 @@ export const TodayPrayStartCard = () => {
             </div>
           </div>
           <img src={"/images/Hand.png"} className="w-24 h-24 "></img>
-          <TodayPrayBtn eventOption={{ where: "TodayPrayStartCard" }} />
+          <TodayPrayBtn
+            eventOption={{
+              where: "TodayPrayStartCard",
+              total_member: memberList.length,
+            }}
+          />
         </div>
       </div>
     </div>

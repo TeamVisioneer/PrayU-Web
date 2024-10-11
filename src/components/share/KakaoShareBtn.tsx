@@ -1,5 +1,5 @@
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDateYMD } from "@/lib/utils";
+import { getDomainUrl, getISOTodayDateYMD } from "@/lib/utils";
 import { KakaoLinkObject } from "../kakao/Kakao";
 import { Button } from "../ui/button";
 
@@ -41,24 +41,19 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
 export const BibleCardLink = () => {
   const today = getISOTodayDateYMD();
   const contentNumber = parseInt(today.day, 10) % 31;
+  const domainUrl = getDomainUrl();
   return {
     objectType: "feed",
     content: {
       title: `${today.year}.${today.month}.${today.day} 오늘의 말씀`,
       description: "PrayU 에서 말씀과 함께 기도해요!",
       imageUrl: `https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/BibleContent/content${contentNumber}.png`,
-      link: {
-        webUrl: window.location.href,
-        mobileWebUrl: window.location.href,
-      },
+      link: { webUrl: domainUrl, mobileWebUrl: domainUrl },
     },
     buttons: [
       {
-        title: "오늘의 기도 시작하기",
-        link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
-        },
+        title: "PrayU 시작하기",
+        link: { webUrl: domainUrl, mobileWebUrl: domainUrl },
       },
     ],
   } as KakaoLinkObject;

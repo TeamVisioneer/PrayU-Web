@@ -1,13 +1,10 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISOTodayDate, sleep } from "@/lib/utils";
 
-interface EventOption {
-  where: string;
-}
 interface TodayPrayBtnProps {
-  eventOption: EventOption;
+  eventOption: { where: string; total_member: number };
 }
 
 const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
@@ -33,12 +30,13 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   if (!myMember || !targetGroup) return null;
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
+    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
     setIsOpenTodayPrayDrawer(true);
     setIsOpenMyPrayDrawer(false);
     setIsOpenMyMemberDrawer(false);
-    analyticsTrack("클릭_오늘의기도_시작", { where: eventOption.where });
-
     setPrayCardCarouselList([]);
+
+    sleep(100);
     const startDt = getISOTodayDate(-6);
     const todayDt = getISOTodayDate();
     const endDt = getISOTodayDate(1);
@@ -65,7 +63,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   return (
     <Button
       variant="primary"
-      className="w-[188px] h-[46px] text-md font-bold rounded-[10px]"
+      className="w-48 h-12 text-md font-bold rounded-[10px]"
       onClick={() => onClickTodayPrayBtn(targetGroup.id)}
     >
       기도 시작하기
