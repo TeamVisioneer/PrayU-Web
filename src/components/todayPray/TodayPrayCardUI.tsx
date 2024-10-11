@@ -31,7 +31,7 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
       <div className="flex justify-between px-2">
         <div className="w-6"></div>
         <div className="text-sm text-gray-400">
-          {prayCardCarouselList.length}명 중 {prayCardCarouselIndex}
+          {prayCardCarouselList?.length || 0}명 중 {prayCardCarouselIndex}
           번째 기도
         </div>
         <OtherPrayCardMenuBtn

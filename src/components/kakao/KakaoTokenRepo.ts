@@ -87,6 +87,8 @@ export class KakaoTokenRepo {
         return null;
       }
       const responseData: KakaoTokenResponse = await response.json();
+      this.setKakaoTokensInCookie(responseData);
+      window.Kakao.Auth.setAccessToken(responseData.access_token);
       return responseData;
     } catch (error) {
       Sentry.captureException(error);
