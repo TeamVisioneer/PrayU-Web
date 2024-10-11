@@ -1,8 +1,7 @@
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { getDateDistance } from "@toss/date";
-import { LuDownload } from "react-icons/lu";
-import { Badge } from "../ui/badge";
+import { KakaoShareButton, PlayListShareLink } from "../share/KakaoShareBtn";
 
 const RewardBanner = () => {
   const setBannerDialogContent = useBaseStore(
@@ -21,26 +20,6 @@ const RewardBanner = () => {
 
   if (hours == 0 && minutes == 0 && seconds == 0) return null;
 
-  const handleDownload = async () => {
-    analyticsTrack("클릭_베너_다운로드", {});
-    try {
-      const fileUrl =
-        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayUPlayList/PrayU_PlayList_Vol_1.pdf";
-      const response = await fetch(fileUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "PrayU_PlayList_Vol_1.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading the PDF file:", error);
-    }
-  };
-
   const RewardContent = (
     <div className="flex flex-col items-center">
       <section className="h-80 w-full flex justify-center">
@@ -53,13 +32,13 @@ const RewardBanner = () => {
             이벤트 마감까지 {hours > 0 ? `${hours} 시간` : `${minutes} 분`}이
             남았어요!
           </p>
-          <p>버튼을 눌러 PlayList Vol.1 PDF 를 받아주세요</p>
+          <p>버튼을 통해 PlayList Vol.1 를 받아주세요</p>
         </div>
-
-        <Badge onClick={handleDownload} className="flex gap-1">
-          <span>다운로드</span>
-          <LuDownload />
-        </Badge>
+        <KakaoShareButton
+          buttonText="카카오톡으로 전달받기"
+          kakaoLinkObject={PlayListShareLink()}
+          eventOption={{ where: "RewardBanner" }}
+        />
       </section>
     </div>
   );
