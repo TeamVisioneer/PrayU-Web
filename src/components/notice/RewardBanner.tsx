@@ -37,7 +37,7 @@ const RewardBanner = () => {
         </div>
         <KakaoShareButton
           buttonText="카카오톡으로 전달받기"
-          kakaoLinkObject={playListShareLink}
+          kakaoLinkObject={{ ...playListShareLink }}
           eventOption={{ where: "RewardBanner" }}
         />
       </section>
