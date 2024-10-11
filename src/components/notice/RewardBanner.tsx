@@ -1,7 +1,6 @@
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { getDateDistance } from "@toss/date";
-import { KakaoShareButton, PlayListShareLink } from "../share/KakaoShareBtn";
 
 const RewardBanner = () => {
   const setBannerDialogContent = useBaseStore(
@@ -17,35 +16,11 @@ const RewardBanner = () => {
   const createdAt = new Date(targetGroup.created_at);
   const deadline = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
   const { hours, minutes, seconds } = getDateDistance(new Date(), deadline);
-
   if (hours == 0 && minutes == 0 && seconds == 0) return null;
-
-  const RewardContent = (
-    <div className="flex flex-col items-center">
-      <section className="h-80 w-full flex justify-center">
-        <img src="/images/PlayListCover.png" className="h-80" />
-      </section>
-      <section className="flex flex-col items-center gap-3">
-        <h1 className="text-lg font-bold">PrayU PlayList 도착 🎁</h1>
-        <div className="text-sm text-gray-400 text-center">
-          <p>
-            이벤트 마감까지 {hours > 0 ? `${hours} 시간` : `${minutes} 분`}이
-            남았어요!
-          </p>
-          <p>버튼을 통해 PlayList Vol.1 를 받아주세요</p>
-        </div>
-        <KakaoShareButton
-          buttonText="카카오톡으로 전달받기"
-          kakaoLinkObject={PlayListShareLink()}
-          eventOption={{ where: "RewardBanner" }}
-        />
-      </section>
-    </div>
-  );
 
   const onClickBanner = () => {
     analyticsTrack("클릭_베너_리워드", {});
-    setBannerDialogContent(RewardContent);
+    setBannerDialogContent("reward");
     setIsOpenBannerDialog(true);
   };
 
