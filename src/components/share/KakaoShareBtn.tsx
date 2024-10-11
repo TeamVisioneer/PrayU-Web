@@ -141,6 +141,8 @@ export const ExpiredMemberLink = () => {
 };
 
 export const PlayListShareLink = () => {
+  const domainUrl = getDomainUrl();
+
   return {
     objectType: "feed",
     content: {
@@ -149,8 +151,8 @@ export const PlayListShareLink = () => {
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/PrayUPlayList/PlayListCover.png",
       link: {
-        webUrl: getDomainUrl(),
-        mobileWebUrl: getDomainUrl(),
+        webUrl: domainUrl,
+        mobileWebUrl: domainUrl,
       },
     },
     buttons: [
