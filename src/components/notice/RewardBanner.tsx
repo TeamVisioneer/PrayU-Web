@@ -20,7 +20,7 @@ const RewardBanner = () => {
 
   if (hours == 0 && minutes == 0 && seconds == 0) return null;
 
-  const RewardContent = () => (
+  const RewardContent = (
     <div className="flex flex-col items-center">
       <section className="h-80 w-full flex justify-center">
         <img src="/images/PlayListCover.png" className="h-80" />
@@ -45,7 +45,7 @@ const RewardBanner = () => {
 
   const onClickBanner = () => {
     analyticsTrack("클릭_베너_리워드", {});
-    setBannerDialogContent(RewardContent());
+    setBannerDialogContent(RewardContent);
     setIsOpenBannerDialog(true);
   };
 
