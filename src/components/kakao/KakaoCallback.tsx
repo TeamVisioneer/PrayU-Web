@@ -87,7 +87,7 @@ const KakaoCallBack = () => {
     setIsOpenTodayPrayDrawer,
     setIsOpenMyMemberDrawer,
   ]);
-  return <div>KakaoCallback</div>;
+  return null;
 };
 
 export default KakaoCallBack;
