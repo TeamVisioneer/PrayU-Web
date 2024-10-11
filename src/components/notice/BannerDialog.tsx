@@ -8,7 +8,7 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import { KakaoShareButton, PlayListShareLink } from "../share/KakaoShareBtn";
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
-import { getDateDistance } from "node_modules/@toss/date/dist/date";
+import { getDateDistance } from "@toss/date";
 
 const BannerDialog = () => {
   const bannerDialogContentType = useBaseStore(
