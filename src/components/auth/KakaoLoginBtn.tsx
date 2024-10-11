@@ -1,22 +1,23 @@
 import kakaoIcon from "@/assets/kakaoIcon.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import * as Sentry from "@sentry/react";
-import { getDomainUrl } from "@/lib/utils";
 
 interface KakaoLoginBtnProps {
-  redirectGroupId: string;
+  redirectUri: string;
+  state: string;
 }
 
-const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectGroupId }) => {
-  const baseUrl = getDomainUrl();
-
+const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({
+  redirectUri,
+  state,
+}) => {
   const handleKakaoLoginBtnClick = async () => {
     analyticsTrack("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
     if (window?.Kakao?.Auth) {
       try {
         window?.Kakao.Auth.authorize({
-          redirectUri: `${baseUrl}/auth/kakao/callback`,
-          state: `groupId:${redirectGroupId}`,
+          redirectUri: redirectUri,
+          state: state,
         });
       } catch (error) {
         console.error("Kakao login error:", error);
