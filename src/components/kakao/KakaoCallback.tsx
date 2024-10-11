@@ -1,5 +1,5 @@
 import { getDomainUrl } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { KakaoTokenRepo } from "./KakaoTokenRepo";
 import { useNavigate } from "react-router-dom";
