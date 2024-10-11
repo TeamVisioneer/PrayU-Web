@@ -101,7 +101,11 @@ const PrayCardCreatePage: React.FC = () => {
     }
     if (!updatedMember) return;
 
-    const newPrayCard = await createPrayCard(groupId, currentUserId, content);
+    const newPrayCard = await createPrayCard(
+      groupId,
+      currentUserId,
+      content.trim()
+    );
     return newPrayCard;
   };
 
@@ -180,7 +184,7 @@ const PrayCardCreatePage: React.FC = () => {
           <textarea
             className="text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
             value={inputPrayCardContent}
-            onChange={(e) => setPrayCardContent(e.target.value.trim())}
+            onChange={(e) => setPrayCardContent(e.target.value)}
             placeholder={`기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
           />
         </div>
