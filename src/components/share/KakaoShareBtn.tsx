@@ -52,7 +52,7 @@ export const BibleCardLink = () => {
     },
     buttons: [
       {
-        title: "오늘의 기도 시작하기",
+        title: "PrayU 시작하기",
         link: { webUrl: domainUrl, mobileWebUrl: domainUrl },
       },
     ],
