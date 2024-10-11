@@ -17,6 +17,7 @@ import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
+import BannerDialog from "@/components/notice/BannerDialog";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -122,11 +123,14 @@ const GroupPage: React.FC = () => {
       member.user_id !== currentUserId &&
       !myMember.profiles.blocking_users.includes(member.user_id)
   );
-  const isExpiredAllMember = otherMemberList.every(
-    (member) => member.updated_at < getISOTodayDate(-6)
-  );
-  const isTodayPrayStart =
-    (!isPrayToday && !isExpiredAllMember) || otherMemberList.length == 0;
+  const isExpiredAllMember =
+    otherMemberList.length == 0
+      ? false
+      : otherMemberList.every(
+          (member) => member.updated_at < getISOTodayDate(-6)
+        );
+
+  const isTodayPrayStart = !isPrayToday && !isExpiredAllMember;
 
   return (
     <div className="flex flex-col h-full gap-5">
@@ -163,6 +167,7 @@ const GroupPage: React.FC = () => {
       <PrayListDrawer />
       <ShareDrawer />
       <EventDialog />
+      <BannerDialog />
       <GroupSettingsDialog targetGroup={targetGroup} />
       <ReportAlert />
     </div>

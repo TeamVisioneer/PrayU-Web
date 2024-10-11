@@ -3,6 +3,7 @@ import { getISOOnlyDate, getISOTodayDate } from "../../lib/utils";
 import { getDateDistance } from "@toss/date";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
+import { UserProfile } from "../profile/UserProfile";
 
 interface OtherMemberProps {
   member: MemberWithProfiles;
@@ -26,19 +27,10 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
 
   return (
     <div
-      className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl shadow-member"
+      className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl"
       onClick={() => onClickOtherMember()}
     >
-      <div className="flex items-center gap-2">
-        <img
-          src={member.profiles.avatar_url || "/images/defaultProfileImage.png"}
-          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-            e.currentTarget.src = "/images/defaultProfileImage.png";
-          }}
-          className="w-8 h-8 rounded-full object-cover"
-        />
-        <h3>{member.profiles.full_name}</h3>
-      </div>
+      <UserProfile profile={member.profiles} imgSize="w-8 h-8" fontSize="" />
       <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
         {member.pray_summary}
       </div>

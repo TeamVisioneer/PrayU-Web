@@ -26,7 +26,12 @@ const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
+  const setIsOpenBannerDialog = useBaseStore(
+    (state) => state.setIsOpenBannerDialog
+  );
+
   const handleClickSharBtn = () => {
+    setIsOpenBannerDialog(false);
     setIsOpenTodayPrayDrawer(false);
     setIsOpenShareDrawer(true);
     analyticsTrack("클릭_공유_그룹초대", { where: eventOption.where });
