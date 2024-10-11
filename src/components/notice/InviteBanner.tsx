@@ -2,7 +2,6 @@ import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { getDateDistance } from "@toss/date";
 import { useEffect, useState } from "react";
-import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
 const InviteBanner = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
