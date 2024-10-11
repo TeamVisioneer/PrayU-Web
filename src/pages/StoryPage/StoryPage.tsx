@@ -171,7 +171,7 @@ const StoryPage = () => {
             <div className="image-container mt-8">
               <img
                 src="/images/story/solve1.png"
-                className="mx-auto h-[350px]"
+                className="mx-auto max-w-[350px] w-full"
               />
             </div>
             <p className="mt-6">우리 소그룹 내에서 먼저 사용해보고자</p>
@@ -186,7 +186,7 @@ const StoryPage = () => {
             <div className="image-container mt-8">
               <img
                 src="/images/story/solve2.png"
-                className="mx-auto h-[350px]"
+                className="mx-auto max-w-[350px] w-full"
               />
             </div>
             <p className="mt-6">그룹원들이 기도제목을 작성하면</p>
@@ -201,7 +201,7 @@ const StoryPage = () => {
             <div className="image-container mt-8">
               <img
                 src="/images/story/solve3.png"
-                className="mx-auto h-[350px]"
+                className="mx-auto max-w-[350px] w-full"
               />
             </div>
             <p className="mt-6">
@@ -280,7 +280,10 @@ const StoryPage = () => {
             이런 목표를 갖고 있어요 😊
           </h2>
           <div className="image-container mt-8">
-            <img src="/images/story/goal.png" className="mx-auto h-[265px]" />
+            <img
+              src="/images/story/goal.png"
+              className="mx-auto max-w-[400px] w-full"
+            />
           </div>
           <div className="h-11"></div>
           <p className="mt-6">매주 주일 기도제목을 나누고 끝나는 그룹에서</p>
