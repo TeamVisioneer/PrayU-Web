@@ -34,7 +34,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     setIsOpenTodayPrayDrawer(true);
     setIsOpenMyPrayDrawer(false);
     setIsOpenMyMemberDrawer(false);
-    setPrayCardCarouselList([]);
+    setPrayCardCarouselList(null);
 
     sleep(100);
     const startDt = getISOTodayDate(-6);

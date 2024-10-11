@@ -136,7 +136,7 @@ export interface BaseStore {
   isDisabledPrayCardCreateBtn: boolean;
   isDisabledSkipPrayCardBtn: boolean;
   prayCardCarouselApi: CarouselApi | null;
-  prayCardCarouselList: PrayCardWithProfiles[];
+  prayCardCarouselList: PrayCardWithProfiles[] | null;
   prayCardCarouselIndex: number;
   setPrayCardCarouselIndex: (index: number) => void;
   fetchGroupPrayCardList: (
@@ -151,7 +151,7 @@ export interface BaseStore {
     groupId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   setPrayCardCarouselList: (
-    prayCardCarouselList: PrayCardWithProfiles[]
+    prayCardCarouselList: PrayCardWithProfiles[] | null
   ) => void;
   fetchUserPrayCardListByGroupId: (
     currentUserId: string,
@@ -505,7 +505,7 @@ const useBaseStore = create<BaseStore>()(
     isDisabledPrayCardCreateBtn: false,
     isDisabledSkipPrayCardBtn: false,
     prayCardCarouselApi: null,
-    prayCardCarouselList: [],
+    prayCardCarouselList: null,
     prayCardCarouselIndex: 0,
     setPrayCardCarouselIndex: (index: number) => {
       set((state) => {
@@ -551,7 +551,9 @@ const useBaseStore = create<BaseStore>()(
       });
       return groupPrayCardList;
     },
-    setPrayCardCarouselList: (prayCardCarouselList: PrayCardWithProfiles[]) => {
+    setPrayCardCarouselList: (
+      prayCardCarouselList: PrayCardWithProfiles[] | null
+    ) => {
       set((state) => {
         state.prayCardCarouselList = prayCardCarouselList;
       });

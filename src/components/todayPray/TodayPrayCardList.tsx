@@ -41,7 +41,8 @@ const TodayPrayCardList = () => {
     });
   }, [prayCardCarouselApi, setPrayCardCarouselIndex]);
 
-  if (!myMember || !memberList || !groupPrayCardList) return null;
+  if (!myMember || !memberList || !groupPrayCardList || !prayCardCarouselList)
+    return null;
 
   return (
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
