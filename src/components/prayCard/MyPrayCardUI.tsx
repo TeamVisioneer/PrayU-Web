@@ -54,7 +54,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
     content: string,
     memberId: string
   ) => {
-    updatePrayCardContent(prayCardId, content);
+    updatePrayCardContent(prayCardId, content.trim());
     updateMember(memberId, content);
     setIsEditingPrayCard(false);
     analyticsTrack("클릭_기도카드_저장", {});
@@ -112,7 +112,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
             ref={textareaRef}
             value={inputPrayCardContent}
             placeholder={`기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
-            onChange={(e) => setPrayCardContent(e.target.value.trim())}
+            onChange={(e) => setPrayCardContent(e.target.value)}
             onFocus={() => setIsEditingPrayCard(true)}
             onBlur={() =>
               handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
