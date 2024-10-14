@@ -9,6 +9,7 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import TodayPrayInviteCompletedItem from "./TodayPrayInviteCompletedItem";
 import DummyPrayCardUI from "../prayCard/DummyPrayCardUI";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const TodayPrayCardList = () => {
   const setPrayCardCarouselApi = useBaseStore(
@@ -42,12 +43,16 @@ const TodayPrayCardList = () => {
   }, [prayCardCarouselApi, setPrayCardCarouselIndex]);
 
   if (!myMember || !memberList || !groupPrayCardList || !prayCardCarouselList)
-    return null;
+    return (
+      <div className="flex justify-center items-center min-h-80vh max-h-80vh">
+        <ClipLoader color="#70AAFF" size={20} />
+      </div>
+    );
 
   return (
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
       <CarouselContent>
-        <CarouselItem className="basis-5/6 min-h-80vh max-h-80vh"></CarouselItem>
+        <CarouselItem className="basis-5/6"></CarouselItem>
         {memberList.length == 1 && (
           <CarouselItem className="basis-5/6">
             <DummyPrayCardUI
@@ -78,7 +83,7 @@ const TodayPrayCardList = () => {
             )}
           </CarouselItem>
         )}
-        <CarouselItem className="basis-5/6 min-h-80vh max-h-80vh"></CarouselItem>
+        <CarouselItem className="basis-5/6"></CarouselItem>
       </CarouselContent>
     </Carousel>
   );

@@ -1,5 +1,5 @@
 import { MemberWithProfiles } from "supabase/types/tables";
-import { getISOOnlyDate, getISOTodayDate, sleep } from "../../lib/utils";
+import { getISOOnlyDate, getISOTodayDate } from "../../lib/utils";
 import { getDateDistance } from "@toss/date";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
@@ -26,13 +26,13 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
   const onClickOtherMember = async () => {
     analyticsTrack("클릭_멤버_구성원", { member: member.user_id });
     setIsOpenOtherMemberDrawer(true);
-    setOtherMember(member);
-    sleep(100);
+    setOtherMember(null);
     await fetchOtherPrayCardListByGroupId(
       user!.id,
       member.user_id!,
       member.group_id!
     );
+    setOtherMember(member);
   };
 
   return (

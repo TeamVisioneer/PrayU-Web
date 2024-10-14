@@ -137,7 +137,6 @@ const TermServicePage: React.FC = () => {
           동의하고 시작해요
         </Button>
       </div>
-      <span></span>
     </div>
   );
 };
