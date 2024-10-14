@@ -53,7 +53,7 @@ const TutorialPage: React.FC = () => {
       title: "기도 반응하기",
       description: [
         "버튼을 눌러 반응을 남겨보세요",
-        "친구들에게 기도반응이 전달 되어요!",
+        "친구들에게 기도반응을 전달 할 수 있어요!",
       ],
       textMarginTop: "mt-[230px]",
     },
