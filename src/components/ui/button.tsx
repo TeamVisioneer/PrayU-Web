@@ -21,7 +21,7 @@ const buttonVariants = cva(
         // custom
         primary:
           "shadow-md bg-gradient-to-br from-[#608CFF] to-[#4574F1] text-white cursor-pointer",
-        primaryLight: "shadow-md bg-white text-[#222222] cursor-pointer",
+        primaryLight: "shadow-sm bg-white text-[#222222] cursor-pointer",
       },
       size: {
         default: "h-10 px-4 py-2",

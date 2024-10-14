@@ -21,6 +21,9 @@ const TutorialPage: React.FC = () => {
   const navigate = useNavigate();
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
+  const setIsOpenShareDrawer = useBaseStore(
+    (state) => state.setIsOpenShareDrawer
+  );
 
   if (userLoading) return null;
 
@@ -159,9 +162,8 @@ const TutorialPage: React.FC = () => {
           <Button
             onClick={() => onClickRight({ where: "TodayPrayStartCard" })}
             variant="primary"
-            className={`w-[188px] h-[46px] text-md font-bold rounded-[10px] ${
-              index === 2 && "z-40"
-            }`}
+            className={`w-[188px] h-[46px] text-md font-bold rounded-[10px]  
+              ${index === 2 && "z-40 animate-bounce"}`}
           >
             기도 시작하기
           </Button>
@@ -218,7 +220,12 @@ const TutorialPage: React.FC = () => {
                 ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
                 : `opacity-20 ${emojiData.shadowColor}`
             }`}
-            onClick={() => setTodayPrayType(type)}
+            onClick={() => {
+              setTodayPrayType(type);
+              setTimeout(() => {
+                onClickRight({ where: "ReactionBtn" });
+              }, 1300);
+            }}
           >
             <img src={emojiData.icon} className="w-9 h-9" />
           </button>
@@ -272,8 +279,11 @@ const TutorialPage: React.FC = () => {
         </div>
         <Button
           variant="primary"
-          className={`w-56 ${index === 4 && "z-40"}`}
-          onClick={() => onClickRight({ where: "CompletedUI" })}
+          className={`w-56 ${index === 4 && "z-40 animate-bounce"}`}
+          onClick={() => {
+            onClickRight({ where: "CompletedUI" });
+            setIsOpenShareDrawer(true);
+          }}
         >
           친구 초대하기
         </Button>
@@ -297,7 +307,7 @@ const TutorialPage: React.FC = () => {
         const clickedX = e.clientX;
         const windowWidth = window.innerWidth;
         if (clickedX < windowWidth / 2) onClickLeft();
-        else onClickRight({ where: "DimUI" });
+        else if (index < 2) onClickRight({ where: "DimUI" });
       }}
     >
       <div
@@ -313,36 +323,33 @@ const TutorialPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <footer className="text-white flex justify-around items-center gap-4">
+        <footer className="text-white flex justify-around items-center gap-4 h-[32px]">
           {index == 0 && <div className="w-8"></div>}
           <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex justify-between items-center gap-4 w-[110px]">
               <FaAngleLeft size={24} onClick={() => onClickLeft()} />
               <span>
                 {index + 1} / {TutorialComponentProps.length}
               </span>
               <FaAngleRight
                 size={24}
-                onClick={() => onClickRight({ where: "RightBtn" })}
+                onClick={() => index < 2 && onClickRight({ where: "RightBtn" })}
               />
             </div>
-            <a
-              className="flex gap-1 items-center text-white underline cursor-pointer"
-              onClick={() => onClickCompletedTutorial()}
-            >
-              {index == TutorialComponentProps.length - 1
-                ? "시작하기"
-                : "건너뛰기"}
-            </a>
           </div>
           {index == 0 && (
             <div className="flex flex-col gap-1 animate-pulse duration-700">
               <MdOutlineTouchApp size={32} />
-              <span className="text-sm font-light">다음</span>
             </div>
           )}
         </footer>
       </div>
+      <a
+        className="text-white/50 cursor-pointer"
+        onClick={() => onClickCompletedTutorial()}
+      >
+        {index == TutorialComponentProps.length - 1 ? "" : "건너뛰기"}
+      </a>
     </div>
   );
 

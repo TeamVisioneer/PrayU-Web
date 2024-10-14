@@ -59,13 +59,13 @@ const ShareDrawer: React.FC = () => {
   };
 
   const CarouselDots = () => (
-    <div className="flex justify-center items-center mt-6">
-      {Array.from({ length: 2 }, (_, index) => (
+    <div className="flex justify-center items-center pb-4">
+      {Array.from({ length: 3 }, (_, index) => (
         <span
           key={index}
           className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
             currentIndex === index
-              ? "w-[8px] h-[8px] bg-mainBtn"
+              ? "w-[8px] h-[8px] bg-[#608CFF]"
               : "h-[6px] w-[6px] bg-gray-400"
           }`}
           onClick={() => handleDotsClick(index)}
@@ -76,7 +76,24 @@ const ShareDrawer: React.FC = () => {
 
   const ImageCerousel = (
     <Carousel setApi={setApi}>
+      <CarouselDots />
       <CarouselContent>
+        <CarouselItem className="flex flex-col items-center gap-6">
+          <div className="h-[200px] w-full flex flex-col items-center">
+            <img className="h-full rounded-md" src="/images/InviteDrawer.png" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-[1.15rem] font-bold text-[#222222]">
+              함께 기도할 그룹원들을 초대해보아요
+            </p>
+            <div>
+              <p className="text-sm text-[#919191]">
+                초대 링크를 보내면 새 그룹원들이
+              </p>
+              <p className="text-sm text-gray-500">편하게 참여할 수 있어요</p>
+            </div>
+          </div>
+        </CarouselItem>
         <CarouselItem className="flex flex-col items-center gap-4">
           <div className="h-[200px] w-full flex flex-col items-center">
             <img
@@ -112,25 +129,24 @@ const ShareDrawer: React.FC = () => {
           </div>
         </CarouselItem>
       </CarouselContent>
-      <CarouselDots />
     </Carousel>
   );
 
   const DrawerBody = (
-    <div className="flex flex-col items-center text-center gap-6 pb-10">
-      <div className="flex flex-col items-center">
-        <p className="text-xl font-bold">새 친구들을 초대해 보아요 📮</p>
-      </div>
-
+    <div className="flex flex-col items-center text-center gap-8 pb-10">
       {ImageCerousel}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <KakaoShareButton
-          className="w-48"
-          buttonText="초대 메세지 보내기"
+          className="bg-red-300 w-60 h-11 text-[0.95rem]"
+          buttonText="카카오톡 공유하기"
           kakaoLinkObject={GroupInviteLink(targetGroup?.name || "")}
           eventOption={{ where: "GroupPage" }}
         />
-        <Button variant="primaryLight" onClick={() => onClickCopyLink()}>
+        <Button
+          variant="primaryLight"
+          className="w-60 h-11 text-[0.95rem]"
+          onClick={() => onClickCopyLink()}
+        >
           그룹 링크 복사하기
         </Button>
       </div>
