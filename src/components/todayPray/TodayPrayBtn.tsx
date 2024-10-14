@@ -1,7 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate, sleep } from "@/lib/utils";
+import { getISOTodayDate } from "@/lib/utils";
 
 interface TodayPrayBtnProps {
   eventOption: { where: string; total_member: number };

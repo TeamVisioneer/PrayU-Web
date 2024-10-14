@@ -4,6 +4,7 @@ import { getISODateYMD, getISOTodayDate } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import DeletedPrayCardUI from "./DeletedPrayCardUI";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface OtherPrayCardProps {
   currentUserId: string;
@@ -15,7 +16,11 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({ eventOption }) => {
   const otherMember = useBaseStore((state) => state.otherMember);
 
   if (!otherPrayCardList || !otherMember) {
-    return <div className="flex justify-center min-h-80vh max-h-80vh"></div>;
+    return (
+      <div className="flex justify-center items-center min-h-80vh max-h-80vh">
+        <ClipLoader color="#70AAFF" size={20} />
+      </div>
+    );
   }
   if (otherPrayCardList.length == 0) return <DeletedPrayCardUI />;
   if (otherPrayCardList[0].created_at < getISOTodayDate(-6))
