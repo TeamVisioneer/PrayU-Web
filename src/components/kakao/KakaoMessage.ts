@@ -24,25 +24,20 @@ export const PrayRequestMessage = (userName: string | null) => {
   } as KakaoMessageObject;
 };
 
-export const MemberJoinMessage = (
-  groupName: string | null,
-  userName: string | null
-) => {
+export const MemberJoinMessage = (userName: string | null, groupId: string) => {
+  const groupUrl = `${baseUrl}/group/${groupId}`;
   return {
     object_type: "feed",
     content: {
-      title: "💌 PrayU 입장 알림",
-      description: `${userName}님이 ${groupName} 그룹에 입장했어요!`,
+      title: "📢 PrayU 입장 알림",
+      description: `${userName}님이 기도그룹에 입장했어요!`,
       image_url: "",
       link: { web_url: baseUrl, mobile_web_url: baseUrl },
     },
     buttons: [
       {
         title: "기도제목 확인하기",
-        link: {
-          mobile_web_url: window.location.href,
-          web_url: window.location.href,
-        },
+        link: { mobile_web_url: groupUrl, web_url: groupUrl },
       },
     ],
   } as KakaoMessageObject;
