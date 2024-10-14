@@ -48,6 +48,16 @@ const TodayPrayCardList = () => {
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
       <CarouselContent>
         <CarouselItem className="basis-5/6 min-h-80vh max-h-80vh"></CarouselItem>
+        {memberList.length == 1 && (
+          <CarouselItem className="basis-5/6">
+            <DummyPrayCardUI
+              profileImage="/images/avatar/avatar_1.png"
+              name="기도 친구"
+              content={`1. 가족 모두가 건강하고 행복하게 지낼 수 있도록 기도해주세요.\n\n2. 직장에서의 삶이 버겁고 힘들 때가 많습니다. 순간마다 하나님을 먼저 찾고 기도와 말씀으로 이겨낼 수 있길 원합니다.\n\n3. 소그룹원들이 주일 예배와 그룹 모임에 참여하며 하나님의 말씀을 듣고 실천할 수 있길 기도합니다.`}
+              dayOffset={2}
+            />
+          </CarouselItem>
+        )}
         {prayCardCarouselList.map((prayCard) => (
           <CarouselItem key={prayCard.id} className="basis-5/6">
             <TodayPrayCardUI
@@ -59,16 +69,6 @@ const TodayPrayCardList = () => {
             />
           </CarouselItem>
         ))}
-        {memberList.length == 1 && (
-          <CarouselItem className="basis-5/6">
-            <DummyPrayCardUI
-              profileImage="/images/avatar/avatar_1.png"
-              name="기도 친구"
-              content={`1. 가족 모두가 건강하고 행복하게 지낼 수 있도록 기도해주세요.\n\n2. 직장에서의 삶이 버겁고 힘들 때가 많습니다. 순간마다 하나님을 먼저 찾고 기도와 말씀으로 이겨낼 수 있길 원합니다.\n\n3. 소그룹원들이 주일 예배와 그룹 모임에 참여하며 하나님의 말씀을 듣고 실천할 수 있길 기도합니다.`}
-              dayOffset={2}
-            />
-          </CarouselItem>
-        )}
         {isPrayToday && (
           <CarouselItem className="basis-5/6">
             {memberList.length == 1 ? (
