@@ -53,6 +53,7 @@ import {
   updateProfilesParams,
 } from "@/apis/profiles";
 import { getProfile } from "@/apis/profiles";
+import { updateUserMetaData } from "@/apis/user";
 
 export interface BaseStore {
   // user
@@ -61,6 +62,7 @@ export interface BaseStore {
   userLoading: boolean;
   userPlan: string;
   getUser: () => void;
+  updateUserMetaData: (params: { [key: string]: string }) => Promise<void>;
   signOut: () => Promise<void>;
   setUserPlan: (userId: string) => void;
 
@@ -324,6 +326,9 @@ const useBaseStore = create<BaseStore>()(
       return () => {
         subscription?.unsubscribe();
       };
+    },
+    updateUserMetaData: async (params: { [key: string]: string }) => {
+      await updateUserMetaData(params);
     },
     signOut: async () => {
       await supabase.auth.signOut();
