@@ -90,7 +90,7 @@ const ShareDrawer: React.FC = () => {
               <p className="text-sm text-[#919191]">
                 초대 링크를 보내면 새 그룹원들이
               </p>
-              <p className="text-sm text-gray-500">편하게 참여할 수 있어요</p>
+              <p className="text-sm text-[#919191]">편하게 참여할 수 있어요</p>
             </div>
           </div>
         </CarouselItem>
@@ -102,10 +102,10 @@ const ShareDrawer: React.FC = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-base font-bold">그룹 링크 공지</p>
+            <p className="text-base font-bold text-[#222222]">그룹 링크 공지</p>
             <div>
-              <p className="text-sm text-gray-500">링크를 공지에 등록하고</p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-[#919191]">링크를 공지에 등록하고</p>
+              <p className="text-sm text-[#919191]">
                 채팅방에서 편하게 접근해요
               </p>
             </div>
@@ -119,10 +119,12 @@ const ShareDrawer: React.FC = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-base font-bold">카카오톡 초대 전송</p>
+            <p className="text-base font-bold text-[#222222]">
+              카카오톡 초대 전송
+            </p>
             <div>
-              <p className="text-sm text-gray-500">카카오톡 초대하기를 통해</p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-[#919191]">카카오톡 초대하기를 통해</p>
+              <p className="text-sm text-[#919191]">
                 그룹 입장 카드를 전송할 수 있어요
               </p>
             </div>
@@ -137,7 +139,7 @@ const ShareDrawer: React.FC = () => {
       {ImageCerousel}
       <div className="flex flex-col gap-3">
         <KakaoShareButton
-          className="bg-red-300 w-60 h-11 text-[0.95rem] rounded-[10px]"
+          className="w-60 h-11 text-[0.95rem] rounded-[10px]"
           buttonText="카카오톡 공유하기"
           kakaoLinkObject={GroupInviteLink(targetGroup?.name || "")}
           eventOption={{ where: "GroupPage" }}
