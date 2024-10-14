@@ -243,7 +243,7 @@ const TutorialPage: React.FC = () => {
               src="/images/defaultProfileImage.png"
               className="w-7 h-7 rounded-full object-cover"
             />
-            <p className="text-white text-lg">기도친구</p>
+            <p className="text-white text-lg">PrayU 봇</p>
           </div>
           <p className="text-sm text-white text-left">
             시작일: 2021.08.01 (일)
@@ -251,7 +251,7 @@ const TutorialPage: React.FC = () => {
         </div>
         <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
           <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
-            기도친구와 함께 기도해요
+            PrayU를 위해 기도해주세요! 🙏🏻
           </p>
         </div>
       </div>
@@ -279,7 +279,9 @@ const TutorialPage: React.FC = () => {
         </div>
         <Button
           variant="primary"
-          className={`w-56 ${index === 4 && "z-40 animate-bounce"}`}
+          className={`w-56 h-[46px] text-md font-bold rounded-[10px] ${
+            index === 4 && "z-40 animate-bounce"
+          }`}
           onClick={() => {
             onClickRight({ where: "CompletedUI" });
             setIsOpenShareDrawer(true);

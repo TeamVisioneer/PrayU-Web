@@ -137,14 +137,14 @@ const ShareDrawer: React.FC = () => {
       {ImageCerousel}
       <div className="flex flex-col gap-3">
         <KakaoShareButton
-          className="bg-red-300 w-60 h-11 text-[0.95rem]"
+          className="bg-red-300 w-60 h-11 text-[0.95rem] rounded-[10px]"
           buttonText="카카오톡 공유하기"
           kakaoLinkObject={GroupInviteLink(targetGroup?.name || "")}
           eventOption={{ where: "GroupPage" }}
         />
         <Button
           variant="primaryLight"
-          className="w-60 h-11 text-[0.95rem]"
+          className="w-60 h-11 text-[0.95rem] rounded-[10px]"
           onClick={() => onClickCopyLink()}
         >
           그룹 링크 복사하기
