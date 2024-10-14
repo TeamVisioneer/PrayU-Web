@@ -303,20 +303,20 @@ const useBaseStore = create<BaseStore>()(
         const ENV = import.meta.env.VITE_ENV;
         const WEB_VERSION = import.meta.env.WEB_VERSION;
         const userId = session.user.id;
-        const { email, full_name, user_name } = session.user.user_metadata;
+        const { email, full_name, name } = session.user.user_metadata;
 
         if (ENV === "staging" || ENV === "prod") {
           Sentry.setUser({
             WEB_VERSION: WEB_VERSION,
             id: userId,
             email: email,
-            user_name: user_name,
+            name: name,
           });
           analyticsIdentify(session.user.id, {
             WEB_VERSION: WEB_VERSION,
             email: email,
             full_name: full_name,
-            user_name: user_name,
+            name: name,
           });
         }
       });

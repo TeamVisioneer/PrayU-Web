@@ -26,7 +26,7 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
         본 기도카드는 예시 기도카드 입니다.
       </p>
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
-        <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
+        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
           <div className="flex items-center gap-2">
             <img
               src={profileImage || "/images/defaultProfileImage.png"}

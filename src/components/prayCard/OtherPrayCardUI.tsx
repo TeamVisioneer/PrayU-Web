@@ -12,11 +12,10 @@ interface OtherPrayCardProps {
 
 const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({ eventOption }) => {
   const otherPrayCardList = useBaseStore((state) => state.otherPrayCardList);
+  const otherMember = useBaseStore((state) => state.otherMember);
 
-  if (!otherPrayCardList) {
-    return (
-      <div className="flex justify-center min-h-80vh max-h-80vh px-10 pt-[32px]"></div>
-    );
+  if (!otherPrayCardList || !otherMember) {
+    return <div className="flex justify-center min-h-80vh max-h-80vh"></div>;
   }
   if (otherPrayCardList.length == 0) return <DeletedPrayCardUI />;
   if (otherPrayCardList[0].created_at < getISOTodayDate(-6))
