@@ -83,6 +83,7 @@ const TutorialPage: React.FC = () => {
     navigate("/group");
   };
 
+  const userName = user?.user_metadata.full_name || user?.user_metadata.name;
   const TopBar = (
     <div
       className={`flex justify-between items-center bg-mainBg p-2 rounded-md ${
@@ -96,7 +97,7 @@ const TutorialPage: React.FC = () => {
       </div>
       <div className="bg-mainBg text-lg font-bold flex items-center gap-1 px-2 rounded-sm">
         <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-          {user ? `${user.user_metadata.name}의 기도그룹` : "새 기도그룹"}
+          {userName ? `${userName}의 기도그룹` : "새 기도그룹"}
         </div>
         <span className="text-sm text-gray-500">1</span>
       </div>
