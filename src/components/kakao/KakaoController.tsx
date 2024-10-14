@@ -97,7 +97,7 @@ export class KakaoController {
 
   static async sendDirectMessage(
     message: KakaoMessageObject,
-    kakaoId: string
+    kakaoId: string | null
   ): Promise<KakaoSendMessageResponse | null> {
     try {
       const kakaoFriendsResponse: KakaoFriendsResponse | null =

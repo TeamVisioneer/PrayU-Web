@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 import { useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import { KakaoController } from "@/components/kakao/KakaoController";
+import { MemberJoinMessage } from "@/components/kakao/KakaoMessage";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -92,6 +94,11 @@ const PrayCardCreatePage: React.FC = () => {
     let updatedMember: Member | null;
     if (!myMember) {
       updatedMember = await createMember(groupId, currentUserId, content);
+
+      await KakaoController.sendDirectMessage(
+        MemberJoinMessage(user?.user_metadata.name, groupId),
+        targetGroup.profiles.kakao_id
+      );
     } else {
       updatedMember = await updateMember(
         myMember.id,
