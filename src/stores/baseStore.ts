@@ -47,7 +47,7 @@ import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
-import { analyticsIdentify } from "@/analytics/analytics";
+import { analyticsIdentify, analyticsTrack } from "@/analytics/analytics";
 import {
   fetchProfileList,
   updateProfile,
@@ -751,6 +751,8 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.isOpenShareDrawer = isOpenShareDrawer;
       });
+      console.log("isOpen", isOpenShareDrawer);
+      analyticsTrack("드로어_초대", { isOpen: isOpenShareDrawer });
     },
     setIsOpenContentDrawer: (isOpenContentDrawer: boolean) => {
       set((state) => {
