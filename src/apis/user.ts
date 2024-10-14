@@ -2,6 +2,22 @@ import * as Sentry from "@sentry/react";
 import { supabase } from "../../supabase/client";
 import { getISOToday } from "@/lib/utils";
 
+export const updateUserMetaData = async (params: { [key: string]: string }) => {
+  try {
+    const { data, error } = await supabase.auth.updateUser({
+      data: params,
+    });
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const deleteUser = async (userId: string): Promise<boolean> => {
   try {
     // member soft delete

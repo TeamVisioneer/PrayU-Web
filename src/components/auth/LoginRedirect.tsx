@@ -7,6 +7,7 @@ import useAuth from "@/hooks/useAuth";
 const LoginRedirect = () => {
   const { user } = useAuth();
   const session = useBaseStore((state) => state.session);
+  const updateUserMetaData = useBaseStore((state) => state.updateUserMetaData);
   const navigate = useNavigate();
   const myProfile = useBaseStore((state) => state.myProfile);
   const getProfile = useBaseStore((state) => state.getProfile);
@@ -33,6 +34,12 @@ const LoginRedirect = () => {
     if (!myProfile) return;
     if (provider == "kakao") {
       window.Kakao.Auth.setAccessToken(session?.provider_token || "");
+      if (!user?.user_metadata.full_name) {
+        updateUserMetaData({
+          full_name: user!.user_metadata.name,
+          avatar_url: user!.user_metadata.picture,
+        });
+      }
       if (!myProfile.full_name) {
         updateProfile(currentUserId, {
           full_name: user!.user_metadata.name,
@@ -52,6 +59,7 @@ const LoginRedirect = () => {
     currentUserId,
     kakaoId,
     provider,
+    updateUserMetaData,
     updateProfile,
     navigate,
     groupId,
