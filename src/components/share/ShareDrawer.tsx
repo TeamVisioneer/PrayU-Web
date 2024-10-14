@@ -40,6 +40,11 @@ const ShareDrawer: React.FC = () => {
     analyticsTrack("클릭_공유_링크복사", {});
   };
 
+  const onOpenChangeDrawer = (isOpenShareDrawer: boolean) => {
+    setIsOpenShareDrawer(isOpenShareDrawer);
+    analyticsTrack("드로어_초대", { isOpen: isOpenShareDrawer });
+  };
+
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -156,7 +161,7 @@ const ShareDrawer: React.FC = () => {
   );
 
   return (
-    <Drawer open={isOpenShareDrawer} onOpenChange={setIsOpenShareDrawer}>
+    <Drawer open={isOpenShareDrawer} onOpenChange={onOpenChangeDrawer}>
       <DrawerContent className="bg-mainBg focus:outline-none">
         <DrawerHeader className="p-2">
           <DrawerTitle></DrawerTitle>
