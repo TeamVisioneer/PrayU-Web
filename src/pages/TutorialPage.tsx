@@ -4,7 +4,7 @@ import { SlMenu } from "react-icons/sl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
-import { days, getISOTodayDate } from "@/lib/utils";
+import { days, getISOTodayDate, sleep } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
@@ -222,9 +222,9 @@ const TutorialPage: React.FC = () => {
             }`}
             onClick={() => {
               setTodayPrayType(type);
-              setTimeout(() => {
+              sleep(1200).then(() => {
                 onClickRight({ where: "ReactionBtn" });
-              }, 1300);
+              });
             }}
           >
             <img src={emojiData.icon} className="w-9 h-9" />
@@ -243,7 +243,7 @@ const TutorialPage: React.FC = () => {
               src="/images/defaultProfileImage.png"
               className="w-7 h-7 rounded-full object-cover"
             />
-            <p className="text-white text-lg">PrayU 봇</p>
+            <p className="text-white text-lg">PrayU</p>
           </div>
           <p className="text-sm text-white text-left">
             시작일: 2021.08.01 (일)

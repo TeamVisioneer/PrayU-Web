@@ -95,23 +95,6 @@ const ShareDrawer: React.FC = () => {
           </div>
         </CarouselItem>
         <CarouselItem className="flex flex-col items-center gap-4">
-          <div className="h-[200px] w-full flex flex-col items-center">
-            <img
-              className="h-full rounded-md shadow-prayCard"
-              src="/images/KakaoShareMessage.png"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-base font-bold">카카오톡 초대 전송</p>
-            <div>
-              <p className="text-sm text-gray-500">카카오톡 초대하기를 통해</p>
-              <p className="text-sm text-gray-500">
-                그룹 입장 카드를 전송할 수 있어요
-              </p>
-            </div>
-          </div>
-        </CarouselItem>
-        <CarouselItem className="flex flex-col items-center gap-4">
           <div className="h-[200px] w-full flex flex-col  items-center">
             <img
               className="h-full rounded-md shadow-prayCard"
@@ -124,6 +107,23 @@ const ShareDrawer: React.FC = () => {
               <p className="text-sm text-gray-500">링크를 공지에 등록하고</p>
               <p className="text-sm text-gray-500">
                 채팅방에서 편하게 접근해요
+              </p>
+            </div>
+          </div>
+        </CarouselItem>
+        <CarouselItem className="flex flex-col items-center gap-4">
+          <div className="h-[200px] w-full flex flex-col items-center">
+            <img
+              className="h-full rounded-md shadow-prayCard"
+              src="/images/KakaoShareMessage.png"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-base font-bold">카카오톡 초대 전송</p>
+            <div>
+              <p className="text-sm text-gray-500">카카오톡 초대하기를 통해</p>
+              <p className="text-sm text-gray-500">
+                그룹 입장 카드를 전송할 수 있어요
               </p>
             </div>
           </div>
