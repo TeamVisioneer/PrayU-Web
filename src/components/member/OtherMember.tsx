@@ -1,5 +1,5 @@
 import { MemberWithProfiles } from "supabase/types/tables";
-import { getISOOnlyDate, getISOTodayDate, sleep } from "../../lib/utils";
+import { getISOOnlyDate, getISOTodayDate } from "../../lib/utils";
 import { getDateDistance } from "@toss/date";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
