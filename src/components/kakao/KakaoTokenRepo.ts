@@ -29,12 +29,12 @@ export class KakaoTokenRepo {
         return response.access_token;
       }
     } else {
-      this.openKakaoLoginPagePre(state);
+      this.openKakaoLoginPageWithKakao(state);
     }
     return null;
   }
 
-  static openKakaoLoginPagePre(state: string) {
+  static openKakaoLoginPageWithKakao(state: string) {
     const BASEURL = getDomainUrl();
     try {
       window.Kakao.Auth.authorize({
@@ -47,7 +47,10 @@ export class KakaoTokenRepo {
     }
   }
 
-  static async openKakaoLoginPage(groupId: string = "", from: string = "") {
+  static async openKakaoLoginPageWithSupabase(
+    groupId: string = "",
+    from: string = ""
+  ) {
     const BASEURL = getDomainUrl();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",

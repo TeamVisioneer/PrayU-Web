@@ -37,9 +37,6 @@ const KakaoCallBack = () => {
         return;
       }
       const response = await KakaoTokenRepo.fetchKakaoToken(code, redirectUrl);
-      if (response?.access_token)
-        window.Kakao.Auth.setAccessToken(response.access_token);
-
       if (!response || !response.id_token) {
         navigate("/", { replace: true });
         return;
