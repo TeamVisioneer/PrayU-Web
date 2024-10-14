@@ -11,6 +11,10 @@ export type PrayCard = Database["public"]["Tables"]["pray_card"]["Row"];
 
 export type Pray = Database["public"]["Tables"]["pray"]["Row"];
 
+export interface GroupWithProfiles extends Group {
+  profiles: Profiles;
+}
+
 export interface MemberWithGroup extends Member {
   group: Group;
 }

@@ -1,5 +1,9 @@
 import { supabase } from "./../../supabase/client";
-import { MemberWithGroup, Group } from "../../supabase/types/tables";
+import {
+  MemberWithGroup,
+  Group,
+  GroupWithProfiles,
+} from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 import { getISOToday } from "@/lib/utils";
 
@@ -26,11 +30,13 @@ export const fetchGroupListByUserId = async (
   }
 };
 
-export const getGroup = async (groupId: string): Promise<Group | null> => {
+export const getGroup = async (
+  groupId: string
+): Promise<GroupWithProfiles | null> => {
   try {
     const { error, data } = await supabase
       .from("group")
-      .select("*")
+      .select(`*, profiles (id, full_name, avatar_url, kakao_id)`)
       .eq("id", groupId)
       .single();
     if (error) {
@@ -39,7 +45,7 @@ export const getGroup = async (groupId: string): Promise<Group | null> => {
       Sentry.captureException(error.message);
       return null;
     }
-    return data;
+    return data as GroupWithProfiles;
   } catch (error) {
     Sentry.captureException(error);
     return null;
@@ -50,17 +56,17 @@ export const createGroup = async (
   userId: string,
   name: string,
   intro: string
-): Promise<Group | null> => {
+): Promise<GroupWithProfiles | null> => {
   try {
     const { error, data } = await supabase
       .from("group")
       .insert([{ user_id: userId, name, intro }])
-      .select();
+      .select(`*, profiles (id, full_name, avatar_url, kakao_id)`);
     if (error) {
       Sentry.captureException(error.message);
       return null;
     }
-    return data ? data[0] : null;
+    return data ? (data[0] as GroupWithProfiles) : null;
   } catch (error) {
     Sentry.captureException(error);
     return null;

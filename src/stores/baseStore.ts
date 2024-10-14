@@ -18,6 +18,7 @@ import {
   TodayPrayTypeHash,
   PrayWithProfiles,
   Profiles,
+  GroupWithProfiles,
 } from "../../supabase/types/tables";
 import {
   fetchGroupListByUserId,
@@ -78,7 +79,7 @@ export interface BaseStore {
 
   // group
   groupList: Group[] | null;
-  targetGroup: Group | null;
+  targetGroup: GroupWithProfiles | null;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
   isGroupLeader: boolean;
@@ -92,7 +93,7 @@ export interface BaseStore {
     userId: string,
     name: string,
     intro: string
-  ) => Promise<Group | null>;
+  ) => Promise<GroupWithProfiles | null>;
   updateGroup: (
     groupId: string,
     params: updateGroupParams
@@ -406,7 +407,7 @@ const useBaseStore = create<BaseStore>()(
       userId: string,
       name: string,
       intro: string
-    ): Promise<Group | null> => {
+    ): Promise<GroupWithProfiles | null> => {
       const group = await createGroup(userId, name, intro);
       set((state) => {
         state.targetGroup = group;
