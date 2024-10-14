@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import completed from "@/assets/completed.svg";
 import { MdOutlineTouchApp } from "react-icons/md";
-import { TbHandClick } from "react-icons/tb";
 
 const TutorialPage: React.FC = () => {
   const [index, setIndex] = useState(0);
@@ -204,13 +203,6 @@ const TutorialPage: React.FC = () => {
 
   const ReactionBtn = (
     <div className="relative flex justify-center gap-[30px]">
-      {!todayPrayType && (
-        <TbHandClick
-          size={30}
-          className="absolute z-50 bottom-0 right-24 animate-pulse duration-1000 ease-in"
-        />
-      )}
-
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
@@ -220,7 +212,7 @@ const TutorialPage: React.FC = () => {
               emojiData.bgColor
             } ${
               !todayPrayType
-                ? `opacity-90 ${emojiData.shadowColor}`
+                ? `opacity-90 ${emojiData.shadowColor} animate-bounce`
                 : todayPrayType == type
                 ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
                 : `opacity-20 ${emojiData.shadowColor}`
@@ -343,7 +335,7 @@ const TutorialPage: React.FC = () => {
             </a>
           </div>
           {index == 0 && (
-            <div className="flex flex-col gap-1 animate-pulse">
+            <div className="flex flex-col gap-1 animate-pulse duration-700">
               <MdOutlineTouchApp size={32} />
               <span className="text-sm font-light">다음</span>
             </div>
@@ -354,7 +346,7 @@ const TutorialPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-100vh">
       {DimUI}
       {index < 3 ? (
         <div className="flex flex-col w-full h-full gap-5">
