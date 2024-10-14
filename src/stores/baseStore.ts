@@ -751,7 +751,6 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.isOpenShareDrawer = isOpenShareDrawer;
       });
-      console.log("isOpen", isOpenShareDrawer);
       analyticsTrack("드로어_초대", { isOpen: isOpenShareDrawer });
     },
     setIsOpenContentDrawer: (isOpenContentDrawer: boolean) => {
