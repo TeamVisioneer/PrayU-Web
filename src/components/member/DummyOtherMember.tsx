@@ -21,7 +21,7 @@ const DummyOtherMember: React.FC = () => {
           className="w-8 h-8 rounded-full object-cover"
           src="/images/avatar/avatar_1.png"
         />
-        <p>기도 친구</p>
+        <p>PrayU</p>
       </div>
       <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
         PrayU 를 통해 많은 사람들이 기도할 수 있도록 🙏🏻

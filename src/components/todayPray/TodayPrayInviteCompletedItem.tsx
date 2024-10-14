@@ -81,7 +81,7 @@ const TodayPrayDummyCompletedItem = () => {
           }`}
         >
           <OpenShareDrawerBtn
-            className="w-56 flex flex-col items-center gap-2"
+            className="w-56 flex flex-col items-center gap-2 h-[46px] text-md font-bold rounded-[10px]"
             text="친구 초대하기"
             eventOption={{ where: "TodayPrayDummyCompletedItem" }}
           />

@@ -4,7 +4,7 @@ import { SlMenu } from "react-icons/sl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
-import { days, getISOTodayDate } from "@/lib/utils";
+import { days, getISOTodayDate, sleep } from "@/lib/utils";
 import { analyticsTrack } from "@/analytics/analytics";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
@@ -21,6 +21,9 @@ const TutorialPage: React.FC = () => {
   const navigate = useNavigate();
   const user = useBaseStore((state) => state.user);
   const userLoading = useBaseStore((state) => state.userLoading);
+  const setIsOpenShareDrawer = useBaseStore(
+    (state) => state.setIsOpenShareDrawer
+  );
 
   if (userLoading) return null;
 
@@ -159,9 +162,8 @@ const TutorialPage: React.FC = () => {
           <Button
             onClick={() => onClickRight({ where: "TodayPrayStartCard" })}
             variant="primary"
-            className={`w-[188px] h-[46px] text-md font-bold rounded-[10px] ${
-              index === 2 && "z-40"
-            }`}
+            className={`w-[188px] h-[46px] text-md font-bold rounded-[10px]  
+              ${index === 2 && "z-40 animate-bounce"}`}
           >
             기도 시작하기
           </Button>
@@ -218,7 +220,12 @@ const TutorialPage: React.FC = () => {
                 ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
                 : `opacity-20 ${emojiData.shadowColor}`
             }`}
-            onClick={() => setTodayPrayType(type)}
+            onClick={() => {
+              setTodayPrayType(type);
+              sleep(1200).then(() => {
+                onClickRight({ where: "ReactionBtn" });
+              });
+            }}
           >
             <img src={emojiData.icon} className="w-9 h-9" />
           </button>
@@ -236,7 +243,7 @@ const TutorialPage: React.FC = () => {
               src="/images/defaultProfileImage.png"
               className="w-7 h-7 rounded-full object-cover"
             />
-            <p className="text-white text-lg">기도친구</p>
+            <p className="text-white text-lg">PrayU</p>
           </div>
           <p className="text-sm text-white text-left">
             시작일: 2021.08.01 (일)
@@ -244,7 +251,7 @@ const TutorialPage: React.FC = () => {
         </div>
         <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
           <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
-            기도친구와 함께 기도해요
+            PrayU를 위해 기도해주세요! 🙏🏻
           </p>
         </div>
       </div>
@@ -272,8 +279,13 @@ const TutorialPage: React.FC = () => {
         </div>
         <Button
           variant="primary"
-          className={`w-56 ${index === 4 && "z-40"}`}
-          onClick={() => onClickRight({ where: "CompletedUI" })}
+          className={`w-56 h-[46px] text-md font-bold rounded-[10px] ${
+            index === 4 && "z-40 animate-bounce"
+          }`}
+          onClick={() => {
+            onClickRight({ where: "CompletedUI" });
+            setIsOpenShareDrawer(true);
+          }}
         >
           친구 초대하기
         </Button>
@@ -297,7 +309,7 @@ const TutorialPage: React.FC = () => {
         const clickedX = e.clientX;
         const windowWidth = window.innerWidth;
         if (clickedX < windowWidth / 2) onClickLeft();
-        else onClickRight({ where: "DimUI" });
+        else if (index < 2) onClickRight({ where: "DimUI" });
       }}
     >
       <div
@@ -313,36 +325,33 @@ const TutorialPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <footer className="text-white flex justify-around items-center gap-4">
+        <footer className="text-white flex justify-around items-center gap-4 h-[32px]">
           {index == 0 && <div className="w-8"></div>}
           <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex justify-between items-center gap-4 w-[110px]">
               <FaAngleLeft size={24} onClick={() => onClickLeft()} />
               <span>
                 {index + 1} / {TutorialComponentProps.length}
               </span>
               <FaAngleRight
                 size={24}
-                onClick={() => onClickRight({ where: "RightBtn" })}
+                onClick={() => index < 2 && onClickRight({ where: "RightBtn" })}
               />
             </div>
-            <a
-              className="flex gap-1 items-center text-white underline cursor-pointer"
-              onClick={() => onClickCompletedTutorial()}
-            >
-              {index == TutorialComponentProps.length - 1
-                ? "시작하기"
-                : "건너뛰기"}
-            </a>
           </div>
           {index == 0 && (
             <div className="flex flex-col gap-1 animate-pulse duration-700">
               <MdOutlineTouchApp size={32} />
-              <span className="text-sm font-light">다음</span>
             </div>
           )}
         </footer>
       </div>
+      <a
+        className="text-white/50 cursor-pointer"
+        onClick={() => onClickCompletedTutorial()}
+      >
+        {index == TutorialComponentProps.length - 1 ? "" : "건너뛰기"}
+      </a>
     </div>
   );
 
