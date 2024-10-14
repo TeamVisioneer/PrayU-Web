@@ -7,14 +7,10 @@ import { KakaoController } from "../kakao/KakaoController";
 import { getDomainUrl, sleep } from "@/lib/utils";
 import { useToast } from "../ui/use-toast";
 
-interface EventOption {
-  where: string;
-}
-
 interface ReactionBtnProps {
   currentUserId: string;
   prayCard: PrayCardWithProfiles;
-  eventOption: EventOption;
+  eventOption: { where: string; total_member: number };
 }
 
 const ReactionBtn: React.FC<ReactionBtnProps> = ({
@@ -109,6 +105,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     analyticsTrack("클릭_기도카드_반응", {
       pray_type: prayType,
       where: eventOption.where,
+      total_member: eventOption.total_member,
     });
   };
 

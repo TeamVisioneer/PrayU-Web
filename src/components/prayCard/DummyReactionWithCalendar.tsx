@@ -18,6 +18,7 @@ interface DumyReactionBtnWithCalendarProps {
 const DumyReactionBtnWithCalendar: React.FC<
   DumyReactionBtnWithCalendarProps
 > = ({ dayOffset }) => {
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
@@ -123,9 +124,9 @@ const DumyReactionBtnWithCalendar: React.FC<
           return (
             <button
               key={type}
-              className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out  ${
+              className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
                 emojiData.bgColor
-              } ${
+              } ${!isPrayToday && "animate-bounce"} ${
                 isNotSelected
                   ? `opacity-20 ${emojiData.shadowColor}`
                   : `opacity-90 ${
