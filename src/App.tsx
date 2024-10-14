@@ -45,7 +45,7 @@ const App = () => {
       <div
         className={`mx-auto ${
           window.location.pathname === "/story" ? "w-full" : "max-w-[480px] p-5"
-        } h-full overflow-x-hidden no-scrollbar`}
+        } h-100vh overflow-x-hidden no-scrollbar`}
       >
         <BrowserRouter>
           <AuthProvider>
