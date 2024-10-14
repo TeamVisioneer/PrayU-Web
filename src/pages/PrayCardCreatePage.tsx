@@ -95,9 +95,8 @@ const PrayCardCreatePage: React.FC = () => {
     if (!myMember) {
       updatedMember = await createMember(groupId, currentUserId, content);
 
-      const kakaoMessage = MemberJoinMessage(user?.user_metadata.name, groupId);
       await KakaoController.sendDirectMessage(
-        kakaoMessage,
+        MemberJoinMessage(user?.user_metadata.name, groupId),
         targetGroup.profiles.kakao_id
       );
     } else {
