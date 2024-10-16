@@ -26,12 +26,15 @@ const LogInDrawer = () => {
     pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
   const redirectUrl = `${baseUrl}/login-redirect?groupId=${groupId}&from=LogInDrawer`;
 
-  const [isIOSApp, setIsIOSApp] = useState(false);
+  const [isApp, setIsApp] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIOSApp = userAgent.includes("prayu-ios");
-    setIsIOSApp(isIOSApp);
+    const isApp = userAgent.includes("prayu");
+    const isIOS = userAgent.includes("prayu-ios");
+    setIsApp(isApp);
+    setIsIOS(isIOS);
   }, []);
 
   const LoginContent = (
@@ -47,9 +50,9 @@ const LogInDrawer = () => {
           redirectUri={`${baseUrl}/auth/kakao/callback`}
           state={`groupId:${groupId}`}
         />
-        {isIOSApp && (
+        {isApp && (
           <>
-            <AppleLoginBtn redirectUrl={redirectUrl} />
+            {isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
             <EmailLoginBtn />
           </>
         )}
