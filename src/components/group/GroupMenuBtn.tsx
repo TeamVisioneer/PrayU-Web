@@ -101,7 +101,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
 
   const onClickOpenNotice = () => {
     analyticsTrack("클릭_카카오_소식", {});
-    window.location.href = "http://pf.kakao.com/_XaHDG/posts";
+    window.location.href = "https://pf.kakao.com/_XaHDG/posts";
   };
   const onClickOpenTutorial = () => {
     analyticsTrack("클릭_튜토리얼", {});
