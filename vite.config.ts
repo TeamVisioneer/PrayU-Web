@@ -24,11 +24,6 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       sourcemap: true,
-      rollupOptions: {
-        external: [
-          "./supabase/functions/**", // 빌드에서 제외할 폴더 경로
-        ],
-      },
     },
     define: {
       "import.meta.env": env,
