@@ -72,7 +72,8 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
         cancelText: "취소",
         onAction: async () => {
           const state = `groupId:${targetGroup.id};from:MyPrayCard`;
-          await KakaoTokenRepo.init(state);
+          const token = await KakaoTokenRepo.init(state);
+          if (token) await sendPrayRequestMessage();
         },
       });
       setIsConfirmAlertOpen(true);
