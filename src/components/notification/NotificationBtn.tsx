@@ -5,13 +5,33 @@ import {
 } from "@/components/ui/popover";
 import { RiNotification4Line } from "react-icons/ri";
 import NotificationList from "./NotificationList";
+import useBaseStore from "@/stores/baseStore";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const NotificationBtn = () => {
+  const user = useBaseStore((state) => state.user);
+  const targetGroup = useBaseStore((state) => state.targetGroup);
+  const fetchUserNotificationListByGroupId = useBaseStore(
+    (state) => state.fetchUserNotificationListByGroupId
+  );
+  const userNotificationUnreadTotal = useBaseStore(
+    (state) => state.userNotificationTotal
+  );
+
+  const onClickNotificationBtn = async (open: boolean) => {
+    analyticsTrack("클릭_알림_버튼", {});
+    if (!user || !targetGroup) return null;
+    if (open)
+      await fetchUserNotificationListByGroupId(user.id, targetGroup.id, true);
+  };
+
   return (
-    <Popover>
+    <Popover onOpenChange={onClickNotificationBtn}>
       <PopoverTrigger>
         <div className="relative cursor-pointer">
-          <div className="absolute top-0 right-0 w-[0.6rem] h-[0.6rem] bg-red-400 rounded-full text-center"></div>
+          {userNotificationUnreadTotal > 0 && (
+            <div className="absolute top-0 right-0 w-[0.6rem] h-[0.6rem] bg-red-400 rounded-full text-center"></div>
+          )}
           <RiNotification4Line size={22} />
         </div>
       </PopoverTrigger>

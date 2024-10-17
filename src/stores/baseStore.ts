@@ -13,6 +13,7 @@ import {
   GroupWithProfiles,
   Member,
   MemberWithProfiles,
+  Notification,
   Pray,
   PrayCard,
   PrayCardWithProfiles,
@@ -55,6 +56,10 @@ import {
 } from "@/apis/profiles";
 import { getProfile } from "@/apis/profiles";
 import { updateUserMetaData } from "@/apis/user";
+import {
+  createNotification,
+  fetchUserNotificationListByGroupId,
+} from "@/apis/notification";
 
 export interface BaseStore {
   // user
@@ -201,6 +206,27 @@ export interface BaseStore {
   groupAndSortByUserId: (data: PrayWithProfiles[]) => {
     [key: string]: PrayWithProfiles[];
   };
+
+  // notification
+  userNotificationList: Notification[] | null;
+  userNotificationTotal: number;
+  fetchUserNotificationListByGroupId: (
+    userId: string,
+    groupId: string,
+    unreadOnly?: boolean,
+    limit?: number,
+    offset?: number,
+  ) => Promise<Notification[]>;
+
+  createNotification: (
+    groupId: string,
+    userId: string,
+    senderId: string,
+    title: string,
+    body: string,
+    type: string,
+    data: { key: string; value: string },
+  ) => Promise<Notification | null>;
 
   isOpenMyPrayDrawer: boolean;
   setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
@@ -742,6 +768,51 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.isOpenMyPrayDrawer = isOpenTodayPrayDrawer;
       });
+    },
+
+    // notification
+    userNotificationList: null,
+    userNotificationTotal: 0,
+    fetchUserNotificationListByGroupId: async (
+      userId: string,
+      groupId: string,
+      unreadOnly?: boolean,
+      limit?: number,
+      offset?: number,
+    ) => {
+      const { notificationList, total } =
+        await fetchUserNotificationListByGroupId(
+          userId,
+          groupId,
+          unreadOnly,
+          limit,
+          offset,
+        );
+      set((state) => {
+        state.userNotificationList = notificationList;
+        state.userNotificationTotal = total;
+      });
+      return notificationList;
+    },
+    createNotification: async (
+      groupId: string,
+      userId: string,
+      senderId: string,
+      title: string,
+      body: string,
+      type: string,
+      data: { key: string; value: string },
+    ) => {
+      const notification = await createNotification(
+        groupId,
+        userId,
+        senderId,
+        title,
+        body,
+        type,
+        data,
+      );
+      return notification;
     },
 
     // share
