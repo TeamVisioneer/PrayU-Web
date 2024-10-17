@@ -33,30 +33,19 @@ const LoginRedirect = () => {
 
   useEffect(() => {
     if (!myProfile) return;
-    let updatedProfileData: updateProfilesParams = {};
+    const updatedProfileData: updateProfilesParams = {};
 
     // Kakao provider 관련 프로필 업데이트
     if (provider === "kakao") {
-      if (!user?.user_metadata.full_name) {
-        updateUserMetaData({
-          full_name: user!.user_metadata.name,
-          avatar_url: user!.user_metadata.picture,
-        });
-      }
-      if (!myProfile.full_name) {
-        updatedProfileData = {
-          full_name: user!.user_metadata.name,
-          avatar_url:
-            user!.user_metadata.picture || user!.user_metadata.avatar_url,
-          kakao_id: kakaoId,
-        };
-      } else if (!myProfile.kakao_id) {
-        updatedProfileData = { kakao_id: kakaoId };
-      }
+      if (!myProfile.full_name)
+        updatedProfileData.full_name = user!.user_metadata.name;
+      if (!myProfile.avatar_url)
+        updatedProfileData.avatar_url = user!.user_metadata.picture;
+      if (!myProfile.kakao_id)
+        updatedProfileData.kakao_id = user!.user_metadata.kakaoId;
     }
-    if (fcmToken && myProfile.fcm_token !== fcmToken) {
-      updatedProfileData = { ...updatedProfileData, fcm_token: fcmToken };
-    }
+    if (fcmToken && myProfile.fcm_token !== fcmToken)
+      updatedProfileData.fcm_token = fcmToken;
     if (Object.keys(updatedProfileData).length > 0) {
       updateProfile(currentUserId, updatedProfileData);
     }
