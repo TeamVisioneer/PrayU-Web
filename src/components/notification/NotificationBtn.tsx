@@ -36,7 +36,7 @@ const NotificationBtn = () => {
       <PopoverTrigger>
         <div className="relative cursor-pointer">
           {userNotificationUnread > 0 && (
-            <div className="absolute top-0 right-0 w-[0.6rem] h-[0.6rem] bg-red-400 rounded-full text-center"></div>
+            <div className="absolute top-0 right-0 w-[0.6rem] h-[0.6rem] bg-destructive rounded-full text-center"></div>
           )}
           <RiNotification4Line size={22} />
         </div>
