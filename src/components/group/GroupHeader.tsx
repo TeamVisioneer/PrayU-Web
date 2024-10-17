@@ -5,6 +5,7 @@ import {
   MemberWithProfiles,
   Group,
 } from "supabase/types/tables";
+import NotificationBtn from "../notification/NotificationBtn";
 
 interface GroupHeaderProps {
   otherMemberList: MemberWithProfiles[];
@@ -32,7 +33,8 @@ const GroupHeader: React.FC<GroupHeaderProps> = ({
           {otherMemberList.length + 1}
         </span>
       </div>
-      <div className="w-[48px] flex justify-end">
+      <div className="w-[48px] flex justify-between items-center ">
+        <NotificationBtn />
         <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
       </div>
     </div>

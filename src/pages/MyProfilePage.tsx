@@ -20,7 +20,6 @@ import {
 import { LuInfo, LuPencil, LuSave } from "react-icons/lu";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Profiles } from "supabase/types/tables.ts";
 import { UserProfile } from "@/components/profile/UserProfile.tsx";
 import { analyticsTrack } from "@/analytics/analytics.ts";
 
@@ -41,6 +40,38 @@ const MyProfilePage = () => {
   const [name, setName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    getProfile(user!.id);
+  }, [user, getProfile]);
+
+  useEffect(() => {
+    if (myProfile) setName(myProfile.full_name!);
+    if (myProfile) fetchProfileList(myProfile.blocking_users);
+  }, [myProfile, fetchProfileList]);
+
+  if (!myProfile || !profileList) {
+    return (
+      <div className="w-ful flex flex-col gap-6 items-center">
+        <div className="w-full flex justify-between items-center">
+          <div className="w-[60px]">
+            <IoChevronBack size={20} onClick={() => window.history.back()} />
+          </div>
+          <span className="text-xl font-bold">나의 정보</span>
+          <div className="w-[60px] flex justify-end items-center"></div>
+        </div>
+        <div className="flex justify-center h-[80px] object-cover">
+          <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
+        </div>
+        <div className="w-full flex flex-col gap-4">
+          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
+          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
+          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
+          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
+        </div>
+      </div>
+    );
+  }
 
   const onClickUpdateName = () => {
     setIsEditing(true);
@@ -71,10 +102,7 @@ const MyProfilePage = () => {
     setIsConfirmAlertOpen(true);
   };
 
-  const onClickUnblock = async (
-    myProfile: Profiles,
-    blockedProfileId: string
-  ) => {
+  const onClickUnblock = async (blockedProfileId: string) => {
     analyticsTrack("클릭_프로필_차단해제", {});
     const updatedBlockingUsers = myProfile.blocking_users.filter(
       (id) => id !== blockedProfileId
@@ -93,14 +121,12 @@ const MyProfilePage = () => {
     });
   };
 
-  useEffect(() => {
-    getProfile(user!.id);
-  }, [user, getProfile]);
-
-  useEffect(() => {
-    if (myProfile) setName(myProfile.full_name!);
-    if (myProfile) fetchProfileList(myProfile.blocking_users);
-  }, [myProfile, fetchProfileList]);
+  const onChangePushNotificationToggle = async () => {
+    analyticsTrack("클릭_프로필_푸쉬알림토글", {});
+    await updateProfile(myProfile.id, {
+      push_notification: !myProfile.push_notification,
+    });
+  };
 
   // TODO: 카카오 메세지 재기획 이후 진행
   const kakaoMessageEnabled = false;
@@ -127,147 +153,157 @@ const MyProfilePage = () => {
           <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
         )}
       </div>
-      {myProfile && profileList ? (
-        <div className="w-full flex flex-col items-center gap-4 ">
-          <div className="w-full h-14 flex items-center px-4 py-2 bg-white rounded-xl">
-            <span className="text-md font-semibold">이름</span>
-            <div className="flex flex-grow items-center gap-2">
-              <Input
-                ref={inputRef}
-                className="p-0 text-md border-none text-right"
-                type="text"
-                value={name}
-                onClick={() => onClickUpdateName()}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={() => onBlurUpdateName()}
-                placeholder="이름을 입력해주세요!"
-                maxLength={12}
-              />
-              {isEditing ? (
-                <LuSave size={16} />
-              ) : (
-                <LuPencil size={16} onClick={() => onClickUpdateName()} />
-              )}
-            </div>
+      <div className="w-full flex flex-col items-center gap-4 ">
+        <div className="w-full h-14 flex items-center px-4 py-2 bg-white rounded-xl">
+          <span className="text-md font-semibold">이름</span>
+          <div className="flex flex-grow items-center gap-2">
+            <Input
+              ref={inputRef}
+              className="p-0 text-md border-none text-right"
+              type="text"
+              value={name}
+              onClick={() => onClickUpdateName()}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={() => onBlurUpdateName()}
+              placeholder="이름을 입력해주세요!"
+              maxLength={12}
+            />
+            {isEditing ? (
+              <LuSave size={16} />
+            ) : (
+              <LuPencil size={16} onClick={() => onClickUpdateName()} />
+            )}
           </div>
+        </div>
 
-          <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger
-                  onClick={() => analyticsTrack("클릭_프로필_차단친구관리", {})}
-                >
-                  <div className="w-full h-10 flex flex-grow justify-between items-center">
-                    <span className="font-semibold">차단친구 관리</span>
-                    <span className="p-2">{profileList.length} 명</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="w-full flex flex-col gap-4 px-2 py-4">
-                    {profileList.map((blockedProfile) => (
-                      <div
-                        key={blockedProfile.id}
-                        className="w-full flex justify-between items-center bg-white rounded-xl"
-                      >
-                        <UserProfile
-                          profile={blockedProfile}
-                          imgSize="w-6 h-6"
-                          fontSize="font-medium"
-                        />
-                        <Badge
-                          variant="outline"
+        <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger
+                onClick={() => analyticsTrack("클릭_프로필_환경설정", {})}
+              >
+                <div className="w-full h-10 flex flex-grow justify-between items-center">
+                  <span className="font-semibold">환경 설정</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="w-full flex flex-col p-2 gap-4 text-sm">
+                  {kakaoMessageEnabled && (
+                    <div className="w-full flex justify-between items-center bg-white rounded-xl">
+                      <div className="flex items-center gap-1">
+                        <span>카카오 메세지 전송</span>
+                        <Popover>
+                          <PopoverTrigger
+                            onClick={() =>
+                              analyticsTrack("클릭_프로필_카카오메세지설명", {})
+                            }
+                          >
+                            <LuInfo size={16} color="gray" />
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <span className="text-sm text-gray-500">
+                              기도 반응 할 때 상대방에게 카카오 메세지가
+                              전송됩니다
+                            </span>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <Switch
+                        defaultChecked={myProfile.kakao_notification}
+                        onCheckedChange={() =>
+                          onChangeKakaoNotificationToggle()
+                        }
+                      />
+                    </div>
+                  )}
+                  <div className="w-full flex justify-between items-center bg-white rounded-xl">
+                    <div className="flex items-center gap-1">
+                      <span>모바일 푸시 알림</span>
+                      <Popover>
+                        <PopoverTrigger
                           onClick={() =>
-                            onClickUnblock(myProfile, blockedProfile.id)
+                            analyticsTrack("클릭_프로필_카카오메세지설명", {})
                           }
                         >
-                          차단 해제
-                        </Badge>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-
-          {kakaoMessageEnabled && (
-            <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger
-                    onClick={() => analyticsTrack("클릭_프로필_환경설정", {})}
-                  >
-                    <div className="w-full h-10 flex flex-grow justify-between items-center">
-                      <span className="font-semibold">환경 설정</span>
+                          <LuInfo size={16} color="gray" />
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <span className="text-sm text-gray-500">
+                            앱에서 오늘의 기도 알림, 친구의 기도 알림을 받습니다
+                          </span>
+                        </PopoverContent>
+                      </Popover>
                     </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="w-full flex flex-col p-2 gap-2 text-sm">
-                      <div className="w-full flex justify-between items-center bg-white rounded-xl">
-                        <div className="flex items-center gap-1">
-                          <span>카카오 메세지 전송</span>
-                          <Popover>
-                            <PopoverTrigger
-                              onClick={() =>
-                                analyticsTrack(
-                                  "클릭_프로필_카카오메세지설명",
-                                  {}
-                                )
-                              }
-                            >
-                              <LuInfo size={16} color="gray" />
-                            </PopoverTrigger>
-                            <PopoverContent>
-                              <span className="text-sm text-gray-500">
-                                기도 반응 할 때 상대방에게 카카오 메세지가
-                                전송됩니다
-                              </span>
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                        <Switch
-                          defaultChecked={myProfile.kakao_notification}
-                          onCheckedChange={() =>
-                            onChangeKakaoNotificationToggle()
-                          }
-                        />
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-          )}
+                    <Switch
+                      defaultChecked={myProfile.push_notification}
+                      onCheckedChange={() => onChangePushNotificationToggle()}
+                    />
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
 
-          <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger
-                  onClick={() => analyticsTrack("클릭_프로필_계정관리", {})}
-                >
-                  <div className="w-full h-10 flex flex-grow justify-between items-center">
-                    <span className="font-semibold">계정 관리</span>
-                    <span className="text-sm p-2 max-w-56 whitespace-nowrap overflow-hidden text-ellipsis">
-                      {user!.user_metadata.email}
-                    </span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="w-full flex flex-col p-2 gap-2 text-sm text-gray-400 underline text-end cursor-pointer">
-                    <p onClick={() => onClickExitPrayU()}>회원탈퇴</p>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
+        <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger
+                onClick={() => analyticsTrack("클릭_프로필_차단친구관리", {})}
+              >
+                <div className="w-full h-10 flex flex-grow justify-between items-center">
+                  <span className="font-semibold">차단친구 관리</span>
+                  <span className="p-2">{profileList.length} 명</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="w-full flex flex-col gap-4 px-2 py-4">
+                  {profileList.map((blockedProfile) => (
+                    <div
+                      key={blockedProfile.id}
+                      className="w-full flex justify-between items-center bg-white rounded-xl"
+                    >
+                      <UserProfile
+                        profile={blockedProfile}
+                        imgSize="w-6 h-6"
+                        fontSize="font-medium"
+                      />
+                      <Badge
+                        variant="outline"
+                        onClick={() => onClickUnblock(blockedProfile.id)}
+                      >
+                        차단 해제
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
-      ) : (
-        <div className="w-full flex flex-col gap-2">
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
+
+        <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger
+                onClick={() => analyticsTrack("클릭_프로필_계정관리", {})}
+              >
+                <div className="w-full h-10 flex flex-grow justify-between items-center">
+                  <span className="font-semibold">계정 관리</span>
+                  <span className="text-sm p-2 max-w-56 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {user!.user_metadata.email}
+                  </span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="w-full flex flex-col p-2 gap-2 text-sm text-gray-400 underline text-end cursor-pointer">
+                  <p onClick={() => onClickExitPrayU()}>회원탈퇴</p>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
-      )}
+      </div>
 
       <footer className="absolute bottom-4 w-full px-6 flex justify-between text-gray-400 text-[10px]">
         <span>© 2024 PrayU. All rights reserved.</span>
