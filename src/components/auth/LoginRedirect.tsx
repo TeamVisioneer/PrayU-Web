@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import useAuth from "@/hooks/useAuth";
+import { updateProfilesParams } from "@/apis/profiles";
 
 const LoginRedirect = () => {
   const { user } = useAuth();
@@ -23,6 +24,7 @@ const LoginRedirect = () => {
   const groupId = params.get("groupId");
   const from = params.get("from");
   const groupPageUrl = groupId ? `/group/${groupId}` : "/group";
+  const fcmToken = localStorage.getItem("fcmToken");
 
   useEffect(() => {
     getProfile(currentUserId);
@@ -31,27 +33,27 @@ const LoginRedirect = () => {
 
   useEffect(() => {
     if (!myProfile) return;
-    if (provider == "kakao") {
-      if (!user?.user_metadata.full_name) {
-        updateUserMetaData({
-          full_name: user!.user_metadata.name,
-          avatar_url: user!.user_metadata.picture,
-        });
-      }
-      if (!myProfile.full_name) {
-        updateProfile(currentUserId, {
-          full_name: user!.user_metadata.name,
-          avatar_url:
-            user!.user_metadata.picture || user!.user_metadata.avatar_url,
-          kakao_id: kakaoId,
-        });
-      } else if (!myProfile.kakao_id)
-        updateProfile(currentUserId, { kakao_id: kakaoId });
-    }
+    const updatedProfileData: updateProfilesParams = {};
 
-    if (!myProfile.terms_agreed_at)
+    // Kakao provider 관련 프로필 업데이트
+    if (provider === "kakao") {
+      if (!myProfile.full_name)
+        updatedProfileData.full_name = user!.user_metadata.name;
+      if (!myProfile.avatar_url)
+        updatedProfileData.avatar_url = user!.user_metadata.picture;
+      if (!myProfile.kakao_id)
+        updatedProfileData.kakao_id = user!.user_metadata.kakaoId;
+    }
+    if (fcmToken && myProfile.fcm_token !== fcmToken)
+      updatedProfileData.fcm_token = fcmToken;
+    if (Object.keys(updatedProfileData).length > 0) {
+      updateProfile(currentUserId, updatedProfileData);
+    }
+    if (!myProfile.terms_agreed_at) {
       navigate(`/term?groupId=${groupId}`, { replace: true });
-    else navigate(groupPageUrl, { replace: true });
+    } else {
+      navigate(groupPageUrl, { replace: true });
+    }
   }, [
     myProfile,
     currentUserId,
@@ -63,6 +65,7 @@ const LoginRedirect = () => {
     groupId,
     groupPageUrl,
     user,
+    fcmToken,
   ]);
 
   return null;
