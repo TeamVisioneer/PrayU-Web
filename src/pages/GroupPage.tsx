@@ -146,6 +146,7 @@ const GroupPage: React.FC = () => {
           <OtherMemberList otherMemberList={otherMemberList} />
         )}
       </div>
+
       <TodayPrayCardListDrawer />
       <OtherMemberDrawer />
       <PrayListDrawer />
