@@ -13,7 +13,7 @@ export const fetchUserNotificationListByGroupId = async (
     let query = supabase
       .from("notification")
       .select("*", { count: "exact" })
-      .eq("group_id", groupId)
+      .or(`group_id.eq.${groupId},group_id.is.null`)
       .eq("user_id", userId)
       .is("deleted_at", null);
     if (unreadOnly) query = query.is("checked_at", null);
@@ -33,26 +33,30 @@ export const fetchUserNotificationListByGroupId = async (
   }
 };
 
+export interface createNotificationParams {
+  groupId?: string;
+  userId: string;
+  senderId?: string;
+  title: string;
+  body: string;
+  type: string;
+  data?: { [key: string]: string };
+}
+
 export const createNotification = async (
-  groupId: string,
-  userId: string,
-  senderId: string,
-  title: string,
-  body: string,
-  type: string,
-  data: { key: string; value: string },
+  params: createNotificationParams,
 ): Promise<Notification | null> => {
   try {
     const { error, data: result } = await supabase
       .from("notification")
       .insert([{
-        group_id: groupId,
-        user_id: userId,
-        sender_id: senderId,
-        title,
-        body,
-        type,
-        data,
+        group_id: params.groupId,
+        user_id: params.userId,
+        sender_id: params.senderId,
+        title: params.title,
+        body: params.body,
+        type: params.type,
+        data: params.data || {},
       }])
       .select();
 

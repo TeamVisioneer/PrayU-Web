@@ -58,7 +58,10 @@ import { getProfile } from "@/apis/profiles";
 import { updateUserMetaData } from "@/apis/user";
 import {
   createNotification,
+  createNotificationParams,
   fetchUserNotificationListByGroupId,
+  updateNotification,
+  updateNotificationParams,
 } from "@/apis/notification";
 
 export interface BaseStore {
@@ -210,6 +213,7 @@ export interface BaseStore {
   // notification
   userNotificationList: Notification[] | null;
   userNotificationTotal: number;
+  userNotificationUnread: number;
   fetchUserNotificationListByGroupId: (
     userId: string,
     groupId: string,
@@ -217,15 +221,12 @@ export interface BaseStore {
     limit?: number,
     offset?: number,
   ) => Promise<Notification[]>;
-
   createNotification: (
-    groupId: string,
-    userId: string,
-    senderId: string,
-    title: string,
-    body: string,
-    type: string,
-    data: { key: string; value: string },
+    params: createNotificationParams,
+  ) => Promise<Notification | null>;
+  updateNotification: (
+    notificationId: string,
+    params: updateNotificationParams,
   ) => Promise<Notification | null>;
 
   isOpenMyPrayDrawer: boolean;
@@ -773,6 +774,7 @@ const useBaseStore = create<BaseStore>()(
     // notification
     userNotificationList: null,
     userNotificationTotal: 0,
+    userNotificationUnread: 0,
     fetchUserNotificationListByGroupId: async (
       userId: string,
       groupId: string,
@@ -791,27 +793,21 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.userNotificationList = notificationList;
         state.userNotificationTotal = total;
+        if (unreadOnly) state.userNotificationUnread = total;
       });
       return notificationList;
     },
     createNotification: async (
-      groupId: string,
-      userId: string,
-      senderId: string,
-      title: string,
-      body: string,
-      type: string,
-      data: { key: string; value: string },
+      params: createNotificationParams,
     ) => {
-      const notification = await createNotification(
-        groupId,
-        userId,
-        senderId,
-        title,
-        body,
-        type,
-        data,
-      );
+      const notification = await createNotification(params);
+      return notification;
+    },
+    updateNotification: async (
+      notificationId: string,
+      params: updateNotificationParams,
+    ) => {
+      const notification = await updateNotification(notificationId, params);
       return notification;
     },
 
