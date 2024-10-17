@@ -2,9 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
-import GroupMenuBtn from "../components/group/GroupMenuBtn";
 import ShareDrawer from "@/components/share/ShareDrawer";
-import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 import EventDialog from "@/components/notice/EventDialog";
 import ReportAlert from "@/components/alert/ReportAlert";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +16,7 @@ import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import BannerDialog from "@/components/notice/BannerDialog";
+import GroupHeader from "@/components/group/GroupHeader";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -134,25 +133,11 @@ const GroupPage: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full gap-5">
-      <div className="relative flex justify-between items-center">
-        <OpenShareDrawerBtn
-          text="초대"
-          eventOption={{ where: "GroupPage" }}
-          type="tag"
-        />
-        <div className="text-lg font-bold flex items-center gap-1">
-          <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-            {targetGroup.name}
-          </div>
-          <span className="text-sm text-gray-500">
-            {otherMemberList.length + 1}
-          </span>
-        </div>
-        <div className="w-[48px] flex justify-end">
-          {/* <OpenEventDialogBtn /> */}
-          <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
-        </div>
-      </div>
+      <GroupHeader
+        groupList={groupList}
+        targetGroup={targetGroup}
+        otherMemberList={otherMemberList}
+      />
       <div className="flex flex-col flex-grow gap-4">
         <MyMember myMember={myMember} />
         {isTodayPrayStart ? (
