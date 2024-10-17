@@ -12,6 +12,7 @@ export interface updateProfilesParams {
   website?: string;
   kakao_notification?: boolean;
   terms_agreed_at?: string;
+  fcm_token?: string;
 }
 
 export const updateProfile = async (

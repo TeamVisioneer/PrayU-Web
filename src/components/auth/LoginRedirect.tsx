@@ -4,6 +4,13 @@ import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import useAuth from "@/hooks/useAuth";
 
+interface ProfileUpdateData {
+  full_name?: string;
+  avatar_url?: string;
+  kakao_id?: string;
+  fcm_token?: string;
+}
+
 const LoginRedirect = () => {
   const { user } = useAuth();
   const updateUserMetaData = useBaseStore((state) => state.updateUserMetaData);
@@ -23,6 +30,7 @@ const LoginRedirect = () => {
   const groupId = params.get("groupId");
   const from = params.get("from");
   const groupPageUrl = groupId ? `/group/${groupId}` : "/group";
+  const fcmToken = localStorage.getItem("fcmToken");
 
   useEffect(() => {
     getProfile(currentUserId);
@@ -31,7 +39,10 @@ const LoginRedirect = () => {
 
   useEffect(() => {
     if (!myProfile) return;
-    if (provider == "kakao") {
+    let updatedProfileData: ProfileUpdateData = {};
+
+    // Kakao provider 관련 프로필 업데이트
+    if (provider === "kakao") {
       if (!user?.user_metadata.full_name) {
         updateUserMetaData({
           full_name: user!.user_metadata.name,
@@ -39,19 +50,27 @@ const LoginRedirect = () => {
         });
       }
       if (!myProfile.full_name) {
-        updateProfile(currentUserId, {
+        updatedProfileData = {
           full_name: user!.user_metadata.name,
           avatar_url:
             user!.user_metadata.picture || user!.user_metadata.avatar_url,
           kakao_id: kakaoId,
-        });
-      } else if (!myProfile.kakao_id)
-        updateProfile(currentUserId, { kakao_id: kakaoId });
+        };
+      } else if (!myProfile.kakao_id) {
+        updatedProfileData = { kakao_id: kakaoId };
+      }
     }
-
-    if (!myProfile.terms_agreed_at)
+    if (fcmToken && myProfile.fcm_token !== fcmToken) {
+      updatedProfileData = { ...updatedProfileData, fcm_token: fcmToken };
+    }
+    if (Object.keys(updatedProfileData).length > 0) {
+      updateProfile(currentUserId, updatedProfileData);
+    }
+    if (!myProfile.terms_agreed_at) {
       navigate(`/term?groupId=${groupId}`, { replace: true });
-    else navigate(groupPageUrl, { replace: true });
+    } else {
+      navigate(groupPageUrl, { replace: true });
+    }
   }, [
     myProfile,
     currentUserId,
@@ -63,6 +82,7 @@ const LoginRedirect = () => {
     groupId,
     groupPageUrl,
     user,
+    fcmToken,
   ]);
 
   return null;

@@ -64,13 +64,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "group_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "group_user_id_fkey1"
             columns: ["user_id"]
             isOneToOne: false
@@ -116,13 +109,58 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "member_user_id_fkey1"
+            foreignKeyName: "member_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
+      }
+      notification: {
+        Row: {
+          body: string
+          checked_at: string | null
+          completed_at: string | null
+          created_at: string
+          data: Json
+          fcm_result: Json
+          group_id: string | null
+          id: string
+          sender_id: string | null
+          title: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          body?: string
+          checked_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          data?: Json
+          fcm_result?: Json
+          group_id?: string | null
+          id?: string
+          sender_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string | null
+        }
+        Update: {
+          body?: string
+          checked_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          data?: Json
+          fcm_result?: Json
+          group_id?: string | null
+          id?: string
+          sender_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       pray: {
         Row: {
@@ -158,13 +196,6 @@ export type Database = {
             columns: ["pray_card_id"]
             isOneToOne: false
             referencedRelation: "pray_card"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "pray_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
@@ -213,13 +244,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "pray_card_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "pray_card_user_id_fkey1"
             columns: ["user_id"]
             isOneToOne: false
@@ -232,10 +256,12 @@ export type Database = {
         Row: {
           avatar_url: string | null
           blocking_users: string[]
+          fcm_token: string
           full_name: string | null
           id: string
           kakao_id: string | null
           kakao_notification: boolean
+          push_notification: boolean
           terms_agreed_at: string | null
           updated_at: string | null
           username: string | null
@@ -244,10 +270,12 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           blocking_users?: string[]
+          fcm_token?: string
           full_name?: string | null
           id: string
           kakao_id?: string | null
           kakao_notification?: boolean
+          push_notification?: boolean
           terms_agreed_at?: string | null
           updated_at?: string | null
           username?: string | null
@@ -256,24 +284,18 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           blocking_users?: string[]
+          fcm_token?: string
           full_name?: string | null
           id?: string
           kakao_id?: string | null
           kakao_notification?: boolean
+          push_notification?: boolean
           terms_agreed_at?: string | null
           updated_at?: string | null
           username?: string | null
           website?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -371,4 +393,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
