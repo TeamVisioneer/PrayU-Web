@@ -69,22 +69,17 @@ export const deleteUser = async (userId: string): Promise<boolean> => {
 
   try {
     // user hard delete
+    const { data: { session } } = await supabase.auth.getSession();
     const response = await fetch(
-      `${import.meta.env.VITE_SUPA_PROJECT_URL}/functions/v1/delete-user`,
+      `${import.meta.env.VITE_SUPA_PROJECT_URL}/functions/v1/api/users`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPA_ANON_KEY,
-          authorization: `Bearer ${import.meta.env.VITE_SUPA_ANON_KEY}`,
+          authorization: `Bearer ${session?.access_token}`,
         },
-        body: JSON.stringify({ userId }), // userId를 body에 포함시킴
-      }
+      },
     );
-
-    if (!response.ok) {
-      return false;
-    }
 
     const { error } = await response.json();
     if (error) {

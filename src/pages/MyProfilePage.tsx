@@ -26,7 +26,6 @@ import { analyticsTrack } from "@/analytics/analytics.ts";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
-  const signOut = useBaseStore((state) => state.signOut);
 
   const setAlertData = useBaseStore((state) => state.setAlertData);
   const setIsConfirmAlertOpen = useBaseStore(
@@ -59,16 +58,14 @@ const MyProfilePage = () => {
     setAlertData({
       color: "bg-red-400",
       title: "PrayU 탈퇴하기",
-      description: `더 이상 기도 나눔을 할 수 없게 돼요 :(`,
+      description:
+        "PrayU 계정을 탈퇴하시겠습니까?\nPrayU 의 모든 데이터가 삭제됩니다.",
       actionText: "탈퇴하기",
       cancelText: "취소",
       onAction: async () => {
         const userId = user!.id;
         const success = await deleteUser(userId);
-        if (success) {
-          await signOut();
-          window.location.href = "/";
-        }
+        if (success) window.location.href = "/";
       },
     });
     setIsConfirmAlertOpen(true);
@@ -256,7 +253,7 @@ const MyProfilePage = () => {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="w-full flex flex-col p-2 gap-2 text-sm text-gray-400 underline text-end">
+                  <div className="w-full flex flex-col p-2 gap-2 text-sm text-gray-400 underline text-end cursor-pointer">
                     <p onClick={() => onClickExitPrayU()}>회원탈퇴</p>
                   </div>
                 </AccordionContent>
