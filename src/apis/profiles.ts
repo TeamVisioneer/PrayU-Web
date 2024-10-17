@@ -11,12 +11,13 @@ export interface updateProfilesParams {
   username?: string;
   website?: string;
   kakao_notification?: boolean;
+  push_notification?: boolean;
   terms_agreed_at?: string;
 }
 
 export const updateProfile = async (
   userId: string,
-  params: updateProfilesParams
+  params: updateProfilesParams,
 ) => {
   try {
     const { error, data } = await supabase
@@ -54,7 +55,7 @@ export const getProfile = async (userId: string): Promise<Profiles | null> => {
 };
 
 export const fetchProfileList = async (
-  userIds: string[]
+  userIds: string[],
 ): Promise<Profiles[] | null> => {
   try {
     const { data, error } = await supabase
