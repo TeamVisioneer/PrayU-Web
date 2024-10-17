@@ -3,13 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import useAuth from "@/hooks/useAuth";
-
-interface ProfileUpdateData {
-  full_name?: string;
-  avatar_url?: string;
-  kakao_id?: string;
-  fcm_token?: string;
-}
+import { updateProfilesParams } from "@/apis/profiles";
 
 const LoginRedirect = () => {
   const { user } = useAuth();
@@ -39,7 +33,7 @@ const LoginRedirect = () => {
 
   useEffect(() => {
     if (!myProfile) return;
-    let updatedProfileData: ProfileUpdateData = {};
+    let updatedProfileData: updateProfilesParams = {};
 
     // Kakao provider 관련 프로필 업데이트
     if (provider === "kakao") {
