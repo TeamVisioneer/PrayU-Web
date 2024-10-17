@@ -124,6 +124,7 @@ export type Database = {
           completed_at: string | null
           created_at: string
           data: Json
+          deleted_at: string | null
           fcm_result: Json
           group_id: string | null
           id: string
@@ -138,6 +139,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           data?: Json
+          deleted_at?: string | null
           fcm_result?: Json
           group_id?: string | null
           id?: string
@@ -152,6 +154,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           data?: Json
+          deleted_at?: string | null
           fcm_result?: Json
           group_id?: string | null
           id?: string
