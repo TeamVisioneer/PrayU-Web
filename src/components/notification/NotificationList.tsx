@@ -5,14 +5,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import NotificationItem from "./NotificationItem";
 import useBaseStore from "@/stores/baseStore";
-import ClipLoader from "react-spinners/ClipLoader";
 import { analyticsTrack } from "@/analytics/analytics";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const NotificationList = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const user = useBaseStore((state) => state.user);
   const userNotificationList = useBaseStore(
     (state) => state.userNotificationList
+  );
+  const setUserNotificationList = useBaseStore(
+    (state) => state.setUserNotificationList
   );
   const userNotificationUnread = useBaseStore(
     (state) => state.userNotificationUnread
@@ -22,26 +25,21 @@ const NotificationList = () => {
   );
 
   if (!user || !targetGroup) return null;
-  if (!userNotificationList) {
-    return (
-      <div className="flex justify-center items-center h-[300px] w-full">
-        <ClipLoader color="#70AAFF" size={20} />
-      </div>
-    );
-  }
 
   const onClickUnreadNotification = async () => {
     analyticsTrack("클릭_알림_읽지않음", {});
+    setUserNotificationList(null);
     await fetchUserNotificationListByGroupId(user.id, targetGroup.id, true);
   };
 
   const onClickAllNotification = async () => {
     analyticsTrack("클릭_알림_전체", {});
+    setUserNotificationList(null);
     await fetchUserNotificationListByGroupId(user.id, targetGroup.id, false);
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-lg font-bold flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -66,26 +64,40 @@ const NotificationList = () => {
               전체
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="unread">
-            <ScrollArea className="h-[300px]">
-              {userNotificationList.map((notification) => (
-                <NotificationItem
-                  key={notification.id}
-                  notification={notification}
-                />
-              ))}
-            </ScrollArea>
-          </TabsContent>
-          <TabsContent value="all">
-            <ScrollArea className="h-[300px]">
-              {userNotificationList.map((notification) => (
-                <NotificationItem
-                  key={notification.id}
-                  notification={notification}
-                />
-              ))}
-            </ScrollArea>
-          </TabsContent>
+          {!userNotificationList ? (
+            <div className="flex justify-center items-center h-[300px] w-full">
+              <ClipLoader color="#EFF4F8" size={10} />
+            </div>
+          ) : (
+            <>
+              <TabsContent value="unread">
+                <ScrollArea className="h-[300px]">
+                  {userNotificationUnread === 0 ? (
+                    <div className="flex justify-center items-center h-[300px] w-full text-gray-500 text-sm">
+                      모든 알림을 확인하였어요!
+                    </div>
+                  ) : (
+                    userNotificationList.map((notification) => (
+                      <NotificationItem
+                        key={notification.id}
+                        notification={notification}
+                      />
+                    ))
+                  )}
+                </ScrollArea>
+              </TabsContent>
+              <TabsContent value="all">
+                <ScrollArea className="h-[300px]">
+                  {userNotificationList.map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      notification={notification}
+                    />
+                  ))}
+                </ScrollArea>
+              </TabsContent>
+            </>
+          )}
         </Tabs>
       </CardContent>
     </Card>

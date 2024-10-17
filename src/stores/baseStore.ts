@@ -228,6 +228,7 @@ export interface BaseStore {
     notificationId: string,
     params: updateNotificationParams,
   ) => Promise<Notification | null>;
+  setUserNotificationList: (notificationList: Notification[] | null) => void;
 
   isOpenMyPrayDrawer: boolean;
   setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
@@ -809,6 +810,11 @@ const useBaseStore = create<BaseStore>()(
     ) => {
       const notification = await updateNotification(notificationId, params);
       return notification;
+    },
+    setUserNotificationList: (notificationList: Notification[] | null) => {
+      set((state) => {
+        state.userNotificationList = notificationList;
+      });
     },
 
     // share

@@ -17,15 +17,18 @@ const NotificationBtn = () => {
   const userNotificationUnread = useBaseStore(
     (state) => state.userNotificationUnread
   );
-
-  const createNotification = useBaseStore((state) => state.createNotification);
+  const setUserNotificationList = useBaseStore(
+    (state) => state.setUserNotificationList
+  );
 
   if (!user || !targetGroup) return null;
 
   const onClickNotificationBtn = async (open: boolean) => {
     analyticsTrack("클릭_알림_버튼", {});
-    if (open)
+    if (open) {
+      setUserNotificationList(null);
       await fetchUserNotificationListByGroupId(user.id, targetGroup.id, true);
+    }
   };
 
   return (
@@ -39,20 +42,6 @@ const NotificationBtn = () => {
         </div>
       </PopoverTrigger>
       <PopoverContent>
-        <button
-          onClick={() =>
-            createNotification({
-              groupId: targetGroup.id,
-              userId: user.id,
-              title: "알림 생성 테스트",
-              body: "알림 생성 테스트",
-              type: "NOTICE",
-            })
-          }
-        >
-          알림 생성 테스트
-        </button>
-
         <NotificationList />
       </PopoverContent>
     </Popover>
