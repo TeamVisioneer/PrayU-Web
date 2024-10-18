@@ -22,10 +22,10 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { UserProfile } from "@/components/profile/UserProfile.tsx";
 import { analyticsTrack } from "@/analytics/analytics.ts";
+import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo.ts";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
-
   const setAlertData = useBaseStore((state) => state.setAlertData);
   const setIsConfirmAlertOpen = useBaseStore(
     (state) => state.setIsConfirmAlertOpen
@@ -36,10 +36,17 @@ const MyProfilePage = () => {
   const getProfile = useBaseStore((state) => state.getProfile);
   const fetchProfileList = useBaseStore((state) => state.fetchProfileList);
   const updateProfile = useBaseStore((state) => state.updateProfile);
+  const signOut = useBaseStore((state) => state.signOut);
 
   const [name, setName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const onClickSignOut = () => {
+    analyticsTrack("클릭_로그아웃", {});
+    KakaoTokenRepo.cleanKakaoTokensInCookies();
+    signOut();
+  };
 
   useEffect(() => {
     getProfile(user!.id);
@@ -57,7 +64,7 @@ const MyProfilePage = () => {
           <div className="w-[60px]">
             <IoChevronBack size={20} onClick={() => window.history.back()} />
           </div>
-          <span className="text-xl font-bold">나의 정보</span>
+          <span className="text-xl font-bold">내 프로필</span>
           <div className="w-[60px] flex justify-end items-center"></div>
         </div>
         <div className="flex justify-center h-[80px] object-cover">
@@ -138,7 +145,7 @@ const MyProfilePage = () => {
           <IoChevronBack size={20} onClick={() => window.history.back()} />
         </div>
 
-        <span className="text-xl font-bold">나의 정보</span>
+        <span className="text-xl font-bold">내 프로필</span>
         <div className="w-[60px] flex justify-end items-center">
           {isEditing && <Badge>완료</Badge>}
         </div>
@@ -296,8 +303,9 @@ const MyProfilePage = () => {
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="w-full flex flex-col p-2 gap-2 text-sm text-gray-400 underline text-end cursor-pointer">
+                <div className="w-full flex p-2 gap-2 text-sm text-gray-400 text-end cursor-pointer justify-between">
                   <p onClick={() => onClickExitPrayU()}>회원탈퇴</p>
+                  <p onClick={() => onClickSignOut()}>로그아웃</p>
                 </div>
               </AccordionContent>
             </AccordionItem>
