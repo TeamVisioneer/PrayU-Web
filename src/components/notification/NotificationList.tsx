@@ -17,8 +17,8 @@ const NotificationList = () => {
   const setUserNotificationList = useBaseStore(
     (state) => state.setUserNotificationList
   );
-  const userNotificationUnread = useBaseStore(
-    (state) => state.userNotificationUnread
+  const userNotificationUnreadTotal = useBaseStore(
+    (state) => state.userNotificationUnreadTotal
   );
   const fetchUserNotificationListByGroupId = useBaseStore(
     (state) => state.fetchUserNotificationListByGroupId
@@ -46,8 +46,8 @@ const NotificationList = () => {
             <RiNotification4Line size={22} />
             그룹 알림
           </div>
-          {userNotificationUnread > 0 && (
-            <Badge variant="destructive">{userNotificationUnread}</Badge>
+          {userNotificationUnreadTotal > 0 && (
+            <Badge variant="destructive">{userNotificationUnreadTotal}</Badge>
           )}
         </CardTitle>
       </CardHeader>
@@ -72,7 +72,7 @@ const NotificationList = () => {
             <>
               <TabsContent value="unread">
                 <ScrollArea className="h-[300px]">
-                  {userNotificationUnread === 0 ? (
+                  {userNotificationUnreadTotal === 0 ? (
                     <div className="flex justify-center items-center h-[300px] w-full text-gray-500 text-sm">
                       모든 알림을 확인하였어요!
                     </div>

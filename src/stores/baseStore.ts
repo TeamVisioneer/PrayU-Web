@@ -213,7 +213,7 @@ export interface BaseStore {
   // notification
   userNotificationList: Notification[] | null;
   userNotificationTotal: number;
-  userNotificationUnread: number;
+  userNotificationUnreadTotal: number;
   fetchUserNotificationListByGroupId: (
     userId: string,
     groupId: string,
@@ -229,6 +229,7 @@ export interface BaseStore {
     params: updateNotificationParams,
   ) => Promise<Notification | null>;
   setUserNotificationList: (notificationList: Notification[] | null) => void;
+  setUserNotificationUnreadTotal: (total: number) => void;
 
   isOpenMyPrayDrawer: boolean;
   setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
@@ -775,7 +776,7 @@ const useBaseStore = create<BaseStore>()(
     // notification
     userNotificationList: null,
     userNotificationTotal: 0,
-    userNotificationUnread: 0,
+    userNotificationUnreadTotal: 0,
     fetchUserNotificationListByGroupId: async (
       userId: string,
       groupId: string,
@@ -794,7 +795,7 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.userNotificationList = notificationList;
         state.userNotificationTotal = total;
-        if (unreadOnly) state.userNotificationUnread = total;
+        if (unreadOnly) state.userNotificationUnreadTotal = total;
       });
       return notificationList;
     },
@@ -814,6 +815,11 @@ const useBaseStore = create<BaseStore>()(
     setUserNotificationList: (notificationList: Notification[] | null) => {
       set((state) => {
         state.userNotificationList = notificationList;
+      });
+    },
+    setUserNotificationUnreadTotal: (unread: number) => {
+      set((state) => {
+        state.userNotificationUnreadTotal = unread;
       });
     },
 

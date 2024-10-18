@@ -13,6 +13,12 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   notification,
 }) => {
   const updateNotification = useBaseStore((state) => state.updateNotification);
+  const userNotificationUnreadTotal = useBaseStore(
+    (state) => state.userNotificationUnreadTotal
+  );
+  const setUserNotificationUnreadTotal = useBaseStore(
+    (state) => state.setUserNotificationUnreadTotal
+  );
   const user = useBaseStore((state) => state.user);
   const targetGroup = useBaseStore((state) => state.targetGroup);
 
@@ -29,6 +35,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     if (!user || !targetGroup) return null;
     analyticsTrack("클릭_알림_확인", { notification_id: id });
     setUnread(false);
+    setUserNotificationUnreadTotal(userNotificationUnreadTotal - 1);
     await updateNotification(id, { checked_at: getISOToday() });
   };
 

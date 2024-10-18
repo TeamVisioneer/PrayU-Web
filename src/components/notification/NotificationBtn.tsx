@@ -14,8 +14,8 @@ const NotificationBtn = () => {
   const fetchUserNotificationListByGroupId = useBaseStore(
     (state) => state.fetchUserNotificationListByGroupId
   );
-  const userNotificationUnread = useBaseStore(
-    (state) => state.userNotificationUnread
+  const userNotificationUnreadTotal = useBaseStore(
+    (state) => state.userNotificationUnreadTotal
   );
   const setUserNotificationList = useBaseStore(
     (state) => state.setUserNotificationList
@@ -35,7 +35,7 @@ const NotificationBtn = () => {
     <Popover onOpenChange={onClickNotificationBtn}>
       <PopoverTrigger>
         <div className="relative cursor-pointer">
-          {userNotificationUnread > 0 && (
+          {userNotificationUnreadTotal > 0 && (
             <div className="absolute top-0 right-0 w-[0.6rem] h-[0.6rem] bg-destructive rounded-full text-center"></div>
           )}
           <RiNotification4Line size={22} />
