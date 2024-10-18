@@ -47,6 +47,7 @@ const App = () => {
           window.location.pathname === "/story" ? "w-full" : "max-w-[480px] p-5"
         } h-100vh overflow-x-hidden no-scrollbar`}
       >
+        <KakaoInit />
         <BrowserRouter>
           <AuthProvider>
             {(import.meta.env.VITE_ENV === "staging" ||
@@ -126,7 +127,6 @@ const App = () => {
       </div>
       <Toaster />
       <ConfirmAlert />
-      <KakaoInit />
     </div>
   );
 };
