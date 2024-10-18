@@ -6,36 +6,65 @@ import { Badge } from "@/components/ui/badge";
 import NotificationItem from "./NotificationItem";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
-import ClipLoader from "react-spinners/ClipLoader";
+import { useState } from "react";
 
 const NotificationList = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const user = useBaseStore((state) => state.user);
-  const userNotificationList = useBaseStore(
-    (state) => state.userNotificationList
-  );
-  const setUserNotificationList = useBaseStore(
-    (state) => state.setUserNotificationList
-  );
+
   const userNotificationUnreadTotal = useBaseStore(
     (state) => state.userNotificationUnreadTotal
+  );
+  const userNotificationTotal = useBaseStore(
+    (state) => state.userNotificationTotal
   );
   const fetchUserNotificationListByGroupId = useBaseStore(
     (state) => state.fetchUserNotificationListByGroupId
   );
+  const fetchNotificationCount = useBaseStore(
+    (state) => state.fetchNotificationCount
+  );
+
+  const userNotificationView = useBaseStore(
+    (state) => state.userNotificationView
+  );
+  const setUserNotificationView = useBaseStore(
+    (state) => state.setUserNotificationView
+  );
+  const [offset, setOffset] = useState(10);
 
   if (!user || !targetGroup) return null;
 
-  const onClickUnreadNotification = async () => {
-    analyticsTrack("클릭_알림_읽지않음", {});
-    setUserNotificationList(null);
-    await fetchUserNotificationListByGroupId(user.id, targetGroup.id, true);
+  const onClickNotificationTab = async (unreadOnly: boolean) => {
+    const trackEvent = unreadOnly ? "클릭_알림_읽지않음" : "클릭_알림_전체";
+    analyticsTrack(trackEvent, {});
+    setUserNotificationView([]);
+    setOffset(10);
+    const newNotificationList = await fetchUserNotificationListByGroupId(
+      user.id,
+      targetGroup.id,
+      unreadOnly
+    );
+    setUserNotificationView(newNotificationList);
+    await fetchNotificationCount(user.id, targetGroup.id, unreadOnly);
   };
 
-  const onClickAllNotification = async () => {
-    analyticsTrack("클릭_알림_전체", {});
-    setUserNotificationList(null);
-    await fetchUserNotificationListByGroupId(user.id, targetGroup.id, false);
+  const onClickMoreNotification = async (unreadOnly: boolean) => {
+    const totalCount = unreadOnly
+      ? userNotificationUnreadTotal
+      : userNotificationTotal;
+    if (offset >= totalCount) return null;
+
+    const limit = offset > totalCount ? totalCount - offset : 10;
+    const newNotificationList = await fetchUserNotificationListByGroupId(
+      user.id,
+      targetGroup.id,
+      unreadOnly,
+      limit,
+      offset
+    );
+    setUserNotificationView([...userNotificationView, ...newNotificationList]);
+    setOffset(offset + 10);
   };
 
   return (
@@ -56,48 +85,69 @@ const NotificationList = () => {
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger
               value="unread"
-              onClick={() => onClickUnreadNotification()}
+              onClick={() => onClickNotificationTab(true)}
             >
               읽지 않음
             </TabsTrigger>
-            <TabsTrigger value="all" onClick={() => onClickAllNotification()}>
+            <TabsTrigger
+              value="all"
+              onClick={() => onClickNotificationTab(false)}
+            >
               전체
             </TabsTrigger>
           </TabsList>
-          {!userNotificationList ? (
-            <div className="flex justify-center items-center h-[300px] w-full">
-              <ClipLoader color="#EFF4F8" size={10} />
-            </div>
-          ) : (
-            <>
-              <TabsContent value="unread">
-                <ScrollArea className="h-[300px]">
-                  {userNotificationUnreadTotal === 0 ? (
-                    <div className="flex justify-center items-center h-[300px] w-full text-gray-500 text-sm">
-                      모든 알림을 확인하였어요!
-                    </div>
-                  ) : (
-                    userNotificationList.map((notification) => (
+          <TabsContent value="unread">
+            <ScrollArea>
+              {userNotificationUnreadTotal === 0 ? (
+                <div className="flex justify-center items-center h-[300px] w-full text-gray-500 text-sm">
+                  모든 알림을 확인하였어요!
+                </div>
+              ) : (
+                <div className="h-[300px] overflow-auto scroll-smooth">
+                  {userNotificationView.map((notification, index) => (
+                    <>
                       <NotificationItem
                         key={notification.id}
                         notification={notification}
                       />
-                    ))
-                  )}
-                </ScrollArea>
-              </TabsContent>
-              <TabsContent value="all">
-                <ScrollArea className="h-[300px]">
-                  {userNotificationList.map((notification) => (
+                      {index == userNotificationView.length - 1 &&
+                        offset < userNotificationUnreadTotal && (
+                          <div
+                            onClick={() => onClickMoreNotification(true)}
+                            className="w-full text-center text-gray-500 text-sm underline "
+                          >
+                            더보기
+                          </div>
+                        )}
+                    </>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
+          </TabsContent>
+          <TabsContent value="all">
+            <ScrollArea className="h-[300px]">
+              <div className="h-[300px] overflow-auto scroll-smooth">
+                {userNotificationView.map((notification, index) => (
+                  <>
                     <NotificationItem
                       key={notification.id}
                       notification={notification}
                     />
-                  ))}
-                </ScrollArea>
-              </TabsContent>
-            </>
-          )}
+                    {index == userNotificationView.length - 1 &&
+                      offset < userNotificationTotal && (
+                        <div
+                          onClick={() => onClickMoreNotification(false)}
+                          className="w-full text-center text-gray-500 text-sm underline "
+                        >
+                          더보기
+                        </div>
+                      )}
+                  </>
+                ))}
+              </div>
+            </ScrollArea>
+          </TabsContent>
         </Tabs>
       </CardContent>
     </Card>

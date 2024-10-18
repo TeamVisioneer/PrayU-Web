@@ -17,8 +17,8 @@ const NotificationBtn = () => {
   const userNotificationUnreadTotal = useBaseStore(
     (state) => state.userNotificationUnreadTotal
   );
-  const setUserNotificationList = useBaseStore(
-    (state) => state.setUserNotificationList
+  const setUserNotificationView = useBaseStore(
+    (state) => state.setUserNotificationView
   );
 
   if (!user || !targetGroup) return null;
@@ -26,8 +26,12 @@ const NotificationBtn = () => {
   const onClickNotificationBtn = async (open: boolean) => {
     analyticsTrack("클릭_알림_버튼", {});
     if (open) {
-      setUserNotificationList(null);
-      await fetchUserNotificationListByGroupId(user.id, targetGroup.id, true);
+      const newNotificationList = await fetchUserNotificationListByGroupId(
+        user.id,
+        targetGroup.id,
+        true
+      );
+      setUserNotificationView(newNotificationList);
     }
   };
 

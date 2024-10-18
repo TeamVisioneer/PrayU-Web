@@ -59,6 +59,7 @@ import { updateUserMetaData } from "@/apis/user";
 import {
   createNotification,
   createNotificationParams,
+  fetchNotificationCount,
   fetchUserNotificationListByGroupId,
   updateNotification,
   updateNotificationParams,
@@ -211,6 +212,7 @@ export interface BaseStore {
   };
 
   // notification
+  userNotificationView: Notification[];
   userNotificationList: Notification[] | null;
   userNotificationTotal: number;
   userNotificationUnreadTotal: number;
@@ -221,6 +223,11 @@ export interface BaseStore {
     limit?: number,
     offset?: number,
   ) => Promise<Notification[]>;
+  fetchNotificationCount: (
+    userId: string,
+    groupId: string,
+    unreadOnly?: boolean,
+  ) => Promise<number>;
   createNotification: (
     params: createNotificationParams,
   ) => Promise<Notification | null>;
@@ -228,6 +235,7 @@ export interface BaseStore {
     notificationId: string,
     params: updateNotificationParams,
   ) => Promise<Notification | null>;
+  setUserNotificationView: (notificationView: Notification[]) => void;
   setUserNotificationList: (notificationList: Notification[] | null) => void;
   setUserNotificationUnreadTotal: (total: number) => void;
 
@@ -775,6 +783,7 @@ const useBaseStore = create<BaseStore>()(
 
     // notification
     userNotificationList: null,
+    userNotificationView: [],
     userNotificationTotal: 0,
     userNotificationUnreadTotal: 0,
     fetchUserNotificationListByGroupId: async (
@@ -784,20 +793,29 @@ const useBaseStore = create<BaseStore>()(
       limit?: number,
       offset?: number,
     ) => {
-      const { notificationList, total } =
-        await fetchUserNotificationListByGroupId(
-          userId,
-          groupId,
-          unreadOnly,
-          limit,
-          offset,
-        );
+      const notificationList = await fetchUserNotificationListByGroupId(
+        userId,
+        groupId,
+        unreadOnly,
+        limit,
+        offset,
+      );
       set((state) => {
         state.userNotificationList = notificationList;
-        state.userNotificationTotal = total;
-        if (unreadOnly) state.userNotificationUnreadTotal = total;
       });
       return notificationList;
+    },
+    fetchNotificationCount: async (
+      userId: string,
+      groupId: string,
+      unreadOnly: boolean = false,
+    ) => {
+      const count = await fetchNotificationCount(userId, groupId, unreadOnly);
+      set((state) => {
+        if (unreadOnly) state.userNotificationUnreadTotal = count;
+        else state.userNotificationTotal = count;
+      });
+      return count;
     },
     createNotification: async (
       params: createNotificationParams,
@@ -811,6 +829,11 @@ const useBaseStore = create<BaseStore>()(
     ) => {
       const notification = await updateNotification(notificationId, params);
       return notification;
+    },
+    setUserNotificationView: (notificationView: Notification[]) => {
+      set((state) => {
+        state.userNotificationView = notificationView;
+      });
     },
     setUserNotificationList: (notificationList: Notification[] | null) => {
       set((state) => {
