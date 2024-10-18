@@ -16,6 +16,7 @@ import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
+import { IoPersonCircleOutline } from "react-icons/io5";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -121,12 +122,12 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
       >
         <SlMenu size={20} />
       </SheetTrigger>
-      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-start overflow-y-auto no-scrollbar">
+      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-start overflow-y-auto no-scrollbar bg-mainBg">
         <SheetHeader className="w-full">
           <SheetTitle className="flex items-center gap-2 text-left text-[#222222]">
             <p>PrayU 그룹</p>
           </SheetTitle>
-          <hr className="w-full border-[#F5F5F5]" />
+          <hr className="w-full" />
           <SheetDescription></SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-4 items-start text-gray-500 w-full">
@@ -148,7 +149,17 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
               </a>
             </div>
           ))}
-          <hr className="w-full border-[#F5F5F5]" />
+          <hr className="w-full" />
+          <div className="flex items-center gap-2">
+            <IoPersonCircleOutline size={20} color="#222222" />
+            <a
+              href="/profile/me"
+              onClick={() => analyticsTrack("클릭_프로필_나", {})}
+              className="cursor-pointer text-[#222222] font-medium"
+            >
+              내 프로필
+            </a>
+          </div>
           {targetGroup && (
             <>
               <div className="flex items-center gap-2">
@@ -182,33 +193,23 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
                   </a>
                 </div>
               )}
-              <hr className="w-full border-[#F5F5F5]" />
             </>
           )}
-          <a
-            href="/profile/me"
-            onClick={() => analyticsTrack("클릭_프로필_나", {})}
-          >
-            내 정보
-          </a>
-
+          <hr className="w-full" />
           <a href="/" onClick={() => analyticsTrack("클릭_홈", {})}>
-            PrayU 홈
+            Prayu 홈
           </a>
           <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
-            PrayU 소식
-          </a>
-          <a className="cursor-pointer" onClick={() => onClickOpenTutorial()}>
-            PrayU 튜토리얼
+            공지사항
           </a>
           <a
             href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
             onClick={() => onClickContactUs()}
           >
-            PrayU 문의
+            문의하기
           </a>
-          <a className="cursor-pointer" onClick={() => onClickSignOut()}>
-            로그아웃
+          <a className="cursor-pointer" onClick={() => onClickOpenTutorial()}>
+            가이드
           </a>
         </div>
         <SheetClose className="focus:outline-none"></SheetClose>
