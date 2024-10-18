@@ -21,8 +21,8 @@ export class KakaoTokenRepo {
       window.Kakao.Auth.setAccessToken(KAKAOTOKENS.accessToken);
       return KAKAOTOKENS.accessToken;
     } else if (KAKAOTOKENS.refreshToken) {
-      const response: KakaoTokenRefreshResponse | null =
-        await this.refreshKakaoToken(KAKAOTOKENS.refreshToken);
+      const response: KakaoTokenRefreshResponse | null = await this
+        .refreshKakaoToken(KAKAOTOKENS.refreshToken);
       if (response) {
         this.setKakaoTokensInCookie(response);
         window.Kakao.Auth.setAccessToken(response.access_token);
@@ -49,7 +49,7 @@ export class KakaoTokenRepo {
 
   static async openKakaoLoginPageWithSupabase(
     groupId: string = "",
-    from: string = ""
+    from: string = "",
   ) {
     const BASEURL = getDomainUrl();
     const { error } = await supabase.auth.signInWithOAuth({
@@ -67,7 +67,7 @@ export class KakaoTokenRepo {
 
   static async fetchKakaoToken(
     code: string,
-    redirectUri: string
+    redirectUri: string,
   ): Promise<KakaoTokenResponse | null> {
     const data = {
       grant_type: "authorization_code",
@@ -91,7 +91,9 @@ export class KakaoTokenRepo {
       }
       const responseData: KakaoTokenResponse = await response.json();
       this.setKakaoTokensInCookie(responseData);
-      window.Kakao.Auth.setAccessToken(responseData.access_token);
+      if (window?.Kakao?.Auth) {
+        window.Kakao.Auth.setAccessToken(responseData.access_token);
+      }
       return responseData;
     } catch (error) {
       Sentry.captureException(error);
@@ -100,7 +102,7 @@ export class KakaoTokenRepo {
   }
 
   static async refreshKakaoToken(
-    refreshToken: string
+    refreshToken: string,
   ): Promise<KakaoTokenRefreshResponse | null> {
     const data = {
       grant_type: "refresh_token",
@@ -150,34 +152,34 @@ export class KakaoTokenRepo {
   }
 
   static setKakaoTokensInCookie(
-    kakaoTokenResponse: KakaoTokenResponse | KakaoTokenRefreshResponse
+    kakaoTokenResponse: KakaoTokenResponse | KakaoTokenRefreshResponse,
   ) {
     const now = new Date();
 
     if (kakaoTokenResponse.access_token && kakaoTokenResponse.expires_in) {
       const accessTokenExpires = new Date(
-        now.getTime() + kakaoTokenResponse.expires_in * 1000
+        now.getTime() + kakaoTokenResponse.expires_in * 1000,
       );
-      document.cookie = `${this.ACCESS_TOKEN_COOKIE_NAME}=${
-        kakaoTokenResponse.access_token
-      }; expires=${accessTokenExpires.toUTCString()}; path=/`;
+      document.cookie =
+        `${this.ACCESS_TOKEN_COOKIE_NAME}=${kakaoTokenResponse.access_token}; expires=${accessTokenExpires.toUTCString()}; path=/`;
     }
     if (
       kakaoTokenResponse.refresh_token &&
       kakaoTokenResponse.refresh_token_expires_in
     ) {
       const refreshTokenExpires = new Date(
-        now.getTime() + kakaoTokenResponse.refresh_token_expires_in * 1000
+        now.getTime() + kakaoTokenResponse.refresh_token_expires_in * 1000,
       );
-      document.cookie = `${this.REFRESH_TOKEN_COOKIE_NAME}=${
-        kakaoTokenResponse.refresh_token
-      }; expires=${refreshTokenExpires.toUTCString()}; path=/`;
+      document.cookie =
+        `${this.REFRESH_TOKEN_COOKIE_NAME}=${kakaoTokenResponse.refresh_token}; expires=${refreshTokenExpires.toUTCString()}; path=/`;
     }
   }
 
   static cleanKakaoTokensInCookies() {
     const pastDate = new Date(0).toUTCString();
-    document.cookie = `${this.ACCESS_TOKEN_COOKIE_NAME}=; expires=${pastDate}; path=/`;
-    document.cookie = `${this.REFRESH_TOKEN_COOKIE_NAME}=; expires=${pastDate}; path=/`;
+    document.cookie =
+      `${this.ACCESS_TOKEN_COOKIE_NAME}=; expires=${pastDate}; path=/`;
+    document.cookie =
+      `${this.REFRESH_TOKEN_COOKIE_NAME}=; expires=${pastDate}; path=/`;
   }
 }
