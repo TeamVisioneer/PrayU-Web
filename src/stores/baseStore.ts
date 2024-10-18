@@ -13,6 +13,7 @@ import {
   GroupWithProfiles,
   Member,
   MemberWithProfiles,
+  Notification,
   Pray,
   PrayCard,
   PrayCardWithProfiles,
@@ -55,6 +56,13 @@ import {
 } from "@/apis/profiles";
 import { getProfile } from "@/apis/profiles";
 import { updateUserMetaData } from "@/apis/user";
+import {
+  createNotification,
+  createNotificationParams,
+  fetchUserNotificationListByGroupId,
+  updateNotification,
+  updateNotificationParams,
+} from "@/apis/notification";
 
 export interface BaseStore {
   // user
@@ -201,6 +209,27 @@ export interface BaseStore {
   groupAndSortByUserId: (data: PrayWithProfiles[]) => {
     [key: string]: PrayWithProfiles[];
   };
+
+  // notification
+  userNotificationList: Notification[] | null;
+  userNotificationTotal: number;
+  userNotificationUnreadTotal: number;
+  fetchUserNotificationListByGroupId: (
+    userId: string,
+    groupId: string,
+    unreadOnly?: boolean,
+    limit?: number,
+    offset?: number,
+  ) => Promise<Notification[]>;
+  createNotification: (
+    params: createNotificationParams,
+  ) => Promise<Notification | null>;
+  updateNotification: (
+    notificationId: string,
+    params: updateNotificationParams,
+  ) => Promise<Notification | null>;
+  setUserNotificationList: (notificationList: Notification[] | null) => void;
+  setUserNotificationUnreadTotal: (total: number) => void;
 
   isOpenMyPrayDrawer: boolean;
   setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
@@ -741,6 +770,56 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => {
       set((state) => {
         state.isOpenMyPrayDrawer = isOpenTodayPrayDrawer;
+      });
+    },
+
+    // notification
+    userNotificationList: null,
+    userNotificationTotal: 0,
+    userNotificationUnreadTotal: 0,
+    fetchUserNotificationListByGroupId: async (
+      userId: string,
+      groupId: string,
+      unreadOnly?: boolean,
+      limit?: number,
+      offset?: number,
+    ) => {
+      const { notificationList, total } =
+        await fetchUserNotificationListByGroupId(
+          userId,
+          groupId,
+          unreadOnly,
+          limit,
+          offset,
+        );
+      set((state) => {
+        state.userNotificationList = notificationList;
+        state.userNotificationTotal = total;
+        if (unreadOnly) state.userNotificationUnreadTotal = total;
+      });
+      return notificationList;
+    },
+    createNotification: async (
+      params: createNotificationParams,
+    ) => {
+      const notification = await createNotification(params);
+      return notification;
+    },
+    updateNotification: async (
+      notificationId: string,
+      params: updateNotificationParams,
+    ) => {
+      const notification = await updateNotification(notificationId, params);
+      return notification;
+    },
+    setUserNotificationList: (notificationList: Notification[] | null) => {
+      set((state) => {
+        state.userNotificationList = notificationList;
+      });
+    },
+    setUserNotificationUnreadTotal: (unread: number) => {
+      set((state) => {
+        state.userNotificationUnreadTotal = unread;
       });
     },
 
