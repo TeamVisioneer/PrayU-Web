@@ -8,28 +8,55 @@ export const fetchUserNotificationListByGroupId = async (
   unreadOnly: boolean = false,
   limit: number = 10,
   offset: number = 0,
-): Promise<{ notificationList: Notification[]; total: number }> => {
+): Promise<Notification[]> => {
   try {
     let query = supabase
       .from("notification")
-      .select("*", { count: "exact" })
+      .select("*")
       .or(`group_id.eq.${groupId},group_id.is.null`)
       .eq("user_id", userId)
       .is("deleted_at", null);
     if (unreadOnly) query = query.is("checked_at", null);
 
-    const { data, error, count } = await query
+    const { data, error } = await query
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
     if (error) {
       Sentry.captureException(error.message);
-      return { notificationList: [], total: 0 };
+      return [];
     }
-    return { notificationList: data as Notification[], total: count || 0 };
+    return data as Notification[];
   } catch (error) {
     Sentry.captureException(error);
-    return { notificationList: [], total: 0 };
+    return [];
+  }
+};
+
+export const fetchNotificationCount = async (
+  userId: string,
+  groupId: string,
+  unreadOnly: boolean = false,
+): Promise<number> => {
+  try {
+    let query = supabase
+      .from("notification")
+      .select("*")
+      .or(`group_id.eq.${groupId},group_id.is.null`)
+      .eq("user_id", userId)
+      .is("deleted_at", null);
+
+    if (unreadOnly) query = query.is("checked_at", null);
+    const { data, error } = await query;
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return 0;
+    }
+    return data?.length || 0;
+  } catch (error) {
+    Sentry.captureException(error);
+    return 0;
   }
 };
 

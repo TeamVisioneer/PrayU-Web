@@ -42,8 +42,8 @@ const GroupPage: React.FC = () => {
   const fetchTodayUserPrayByGroupId = useBaseStore(
     (state) => state.fetchTodayUserPrayByGroupId
   );
-  const fetchUserNotificationListByGroupId = useBaseStore(
-    (state) => state.fetchUserNotificationListByGroupId
+  const fetchNotificationCount = useBaseStore(
+    (state) => state.fetchNotificationCount
   );
   const userPlan = useBaseStore((state) => state.userPlan);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
@@ -55,14 +55,13 @@ const GroupPage: React.FC = () => {
     if (groupId) getGroup(groupId);
     if (groupId) fetchMemberListByGroupId(groupId);
     if (groupId) fetchTodayUserPrayByGroupId(currentUserId, groupId);
-    if (groupId)
-      fetchUserNotificationListByGroupId(currentUserId, groupId, true);
+    if (groupId) fetchNotificationCount(currentUserId, groupId, true);
   }, [
     fetchGroupListByUserId,
     fetchMemberListByGroupId,
     getMember,
     fetchTodayUserPrayByGroupId,
-    fetchUserNotificationListByGroupId,
+    fetchNotificationCount,
     currentUserId,
     groupId,
     getGroup,
