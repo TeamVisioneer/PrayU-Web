@@ -12,11 +12,10 @@ import { Group } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import { SlMenu } from "react-icons/sl";
-import addGroup from "@/assets/addGroup.svg";
-import minusGroup from "@/assets/minusGroup.svg";
-import groupIcon from "@/assets/groupIcon.svg";
 import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
-import { IoSettingsSharp } from "react-icons/io5";
+import { IoRemoveCircleOutline } from "react-icons/io5";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -125,10 +124,9 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
       <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-start overflow-y-auto no-scrollbar">
         <SheetHeader className="w-full">
           <SheetTitle className="flex items-center gap-2 text-left text-[#222222]">
-            <img src={groupIcon} />
             <p>PrayU 그룹</p>
           </SheetTitle>
-          <hr className="w-full" />
+          <hr className="w-full border-[#F5F5F5]" />
           <SheetDescription></SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-4 items-start text-gray-500 w-full">
@@ -150,11 +148,11 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
               </a>
             </div>
           ))}
-          <hr className="w-full" />
+          <hr className="w-full border-[#F5F5F5]" />
           {targetGroup && (
             <>
               <div className="flex items-center gap-2">
-                <img src={addGroup} />
+                <IoAddCircleOutline size={20} color="#222222" />
                 <a
                   className="cursor-pointer text-[#222222] font-medium"
                   onClick={() => handleClickCreateGroup()}
@@ -163,7 +161,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
                 </a>
               </div>
               <div className="flex items-center gap-2">
-                <img src={minusGroup} />
+                <IoRemoveCircleOutline size={20} color="#222222" />
                 <a
                   className="cursor-pointer text-[#222222] font-medium"
                   onClick={() =>
@@ -175,7 +173,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
               </div>
               {isGroupLeader && (
                 <div className="flex items-center gap-2">
-                  <IoSettingsSharp size={21} color="#6B94FF" />
+                  <IoSettingsOutline size={20} color="#222222" />
                   <a
                     className="cursor-pointer text-[#222222] font-medium"
                     onClick={() => handleClickUpdateGroup()}
@@ -184,7 +182,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
                   </a>
                 </div>
               )}
-              <hr className="w-full" />
+              <hr className="w-full border-[#F5F5F5]" />
             </>
           )}
           <a
