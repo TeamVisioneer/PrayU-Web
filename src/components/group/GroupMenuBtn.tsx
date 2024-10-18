@@ -12,7 +12,6 @@ import { Group } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import { SlMenu } from "react-icons/sl";
-import { KakaoTokenRepo } from "../kakao/KakaoTokenRepo";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -37,7 +36,6 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   const setAlertData = useBaseStore((state) => state.setAlertData);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const { toast } = useToast();
-  const signOut = useBaseStore((state) => state.signOut);
   const setIsConfirmAlertOpen = useBaseStore(
     (state) => state.setIsConfirmAlertOpen
   );
@@ -106,12 +104,6 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   const onClickOpenTutorial = () => {
     analyticsTrack("클릭_튜토리얼", {});
     window.location.href = "/tutorial";
-  };
-
-  const onClickSignOut = () => {
-    analyticsTrack("클릭_로그아웃", {});
-    KakaoTokenRepo.cleanKakaoTokensInCookies();
-    signOut();
   };
 
   return (
