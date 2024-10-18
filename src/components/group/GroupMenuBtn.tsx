@@ -189,7 +189,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
           )}
           <hr className="w-full" />
           <a href="/" onClick={() => analyticsTrack("클릭_홈", {})}>
-            Prayu 홈
+            PrayU 홈
           </a>
           <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
             공지사항
