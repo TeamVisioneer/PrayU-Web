@@ -16,7 +16,7 @@ const PrayListDrawer: React.FC = () => {
 
   return (
     <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
-      <DrawerContent className="h-[400px]">
+      <DrawerContent className="h-[400px] bg-mainBg">
         <DrawerHeader>
           <DrawerTitle className="p-4 text-center">기도해 준 친구</DrawerTitle>
           <DrawerDescription></DrawerDescription>
