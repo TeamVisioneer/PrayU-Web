@@ -64,7 +64,7 @@ const MyProfilePage = () => {
           <div className="w-[60px]">
             <IoChevronBack size={20} onClick={() => window.history.back()} />
           </div>
-          <span className="text-xl font-bold">나의 정보</span>
+          <span className="text-xl font-bold">내 프로필</span>
           <div className="w-[60px] flex justify-end items-center"></div>
         </div>
         <div className="flex justify-center h-[80px] object-cover">
@@ -145,7 +145,7 @@ const MyProfilePage = () => {
           <IoChevronBack size={20} onClick={() => window.history.back()} />
         </div>
 
-        <span className="text-xl font-bold">나의 정보</span>
+        <span className="text-xl font-bold">내 프로필</span>
         <div className="w-[60px] flex justify-end items-center">
           {isEditing && <Badge>완료</Badge>}
         </div>
