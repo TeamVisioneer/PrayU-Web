@@ -2,10 +2,11 @@ import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
-import { KakaoMessageObject } from "../kakao/Kakao";
 import { KakaoController } from "../kakao/KakaoController";
-import { getDomainUrl, sleep } from "@/lib/utils";
+import { sleep } from "@/lib/utils";
 import { useToast } from "../ui/use-toast";
+import { PrayReactionMessage } from "../kakao/KakaoMessage";
+import { NotificationType } from "../notification/NotificationType";
 
 interface ReactionBtnProps {
   currentUserId: string;
@@ -19,6 +20,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   eventOption,
 }) => {
   const { toast } = useToast();
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const myMember = useBaseStore((state) => state.myMember);
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
@@ -28,41 +30,13 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
   );
-
   const createPray = useBaseStore((state) => state.createPray);
   const updatePray = useBaseStore((state) => state.updatePray);
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const setIsPrayTodayForMember = useBaseStore(
     (state) => state.setIsPrayTodayForMember
   );
-
-  const baseUrl = getDomainUrl();
-  const currentUrl = window.location.href;
-
-  const kakaoMessage: KakaoMessageObject = {
-    object_type: "feed",
-    content: {
-      title: "📮 PrayU 기도 알림",
-      description: `${myMember?.profiles.full_name}님이 당신을 위해 기도해주었어요`,
-      image_url:
-        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/ReactionIcon.png",
-      image_width: 800,
-      image_height: 400,
-      link: {
-        web_url: baseUrl,
-        mobile_web_url: baseUrl,
-      },
-    },
-    buttons: [
-      {
-        title: "오늘의 기도 시작",
-        link: {
-          mobile_web_url: currentUrl,
-          web_url: currentUrl,
-        },
-      },
-    ],
-  };
+  const createNotification = useBaseStore((state) => state.createNotification);
 
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard.id]);
 
@@ -76,6 +50,18 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
       const newPray = await createPray(prayCard.id, currentUserId, prayType);
       if (!newPray) return null;
 
+      await createNotification({
+        userId: prayCard.user_id ? [prayCard.user_id] : [],
+        title: "PrayU 기도 알림",
+        body: `${targetGroup!.name} 그룹에서 당신을 위해 기도해 주었어요`,
+        type: NotificationType.SNS,
+        data: {
+          praycard_id: prayCard.id,
+          pray_id: newPray.id,
+          pray_type: prayType,
+        },
+      });
+
       // TODO: 카카오 메세지 재기획 이후 진행
       const kakaoMessageEnabled = false;
       if (kakaoMessageEnabled) {
@@ -84,7 +70,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           myMember?.profiles.kakao_notification
         ) {
           const response = await KakaoController.sendDirectMessage(
-            kakaoMessage,
+            PrayReactionMessage(myMember?.profiles.full_name, targetGroup!.id),
             prayCard.profiles.kakao_id
           );
           if (response && response.successful_receiver_uuids.length > 0) {

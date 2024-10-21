@@ -42,3 +42,34 @@ export const MemberJoinMessage = (userName: string | null, groupId: string) => {
     ],
   } as KakaoMessageObject;
 };
+
+export const PrayReactionMessage = (
+  userName: string | null,
+  groupId: string | null,
+) => {
+  const groupUrl = `${baseUrl}/group/${groupId}`;
+  return {
+    object_type: "feed",
+    content: {
+      title: "📮 PrayU 기도 알림",
+      description: `${userName}님이 당신을 위해 기도해주었어요`,
+      image_url:
+        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/ReactionIcon.png",
+      image_width: 800,
+      image_height: 400,
+      link: {
+        web_url: baseUrl,
+        mobile_web_url: baseUrl,
+      },
+    },
+    buttons: [
+      {
+        title: "오늘의 기도 시작",
+        link: {
+          mobile_web_url: groupUrl,
+          web_url: groupUrl,
+        },
+      },
+    ],
+  } as KakaoMessageObject;
+};
