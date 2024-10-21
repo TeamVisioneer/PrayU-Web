@@ -268,13 +268,6 @@ const PrayCardCreatePage: React.FC = () => {
             다음에 작성하기
           </Button>
         )}
-        <Button
-          className="w-full"
-          onClick={() => handleCraeteNotificationTest()}
-          variant="primaryLight"
-        >
-          Notification Test
-        </Button>
       </div>
     </div>
   );
