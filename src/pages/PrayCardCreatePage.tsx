@@ -11,6 +11,8 @@ import { useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { KakaoController } from "@/components/kakao/KakaoController";
 import { MemberJoinMessage } from "@/components/kakao/KakaoMessage";
+import { NotificationType } from "@/components/notification/NotificationType";
+import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -51,6 +53,7 @@ const PrayCardCreatePage: React.FC = () => {
   const setIsDisabledSkipPrayCardBtn = useBaseStore(
     (state) => state.setIsDisabledSkipPrayCardBtn
   );
+  const createNotification = useBaseStore((state) => state.createNotification);
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
@@ -86,34 +89,51 @@ const PrayCardCreatePage: React.FC = () => {
     return `(${prayerVerses[randomIndex].verse})\n${prayerVerses[randomIndex].text}`;
   };
 
-  const handleCreatePrayCard = async (
+  const upsertMember = async (
     currentUserId: string,
     groupId: string,
     content: string
   ) => {
-    let updatedMember: Member | null;
+    let upsertedMember: Member | null;
     if (!myMember) {
-      updatedMember = await createMember(groupId, currentUserId, content);
-
-      await KakaoController.sendDirectMessage(
-        MemberJoinMessage(user?.user_metadata.name, groupId),
-        targetGroup.profiles.kakao_id
-      );
+      upsertedMember = await createMember(groupId, currentUserId, content);
     } else {
-      updatedMember = await updateMember(
+      upsertedMember = await updateMember(
         myMember.id,
         content,
         getISOTodayDate()
       );
     }
-    if (!updatedMember) return;
+    return upsertedMember;
+  };
 
-    const newPrayCard = await createPrayCard(
-      groupId,
-      currentUserId,
-      content.trim()
-    );
-    return newPrayCard;
+  const sendNotification = async (member: Member) => {
+    if (member.created_at === member.updated_at) {
+      await createNotification({
+        groupId: targetGroup.id,
+        userId: [targetGroup.profiles.id],
+        senderId: member.user_id!,
+        title: "PrayU 입장 알림",
+        body: `${user?.user_metadata.name}님이 기도그룹에 참여했어요!`,
+        type: NotificationType.SNS,
+      });
+      await KakaoTokenRepo.init();
+      await KakaoController.sendDirectMessage(
+        MemberJoinMessage(user?.user_metadata.name, targetGroup.id),
+        targetGroup.profiles.kakao_id
+      );
+    } else {
+      await createNotification({
+        groupId: targetGroup.id,
+        userId: memberList
+          .map((member) => member.user_id!)
+          .filter((userId) => userId !== member.user_id!),
+        senderId: member.user_id!,
+        title: "PrayU 기도카드 알림",
+        body: `${targetGroup.name} 그룹에 새로운 기도카드가 등록되었어요!`,
+        type: NotificationType.SNS,
+      });
+    }
   };
 
   const onClickSkipPrayCard = async (
@@ -123,30 +143,42 @@ const PrayCardCreatePage: React.FC = () => {
     setIsDisabledSkipPrayCardBtn(true);
     analyticsTrack("클릭_기도카드_다음에작성", {});
     const randomContent = getRandomVerse();
-    const newPrayCard = await handleCreatePrayCard(
+    const upsertedMember = await upsertMember(
       currentUserId,
       groupId,
       randomContent
     );
-    if (!newPrayCard) {
+    if (!upsertedMember) {
       setIsDisabledSkipPrayCardBtn(false);
       return null;
     }
+    const newPrayCard = await createPrayCard(
+      groupId,
+      currentUserId,
+      randomContent
+    );
+    if (newPrayCard) await sendNotification(upsertedMember);
     window.location.replace(`/group/${groupId}`);
   };
 
   const onClickJoinGroup = async (currentUserId: string, groupId: string) => {
     setIsDisabledPrayCardCreateBtn(true);
     analyticsTrack("클릭_기도카드_생성", { group_id: groupId });
-    const newPrayCard = await handleCreatePrayCard(
+    const upsertedMember = await upsertMember(
       currentUserId,
       groupId,
       inputPrayCardContent
     );
-    if (!newPrayCard) {
-      setIsDisabledPrayCardCreateBtn(false);
+    if (!upsertedMember) {
+      setIsDisabledSkipPrayCardBtn(false);
       return null;
     }
+    const newPrayCard = await createPrayCard(
+      groupId,
+      currentUserId,
+      inputPrayCardContent
+    );
+    if (newPrayCard) await sendNotification(upsertedMember);
     window.location.replace(`/group/${groupId}`);
   };
 

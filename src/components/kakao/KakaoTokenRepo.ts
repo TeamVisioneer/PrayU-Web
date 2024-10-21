@@ -14,7 +14,7 @@ export class KakaoTokenRepo {
   private static readonly CLIENT_SECRET = import.meta.env
     .VITE_KAKAO_CLIENT_SECRET_KEY;
 
-  static async init(state: string = ""): Promise<string | null> {
+  static async init(): Promise<string | null> {
     const KAKAOTOKENS = this.getKakaoTokensInCookie();
 
     if (KAKAOTOKENS.accessToken) {
@@ -28,8 +28,6 @@ export class KakaoTokenRepo {
         window.Kakao.Auth.setAccessToken(response.access_token);
         return response.access_token;
       }
-    } else {
-      this.openKakaoLoginPageWithKakao(state);
     }
     return null;
   }

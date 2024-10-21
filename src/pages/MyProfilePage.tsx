@@ -190,7 +190,7 @@ const MyProfilePage = () => {
                 onClick={() => analyticsTrack("클릭_프로필_환경설정", {})}
               >
                 <div className="w-full h-10 flex flex-grow justify-between items-center">
-                  <span className="font-semibold">환경 설정</span>
+                  <span className="font-semibold">알림 설정</span>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -229,14 +229,18 @@ const MyProfilePage = () => {
                       <Popover>
                         <PopoverTrigger
                           onClick={() =>
-                            analyticsTrack("클릭_프로필_카카오메세지설명", {})
+                            analyticsTrack("클릭_프로필_푸시알림설명", {})
                           }
                         >
                           <LuInfo size={16} color="gray" />
                         </PopoverTrigger>
-                        <PopoverContent>
+                        <PopoverContent className="p-3 w-48">
                           <span className="text-sm text-gray-500">
-                            앱에서 오늘의 기도 알림, 친구의 기도 알림을 받습니다
+                            모바일에서 오늘의 기도 알림,
+                          </span>
+                          <br />
+                          <span className="text-sm text-gray-500">
+                            친구의 기도 알림을 받습니다
                           </span>
                         </PopoverContent>
                       </Popover>

@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/react";
 import { supabase } from "../../supabase/client";
 import { Notification } from "../../supabase/types/tables";
+import { NotificationType } from "@/components/notification/NotificationType";
 
 export const fetchUserNotificationListByGroupId = async (
   userId: string,
@@ -62,11 +63,11 @@ export const fetchNotificationCount = async (
 
 export interface createNotificationParams {
   groupId?: string;
-  userId: string;
+  userId: string[];
   senderId?: string;
   title: string;
   body: string;
-  type: string;
+  type: NotificationType;
   data?: { [key: string]: string };
 }
 
@@ -76,15 +77,17 @@ export const createNotification = async (
   try {
     const { error, data: result } = await supabase
       .from("notification")
-      .insert([{
-        group_id: params.groupId,
-        user_id: params.userId,
-        sender_id: params.senderId,
-        title: params.title,
-        body: params.body,
-        type: params.type,
-        data: params.data || {},
-      }])
+      .insert(
+        params.userId.map((userId) => ({
+          group_id: params.groupId || null,
+          user_id: userId,
+          sender_id: params.senderId || null,
+          title: params.title,
+          body: params.body,
+          type: params.type,
+          data: params.data || {},
+        })),
+      )
       .select();
 
     if (error) {
