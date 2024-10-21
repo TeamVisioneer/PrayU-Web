@@ -234,10 +234,13 @@ const MyProfilePage = () => {
                         >
                           <LuInfo size={16} color="gray" />
                         </PopoverTrigger>
-                        <PopoverContent>
+                        <PopoverContent className="p-3 w-48">
                           <span className="text-sm text-gray-500">
-                            모바일에서 오늘의 기도 알림, 친구의 기도 알림을
-                            받습니다
+                            모바일에서 오늘의 기도 알림,
+                          </span>
+                          <br />
+                          <span className="text-sm text-gray-500">
+                            친구의 기도 알림을 받습니다
                           </span>
                         </PopoverContent>
                       </Popover>
