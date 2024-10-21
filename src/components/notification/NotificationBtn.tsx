@@ -39,8 +39,15 @@ const NotificationBtn = () => {
     <Popover onOpenChange={onClickNotificationBtn}>
       <PopoverTrigger>
         <div className="relative cursor-pointer">
-          {userNotificationUnreadTotal > 0 && (
-            <div className="absolute top-0 right-0 w-[0.6rem] h-[0.6rem] bg-destructive rounded-full text-center"></div>
+          {userNotificationUnreadTotal > 0 &&
+          userNotificationUnreadTotal < 10 ? (
+            <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-destructive rounded-full text-xs text-white">
+              {userNotificationUnreadTotal}
+            </div>
+          ) : (
+            <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-destructive rounded-full text-[0.5rem] text-white">
+              10+
+            </div>
           )}
           <RiNotification4Line size={22} />
         </div>
