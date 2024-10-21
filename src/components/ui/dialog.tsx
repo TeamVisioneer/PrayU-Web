@@ -9,7 +9,11 @@ const Dialog = ({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) => {
   // Dialog Custom Start
-  const { onOpenChange } = props;
+  const { open, onOpenChange } = props;
+
+  useEffect(() => {
+    if (open) window.history.pushState(null, "", window.location.pathname);
+  }, [open]);
 
   useEffect(() => {
     const handlePopState = () => {

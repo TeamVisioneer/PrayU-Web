@@ -239,6 +239,11 @@ export interface BaseStore {
   setUserNotificationList: (notificationList: Notification[] | null) => void;
   setUserNotificationUnreadTotal: (total: number) => void;
 
+  // notification popover
+  isOpenNotificationPopover: boolean;
+  setIsOpenNotificationPopover: (isOpenNotificationPopover: boolean) => void;
+
+  // myPray drawer
   isOpenMyPrayDrawer: boolean;
   setIsOpenMyPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
 
@@ -843,6 +848,14 @@ const useBaseStore = create<BaseStore>()(
     setUserNotificationUnreadTotal: (unread: number) => {
       set((state) => {
         state.userNotificationUnreadTotal = unread;
+      });
+    },
+
+    // notification popover
+    isOpenNotificationPopover: false,
+    setIsOpenNotificationPopover: (isOpenNotificationPopover: boolean) => {
+      set((state) => {
+        state.isOpenNotificationPopover = isOpenNotificationPopover;
       });
     },
 
