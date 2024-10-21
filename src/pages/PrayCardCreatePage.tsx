@@ -12,6 +12,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { KakaoController } from "@/components/kakao/KakaoController";
 import { MemberJoinMessage } from "@/components/kakao/KakaoMessage";
 import { NotificationType } from "@/components/notification/NotificationType";
+import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -116,6 +117,7 @@ const PrayCardCreatePage: React.FC = () => {
         body: `${user?.user_metadata.name}님이 기도그룹에 참여했어요!`,
         type: NotificationType.SNS,
       });
+      await KakaoTokenRepo.init();
       await KakaoController.sendDirectMessage(
         MemberJoinMessage(user?.user_metadata.name, targetGroup.id),
         targetGroup.profiles.kakao_id
