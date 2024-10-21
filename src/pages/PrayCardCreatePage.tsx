@@ -88,7 +88,7 @@ const PrayCardCreatePage: React.FC = () => {
     return `(${prayerVerses[randomIndex].verse})\n${prayerVerses[randomIndex].text}`;
   };
 
-  const updsertMember = async (
+  const upsertMember = async (
     currentUserId: string,
     groupId: string,
     content: string
@@ -141,7 +141,7 @@ const PrayCardCreatePage: React.FC = () => {
     setIsDisabledSkipPrayCardBtn(true);
     analyticsTrack("클릭_기도카드_다음에작성", {});
     const randomContent = getRandomVerse();
-    const upsertedMember = await updsertMember(
+    const upsertedMember = await upsertMember(
       currentUserId,
       groupId,
       randomContent
@@ -162,7 +162,7 @@ const PrayCardCreatePage: React.FC = () => {
   const onClickJoinGroup = async (currentUserId: string, groupId: string) => {
     setIsDisabledPrayCardCreateBtn(true);
     analyticsTrack("클릭_기도카드_생성", { group_id: groupId });
-    const upsertedMember = await updsertMember(
+    const upsertedMember = await upsertMember(
       currentUserId,
       groupId,
       inputPrayCardContent
