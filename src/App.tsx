@@ -27,7 +27,6 @@ import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
 import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
-import MetaPixelInit from "./components/meta/MetaPixelInit";
 
 const App = () => {
   useEffect(() => {
@@ -49,7 +48,6 @@ const App = () => {
         } h-100vh overflow-x-hidden no-scrollbar`}
       >
         <KakaoInit />
-        <MetaPixelInit />
         <BrowserRouter>
           <AuthProvider>
             {(import.meta.env.VITE_ENV === "staging" ||
