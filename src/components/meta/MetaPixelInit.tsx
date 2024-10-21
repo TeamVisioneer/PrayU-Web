@@ -38,12 +38,7 @@ const MetaPixelInit: React.FC = () => {
 
       {/* NoScript Tag */}
       <noscript>
-        <img
-          height="1"
-          width="1"
-          style={{ display: "none" }}
-          src="https://www.facebook.com/tr?id=3851311148517680&ev=PageView&noscript=1"
-        />
+        {`<img height="1" width="1" style="display:none;" src="https://www.facebook.com/tr?id=3851311148517680&ev=PageView&noscript=1" />`}
       </noscript>
     </Helmet>
   );
