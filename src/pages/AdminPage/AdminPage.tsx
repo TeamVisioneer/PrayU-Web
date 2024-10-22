@@ -5,6 +5,7 @@ import NotificationSendDialog from "./NotificationDialog";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { getISOTodayDate } from "@/lib/utils";
+import { FaLock } from "react-icons/fa";
 
 const AdminPage = () => {
   const { user } = useAuth();
@@ -22,7 +23,15 @@ const AdminPage = () => {
   }, [fetchProfileCount, fetchGroupListByDate, todayDate]);
 
   if (!user || user.user_metadata.email !== "team.visioneer15@gmail.com") {
-    window.location.replace("/");
+    return (
+      <div className="h-full w-ful flex flex-col justify-center items-center">
+        <MainHeader />
+        <div className="flex flex-col gap-3 justify-center items-center">
+          <FaLock size={50} />
+          <div className="text-gray-500">관리자 계정으로 접근해 주세요</div>
+        </div>
+      </div>
+    );
   }
 
   return (
