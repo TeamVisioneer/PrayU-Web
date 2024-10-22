@@ -43,7 +43,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
   const weeklyDays = generateDates(prayCard);
 
   return (
-    <div className="flex justify-center gap-[13px]">
+    <div className="flex justify-center gap-3">
       {weeklyDays.map((date) => {
         const isToday = date.date === currentDate;
         const dayOfWeek = new Date(date.date).getDay();

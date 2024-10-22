@@ -84,7 +84,7 @@ const DumyReactionBtnWithCalendar: React.FC<
 
   return (
     <div className="flex flex-col gap-6 p-2">
-      <div className="flex justify-center gap-[13px]">
+      <div className="flex justify-center gap-3">
         {weeklyDays.map((date, index) => {
           const isToday = date.date === getISOToday().split("T")[0];
           const isPast =
@@ -116,7 +116,7 @@ const DumyReactionBtnWithCalendar: React.FC<
         })}
       </div>
 
-      <div className="flex justify-center gap-[30px]">
+      <div className="flex justify-center gap-8">
         {Object.values(PrayType).map((type) => {
           const emojiData = PrayTypeDatas[type];
           const isSelected = todayPrayType === type;
@@ -124,7 +124,7 @@ const DumyReactionBtnWithCalendar: React.FC<
           return (
             <button
               key={type}
-              className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
+              className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
                 emojiData.bgColor
               } ${!isPrayToday && "animate-bounce"} ${
                 isNotSelected
