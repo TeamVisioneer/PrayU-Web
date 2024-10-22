@@ -31,6 +31,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
     analyticsTrack("클릭_오늘의기도_시작", eventOption);
+    window.fbq("track", "클릭_오늘의기도_시작", eventOption);
     setIsOpenTodayPrayDrawer(true);
     setIsOpenMyPrayDrawer(false);
     setIsOpenMyMemberDrawer(false);

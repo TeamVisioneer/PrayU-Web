@@ -19,5 +19,3 @@
   "script",
   "https://connect.facebook.net/en_US/fbevents.js"
 );
-fbq("init", "3851311148517680");
-fbq("track", "PageView");

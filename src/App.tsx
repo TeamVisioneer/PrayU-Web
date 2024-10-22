@@ -27,7 +27,7 @@ import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
 import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
-import MetaPixelInit from "./components/meta/MetaPixelInit";
+import MetaPixelInit from "./analytics/metaPixelInit";
 
 const App = () => {
   useEffect(() => {
@@ -48,8 +48,8 @@ const App = () => {
           window.location.pathname === "/story" ? "w-full" : "max-w-[480px] p-5"
         } h-100vh overflow-x-hidden no-scrollbar`}
       >
-        <KakaoInit />
         <MetaPixelInit />
+        <KakaoInit />
         <BrowserRouter>
           <AuthProvider>
             {(import.meta.env.VITE_ENV === "staging" ||
