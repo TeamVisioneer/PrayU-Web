@@ -105,22 +105,16 @@ const NotificationList = () => {
               ) : (
                 <div className="h-[300px] overflow-auto scroll-smooth">
                   {userNotificationView.map((notification, index) => (
-                    <>
-                      <NotificationItem
-                        key={notification.id}
-                        notification={notification}
-                      />
-                      {index == userNotificationView.length - 1 &&
-                        offset < userNotificationUnreadTotal && (
-                          <div
-                            onClick={() => onClickMoreNotification(true)}
-                            className="w-full text-center text-gray-500 text-sm underline "
-                          >
-                            더보기
-                          </div>
-                        )}
-                    </>
+                    <NotificationItem key={index} notification={notification} />
                   ))}
+                  {offset < userNotificationUnreadTotal && (
+                    <div
+                      onClick={() => onClickMoreNotification(true)}
+                      className="w-full text-center text-gray-500 text-sm underline "
+                    >
+                      더보기
+                    </div>
+                  )}
                 </div>
               )}
             </ScrollArea>
@@ -129,22 +123,16 @@ const NotificationList = () => {
             <ScrollArea className="h-[300px]">
               <div className="h-[300px] overflow-auto scroll-smooth">
                 {userNotificationView.map((notification, index) => (
-                  <>
-                    <NotificationItem
-                      key={notification.id}
-                      notification={notification}
-                    />
-                    {index == userNotificationView.length - 1 &&
-                      offset < userNotificationTotal && (
-                        <div
-                          onClick={() => onClickMoreNotification(false)}
-                          className="w-full text-center text-gray-500 text-sm underline "
-                        >
-                          더보기
-                        </div>
-                      )}
-                  </>
+                  <NotificationItem key={index} notification={notification} />
                 ))}
+                {offset < userNotificationTotal && (
+                  <div
+                    onClick={() => onClickMoreNotification(false)}
+                    className="w-full text-center text-gray-500 text-sm underline "
+                  >
+                    더보기
+                  </div>
+                )}
               </div>
             </ScrollArea>
           </TabsContent>

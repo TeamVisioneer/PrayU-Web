@@ -31,7 +31,7 @@ const NotificationBtn = () => {
 
   const onClickNotificationBtn = async () => {
     analyticsTrack("클릭_알림_버튼", {});
-    if (isOpenNotificationPopover) {
+    if (!isOpenNotificationPopover) {
       const newNotificationList = await fetchUserNotificationListByGroupId(
         user.id,
         targetGroup.id,
