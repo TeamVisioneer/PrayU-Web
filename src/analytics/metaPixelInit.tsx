@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 const MetaPixelInit: React.FC = () => {
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "/src/components/MetaPixel/metaPixelScript.js";
+    script.src = "/src/analytics/metaPixelScript.js";
     script.type = "module";
     script.async = true;
     document.head.appendChild(script);

@@ -27,7 +27,7 @@ import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
 import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
-import MetaPixelInit from "./components/MetaPixel/metaPixelInit";
+import MetaPixelInit from "./analytics/metaPixelInit";
 
 const App = () => {
   useEffect(() => {

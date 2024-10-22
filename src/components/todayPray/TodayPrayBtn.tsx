@@ -31,6 +31,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
     analyticsTrack("클릭_오늘의기도_시작", eventOption);
+    window.fbq("track", "클릭_오늘의기도_시작", eventOption);
     setIsOpenTodayPrayDrawer(true);
     setIsOpenMyPrayDrawer(false);
     setIsOpenMyMemberDrawer(false);
@@ -56,11 +57,6 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
           .sort((prayCard) => (prayCard.user_id === myMember.user_id ? -1 : 1))
       : [];
     setPrayCardCarouselList(filterdGroupPrayCardList);
-    if (filterdGroupPrayCardList.length > 2) {
-      window.fbq("track", "클릭_오늘의기도_시작_3인이상", {
-        memberLength: filterdGroupPrayCardList.length,
-      });
-    }
   };
 
   return (
