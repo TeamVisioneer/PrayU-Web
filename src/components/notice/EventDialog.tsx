@@ -5,92 +5,46 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-
 import useBaseStore from "@/stores/baseStore";
-import imgEventOpen from "@/assets/event_open.svg";
-// import imgUpdate from "@/assets/update_0906.svg";
-import { useEffect, useState } from "react";
-import { analyticsTrack } from "@/analytics/analytics";
 
 const EventDialog = () => {
   const isOpenEventDialog = useBaseStore((state) => state.isOpenEventDialog);
   const setIsOpenEventDialog = useBaseStore(
     (state) => state.setIsOpenEventDialog
   );
-  const [api, setApi] = useState<CarouselApi>();
-  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleDotsClick = (index: number) => {
-    if (!api) return;
-    setCurrentIndex(index);
-    api.scrollTo(index);
-  };
-
-  const CarouselDots = () => (
-    <div className="flex justify-center items-center">
-      {Array.from({ length: 2 }, (_, index) => (
-        <span
-          key={index}
-          className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
-            currentIndex === index
-              ? "w-[8px] h-[8px] bg-mainBtn"
-              : "h-[6px] w-[6px] bg-gray-400"
-          }`}
-          onClick={() => handleDotsClick(index)}
-        ></span>
-      ))}
-    </div>
-  );
-
-  const onClickEventImg = (url: string, eventName: string) => {
-    analyticsTrack("클릭_공지_이벤트카드", { title: eventName });
-    window.location.href = url;
-  };
-
-  useEffect(() => {
-    if (!api) return;
-    setCurrentIndex(api.selectedScrollSnap());
-    api.on("select", () => {
-      setCurrentIndex(api.selectedScrollSnap());
-    });
-  }, [api]);
   return (
     <Dialog open={isOpenEventDialog} onOpenChange={setIsOpenEventDialog}>
-      <DialogContent className="w-full aspect-[1/1] bg-mainBg">
+      <DialogContent className="w-11/12 h-96 overflow-auto rounded-2xl bg-mainBg">
         <DialogHeader>
-          <DialogTitle className="text-md text-center">
-            🎉 진행중인 소식
+          <DialogTitle className="text-xl text-left">
+            [2024.10.22] 업데이트 안내
           </DialogTitle>
-          <DialogDescription className="text-center text-xs text-gray-400">
-            클릭하고 경품 받아가세요!!
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
+          <div className="w-full flex flex-col gap-2 py-3">
+            <div className="flex flex-col items-start gap-1">
+              <h1 className="text-xl">☑️ 내 기도제목 기도</h1>
+              <p className="text-sm text-left text-gray-400">
+                오늘의 기도에서 내 기도제목을 확인하고 기도할 수 있어요! 내
+                기도제목을 위해서도 매일 기도해주세요:)
+              </p>
+            </div>
+            <div className="flex flex-col items-start gap-1">
+              <h1 className="text-xl">☑️ 알림 기능 추가</h1>
+              <p className="text-sm text-left text-gray-400">
+                그룹원 입장, 기도제목 작성, 오늘의 기도 리마인드 등을 위한
+                알림기능이 추가되었어요!
+              </p>
+            </div>
+            <div className="flex flex-col items-start gap-1">
+              <h1 className="text-xl">☑️ 튜토리얼 추가</h1>
+              <p className="text-sm text-left text-gray-400">
+                그룹 가입 후 튜토리얼을 통해 서비스 사용 방법을 확인할 수
+                있어요! 기존 유저들은 메뉴탭에서 튜토리얼을 확인할 수 있습니다:)
+              </p>
+            </div>
+          </div>
         </DialogHeader>
-        <Carousel className="flex w-full h-full justify-center" setApi={setApi}>
-          <CarouselContent>
-            {/* <CarouselItem className="w-full h-full">
-              <img className="w-[350px] h-[350px] rounded-xl" src={imgUpdate} />
-            </CarouselItem> */}
-            <CarouselItem className="w-full h-full">
-              <img
-                onClick={() =>
-                  onClickEventImg(
-                    "http://pf.kakao.com/_XaHDG/106447699",
-                    "Open_Event"
-                  )
-                }
-                className="w-[350px] h-[350px] rounded-xl"
-                src={imgEventOpen}
-              />
-            </CarouselItem>
-          </CarouselContent>
-        </Carousel>
-        <CarouselDots />
       </DialogContent>
     </Dialog>
   );

@@ -10,7 +10,11 @@ import { useEffect } from "react";
 const Sheet = ({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Root>) => {
-  const { onOpenChange } = props;
+  const { open, onOpenChange } = props;
+
+  useEffect(() => {
+    if (open) window.history.pushState(null, "", window.location.pathname);
+  }, [open]);
 
   useEffect(() => {
     const handlePopState = () => {

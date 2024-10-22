@@ -20,12 +20,18 @@ const NotificationBtn = () => {
   const setUserNotificationView = useBaseStore(
     (state) => state.setUserNotificationView
   );
+  const isOpenNotificationPopover = useBaseStore(
+    (state) => state.isOpenNotificationPopover
+  );
+  const setIsOpenNotificationPopover = useBaseStore(
+    (state) => state.setIsOpenNotificationPopover
+  );
 
   if (!user || !targetGroup) return null;
 
-  const onClickNotificationBtn = async (open: boolean) => {
+  const onClickNotificationBtn = async () => {
     analyticsTrack("클릭_알림_버튼", {});
-    if (open) {
+    if (!isOpenNotificationPopover) {
       const newNotificationList = await fetchUserNotificationListByGroupId(
         user.id,
         targetGroup.id,
@@ -36,19 +42,22 @@ const NotificationBtn = () => {
   };
 
   return (
-    <Popover onOpenChange={onClickNotificationBtn}>
-      <PopoverTrigger>
+    <Popover
+      open={isOpenNotificationPopover}
+      onOpenChange={setIsOpenNotificationPopover}
+    >
+      <PopoverTrigger onClick={() => onClickNotificationBtn()}>
         <div className="relative cursor-pointer">
           {userNotificationUnreadTotal > 0 &&
-          userNotificationUnreadTotal < 10 ? (
-            <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-destructive rounded-full text-xs text-white">
-              {userNotificationUnreadTotal}
-            </div>
-          ) : (
-            <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-destructive rounded-full text-[0.5rem] text-white">
-              10+
-            </div>
-          )}
+            (userNotificationUnreadTotal < 10 ? (
+              <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-destructive rounded-full text-xs text-white">
+                {userNotificationUnreadTotal}
+              </div>
+            ) : (
+              <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-destructive rounded-full text-[0.5rem] text-white">
+                10+
+              </div>
+            ))}
           <RiNotification4Line size={22} />
         </div>
       </PopoverTrigger>

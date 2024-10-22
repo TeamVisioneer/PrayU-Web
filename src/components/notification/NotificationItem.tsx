@@ -4,6 +4,8 @@ import { getDateDistance } from "@toss/date";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOToday } from "@/lib/utils";
 import { useState } from "react";
+import { NotificationType } from "./NotificationType";
+import { Badge } from "../ui/badge";
 
 interface NotificationItemProps {
   notification: Notification;
@@ -21,6 +23,9 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   );
   const user = useBaseStore((state) => state.user);
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const setIsOpenEventDialog = useBaseStore(
+    (state) => state.setIsOpenEventDialog
+  );
 
   const dateDistance = getDateDistance(
     new Date(notification.created_at),
@@ -31,17 +36,20 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     Boolean(!notification.checked_at)
   );
 
-  const checkNotification = async (id: string) => {
+  const checkNotification = async (notification: Notification) => {
     if (!user || !targetGroup) return null;
-    analyticsTrack("클릭_알림_확인", { notification_id: id });
+    analyticsTrack("클릭_알림_확인", { notification_id: notification.id });
     setUnread(false);
     setUserNotificationUnreadTotal(userNotificationUnreadTotal - 1);
-    await updateNotification(id, { checked_at: getISOToday() });
+    await updateNotification(notification.id, { checked_at: getISOToday() });
+    if (notification.type == NotificationType.NOTICE) {
+      setIsOpenEventDialog(true);
+    }
   };
 
   return (
     <div
-      onClick={() => checkNotification(notification.id)}
+      onClick={() => checkNotification(notification)}
       className="flex items-start gap-2 p-2 hover:bg-muted/50 rounded-lg transition-colors"
     >
       <span
@@ -51,7 +59,12 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       ></span>
       <div className="flex-grow space-y-1">
         <div className="flex items-center justify-between">
-          <p className="font-medium">{notification.title}</p>
+          <div className="flex gap-1">
+            <p className="font-medium">{notification.title}</p>
+            {notification.type == NotificationType.NOTICE && (
+              <Badge>공지</Badge>
+            )}
+          </div>
           <span className="text-xs text-muted-foreground">
             {dateDistance.days > 0
               ? `${dateDistance.days}일 전`
@@ -60,7 +73,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
               : `${dateDistance.minutes}분 전`}
           </span>
         </div>
-        <p className="text-sm text-muted-foreground">{notification.body}</p>
+        {notification.body.split("\\n").map((line, index) => (
+          <p key={index} className="text-sm text-muted-foreground">
+            {line}
+          </p>
+        ))}
       </div>
     </div>
   );

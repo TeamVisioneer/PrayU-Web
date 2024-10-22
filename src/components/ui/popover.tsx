@@ -1,13 +1,37 @@
-import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { cn } from "@/lib/utils";
+import { useEffect, forwardRef } from "react";
 
-const Popover = PopoverPrimitive.Root;
+const Popover = ({
+  ...props
+}: React.ComponentProps<typeof PopoverPrimitive.Root>) => {
+  // Custom Start
+  const { open, onOpenChange } = props;
+
+  useEffect(() => {
+    if (open) window.history.pushState(null, "", window.location.pathname);
+  }, [open]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (onOpenChange) {
+        onOpenChange(false);
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [onOpenChange]);
+  // Dialog Custom End
+
+  return <PopoverPrimitive.Root {...props} />;
+};
 
 const PopoverTrigger = PopoverPrimitive.Trigger;
 
-const PopoverContent = React.forwardRef<
+const PopoverContent = forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
 >(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
