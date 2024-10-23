@@ -1,14 +1,14 @@
 import { supabase } from "./../../supabase/client";
 import {
-  MemberWithGroup,
   Group,
   GroupWithProfiles,
+  MemberWithGroup,
 } from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 import { getISOToday } from "@/lib/utils";
 
 export const fetchGroupListByUserId = async (
-  userId: string
+  userId: string,
 ): Promise<Group[] | null> => {
   try {
     const { data, error } = await supabase
@@ -30,8 +30,29 @@ export const fetchGroupListByUserId = async (
   }
 };
 
+export const fetchGroupListByDate = async (
+  createdAt: string,
+): Promise<Group[] | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("group")
+      .select("*")
+      .gt("created_at", createdAt)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true });
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return (data as Group[]);
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const getGroup = async (
-  groupId: string
+  groupId: string,
 ): Promise<GroupWithProfiles | null> => {
   try {
     const { error, data } = await supabase
@@ -55,7 +76,7 @@ export const getGroup = async (
 export const createGroup = async (
   userId: string,
   name: string,
-  intro: string
+  intro: string,
 ): Promise<GroupWithProfiles | null> => {
   try {
     const { error, data } = await supabase
@@ -80,7 +101,7 @@ export interface updateGroupParams {
 
 export const updateGroup = async (
   groupId: string,
-  params: updateGroupParams
+  params: updateGroupParams,
 ) => {
   try {
     const { error, data } = await supabase

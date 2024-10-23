@@ -73,3 +73,44 @@ export const fetchProfileList = async (
     return null;
   }
 };
+
+export const fetchProfileListByStartId = async (
+  startId: string,
+  limit: number,
+): Promise<string[] | null> => {
+  try {
+    const query = supabase
+      .from("profiles")
+      .select("id");
+
+    if (startId) query.gt("id", startId);
+
+    const { data, error } = await query
+      .limit(limit)
+      .order("id", { ascending: true });
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data ? data.map((profile) => profile.id) : null;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const fetchProfileCount = async (): Promise<number> => {
+  try {
+    const { count, error } = await supabase
+      .from("profiles")
+      .select("id", { count: "exact", head: true });
+    if (error) {
+      Sentry.captureException(error.message);
+      return 0;
+    }
+    return count ? count : 0;
+  } catch (error) {
+    Sentry.captureException(error);
+    return 0;
+  }
+};

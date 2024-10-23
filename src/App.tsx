@@ -28,6 +28,7 @@ import LoginRedirect from "./components/auth/LoginRedirect";
 import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
 import MetaPixelInit from "./analytics/metaPixelInit";
+import AdminPage from "./pages/AdminPage/AdminPage";
 
 const App = () => {
   useEffect(() => {
@@ -61,6 +62,14 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <LoginRedirect />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <PrivateRoute>
+                    <AdminPage />
                   </PrivateRoute>
                 }
               />

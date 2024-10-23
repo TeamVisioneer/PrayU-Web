@@ -23,6 +23,7 @@ import {
 } from "../../supabase/types/tables";
 import {
   createGroup,
+  fetchGroupListByDate,
   fetchGroupListByUserId,
   getGroup,
   updateGroup,
@@ -50,7 +51,9 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
 import { analyticsIdentify } from "@/analytics/analytics";
 import {
+  fetchProfileCount,
   fetchProfileList,
+  fetchProfileListByStartId,
   updateProfile,
   updateProfilesParams,
 } from "@/apis/profiles";
@@ -79,8 +82,14 @@ export interface BaseStore {
   // profiles
   myProfile: Profiles | null;
   profileList: Profiles[] | null;
+  profileCount: number;
   getProfile: (userId: string) => Promise<Profiles | null>;
   fetchProfileList: (userIds: string[]) => Promise<Profiles[] | null>;
+  fetchProfileListByStartId: (
+    startId: string,
+    limit: number,
+  ) => Promise<string[] | null>;
+  fetchProfileCount: () => Promise<number>;
   updateProfile: (
     userId: string,
     params: updateProfilesParams,
@@ -88,12 +97,14 @@ export interface BaseStore {
 
   // group
   groupList: Group[] | null;
+  todayGroupList: Group[] | null;
   targetGroup: GroupWithProfiles | null;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
   isGroupLeader: boolean;
   targetGroupLoading: boolean;
   fetchGroupListByUserId: (userId: string) => Promise<void>;
+  fetchGroupListByDate: (createdAt: string) => Promise<Group[] | null>;
   getGroup: (groupId: string) => Promise<void>;
   setGroupName: (groupName: string) => void;
   setIsDisabledGroupCreateBtn: (isDisabled: boolean) => void;
@@ -403,6 +414,7 @@ const useBaseStore = create<BaseStore>()(
     // profiles
     myProfile: null,
     profileList: null,
+    profileCount: 0,
     getProfile: async (userId: string) => {
       const data = await getProfile(userId);
       set((state) => {
@@ -417,6 +429,20 @@ const useBaseStore = create<BaseStore>()(
       });
       return data;
     },
+    fetchProfileListByStartId: async (
+      startId: string,
+      limit: number,
+    ) => {
+      const data = await fetchProfileListByStartId(startId, limit);
+      return data;
+    },
+    fetchProfileCount: async () => {
+      const data = await fetchProfileCount();
+      set((state) => {
+        state.profileCount = data;
+      });
+      return data;
+    },
     updateProfile: async (
       userId: string,
       params: updateProfilesParams,
@@ -427,7 +453,9 @@ const useBaseStore = create<BaseStore>()(
 
     // group
     groupList: null,
+    todayGroupList: null,
     targetGroup: null,
+    targetGroupLoading: true,
     inputGroupName: "",
     isDisabledGroupCreateBtn: false,
     isGroupLeader: false,
@@ -437,7 +465,13 @@ const useBaseStore = create<BaseStore>()(
         state.groupList = data;
       });
     },
-    targetGroupLoading: true,
+    fetchGroupListByDate: async (createdAt: string) => {
+      const data = await fetchGroupListByDate(createdAt);
+      set((state) => {
+        state.todayGroupList = data;
+      });
+      return data;
+    },
     getGroup: async (groupId: string) => {
       const data = await getGroup(groupId);
       set((state) => {
