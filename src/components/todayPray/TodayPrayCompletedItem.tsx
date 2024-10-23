@@ -89,13 +89,6 @@ const TodayPrayCompletedItem = () => {
         />
         <TodayPrayReplayBtn eventOption={{ where: "TodayPrayCompletedItem" }} />
       </section>
-      <button
-        className="absolute bottom-3 flex gap-1 items-center text-gray-400"
-        onClick={() => setIsOpenTodayPrayDrawer(false)}
-      >
-        <IoClose />
-        닫기
-      </button>
     </div>
   );
 };

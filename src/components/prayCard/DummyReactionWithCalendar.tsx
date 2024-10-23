@@ -126,7 +126,7 @@ const DumyReactionBtnWithCalendar: React.FC<
               key={type}
               className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
                 emojiData.bgColor
-              } ${!isPrayToday && "animate-bounce"} ${
+              } ${!isPrayToday && "animate-pulse"} ${
                 isNotSelected
                   ? `opacity-20 ${emojiData.shadowColor}`
                   : `opacity-90 ${

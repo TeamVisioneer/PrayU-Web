@@ -76,7 +76,7 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
       <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />
       <div className="text-gray-400 text-sm text-center">
         <div className={isPrayToday ? "invisible" : ""}>
-          반응을 누르면 다음 기도로 넘어가요
+          기도 반응 버튼을 눌러 친구에게 기도를 남겨요
         </div>
       </div>
     </div>
