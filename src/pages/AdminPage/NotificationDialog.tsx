@@ -18,7 +18,7 @@ const NotificationSendDialog = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [sendResult, setSendResult] = useState("전송 전");
+  const [sendResult, setSendResult] = useState("알림 생성 전");
 
   const fetchProfileListByStartId = useBaseStore(
     (state) => state.fetchProfileListByStartId
@@ -26,7 +26,7 @@ const NotificationSendDialog = () => {
   const createNotification = useBaseStore((state) => state.createNotification);
 
   const handleSubmit = async () => {
-    setSendResult("전송중");
+    setSendResult("알림 생성중");
     const limit = 1000;
     let isSending = true;
 
@@ -34,7 +34,7 @@ const NotificationSendDialog = () => {
       const userIds = await fetchProfileListByStartId(startId, limit);
       if (!userIds) {
         isSending = false;
-        setSendResult(`[전송 실패] startId : ${startId}`);
+        setSendResult(`[알림 생성 실패] startId : ${startId}`);
         break;
       }
       const notification = await createNotification({
@@ -45,17 +45,17 @@ const NotificationSendDialog = () => {
       });
       if (!notification) {
         isSending = false;
-        setSendResult(`[전송 실패] startId : ${startId}`);
+        setSendResult(`[알림 생성 실패] startId : ${startId}`);
         break;
       }
       if (userIds.length < limit) {
         isSending = false;
-        setSendResult(`전송 완료`);
+        setSendResult(`알림 생성 완료`);
         break;
       } else setStartId(userIds[limit - 1]);
     }
 
-    setSendResult("전송 완료");
+    setSendResult("알림 생성 완료");
   };
 
   return (
