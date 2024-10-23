@@ -10,7 +10,6 @@ const MetaPixelInit: React.FC = () => {
 
     script.onload = () => {
       if (window.fbq) {
-        console.log("hoizza");
         window.fbq("init", `${import.meta.env.VITE_META_PIXEL_ID}`);
         window.fbq("track", "PageView");
       } else {
