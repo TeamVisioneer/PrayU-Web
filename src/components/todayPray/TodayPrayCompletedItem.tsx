@@ -1,6 +1,5 @@
 import { getISOTodayDateYMD } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5";
 import { BibleCardLink, KakaoShareButton } from "../share/KakaoShareBtn";
 import useBaseStore from "@/stores/baseStore";
 import TodayPrayReplayBtn from "./TodayPrayRePlayBtn";
@@ -9,9 +8,7 @@ const TodayPrayCompletedItem = () => {
   const today = getISOTodayDateYMD();
   const contentNumber = parseInt(today.day, 10) % 31;
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const setIsOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenTodayPrayDrawer
-  );
+
   const prayCardCarouselIndex = useBaseStore(
     (state) => state.prayCardCarouselIndex
   );

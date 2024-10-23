@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5";
 import useBaseStore from "@/stores/baseStore";
 import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 import completed from "@/assets/completed.svg";
 import TodayPrayReplayBtn from "./TodayPrayRePlayBtn";
 
 const TodayPrayDummyCompletedItem = () => {
-  const setIsOpenTodayPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenTodayPrayDrawer
-  );
   const prayCardCarouselIndex = useBaseStore(
     (state) => state.prayCardCarouselIndex
   );
