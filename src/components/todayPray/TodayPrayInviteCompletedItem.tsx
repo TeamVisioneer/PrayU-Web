@@ -50,53 +50,43 @@ const TodayPrayDummyCompletedItem = () => {
   }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi]);
 
   return (
-    <div className="relative flex flex-col justify-between items-center min-h-80vh max-h-80vh">
-      <div className=""></div>
-      <div className="flex flex-col gap-4 justify-center items-center">
-        <section
-          className={`flex flex-col gap-6 items-center transition-opacity duration-1000 ease-in ${
-            showImage ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <h1 className="text-2xl font-bold">오늘의 기도 완료</h1>
-          <div className="h-[120px] w-[120px] flex flex-col items-center">
-            <img
-              className="h-full w-full rounded-2xl"
-              src={completed}
-              onLoad={() => setIsImageLoaded(true)}
-            />
-          </div>
-        </section>
-        <section
-          className={`flex flex-col justify-center items-center text-liteBlack transition-opacity duration-1000 ease-in-out  ${
-            showTitleText ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <p>친구들의 기도제목으로</p>
-          <p>오늘의 기도를 시작해 보아요</p>
-        </section>
-        <section
-          className={`flex flex-col items-center gap-4 transition-opacity duration-1000 ease-in-out ${
-            showButton ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <OpenShareDrawerBtn
-            className="w-56 flex flex-col items-center gap-2 h-[46px] text-md font-bold rounded-[10px]"
-            text="친구 초대하기"
-            eventOption={{ where: "TodayPrayDummyCompletedItem" }}
-          />
-          <TodayPrayReplayBtn
-            eventOption={{ where: "TodayPrayDummyCompletedItem" }}
-          />
-        </section>
-      </div>
-      <button
-        className="flex gap-1 items-center text-gray-400"
-        onClick={() => setIsOpenTodayPrayDrawer(false)}
+    <div className="relative flex flex-col gap-4  justify-center items-center min-h-80vh max-h-80vh pb-10">
+      <section
+        className={`flex flex-col gap-6 items-center transition-opacity duration-1000 ease-in ${
+          showImage ? "opacity-100" : "opacity-0"
+        }`}
       >
-        <IoClose />
-        닫기
-      </button>
+        <h1 className="text-2xl font-bold">오늘의 기도 완료</h1>
+        <div className="h-[120px] w-[120px] flex flex-col items-center">
+          <img
+            className="h-full w-full rounded-2xl"
+            src={completed}
+            onLoad={() => setIsImageLoaded(true)}
+          />
+        </div>
+      </section>
+      <section
+        className={`flex flex-col justify-center items-center text-liteBlack transition-opacity duration-1000 ease-in-out  ${
+          showTitleText ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <p>친구들의 기도제목으로</p>
+        <p>오늘의 기도를 시작해 보아요</p>
+      </section>
+      <section
+        className={`flex flex-col items-center gap-4 transition-opacity duration-1000 ease-in-out ${
+          showButton ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <OpenShareDrawerBtn
+          className="w-56 flex flex-col items-center gap-2 h-[46px] text-md font-bold rounded-[10px]"
+          text="친구 초대하기"
+          eventOption={{ where: "TodayPrayDummyCompletedItem" }}
+        />
+        <TodayPrayReplayBtn
+          eventOption={{ where: "TodayPrayDummyCompletedItem" }}
+        />
+      </section>
     </div>
   );
 };
