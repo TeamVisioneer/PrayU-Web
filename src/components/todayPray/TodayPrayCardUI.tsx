@@ -41,7 +41,7 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
       </div>
 
       <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
-        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
+        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-4">
           <div className="flex items-center gap-2">
             <img
               src={
@@ -60,7 +60,7 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
             {createdDateYMD.day} ({days[createdAtDate.getDay()]})
           </p>
         </div>
-        <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
+        <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-2 py-2 overflow-y-auto no-scrollbar">
           {!prayCard.content && prayCard.user_id == user!.id ? (
             <p className="flex-grow w-full p-2 text-sm text-gray-400">
               내 기도제목에서 <br />

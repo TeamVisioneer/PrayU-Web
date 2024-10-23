@@ -173,7 +173,7 @@ const TutorialPage: React.FC = () => {
   );
 
   const Calendar = (
-    <div className="flex justify-center gap-[13px]">
+    <div className="flex justify-center gap-3">
       {days.map((day, index) => (
         <div key={index} className="flex flex-col items-center gap-1">
           <span
@@ -205,13 +205,13 @@ const TutorialPage: React.FC = () => {
   );
 
   const ReactionBtn = (
-    <div className="relative flex justify-center gap-[30px]">
+    <div className="relative flex justify-center gap-8">
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
           <button
             key={type}
-            className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
+            className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
               emojiData.bgColor
             } ${
               !todayPrayType

@@ -98,14 +98,14 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   };
 
   return (
-    <div className="flex justify-center gap-[30px]">
+    <div className="flex justify-center gap-8">
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
           <button
             key={type}
             onClick={() => handleClick(type as PrayType)}
-            className={`flex justify-center items-center w-[65px] h-[65px] rounded-full duration-1000 ease-in-out ${
+            className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
               emojiData.bgColor
             } ${
               !hasPrayed
