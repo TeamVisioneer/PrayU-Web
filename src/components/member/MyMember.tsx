@@ -71,7 +71,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   );
 
   const MyMemberUI = (
-    <div className="w-full flex flex-col gap-3 cursor-pointer bg-white p-[25px] rounded-[15px]">
+    <div className="w-full flex flex-col gap-3 cursor-pointer bg-white p-6 rounded-[15px]">
       <div className="flex flex-col gap-1">
         <h3 className="flex font-bold text-lg">내 기도제목</h3>
         <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">
