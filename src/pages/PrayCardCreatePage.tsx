@@ -248,7 +248,7 @@ const PrayCardCreatePage: React.FC = () => {
         </div>
       </div>
 
-      <p>당신의 기도제목을 알려주세요 😁</p>
+      <p>당신의 기도제목을 기다리고 있어요 🙏🏻</p>
       <div className="w-full px-5">{PrayCardUI}</div>
 
       <div className="flex flex-col items-center w-full p-5 gap-4">

@@ -53,7 +53,11 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
               }}
               className="w-7 h-7 rounded-full object-cover"
             />
-            <p className="text-white text-lg">{prayCard.profiles.full_name}</p>
+            <p className="text-white text-lg">
+              {prayCard.user_id == user!.id
+                ? "내 기도카드"
+                : prayCard.profiles.full_name}
+            </p>
           </div>
           <p className="text-sm text-white w-full text-left">
             시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
@@ -76,7 +80,7 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
       <ReactionWithCalendar prayCard={prayCard} eventOption={eventOption} />
       <div className="text-gray-400 text-sm text-center">
         <div className={isPrayToday ? "invisible" : ""}>
-          반응을 누르면 다음 기도로 넘어가요
+          기도 반응 버튼을 눌러 오늘의 기도를 남겨요
         </div>
       </div>
     </div>
