@@ -218,7 +218,7 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType,
   ) => Promise<Pray | null>;
-  groupAndSortByUserId: (data: PrayWithProfiles[]) => {
+  groupAndSortByUserId: (currentUserId: string, data: PrayWithProfiles[]) => {
     [key: string]: PrayWithProfiles[];
   };
 
@@ -768,7 +768,7 @@ const useBaseStore = create<BaseStore>()(
         );
       });
     },
-    groupAndSortByUserId: (data: PrayWithProfiles[]) => {
+    groupAndSortByUserId: (currentUserId: string, data: PrayWithProfiles[]) => {
       const hash: { [key: string]: PrayWithProfiles[] } = {};
 
       data.forEach((item) => {
@@ -779,7 +779,12 @@ const useBaseStore = create<BaseStore>()(
       });
 
       const sortedEntries = Object.entries(hash).sort(
-        (a, b) => b[1].length - a[1].length,
+        ([keyA, valueA], [keyB, valueB]) => {
+          // 내 기도를 우선 정렬
+          if (keyA === currentUserId) return -1;
+          if (keyB === currentUserId) return 1;
+          return valueB.length - valueA.length;
+        },
       );
 
       const sortedHash = sortedEntries.reduce((acc, [key, value]) => {
