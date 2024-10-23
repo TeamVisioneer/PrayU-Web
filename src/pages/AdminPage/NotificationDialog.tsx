@@ -117,11 +117,13 @@ const NotificationSendDialog = () => {
             </div>
             <Button
               onClick={() => handleSubmit()}
-              // disabled={sendResult == "전송 전" ? false : true}
+              disabled={
+                sendResult == "알림 생성 전" && title && content ? false : true
+              }
               className="w-full"
             >
               <AlertCircle className="mr-2 h-4 w-4" />
-              알림 전송
+              공지 알림 생성
             </Button>
           </section>
         </DialogContent>
