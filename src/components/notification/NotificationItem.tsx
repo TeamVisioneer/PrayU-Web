@@ -73,11 +73,13 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
               : `${dateDistance.minutes}분 전`}
           </span>
         </div>
-        {notification.body.split("\\n").map((line, index) => (
-          <p key={index} className="text-sm text-muted-foreground">
-            {line}
-          </p>
-        ))}
+        <div>
+          {notification.body.split("").map((line, index) => (
+            <p key={index} className="text-sm text-muted-foreground">
+              {line}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   );
