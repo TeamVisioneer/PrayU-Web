@@ -44,6 +44,7 @@ import {
   fetchGroupPrayCardList,
   fetchOtherPrayCardListByGroupId,
   fetchUserPrayCardListByGroupId,
+  fetchUserPrayCardListAll,
   updatePrayCardContent,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
@@ -166,6 +167,7 @@ export interface BaseStore {
   groupPrayCardList: PrayCardWithProfiles[] | null;
   otherPrayCardList: PrayCardWithProfiles[] | null;
   userPrayCardList: PrayCardWithProfiles[] | null;
+  userPrayCardListAll: PrayCardWithProfiles[] | null;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
   isDisabledPrayCardCreateBtn: boolean;
@@ -191,6 +193,9 @@ export interface BaseStore {
   fetchUserPrayCardListByGroupId: (
     currentUserId: string,
     groupId: string
+  ) => Promise<PrayCardWithProfiles[] | null>;
+  fetchUserPrayCardListAll: (
+    currentUserId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   createPrayCard: (
     groupId: string,
@@ -627,6 +632,7 @@ const useBaseStore = create<BaseStore>()(
     // prayCard
     groupPrayCardList: null,
     userPrayCardList: null,
+    userPrayCardListAll: null,
     otherPrayCardList: null,
     inputPrayCardContent: "",
     isEditingPrayCard: false,
@@ -733,6 +739,13 @@ const useBaseStore = create<BaseStore>()(
         state.userPrayCardList = userPrayCardList;
       });
       return userPrayCardList;
+    },
+    fetchUserPrayCardListAll: async (currentUserId: string) => {
+      const userPrayCardListAll = await fetchUserPrayCardListAll(currentUserId);
+      set((state) => {
+        state.userPrayCardListAll = userPrayCardListAll;
+      });
+      return userPrayCardListAll;
     },
     createPrayCard: async (
       groupId: string,

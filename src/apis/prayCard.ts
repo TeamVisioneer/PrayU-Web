@@ -117,6 +117,43 @@ export const fetchUserPrayCardListByGroupId = async (
   }
 };
 
+export const fetchUserPrayCardListAll = async (
+  currentUserId: string
+): Promise<PrayCardWithProfiles[] | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("pray_card")
+      .select(
+        `*,
+      profiles (id, full_name, avatar_url, kakao_id),
+      pray (*, 
+        profiles (id, full_name, avatar_url, kakao_id)
+      )`
+      )
+      .eq("user_id", currentUserId)
+      .is("deleted_at", null)
+      .is("pray.deleted_at", null)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+
+    const sortedData = data.map((data) => ({
+      ...data,
+      pray: data.pray.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      ),
+    }));
+    return sortedData as PrayCardWithProfiles[];
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const createPrayCard = async (
   groupId: string,
   userId: string,
