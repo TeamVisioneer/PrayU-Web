@@ -1,59 +1,27 @@
-import { useRef } from "react";
-import { Input } from "@/components/ui/input";
 import useAuth from "@/hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
-import { useEffect, useState } from "react";
+import SettingDialog from "@/components/profile/SettingDialog";
+import { useEffect } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
-import { deleteUser } from "../apis/user.ts";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { LuInfo, LuPencil, LuSave } from "react-icons/lu";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { UserProfile } from "@/components/profile/UserProfile.tsx";
-import { analyticsTrack } from "@/analytics/analytics.ts";
-import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo.ts";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
-  const setAlertData = useBaseStore((state) => state.setAlertData);
-  const setIsConfirmAlertOpen = useBaseStore(
-    (state) => state.setIsConfirmAlertOpen
-  );
 
   const myProfile = useBaseStore((state) => state.myProfile);
   const profileList = useBaseStore((state) => state.profileList);
   const getProfile = useBaseStore((state) => state.getProfile);
   const fetchProfileList = useBaseStore((state) => state.fetchProfileList);
-  const updateProfile = useBaseStore((state) => state.updateProfile);
-  const signOut = useBaseStore((state) => state.signOut);
-
-  const [name, setName] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const onClickSignOut = () => {
-    analyticsTrack("클릭_로그아웃", {});
-    KakaoTokenRepo.cleanKakaoTokensInCookies();
-    signOut();
-  };
+  const setIsOpenSettingDialog = useBaseStore(
+    (state) => state.setIsOpenSettingDialog
+  );
 
   useEffect(() => {
     getProfile(user!.id);
   }, [user, getProfile]);
 
   useEffect(() => {
-    if (myProfile) setName(myProfile.full_name!);
     if (myProfile) fetchProfileList(myProfile.blocking_users);
   }, [myProfile, fetchProfileList]);
 
@@ -80,74 +48,24 @@ const MyProfilePage = () => {
     );
   }
 
-  const onClickUpdateName = () => {
-    setIsEditing(true);
-    inputRef.current?.focus();
+  const onClickSettingBtn = () => {
+    setIsOpenSettingDialog(true);
+    //analyticsTrack("클릭_공지", {});
+    console.log("gg");
   };
-
-  const onBlurUpdateName = () => {
-    setIsEditing(false);
-    if (name.trim() === "") setName(myProfile?.full_name || "");
-    else updateProfile(user!.id, { full_name: name });
-  };
-
-  const onClickExitPrayU = () => {
-    analyticsTrack("클릭_프로필_회원탈퇴", {});
-    setAlertData({
-      color: "bg-red-400",
-      title: "PrayU 탈퇴하기",
-      description:
-        "PrayU 계정을 탈퇴하시겠습니까?\nPrayU 의 모든 데이터가 삭제됩니다.",
-      actionText: "탈퇴하기",
-      cancelText: "취소",
-      onAction: async () => {
-        const userId = user!.id;
-        const success = await deleteUser(userId);
-        if (success) window.location.href = "/";
-      },
-    });
-    setIsConfirmAlertOpen(true);
-  };
-
-  const onClickUnblock = async (blockedProfileId: string) => {
-    analyticsTrack("클릭_프로필_차단해제", {});
-    const updatedBlockingUsers = myProfile.blocking_users.filter(
-      (id) => id !== blockedProfileId
-    );
-    await updateProfile(myProfile.id, {
-      blocking_users: updatedBlockingUsers,
-    });
-    fetchProfileList(updatedBlockingUsers);
-  };
-
-  const onChangeKakaoNotificationToggle = async () => {
-    analyticsTrack("클릭_프로필_카카오메세지토글", {});
-    if (!myProfile) return;
-    await updateProfile(myProfile.id, {
-      kakao_notification: !myProfile.kakao_notification,
-    });
-  };
-
-  const onChangePushNotificationToggle = async () => {
-    analyticsTrack("클릭_프로필_푸쉬알림토글", {});
-    await updateProfile(myProfile.id, {
-      push_notification: !myProfile.push_notification,
-    });
-  };
-
-  // TODO: 카카오 메세지 재기획 이후 진행
-  const kakaoMessageEnabled = false;
 
   return (
     <div className="w-ful flex flex-col gap-6 items-center">
       <div className="w-full flex justify-between items-center">
-        <div className="w-[60px]">
+        <div className="w-14 ">
           <IoChevronBack size={20} onClick={() => window.history.back()} />
         </div>
-
         <span className="text-xl font-bold">내 프로필</span>
-        <div className="w-[60px] flex justify-end items-center">
-          {isEditing && <Badge>완료</Badge>}
+        <div
+          className="flex justify-end items-center w-14"
+          onClick={onClickSettingBtn}
+        >
+          <IoSettingsOutline size={20} color="#222222" />
         </div>
       </div>
       <div className="flex justify-center h-[80px] object-cover">
@@ -160,7 +78,7 @@ const MyProfilePage = () => {
           <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
         )}
       </div>
-      <div className="w-full flex flex-col items-center gap-4 ">
+      {/* <div className="w-full flex flex-col items-center gap-4 ">
         <div className="w-full h-14 flex items-center px-4 py-2 bg-white rounded-xl">
           <span className="text-md font-semibold">이름</span>
           <div className="flex flex-grow items-center gap-2">
@@ -315,7 +233,7 @@ const MyProfilePage = () => {
             </AccordionItem>
           </Accordion>
         </div>
-      </div>
+      </div> */}
 
       <footer className="absolute bottom-4 w-full px-6 flex justify-between text-gray-400 text-[10px]">
         <span>© 2024 PrayU. All rights reserved.</span>
@@ -329,6 +247,7 @@ const MyProfilePage = () => {
           </a>
         </div>
       </footer>
+      <SettingDialog />
     </div>
   );
 };

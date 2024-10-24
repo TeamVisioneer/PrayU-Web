@@ -95,6 +95,8 @@ export interface BaseStore {
     userId: string,
     params: updateProfilesParams
   ) => Promise<Profiles | null>;
+  isOpenSettingDialog: boolean;
+  setIsOpenSettingDialog: (isOpenSettingDialog: boolean) => void;
 
   // group
   groupList: Group[] | null;
@@ -138,7 +140,7 @@ export interface BaseStore {
   fetchMemberListByGroupId: (
     groupId: string,
     limit?: number,
-    offset?: number,
+    offset?: number
   ) => Promise<MemberWithProfiles[] | null>;
   fetchMemberCountByGroupId: (groupId: string) => Promise<number | null>;
   createMember: (
@@ -462,6 +464,12 @@ const useBaseStore = create<BaseStore>()(
       const myProfile = await updateProfile(userId, params);
       return myProfile;
     },
+    isOpenSettingDialog: false,
+    setIsOpenSettingDialog: (isOpenSettingDialog: boolean) => {
+      set((state) => {
+        state.isOpenSettingDialog = isOpenSettingDialog;
+      });
+    },
 
     // group
     groupList: null,
@@ -561,13 +569,9 @@ const useBaseStore = create<BaseStore>()(
     fetchMemberListByGroupId: async (
       groupId: string,
       limit?: number,
-      offset?: number,
+      offset?: number
     ) => {
-      const memberList = await fetchMemberListByGroupId(
-        groupId,
-        limit,
-        offset,
-      );
+      const memberList = await fetchMemberListByGroupId(groupId, limit, offset);
       set((state) => {
         state.memberList = memberList;
       });
