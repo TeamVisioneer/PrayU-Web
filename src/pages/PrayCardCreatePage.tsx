@@ -84,10 +84,6 @@ const PrayCardCreatePage: React.FC = () => {
     );
   }
 
-  const replaceGroup = (groupId: string) => {
-    window.location.replace(`/group/${groupId}`);
-  };
-
   const getRandomVerse = () => {
     const randomIndex = Math.floor(Math.random() * prayerVerses.length);
     return `(${prayerVerses[randomIndex].verse})\n${prayerVerses[randomIndex].text}`;
@@ -162,7 +158,7 @@ const PrayCardCreatePage: React.FC = () => {
       randomContent
     );
     if (newPrayCard) await sendNotification(upsertedMember);
-    replaceGroup(groupId);
+    window.location.replace(`/group/${groupId}`);
   };
 
   const onClickJoinGroup = async (currentUserId: string, groupId: string) => {
@@ -183,7 +179,7 @@ const PrayCardCreatePage: React.FC = () => {
       inputPrayCardContent
     );
     if (newPrayCard) await sendNotification(upsertedMember);
-    replaceGroup(groupId);
+    window.location.replace(`/group/${groupId}`);
   };
 
   const todayDateYMD = getISOTodayDateYMD();

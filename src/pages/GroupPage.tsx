@@ -87,7 +87,10 @@ const GroupPage: React.FC = () => {
     } else if (targetGroupLoading == false && targetGroup == null) {
       navigate("/group/not-found");
       return;
-    } else if (myMember && groupId === "9085a291-7eb2-4b00-9f85-0ccd98f433a7") {
+    } else if (
+      !memberLoading &&
+      groupId === "9085a291-7eb2-4b00-9f85-0ccd98f433a7"
+    ) {
       navigate("/group/open/1027-union", { replace: true });
       return;
     }
