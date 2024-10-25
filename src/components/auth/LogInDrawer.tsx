@@ -20,7 +20,7 @@ const LogInDrawer = () => {
   );
   const location = useLocation();
   const baseUrl = getDomainUrl();
-  const pathname = location.state?.from?.pathname || window.location.pathname;
+  const pathname = location.state?.from?.pathname || location.pathname;
   const pathParts = pathname.split("/");
   let groupId = "";
   if (pathParts.length === 3 && pathParts[1] === "group") {
