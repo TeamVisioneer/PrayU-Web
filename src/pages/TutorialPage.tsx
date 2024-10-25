@@ -209,9 +209,8 @@ const TutorialPage: React.FC = () => {
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
-          <div className="relative">
+          <div key={type} className="relative">
             <button
-              key={type}
               className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
                 emojiData.bgColor
               } ${
