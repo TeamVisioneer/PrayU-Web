@@ -31,7 +31,7 @@ const LogInDrawer = () => {
     pathParts[2] === "open" &&
     pathParts[3] === "1027-union"
   ) {
-    groupId = "9085a291-7eb2-4b00-9f85-0ccd98f433a7";
+    groupId = String(import.meta.env.VITE_UNION_WORSHIP_GROUP_ID);
   }
   const redirectUrl = `${baseUrl}/login-redirect?groupId=${groupId}&from=LogInDrawer`;
 
