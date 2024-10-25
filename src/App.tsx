@@ -187,7 +187,7 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
-      case "/group/oepn/1027-union":
+      case "/group/open/1027-union":
         analyticsTrack("페이지_그룹_1027-union", {
           title: "Group 1027-union Page",
           where: from,

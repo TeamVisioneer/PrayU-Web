@@ -56,7 +56,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           senderId: currentUserId,
           groupId: targetGroup!.id,
           title: "PrayU 기도 알림",
-          body: `${targetGroup!.name} 그룹에서 당신을 위해 기도해 주었어요`,
+          body: "당신을 위해 기도해 준 친구가 있어요!",
           type: NotificationType.SNS,
           data: {
             praycard_id: prayCard.id,
