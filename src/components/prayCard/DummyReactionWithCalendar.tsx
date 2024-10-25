@@ -122,9 +122,8 @@ const DumyReactionBtnWithCalendar: React.FC<
           const isSelected = todayPrayType === type;
           const isNotSelected = todayPrayType !== "" && !isSelected;
           return (
-            <div className="relative">
+            <div key={type} className="relative">
               <button
-                key={type}
                 className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
                   emojiData.bgColor
                 } ${!isPrayToday && "animate-pulse"} ${

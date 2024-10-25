@@ -1,5 +1,6 @@
 import GroupHeader from "@/components/group/GroupHeader";
 import ReactionResultBox from "@/components/pray/ReactionResultBox";
+import ShareDrawer from "@/components/share/ShareDrawer";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import useBaseStore from "@/stores/baseStore";
@@ -12,11 +13,12 @@ const UnionWorshipPage = () => {
     (state) => state.fetchMemberListByGroupId
   );
   const memberList = useBaseStore((state) => state.memberList);
+  const groupId = String(import.meta.env.VITE_UNION_WORSHIP_GROUP_ID);
 
   useEffect(() => {
-    getGroup("9085a291-7eb2-4b00-9f85-0ccd98f433a7");
-    fetchMemberListByGroupId("9085a291-7eb2-4b00-9f85-0ccd98f433a7");
-  }, [fetchMemberListByGroupId, getGroup]);
+    getGroup(groupId);
+    fetchMemberListByGroupId(groupId);
+  }, [fetchMemberListByGroupId, getGroup, groupId]);
 
   if (!targetGroup || !memberList) {
     return (
@@ -52,6 +54,7 @@ const UnionWorshipPage = () => {
         {MyMemberUI}
         <TodayPrayStartCard />
       </div>
+      <ShareDrawer />
     </div>
   );
 };
