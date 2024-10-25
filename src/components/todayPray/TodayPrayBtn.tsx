@@ -27,12 +27,22 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     (state) => state.setIsOpenMyMemberDrawer
   );
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
+  const setIsOpenLoginDrawer = useBaseStore(
+    (state) => state.setIsOpenLoginDrawer
+  );
+
+  const onClickTodayPrayBtnNoUser = () => {
+    setIsOpenLoginDrawer(true);
+  };
 
   if (!myMember || !targetGroup)
     return (
       <Button
         variant="primary"
         className="w-48 h-12 text-md font-bold rounded-[10px]"
+        onClick={() => {
+          onClickTodayPrayBtnNoUser();
+        }}
       >
         기도 시작하기
       </Button>

@@ -20,10 +20,19 @@ const LogInDrawer = () => {
   );
   const location = useLocation();
   const baseUrl = getDomainUrl();
-  const pathname = location.state?.from?.pathname || "";
+  const pathname = location.state?.from?.pathname || window.location.pathname;
   const pathParts = pathname.split("/");
-  const groupId =
-    pathParts.length === 3 && pathParts[1] === "group" ? pathParts[2] : "";
+  let groupId = "";
+  if (pathParts.length === 3 && pathParts[1] === "group") {
+    groupId = pathParts[2];
+  } else if (
+    pathParts.length === 4 &&
+    pathParts[1] === "group" &&
+    pathParts[2] === "open" &&
+    pathParts[3] === "1027-union"
+  ) {
+    groupId = "9085a291-7eb2-4b00-9f85-0ccd98f433a7";
+  }
   const redirectUrl = `${baseUrl}/login-redirect?groupId=${groupId}&from=LogInDrawer`;
 
   const [isApp, setIsApp] = useState(false);

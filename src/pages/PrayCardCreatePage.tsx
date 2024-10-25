@@ -84,6 +84,12 @@ const PrayCardCreatePage: React.FC = () => {
     );
   }
 
+  const replaceGroup = (groupId: string) => {
+    if (groupId === "9085a291-7eb2-4b00-9f85-0ccd98f433a7")
+      window.location.replace(`/group/open/1027-union`);
+    else window.location.replace(`/group/${groupId}`);
+  };
+
   const getRandomVerse = () => {
     const randomIndex = Math.floor(Math.random() * prayerVerses.length);
     return `(${prayerVerses[randomIndex].verse})\n${prayerVerses[randomIndex].text}`;
@@ -158,7 +164,7 @@ const PrayCardCreatePage: React.FC = () => {
       randomContent
     );
     if (newPrayCard) await sendNotification(upsertedMember);
-    window.location.replace(`/group/${groupId}`);
+    replaceGroup(groupId);
   };
 
   const onClickJoinGroup = async (currentUserId: string, groupId: string) => {
@@ -179,7 +185,7 @@ const PrayCardCreatePage: React.FC = () => {
       inputPrayCardContent
     );
     if (newPrayCard) await sendNotification(upsertedMember);
-    window.location.replace(`/group/${groupId}`);
+    replaceGroup(groupId);
   };
 
   const todayDateYMD = getISOTodayDateYMD();
