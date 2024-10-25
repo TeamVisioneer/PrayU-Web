@@ -98,6 +98,10 @@ export interface BaseStore {
   ) => Promise<Profiles | null>;
   isOpenSettingDialog: boolean;
   setIsOpenSettingDialog: (isOpenSettingDialog: boolean) => void;
+  isOpenHistoryDrawer: boolean;
+  setIsOpenHistoryDrawer: (isOpenHistoryDrawer: boolean) => void;
+  historyCard: PrayCardWithProfiles | null;
+  setHistoryCard: (historyCard: PrayCardWithProfiles | null) => void;
 
   // group
   groupList: Group[] | null;
@@ -473,6 +477,18 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenSettingDialog: (isOpenSettingDialog: boolean) => {
       set((state) => {
         state.isOpenSettingDialog = isOpenSettingDialog;
+      });
+    },
+    isOpenHistoryDrawer: false,
+    setIsOpenHistoryDrawer: (isOpenHistoryDrawer: boolean) => {
+      set((state) => {
+        state.isOpenHistoryDrawer = isOpenHistoryDrawer;
+      });
+    },
+    historyCard: null,
+    setHistoryCard: (historyCard: PrayCardWithProfiles | null) => {
+      set((state) => {
+        state.historyCard = historyCard;
       });
     },
 

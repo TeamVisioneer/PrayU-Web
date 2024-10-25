@@ -6,6 +6,8 @@ import { IoChevronBack } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IoSettingsOutline } from "react-icons/io5";
 import HistoryList from "@/components/profile/HistoryList";
+import HistoryDrawer from "@/components/profile/HistoryDrawer";
+import PrayListDrawer from "@/components/pray/PrayListDrawer";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -34,7 +36,7 @@ const MyProfilePage = () => {
 
   if (!myProfile || !profileList) {
     return (
-      <div className="w-ful flex flex-col gap-6 items-center">
+      <div className="w-full flex flex-grow flex-col gap-6 items-center">
         <div className="w-full flex justify-between items-center">
           <div className="w-[60px]">
             <IoChevronBack size={20} onClick={() => window.history.back()} />
@@ -61,32 +63,36 @@ const MyProfilePage = () => {
   };
 
   return (
-    <div className="w-ful flex flex-col gap-6 items-center">
-      <div className="w-full flex justify-between items-center">
-        <div className="w-14 ">
-          <IoChevronBack size={20} onClick={() => window.history.back()} />
+    <div className="w-full flex flex-col gap-6 items-center">
+      {/* <div className="absolute top-10"> */}
+      <div className="w-full bg-mainBg z-10">
+        <div className="w-full flex justify-between items-center">
+          <div className="w-14 ">
+            <IoChevronBack size={20} onClick={() => window.history.back()} />
+          </div>
+          <span className="text-xl font-bold">내 프로필</span>
+          <div
+            className="flex justify-end items-center w-14"
+            onClick={onClickSettingBtn}
+          >
+            <IoSettingsOutline size={20} color="#222222" />
+          </div>
         </div>
-        <span className="text-xl font-bold">내 프로필</span>
-        <div
-          className="flex justify-end items-center w-14"
-          onClick={onClickSettingBtn}
-        >
-          <IoSettingsOutline size={20} color="#222222" />
+        <div className="flex justify-center h-[80px] object-cover">
+          {myProfile && profileList ? (
+            <img
+              className="h-full aspect-square rounded-full object-cover"
+              src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
+            />
+          ) : (
+            <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
+          )}
+        </div>
+        <div className="w-full flex flex-col items-center">
+          {myProfile.full_name} 님의 기도들
         </div>
       </div>
-      <div className="flex justify-center h-[80px] object-cover">
-        {myProfile && profileList ? (
-          <img
-            className="h-full aspect-square rounded-full object-cover"
-            src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
-          />
-        ) : (
-          <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
-        )}
-      </div>
-      <div className="w-full flex flex-col items-center">
-        {myProfile.full_name} 님의 기도들
-      </div>
+      {/* <div className="h-28 "></div> */}
       <div>
         <HistoryList />
       </div>
@@ -104,6 +110,8 @@ const MyProfilePage = () => {
         </div>
       </footer>
       <SettingDialog />
+      <HistoryDrawer />
+      <PrayListDrawer />
     </div>
   );
 };
