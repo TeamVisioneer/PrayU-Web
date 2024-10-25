@@ -1,11 +1,9 @@
 import GroupHeader from "@/components/group/GroupHeader";
-import MyMember from "@/components/member/MyMember";
 import ReactionResultBox from "@/components/pray/ReactionResultBox";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
-import { MemberWithProfiles } from "supabase/types/tables";
 
 const UnionWorshipPage = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
