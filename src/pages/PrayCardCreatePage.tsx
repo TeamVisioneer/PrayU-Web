@@ -85,9 +85,7 @@ const PrayCardCreatePage: React.FC = () => {
   }
 
   const replaceGroup = (groupId: string) => {
-    if (groupId === String(import.meta.env.VITE_UNION_WORSHIP_GROUP_ID))
-      window.location.replace(`/group/open/1027-union`);
-    else window.location.replace(`/group/${groupId}`);
+    window.location.replace(`/group/${groupId}`);
   };
 
   const getRandomVerse = () => {

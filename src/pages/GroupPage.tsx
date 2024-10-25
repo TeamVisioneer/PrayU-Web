@@ -51,11 +51,13 @@ const GroupPage: React.FC = () => {
 
   useEffect(() => {
     fetchGroupListByUserId(currentUserId);
-    if (groupId) getMember(currentUserId, groupId);
-    if (groupId) getGroup(groupId);
-    if (groupId) fetchMemberListByGroupId(groupId);
-    if (groupId) fetchTodayUserPrayByGroupId(currentUserId, groupId);
-    if (groupId) fetchNotificationCount(currentUserId, groupId, true);
+    if (groupId) {
+      getMember(currentUserId, groupId);
+      getGroup(groupId);
+      fetchMemberListByGroupId(groupId);
+      fetchTodayUserPrayByGroupId(currentUserId, groupId);
+      fetchNotificationCount(currentUserId, groupId, true);
+    }
   }, [
     fetchGroupListByUserId,
     fetchMemberListByGroupId,
@@ -74,8 +76,7 @@ const GroupPage: React.FC = () => {
     ) {
       navigate(`/group/${groupId}/praycard/new`, { replace: true });
       return;
-    }
-    if (
+    } else if (
       groupList &&
       groupList.length >= maxGroupCount &&
       !groupList.some((group) => group.id === groupId) &&
@@ -83,9 +84,11 @@ const GroupPage: React.FC = () => {
     ) {
       navigate("/group/limit", { replace: true });
       return;
-    }
-    if (targetGroupLoading == false && targetGroup == null) {
+    } else if (targetGroupLoading == false && targetGroup == null) {
       navigate("/group/not-found");
+      return;
+    } else if (myMember && groupId === "9085a291-7eb2-4b00-9f85-0ccd98f433a7") {
+      navigate("/group/open/1027-union", { replace: true });
       return;
     }
   }, [
