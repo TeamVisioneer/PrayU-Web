@@ -24,14 +24,14 @@ const HookingMessage: React.FC = () => {
       }}
     >
       {/* 텍스트를 이미지의 하단에 배치 */}
-      <div className="absolute left-0 right-0 text-base p-2 text-center bg-opacity-50 bottom-1 ">
+      <div className="absolute left-0 right-0 text-base p-2 text-center bg-opacity-50 bottom-0 ">
         <p className="text-white leading-tight gmarket-font">
           <CountUp
             start={0}
             end={totalPrayCount}
             duration={1.5}
             separator=","
-            className="text-indigo-800 font-extrabold"
+            className="text-indigo-800 font-extrabold text-2xl"
           />{" "}
           번의 기도가
         </p>
