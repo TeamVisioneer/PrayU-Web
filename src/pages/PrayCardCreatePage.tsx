@@ -130,7 +130,7 @@ const PrayCardCreatePage: React.FC = () => {
           .filter((userId) => userId !== member.user_id!),
         senderId: member.user_id!,
         title: "PrayU 기도카드 알림",
-        body: `${targetGroup.name} 그룹에 새로운 기도카드가 등록되었어요!`,
+        body: `${targetGroup.name}에 새로운 기도카드가 등록되었어요!`,
         type: NotificationType.SNS,
       });
     }
