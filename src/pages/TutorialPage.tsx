@@ -205,30 +205,37 @@ const TutorialPage: React.FC = () => {
   );
 
   const ReactionBtn = (
-    <div className="relative flex justify-center gap-8">
+    <div className="flex justify-center gap-8">
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
-          <button
-            key={type}
-            className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
-              emojiData.bgColor
-            } ${
-              !todayPrayType
-                ? `opacity-90 ${emojiData.shadowColor} animate-pulse`
-                : todayPrayType == type
-                ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
-                : `opacity-20 ${emojiData.shadowColor}`
-            }`}
-            onClick={() => {
-              setTodayPrayType(type);
-              sleep(1200).then(() => {
-                onClickRight({ where: "ReactionBtn" });
-              });
-            }}
-          >
-            <img src={emojiData.icon} className="w-9 h-9" />
-          </button>
+          <div className="relative">
+            <button
+              key={type}
+              className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
+                emojiData.bgColor
+              } ${
+                !todayPrayType
+                  ? `opacity-90 ${emojiData.shadowColor} animate-pulse`
+                  : todayPrayType == type
+                  ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
+                  : `opacity-20 ${emojiData.shadowColor}`
+              }`}
+              onClick={() => {
+                setTodayPrayType(type);
+                sleep(1200).then(() => {
+                  onClickRight({ where: "ReactionBtn" });
+                });
+              }}
+            >
+              <img src={emojiData.icon} className="w-9 h-9" />
+            </button>
+            {type == PrayType.PRAY && !todayPrayType && (
+              <span className="absolute -top-2 -right-3 text-white bg-black text-xs rounded-xl px-2 py-1">
+                클릭
+              </span>
+            )}
+          </div>
         );
       })}
     </div>
