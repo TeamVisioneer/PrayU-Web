@@ -28,9 +28,13 @@ export function analyticsTrack(eventName: string, eventProperties: object) {
     import.meta.env.VITE_ENV == "staging" ||
     import.meta.env.VITE_ENV == "prod"
   ) {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isApp = userAgent.includes("prayu");
+
     analytics.track(eventName, {
       ...eventProperties,
       WEB_VERSION: WEB_VERSION,
+      PLATFORM: isApp ? "APP" : "WEB",
     });
   }
 }
