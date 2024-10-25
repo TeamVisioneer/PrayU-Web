@@ -29,6 +29,7 @@ import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
 import MetaPixelInit from "./analytics/metaPixelInit";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 
 const App = () => {
   useEffect(() => {
@@ -119,6 +120,10 @@ const App = () => {
                     <PrayCardCreatePage />
                   </PrivateRoute>
                 }
+              />
+              <Route
+                path="/group/open/1027-union"
+                element={<UnionWorshipPage />}
               />
               <Route path="/group/not-found" element={<GroupNotFoundPage />} />
               <Route path="/group/limit" element={<GroupLimitPage />} />
