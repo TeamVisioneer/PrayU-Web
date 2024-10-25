@@ -163,7 +163,7 @@ const TutorialPage: React.FC = () => {
             onClick={() => onClickRight({ where: "TodayPrayStartCard" })}
             variant="primary"
             className={`w-[188px] h-[46px] text-md font-bold rounded-[10px]  
-              ${index === 2 && "z-40 animate-bounce"}`}
+              ${index === 2 && "z-40 animate-pulse duration-1000"}`}
           >
             기도 시작하기
           </Button>
@@ -205,30 +205,37 @@ const TutorialPage: React.FC = () => {
   );
 
   const ReactionBtn = (
-    <div className="relative flex justify-center gap-8">
+    <div className="flex justify-center gap-8">
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
-          <button
-            key={type}
-            className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
-              emojiData.bgColor
-            } ${
-              !todayPrayType
-                ? `opacity-90 ${emojiData.shadowColor} animate-bounce`
-                : todayPrayType == type
-                ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
-                : `opacity-20 ${emojiData.shadowColor}`
-            }`}
-            onClick={() => {
-              setTodayPrayType(type);
-              sleep(1200).then(() => {
-                onClickRight({ where: "ReactionBtn" });
-              });
-            }}
-          >
-            <img src={emojiData.icon} className="w-9 h-9" />
-          </button>
+          <div className="relative">
+            <button
+              key={type}
+              className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
+                emojiData.bgColor
+              } ${
+                !todayPrayType
+                  ? `opacity-90 ${emojiData.shadowColor} animate-pulse`
+                  : todayPrayType == type
+                  ? `opacity-90 ring-4 ring-offset-2 ${emojiData.ringColor}`
+                  : `opacity-20 ${emojiData.shadowColor}`
+              }`}
+              onClick={() => {
+                setTodayPrayType(type);
+                sleep(1200).then(() => {
+                  onClickRight({ where: "ReactionBtn" });
+                });
+              }}
+            >
+              <img src={emojiData.icon} className="w-9 h-9" />
+            </button>
+            {type == PrayType.PRAY && !todayPrayType && (
+              <span className="absolute -top-2 -right-3 text-white bg-black text-xs rounded-xl px-2 py-1">
+                클릭
+              </span>
+            )}
+          </div>
         );
       })}
     </div>
@@ -256,7 +263,7 @@ const TutorialPage: React.FC = () => {
         </div>
       </div>
       <div className={`${index === 3 ? "z-50" : ""}`}>
-        <div className="flex flex-col gap-6 p-2 bg-mainBg rounded-md">
+        <div className="flex flex-col gap-6 p-2 mb-5 bg-mainBg rounded-md">
           {Calendar}
           {ReactionBtn}
         </div>
@@ -280,7 +287,7 @@ const TutorialPage: React.FC = () => {
         <Button
           variant="primary"
           className={`w-56 h-[46px] text-md font-bold rounded-[10px] ${
-            index === 4 && "z-40 animate-bounce"
+            index === 4 && "z-40 animate-pulse duration-1000"
           }`}
           onClick={() => {
             onClickRight({ where: "CompletedUI" });
@@ -309,7 +316,7 @@ const TutorialPage: React.FC = () => {
         const clickedX = e.clientX;
         const windowWidth = window.innerWidth;
         if (clickedX < windowWidth / 2) onClickLeft();
-        else if (index < 2) onClickRight({ where: "DimUI" });
+        else onClickRight({ where: "DimUI" });
       }}
     >
       <div
@@ -329,14 +336,11 @@ const TutorialPage: React.FC = () => {
           {index == 0 && <div className="w-8"></div>}
           <div className="flex flex-col items-center gap-4">
             <div className="flex justify-between items-center gap-4 w-[110px]">
-              <FaAngleLeft size={24} onClick={() => onClickLeft()} />
+              <FaAngleLeft size={24} />
               <span>
                 {index + 1} / {TutorialComponentProps.length}
               </span>
-              <FaAngleRight
-                size={24}
-                onClick={() => index < 2 && onClickRight({ where: "RightBtn" })}
-              />
+              <FaAngleRight size={24} />
             </div>
           </div>
           {index == 0 && (

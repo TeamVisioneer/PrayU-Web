@@ -26,6 +26,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
+  const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
 
   if (!myMember || !targetGroup)
     return (
@@ -64,6 +65,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
           )
           .sort((prayCard) => (prayCard.user_id === myMember.user_id ? -1 : 1))
       : [];
+    if (filterdGroupPrayCardList.length == 0) setIsPrayToday(true);
     setPrayCardCarouselList(filterdGroupPrayCardList);
   };
 

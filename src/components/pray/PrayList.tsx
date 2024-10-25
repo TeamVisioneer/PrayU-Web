@@ -18,7 +18,7 @@ const PrayList: React.FC = () => {
   if (!memberList || !userPrayCardList || userPrayCardList.length == 0)
     return null;
 
-  const prayerList = groupAndSortByUserId(userPrayCardList[0].pray);
+  const prayerList = groupAndSortByUserId(user!.id, userPrayCardList[0].pray);
   const lenPrayerList = Object.keys(prayerList).length;
   const isOnlyMyPrayInPrayerList =
     lenPrayerList == 1 && Object.keys(prayerList).includes(user!.id);
@@ -66,21 +66,24 @@ const PrayList: React.FC = () => {
                     e.currentTarget.src = "/images/defaultProfileImage.png";
                   }}
                 />
-                <p className="font-medium">
-                  {prayerList[user_id][0].profiles.full_name}
-                </p>
+                {user_id == user!.id ? (
+                  <p className="font-medium">내가 한 기도</p>
+                ) : (
+                  <p className="font-medium">
+                    {prayerList[user_id][0].profiles.full_name}
+                  </p>
+                )}
               </div>
               <div className="flex items-center gap-1">
                 {prayerList[user_id].map((pray) => (
                   <img
                     key={pray.id}
                     src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
-                    className={`rounded-full  border-2
-                        ${
-                          isToday(pray.created_at)
-                            ? "border-yellow-300"
-                            : "border-transparent"
-                        }`}
+                    className={`rounded-full  border-2 ${
+                      isToday(pray.created_at)
+                        ? "border-yellow-300"
+                        : "border-transparent"
+                    }`}
                   />
                 ))}
               </div>

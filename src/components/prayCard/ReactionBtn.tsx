@@ -50,19 +50,21 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
       const newPray = await createPray(prayCard.id, currentUserId, prayType);
       if (!newPray) return null;
 
-      await createNotification({
-        userId: prayCard.user_id ? [prayCard.user_id] : [],
-        senderId: currentUserId,
-        groupId: targetGroup!.id,
-        title: "PrayU 기도 알림",
-        body: `${targetGroup!.name} 그룹에서 당신을 위해 기도해 주었어요`,
-        type: NotificationType.SNS,
-        data: {
-          praycard_id: prayCard.id,
-          pray_id: newPray.id,
-          pray_type: prayType,
-        },
-      });
+      if (newPray.user_id !== prayCard.user_id) {
+        await createNotification({
+          userId: prayCard.user_id ? [prayCard.user_id] : [],
+          senderId: currentUserId,
+          groupId: targetGroup!.id,
+          title: "PrayU 기도 알림",
+          body: `${targetGroup!.name} 그룹에서 당신을 위해 기도해 주었어요`,
+          type: NotificationType.SNS,
+          data: {
+            praycard_id: prayCard.id,
+            pray_id: newPray.id,
+            pray_type: prayType,
+          },
+        });
+      }
 
       // TODO: 카카오 메세지 재기획 이후 진행
       const kakaoMessageEnabled = false;

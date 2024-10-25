@@ -153,7 +153,7 @@ const MyProfilePage = () => {
       <div className="flex justify-center h-[80px] object-cover">
         {myProfile && profileList ? (
           <img
-            className="h-full aspect-square rounded-full"
+            className="h-full aspect-square rounded-full object-cover"
             src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
           />
         ) : (
