@@ -29,6 +29,7 @@ import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
 import MetaPixelInit from "./analytics/metaPixelInit";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 
 const App = () => {
   useEffect(() => {
@@ -120,6 +121,10 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/group/open/1027-union"
+                element={<UnionWorshipPage />}
+              />
               <Route path="/group/not-found" element={<GroupNotFoundPage />} />
               <Route path="/group/limit" element={<GroupLimitPage />} />
               <Route
@@ -179,6 +184,12 @@ const AnalyticsTracker = () => {
       case "/group/new":
         analyticsTrack("페이지_그룹_생성", {
           title: "Group Create Page",
+          where: from,
+        });
+        break;
+      case "/group/oepn/1027-union":
+        analyticsTrack("페이지_그룹_1027-union", {
+          title: "Group 1027-union Page",
           where: from,
         });
         break;

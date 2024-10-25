@@ -27,7 +27,15 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     (state) => state.setIsOpenMyMemberDrawer
   );
 
-  if (!myMember || !targetGroup) return null;
+  if (!myMember || !targetGroup)
+    return (
+      <Button
+        variant="primary"
+        className="w-48 h-12 text-md font-bold rounded-[10px]"
+      >
+        기도 시작하기
+      </Button>
+    );
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
     analyticsTrack("클릭_오늘의기도_시작", eventOption);
