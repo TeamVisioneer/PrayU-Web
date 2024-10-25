@@ -8,6 +8,7 @@ import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
+import HookingMessage from "./HookingMessage";
 
 const UnionWorshipPage = () => {
   const { user } = useBaseStore();
@@ -66,6 +67,7 @@ const UnionWorshipPage = () => {
 
   return (
     <div className="flex flex-col h-full gap-5">
+      <HookingMessage />
       <GroupHeader
         groupList={groupList || []}
         targetGroup={targetGroup}
