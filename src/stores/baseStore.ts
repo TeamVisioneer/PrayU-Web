@@ -87,12 +87,12 @@ export interface BaseStore {
   fetchProfileList: (userIds: string[]) => Promise<Profiles[] | null>;
   fetchProfileListByStartId: (
     startId: string,
-    limit: number,
+    limit: number
   ) => Promise<string[] | null>;
   fetchProfileCount: () => Promise<number>;
   updateProfile: (
     userId: string,
-    params: updateProfilesParams,
+    params: updateProfilesParams
   ) => Promise<Profiles | null>;
 
   // group
@@ -112,11 +112,11 @@ export interface BaseStore {
   createGroup: (
     userId: string,
     name: string,
-    intro: string,
+    intro: string
   ) => Promise<GroupWithProfiles | null>;
   updateGroup: (
     groupId: string,
-    params: updateGroupParams,
+    params: updateGroupParams
   ) => Promise<Group | null>;
   isOpenTodayPrayDrawer: boolean;
   setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
@@ -134,16 +134,16 @@ export interface BaseStore {
   createMember: (
     groupId: string,
     userId: string,
-    praySummary: string,
+    praySummary: string
   ) => Promise<Member | null>;
   updateMember: (
     memberId: string,
     praySummary: string,
-    updatedAt?: string,
+    updatedAt?: string
   ) => Promise<Member | null>;
   getMember: (
     userId: string,
-    groupId: string,
+    groupId: string
   ) => Promise<MemberWithProfiles | null>;
   setOtherMember: (member: MemberWithProfiles | null) => void;
   isOpenMyMemberDrawer: boolean;
@@ -166,28 +166,28 @@ export interface BaseStore {
     groupId: string,
     currentUserId: string,
     startDt: string,
-    endDt: string,
+    endDt: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   fetchOtherPrayCardListByGroupId: (
     currentUserId: string,
     userId: string,
-    groupId: string,
+    groupId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   setPrayCardCarouselList: (
-    prayCardCarouselList: PrayCardWithProfiles[] | null,
+    prayCardCarouselList: PrayCardWithProfiles[] | null
   ) => void;
   fetchUserPrayCardListByGroupId: (
     currentUserId: string,
-    groupId: string,
+    groupId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   createPrayCard: (
     groupId: string,
     userId: string,
-    content: string,
+    content: string
   ) => Promise<PrayCard | null>;
   setIsEditingPrayCard: (isEditingPrayCard: boolean) => void;
   setIsDisabledPrayCardCreateBtn: (
-    isDisabledPrayCardCreateBtn: boolean,
+    isDisabledPrayCardCreateBtn: boolean
   ) => void;
   setIsDisabledSkipPrayCardBtn: (isDisabledSkipPrayCardBtn: boolean) => void;
   updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
@@ -205,20 +205,23 @@ export interface BaseStore {
   setIsPrayTodayForMember: (isPrayTodayForMember: boolean) => void;
   fetchTodayUserPrayByGroupId: (
     userId: string,
-    groupId: string,
+    groupId: string
   ) => Promise<void>;
   fetchTotalPrayCount: () => Promise<void>;
   createPray: (
     prayCardId: string,
     userId: string,
-    prayType: PrayType,
+    prayType: PrayType
   ) => Promise<Pray | null>;
   updatePray: (
     prayCardId: string | undefined,
     userId: string | undefined,
-    prayType: PrayType,
+    prayType: PrayType
   ) => Promise<Pray | null>;
-  groupAndSortByUserId: (currentUserId: string, data: PrayWithProfiles[]) => {
+  groupAndSortByUserId: (
+    currentUserId: string,
+    data: PrayWithProfiles[]
+  ) => {
     [key: string]: PrayWithProfiles[];
   };
 
@@ -232,19 +235,19 @@ export interface BaseStore {
     groupId: string,
     unreadOnly?: boolean,
     limit?: number,
-    offset?: number,
+    offset?: number
   ) => Promise<Notification[]>;
   fetchNotificationCount: (
     userId: string,
     groupId: string,
-    unreadOnly?: boolean,
+    unreadOnly?: boolean
   ) => Promise<number>;
   createNotification: (
-    params: createNotificationParams,
+    params: createNotificationParams
   ) => Promise<Notification | null>;
   updateNotification: (
     notificationId: string,
-    params: updateNotificationParams,
+    params: updateNotificationParams
   ) => Promise<Notification | null>;
   setUserNotificationView: (notificationView: Notification[]) => void;
   setUserNotificationList: (notificationList: Notification[] | null) => void;
@@ -272,7 +275,7 @@ export interface BaseStore {
   isOpenBannerDialog: boolean;
   setIsOpenBannerDialog: (isOpenBannerDialog: boolean) => void;
   setBannerDialogContent: (
-    bannerDialogContentType: "invite" | "reward",
+    bannerDialogContentType: "invite" | "reward"
   ) => void;
 
   // etc
@@ -323,6 +326,8 @@ export interface BaseStore {
   //dialog
   isOpenGroupSettingsDialog: boolean;
   setIsOpenGroupSettingsDialog: (isOpenGroupSettingsDialog: boolean) => void;
+  isOpenHookingDialog: boolean;
+  setIsOpenHookingDialog: (isOpenHookingDialog: boolean) => void;
 }
 
 const useBaseStore = create<BaseStore>()(
@@ -396,7 +401,7 @@ const useBaseStore = create<BaseStore>()(
         return null;
       }
       const userList = import.meta.env.VITE_PREMIUM_PLAN_USERLIST.split(
-        ",",
+        ","
       ).reduce((acc: Record<string, string>, item: string) => {
         const [userId, userName] = item.split(":");
         acc[userId] = userName;
@@ -429,10 +434,7 @@ const useBaseStore = create<BaseStore>()(
       });
       return data;
     },
-    fetchProfileListByStartId: async (
-      startId: string,
-      limit: number,
-    ) => {
+    fetchProfileListByStartId: async (startId: string, limit: number) => {
       const data = await fetchProfileListByStartId(startId, limit);
       return data;
     },
@@ -445,7 +447,7 @@ const useBaseStore = create<BaseStore>()(
     },
     updateProfile: async (
       userId: string,
-      params: updateProfilesParams,
+      params: updateProfilesParams
     ): Promise<Profiles | null> => {
       const myProfile = await updateProfile(userId, params);
       return myProfile;
@@ -482,7 +484,7 @@ const useBaseStore = create<BaseStore>()(
     createGroup: async (
       userId: string,
       name: string,
-      intro: string,
+      intro: string
     ): Promise<GroupWithProfiles | null> => {
       const group = await createGroup(userId, name, intro);
       set((state) => {
@@ -543,7 +545,7 @@ const useBaseStore = create<BaseStore>()(
     createMember: async (
       groupId: string,
       userId: string,
-      praySummay: string,
+      praySummay: string
     ): Promise<Member | null> => {
       const member = await createMember(groupId, userId, praySummay);
       return member;
@@ -605,13 +607,13 @@ const useBaseStore = create<BaseStore>()(
       groupId: string,
       currentUserId: string,
       startDt: string,
-      endDt: string,
+      endDt: string
     ) => {
       const groupPrayCardList = await fetchGroupPrayCardList(
         groupId,
         currentUserId,
         startDt,
-        endDt,
+        endDt
       );
       const today = new Date(getISOToday());
       const startOfDay = new Date(today.setHours(0, 0, 0, 0));
@@ -625,7 +627,7 @@ const useBaseStore = create<BaseStore>()(
               (pray) =>
                 pray.user_id === currentUserId &&
                 new Date(pray.created_at) >= startOfDay &&
-                new Date(pray.created_at) <= endOfDay,
+                new Date(pray.created_at) <= endOfDay
             );
             state.todayPrayTypeHash[prayCard.id] = todayPray
               ? (todayPray.pray_type as PrayType)
@@ -636,7 +638,7 @@ const useBaseStore = create<BaseStore>()(
       return groupPrayCardList;
     },
     setPrayCardCarouselList: (
-      prayCardCarouselList: PrayCardWithProfiles[] | null,
+      prayCardCarouselList: PrayCardWithProfiles[] | null
     ) => {
       set((state) => {
         state.prayCardCarouselList = prayCardCarouselList;
@@ -645,7 +647,7 @@ const useBaseStore = create<BaseStore>()(
     fetchOtherPrayCardListByGroupId: async (
       currentUserId: string,
       userId: string,
-      groupId: string,
+      groupId: string
     ) => {
       set((state) => {
         state.otherPrayCardList = null;
@@ -653,7 +655,7 @@ const useBaseStore = create<BaseStore>()(
       const otherPrayCardList = await fetchOtherPrayCardListByGroupId(
         currentUserId,
         userId,
-        groupId,
+        groupId
       );
       const today = new Date(getISOToday());
       const startOfDay = new Date(today.setHours(0, 0, 0, 0));
@@ -666,7 +668,7 @@ const useBaseStore = create<BaseStore>()(
               (pray) =>
                 pray.user_id === currentUserId &&
                 new Date(pray.created_at) >= startOfDay &&
-                new Date(pray.created_at) <= endOfDay,
+                new Date(pray.created_at) <= endOfDay
             );
             state.todayPrayTypeHash[prayCard.id] = todayPray
               ? (todayPray.pray_type as PrayType)
@@ -679,11 +681,11 @@ const useBaseStore = create<BaseStore>()(
     },
     fetchUserPrayCardListByGroupId: async (
       currentUserId: string,
-      groupId: string,
+      groupId: string
     ) => {
       const userPrayCardList = await fetchUserPrayCardListByGroupId(
         currentUserId,
-        groupId,
+        groupId
       );
       set((state) => {
         state.userPrayCardList = userPrayCardList;
@@ -693,7 +695,7 @@ const useBaseStore = create<BaseStore>()(
     createPrayCard: async (
       groupId: string,
       userId: string,
-      content: string,
+      content: string
     ) => {
       const prayCard = await createPrayCard(groupId, userId, content);
       return prayCard;
@@ -764,7 +766,7 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.isPrayToday = Boolean(userPrayList.length);
         state.isPrayTodayForMember = userPrayList.some(
-          (pray) => pray.pray_card.user_id !== userId,
+          (pray) => pray.pray_card.user_id !== userId
         );
       });
     },
@@ -784,7 +786,7 @@ const useBaseStore = create<BaseStore>()(
           if (keyA === currentUserId) return -1;
           if (keyB === currentUserId) return 1;
           return valueB.length - valueA.length;
-        },
+        }
       );
 
       const sortedHash = sortedEntries.reduce((acc, [key, value]) => {
@@ -798,7 +800,7 @@ const useBaseStore = create<BaseStore>()(
     createPray: async (
       prayCardId: string,
       userId: string,
-      prayType: PrayType,
+      prayType: PrayType
     ) => {
       const pray = await createPray(prayCardId, userId, prayType);
       set((state) => {
@@ -809,7 +811,7 @@ const useBaseStore = create<BaseStore>()(
     updatePray: async (
       prayCardId: string | undefined,
       userId: string | undefined,
-      prayType: PrayType,
+      prayType: PrayType
     ) => {
       const pray = await updatePray(prayCardId, userId, prayType);
       set((state) => {
@@ -835,14 +837,14 @@ const useBaseStore = create<BaseStore>()(
       groupId: string,
       unreadOnly?: boolean,
       limit?: number,
-      offset?: number,
+      offset?: number
     ) => {
       const notificationList = await fetchUserNotificationListByGroupId(
         userId,
         groupId,
         unreadOnly,
         limit,
-        offset,
+        offset
       );
       set((state) => {
         state.userNotificationList = notificationList;
@@ -852,7 +854,7 @@ const useBaseStore = create<BaseStore>()(
     fetchNotificationCount: async (
       userId: string,
       groupId: string,
-      unreadOnly: boolean = false,
+      unreadOnly: boolean = false
     ) => {
       const count = await fetchNotificationCount(userId, groupId, unreadOnly);
       set((state) => {
@@ -861,15 +863,13 @@ const useBaseStore = create<BaseStore>()(
       });
       return count;
     },
-    createNotification: async (
-      params: createNotificationParams,
-    ) => {
+    createNotification: async (params: createNotificationParams) => {
       const notification = await createNotification(params);
       return notification;
     },
     updateNotification: async (
       notificationId: string,
-      params: updateNotificationParams,
+      params: updateNotificationParams
     ) => {
       const notification = await updateNotification(notificationId, params);
       return notification;
@@ -1001,7 +1001,13 @@ const useBaseStore = create<BaseStore>()(
         state.isOpenGroupSettingsDialog = isOpenGroupSettingsDialog;
       });
     },
-  })),
+    isOpenHookingDialog: false,
+    setIsOpenHookingDialog: (isOpenHookingDialog: boolean) => {
+      set((state) => {
+        state.isOpenHookingDialog = isOpenHookingDialog;
+      });
+    },
+  }))
 );
 
 export default useBaseStore;
