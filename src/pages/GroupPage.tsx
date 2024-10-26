@@ -28,7 +28,6 @@ const GroupPage: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const targetGroupLoading = useBaseStore((state) => state.targetGroupLoading);
   const getGroup = useBaseStore((state) => state.getGroup);
-  const memberList = useBaseStore((state) => state.memberList);
   const getMember = useBaseStore((state) => state.getMember);
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
