@@ -77,7 +77,7 @@ const OtherMemberList: React.FC = () => {
             className="w-full flex justify-center items-center"
           >
             {memberList ? (
-              <span className="text-gray-500 text-sm underline ">더보기</span>
+              <span className="text-gray-500 underline ">더보기</span>
             ) : (
               <ClipLoader color="#70AAFF" size={10} />
             )}
