@@ -8,7 +8,7 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import HookingItem from "./HookingItem";
 
-const GroupSettingsDialog: React.FC = () => {
+const HookingDialog: React.FC = () => {
   const isOpenHookingDialog = useBaseStore(
     (state) => state.isOpenHookingDialog
   );
@@ -29,4 +29,4 @@ const GroupSettingsDialog: React.FC = () => {
   );
 };
 
-export default GroupSettingsDialog;
+export default HookingDialog;

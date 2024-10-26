@@ -53,7 +53,7 @@ const TodayPrayCardList = () => {
     <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
-        {memberList.length == 1 && !isPrayToday && (
+        {memberList.length == 1 && (
           <CarouselItem className="basis-5/6">
             <DummyPrayCardUI
               profileImage="/images/avatar/avatar_1.png"

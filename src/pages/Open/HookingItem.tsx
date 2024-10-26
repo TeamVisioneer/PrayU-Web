@@ -1,41 +1,22 @@
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import useBaseStore from "@/stores/baseStore";
-import CountUp from "react-countup";
+import { analyticsTrack } from "@/analytics/analytics";
 
-const TodayPrayCompletedItem = () => {
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const totalPrayCount = useBaseStore((state) => state.totalPrayCount);
-  const fetchTotalPrayCount = useBaseStore(
-    (state) => state.fetchTotalPrayCount
-  );
-
-  useEffect(() => {
-    fetchTotalPrayCount();
-  }, [fetchTotalPrayCount]);
-
-  const prayCardCarouselIndex = useBaseStore(
-    (state) => state.prayCardCarouselIndex
-  );
-  const prayCardCarouselApi = useBaseStore(
-    (state) => state.prayCardCarouselApi
-  );
+const HookingItem = () => {
+  const user = useBaseStore((state) => state.user);
+  const createGroup = useBaseStore((state) => state.createGroup);
+  const createMember = useBaseStore((state) => state.createMember);
+  const createPrayCard = useBaseStore((state) => state.createPrayCard);
 
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const [showTitleText, setShowTitleText] = useState(false);
   const [showButton, setShowButton] = useState(false);
 
-  useEffect(() => {
-    if (
-      prayCardCarouselApi &&
-      prayCardCarouselIndex !== prayCardCarouselApi.scrollSnapList().length - 2
-    ) {
-      setShowImage(false);
-      setShowTitleText(false);
-      setShowButton(false);
-      return;
-    }
+  const [disabledCreateGroupBtn, setDisabledCreateGroupBtn] = useState(false);
 
+  useEffect(() => {
     if (isImageLoaded) {
       const imageTimeout = setTimeout(() => {
         setShowImage(true);
@@ -52,7 +33,31 @@ const TodayPrayCompletedItem = () => {
         clearTimeout(buttonTimeout);
       };
     }
-  }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi, isPrayToday]);
+  }, [isImageLoaded]);
+
+  const handleCreateGroup = async () => {
+    if (!user) return;
+    const userName = user.user_metadata.full_name;
+    const groupName = userName ? `${userName}의 기도그룹` : "새 기도그룹";
+    const targetGroup = await createGroup(user.id, groupName, "intro");
+    if (!targetGroup) return;
+    const myMember = await createMember(targetGroup.id, user.id, "");
+    if (!myMember) return;
+
+    await createPrayCard(targetGroup.id, user.id, "");
+    return targetGroup.id;
+  };
+
+  const onClickCreateGroupBtn = async () => {
+    analyticsTrack("클릭_그룹_생성", { where: "HookingDialog" });
+    setDisabledCreateGroupBtn(true);
+    const targetGroupId = await handleCreateGroup();
+    if (!targetGroupId) {
+      setDisabledCreateGroupBtn(false);
+      return;
+    }
+    window.location.replace("/group/" + targetGroupId);
+  };
 
   return (
     <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
@@ -79,7 +84,7 @@ const TodayPrayCompletedItem = () => {
           showButton ? "opacity-100" : "opacity-0"
         }`}
       >
-        <div className="left-0 right-0 text-base p-2 text-center bg-opacity-50 bottom-0 ">
+        {/* <div className="left-0 right-0 text-base p-2 text-center bg-opacity-50 bottom-0 ">
           <p className=" leading-tight gmarket-font">
             <CountUp
               start={0}
@@ -93,10 +98,18 @@ const TodayPrayCompletedItem = () => {
           <p className="leading-tight gmarket-font">
             PrayU 를 통해 전달되었어요
           </p>
-        </div>
+        </div> */}
+        <Button
+          variant="primary"
+          className="w-60 h-11 text-[0.95rem] rounded-[10px]"
+          disabled={disabledCreateGroupBtn}
+          onClick={() => onClickCreateGroupBtn()}
+        >
+          내 그룹 만들기
+        </Button>
       </section>
     </div>
   );
 };
 
-export default TodayPrayCompletedItem;
+export default HookingItem;
