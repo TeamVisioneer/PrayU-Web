@@ -18,6 +18,9 @@ const ReactionResultBox: React.FC<ReactionResultType1Props> = ({
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
   );
+  const fetchTodayUserPrayByGroupId = useBaseStore(
+    (state) => state.fetchTodayUserPrayByGroupId
+  );
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
   );
@@ -25,6 +28,7 @@ const ReactionResultBox: React.FC<ReactionResultType1Props> = ({
   const onClickMyMemberReaction = (event: { stopPropagation: () => void }) => {
     if (!user || !targetGroup) return;
     fetchUserPrayCardListByGroupId(user.id, targetGroup.id);
+    fetchTodayUserPrayByGroupId(user.id, targetGroup.id);
     setIsOpenMyPrayDrawer(true);
     event.stopPropagation();
     analyticsTrack("클릭_기도카드_반응결과", eventOption);

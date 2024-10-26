@@ -71,34 +71,24 @@ const HookingItem = () => {
         />
       </div>
       <div
-        className={`flex flex-col justify-center items-center gap-1 transition-opacity duration-1000 ease-in-out ${
+        className={`flex flex-col justify-center items-center gap-2 transition-opacity duration-1000 ease-in-out ${
           showTitleText ? "opacity-100" : "opacity-0"
         }`}
       >
-        <h2 className="text-lg ">앞으로도 그룹원들과</h2>
-        <h1 className="text-xl font-bold">지.속.적.으.로.</h1>
-        <p className="font-light"># 주일의 기도를, 매일의 기도로!</p>
+        <div className="text-center flex flex-col">
+          <p className="text-lg">더욱 합심하여 기도할 때 입니다</p>
+          <p className="text-lg">각자의 그룹에서 기도를 이어주세요</p>
+        </div>
+        <p className="font-light flex gap-2">
+          <span># 그룹원들과 함께</span>
+          <span># 매일의 기도를</span>
+        </p>
       </div>
       <section
         className={`flex flex-col items-center gap-4 transition-opacity duration-1000 ease-in-out ${
           showButton ? "opacity-100" : "opacity-0"
         }`}
       >
-        {/* <div className="left-0 right-0 text-base p-2 text-center bg-opacity-50 bottom-0 ">
-          <p className=" leading-tight gmarket-font">
-            <CountUp
-              start={0}
-              end={totalPrayCount}
-              duration={5}
-              separator=","
-              className="text-indigo-800 font-extrabold text-2xl"
-            />{" "}
-            번의 기도가
-          </p>
-          <p className="leading-tight gmarket-font">
-            PrayU 를 통해 전달되었어요
-          </p>
-        </div> */}
         <Button
           variant="primary"
           className="w-60 h-11 text-[0.95rem] rounded-[10px]"
