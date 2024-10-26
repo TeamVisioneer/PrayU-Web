@@ -6,8 +6,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import useBaseStore from "@/stores/baseStore";
-import { useEffect } from "react";
-import { analyticsTrack } from "@/analytics/analytics";
 import HookingItem from "./HookingItem";
 
 const GroupSettingsDialog: React.FC = () => {
