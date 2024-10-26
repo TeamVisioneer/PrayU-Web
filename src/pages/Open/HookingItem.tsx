@@ -61,7 +61,7 @@ const TodayPrayCompletedItem = () => {
           className={`h-full rounded-2xl transition-opacity duration-1000 ease-in ${
             showImage ? "opacity-100" : "opacity-0"
           }`}
-          src={`/images/appIcon.png`}
+          src={`/images/adsment.png`}
           onLoad={() => setIsImageLoaded(true)}
         />
       </div>
@@ -72,7 +72,7 @@ const TodayPrayCompletedItem = () => {
       >
         <h2 className="text-lg ">앞으로도 그룹원들과</h2>
         <h1 className="text-xl font-bold">지.속.적.으.로.</h1>
-        <p className="font-light">우리만의 기도제목 나눔공간 PrayU</p>
+        <p className="font-light"># 주일의 기도를, 매일의 기도로!</p>
       </div>
       <section
         className={`flex flex-col items-center gap-4 transition-opacity duration-1000 ease-in-out ${
