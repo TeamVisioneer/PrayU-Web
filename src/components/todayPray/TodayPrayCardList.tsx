@@ -21,11 +21,9 @@ const TodayPrayCardList = () => {
   const setPrayCardCarouselIndex = useBaseStore(
     (state) => state.setPrayCardCarouselIndex
   );
-  const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const prayCardCarouselList = useBaseStore(
     (state) => state.prayCardCarouselList
   );
-  const myMember = useBaseStore((state) => state.myMember);
   const memberList = useBaseStore((state) => state.memberList);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
@@ -42,7 +40,7 @@ const TodayPrayCardList = () => {
     });
   }, [prayCardCarouselApi, setPrayCardCarouselIndex]);
 
-  if (!myMember || !memberList || !groupPrayCardList || !prayCardCarouselList)
+  if (!memberList || !prayCardCarouselList)
     return (
       <div className="flex justify-center items-center min-h-80vh max-h-80vh">
         <ClipLoader color="#70AAFF" size={20} />

@@ -75,9 +75,9 @@ const HookingItem = () => {
           showTitleText ? "opacity-100" : "opacity-0"
         }`}
       >
-        <div className="text-center flex flex-col">
-          <p className="text-lg">더욱 합심하여 기도할 때 입니다</p>
-          <p className="text-lg">각자의 그룹에서 기도를 이어주세요</p>
+        <div className="text-center text-lg font-bold flex flex-col">
+          <p>더욱 합심하여 기도할 때 입니다</p>
+          <p>각자의 그룹에서 기도를 이어주세요</p>
         </div>
         <p className="font-light flex gap-2">
           <span># 그룹원들과 함께</span>
