@@ -9,20 +9,24 @@ import {
 import TodayPrayCardList from "./TodayPrayCardList";
 
 const TodayPrayCardListDrawer: React.FC = () => {
-  const memberList = useBaseStore((state) => state.memberList);
-  const groupPrayCardList = useBaseStore((state) => state.groupPrayCardList);
   const isOpenTodayPrayDrawer = useBaseStore(
     (state) => state.isOpenTodayPrayDrawer
   );
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
+  const setIsOpenHookingDialog = useBaseStore(
+    (state) => state.setIsOpenHookingDialog
+  );
 
-  if (!memberList || !groupPrayCardList) return null;
+  const handleOnCloseTodayPrayDrawer = () => {
+    setIsOpenHookingDialog(true);
+  };
 
   return (
     <Drawer
       open={isOpenTodayPrayDrawer}
+      onClose={() => handleOnCloseTodayPrayDrawer()}
       onOpenChange={setIsOpenTodayPrayDrawer}
     >
       <DrawerContent className="bg-mainBg pb-5">

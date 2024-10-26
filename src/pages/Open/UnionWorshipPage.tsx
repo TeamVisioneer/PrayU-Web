@@ -10,6 +10,7 @@ import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDra
 import { Skeleton } from "@/components/ui/skeleton";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
+import HookingDialog from "./HookingDialog";
 
 const UnionWorshipPage = () => {
   const { user } = useBaseStore();
@@ -85,6 +86,7 @@ const UnionWorshipPage = () => {
       <PrayListDrawer />
       <OtherMemberDrawer />
       <TodayPrayCardListDrawer />
+      <HookingDialog />
     </div>
   );
 };
