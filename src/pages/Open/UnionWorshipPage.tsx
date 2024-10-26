@@ -1,10 +1,12 @@
 import LogInDrawer from "@/components/auth/LogInDrawer";
 import GroupHeader from "@/components/group/GroupHeader";
 import MyMember from "@/components/member/MyMember";
+import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
+import OtherMemberList from "@/components/member/OtherMemberList";
+import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import ReactionResultBox from "@/components/pray/ReactionResultBox";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDrawer";
-import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
@@ -23,23 +25,23 @@ const UnionWorshipPage = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
+  const setIsOpenLoginDrawer = useBaseStore(
+    (state) => state.setIsOpenLoginDrawer
+  );
+
   const groupId = String(import.meta.env.VITE_UNION_WORSHIP_GROUP_ID);
 
   useEffect(() => {
     getGroup(groupId);
+    fetchMemberListByGroupId(groupId);
+  }, [fetchMemberListByGroupId, getGroup, groupId]);
+
+  useEffect(() => {
     if (user) {
       getMember(user.id, groupId);
       fetchGroupListByUserId(user.id);
     }
-    fetchMemberListByGroupId(groupId);
-  }, [
-    fetchMemberListByGroupId,
-    getGroup,
-    getMember,
-    user,
-    fetchGroupListByUserId,
-    groupId,
-  ]);
+  }, [getMember, user, fetchGroupListByUserId, groupId]);
 
   if (!targetGroup || !memberList) {
     return (
@@ -51,7 +53,10 @@ const UnionWorshipPage = () => {
   }
 
   const MyMemberUI = (
-    <div className="w-full flex flex-col gap-3 cursor-pointer bg-white p-6 rounded-[15px]">
+    <div
+      onClick={() => setIsOpenLoginDrawer(true)}
+      className="w-full flex flex-col gap-3 cursor-pointer bg-white p-6 rounded-[15px]"
+    >
       <div className="flex flex-col gap-1">
         <h3 className="flex font-bold text-lg">내 기도제목</h3>
         <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">
@@ -64,20 +69,27 @@ const UnionWorshipPage = () => {
     </div>
   );
 
+  const otherMemberList = memberList.filter(
+    (member) => member.user_id != user?.id
+  );
+
   return (
     <div className="flex flex-col h-full gap-5">
       <GroupHeader
         groupList={groupList || []}
         targetGroup={targetGroup}
-        otherMemberList={memberList}
+        otherMemberList={otherMemberList}
       />
       <div className="flex flex-col flex-grow gap-4">
         {myMember ? <MyMember myMember={myMember} /> : MyMemberUI}
-        <TodayPrayStartCard />
+        <OtherMemberList otherMemberList={otherMemberList} />
       </div>
-      <ShareDrawer />
-      <TodayPrayCardListDrawer />
+
       <LogInDrawer />
+      <ShareDrawer />
+      <PrayListDrawer />
+      <OtherMemberDrawer />
+      <TodayPrayCardListDrawer />
     </div>
   );
 };

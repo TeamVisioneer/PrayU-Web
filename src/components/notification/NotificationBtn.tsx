@@ -26,10 +26,15 @@ const NotificationBtn = () => {
   const setIsOpenNotificationPopover = useBaseStore(
     (state) => state.setIsOpenNotificationPopover
   );
-
-  if (!user || !targetGroup) return null;
+  const setIsOpenLoginDrawer = useBaseStore(
+    (state) => state.setIsOpenLoginDrawer
+  );
 
   const onClickNotificationBtn = async () => {
+    if (!user || !targetGroup) {
+      setIsOpenLoginDrawer(true);
+      return;
+    }
     analyticsTrack("클릭_알림_버튼", {});
     setUserNotificationView([]);
     if (!isOpenNotificationPopover) {

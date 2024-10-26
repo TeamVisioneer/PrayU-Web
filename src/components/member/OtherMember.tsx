@@ -18,6 +18,9 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
   const setIsOpenOtherMemberDrawer = useBaseStore(
     (state) => state.setIsOpenOtherMemberDrawer
   );
+  const setIsOpenLoginDrawer = useBaseStore(
+    (state) => state.setIsOpenLoginDrawer
+  );
   const dateDistance = getDateDistance(
     new Date(getISOOnlyDate(member.updated_at)),
     new Date(getISOTodayDate())
@@ -25,14 +28,17 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
 
   const onClickOtherMember = async () => {
     analyticsTrack("클릭_멤버_구성원", { member: member.user_id });
-    setIsOpenOtherMemberDrawer(true);
-    setOtherMember(null);
-    await fetchOtherPrayCardListByGroupId(
-      user!.id,
-      member.user_id!,
-      member.group_id!
-    );
-    setOtherMember(member);
+    if (!user) setIsOpenLoginDrawer(true);
+    else {
+      setIsOpenOtherMemberDrawer(true);
+      setOtherMember(null);
+      await fetchOtherPrayCardListByGroupId(
+        user.id,
+        member.user_id!,
+        member.group_id!
+      );
+      setOtherMember(member);
+    }
   };
 
   return (
