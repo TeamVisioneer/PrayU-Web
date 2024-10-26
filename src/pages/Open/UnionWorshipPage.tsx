@@ -23,7 +23,6 @@ const UnionWorshipPage = () => {
   const fetchMemberCountByGroupId = useBaseStore(
     (state) => state.fetchMemberCountByGroupId
   );
-  const memberList = useBaseStore((state) => state.memberList);
   const groupList = useBaseStore((state) => state.groupList);
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
@@ -47,7 +46,7 @@ const UnionWorshipPage = () => {
     }
   }, [getMember, user, fetchGroupListByUserId, groupId]);
 
-  if (!targetGroup || !memberList) {
+  if (!targetGroup) {
     return (
       <div className="flex flex-col h-full gap-4 pt-[48px]">
         <Skeleton className="w-full h-[150px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
@@ -73,20 +72,12 @@ const UnionWorshipPage = () => {
     </div>
   );
 
-  const otherMemberList = memberList.filter(
-    (member) => member.user_id != user?.id
-  );
-
   return (
     <div className="flex flex-col h-full gap-5">
-      <GroupHeader
-        groupList={groupList || []}
-        targetGroup={targetGroup}
-        otherMemberList={otherMemberList}
-      />
+      <GroupHeader groupList={groupList || []} targetGroup={targetGroup} />
       <div className="flex flex-col flex-grow gap-4">
         {myMember ? <MyMember myMember={myMember} /> : MyMemberUI}
-        <OtherMemberList otherMemberList={otherMemberList} />
+        <OtherMemberList />
       </div>
 
       <LogInDrawer />

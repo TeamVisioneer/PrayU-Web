@@ -134,11 +134,12 @@ export interface BaseStore {
   isOpenOtherMemberDrawer: boolean;
   setIsOpenOtherMemberDrawer: (isOpenOtherMemberDrawer: boolean) => void;
   setMemberListView: (memberListView: MemberWithProfiles[]) => void;
+  setMemberList: (memberList: MemberWithProfiles[] | null) => void;
   fetchMemberListByGroupId: (
     groupId: string,
     limit?: number,
     offset?: number,
-  ) => Promise<void>;
+  ) => Promise<MemberWithProfiles[] | null>;
   fetchMemberCountByGroupId: (groupId: string) => Promise<number | null>;
   createMember: (
     groupId: string,
@@ -537,7 +538,7 @@ const useBaseStore = create<BaseStore>()(
     //member
     memberList: null,
     memberListView: [],
-    memberCount: null,
+    memberCount: 0,
     memberLoading: true,
     myMember: null,
     otherMember: null,
@@ -550,6 +551,11 @@ const useBaseStore = create<BaseStore>()(
     setMemberListView: (memberListView: MemberWithProfiles[]) => {
       set((state) => {
         state.memberListView = memberListView;
+      });
+    },
+    setMemberList: (memberList: MemberWithProfiles[] | null) => {
+      set((state) => {
+        state.memberList = memberList;
       });
     },
     fetchMemberListByGroupId: async (
@@ -565,6 +571,7 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.memberList = memberList;
       });
+      return memberList;
     },
     fetchMemberCountByGroupId: async (groupId: string) => {
       const memberCount = await fetchMemberCountByGroupId(groupId);

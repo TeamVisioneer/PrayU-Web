@@ -1,23 +1,20 @@
 import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 import GroupMenuBtn from "./GroupMenuBtn";
-import {
-  GroupWithProfiles,
-  MemberWithProfiles,
-  Group,
-} from "supabase/types/tables";
+import { GroupWithProfiles, Group } from "supabase/types/tables";
 import NotificationBtn from "../notification/NotificationBtn";
+import useBaseStore from "@/stores/baseStore";
 
 interface GroupHeaderProps {
-  otherMemberList: MemberWithProfiles[];
   targetGroup: GroupWithProfiles;
   groupList: Group[];
 }
 
 const GroupHeader: React.FC<GroupHeaderProps> = ({
-  otherMemberList,
   targetGroup,
   groupList,
 }) => {
+  const memberCount = useBaseStore((state) => state.memberCount);
+
   return (
     <div className="flex justify-between items-center">
       <OpenShareDrawerBtn
@@ -29,9 +26,7 @@ const GroupHeader: React.FC<GroupHeaderProps> = ({
         <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
           {targetGroup.name}
         </div>
-        <span className="text-sm text-gray-500">
-          {otherMemberList.length + 1}
-        </span>
+        <span className="text-sm text-gray-500">{memberCount}</span>
       </div>
       <div className="w-[48px] flex justify-between items-center ">
         <NotificationBtn />
