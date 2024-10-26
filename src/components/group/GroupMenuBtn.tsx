@@ -141,6 +141,14 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
               </a>
             </div>
           ))}
+          {!user && (
+            <div className="flex items-center gap-1">
+              <span className="w-[5px] h-[18px]  rounded-md bg-mainBtn"></span>
+              <a className="cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis font-bold text-[#222222]">
+                1027 연합예배
+              </a>
+            </div>
+          )}
           <hr className="w-full" />
           <div className="flex items-center gap-2">
             <IoPersonCircleOutline size={20} color="#222222" />

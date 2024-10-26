@@ -9,7 +9,6 @@ import useBaseStore from "@/stores/baseStore";
 import OtherPrayCardUI from "../prayCard/OtherPrayCardUI";
 
 const OtherMemberDrawer: React.FC = () => {
-  const user = useBaseStore((state) => state.user);
   const memberList = useBaseStore((state) => state.memberList);
   const isOpenOtherMemberDrawer = useBaseStore(
     (state) => state.isOpenOtherMemberDrawer
@@ -18,7 +17,8 @@ const OtherMemberDrawer: React.FC = () => {
     (state) => state.setIsOpenOtherMemberDrawer
   );
 
-  if (!user || !memberList) return null;
+  if (!memberList) return null;
+
   return (
     <Drawer
       open={isOpenOtherMemberDrawer}
@@ -30,7 +30,6 @@ const OtherMemberDrawer: React.FC = () => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         <OtherPrayCardUI
-          currentUserId={user.id}
           eventOption={{
             where: "OtherMember",
             total_member: memberList.length,

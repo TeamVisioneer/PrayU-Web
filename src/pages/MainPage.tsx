@@ -42,7 +42,7 @@ const MainPage: React.FC = () => {
     <div className="flex flex-col items-center justify-center text-center h-full">
       <MainHeader />
       <section className="w-full flex flex-col items-center ">
-        <div className="flex flex-col gap-8 p-10 items-center justify-center ">
+        <div className="flex flex-col gap-8  items-center justify-center ">
           <div className="h-[80px] w-full flex flex-col items-center object-cover">
             <img className="h-full" src="/images/PrayULogo.png" />
           </div>
@@ -63,7 +63,15 @@ const MainPage: React.FC = () => {
             </p>
             <p>PrayU 를 통해 전달되었어요</p>
           </div>
-          <PrayUStartBtn />
+          <div className="flex flex-col gap-4">
+            <PrayUStartBtn />
+            <a
+              className="text-liteBlack underline font-bold"
+              href="/group/open/1027-union"
+            >
+              1027 연합예배 그룹
+            </a>
+          </div>
         </div>
       </section>
 

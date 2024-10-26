@@ -7,7 +7,6 @@ import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 import ClipLoader from "react-spinners/ClipLoader";
 
 interface OtherPrayCardProps {
-  currentUserId: string;
   eventOption: { where: string; total_member: number };
 }
 

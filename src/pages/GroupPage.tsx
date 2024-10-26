@@ -49,6 +49,10 @@ const GroupPage: React.FC = () => {
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
 
+  const unionWorshipGroupId = String(
+    import.meta.env.VITE_UNION_WORSHIP_GROUP_ID
+  );
+
   useEffect(() => {
     fetchGroupListByUserId(currentUserId);
     if (groupId) {
@@ -87,10 +91,7 @@ const GroupPage: React.FC = () => {
     } else if (targetGroupLoading == false && targetGroup == null) {
       navigate("/group/not-found");
       return;
-    } else if (
-      !memberLoading &&
-      groupId === "9085a291-7eb2-4b00-9f85-0ccd98f433a7"
-    ) {
+    } else if (!memberLoading && groupId === unionWorshipGroupId) {
       navigate("/group/open/1027-union", { replace: true });
       return;
     }
@@ -104,6 +105,7 @@ const GroupPage: React.FC = () => {
     targetGroupLoading,
     maxGroupCount,
     userPlan,
+    unionWorshipGroupId,
   ]);
 
   useEffect(() => {
