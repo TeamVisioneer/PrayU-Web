@@ -28,13 +28,15 @@ const GroupPage: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const targetGroupLoading = useBaseStore((state) => state.targetGroupLoading);
   const getGroup = useBaseStore((state) => state.getGroup);
-  const memberList = useBaseStore((state) => state.memberList);
   const getMember = useBaseStore((state) => state.getMember);
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
+  );
+  const fetchMemberCountByGroupId = useBaseStore(
+    (state) => state.fetchMemberCountByGroupId
   );
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
@@ -59,12 +61,14 @@ const GroupPage: React.FC = () => {
       getMember(currentUserId, groupId);
       getGroup(groupId);
       fetchMemberListByGroupId(groupId);
+      fetchMemberCountByGroupId(groupId);
       fetchTodayUserPrayByGroupId(currentUserId, groupId);
       fetchNotificationCount(currentUserId, groupId, true);
     }
   }, [
     fetchGroupListByUserId,
     fetchMemberListByGroupId,
+    fetchMemberCountByGroupId,
     getMember,
     fetchTodayUserPrayByGroupId,
     fetchNotificationCount,
@@ -114,13 +118,7 @@ const GroupPage: React.FC = () => {
     }
   }, [targetGroup, currentUserId, setIsGroupLeader]);
 
-  if (
-    !targetGroup ||
-    !memberList ||
-    !groupList ||
-    !myMember ||
-    isPrayToday == null
-  ) {
+  if (!targetGroup || !groupList || !myMember || isPrayToday == null) {
     return (
       <div className="flex flex-col h-full gap-4 pt-[48px]">
         <Skeleton className="w-full h-[150px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
@@ -129,35 +127,12 @@ const GroupPage: React.FC = () => {
     );
   }
 
-  const otherMemberList = memberList.filter(
-    (member) =>
-      member.user_id &&
-      member.user_id !== currentUserId &&
-      !myMember.profiles.blocking_users.includes(member.user_id)
-  );
-  const isExpiredAllMember =
-    otherMemberList.length == 0
-      ? false
-      : otherMemberList.every(
-          (member) => member.updated_at < getISOTodayDate(-6)
-        );
-
-  const isTodayPrayStart = !isPrayToday && !isExpiredAllMember;
-
   return (
     <div className="flex flex-col h-full gap-5">
-      <GroupHeader
-        groupList={groupList}
-        targetGroup={targetGroup}
-        otherMemberList={otherMemberList}
-      />
+      <GroupHeader groupList={groupList} targetGroup={targetGroup} />
       <div className="flex flex-col flex-grow gap-4">
         <MyMember myMember={myMember} />
-        {isTodayPrayStart ? (
-          <TodayPrayStartCard />
-        ) : (
-          <OtherMemberList otherMemberList={otherMemberList} />
-        )}
+        {!isPrayToday ? <TodayPrayStartCard /> : <OtherMemberList />}
       </div>
 
       <TodayPrayCardListDrawer />

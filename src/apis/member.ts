@@ -4,7 +4,9 @@ import { Member, MemberWithProfiles } from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 
 export const fetchMemberListByGroupId = async (
-  groupId: string
+  groupId: string,
+  limit: number = 25,
+  offset: number = 0,
 ): Promise<MemberWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -12,7 +14,8 @@ export const fetchMemberListByGroupId = async (
       .select(`*, profiles (id, full_name, avatar_url, kakao_id)`)
       .eq("group_id", groupId)
       .is("deleted_at", null)
-      .order("updated_at", { ascending: false });
+      .order("updated_at", { ascending: false })
+      .range(offset, offset + limit - 1);
     if (error) {
       Sentry.captureException(error.message);
       return null;
@@ -24,10 +27,30 @@ export const fetchMemberListByGroupId = async (
   }
 };
 
+export const fetchMemberCountByGroupId = async (
+  groupId: string,
+): Promise<number | null> => {
+  try {
+    const { count, error } = await supabase
+      .from("member")
+      .select("id", { count: "exact" })
+      .eq("group_id", groupId)
+      .is("deleted_at", null);
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return count;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const createMember = async (
   groupId: string,
   userId: string,
-  praySummay: string
+  praySummay: string,
 ): Promise<Member | null> => {
   try {
     const { error, data } = await supabase
@@ -49,13 +72,13 @@ export const createMember = async (
 
 export const getMember = async (
   userId: string,
-  groupId: string
+  groupId: string,
 ): Promise<MemberWithProfiles | null> => {
   try {
     const { data, error } = await supabase
       .from("member")
       .select(
-        `*, profiles (id, full_name, avatar_url, kakao_id, blocking_users, kakao_notification)`
+        `*, profiles (id, full_name, avatar_url, kakao_id, blocking_users, kakao_notification)`,
       )
       .eq("user_id", userId)
       .eq("group_id", groupId);
@@ -73,7 +96,7 @@ export const getMember = async (
 export const updateMember = async (
   memberId: string,
   praySummary: string,
-  updatedAt?: string
+  updatedAt?: string,
 ): Promise<Member | null> => {
   try {
     const updateParams = {
@@ -99,7 +122,7 @@ export const updateMember = async (
 
 export const deleteMemberbyGroupId = async (
   userId: string,
-  groupId: string
+  groupId: string,
 ) => {
   try {
     const { error } = await supabase

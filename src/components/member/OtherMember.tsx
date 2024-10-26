@@ -46,7 +46,9 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
       className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl"
       onClick={() => onClickOtherMember()}
     >
-      <UserProfile profile={member.profiles} imgSize="w-8 h-8" fontSize="" />
+      {member.profiles && (
+        <UserProfile profile={member.profiles} imgSize="w-8 h-8" fontSize="" />
+      )}
       <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
         {member.pray_summary}
       </div>
