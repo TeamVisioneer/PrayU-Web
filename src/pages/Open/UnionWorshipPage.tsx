@@ -20,6 +20,9 @@ const UnionWorshipPage = () => {
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
+  const fetchMemberCountByGroupId = useBaseStore(
+    (state) => state.fetchMemberCountByGroupId
+  );
   const memberList = useBaseStore((state) => state.memberList);
   const groupList = useBaseStore((state) => state.groupList);
   const fetchGroupListByUserId = useBaseStore(
@@ -34,7 +37,8 @@ const UnionWorshipPage = () => {
   useEffect(() => {
     getGroup(groupId);
     fetchMemberListByGroupId(groupId);
-  }, [fetchMemberListByGroupId, getGroup, groupId]);
+    fetchMemberCountByGroupId(groupId);
+  }, [fetchMemberListByGroupId, fetchMemberCountByGroupId, getGroup, groupId]);
 
   useEffect(() => {
     if (user) {

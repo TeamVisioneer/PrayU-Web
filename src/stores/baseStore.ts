@@ -32,6 +32,7 @@ import {
 import {
   createMember,
   deleteMemberbyGroupId,
+  fetchMemberCountByGroupId,
   fetchMemberListByGroupId,
   getMember,
   updateMember,
@@ -125,12 +126,20 @@ export interface BaseStore {
 
   // member
   memberList: MemberWithProfiles[] | null;
+  memberListView: MemberWithProfiles[];
+  memberCount: number | null;
   memberLoading: boolean;
   myMember: MemberWithProfiles | null;
   otherMember: MemberWithProfiles | null;
   isOpenOtherMemberDrawer: boolean;
   setIsOpenOtherMemberDrawer: (isOpenOtherMemberDrawer: boolean) => void;
-  fetchMemberListByGroupId: (groupId: string) => Promise<void>;
+  setMemberListView: (memberListView: MemberWithProfiles[]) => void;
+  fetchMemberListByGroupId: (
+    groupId: string,
+    limit?: number,
+    offset?: number,
+  ) => Promise<void>;
+  fetchMemberCountByGroupId: (groupId: string) => Promise<number | null>;
   createMember: (
     groupId: string,
     userId: string,
@@ -527,6 +536,8 @@ const useBaseStore = create<BaseStore>()(
 
     //member
     memberList: null,
+    memberListView: [],
+    memberCount: null,
     memberLoading: true,
     myMember: null,
     otherMember: null,
@@ -536,11 +547,31 @@ const useBaseStore = create<BaseStore>()(
         state.isOpenOtherMemberDrawer = isOpenOtherMemberDrawer;
       });
     },
-    fetchMemberListByGroupId: async (groupId: string) => {
-      const memberList = await fetchMemberListByGroupId(groupId);
+    setMemberListView: (memberListView: MemberWithProfiles[]) => {
+      set((state) => {
+        state.memberListView = memberListView;
+      });
+    },
+    fetchMemberListByGroupId: async (
+      groupId: string,
+      limit?: number,
+      offset?: number,
+    ) => {
+      const memberList = await fetchMemberListByGroupId(
+        groupId,
+        limit,
+        offset,
+      );
       set((state) => {
         state.memberList = memberList;
       });
+    },
+    fetchMemberCountByGroupId: async (groupId: string) => {
+      const memberCount = await fetchMemberCountByGroupId(groupId);
+      set((state) => {
+        state.memberCount = memberCount;
+      });
+      return memberCount;
     },
     createMember: async (
       groupId: string,
