@@ -47,7 +47,7 @@ const OtherMemberList: React.FC = () => {
     setOffset(offset + pageSize);
   };
 
-  const filteredMember = (member: MemberWithProfiles) => {
+  const isOtherMember = (member: MemberWithProfiles) => {
     if (myMember) {
       return (
         member.user_id != myMember.user_id &&
@@ -67,10 +67,11 @@ const OtherMemberList: React.FC = () => {
 
         {memberListView.map(
           (member) =>
-            filteredMember(member) && (
+            isOtherMember(member) && (
               <OtherMember key={member.id} member={member}></OtherMember>
             )
         )}
+
         {offset < memberCount && (
           <div
             onClick={() => onClickMoreMemberList()}
