@@ -13,8 +13,8 @@ const Sheet = ({
   const { open, onOpenChange } = props;
 
   useEffect(() => {
-    if (open && window.history.state?.open) {
-      window.history.pushState({ open: true }, "", window.location.pathname);
+    if (open && window.history.state?.open !== true) {
+      window.history.pushState({ open: true }, "", "");
     }
   }, [open]);
 
