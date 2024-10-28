@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { IoSettingsOutline } from "react-icons/io5";
 import HistoryList from "@/components/profile/HistoryList";
 import HistoryDrawer from "@/components/profile/HistoryDrawer";
-import PrayListDrawer from "@/components/pray/PrayListDrawer";
+import HistoryPrayListDrawer from "@/components/profile/HistoryPrayListDrawer";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -97,7 +97,7 @@ const MyProfilePage = () => {
         <HistoryList />
       </div>
 
-      <footer className="absolute bottom-4 w-full px-6 flex justify-between text-gray-400 text-[10px]">
+      <footer className="bottom-4 w-full px-6 flex justify-between text-gray-400 text-[10px]">
         <span>© 2024 PrayU. All rights reserved.</span>
         <div className="flex gap-2">
           <a href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html">
@@ -111,7 +111,7 @@ const MyProfilePage = () => {
       </footer>
       <SettingDialog />
       <HistoryDrawer />
-      <PrayListDrawer />
+      <HistoryPrayListDrawer />
     </div>
   );
 };

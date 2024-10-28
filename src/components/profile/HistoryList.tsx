@@ -1,4 +1,5 @@
 import useBaseStore from "@/stores/baseStore";
+import { Badge } from "../ui/badge";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 
 const HistoryList = () => {
@@ -21,6 +22,13 @@ const HistoryList = () => {
     setHistoryCard(prayCard);
     setIsOpenHistoryDrawer(true);
   };
+  function formatDate(isoString: string) {
+    const date = new Date(isoString);
+    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}.${String(date.getDate()).padStart(2, "0")}`;
+  }
 
   console.log("userPrayCardListAll", userPrayCardListAll);
 
@@ -35,8 +43,9 @@ const HistoryList = () => {
               onClickStory(prayCard);
             }}
           >
-            <span className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
-              {prayCard.content}
+            <Badge className="mb-4">{prayCard.group!.name}</Badge>
+            <span className="text-center text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
+              {formatDate(prayCard.created_at)}
             </span>
           </div>
         ))}

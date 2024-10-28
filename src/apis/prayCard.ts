@@ -7,7 +7,7 @@ export const fetchGroupPrayCardList = async (
   groupId: string,
   currentUserId: string,
   startDt: string,
-  endDt: string,
+  endDt: string
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -17,7 +17,7 @@ export const fetchGroupPrayCardList = async (
       profiles (id, full_name, avatar_url, kakao_id),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
-      )`,
+      )`
       )
       .eq("group_id", groupId)
       .eq("pray.user_id", currentUserId)
@@ -44,7 +44,7 @@ export const fetchOtherPrayCardListByGroupId = async (
   userId: string,
   groupId: string,
   limit: number = 1,
-  offset: number = 0,
+  offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -54,7 +54,7 @@ export const fetchOtherPrayCardListByGroupId = async (
         profiles (id, full_name, avatar_url, kakao_id),
         pray (*, 
           profiles (id, full_name, avatar_url, kakao_id)
-        )`,
+        )`
       )
       .eq("user_id", userId)
       .eq("group_id", groupId)
@@ -79,7 +79,7 @@ export const fetchUserPrayCardListByGroupId = async (
   currentUserId: string,
   groupId: string,
   limit: number = 1,
-  offset: number = 0,
+  offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -89,7 +89,7 @@ export const fetchUserPrayCardListByGroupId = async (
       profiles (id, full_name, avatar_url, kakao_id),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
-      )`,
+      )`
       )
       .eq("user_id", currentUserId)
       .eq("group_id", groupId)
@@ -107,7 +107,7 @@ export const fetchUserPrayCardListByGroupId = async (
       ...data,
       pray: data.pray.sort(
         (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       ),
     }));
     return sortedData as PrayCardWithProfiles[];
@@ -128,7 +128,8 @@ export const fetchUserPrayCardListAll = async (
       profiles (id, full_name, avatar_url, kakao_id),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
-      )`
+      ),
+      group(name)`
       )
       .eq("user_id", currentUserId)
       .is("deleted_at", null)
@@ -157,7 +158,7 @@ export const fetchUserPrayCardListAll = async (
 export const createPrayCard = async (
   groupId: string,
   userId: string,
-  content: string,
+  content: string
 ): Promise<PrayCard | null> => {
   try {
     const { error, data } = await supabase
@@ -177,7 +178,7 @@ export const createPrayCard = async (
 
 export async function updatePrayCardContent(
   prayCardId: string,
-  newPrayContent: string,
+  newPrayContent: string
 ) {
   try {
     const { data, error } = await supabase
@@ -219,7 +220,7 @@ export const deletePrayCard = async (prayCardId: string) => {
 
 export const deletePrayCardByGroupId = async (
   userId: string,
-  groupId: string,
+  groupId: string
 ) => {
   try {
     const { error } = await supabase
