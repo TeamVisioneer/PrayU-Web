@@ -16,7 +16,7 @@ const PrayCardHistoryUI: React.FC = () => {
 
   const onClickPrayerList = () => {
     setIsOpenMyPrayDrawer(true);
-    analyticsTrack("클릭_히스토리_기도카드_반응결과", {
+    analyticsTrack("클릭_기도카드_히스토리_반응결과", {
       where: "PrayCardHistory",
     });
   };
