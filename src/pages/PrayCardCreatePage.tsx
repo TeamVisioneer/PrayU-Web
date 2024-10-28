@@ -106,7 +106,6 @@ const PrayCardCreatePage: React.FC = () => {
     }
     return upsertedMember;
   };
-
   const sendNotification = async (member: Member) => {
     if (member.created_at === member.updated_at) {
       await createNotification({

@@ -44,6 +44,7 @@ import {
   fetchGroupPrayCardList,
   fetchOtherPrayCardListByGroupId,
   fetchUserPrayCardListByGroupId,
+  fetchUserPrayCardList,
   updatePrayCardContent,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
@@ -95,6 +96,12 @@ export interface BaseStore {
     userId: string,
     params: updateProfilesParams
   ) => Promise<Profiles | null>;
+  isOpenSettingDialog: boolean;
+  setIsOpenSettingDialog: (isOpenSettingDialog: boolean) => void;
+  isOpenHistoryDrawer: boolean;
+  setIsOpenHistoryDrawer: (isOpenHistoryDrawer: boolean) => void;
+  historyCard: PrayCardWithProfiles | null;
+  setHistoryCard: (historyCard: PrayCardWithProfiles | null) => void;
 
   // group
   groupList: Group[] | null;
@@ -138,7 +145,7 @@ export interface BaseStore {
   fetchMemberListByGroupId: (
     groupId: string,
     limit?: number,
-    offset?: number,
+    offset?: number
   ) => Promise<MemberWithProfiles[] | null>;
   fetchMemberCountByGroupId: (groupId: string) => Promise<number | null>;
   createMember: (
@@ -164,6 +171,7 @@ export interface BaseStore {
   groupPrayCardList: PrayCardWithProfiles[] | null;
   otherPrayCardList: PrayCardWithProfiles[] | null;
   userPrayCardList: PrayCardWithProfiles[] | null;
+  historyPrayCardList: PrayCardWithProfiles[] | null;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
   isDisabledPrayCardCreateBtn: boolean;
@@ -189,6 +197,9 @@ export interface BaseStore {
   fetchUserPrayCardListByGroupId: (
     currentUserId: string,
     groupId: string
+  ) => Promise<PrayCardWithProfiles[] | null>;
+  fetchUserPrayCardList: (
+    currentUserId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   createPrayCard: (
     groupId: string,
@@ -462,6 +473,24 @@ const useBaseStore = create<BaseStore>()(
       const myProfile = await updateProfile(userId, params);
       return myProfile;
     },
+    isOpenSettingDialog: false,
+    setIsOpenSettingDialog: (isOpenSettingDialog: boolean) => {
+      set((state) => {
+        state.isOpenSettingDialog = isOpenSettingDialog;
+      });
+    },
+    isOpenHistoryDrawer: false,
+    setIsOpenHistoryDrawer: (isOpenHistoryDrawer: boolean) => {
+      set((state) => {
+        state.isOpenHistoryDrawer = isOpenHistoryDrawer;
+      });
+    },
+    historyCard: null,
+    setHistoryCard: (historyCard: PrayCardWithProfiles | null) => {
+      set((state) => {
+        state.historyCard = historyCard;
+      });
+    },
 
     // group
     groupList: null,
@@ -561,13 +590,9 @@ const useBaseStore = create<BaseStore>()(
     fetchMemberListByGroupId: async (
       groupId: string,
       limit?: number,
-      offset?: number,
+      offset?: number
     ) => {
-      const memberList = await fetchMemberListByGroupId(
-        groupId,
-        limit,
-        offset,
-      );
+      const memberList = await fetchMemberListByGroupId(groupId, limit, offset);
       set((state) => {
         state.memberList = memberList;
       });
@@ -623,6 +648,7 @@ const useBaseStore = create<BaseStore>()(
     // prayCard
     groupPrayCardList: null,
     userPrayCardList: null,
+    historyPrayCardList: null,
     otherPrayCardList: null,
     inputPrayCardContent: "",
     isEditingPrayCard: false,
@@ -729,6 +755,13 @@ const useBaseStore = create<BaseStore>()(
         state.userPrayCardList = userPrayCardList;
       });
       return userPrayCardList;
+    },
+    fetchUserPrayCardList: async (currentUserId: string) => {
+      const historyPrayCardList = await fetchUserPrayCardList(currentUserId);
+      set((state) => {
+        state.historyPrayCardList = historyPrayCardList;
+      });
+      return historyPrayCardList;
     },
     createPrayCard: async (
       groupId: string,
