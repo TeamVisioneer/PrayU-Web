@@ -145,7 +145,7 @@ const TutorialPage: React.FC = () => {
   const TodayPrayStartCard = (
     <div className="w-full flex-grow flex flex-col items-center">
       <div className="relative flex flex-col w-[85%] flex-grow justify-center items-center max-h-[500px]">
-        <div className="flex w-full flex-col flex-grow py-10 justify-center items-center text-center gap-6 border rounded-2xl bg-gradient-to-t from-[#FFF8F8] via-[#FFEBFA] via-41.75% to-[#AAC7FF] opacity-100">
+        <div className="flex w-full flex-col flex-grow py-10 justify-center items-center text-center gap-5 border rounded-2xl bg-gradient-to-t from-[#FFF8F8] via-[#FFEBFA] via-41.75% to-[#AAC7FF] opacity-100">
           <div className="flex flex-col gap-4">
             <h1 className="font-bold text-xl">오늘의 기도</h1>
             <div className="text-grayText">
@@ -155,9 +155,7 @@ const TutorialPage: React.FC = () => {
           </div>
           <img
             src={"/images/Hand.png"}
-            className={`w-24 h-24 rounded-full bg-white ${
-              index === 2 && "z-40"
-            }`}
+            className={`w-40 rounded-full bg-white ${index === 2 && "z-40"}`}
           ></img>
           <Button
             onClick={() => onClickRight({ where: "TodayPrayStartCard" })}
