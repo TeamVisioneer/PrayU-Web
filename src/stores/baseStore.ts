@@ -216,7 +216,6 @@ export interface BaseStore {
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
   deletePrayCard: (prayCardId: string) => Promise<void>;
   deletePrayCardByGroupId: (userId: string, groupId: string) => Promise<void>;
-  prayCardHistoryLoading: boolean;
 
   // pray
   todayPrayTypeHash: TodayPrayTypeHash;
@@ -761,7 +760,6 @@ const useBaseStore = create<BaseStore>()(
       const historyPrayCardList = await fetchUserPrayCardList(currentUserId);
       set((state) => {
         state.historyPrayCardList = historyPrayCardList;
-        state.prayCardHistoryLoading = false;
       });
       return historyPrayCardList;
     },
@@ -812,7 +810,6 @@ const useBaseStore = create<BaseStore>()(
     deletePrayCardByGroupId: async (userId: string, groupId: string) => {
       await deletePrayCardByGroupId(userId, groupId);
     },
-    prayCardHistoryLoading: true,
 
     // pray
     todayPrayTypeHash: {},

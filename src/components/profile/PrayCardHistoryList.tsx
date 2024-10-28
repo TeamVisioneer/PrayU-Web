@@ -3,16 +3,11 @@ import { Badge } from "../ui/badge";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
 import { formatDate } from "@/lib/utils";
-import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 
 const PrayCardHistoryList = () => {
   const historyPrayCardList = useBaseStore(
     (state) => state.historyPrayCardList
-  );
-
-  const prayCardHistoryLoading = useBaseStore(
-    (state) => state.prayCardHistoryLoading
   );
 
   const setIsOpenHistoryDrawer = useBaseStore(
@@ -27,13 +22,7 @@ const PrayCardHistoryList = () => {
     analyticsTrack("클릭_히스토리_기도카드", {});
   };
 
-  useEffect(() => {
-    if (!prayCardHistoryLoading) {
-      return;
-    }
-  }, [prayCardHistoryLoading]);
-
-  if (prayCardHistoryLoading)
+  if (!historyPrayCardList)
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
