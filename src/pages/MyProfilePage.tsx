@@ -64,8 +64,8 @@ const MyProfilePage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 items-center bg-mainBg">
-      <div className="fixed top-0 w-full bg-mainBg z-10 pt-4">
+    <div className="w-full flex flex-col gap-6 items-center">
+      <div className="fixed top-0 w-full bg-mainBg z-10 p-5">
         <div className="w-full flex justify-between items-center">
           <div className="w-14 ">
             <IoChevronBack size={20} onClick={() => window.history.back()} />
@@ -92,7 +92,7 @@ const MyProfilePage = () => {
           {myProfile.full_name} 님의 기도들
         </div>
       </div>
-      <div className="h-28"></div>
+      <div className="h-36"></div>
       <div>
         <PrayCardHistoryList />
       </div>
