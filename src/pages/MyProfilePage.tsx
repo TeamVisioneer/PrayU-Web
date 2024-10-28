@@ -5,9 +5,9 @@ import { useEffect } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IoSettingsOutline } from "react-icons/io5";
-import HistoryList from "@/components/profile/HistoryList";
-import HistoryDrawer from "@/components/profile/HistoryDrawer";
-import HistoryPrayListDrawer from "@/components/profile/HistoryPrayListDrawer";
+import PrayCardHistoryList from "@/components/profile/PrayCardHistoryList";
+import PrayCardHistoryDrawer from "@/components/profile/PrayCardHistoryDrawer";
+import PrayCardHistoryPrayListDrawer from "@/components/profile/PrayCardHistoryPrayListDrawer";
 import { analyticsTrack } from "@/analytics/analytics";
 
 const MyProfilePage = () => {
@@ -20,7 +20,7 @@ const MyProfilePage = () => {
     (state) => state.setIsOpenSettingDialog
   );
   const fetchUserPrayCardListAll = useBaseStore(
-    (state) => state.fetchUserPrayCardListAll
+    (state) => state.fetchUserPrayCardList
   );
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const MyProfilePage = () => {
         </div>
       </div>
       <div>
-        <HistoryList />
+        <PrayCardHistoryList />
       </div>
 
       <footer className="bottom-4 w-full px-6 flex justify-between text-gray-400 text-[10px]">
@@ -109,8 +109,8 @@ const MyProfilePage = () => {
         </div>
       </footer>
       <SettingDialog />
-      <HistoryDrawer />
-      <HistoryPrayListDrawer />
+      <PrayCardHistoryDrawer />
+      <PrayCardHistoryPrayListDrawer />
     </div>
   );
 };

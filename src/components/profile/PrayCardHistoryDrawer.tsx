@@ -6,9 +6,9 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
-import HistoryCardUI from "./HistoryCardUI";
+import PrayCardHistoryUI from "./PrayCardHistoryUI";
 
-const HistoryDrawer: React.FC = () => {
+const PrayCardHistoryDrawer: React.FC = () => {
   const isOpenHistoryDrawer = useBaseStore(
     (state) => state.isOpenHistoryDrawer
   );
@@ -23,10 +23,10 @@ const HistoryDrawer: React.FC = () => {
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <HistoryCardUI />
+        <PrayCardHistoryUI />
       </DrawerContent>
     </Drawer>
   );
 };
 
-export default HistoryDrawer;
+export default PrayCardHistoryDrawer;

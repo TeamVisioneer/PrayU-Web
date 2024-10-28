@@ -3,7 +3,7 @@ import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { KakaoShareButton, TodayPrayLink } from "../share/KakaoShareBtn";
 import { isToday } from "@/lib/utils";
 
-const HistoryPrayList: React.FC = () => {
+const PrayCardHistoryPrayList: React.FC = () => {
   const user = useBaseStore((state) => state.user);
 
   const groupAndSortByUserId = useBaseStore(
@@ -34,7 +34,7 @@ const HistoryPrayList: React.FC = () => {
             className="w-48"
             buttonText="오늘의 기도 링크 공유"
             kakaoLinkObject={TodayPrayLink()}
-            eventOption={{ where: "HistoryPrayList" }}
+            eventOption={{ where: "PrayCardHistoryPrayList" }}
           />
         </div>
       ) : (
@@ -86,4 +86,4 @@ const HistoryPrayList: React.FC = () => {
   );
 };
 
-export default HistoryPrayList;
+export default PrayCardHistoryPrayList;

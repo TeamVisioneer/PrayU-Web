@@ -44,7 +44,7 @@ import {
   fetchGroupPrayCardList,
   fetchOtherPrayCardListByGroupId,
   fetchUserPrayCardListByGroupId,
-  fetchUserPrayCardListAll,
+  fetchUserPrayCardList,
   updatePrayCardContent,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
@@ -171,7 +171,7 @@ export interface BaseStore {
   groupPrayCardList: PrayCardWithProfiles[] | null;
   otherPrayCardList: PrayCardWithProfiles[] | null;
   userPrayCardList: PrayCardWithProfiles[] | null;
-  userPrayCardListAll: PrayCardWithProfiles[] | null;
+  historyPrayCardList: PrayCardWithProfiles[] | null;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
   isDisabledPrayCardCreateBtn: boolean;
@@ -198,7 +198,7 @@ export interface BaseStore {
     currentUserId: string,
     groupId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
-  fetchUserPrayCardListAll: (
+  fetchUserPrayCardList: (
     currentUserId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   createPrayCard: (
@@ -216,6 +216,7 @@ export interface BaseStore {
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
   deletePrayCard: (prayCardId: string) => Promise<void>;
   deletePrayCardByGroupId: (userId: string, groupId: string) => Promise<void>;
+  prayCardHistoryLoading: boolean;
 
   // pray
   todayPrayTypeHash: TodayPrayTypeHash;
@@ -648,7 +649,7 @@ const useBaseStore = create<BaseStore>()(
     // prayCard
     groupPrayCardList: null,
     userPrayCardList: null,
-    userPrayCardListAll: null,
+    historyPrayCardList: null,
     otherPrayCardList: null,
     inputPrayCardContent: "",
     isEditingPrayCard: false,
@@ -756,12 +757,13 @@ const useBaseStore = create<BaseStore>()(
       });
       return userPrayCardList;
     },
-    fetchUserPrayCardListAll: async (currentUserId: string) => {
-      const userPrayCardListAll = await fetchUserPrayCardListAll(currentUserId);
+    fetchUserPrayCardList: async (currentUserId: string) => {
+      const historyPrayCardList = await fetchUserPrayCardList(currentUserId);
       set((state) => {
-        state.userPrayCardListAll = userPrayCardListAll;
+        state.historyPrayCardList = historyPrayCardList;
+        state.prayCardHistoryLoading = false;
       });
-      return userPrayCardListAll;
+      return historyPrayCardList;
     },
     createPrayCard: async (
       groupId: string,
@@ -810,6 +812,7 @@ const useBaseStore = create<BaseStore>()(
     deletePrayCardByGroupId: async (userId: string, groupId: string) => {
       await deletePrayCardByGroupId(userId, groupId);
     },
+    prayCardHistoryLoading: true,
 
     // pray
     todayPrayTypeHash: {},

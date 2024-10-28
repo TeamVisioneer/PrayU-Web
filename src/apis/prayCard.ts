@@ -117,7 +117,7 @@ export const fetchUserPrayCardListByGroupId = async (
   }
 };
 
-export const fetchUserPrayCardListAll = async (
+export const fetchUserPrayCardList = async (
   currentUserId: string
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
@@ -134,7 +134,8 @@ export const fetchUserPrayCardListAll = async (
       .eq("user_id", currentUserId)
       .is("deleted_at", null)
       .is("pray.deleted_at", null)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(20);
 
     if (error) {
       Sentry.captureException(error.message);

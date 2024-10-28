@@ -7,7 +7,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { Textarea } from "../ui/textarea";
 import { useRef } from "react";
 
-const MyPrayCardUI: React.FC = () => {
+const PrayCardHistoryUI: React.FC = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const prayCard = useBaseStore((state) => state.historyCard);
   const setIsOpenMyPrayDrawer = useBaseStore(
@@ -16,7 +16,9 @@ const MyPrayCardUI: React.FC = () => {
 
   const onClickPrayerList = () => {
     setIsOpenMyPrayDrawer(true);
-    analyticsTrack("클릭_히스토리_기도카드_반응결과", { where: "HistoryCard" });
+    analyticsTrack("클릭_히스토리_기도카드_반응결과", {
+      where: "PrayCardHistory",
+    });
   };
 
   const createdDateYMD = getISODateYMD(prayCard!.created_at);
@@ -89,4 +91,4 @@ const MyPrayCardUI: React.FC = () => {
   );
 };
 
-export default MyPrayCardUI;
+export default PrayCardHistoryUI;

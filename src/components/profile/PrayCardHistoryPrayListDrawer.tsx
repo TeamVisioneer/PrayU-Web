@@ -1,4 +1,4 @@
-import HistoryPrayList from "@/components/profile/HistoryPrayList";
+import PrayCardHistoryPrayList from "@/components/profile/PrayCardHistoryPrayList";
 import useBaseStore from "@/stores/baseStore";
 import {
   Drawer,
@@ -8,7 +8,7 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 
-const HistoryPrayDrawer: React.FC = () => {
+const PrayCardHistoryPrayListDrawer: React.FC = () => {
   const isOpenMyPrayDrawer = useBaseStore((state) => state.isOpenMyPrayDrawer);
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
@@ -21,10 +21,10 @@ const HistoryPrayDrawer: React.FC = () => {
           <DrawerTitle className="p-4 text-center">기도해 준 친구</DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <HistoryPrayList />
+        <PrayCardHistoryPrayList />
       </DrawerContent>
     </Drawer>
   );
 };
 
-export default HistoryPrayDrawer;
+export default PrayCardHistoryPrayListDrawer;

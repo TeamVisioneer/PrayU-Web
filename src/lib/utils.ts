@@ -72,6 +72,14 @@ export const isToday = (dateString: string) => {
   return todayDt === targetDt;
 };
 
+export const formatDate = (isoString: string) => {
+  const date = new Date(isoString);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}.${String(date.getDate()).padStart(2, "0")}`;
+};
+
 // sleep 함수
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
