@@ -4,7 +4,6 @@ import { getDateDistance } from "@toss/date";
 import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
-import MyPrayCardMenuBtn from "../prayCard/MyPrayCardMenuBtn";
 import { Textarea } from "../ui/textarea";
 import { useRef } from "react";
 
@@ -17,12 +16,7 @@ const MyPrayCardUI: React.FC = () => {
 
   const onClickPrayerList = () => {
     setIsOpenMyPrayDrawer(true);
-    analyticsTrack("클릭_기도카드_반응결과", { where: "MyPrayCard" });
-  };
-
-  const handleEditClick = () => {
-    // if (textareaRef.current) textareaRef.current.focus();
-    // analyticsTrack("클릭_기도카드_수정", {});
+    analyticsTrack("클릭_히스토리_기도카드_반응결과", { where: "HistoryCard" });
   };
 
   const createdDateYMD = getISODateYMD(prayCard!.created_at);
@@ -64,14 +58,7 @@ const MyPrayCardUI: React.FC = () => {
 
   return (
     <div className="flex flex-col px-10 gap-2 h-70vh">
-      <div className="flex justify-end px-2">
-        {prayCard && (
-          <MyPrayCardMenuBtn
-            handleEditClick={handleEditClick}
-            prayCard={prayCard}
-          />
-        )}
-      </div>
+      <div className="flex justify-end px-2"></div>
       {MyPrayCardBody}
       <div
         className="flex justify-center focus:outline-none gap-2 mt-4"

@@ -8,6 +8,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import HistoryList from "@/components/profile/HistoryList";
 import HistoryDrawer from "@/components/profile/HistoryDrawer";
 import HistoryPrayListDrawer from "@/components/profile/HistoryPrayListDrawer";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -59,12 +60,11 @@ const MyProfilePage = () => {
 
   const onClickSettingBtn = () => {
     setIsOpenSettingDialog(true);
-    //analyticsTrack("클릭_공지", {});
+    analyticsTrack("클릭_내프로필_설정", {});
   };
 
   return (
     <div className="w-full flex flex-col gap-6 items-center">
-      {/* <div className="absolute top-10"> */}
       <div className="w-full bg-mainBg z-10">
         <div className="w-full flex justify-between items-center">
           <div className="w-14 ">
@@ -92,7 +92,6 @@ const MyProfilePage = () => {
           {myProfile.full_name} 님의 기도들
         </div>
       </div>
-      {/* <div className="h-28 "></div> */}
       <div>
         <HistoryList />
       </div>

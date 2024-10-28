@@ -1,6 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { Badge } from "../ui/badge";
 import { PrayCardWithProfiles } from "supabase/types/tables";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const HistoryList = () => {
   const userPrayCardListAll = useBaseStore(
@@ -13,14 +14,10 @@ const HistoryList = () => {
 
   const setHistoryCard = useBaseStore((state) => state.setHistoryCard);
 
-  //   const onClickStory = (index) => {
-  //     //analyticsTrack("클릭_로그아웃", {});
-  //     //setIsOpenStoryDrawer(true)
-  //   };
-
   const onClickStory = (prayCard: PrayCardWithProfiles) => {
     setHistoryCard(prayCard);
     setIsOpenHistoryDrawer(true);
+    analyticsTrack("클릭_히스토리_기도카드", {});
   };
   function formatDate(isoString: string) {
     const date = new Date(isoString);
