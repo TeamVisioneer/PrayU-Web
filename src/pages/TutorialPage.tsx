@@ -155,7 +155,7 @@ const TutorialPage: React.FC = () => {
           </div>
           <img
             src={"/images/Hand.png"}
-            className={`w-40 rounded-full bg-white ${index === 2 && "z-40"}`}
+            className={`w-40 rounded-full ${index === 2 && "z-40"}`}
           ></img>
           <Button
             onClick={() => onClickRight({ where: "TodayPrayStartCard" })}
