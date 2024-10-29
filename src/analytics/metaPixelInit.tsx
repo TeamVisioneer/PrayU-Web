@@ -11,7 +11,6 @@ const MetaPixelInit: React.FC = () => {
     script.onload = () => {
       if (window.fbq) {
         window.fbq("init", `${import.meta.env.VITE_META_PIXEL_ID}`);
-        window.fbq("track", "PageView");
       } else {
         console.error("Meta Pixel을 초기화할 수 없습니다.");
       }
