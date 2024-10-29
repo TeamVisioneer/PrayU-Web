@@ -10,16 +10,17 @@ const Popover = ({
   const { open, onOpenChange } = props;
 
   useEffect(() => {
-    if (open) window.history.pushState(null, "", window.location.pathname);
+    if (open && window.history.state?.open !== true) {
+      window.history.pushState({ open: true }, "", "");
+    }
   }, [open]);
 
   useEffect(() => {
     const handlePopState = () => {
-      if (onOpenChange) {
-        onOpenChange(false);
-      }
+      if (onOpenChange) onOpenChange(false);
     };
     window.addEventListener("popstate", handlePopState);
+    window.history.replaceState(null, "", window.location.pathname);
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
