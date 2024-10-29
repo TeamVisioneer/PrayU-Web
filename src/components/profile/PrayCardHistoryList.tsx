@@ -40,7 +40,7 @@ const PrayCardHistoryList = () => {
               onClickStory(prayCard);
             }}
           >
-            <Badge className="mb-4">{prayCard.group!.name}</Badge>
+            <Badge className="mb-4 text-xs">{prayCard.group!.name}</Badge>
             <span className="text-center text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
               {formatDate(prayCard.created_at)}
             </span>
