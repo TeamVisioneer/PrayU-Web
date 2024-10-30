@@ -43,12 +43,15 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
   const weeklyDays = generateDates(prayCard);
 
   return (
-    <div className="flex justify-center gap-3">
+    <div className="w-fuil flex justify-around ">
       {weeklyDays.map((date) => {
         const isToday = date.date === currentDate;
         const dayOfWeek = new Date(date.date).getDay();
         return (
-          <div key={date.date} className="flex flex-col items-center gap-1">
+          <div
+            key={date.date}
+            className="w-[10%] flex flex-col items-center gap-1"
+          >
             <span
               className={`text-sm ${
                 isToday ? "font-bold text-black" : "text-deactivate"
@@ -57,7 +60,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
               {days[dayOfWeek]}
             </span>
             <div
-              className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
+              className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
                 isToday ? "border-[1.5px] border-[#BBBED4]" : ""
               } ${todayPrayTypeHash[prayCard.id] ? "border-none" : ""}`}
             >

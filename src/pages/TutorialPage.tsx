@@ -146,17 +146,19 @@ const TutorialPage: React.FC = () => {
     <div className="w-full flex-grow flex flex-col items-center">
       <div className="relative flex flex-col w-[85%] flex-grow justify-center items-center max-h-[500px]">
         <div className="flex w-full flex-col flex-grow py-10 justify-center items-center text-center gap-5 border rounded-2xl bg-gradient-to-t from-[#FFF8F8] via-[#FFEBFA] via-41.75% to-[#AAC7FF] opacity-100">
-          <div className="flex flex-col gap-4">
-            <h1 className="font-bold text-xl">오늘의 기도</h1>
-            <div className="text-grayText">
-              <h1>당신의 기도가 필요한 오늘,</h1>
-              <h1>서로를 위해 기도해 보아요</h1>
+          <section>
+            <div className="flex flex-col gap-4">
+              <h1 className="font-bold text-xl">오늘의 기도</h1>
+              <div className="text-grayText">
+                <h1>당신의 기도가 필요한 오늘,</h1>
+                <h1>서로를 위해 기도해 보아요</h1>
+              </div>
             </div>
-          </div>
-          <img
-            src={"/images/Hand.png"}
-            className={`w-40 rounded-full ${index === 2 && "z-40"}`}
-          ></img>
+            <img
+              src={"/images/Hand.png"}
+              className={`w-40 rounded-full ${index === 2 && "z-40"}`}
+            ></img>
+          </section>
           <Button
             onClick={() => onClickRight({ where: "TodayPrayStartCard" })}
             variant="primary"
@@ -171,9 +173,9 @@ const TutorialPage: React.FC = () => {
   );
 
   const Calendar = (
-    <div className="flex justify-center gap-3">
+    <div className="flex justify-around">
       {days.map((day, index) => (
-        <div key={index} className="flex flex-col items-center gap-1">
+        <div key={index} className="w-[10%] flex flex-col items-center gap-1">
           <span
             className={`text-sm ${
               index == todayDt.getDay()
@@ -184,7 +186,7 @@ const TutorialPage: React.FC = () => {
             {day}
           </span>
           <div
-            className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
+            className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
               index == todayDt.getDay() && "border-[1.5px] border-[#BBBED4]"
             } ${todayPrayType && "border-none"}`}
           >
@@ -203,13 +205,13 @@ const TutorialPage: React.FC = () => {
   );
 
   const ReactionBtn = (
-    <div className="flex justify-center gap-8">
+    <div className="flex justify-around">
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
-          <div key={type} className="relative">
+          <div key={type} className="relative w-1/5 max-w-20">
             <button
-              className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
+              className={`w-full aspect-square rounded-full flex justify-center items-center p-2 duration-1000 ease-in-out ${
                 emojiData.bgColor
               } ${
                 !todayPrayType
@@ -225,7 +227,7 @@ const TutorialPage: React.FC = () => {
                 });
               }}
             >
-              <img src={emojiData.icon} className="w-9 h-9" />
+              <img src={emojiData.icon} className="w-3/4 h-3/4" />
             </button>
             {type == PrayType.PRAY && !todayPrayType && (
               <span className="absolute -top-2 -right-3 text-white bg-black text-xs rounded-xl px-2 py-1">

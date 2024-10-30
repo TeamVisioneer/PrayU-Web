@@ -75,8 +75,8 @@ const DumyReactionBtnWithCalendar: React.FC<
     return (
       <img
         src={PrayTypeDatas[prayType as PrayType]?.reactImg}
-        alt={PrayTypeDatas[prayType as PrayType]?.emoji}
-      ></img>
+        className="w-full h-full"
+      />
     );
   };
 
@@ -84,7 +84,7 @@ const DumyReactionBtnWithCalendar: React.FC<
 
   return (
     <div className="flex flex-col gap-6 p-2">
-      <div className="flex justify-center gap-3">
+      <div className="flex justify-around">
         {weeklyDays.map((date, index) => {
           const isToday = date.date === getISOToday().split("T")[0];
           const isPast =
@@ -92,7 +92,10 @@ const DumyReactionBtnWithCalendar: React.FC<
 
           const dayOfWeek = new Date(date.date).getDay();
           return (
-            <div key={date.date} className="flex flex-col items-center gap-1">
+            <div
+              key={date.date}
+              className="w-[10%] flex flex-col items-center gap-1"
+            >
               <span
                 className={`text-sm ${
                   isToday ? "font-bold text-black" : "text-deactivate"
@@ -101,7 +104,7 @@ const DumyReactionBtnWithCalendar: React.FC<
                 {days[dayOfWeek]}
               </span>
               <div
-                className={`w-7 h-7 flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
+                className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
                   isToday ? "border-[1.5px] border-[#BBBED4]" : ""
                 } ${todayPrayType ? "border-none" : ""}`}
               >
@@ -116,15 +119,15 @@ const DumyReactionBtnWithCalendar: React.FC<
         })}
       </div>
 
-      <div className="flex justify-center gap-8">
+      <div className="flex justify-around">
         {Object.values(PrayType).map((type) => {
           const emojiData = PrayTypeDatas[type];
           const isSelected = todayPrayType === type;
           const isNotSelected = todayPrayType !== "" && !isSelected;
           return (
-            <div key={type} className="relative">
+            <div key={type} className="relative w-1/5 max-w-20">
               <button
-                className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
+                className={`w-full aspect-square rounded-full flex justify-center items-center p-2 duration-1000 ease-in-out ${
                   emojiData.bgColor
                 } ${!isPrayToday && "animate-pulse"} ${
                   isNotSelected
@@ -137,7 +140,7 @@ const DumyReactionBtnWithCalendar: React.FC<
                 }`}
                 onClick={() => handleClick(type)}
               >
-                <img src={emojiData.icon} className="w-9 h-9" />
+                <img src={emojiData.icon} className="w-3/4 h-3/4" />
               </button>
               {type == PrayType.PRAY && !todayPrayType && (
                 <span className="absolute -top-2 -right-3 text-white bg-black text-xs rounded-xl px-2 py-1">
