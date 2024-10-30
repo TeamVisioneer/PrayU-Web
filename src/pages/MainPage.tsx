@@ -65,12 +65,6 @@ const MainPage: React.FC = () => {
           </div>
           <div className="flex flex-col gap-4">
             <PrayUStartBtn />
-            <a
-              className="text-liteBlack underline font-bold"
-              href="/group/open/1027-union"
-            >
-              1027 연합예배 그룹
-            </a>
           </div>
         </div>
       </section>
