@@ -48,7 +48,7 @@ const LogInDrawer = () => {
 
   const LoginContent = (
     <div className="flex flex-col gap-6 px-10">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
         <div className="text-xl font-semibold">로그인 / 회원가입</div>
         <p className="flex flex-col justify-center font-light text-[0.95rem]">
           여러분의 신앙생활은 소중한 개인의 영역입니다.
@@ -56,7 +56,7 @@ const LogInDrawer = () => {
           어떤 정보도 외부에 공유되지 않으니 안심하세요.
         </p>
       </div>
-      <div className="flex flex-col w-full justify-center gap-2 pb-3">
+      <div className="flex flex-col w-full justify-center gap-3 pb-3">
         <KakaoLoginBtn
           redirectUri={`${baseUrl}/auth/kakao/callback`}
           state={`groupId:${groupId}`}
