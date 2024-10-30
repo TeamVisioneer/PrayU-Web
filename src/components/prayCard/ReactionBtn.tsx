@@ -100,14 +100,14 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
   };
 
   return (
-    <div className="flex justify-center gap-8">
+    <div className="w-full flex justify-around">
       {Object.values(PrayType).map((type) => {
         const emojiData = PrayTypeDatas[type];
         return (
           <button
             key={type}
             onClick={() => handleClick(type as PrayType)}
-            className={`flex justify-center items-center w-16 h-16 rounded-full duration-1000 ease-in-out ${
+            className={`flex justify-center items-center w-1/5 p-2 max-w-20 aspect-square rounded-full duration-1000 ease-in-out ${
               emojiData.bgColor
             } ${
               !hasPrayed
@@ -118,7 +118,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
             }`}
             disabled={todayPrayTypeHash[prayCard.id] == type}
           >
-            <img src={emojiData.icon} className="w-9 h-9" />
+            <img src={emojiData.icon} className="w-3/4 h-3/4" />
           </button>
         );
       })}
