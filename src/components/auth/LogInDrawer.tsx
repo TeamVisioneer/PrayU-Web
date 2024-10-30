@@ -61,13 +61,13 @@ const LogInDrawer = () => {
           redirectUri={`${baseUrl}/auth/kakao/callback`}
           state={`groupId:${groupId}`}
         />
-        {!isApp && (
+        {isApp && (
           <>
             <hr className="border-gray-300 mb-1" />
             <div className="flex flex-col items-center gap-3">
               <p className="flex font-light text-xs">다른 방법으로 로그인</p>
               <div className="flex justify-center gap-5">
-                {!isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
+                {isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
                 <EmailLoginBtn />
               </div>
             </div>
