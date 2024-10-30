@@ -66,9 +66,9 @@ export const GroupInviteLink = (groupName: string) => {
       title: "PrayU 그룹 초대 알림",
       description: `${groupName} 그룹에 초대 되었어요!\nPrayU 에서 매일의 기도를 시작해요`,
       imageUrl:
-        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/intro_800_500.png",
-      imageWidth: 800,
-      imageHeight: 500,
+        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/invite.png",
+      imageWidth: 400,
+      imageHeight: 240,
       link: {
         webUrl: window.location.href,
         mobileWebUrl: window.location.href,
