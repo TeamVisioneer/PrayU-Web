@@ -107,7 +107,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           <button
             key={type}
             onClick={() => handleClick(type as PrayType)}
-            className={`flex justify-center items-center w-1/5 max-w-20 aspect-square rounded-full duration-1000 ease-in-out ${
+            className={`flex justify-center items-center w-1/5 p-2 max-w-20 aspect-square rounded-full duration-1000 ease-in-out ${
               emojiData.bgColor
             } ${
               !hasPrayed
