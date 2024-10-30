@@ -61,7 +61,7 @@ const LogInDrawer = () => {
           redirectUri={`${baseUrl}/auth/kakao/callback`}
           state={`groupId:${groupId}`}
         />
-        {!isApp && (
+        {isApp && (
           <div className="flex flex-col items-center gap-3">
             <div className="flex items-center w-full">
               <div className="border-t border-gray-300 flex-grow"></div>
@@ -71,7 +71,7 @@ const LogInDrawer = () => {
               <div className="border-t border-gray-300 flex-grow"></div>
             </div>
             <div className="flex justify-center gap-5">
-              {!isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
+              {isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
               <EmailLoginBtn />
             </div>
           </div>
