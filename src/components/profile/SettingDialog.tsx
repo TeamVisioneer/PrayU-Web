@@ -11,9 +11,7 @@ import { useRef } from "react";
 import { analyticsTrack } from "@/analytics/analytics.ts";
 import useBaseStore from "@/stores/baseStore";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo.ts";
-import { IoChevronBack } from "react-icons/io5";
 import { deleteUser } from "../../apis/user.ts";
 import {
   Accordion,
