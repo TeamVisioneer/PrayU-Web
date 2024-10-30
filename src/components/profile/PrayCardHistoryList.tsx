@@ -1,5 +1,4 @@
 import useBaseStore from "@/stores/baseStore";
-import { Badge } from "../ui/badge";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
 import { formatDate } from "@/lib/utils";
