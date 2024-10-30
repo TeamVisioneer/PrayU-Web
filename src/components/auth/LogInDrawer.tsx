@@ -56,22 +56,25 @@ const LogInDrawer = () => {
           어떤 정보도 외부에 공유되지 않으니 안심하세요.
         </p>
       </div>
-      <div className="flex flex-col w-full justify-center gap-3 pb-3">
+      <div className="flex flex-col w-full justify-center gap-4 pb-3">
         <KakaoLoginBtn
           redirectUri={`${baseUrl}/auth/kakao/callback`}
           state={`groupId:${groupId}`}
         />
-        {isApp && (
-          <>
-            <hr className="border-gray-300 mb-1" />
-            <div className="flex flex-col items-center gap-3">
-              <p className="flex font-light text-xs">다른 방법으로 로그인</p>
-              <div className="flex justify-center gap-5">
-                {isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
-                <EmailLoginBtn />
-              </div>
+        {!isApp && (
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex items-center w-full">
+              <div className="border-t border-gray-300 flex-grow"></div>
+              <span className="text-xs font-light px-4">
+                다른 방법으로 로그인
+              </span>
+              <div className="border-t border-gray-300 flex-grow"></div>
             </div>
-          </>
+            <div className="flex justify-center gap-5">
+              {!isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
+              <EmailLoginBtn />
+            </div>
+          </div>
         )}
       </div>
     </div>
