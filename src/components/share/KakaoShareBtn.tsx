@@ -64,7 +64,7 @@ export const GroupInviteLink = (groupName: string) => {
     objectType: "feed",
     content: {
       title: "PrayU 그룹 초대 알림",
-      description: `${groupName} 그룹에 초대 되었어요!\nPrayU 에서 매일의 기도를 시작해요`,
+      description: `${groupName}에 초대 되었어요!\nPrayU 에서 매일의 기도를 시작해요`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu/invite.png",
       imageWidth: 400,
