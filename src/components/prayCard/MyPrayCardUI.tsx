@@ -100,7 +100,7 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
                 </p>
               </div>
             </div>
-            <p className="text-xs text-white w-full text-left">
+            <p className="text-sm text-white w-full text-left">
               시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
               {createdDateYMD.day}
             </p>

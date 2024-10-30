@@ -1,7 +1,6 @@
 import useBaseStore from "@/stores/baseStore";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import { getDateDistance } from "@toss/date";
-import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import { getISODateYMD } from "@/lib/utils";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { Textarea } from "../ui/textarea";
@@ -23,23 +22,16 @@ const PrayCardHistoryUI: React.FC = () => {
 
   const createdDateYMD = getISODateYMD(prayCard!.created_at);
 
-  const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(prayCard!.created_at)),
-    new Date(getISOTodayDate())
-  );
-
   const MyPrayCardBody = (
     <div className="flex flex-col flex-grow">
       <div className="flex flex-col bg-white rounded-2xl shadow-prayCard flex-grow">
         <div className="bg-gradient-to-r from-start via-middle via-52% to-end flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
           <div className="flex items-center gap-2 w-full">
             <div className="flex gap-2 items-center">
-              <p className="text-xl text-white">
-                {dateDistance.days + 1}일 전 기도
-              </p>
+              <p className="text-xl text-white">{prayCard?.group!.name}</p>
             </div>
           </div>
-          <p className="text-xs text-white w-full text-left">
+          <p className="text-sm text-white w-full text-left">
             시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
             {createdDateYMD.day}
           </p>

@@ -47,7 +47,6 @@ const SettingDialog = () => {
 
   const myProfile = useBaseStore((state) => state.myProfile);
   const profileList = useBaseStore((state) => state.profileList);
-  const getProfile = useBaseStore((state) => state.getProfile);
   const fetchProfileList = useBaseStore((state) => state.fetchProfileList);
   const updateProfile = useBaseStore((state) => state.updateProfile);
   const signOut = useBaseStore((state) => state.signOut);
@@ -56,43 +55,17 @@ const SettingDialog = () => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (myProfile) setName(myProfile.full_name!);
+  }, [myProfile]);
+
+  if (!myProfile || !profileList) return null;
+
   const onClickSignOut = () => {
     analyticsTrack("클릭_로그아웃", {});
     KakaoTokenRepo.cleanKakaoTokensInCookies();
     signOut();
   };
-
-  useEffect(() => {
-    getProfile(user!.id);
-  }, [user, getProfile]);
-
-  useEffect(() => {
-    if (myProfile) setName(myProfile.full_name!);
-    if (myProfile) fetchProfileList(myProfile.blocking_users);
-  }, [myProfile, fetchProfileList]);
-
-  if (!myProfile || !profileList) {
-    return (
-      <div className="w-ful flex flex-col gap-6 items-center">
-        <div className="w-full flex justify-between items-center">
-          <div className="w-[60px]">
-            <IoChevronBack size={20} onClick={() => window.history.back()} />
-          </div>
-          <span className="text-xl font-bold">내 프로필</span>
-          <div className="w-[60px] flex justify-end items-center"></div>
-        </div>
-        <div className="flex justify-center h-[80px] object-cover">
-          <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
-        </div>
-        <div className="w-full flex flex-col gap-4">
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-        </div>
-      </div>
-    );
-  }
 
   const onClickUpdateName = () => {
     setIsEditing(true);
@@ -153,9 +126,9 @@ const SettingDialog = () => {
 
   return (
     <Dialog open={isOpenSettingDialog} onOpenChange={setIsOpenSettingDialog}>
-      <DialogContent className="w-11/12 h-96 overflow-auto rounded-2xl bg-mainBg">
+      <DialogContent className="w-11/12 h-[400px] overflow-auto rounded-2xl bg-mainBg">
         <DialogHeader>
-          <DialogTitle className="text-xl text-left">메롱</DialogTitle>
+          <DialogTitle className="text-xl text-left">설정</DialogTitle>
           <DialogDescription></DialogDescription>
           <div className="w-ful flex flex-col gap-6 items-center">
             <div className="w-full flex flex-col items-center gap-4 ">
