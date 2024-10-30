@@ -28,7 +28,7 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({
 
   return (
     <button
-      className="w-full flex justify-between items-center gap-3 px-4 py-2 rounded-lg text-sm border-yellow-300 border-2"
+      className="w-full flex justify-between items-center gap-3 px-4 py-3 rounded-lg text-sm border-yellow-300 border-2"
       onClick={() => handleKakaoLoginBtnClick()}
       style={{ background: "#FEE500", color: "black" }}
     >

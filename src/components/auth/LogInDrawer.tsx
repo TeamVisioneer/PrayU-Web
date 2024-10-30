@@ -56,31 +56,23 @@ const LogInDrawer = () => {
           어떤 정보도 외부에 공유되지 않으니 안심하세요.
         </p>
       </div>
-      <div className="flex flex-col w-full justify-center gap-2">
+      <div className="flex flex-col w-full justify-center gap-2 pb-3">
         <KakaoLoginBtn
           redirectUri={`${baseUrl}/auth/kakao/callback`}
           state={`groupId:${groupId}`}
         />
-        {isApp && (
+        {!isApp && (
           <>
-            {isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
-            <EmailLoginBtn />
+            <hr className="border-gray-300 mb-1" />
+            <div className="flex flex-col items-center gap-3">
+              <p className="flex font-light text-xs">다른 방법으로 로그인</p>
+              <div className="flex justify-center gap-5">
+                {!isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
+                <EmailLoginBtn />
+              </div>
+            </div>
           </>
         )}
-      </div>
-      <div className="flex flex-col w-full justify-center gap-1 text-sm text-gray-400">
-        <hr className="border-gray-300 mb-1" />
-        <div className="flex gap-2">
-          <p className="font-light">
-            로그인 / 회원 관련 궁금하신 사항이 있다면?
-          </p>
-          <a
-            href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
-            className="text-blue-500 cursor-pointer"
-          >
-            문의하기
-          </a>
-        </div>
       </div>
     </div>
   );
