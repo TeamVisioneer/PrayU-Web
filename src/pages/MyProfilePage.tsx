@@ -25,11 +25,8 @@ const MyProfilePage = () => {
 
   useEffect(() => {
     getProfile(user!.id);
-  }, [user, getProfile]);
-
-  useEffect(() => {
     fetchUserPrayCardListAll(user!.id);
-  }, [user, fetchUserPrayCardListAll]);
+  }, [user, getProfile, fetchUserPrayCardListAll]);
 
   useEffect(() => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
@@ -64,8 +61,8 @@ const MyProfilePage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 items-center">
-      <div className="fixed top-0 w-full bg-mainBg z-10 p-5">
+    <div className="w-full flex flex-col items-center pt-48">
+      <div className="fixed top-0 w-full flex flex-col gap-6 bg-mainBg z-10 p-5">
         <div className="w-full flex justify-between items-center">
           <div className="w-14 ">
             <IoChevronBack size={20} onClick={() => window.history.back()} />
@@ -78,26 +75,21 @@ const MyProfilePage = () => {
             <IoSettingsOutline size={20} color="#222222" />
           </div>
         </div>
-        <div className="flex justify-center h-[80px] object-cover">
-          {myProfile && profileList ? (
+        <div className="flex flex-col justify-center gap-4">
+          <div className="flex justify-center h-[80px] object-cover">
             <img
               className="h-full aspect-square rounded-full object-cover"
               src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
             />
-          ) : (
-            <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
-          )}
-        </div>
-        <div className="w-full flex flex-col items-center">
-          {myProfile.full_name} 님의 기도들
+          </div>
+          <div className="w-full flex flex-col items-center">
+            {myProfile.full_name} 님의 기도카드
+          </div>
         </div>
       </div>
-      <div className="h-36"></div>
-      <div>
-        <PrayCardHistoryList />
-      </div>
+      <PrayCardHistoryList />
 
-      <footer className="bottom-4 w-full px-6 flex justify-between text-gray-400 text-[10px]">
+      <footer className="fixed bottom-0 z-10 bg-mainBg w-full px-6 py-3 flex justify-between text-gray-400 text-[10px]">
         <span>© 2024 PrayU. All rights reserved.</span>
         <div className="flex gap-2">
           <a href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html">

@@ -1,5 +1,4 @@
 import useBaseStore from "@/stores/baseStore";
-import { Badge } from "../ui/badge";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
 import { formatDate } from "@/lib/utils";
@@ -9,11 +8,9 @@ const PrayCardHistoryList = () => {
   const historyPrayCardList = useBaseStore(
     (state) => state.historyPrayCardList
   );
-
   const setIsOpenHistoryDrawer = useBaseStore(
     (state) => state.setIsOpenHistoryDrawer
   );
-
   const setHistoryCard = useBaseStore((state) => state.setHistoryCard);
 
   const onClickStory = (prayCard: PrayCardWithProfiles) => {
@@ -30,23 +27,25 @@ const PrayCardHistoryList = () => {
     );
 
   return (
-    <div className="flex flex-full w-full items-center">
-      <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-        {historyPrayCardList.map((prayCard, index) => (
-          <div
-            key={index}
-            className="w-28 h-40 border rounded-2xl shadow-prayCard bg-gradient-to-t from-[#FFF8F8] via-[#FFEBFA] via-41.75% to-[#AAC7FF] items-center justify-center flex flex-col"
-            onClick={() => {
-              onClickStory(prayCard);
-            }}
-          >
-            <Badge className="mb-4 text-xs">{prayCard.group!.name}</Badge>
-            <span className="text-center text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
+    <div className="w-full grid grid-cols-3 gap-1 p-4 pb-10">
+      {historyPrayCardList.map((prayCard, index) => (
+        <div
+          key={index}
+          className="aspect-[3/4] border items-center flex flex-col rounded-xl "
+          onClick={() => onClickStory(prayCard)}
+        >
+          <div className="w-full flex flex-col bg-gradient-to-r from-start via-middle via-52% to-end p-2 rounded-t-lg">
+            <p className="text-xs text-white w-full text-left">
               {formatDate(prayCard.created_at)}
+            </p>
+          </div>
+          <div className="w-full flex-grow flex flex-col bg-white p-1 rounded-b-lg">
+            <span className="text-xs text-gray-400 line-clamp-3">
+              {prayCard.content}
             </span>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

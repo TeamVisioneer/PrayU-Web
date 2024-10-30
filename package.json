@@ -30,6 +30,7 @@
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.44.4",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@toss/date": "^1.2.0",
     "analytics": "^0.8.14",
     "class-variance-authority": "^0.7.0",
