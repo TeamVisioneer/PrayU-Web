@@ -68,6 +68,18 @@
   }
 }
 
+@font-face {
+  font-family: "handwrittenFont";
+  src: url("/fonts/Cafe24Shiningstar-v2.0.woff2") format("woff2"),
+    url("/fonts/Cafe24Shiningstar-v2.0.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.handwritten {
+  font-family: "handwrittenFont", cursive;
+}
+
 .no-scrollbar {
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */
