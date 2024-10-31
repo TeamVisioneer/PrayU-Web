@@ -23,12 +23,14 @@ const BibleCardPage = () => {
     if (bibleVerseData.length == 0) {
       setIsEnded(false);
       setLoading(false);
+      alert("생성 버튼을 다시 눌러주세요😭");
       return null;
     }
     const imageData = await fetchBgImage(bibleVerseData[0].nature);
     if (imageData.length == 0) {
       setIsEnded(false);
       setLoading(false);
+      alert("생성 버튼을 다시 눌러주세요😭");
       return null;
     }
     setBgImageUrl(imageData[0]);
