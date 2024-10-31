@@ -30,6 +30,7 @@ import TutorialPage from "./pages/TutorialPage";
 import MetaPixelInit from "./analytics/metaPixelInit";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
+import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
 
 const App = () => {
   useEffect(() => {
@@ -75,6 +76,7 @@ const App = () => {
                 }
               />
               <Route path="/tutorial" element={<TutorialPage />} />
+              <Route path="/bible-card" element={<BibleCardPage />} />
 
               <Route path="/auth/kakao/callback" element={<KakaoCallBack />} />
               <Route
@@ -214,6 +216,12 @@ const AnalyticsTracker = () => {
       case "/login/email":
         analyticsTrack("페이지_이메일_로그인", {
           title: "Email Login Page",
+          where: from,
+        });
+        break;
+      case "/bible-card":
+        analyticsTrack("페이지_말씀카드", {
+          title: "Bible Card Page",
           where: from,
         });
         break;
