@@ -25,7 +25,6 @@ const StoryPage = () => {
           </h2>
           <div className="h-20"></div>
 
-          <StartPrayUBtn eventOption={{ where: "topBtn" }} />
           <div className="h-8"></div>
           <h3 className="mt-6">.</h3>
           <h3 className="mt-3">.</h3>

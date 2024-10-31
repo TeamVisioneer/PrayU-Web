@@ -31,7 +31,7 @@ const PrayCardHistoryList = () => {
       {historyPrayCardList.map((prayCard, index) => (
         <div
           key={index}
-          className="aspect-[3/4] border items-center flex flex-col rounded-xl "
+          className="aspect-[3/4] border items-center flex flex-col rounded-lg "
           onClick={() => onClickStory(prayCard)}
         >
           <div className="w-full flex flex-col bg-gradient-to-r from-start via-middle via-52% to-end p-2 rounded-t-lg">
