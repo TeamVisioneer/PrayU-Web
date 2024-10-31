@@ -16,6 +16,7 @@ const BibleCardPage = () => {
   const onClickCreateBibleCard = async () => {
     if (inputContent.length < 20) {
       alert("기도제목은 20자 이상이 필요해요😭");
+      return;
     }
     setLoading(true);
     const bibleVerseData = await createBibleVerse(inputContent);
