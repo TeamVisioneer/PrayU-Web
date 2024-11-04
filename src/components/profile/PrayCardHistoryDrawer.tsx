@@ -17,7 +17,15 @@ const PrayCardHistoryDrawer: React.FC = () => {
   );
 
   return (
-    <Drawer open={isOpenHistoryDrawer} onOpenChange={setIsOpenHistoryDrawer}>
+    <Drawer
+      open={isOpenHistoryDrawer}
+      onOpenChange={setIsOpenHistoryDrawer}
+      onClose={() => {
+        if (window.history.state?.open === true) {
+          window.history.back();
+        }
+      }}
+    >
       <DrawerContent className="bg-mainBg pb-5">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
