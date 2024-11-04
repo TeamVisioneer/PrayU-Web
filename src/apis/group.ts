@@ -97,6 +97,7 @@ export const createGroup = async (
 export interface updateGroupParams {
   name?: string;
   intro?: string;
+  user_id?: string;
 }
 
 export const updateGroup = async (

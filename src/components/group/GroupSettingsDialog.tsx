@@ -7,12 +7,14 @@ import {
 } from "@/components/ui/dialog";
 import useBaseStore from "@/stores/baseStore";
 import { Input } from "../ui/input";
-import { Group, MemberWithProfiles } from "supabase/types/tables";
+import { Group } from "supabase/types/tables";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import { UserProfile } from "../profile/UserProfile";
 import { Badge } from "../ui/badge";
+import GroupMemberSettingsBtn from "./GroupMemberSettingsBtn";
+import GroupMemberOptionTag from "./GroupMemberOptionTag";
 
 interface GroupSettingsDialogProps {
   targetGroup: Group;
@@ -33,17 +35,6 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
   const memberList = useBaseStore((state) => state.memberList);
   const getGroup = useBaseStore((state) => state.getGroup);
 
-  const setAlertData = useBaseStore((state) => state.setAlertData);
-  const setIsConfirmAlertOpen = useBaseStore(
-    (state) => state.setIsConfirmAlertOpen
-  );
-  const deleteMemberbyGroupId = useBaseStore(
-    (state) => state.deleteMemberbyGroupId
-  );
-  const deletePrayCardByGroupId = useBaseStore(
-    (state) => state.deletePrayCardByGroupId
-  );
-
   const onClickSaveGroup = async () => {
     if (inputGroupName.trim() === "") return;
     analyticsTrack("클릭_그룹_이름변경", { group_name: GroupSettingsDialog });
@@ -52,23 +43,6 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
       getGroup(targetGroup.id);
       setIsOpenGroupSettingsDialog(false);
     }
-  };
-
-  const onClickDeleteMemberInGroup = (member: MemberWithProfiles) => {
-    setAlertData({
-      color: "bg-red-400",
-      title: "그룹 내보내기",
-      description: `해당 그룹에서  ${member.profiles.full_name} 님을 내보내시겠어요?\n*${member.profiles.full_name} 님의 기도카드는 모두 삭제되어요`,
-      actionText: "내보내기",
-      cancelText: "취소",
-      onAction: async () => {
-        await deleteMemberbyGroupId(member.profiles.id, targetGroup.id);
-        await deletePrayCardByGroupId(member.profiles.id, targetGroup.id);
-        window.location.replace(`/group/${targetGroup.id}`);
-        analyticsTrack("클릭_그룹_내보내기", { group_id: targetGroup.id });
-      },
-    });
-    setIsConfirmAlertOpen(true);
   };
 
   useEffect(() => {
@@ -98,9 +72,12 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
             />
           </section>
           <section className="flex flex-col gap-4">
-            <label className="text-sm font-medium text-gray-700">
-              그룹원 ({memberList.length})
-            </label>
+            <div className="flex justify-between">
+              <label className="text-sm font-medium text-gray-700">
+                그룹원 ({memberList.length})
+              </label>
+              <GroupMemberSettingsBtn />
+            </div>
             <div className="flex flex-col gap-3 max-h-40 p-1 overflow-auto">
               {[...memberList]
                 .sort((member) =>
@@ -116,12 +93,7 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
                     {member.user_id === targetGroup.user_id ? (
                       <Badge>그룹장</Badge>
                     ) : (
-                      <Badge
-                        variant="secondary"
-                        onClick={() => onClickDeleteMemberInGroup(member)}
-                      >
-                        내보내기
-                      </Badge>
+                      <GroupMemberOptionTag member={member} />
                     )}
                   </div>
                 ))}

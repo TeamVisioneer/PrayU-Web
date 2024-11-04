@@ -130,6 +130,10 @@ export interface BaseStore {
   setIsOpenTodayPrayDrawer: (isOpenTodayPrayDrawer: boolean) => void;
   isOpenGroupMenuSheet: boolean;
   setIsOpenGroupMenuSheet: (isOpenGroupMenuSheet: boolean) => void;
+  activeGroupMemberOption: string;
+  setActiveGroupMemberOption: (
+    activeGroupMemberOption: string,
+  ) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -561,6 +565,14 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenGroupMenuSheet: (isOpenGroupMenuSheet: boolean) => {
       set((state) => {
         state.isOpenGroupMenuSheet = isOpenGroupMenuSheet;
+      });
+    },
+    activeGroupMemberOption: "",
+    setActiveGroupMemberOption: (
+      activeGroupMemberOption: string,
+    ) => {
+      set((state) => {
+        state.activeGroupMemberOption = activeGroupMemberOption;
       });
     },
 
