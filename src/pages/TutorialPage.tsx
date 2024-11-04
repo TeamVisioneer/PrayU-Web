@@ -338,7 +338,7 @@ const TutorialPage: React.FC = () => {
         <footer className="text-white flex justify-around items-center gap-4 h-[32px]">
           {index == 0 && <div className="w-8"></div>}
           <div className="flex flex-col items-center gap-4">
-            <div className="flex justify-between items-center gap-4 w-[110px]">
+            <div className="flex justify-between items-center gap-4">
               <FaAngleLeft size={24} />
               <span>
                 {index + 1} / {TutorialComponentProps.length}
