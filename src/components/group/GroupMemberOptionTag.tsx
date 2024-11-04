@@ -55,7 +55,7 @@ const GroupMemberOptionTag: React.FC<GroupMemberOptionTagProps> = ({
       onAction: async () => {
         await updateGroup(targetGroup.id, { user_id: member.profiles.id });
         analyticsTrack("클릭_그룹_그룹장양도", { group_id: targetGroup.id });
-        // window.location.replace(`/group/${targetGroup.id}`);
+        window.location.replace(`/group/${targetGroup.id}`);
       },
     });
     setIsConfirmAlertOpen(true);

@@ -49,7 +49,11 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   const setIsOpenGroupSettingsDialog = useBaseStore(
     (state) => state.setIsOpenGroupSettingsDialog
   );
+  const setActiveGroupMemberOption = useBaseStore(
+    (state) => state.setActiveGroupMemberOption
+  );
   const isGroupLeader = useBaseStore((state) => state.isGroupLeader);
+  const memberList = useBaseStore((state) => state.memberList);
 
   const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
@@ -62,18 +66,36 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
     }
   };
 
-  const handleClickExitGroup = (groupId: string, groupName: string | null) => {
+  const handleClickExitGroup = () => {
+    if (!targetGroup || !user || !memberList) return;
+    if (isGroupLeader && memberList.length !== 1) {
+      setAlertData({
+        color: "bg-blue-400",
+        title: "그룹장 양도 필요",
+        description:
+          "그룹장은 그룹을 나갈 수 없어요\n 그룹장 양도를 먼저 진행해주세요!",
+        actionText: "그룹 설정하기",
+        cancelText: "취소",
+        onAction: async () => {
+          setIsConfirmAlertOpen(false);
+          setActiveGroupMemberOption("assign");
+          setIsOpenGroupSettingsDialog(true);
+        },
+      });
+      setIsConfirmAlertOpen(true);
+      return null;
+    }
     setAlertData({
       color: "bg-red-400",
       title: "그룹 나가기",
-      description: `더 이상 ${groupName}의 기도를 받을 수 없어요 😭`,
+      description: `더 이상 ${targetGroup.name}의 기도를 받을 수 없어요 😭`,
       actionText: "나가기",
       cancelText: "취소",
       onAction: async () => {
-        await deleteMemberbyGroupId(user!.id, groupId);
-        await deletePrayCardByGroupId(user!.id, groupId);
+        await deleteMemberbyGroupId(user!.id, targetGroup.id);
+        await deletePrayCardByGroupId(user!.id, targetGroup.id);
         window.location.replace("/");
-        analyticsTrack("클릭_그룹_나가기", { group_id: groupId });
+        analyticsTrack("클릭_그룹_나가기", { group_id: targetGroup.id });
       },
     });
     setIsConfirmAlertOpen(true);
@@ -141,14 +163,6 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
               </a>
             </div>
           ))}
-          {!user && (
-            <div className="flex items-center gap-1">
-              <span className="w-[5px] h-[18px]  rounded-md bg-mainBtn"></span>
-              <a className="cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis font-bold text-[#222222]">
-                1027 연합예배
-              </a>
-            </div>
-          )}
           <hr className="w-full" />
           <div className="flex items-center gap-2">
             <IoPersonCircleOutline size={20} color="#222222" />
@@ -175,9 +189,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
                 <IoRemoveCircleOutline size={20} color="#222222" />
                 <a
                   className="cursor-pointer text-[#222222] font-medium"
-                  onClick={() =>
-                    handleClickExitGroup(targetGroup.id, targetGroup.name)
-                  }
+                  onClick={() => handleClickExitGroup()}
                 >
                   그룹 나가기
                 </a>
