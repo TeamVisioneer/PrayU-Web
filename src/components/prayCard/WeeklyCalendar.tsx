@@ -61,7 +61,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
             </span>
             <div
               className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
-                isToday && "border-[1.5px] border-[#BBBED4]"
+                isToday && "box-border border-[1.5px] border-[#BBBED4]"
               } ${todayPrayTypeHash[prayCard.id] && "border-none"}`}
             >
               {isToday
