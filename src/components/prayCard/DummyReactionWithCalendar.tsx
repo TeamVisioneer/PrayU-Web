@@ -105,7 +105,9 @@ const DumyReactionBtnWithCalendar: React.FC<
               </span>
               <div
                 className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
-                  isToday ? "box-border border-[1.5px] border-[#BBBED4]" : ""
+                  isToday
+                    ? "box-border inline-block border-[1.5px] border-[#BBBED4]"
+                    : ""
                 } ${todayPrayType ? "border-none" : ""}`}
               >
                 {isToday
