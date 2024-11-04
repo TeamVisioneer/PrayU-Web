@@ -77,6 +77,10 @@ const TutorialPage: React.FC = () => {
 
   const onClickRight = (eventOption: { where: string }) => {
     analyticsTrack("클릭_튜토리얼_다음", eventOption);
+    if (index === 3 && !todayPrayType) {
+      setTodayPrayType(PrayType.PRAY);
+      return;
+    }
     if (index < TutorialComponentProps.length - 1) setIndex(index + 1);
     if (index == TutorialComponentProps.length - 1) onClickCompletedTutorial();
   };
