@@ -266,7 +266,7 @@ const TutorialPage: React.FC = () => {
         </div>
       </div>
       <div className={`${index === 3 ? "z-50" : ""}`}>
-        <div className="flex flex-col gap-6 p-2 mb-5 bg-mainBg rounded-md">
+        <div className="flex flex-col gap-6 p-2 pb-4 mb-5 bg-mainBg rounded-md">
           {Calendar}
           {ReactionBtn}
         </div>
