@@ -80,6 +80,39 @@ export const formatDate = (isoString: string) => {
   )}.${String(date.getDate()).padStart(2, "0")}`;
 };
 
+export const getWeekInfo = (
+  // 날짜의 해당 주차와 해당 주차의 날짜들을 반환
+  dateString: string
+): { weekNumber: number; weekDates: string[] } => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = date.getMonth(); // 0 = January, 1 = February, etc.
+
+  // 주차 계산
+  const weekNumber = Math.ceil(
+    (date.getDate() + (new Date(year, month, 1).getDay() + 1)) / 7
+  );
+
+  // 현재 주의 일요일 날짜 계산
+  const startOfWeek = new Date(year, month, date.getDate() - date.getDay()); // 일요일
+
+  // 주의 날짜를 저장할 배열
+  const weekDates: string[] = [];
+
+  // 이번 주의 일요일부터 토요일까지 날짜를 계산
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(startOfWeek);
+    day.setDate(startOfWeek.getDate() + i); // 일요일부터 시작
+    weekDates.push(day.toISOString().split("T")[0]); // ISO 형식으로 날짜를 문자열로 변환
+    console.log(day);
+  }
+
+  return {
+    weekNumber,
+    weekDates,
+  };
+};
+
 // sleep 함수
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
