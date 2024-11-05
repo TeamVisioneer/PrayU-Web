@@ -10,11 +10,17 @@ interface WeeklyCalendarProps {
 const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
 
-  const getReactionEmoticon = (prayType: string | null) => {
+  const getReactionEmoticon = (prayType: string | null, isToday: boolean) => {
     return (
       <img
         src={PrayTypeDatas[prayType as PrayType]?.reactImg}
-        className="w-full h-full"
+        className={
+          prayType
+            ? "w-full h-full rounded-sm"
+            : isToday
+            ? "w-full h-full rounded-sm border-[1.5px] border-[#BBBED4]"
+            : ""
+        }
       />
     );
   };
@@ -33,8 +39,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
         return prayDate === newDateString;
       });
 
-      const emoji = pray ? getReactionEmoticon(pray.pray_type) : "";
-      dateList.push({ date: newDateString, emoji });
+      dateList.push({ date: newDateString, prayType: pray?.pray_type || null });
     }
     return dateList;
   };
@@ -59,14 +64,10 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
             >
               {days[dayOfWeek]}
             </span>
-            <div
-              className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
-                isToday && "box-border border-[1.5px] border-[#BBBED4]"
-              } ${todayPrayTypeHash[prayCard.id] && "border-none"}`}
-            >
+            <div className="w-full aspect-square flex items-center justify-center rounded-sm bg-[#DEE0F1]">
               {isToday
-                ? getReactionEmoticon(todayPrayTypeHash[prayCard.id])
-                : date.emoji}
+                ? getReactionEmoticon(todayPrayTypeHash[prayCard.id], isToday)
+                : getReactionEmoticon(date.prayType, isToday)}
             </div>
           </div>
         );

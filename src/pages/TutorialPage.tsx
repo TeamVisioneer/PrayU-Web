@@ -196,9 +196,7 @@ const TutorialPage: React.FC = () => {
           >
             {index == todayDt.getDay() && (
               <img
-                className={`duration-1000 ease-in-out ${
-                  todayPrayType ? "opacity-100" : "opacity-0"
-                }`}
+                className="w-full h-full"
                 src={PrayTypeDatas[todayPrayType as PrayType]?.reactImg}
               />
             )}
