@@ -192,8 +192,14 @@ const TutorialPage: React.FC = () => {
           <div className="w-full aspect-square flex items-center justify-center rounded-sm bg-[#DEE0F1]">
             {index == todayDt.getDay() && (
               <img
-                className="w-full h-full rounded-sm border-[1.5px] border-[#BBBED4]"
                 src={PrayTypeDatas[todayPrayType as PrayType]?.reactImg}
+                className={
+                  todayPrayType
+                    ? "w-full h-full rounded-sm"
+                    : index == todayDt.getDay()
+                    ? "w-full h-full rounded-sm border-[1.5px] border-[#BBBED4]"
+                    : ""
+                }
               />
             )}
           </div>
