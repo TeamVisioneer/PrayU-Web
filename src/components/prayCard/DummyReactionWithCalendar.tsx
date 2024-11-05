@@ -129,7 +129,7 @@ const DumyReactionBtnWithCalendar: React.FC<
           return (
             <div key={type} className="relative w-1/5 max-w-20">
               <button
-                className={`w-full aspect-square rounded-full flex justify-center items-center p-2 duration-1000 ease-in-out ${
+                className={`p-2 w-full aspect-square rounded-full flex justify-center items-center duration-1000 ease-in-out ${
                   emojiData.bgColor
                 } ${!isPrayToday && "animate-pulse"} ${
                   isNotSelected
