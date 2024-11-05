@@ -104,11 +104,9 @@ const DumyReactionBtnWithCalendar: React.FC<
                 {days[dayOfWeek]}
               </span>
               <div
-                className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
-                  isToday
-                    ? "box-border inline-block border-[1.5px] border-[#BBBED4]"
-                    : ""
-                } ${todayPrayType ? "border-none" : ""}`}
+                className={`w-full aspect-[1/1] flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
+                  isToday && "border-[1.5px] border-[#BBBED4]"
+                } ${todayPrayType && "border-none"}`}
               >
                 {isToday
                   ? getReactionEmoticon(todayPrayType)
