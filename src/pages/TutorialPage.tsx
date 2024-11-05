@@ -189,14 +189,10 @@ const TutorialPage: React.FC = () => {
           >
             {day}
           </span>
-          <div
-            className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
-              index == todayDt.getDay() && "border-[1.5px] border-[#BBBED4]"
-            } ${todayPrayType && "border-none"}`}
-          >
+          <div className="w-full aspect-square flex items-center justify-center rounded-sm bg-[#DEE0F1]">
             {index == todayDt.getDay() && (
               <img
-                className="w-full h-full"
+                className="w-full h-full rounded-sm border-[1.5px] border-[#BBBED4]"
                 src={PrayTypeDatas[todayPrayType as PrayType]?.reactImg}
               />
             )}
