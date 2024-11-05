@@ -189,17 +189,17 @@ const TutorialPage: React.FC = () => {
           >
             {day}
           </span>
-          <div
-            className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
-              index == todayDt.getDay() && "border-[1.5px] border-[#BBBED4]"
-            } ${todayPrayType && "border-none"}`}
-          >
+          <div className="w-full aspect-square flex items-center justify-center rounded-sm bg-[#DEE0F1]">
             {index == todayDt.getDay() && (
               <img
-                className={`duration-1000 ease-in-out ${
-                  todayPrayType ? "opacity-100" : "opacity-0"
-                }`}
                 src={PrayTypeDatas[todayPrayType as PrayType]?.reactImg}
+                className={
+                  todayPrayType
+                    ? "w-full h-full rounded-sm"
+                    : index == todayDt.getDay()
+                    ? "w-full h-full rounded-sm border-[1.5px] border-[#BBBED4]"
+                    : ""
+                }
               />
             )}
           </div>
@@ -266,7 +266,7 @@ const TutorialPage: React.FC = () => {
         </div>
       </div>
       <div className={`${index === 3 ? "z-50" : ""}`}>
-        <div className="flex flex-col gap-6 p-2 mb-5 bg-mainBg rounded-md">
+        <div className="flex flex-col gap-6 p-2 pb-4 mb-5 bg-mainBg rounded-md">
           {Calendar}
           {ReactionBtn}
         </div>
@@ -338,7 +338,7 @@ const TutorialPage: React.FC = () => {
         <footer className="text-white flex justify-around items-center gap-4 h-[32px]">
           {index == 0 && <div className="w-8"></div>}
           <div className="flex flex-col items-center gap-4">
-            <div className="flex justify-between items-center gap-4 w-[110px]">
+            <div className="flex justify-between items-center gap-4">
               <FaAngleLeft size={24} />
               <span>
                 {index + 1} / {TutorialComponentProps.length}

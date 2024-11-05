@@ -71,11 +71,17 @@ const DumyReactionBtnWithCalendar: React.FC<
       .map(() => prayTypes[Math.floor(Math.random() * prayTypes.length)]);
   };
 
-  const getReactionEmoticon = (prayType: string | null) => {
+  const getReactionEmoticon = (prayType: string | null, isToday: boolean) => {
     return (
       <img
         src={PrayTypeDatas[prayType as PrayType]?.reactImg}
-        className="w-full h-full"
+        className={
+          prayType
+            ? "w-full h-full rounded-sm"
+            : isToday
+            ? "w-full h-full rounded-sm border-[1.5px] border-[#BBBED4]"
+            : ""
+        }
       />
     );
   };
@@ -103,15 +109,11 @@ const DumyReactionBtnWithCalendar: React.FC<
               >
                 {days[dayOfWeek]}
               </span>
-              <div
-                className={`w-full aspect-square flex items-center justify-center rounded-[5px] bg-[#DEE0F1] ${
-                  isToday ? "border-[1.5px] border-[#BBBED4]" : ""
-                } ${todayPrayType ? "border-none" : ""}`}
-              >
+              <div className="w-full aspect-square flex items-center justify-center rounded-sm bg-[#DEE0F1]">
                 {isToday
-                  ? getReactionEmoticon(todayPrayType)
+                  ? getReactionEmoticon(todayPrayType, isToday)
                   : isPast
-                  ? getReactionEmoticon(randomPrayTypes[index])
+                  ? getReactionEmoticon(randomPrayTypes[index], isToday)
                   : date.emoji}
               </div>
             </div>
@@ -127,7 +129,7 @@ const DumyReactionBtnWithCalendar: React.FC<
           return (
             <div key={type} className="relative w-1/5 max-w-20">
               <button
-                className={`w-full aspect-square rounded-full flex justify-center items-center p-2 duration-1000 ease-in-out ${
+                className={`p-2 w-full aspect-square rounded-full flex justify-center items-center duration-1000 ease-in-out ${
                   emojiData.bgColor
                 } ${!isPrayToday && "animate-pulse"} ${
                   isNotSelected

@@ -19,7 +19,9 @@ export const TodayPrayStartCard = () => {
                 <h1>서로를 위해 기도해 보아요</h1>
               </div>
             </div>
-            <img src={"/images/Hand.png"} className="w-40"></img>
+            <div className="h-36 w-full">
+              <img src="/images/Hand.png" className="h-full"></img>
+            </div>
           </section>
           <TodayPrayBtn
             eventOption={{

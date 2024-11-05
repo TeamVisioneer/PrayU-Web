@@ -88,7 +88,10 @@ const SettingDialog = () => {
       onAction: async () => {
         const userId = user!.id;
         const success = await deleteUser(userId);
-        if (success) window.location.href = "/";
+        if (success) {
+          signOut();
+          window.location.href = "/";
+        }
       },
     });
     setIsConfirmAlertOpen(true);
