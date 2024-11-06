@@ -1,50 +1,38 @@
-import { useEffect, useState } from "react";
 import {
   getISOTodayDate,
   getWeekInfo,
-  getISODate,
   days,
+  getISODate,
   formatToDateString,
   isFutureDate,
 } from "@/lib/utils";
-import { hasPrayedByDate } from "@/apis/pray";
-import useAuth from "@/hooks/useAuth";
+import useBaseStore from "@/stores/baseStore";
 
 const PrayCalendar = () => {
-  const { user } = useAuth();
   const currentDate = getISOTodayDate();
-  const weekInfo = getWeekInfo(currentDate);
   const currentDateString = formatToDateString(currentDate);
+  const prayListByDate = useBaseStore((state) => state.prayListByDate);
+  const weekInfo = getWeekInfo(currentDate);
+  const generateDates = (weekDates: string[], hasPrayedList: boolean[]) => {
+    const startDate = getISODate(new Date(weekDates[0]));
+    const dateList = [];
 
-  const [weeklyDays, setWeeklyDays] = useState<
-    { date: string; hasPrayed: boolean }[]
-  >([]);
+    for (let i = 0; i < 7; i++) {
+      const newDate = new Date(startDate);
+      newDate.setDate(new Date(startDate).getDate() + i);
+      const newDateString = getISODate(newDate).split("T")[0];
 
-  useEffect(() => {
-    const generateDates = async (weekDates: string[]) => {
-      const startDate = getISODate(new Date(weekDates[0]));
-      const dateList = [];
+      dateList.push({ date: newDateString, hasPrayed: hasPrayedList[i] });
+    }
+    return dateList;
+  };
 
-      for (let i = 0; i < 7; i++) {
-        const newDate = new Date(startDate);
-        newDate.setDate(new Date(startDate).getDate() + i);
-        const newDateString = getISODate(newDate).split("T")[0];
-
-        const hasPrayed = await hasPrayedByDate(user!.id, newDate);
-
-        dateList.push({ date: newDateString, hasPrayed });
-      }
-      return dateList;
-    };
-
-    // 비동기 함수 호출 후 상태 설정
-    const fetchWeeklyDays = async () => {
-      const dates = await generateDates(weekInfo.weekDates);
-      setWeeklyDays(dates);
-    };
-
-    fetchWeeklyDays();
-  }, [weekInfo.weekDates, user]);
+  const hasPrayedList = weekInfo.weekDates.map((date) =>
+    prayListByDate!.some(
+      (pray) => getISODate(new Date(pray.created_at)).split("T")[0] === date
+    )
+  );
+  const weeklyDays = generateDates(weekInfo.weekDates, hasPrayedList);
 
   return (
     <div className="aspect-[2.5] w-full flex-grow flex flex-col gap-1 bg-white p-5 rounded-xl">

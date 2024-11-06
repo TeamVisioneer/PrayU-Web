@@ -10,6 +10,7 @@ import PrayCardHistoryDrawer from "@/components/profile/PrayCardHistoryDrawer";
 import PrayCardHistoryPrayListDrawer from "@/components/profile/PrayCardHistoryPrayListDrawer";
 import { analyticsTrack } from "@/analytics/analytics";
 import PrayCalendar from "@/components/profile/PrayCalendar";
+import { getISOTodayDate, getWeekInfo } from "@/lib/utils";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -23,6 +24,14 @@ const MyProfilePage = () => {
   const fetchUserPrayCardListAll = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
+  const fetchPrayListByDate = useBaseStore(
+    (state) => state.fetchPrayListByDate
+  );
+
+  const currentDate = getISOTodayDate();
+  const weekInfo = getWeekInfo(currentDate);
+  const startDt = weekInfo.weekDates[0];
+  const endDt = weekInfo.weekDates[6];
 
   useEffect(() => {
     getProfile(user!.id);
@@ -32,6 +41,10 @@ const MyProfilePage = () => {
   useEffect(() => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
   }, [myProfile, fetchProfileList]);
+
+  useEffect(() => {
+    fetchPrayListByDate(user!.id, startDt, endDt);
+  }, [user, fetchPrayListByDate, startDt, endDt]);
 
   if (!myProfile || !profileList) {
     return (

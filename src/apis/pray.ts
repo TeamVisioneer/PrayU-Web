@@ -93,28 +93,29 @@ export const updatePray = async (
   }
 };
 
-export const hasPrayedByDate = async (
+export const fetchPrayByDateRange = async (
   userId: string | undefined,
-  date: Date
-): Promise<boolean> => {
+  startDt: string,
+  endDt: string
+): Promise<Pray[] | null> => {
   try {
-    if (!userId) return false;
+    if (!userId) return null;
+
     const { data, error } = await supabase
       .from("pray")
-      .select("id")
+      .select("*")
       .eq("user_id", userId)
-      .gte("created_at", date.toISOString())
-      .lte(
-        "created_at",
-        new Date(date.getTime() + 24 * 60 * 60 * 1000).toISOString()
-      );
+      .gte("created_at", startDt)
+      .lte("created_at", endDt);
+
     if (error) {
       Sentry.captureException(error.message);
-      return false;
+      return null;
     }
-    return data && data.length > 0;
+
+    return data ? data : null;
   } catch (error) {
     Sentry.captureException(error);
-    return false;
+    return null;
   }
 };
