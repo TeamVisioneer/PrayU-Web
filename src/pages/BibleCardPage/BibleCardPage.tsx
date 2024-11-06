@@ -19,6 +19,10 @@ const BibleCardPage = () => {
       return;
     }
     setLoading(true);
+    setIsEnded(false);
+    setBgImageUrl("");
+    setBody("");
+    setVerse("");
     const bibleVerseData = await createBibleVerse(inputContent);
     if (bibleVerseData.length == 0) {
       setIsEnded(false);
@@ -26,7 +30,9 @@ const BibleCardPage = () => {
       alert("생성 버튼을 다시 눌러주세요😭");
       return null;
     }
-    const imageData = await fetchBgImage(bibleVerseData[0].nature);
+
+    const { long_label, chapter, paragraph, nature } = bibleVerseData[0];
+    const imageData = await fetchBgImage(nature);
     if (imageData.length == 0) {
       setIsEnded(false);
       setLoading(false);
@@ -34,8 +40,12 @@ const BibleCardPage = () => {
       return null;
     }
     setBgImageUrl(imageData[0]);
-    setBody(bibleVerseData[0].body);
-    setVerse(bibleVerseData[0].verse);
+    setBody(bibleVerseData[0].sentence);
+    setVerse(
+      `${long_label} ${chapter}${
+        long_label == "시편" ? "편" : "장"
+      } ${paragraph}절`
+    );
     setLoading(false);
     setIsEnded(true);
   };
