@@ -10,7 +10,7 @@ import PrayCardHistoryDrawer from "@/components/profile/PrayCardHistoryDrawer";
 import PrayCardHistoryPrayListDrawer from "@/components/profile/PrayCardHistoryPrayListDrawer";
 import { analyticsTrack } from "@/analytics/analytics";
 import PrayCalendar from "@/components/profile/PrayCalendar";
-import { getISOTodayDate, getWeekInfo } from "@/lib/utils";
+import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -31,7 +31,8 @@ const MyProfilePage = () => {
   const currentDate = getISOTodayDate();
   const weekInfo = getWeekInfo(currentDate);
   const startDt = weekInfo.weekDates[0];
-  const endDt = weekInfo.weekDates[6];
+  const endPrevDt = weekInfo.weekDates[6];
+  const endDt = getNextDate(endPrevDt);
 
   useEffect(() => {
     getProfile(user!.id);

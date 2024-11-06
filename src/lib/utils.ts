@@ -123,6 +123,21 @@ export const getWeekInfo = (
   };
 };
 
+export const getNextDate = (dateString: string): string => {
+  // 입력된 날짜 문자열을 한국 시간대로 파싱합니다.
+  const date = new Date(`${dateString}T00:00:00+09:00`);
+
+  // 하루를 추가합니다.
+  date.setDate(date.getDate() + 1);
+
+  // 날짜를 "YYYY-MM-DD" 형식으로 반환합니다.
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 export const isFutureDate = (date1: string, date2: string): boolean => {
   const firstDate = new Date(date1);
   const secondDate = new Date(date2);

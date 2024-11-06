@@ -106,7 +106,7 @@ export const fetchPrayByDateRange = async (
       .select("*")
       .eq("user_id", userId)
       .gte("created_at", startDt)
-      .lte("created_at", endDt);
+      .lt("created_at", endDt);
 
     if (error) {
       Sentry.captureException(error.message);
