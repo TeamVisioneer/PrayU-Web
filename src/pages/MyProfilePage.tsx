@@ -9,6 +9,8 @@ import PrayCardHistoryList from "@/components/profile/PrayCardHistoryList";
 import PrayCardHistoryDrawer from "@/components/profile/PrayCardHistoryDrawer";
 import PrayCardHistoryPrayListDrawer from "@/components/profile/PrayCardHistoryPrayListDrawer";
 import { analyticsTrack } from "@/analytics/analytics";
+import PrayCalendar from "@/components/profile/PrayCalendar";
+import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -22,6 +24,15 @@ const MyProfilePage = () => {
   const fetchUserPrayCardListAll = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
+  const prayListByDate = useBaseStore((state) => state.prayListByDate);
+  const fetchPrayListByDate = useBaseStore(
+    (state) => state.fetchPrayListByDate
+  );
+
+  const currentDate = getISOTodayDate();
+  const weekInfo = getWeekInfo(currentDate);
+  const startDt = weekInfo.weekDates[0];
+  const endDt = getNextDate(weekInfo.weekDates[6]);
 
   useEffect(() => {
     getProfile(user!.id);
@@ -32,14 +43,18 @@ const MyProfilePage = () => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
   }, [myProfile, fetchProfileList]);
 
-  if (!myProfile || !profileList) {
+  useEffect(() => {
+    fetchPrayListByDate(user!.id, startDt, endDt);
+  }, [user, fetchPrayListByDate, startDt, endDt]);
+
+  if (!myProfile || !profileList || !prayListByDate) {
     return (
-      <div className="w-full flex flex-grow flex-col gap-6 items-center">
+      <div className="w-full flex flex-grow flex-col gap-4 items-center">
         <div className="w-full flex justify-between items-center">
           <div className="w-[60px]">
             <IoChevronBack size={20} onClick={() => window.history.back()} />
           </div>
-          <span className="text-xl font-bold">내 프로필</span>
+          <span className="text-lg font-bold">나의 정보</span>
           <div className="w-[60px] flex justify-end items-center"></div>
         </div>
         <div className="flex justify-center h-[80px] object-cover">
@@ -54,20 +69,19 @@ const MyProfilePage = () => {
       </div>
     );
   }
-
   const onClickSettingBtn = () => {
     setIsOpenSettingDialog(true);
     analyticsTrack("클릭_내프로필_설정", {});
   };
 
   return (
-    <div className="w-full flex flex-col items-center pt-48">
-      <div className="fixed top-0 w-full flex flex-col gap-6 bg-mainBg z-10 p-5">
+    <div className="w-full flex flex-col gap-1 items-center">
+      <div className="w-full flex flex-col gap-3 bg-mainBg z-10">
         <div className="w-full flex justify-between items-center">
           <div className="w-14 ">
             <IoChevronBack size={20} onClick={() => window.history.back()} />
           </div>
-          <span className="text-xl font-bold">내 프로필</span>
+          <span className="text-lg font-semibold">나의 정보</span>
           <div
             className="flex justify-end items-center w-14"
             onClick={onClickSettingBtn}
@@ -76,14 +90,18 @@ const MyProfilePage = () => {
           </div>
         </div>
         <div className="flex flex-col justify-center gap-4">
-          <div className="flex justify-center h-[80px] object-cover">
-            <img
-              className="h-full aspect-square rounded-full object-cover"
-              src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
-            />
+          <div className="flex flex-col items-center">
+            <div className="flex justify-center h-[70px] object-cover">
+              <img
+                className="h-full aspect-square rounded-full object-cover"
+                src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
+              />
+            </div>
+            <p className="text-sm font-semibold pt-1">{myProfile.full_name}</p>
           </div>
-          <div className="w-full flex flex-col items-center">
-            {myProfile.full_name} 님의 기도카드
+          <PrayCalendar />
+          <div className="w-full flex flex-col items-start text-sm font-semibold pt-1 pl-3">
+            지난 기도카드
           </div>
         </div>
       </div>

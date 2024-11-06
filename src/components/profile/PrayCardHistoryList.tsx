@@ -27,20 +27,20 @@ const PrayCardHistoryList = () => {
     );
 
   return (
-    <div className="w-full grid grid-cols-3 gap-1 p-4 pb-10">
+    <div className="w-full grid grid-cols-3 gap-3 p-1 pb-10">
       {historyPrayCardList.map((prayCard, index) => (
         <div
           key={index}
-          className="aspect-[3/4] border items-center flex flex-col rounded-lg "
+          className="aspect-[0.76] border-none items-center flex flex-col rounded-lg "
           onClick={() => onClickStory(prayCard)}
         >
-          <div className="w-full flex flex-col bg-gradient-to-r from-start via-middle via-52% to-end p-2 rounded-t-lg">
+          <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
             <p className="text-xs text-white w-full text-left">
               {formatDate(prayCard.created_at)}
             </p>
           </div>
-          <div className="w-full flex-grow flex flex-col bg-white p-1 rounded-b-lg">
-            <span className="text-xs text-gray-400 line-clamp-3">
+          <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">
+            <span className="text-[0.7rem] text-gray-400 line-clamp-3">
               {prayCard.content}
             </span>
           </div>
