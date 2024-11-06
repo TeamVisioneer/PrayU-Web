@@ -55,7 +55,6 @@ const MyProfilePage = () => {
       </div>
     );
   }
-
   const onClickSettingBtn = () => {
     setIsOpenSettingDialog(true);
     analyticsTrack("클릭_내프로필_설정", {});
@@ -77,11 +76,14 @@ const MyProfilePage = () => {
           </div>
         </div>
         <div className="flex flex-col justify-center gap-4">
-          <div className="flex justify-center h-[70px] object-cover">
-            <img
-              className="h-full aspect-square rounded-full object-cover"
-              src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
-            />
+          <div className="flex flex-col items-center">
+            <div className="flex justify-center h-[70px] object-cover">
+              <img
+                className="h-full aspect-square rounded-full object-cover"
+                src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
+              />
+            </div>
+            <p className="text-sm font-semibold pt-1">{myProfile.full_name}</p>
           </div>
           <PrayCalendar />
           <div className="w-full flex flex-col items-start text-sm font-semibold pt-1 pl-3">

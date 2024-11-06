@@ -16,13 +16,6 @@ const PrayCalendar = () => {
   const weekInfo = getWeekInfo(currentDate);
   const currentDateString = formatToDateString(currentDate);
 
-  // 주간 테스트
-  const testDate = new Date("2024-09-30");
-  const temp = getISODate(testDate);
-  const testWeekInfo = getWeekInfo(temp);
-  console.log(testWeekInfo);
-  // 주간 테스트
-
   const [weeklyDays, setWeeklyDays] = useState<
     { date: string; hasPrayed: boolean }[]
   >([]);
