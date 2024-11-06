@@ -32,8 +32,7 @@ const MyProfilePage = () => {
   const currentDate = getISOTodayDate();
   const weekInfo = getWeekInfo(currentDate);
   const startDt = weekInfo.weekDates[0];
-  const endPrevDt = weekInfo.weekDates[6];
-  const endDt = getNextDate(endPrevDt);
+  const endDt = getNextDate(weekInfo.weekDates[6]);
 
   useEffect(() => {
     getProfile(user!.id);
