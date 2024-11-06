@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { getISOTodayDate, getWeekInfo, getISODate, days } from "@/lib/utils";
+import {
+  getISOTodayDate,
+  getWeekInfo,
+  getISODate,
+  days,
+  formatToDateString,
+  isFutureDate,
+} from "@/lib/utils";
 import { hasPrayedByDate } from "@/apis/pray";
 import useAuth from "@/hooks/useAuth";
 
@@ -7,6 +14,14 @@ const PrayCalendar = () => {
   const { user } = useAuth();
   const currentDate = getISOTodayDate();
   const weekInfo = getWeekInfo(currentDate);
+  const currentDateString = formatToDateString(currentDate);
+
+  // 주간 테스트
+  const testDate = new Date("2024-09-30");
+  const temp = getISODate(testDate);
+  const testWeekInfo = getWeekInfo(temp);
+  console.log(testWeekInfo);
+  // 주간 테스트
 
   const [weeklyDays, setWeeklyDays] = useState<
     { date: string; hasPrayed: boolean }[]
@@ -47,7 +62,7 @@ const PrayCalendar = () => {
       <div className="border-t border-[#f7f7f7] my-2"></div>
       <div className="w-full flex justify-around ">
         {weeklyDays.map((date) => {
-          const isToday = date.date === currentDate;
+          const isToday = date.date === currentDateString;
           const hasPrayed = date.hasPrayed;
           const dayOfWeek = new Date(date.date).getDay();
           return (
@@ -63,11 +78,12 @@ const PrayCalendar = () => {
                 {days[dayOfWeek]}
               </span>
               <div className="w-full aspect-square rounded-full flex items-center justify-center bg-[#EFEFEF] ">
-                {hasPrayed ? (
-                  <img src="/images/historyYes.png"></img>
-                ) : (
-                  <img src="/images/historyNo.png"></img>
-                )}
+                {!isFutureDate(currentDateString, date.date) &&
+                  (hasPrayed ? (
+                    <img src="/images/historyYes.png" alt="Prayed" />
+                  ) : (
+                    <img src="/images/historyNo.png" alt="Not Prayed" />
+                  ))}
               </div>
             </div>
           );

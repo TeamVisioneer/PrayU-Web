@@ -80,37 +80,54 @@ export const formatDate = (isoString: string) => {
   )}.${String(date.getDate()).padStart(2, "0")}`;
 };
 
+export const formatToDateString = (isoString: string): string => {
+  const date = new Date(isoString);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 export const getWeekInfo = (
-  // 날짜의 해당 주차와 해당 주차의 날짜들을 반환
   dateString: string
 ): { weekNumber: number; weekDates: string[] } => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = date.getMonth(); // 0 = January, 1 = February, etc.
 
-  // 주차 계산
+  // 주차 계산 (한국 시간 기준)
   const weekNumber = Math.ceil(
     (date.getDate() + (new Date(year, month, 1).getDay() + 1)) / 7
   );
 
-  // 현재 주의 일요일 날짜 계산
-  const startOfWeek = new Date(year, month, date.getDate() - date.getDay()); // 일요일
+  // 한국 시간 기준으로 현재 주의 일요일 날짜 계산
+  const startOfWeek = new Date(year, month, date.getDate() - date.getDay());
+  startOfWeek.setHours(startOfWeek.getHours() + 9); // 한국 시간 기준으로 설정
 
   // 주의 날짜를 저장할 배열
   const weekDates: string[] = [];
 
-  // 이번 주의 일요일부터 토요일까지 날짜를 계산
+  // 이번 주의 일요일부터 토요일까지 날짜를 계산 (한국 시간 반영)
   for (let i = 0; i < 7; i++) {
     const day = new Date(startOfWeek);
-    day.setDate(startOfWeek.getDate() + i); // 일요일부터 시작
-    weekDates.push(day.toISOString().split("T")[0]); // ISO 형식으로 날짜를 문자열로 변환
-    console.log(day);
+    day.setDate(startOfWeek.getDate() + i);
+    const koreaDate = new Date(day.getTime() + 9 * 60 * 60 * 1000); // KST 오프셋 적용
+    weekDates.push(koreaDate.toISOString().split("T")[0]); // ISO 형식으로 날짜를 문자열로 변환
   }
 
   return {
     weekNumber,
     weekDates,
   };
+};
+
+export const isFutureDate = (date1: string, date2: string): boolean => {
+  const firstDate = new Date(date1);
+  const secondDate = new Date(date2);
+
+  return secondDate > firstDate;
 };
 
 // sleep 함수

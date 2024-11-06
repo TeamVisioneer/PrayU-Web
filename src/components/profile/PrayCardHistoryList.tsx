@@ -39,8 +39,8 @@ const PrayCardHistoryList = () => {
               {formatDate(prayCard.created_at)}
             </p>
           </div>
-          <div className="w-full flex-grow flex flex-col bg-white p-3 rounded-b-xl">
-            <span className="text-xs text-gray-400 line-clamp-3">
+          <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">
+            <span className="text-[0.7rem] text-gray-400 line-clamp-3">
               {prayCard.content}
             </span>
           </div>
