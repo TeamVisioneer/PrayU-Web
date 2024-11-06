@@ -10,6 +10,7 @@ import { immer } from "zustand/middleware/immer";
 import { supabase } from "../../supabase/client";
 import { Session, User } from "@supabase/supabase-js";
 import {
+  Bible,
   Group,
   GroupWithProfiles,
   Member,
@@ -70,6 +71,7 @@ import {
   updateNotification,
   updateNotificationParams,
 } from "@/apis/notification";
+import { getBible } from "@/apis/bible";
 
 export interface BaseStore {
   // user
@@ -286,6 +288,14 @@ export interface BaseStore {
   // notification popover
   isOpenNotificationPopover: boolean;
   setIsOpenNotificationPopover: (isOpenNotificationPopover: boolean) => void;
+
+  // bible
+  targetBible: Bible | null;
+  getBible: (
+    longLabel: string,
+    chapter: number,
+    paragraph: number,
+  ) => Promise<Bible | null>;
 
   // myPray drawer
   isOpenMyPrayDrawer: boolean;
@@ -995,6 +1005,20 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.isOpenNotificationPopover = isOpenNotificationPopover;
       });
+    },
+
+    // bible
+    targetBible: null,
+    getBible: async (
+      longLabel: string,
+      chapter: number,
+      paragraph: number,
+    ) => {
+      const bible = await getBible(longLabel, chapter, paragraph);
+      set((state) => {
+        state.targetBible = bible;
+      });
+      return bible;
     },
 
     // share

@@ -11,6 +11,8 @@ export type PrayCard = Database["public"]["Tables"]["pray_card"]["Row"];
 
 export type Pray = Database["public"]["Tables"]["pray"]["Row"];
 
+export type Bible = Database["public"]["Tables"]["bible"]["Row"];
+
 export type OriginNotification =
   Database["public"]["Tables"]["notification"]["Row"];
 export type Notification = Omit<OriginNotification, "data" | "fcm_result"> & {

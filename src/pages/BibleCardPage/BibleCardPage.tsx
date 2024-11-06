@@ -4,8 +4,10 @@ import { createBibleVerse, fetchBgImage } from "@/apis/openai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ClipLoader } from "react-spinners";
+import useBaseStore from "@/stores/baseStore";
 
 const BibleCardPage = () => {
+  const getBible = useBaseStore((state) => state.getBible);
   const [inputContent, setInputContent] = useState("");
   const [body, setBody] = useState("");
   const [verse, setVerse] = useState("");
@@ -32,15 +34,17 @@ const BibleCardPage = () => {
     }
 
     const { long_label, chapter, paragraph, nature } = bibleVerseData[0];
+
+    const targetBible = await getBible(long_label, chapter, paragraph);
     const imageData = await fetchBgImage(nature);
-    if (imageData.length == 0) {
+    if (!targetBible || imageData.length == 0) {
       setIsEnded(false);
       setLoading(false);
       alert("생성 버튼을 다시 눌러주세요😭");
       return null;
     }
     setBgImageUrl(imageData[0]);
-    setBody(bibleVerseData[0].sentence);
+    setBody(targetBible.sentence);
     setVerse(
       `${long_label} ${chapter}${
         long_label == "시편" ? "편" : "장"
