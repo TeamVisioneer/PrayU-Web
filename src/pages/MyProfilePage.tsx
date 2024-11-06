@@ -24,6 +24,7 @@ const MyProfilePage = () => {
   const fetchUserPrayCardListAll = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
+  const prayListByDate = useBaseStore((state) => state.prayListByDate);
   const fetchPrayListByDate = useBaseStore(
     (state) => state.fetchPrayListByDate
   );
@@ -47,7 +48,7 @@ const MyProfilePage = () => {
     fetchPrayListByDate(user!.id, startDt, endDt);
   }, [user, fetchPrayListByDate, startDt, endDt]);
 
-  if (!myProfile || !profileList) {
+  if (!myProfile || !profileList || !prayListByDate) {
     return (
       <div className="w-full flex flex-grow flex-col gap-4 items-center">
         <div className="w-full flex justify-between items-center">

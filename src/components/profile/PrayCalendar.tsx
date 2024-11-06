@@ -28,9 +28,7 @@ const PrayCalendar = () => {
   };
 
   const hasPrayedList = weekInfo.weekDates.map((date) =>
-    prayListByDate!.some(
-      (pray) => getISODate(new Date(pray.created_at)).split("T")[0] === date
-    )
+    prayListByDate!.some((pray) => pray.created_at.split("T")[0] === date)
   );
   const weeklyDays = generateDates(weekInfo.weekDates, hasPrayedList);
 
