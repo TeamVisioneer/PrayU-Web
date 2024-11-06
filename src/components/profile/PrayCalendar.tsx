@@ -80,7 +80,11 @@ const PrayCalendar = () => {
               <div className="w-full aspect-square rounded-full flex items-center justify-center bg-[#EFEFEF] ">
                 {!isFutureDate(currentDateString, date.date) &&
                   (hasPrayed ? (
-                    <img src="/images/historyYes.png" alt="Prayed" />
+                    isToday ? (
+                      <img src="/images/historyToday.png" alt="Today Prayed" />
+                    ) : (
+                      <img src="/images/historyYes.png" alt="Prayed" />
+                    )
                   ) : (
                     <img src="/images/historyNo.png" alt="Not Prayed" />
                   ))}
