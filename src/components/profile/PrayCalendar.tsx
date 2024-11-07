@@ -64,7 +64,9 @@ const PrayCalendar = () => {
                       <img src="/images/historyYes.png" alt="Prayed" />
                     )
                   ) : (
-                    <img src="/images/historyNo.png" alt="Not Prayed" />
+                    !isToday && (
+                      <img src="/images/historyNo.png" alt="Not Prayed" />
+                    )
                   ))}
               </div>
             </div>
