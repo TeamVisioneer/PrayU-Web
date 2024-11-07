@@ -158,6 +158,28 @@ export const fetchUserPrayCardList = async (
   }
 };
 
+export const fetchUserPrayCardCount = async (
+  currentUserId: string
+): Promise<number | null> => {
+  try {
+    const { count, error } = await supabase
+      .from("pray_card")
+      .select("id", { count: "exact" })
+      .eq("user_id", currentUserId)
+      .is("deleted_at", null);
+    // .is("pray.deleted_at", null);
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return count;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const createPrayCard = async (
   groupId: string,
   userId: string,

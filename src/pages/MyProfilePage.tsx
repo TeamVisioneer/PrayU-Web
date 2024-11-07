@@ -24,6 +24,9 @@ const MyProfilePage = () => {
   const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
+  const fetchUserPrayCardCount = useBaseStore(
+    (state) => state.fetchUserPrayCardCount
+  );
   const prayListByDate = useBaseStore((state) => state.prayListByDate);
   const fetchPrayListByDate = useBaseStore(
     (state) => state.fetchPrayListByDate
@@ -37,7 +40,8 @@ const MyProfilePage = () => {
   useEffect(() => {
     getProfile(user!.id);
     fetchUserPrayCardList(user!.id);
-  }, [user, getProfile, fetchUserPrayCardList]);
+    fetchUserPrayCardCount(user!.id);
+  }, [user, getProfile, fetchUserPrayCardList, fetchUserPrayCardCount]);
 
   useEffect(() => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
