@@ -48,8 +48,6 @@ const PrayCardHistoryList = () => {
   if (!historyPrayCardCount) return;
 
   const onClickMoreHistoryPrayCardList = async () => {
-    console.log("offset", offset);
-    console.log("historyPrayCardCount", historyPrayCardCount);
     if (offset >= historyPrayCardCount) return;
 
     setHistoryPrayCardList(null);
@@ -66,7 +64,6 @@ const PrayCardHistoryList = () => {
       ...newHistoryPrayCardList,
     ]);
     setOffset(offset + pageSize);
-    console.log("length", historyPrayCardListView.length);
   };
 
   const onClickStory = (prayCard: PrayCardWithProfiles) => {
@@ -74,8 +71,6 @@ const PrayCardHistoryList = () => {
     setIsOpenHistoryDrawer(true);
     analyticsTrack("클릭_기도카드_히스토리", {});
   };
-
-  // console.log("historyPrayCardList", historyPrayCardList);
 
   if (!historyPrayCardList)
     return (
@@ -85,32 +80,43 @@ const PrayCardHistoryList = () => {
     );
 
   return (
-    <div className="w-full grid grid-cols-3 gap-3 p-1 pb-10">
-      {historyPrayCardListView.map((prayCard, index) => (
-        <div
-          key={index}
-          className="aspect-[0.76] border-none items-center flex flex-col rounded-lg "
-          onClick={() => onClickStory(prayCard)}
-        >
-          <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
-            <p className="text-xs text-white w-full text-left">
-              {formatDate(prayCard.created_at)}
-            </p>
+    <div className="flex flex-col gap-1 pb-10 items-center">
+      <div className="w-full grid grid-cols-3 gap-3 p-1 pb-5">
+        {historyPrayCardListView.map((prayCard, index) => (
+          <div
+            key={index}
+            className="aspect-[0.76] border-none items-center flex flex-col rounded-lg "
+            onClick={() => onClickStory(prayCard)}
+          >
+            <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
+              <p className="text-xs text-white w-full text-left">
+                {formatDate(prayCard.created_at)}
+              </p>
+            </div>
+            <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">
+              <span className="text-[0.7rem] text-gray-400 line-clamp-3">
+                {prayCard.content}
+              </span>
+            </div>
           </div>
-          <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">
-            <span className="text-[0.7rem] text-gray-400 line-clamp-3">
-              {prayCard.content}
-            </span>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
       {offset < historyPrayCardCount && (
         <div
           onClick={() => onClickMoreHistoryPrayCardList()}
-          className="w-full flex justify-center items-center"
+          className="w-fit flex flex-grow justify-center items-center bg-[#DEDFF1] rounded-xl pt-1 pb-1 px-4"
         >
           {historyPrayCardList ? (
-            <span className="text-gray-500 underline ">더보기</span>
+            <div className="flex flex-row">
+              <span className="font-semibold text-sm">더보기</span>
+              <div className="flex flex-col flex-grow items-center justify-center h-auto">
+                <img
+                  className="h-[0.3rem] w-auto ml-2"
+                  src="/images/Vector.png"
+                  alt="Not Prayed"
+                />
+              </div>
+            </div>
           ) : (
             <ClipLoader color="#70AAFF" size={10} />
           )}
