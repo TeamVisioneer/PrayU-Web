@@ -69,7 +69,7 @@ export const fetchBgImage = async (content: string): Promise<string[]> => {
 
 export const createQT = async (content: string): Promise<QTData> => {
   const response = await fetch(
-    `http://127.0.0.1:54321/functions/v1/openai/qt`,
+    `${import.meta.env.VITE_SUPA_PROJECT_URL}/functions/v1/openai/qt`,
     {
       method: "POST",
       headers: {
