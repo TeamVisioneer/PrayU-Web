@@ -2,8 +2,10 @@ import * as Sentry from "@sentry/react";
 
 export interface BibleVerseData {
   keyword: string;
-  body: string;
-  verse: string;
+  long_label: string;
+  chapter: number;
+  paragraph: number;
+  sentence: string;
   nature: string;
 }
 
@@ -34,8 +36,11 @@ export const createBibleVerse = async (
         body: JSON.stringify({ content }),
       }
     );
-
-    const { data } = await response.json();
+    const { data, error } = await response.json();
+    if (error) {
+      Sentry.captureException(error);
+      return [];
+    }
     return data;
   } catch (error) {
     Sentry.captureException(error);

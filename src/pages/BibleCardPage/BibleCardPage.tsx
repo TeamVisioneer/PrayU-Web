@@ -4,8 +4,11 @@ import { createBibleVerse, fetchBgImage } from "@/apis/openai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ClipLoader } from "react-spinners";
+import useBaseStore from "@/stores/baseStore";
+import { enterLine } from "@/lib/utils";
 
 const BibleCardPage = () => {
+  const getBible = useBaseStore((state) => state.getBible);
   const [inputContent, setInputContent] = useState("");
   const [body, setBody] = useState("");
   const [verse, setVerse] = useState("");
@@ -19,6 +22,10 @@ const BibleCardPage = () => {
       return;
     }
     setLoading(true);
+    setIsEnded(false);
+    setBgImageUrl("");
+    setBody("");
+    setVerse("");
     const bibleVerseData = await createBibleVerse(inputContent);
     if (bibleVerseData.length == 0) {
       setIsEnded(false);
@@ -26,16 +33,24 @@ const BibleCardPage = () => {
       alert("생성 버튼을 다시 눌러주세요😭");
       return null;
     }
-    const imageData = await fetchBgImage(bibleVerseData[0].nature);
-    if (imageData.length == 0) {
+
+    const { long_label, chapter, paragraph, nature } = bibleVerseData[0];
+
+    const targetBible = await getBible(long_label, chapter, paragraph);
+    const imageData = await fetchBgImage(nature);
+    if (!targetBible || imageData.length == 0) {
       setIsEnded(false);
       setLoading(false);
       alert("생성 버튼을 다시 눌러주세요😭");
       return null;
     }
     setBgImageUrl(imageData[0]);
-    setBody(bibleVerseData[0].body);
-    setVerse(bibleVerseData[0].verse);
+    setBody(enterLine(targetBible.sentence));
+    setVerse(
+      `${long_label} ${chapter}${
+        long_label == "시편" ? "편" : "장"
+      } ${paragraph}절`
+    );
     setLoading(false);
     setIsEnded(true);
   };
