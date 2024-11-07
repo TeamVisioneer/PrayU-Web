@@ -102,8 +102,6 @@ export interface BaseStore {
   setIsOpenSettingDialog: (isOpenSettingDialog: boolean) => void;
   isOpenHistoryDrawer: boolean;
   setIsOpenHistoryDrawer: (isOpenHistoryDrawer: boolean) => void;
-  historyCard: PrayCardWithProfiles | null;
-  setHistoryCard: (historyCard: PrayCardWithProfiles | null) => void;
 
   // group
   groupList: Group[] | null;
@@ -185,6 +183,8 @@ export interface BaseStore {
   ) => void;
   historyPrayCardCount: number | null;
   fetchUserPrayCardCount: (currentUserId: string) => Promise<number | null>;
+  historyCard: PrayCardWithProfiles | null;
+  setHistoryCard: (historyCard: PrayCardWithProfiles | null) => void;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
   isDisabledPrayCardCreateBtn: boolean;
@@ -506,12 +506,6 @@ const useBaseStore = create<BaseStore>()(
         state.isOpenHistoryDrawer = isOpenHistoryDrawer;
       });
     },
-    historyCard: null,
-    setHistoryCard: (historyCard: PrayCardWithProfiles | null) => {
-      set((state) => {
-        state.historyCard = historyCard;
-      });
-    },
 
     // group
     groupList: null,
@@ -694,6 +688,7 @@ const useBaseStore = create<BaseStore>()(
     prayCardCarouselApi: null,
     prayCardCarouselList: null,
     prayCardCarouselIndex: 0,
+    historyCard: null,
     setPrayCardCarouselIndex: (index: number) => {
       set((state) => {
         state.prayCardCarouselIndex = index;
@@ -868,6 +863,11 @@ const useBaseStore = create<BaseStore>()(
         state.historyPrayCardCount = historyPrayCardCount;
       });
       return historyPrayCardCount;
+    },
+    setHistoryCard: (historyCard: PrayCardWithProfiles | null) => {
+      set((state) => {
+        state.historyCard = historyCard;
+      });
     },
 
     // pray
