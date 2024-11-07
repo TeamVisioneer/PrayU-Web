@@ -15,7 +15,6 @@ export interface QTData {
   };
   application_questions: { question: string }[];
   practical_tasks: { task: string }[];
-  error: string;
 }
 
 export const createBibleVerse = async (
