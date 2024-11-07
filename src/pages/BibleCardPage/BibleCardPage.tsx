@@ -118,7 +118,7 @@ const BibleCardPage = () => {
 
   const onClickInstagramShare = async () => {
     const storyUrl = `instagram-stories://share?source_application=538115812331385`;
-    window.location.href = storyUrl;
+    window.open(storyUrl, "_blank");
   };
 
   return (
