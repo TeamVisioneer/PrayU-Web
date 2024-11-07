@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/utils";
 import { ClipLoader } from "react-spinners";
 import { useState } from "react";
 import { useEffect } from "react";
+import Vector from "@/assets/Vector.png";
 
 const PrayCardHistoryList = () => {
   const user = useBaseStore((state) => state.user);
@@ -104,7 +105,7 @@ const PrayCardHistoryList = () => {
               <div className="flex flex-col flex-grow items-center justify-center h-auto">
                 <img
                   className="h-[0.3rem] w-auto ml-2"
-                  src="/images/Vector.png"
+                  src={Vector}
                   alt="Not Prayed"
                 />
               </div>
