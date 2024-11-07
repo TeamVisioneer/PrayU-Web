@@ -60,11 +60,9 @@ const PrayCardHistoryList = () => {
       limit,
       offset
     );
-    console.log("newHistoryPrayCardList", newHistoryPrayCardList);
     if (!historyPrayCardList || !newHistoryPrayCardList) return;
-
     setHistoryPrayCardListView([
-      ...historyPrayCardList,
+      ...historyPrayCardListView,
       ...newHistoryPrayCardList,
     ]);
     setOffset(offset + pageSize);
