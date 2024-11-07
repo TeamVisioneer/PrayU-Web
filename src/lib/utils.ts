@@ -74,10 +74,12 @@ export const isToday = (dateString: string) => {
 
 export const formatDate = (isoString: string) => {
   const date = new Date(isoString);
-  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}.${String(date.getDate()).padStart(2, "0")}`;
+  return `${date.getFullYear()}.${
+    String(date.getMonth() + 1).padStart(
+      2,
+      "0",
+    )
+  }.${String(date.getDate()).padStart(2, "0")}`;
 };
 
 export const formatToDateString = (isoString: string): string => {
@@ -91,7 +93,7 @@ export const formatToDateString = (isoString: string): string => {
 };
 
 export const getWeekInfo = (
-  dateString: string
+  dateString: string,
 ): { weekNumber: number; weekDates: string[] } => {
   const date = new Date(dateString);
   const year = date.getFullYear();
@@ -99,7 +101,7 @@ export const getWeekInfo = (
 
   // 주차 계산 (한국 시간 기준)
   const weekNumber = Math.ceil(
-    (date.getDate() + (new Date(year, month, 1).getDay() + 1)) / 7
+    (date.getDate() + (new Date(year, month, 1).getDay() + 1)) / 7,
   );
 
   // 한국 시간 기준으로 현재 주의 일요일 날짜 계산
@@ -165,3 +167,7 @@ export const getDomainUrl = () => {
 };
 
 export const days = ["일", "월", "화", "수", "목", "금", "토"];
+
+export const enterLine = (text: string) => {
+  return text;
+};

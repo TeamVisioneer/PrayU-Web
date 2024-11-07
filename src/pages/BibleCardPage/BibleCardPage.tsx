@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ClipLoader } from "react-spinners";
 import useBaseStore from "@/stores/baseStore";
+import { enterLine } from "@/lib/utils";
 
 const BibleCardPage = () => {
   const getBible = useBaseStore((state) => state.getBible);
@@ -44,7 +45,7 @@ const BibleCardPage = () => {
       return null;
     }
     setBgImageUrl(imageData[0]);
-    setBody(targetBible.sentence);
+    setBody(enterLine(targetBible.sentence));
     setVerse(
       `${long_label} ${chapter}${
         long_label == "시편" ? "편" : "장"
