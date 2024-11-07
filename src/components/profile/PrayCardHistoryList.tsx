@@ -5,10 +5,9 @@ import { formatDate } from "@/lib/utils";
 import { ClipLoader } from "react-spinners";
 import { useState } from "react";
 import { useEffect } from "react";
-import useAuth from "@/hooks/useAuth";
 
 const PrayCardHistoryList = () => {
-  const { user } = useAuth();
+  const user = useBaseStore((state) => state.user);
   const historyPrayCardList = useBaseStore(
     (state) => state.historyPrayCardList
   );
@@ -33,7 +32,7 @@ const PrayCardHistoryList = () => {
     (state) => state.historyPrayCardCount
   );
 
-  const pageSize = 20;
+  const pageSize = 18;
   const [offset, setOffset] = useState(pageSize);
 
   useEffect(() => {
@@ -71,13 +70,6 @@ const PrayCardHistoryList = () => {
     setIsOpenHistoryDrawer(true);
     analyticsTrack("클릭_기도카드_히스토리", {});
   };
-
-  if (!historyPrayCardList)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={20} color={"#70AAFF"} loading={true} />
-      </div>
-    );
 
   return (
     <div className="flex flex-col gap-1 pb-10 items-center">

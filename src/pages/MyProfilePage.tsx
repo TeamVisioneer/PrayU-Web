@@ -1,4 +1,3 @@
-import useAuth from "@/hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import SettingDialog from "@/components/profile/SettingDialog";
 import { useEffect } from "react";
@@ -13,7 +12,7 @@ import PrayCalendar from "@/components/profile/PrayCalendar";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 
 const MyProfilePage = () => {
-  const { user } = useAuth();
+  const user = useBaseStore((state) => state.user);
   const myProfile = useBaseStore((state) => state.myProfile);
   const profileList = useBaseStore((state) => state.profileList);
   const getProfile = useBaseStore((state) => state.getProfile);
