@@ -43,7 +43,7 @@ const OtherMemberList: React.FC = () => {
     );
     if (!memberList || !newMemberList) return;
 
-    setMemberListView([...memberList, ...newMemberList]);
+    setMemberListView([...memberListView, ...newMemberList]);
     setOffset(offset + pageSize);
   };
 

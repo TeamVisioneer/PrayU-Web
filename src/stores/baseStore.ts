@@ -45,6 +45,7 @@ import {
   fetchGroupPrayCardList,
   fetchOtherPrayCardListByGroupId,
   fetchUserPrayCardList,
+  fetchUserPrayCardCount,
   fetchUserPrayCardListByGroupId,
   updatePrayCardContent,
 } from "@/apis/prayCard";
@@ -175,6 +176,15 @@ export interface BaseStore {
   otherPrayCardList: PrayCardWithProfiles[] | null;
   userPrayCardList: PrayCardWithProfiles[] | null;
   historyPrayCardList: PrayCardWithProfiles[] | null;
+  historyPrayCardListView: PrayCardWithProfiles[];
+  setHistoryPrayCardListView: (
+    historyPrayCardListView: PrayCardWithProfiles[]
+  ) => void;
+  setHistoryPrayCardList: (
+    historyPrayCardList: PrayCardWithProfiles[] | null
+  ) => void;
+  historyPrayCardCount: number | null;
+  fetchUserPrayCardCount: (currentUserId: string) => Promise<number | null>;
   inputPrayCardContent: string;
   isEditingPrayCard: boolean;
   isDisabledPrayCardCreateBtn: boolean;
@@ -202,7 +212,9 @@ export interface BaseStore {
     groupId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   fetchUserPrayCardList: (
-    currentUserId: string
+    currentUserId: string,
+    limit?: number,
+    offset?: number
   ) => Promise<PrayCardWithProfiles[] | null>;
   createPrayCard: (
     groupId: string,
@@ -664,6 +676,16 @@ const useBaseStore = create<BaseStore>()(
     groupPrayCardList: null,
     userPrayCardList: null,
     historyPrayCardList: null,
+    historyPrayCardCount: 0,
+    historyPrayCardListView: [],
+    setHistoryPrayCardListView: (
+      historyPrayCardListView: PrayCardWithProfiles[]
+    ) => {
+      set((state) => {
+        state.historyPrayCardListView = historyPrayCardListView;
+      });
+    },
+
     otherPrayCardList: null,
     inputPrayCardContent: "",
     isEditingPrayCard: false,
@@ -771,8 +793,16 @@ const useBaseStore = create<BaseStore>()(
       });
       return userPrayCardList;
     },
-    fetchUserPrayCardList: async (currentUserId: string) => {
-      const historyPrayCardList = await fetchUserPrayCardList(currentUserId);
+    fetchUserPrayCardList: async (
+      currentUserId: string,
+      limit?: number,
+      offset?: number
+    ) => {
+      const historyPrayCardList = await fetchUserPrayCardList(
+        currentUserId,
+        limit,
+        offset
+      );
       set((state) => {
         state.historyPrayCardList = historyPrayCardList;
       });
@@ -824,6 +854,20 @@ const useBaseStore = create<BaseStore>()(
     },
     deletePrayCardByGroupId: async (userId: string, groupId: string) => {
       await deletePrayCardByGroupId(userId, groupId);
+    },
+    setHistoryPrayCardList: (
+      historyPrayCardList: PrayCardWithProfiles[] | null
+    ) => {
+      set((state) => {
+        state.historyPrayCardList = historyPrayCardList;
+      });
+    },
+    fetchUserPrayCardCount: async (currentUserId: string) => {
+      const historyPrayCardCount = await fetchUserPrayCardCount(currentUserId);
+      set((state) => {
+        state.historyPrayCardCount = historyPrayCardCount;
+      });
+      return historyPrayCardCount;
     },
 
     // pray

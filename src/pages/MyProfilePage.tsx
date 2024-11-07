@@ -1,4 +1,3 @@
-import useAuth from "@/hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import SettingDialog from "@/components/profile/SettingDialog";
 import { useEffect } from "react";
@@ -11,6 +10,7 @@ import PrayCardHistoryPrayListDrawer from "@/components/profile/PrayCardHistoryP
 import { analyticsTrack } from "@/analytics/analytics";
 import PrayCalendar from "@/components/profile/PrayCalendar";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
+import useAuth from "@/hooks/useAuth";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -21,8 +21,11 @@ const MyProfilePage = () => {
   const setIsOpenSettingDialog = useBaseStore(
     (state) => state.setIsOpenSettingDialog
   );
-  const fetchUserPrayCardListAll = useBaseStore(
+  const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
+  );
+  const fetchUserPrayCardCount = useBaseStore(
+    (state) => state.fetchUserPrayCardCount
   );
   const prayListByDate = useBaseStore((state) => state.prayListByDate);
   const fetchPrayListByDate = useBaseStore(
@@ -36,8 +39,9 @@ const MyProfilePage = () => {
 
   useEffect(() => {
     getProfile(user!.id);
-    fetchUserPrayCardListAll(user!.id);
-  }, [user, getProfile, fetchUserPrayCardListAll]);
+    fetchUserPrayCardList(user!.id);
+    fetchUserPrayCardCount(user!.id);
+  }, [user, getProfile, fetchUserPrayCardList, fetchUserPrayCardCount]);
 
   useEffect(() => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);

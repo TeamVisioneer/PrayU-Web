@@ -7,6 +7,9 @@ import {
   isFutureDate,
 } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
+import historyToday from "@/assets/historyToday.png";
+import historyYes from "@/assets/historyYes.png";
+import historyNo from "@/assets/historyNo.png";
 
 const PrayCalendar = () => {
   const currentDate = getISOTodayDate();
@@ -59,14 +62,12 @@ const PrayCalendar = () => {
                 {!isFutureDate(currentDateString, date.date) &&
                   (hasPrayed ? (
                     isToday ? (
-                      <img src="/images/historyToday.png" alt="Today Prayed" />
+                      <img src={historyToday} alt="Today Prayed" />
                     ) : (
-                      <img src="/images/historyYes.png" alt="Prayed" />
+                      <img src={historyYes} alt="Prayed" />
                     )
                   ) : (
-                    !isToday && (
-                      <img src="/images/historyNo.png" alt="Not Prayed" />
-                    )
+                    !isToday && <img src={historyNo} alt="Not Prayed" />
                   ))}
               </div>
             </div>
