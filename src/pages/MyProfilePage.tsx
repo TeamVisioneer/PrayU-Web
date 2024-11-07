@@ -10,9 +10,10 @@ import PrayCardHistoryPrayListDrawer from "@/components/profile/PrayCardHistoryP
 import { analyticsTrack } from "@/analytics/analytics";
 import PrayCalendar from "@/components/profile/PrayCalendar";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
+import useAuth from "@/hooks/useAuth";
 
 const MyProfilePage = () => {
-  const user = useBaseStore((state) => state.user);
+  const { user } = useAuth();
   const myProfile = useBaseStore((state) => state.myProfile);
   const profileList = useBaseStore((state) => state.profileList);
   const getProfile = useBaseStore((state) => state.getProfile);
