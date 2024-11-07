@@ -118,7 +118,9 @@ export const fetchUserPrayCardListByGroupId = async (
 };
 
 export const fetchUserPrayCardList = async (
-  currentUserId: string
+  currentUserId: string,
+  limit: number = 3,
+  offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -135,7 +137,7 @@ export const fetchUserPrayCardList = async (
       .is("deleted_at", null)
       .is("pray.deleted_at", null)
       .order("created_at", { ascending: false })
-      .limit(20);
+      .range(offset, offset + limit - 1);
 
     if (error) {
       Sentry.captureException(error.message);

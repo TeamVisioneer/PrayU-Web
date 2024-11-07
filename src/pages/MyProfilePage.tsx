@@ -21,7 +21,7 @@ const MyProfilePage = () => {
   const setIsOpenSettingDialog = useBaseStore(
     (state) => state.setIsOpenSettingDialog
   );
-  const fetchUserPrayCardListAll = useBaseStore(
+  const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
   const prayListByDate = useBaseStore((state) => state.prayListByDate);
@@ -36,8 +36,8 @@ const MyProfilePage = () => {
 
   useEffect(() => {
     getProfile(user!.id);
-    fetchUserPrayCardListAll(user!.id);
-  }, [user, getProfile, fetchUserPrayCardListAll]);
+    fetchUserPrayCardList(user!.id);
+  }, [user, getProfile, fetchUserPrayCardList]);
 
   useEffect(() => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
