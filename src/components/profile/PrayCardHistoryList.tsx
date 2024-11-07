@@ -33,7 +33,7 @@ const PrayCardHistoryList = () => {
     (state) => state.historyPrayCardCount
   );
 
-  const pageSize = 3;
+  const pageSize = 20;
   const [offset, setOffset] = useState(pageSize);
 
   useEffect(() => {

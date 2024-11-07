@@ -119,7 +119,7 @@ export const fetchUserPrayCardListByGroupId = async (
 
 export const fetchUserPrayCardList = async (
   currentUserId: string,
-  limit: number = 3,
+  limit: number = 20,
   offset: number = 0
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
