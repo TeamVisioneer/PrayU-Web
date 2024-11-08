@@ -13,14 +13,15 @@ import { analyticsTrack } from "@/analytics/analytics";
 import kakaoShareIcon from "@/assets/kakaoShareIcon.png";
 import { CiSaveUp2, CiLink } from "react-icons/ci";
 import { toast } from "@/components/ui/use-toast";
+import BibleCardCarousel from "./BibleCardCarousel";
+import { Input } from "@/components/ui/input";
+import BibleCardUI from "./BibleCardUI";
 
 const BibleCardPage = () => {
   const getBible = useBaseStore((state) => state.getBible);
   const bibleCardRef = useRef(null);
-  const [inputContent, setInputContent] = useState("");
-  const [body, setBody] = useState("");
-  const [verse, setVerse] = useState("");
-  const [bgImage, setBgImageUrl] = useState("");
+  const [inputBody, setInputBody] = useState("");
+  const [inputName, setInputName] = useState("");
 
   const [publicUrl, setPublicUrl] = useState("");
   const [isimageLoaded, setIsImageLoaded] = useState(false);
@@ -116,70 +117,63 @@ const BibleCardPage = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center pt-11 gap-6">
+    <div className="w-full h-5/6 flex flex-col items-center pt-11 gap-6">
       <MainHeader />
       <div className="text-xl font-light">말씀 카드 만들기</div>
 
-      <section className="relative w-5/6 aspect-square">
-        <div className="z-30 absolute inset-0 w-full h-full flex justify-center items-center bg-gray-300">
-          <ClipLoader size={20} loading={loading} />
-        </div>
-        {!isimageLoaded && (
-          <div ref={bibleCardRef} className="absolute inset-0 w-full h-full">
-            <img src={bgImage} className="z-0 absolute inset-0 w-full h-full" />
-            <div className="z-10 absolute inset-0 bg-black opacity-35 flex justify-center items-center"></div>
-            <div className="z-20 absolute inset-0 flex flex-col w-full h-full p-2 justify-center items-center gap-3 handwritten font-bold text-2xl text-white text-center whitespace-pre-wrap ">
-              <p>{body}</p>
-              <p>{verse}</p>
-            </div>
-            <span className="z-20 absolute bottom-5 right-5 font-bold text-white">
-              PrayU
-            </span>
-          </div>
-        )}
-        {publicUrl && (
-          <div
-            className={`absolute inset-0 w-full h-full z-40 flex flex-col gap-1 transition-opacity duration-1000 ease-in ${
-              isimageLoaded ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <img
-              src={publicUrl}
-              className="w-full h-full"
-              onLoad={() => {
-                setIsImageLoaded(true);
-                setLoading(false);
-              }}
-            />
-          </div>
-        )}
+      <section className="relative w-5/6 transition-all duration-300 ease-in">
+        <BibleCardCarousel />
+        <BibleCardUI name="김명준" />
       </section>
 
-      <Textarea
-        className="text-sm w-5/6 h-32 p-4 rounded-md overflow-y-auto no-scrollbar text-gray-700"
-        value={inputContent}
-        onChange={(e) => setInputContent(e.target.value)}
-        placeholder={`기도제목을 작성하고 나만의 말씀카드를 만들어요`}
-        readOnly={loading}
-      />
-      <Button
-        onClick={() => onClickCreateBibleCard()}
-        variant="primary"
-        className="w-5/6"
-        disabled={loading}
-      >
-        말씀카드 만들기
-      </Button>
-      {isimageLoaded && (
-        <div className="flex justify-center items-center gap-4">
-          <CiLink size={30} onClick={() => onClickCopyLink()} />
-          <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
-          <img
-            src={kakaoShareIcon}
-            className="w-8 aspect-square"
-            onClick={() => onClickKakaoShare()}
+      <section className="w-5/6 flex-grow flex flex-col items-center gap-5 transition-all duration-300 ease-in">
+        <div className="w-full flex flex-col gap-2">
+          <h3>이름</h3>
+          <Input
+            className="p-4 "
+            value={inputBody}
+            onChange={(e) => setInputBody(e.target.value)}
+            placeholder="이름을 입력해 주세요"
+            readOnly={loading}
           />
         </div>
+        <div className="w-full h-full flex flex-col gap-2">
+          <h3>기도제목</h3>
+          <Textarea
+            className="text-sm w-full h-full p-4 rounded-md overflow-y-auto no-scrollbar text-gray-700"
+            value={inputBody}
+            onChange={(e) => setInputBody(e.target.value)}
+            placeholder={`기도제목을 작성하고 나만의 말씀카드를 만들어요`}
+            readOnly={loading}
+          />
+        </div>
+        <Button
+          onClick={() => onClickCreateBibleCard()}
+          variant="primary"
+          className="w-full"
+          disabled={loading}
+        >
+          {loading ? "말씀카드 만드는 중..." : "말씀카드 만들기"}
+        </Button>
+      </section>
+
+      {isimageLoaded && (
+        <section className="w-5/6 flex flex-col gap-4">
+          <div className="w-full flex justify-center items-center gap-4 ">
+            <hr className="flex-grow bg-gray-400" />
+            <span className="text-sm text-gray-400">친구에게 공유하기</span>
+            <hr className="flex-grow bg-gray-400" />
+          </div>
+          <div className="flex justify-center items-center gap-4">
+            <CiLink size={30} onClick={() => onClickCopyLink()} />
+            <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
+            <img
+              src={kakaoShareIcon}
+              className="w-8 aspect-square"
+              onClick={() => onClickKakaoShare()}
+            />
+          </div>
+        </section>
       )}
     </div>
   );
