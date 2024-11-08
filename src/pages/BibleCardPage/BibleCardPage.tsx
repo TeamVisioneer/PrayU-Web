@@ -118,8 +118,7 @@ const BibleCardPage = () => {
   };
 
   const onClickInstagramShare = async () => {
-    const instagramAppId = 538115812331385;
-    const storyUrl = `instagram-stories://share?=${instagramAppId}&background_image=${encodeURIComponent(
+    const storyUrl = `instagram-stories://share?=538115812331385&background_image=${encodeURIComponent(
       base64Url
     )}`;
 
