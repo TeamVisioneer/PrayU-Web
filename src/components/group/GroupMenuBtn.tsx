@@ -16,6 +16,7 @@ import { IoRemoveCircleOutline } from "react-icons/io5";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoPersonCircleOutline } from "react-icons/io5";
+import newIcon from "@/assets/newIcon.svg";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -211,6 +212,18 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
           <a href="/" onClick={() => analyticsTrack("클릭_홈", {})}>
             PrayU 홈
           </a>
+          <div className="flex gap-1 items-center">
+            <a
+              href="/qt"
+              onClick={() =>
+                analyticsTrack("클릭_QT_페이지", { where: "groupMenu" })
+              }
+            >
+              나만의 QT
+            </a>
+            <img src={newIcon} />
+          </div>
+
           <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
             공지사항
           </a>
