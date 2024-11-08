@@ -145,6 +145,10 @@ export const isFutureDate = (date1: string, date2: string): boolean => {
   return secondDate > firstDate;
 };
 
+export const isPastWeek = (date: string): boolean => {
+  return getWeekInfo(date).weekDates[6] < getISOTodayDate();
+};
+
 // sleep 함수
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));

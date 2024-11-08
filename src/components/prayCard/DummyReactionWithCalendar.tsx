@@ -4,20 +4,14 @@ import {
   getISOTodayDate,
   sleep,
   days,
+  getWeekInfo,
 } from "@/lib/utils";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { useState, useEffect } from "react";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
-import React from "react";
 
-interface DumyReactionBtnWithCalendarProps {
-  dayOffset: number;
-}
-
-const DumyReactionBtnWithCalendar: React.FC<
-  DumyReactionBtnWithCalendarProps
-> = ({ dayOffset }) => {
+const DumyReactionBtnWithCalendar = () => {
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const prayCardCarouselApi = useBaseStore(
     (state) => state.prayCardCarouselApi
@@ -48,17 +42,14 @@ const DumyReactionBtnWithCalendar: React.FC<
   const currentDate = getISOTodayDate();
 
   const generateDates = () => {
+    const startDate = getWeekInfo(currentDate).weekDates[0];
     const dateList = [];
-    for (let i = dayOffset; i > 0; i--) {
-      const newDate = new Date(currentDate);
-      newDate.setDate(new Date(currentDate).getDate() - i);
+
+    for (let i = 0; i < 7; i++) {
+      const newDate = new Date(startDate);
+      newDate.setDate(new Date(startDate).getDate() + i);
       const newDateString = getISODate(newDate).split("T")[0];
-      dateList.push({ date: newDateString, emoji: "" });
-    }
-    for (let i = 0; i < 7 - dayOffset; i++) {
-      const newDate = new Date(currentDate);
-      newDate.setDate(new Date(currentDate).getDate() + i);
-      const newDateString = getISODate(newDate).split("T")[0];
+
       dateList.push({ date: newDateString, emoji: "" });
     }
     return dateList;

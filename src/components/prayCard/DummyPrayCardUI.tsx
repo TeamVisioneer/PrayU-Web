@@ -48,7 +48,7 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
           </p>
         </div>
       </div>
-      <DumyReactionBtnWithCalendar dayOffset={dayOffset} />
+      <DumyReactionBtnWithCalendar />
       <div className="text-gray-400 text-sm text-center">
         기도 반응 버튼을 눌러 친구에게 기도를 남겨요
       </div>
