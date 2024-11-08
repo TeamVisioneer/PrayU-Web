@@ -118,7 +118,10 @@ const BibleCardPage = () => {
 
   const onClickInstagramShare = async () => {
     const storyUrl = `instagram-stories://share?source_application=538115812331385`;
-    window.open(storyUrl, "_blank");
+    navigator.clipboard
+      .writeText(storyUrl)
+      .then(() => window.open(storyUrl, "_blank"))
+      .catch((err) => console.error("복사하는 중 오류가 발생했습니다: ", err));
   };
 
   return (
