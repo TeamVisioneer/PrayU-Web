@@ -49,7 +49,7 @@ const QuietTimePage = () => {
   });
   const [verseSentence, setVerseSentence] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // Loading state
+  const [loading, setLoading] = useState<boolean>(false);
   const getBible = useBaseStore((state) => state.getBible);
 
   const verseParams = searchParams.get("verse");
@@ -70,7 +70,7 @@ const QuietTimePage = () => {
 
   const fetchQtData = async (verse: string) => {
     try {
-      setLoading(true); // Set loading to true at the start
+      setLoading(true);
       const isVerse = await checkBibleVerse(verse);
       if (isVerse) {
         const fetchedData = await createQT(verse);
@@ -82,7 +82,7 @@ const QuietTimePage = () => {
       setError("QT 데이터를 가져오는 중 오류가 발생했습니다.");
       console.error(err);
     } finally {
-      setLoading(false); // Set loading to false after fetching is complete
+      setLoading(false);
     }
   };
 
