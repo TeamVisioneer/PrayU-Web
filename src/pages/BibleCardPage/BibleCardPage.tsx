@@ -118,7 +118,7 @@ const BibleCardPage = () => {
   };
 
   const onClickInstagramShare = async () => {
-    const storyUrl = `instagram-stories://share?=538115812331385&background_image=${encodeURIComponent(
+    const storyUrl = `instagram-stories://share?source_application=538115812331385&background_image=${encodeURIComponent(
       base64Url
     )}`;
 
@@ -136,7 +136,7 @@ const BibleCardPage = () => {
       <div className="text-xl font-light">말씀 카드 만들기</div>
 
       <section className="relative w-5/6 aspect-square">
-        <div className="z-40 absolute inset-0 w-full h-full flex justify-center items-center bg-gray-300">
+        <div className="z-30 absolute inset-0 w-full h-full flex justify-center items-center bg-gray-300">
           <ClipLoader size={20} loading={loading} />
         </div>
         <div ref={bibleCardRef} className="absolute inset-0 w-full h-full">
@@ -153,7 +153,7 @@ const BibleCardPage = () => {
         {publicUrl && (
           <img
             src={publicUrl}
-            className={`absolute inset-0 w-full h-full z-50 transition-opacity duration-1000 ease-in ${
+            className={`absolute inset-0 w-full h-full z-40 transition-opacity duration-1000 ease-in ${
               isimageLoaded ? "opacity-100" : "opacity-0"
             }`}
             onLoad={() => {
