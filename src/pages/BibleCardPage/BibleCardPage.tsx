@@ -25,6 +25,7 @@ const BibleCardPage = () => {
   const [bgImage, setBgImageUrl] = useState("");
 
   const [publicUrl, setPublicUrl] = useState("");
+  const [base64Url, setBase64Url] = useState("");
   const [isimageLoaded, setIsImageLoaded] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -79,16 +80,16 @@ const BibleCardPage = () => {
       const canvas = await html2canvas(bibleCardRef.current, {
         useCORS: true,
         allowTaint: true,
-        scale: 2,
       });
-      const dataUrl = canvas.toDataURL("image/png");
-      const pngFile = dataURLToFile(dataUrl, `Card_${getTodayNumber()}.png`);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.5);
+      const pngFile = dataURLToFile(dataUrl, `Card_${getTodayNumber()}.jpeg`);
       const pathData = await uploadImage(
         pngFile,
         `BibleCard/UserBibleCard/${pngFile.name}`
       );
       if (!pathData) return "";
       const publicUrl = getPublicUrl(pathData.path);
+      setBase64Url(dataUrl);
       setPublicUrl(publicUrl || "");
     } catch {
       return "";
@@ -100,7 +101,7 @@ const BibleCardPage = () => {
       const response = await fetch(publicUrl);
       if (!response.ok) return null;
       const blob = await response.blob();
-      download(blob, "BibleCard.png");
+      download(blob, "BibleCard.jpeg");
     } catch (error) {
       return null;
     }
@@ -118,9 +119,12 @@ const BibleCardPage = () => {
 
   const onClickInstagramShare = async () => {
     const instagramAppId = 538115812331385;
-    const storyUrl = `instagram-stories://share?source_application=${instagramAppId}&background_image=${encodeURIComponent(
-      publicUrl
+    const storyUrl = `instagram-stories://share?=${instagramAppId}&background_image=${encodeURIComponent(
+      base64Url
     )}`;
+
+    console.log(storyUrl);
+
     navigator.clipboard
       .writeText(storyUrl)
       .then(() => window.open(storyUrl, "_blank"))
@@ -191,6 +195,7 @@ const BibleCardPage = () => {
           />
         </div>
       )}
+      <button onClick={() => onClickInstagramShare()}>공유 테스트</button>
     </div>
   );
 };
