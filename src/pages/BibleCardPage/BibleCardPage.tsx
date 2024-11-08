@@ -151,16 +151,23 @@ const BibleCardPage = () => {
           </span>
         </div>
         {publicUrl && (
-          <img
-            src={publicUrl}
-            className={`absolute inset-0 w-full h-full z-40 transition-opacity duration-1000 ease-in ${
+          <div
+            className={`absolute inset-0 w-full h-full z-40 flex flex-col gap-1 transition-opacity duration-1000 ease-in ${
               isimageLoaded ? "opacity-100" : "opacity-0"
             }`}
-            onLoad={() => {
-              setIsImageLoaded(true);
-              setLoading(false);
-            }}
-          />
+          >
+            <img
+              src={publicUrl}
+              className="w-full h-full"
+              onLoad={() => {
+                setIsImageLoaded(true);
+                setLoading(false);
+              }}
+            />
+            <p className="text-sm text-gray-400 text-center">
+              말씀카드를 꾹 눌러서 앨범에 저장할 수 있어요
+            </p>
+          </div>
         )}
       </section>
 
@@ -194,7 +201,17 @@ const BibleCardPage = () => {
           />
         </div>
       )}
-      <button onClick={() => onClickInstagramShare()}>공유 테스트</button>
+      <button
+        onClick={async () =>
+          navigator.share({
+            title: "Instagram Story",
+            text: "Check out this story!",
+            url: "https://prayu.site",
+          })
+        }
+      >
+        공유 예시
+      </button>
     </div>
   );
 };
