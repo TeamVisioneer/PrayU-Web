@@ -124,17 +124,19 @@ const BibleCardPage = () => {
         <div className="z-30 absolute inset-0 w-full h-full flex justify-center items-center bg-gray-300">
           <ClipLoader size={20} loading={loading} />
         </div>
-        <div ref={bibleCardRef} className="absolute inset-0 w-full h-full">
-          <img src={bgImage} className="z-0 absolute inset-0 w-full h-full" />
-          <div className="z-10 absolute inset-0 bg-black opacity-35 flex justify-center items-center"></div>
-          <div className="z-20 absolute inset-0 flex flex-col w-full h-full p-2 justify-center items-center gap-3 handwritten font-bold text-2xl text-white text-center whitespace-pre-wrap ">
-            <p>{body}</p>
-            <p>{verse}</p>
+        {!isimageLoaded && (
+          <div ref={bibleCardRef} className="absolute inset-0 w-full h-full">
+            <img src={bgImage} className="z-0 absolute inset-0 w-full h-full" />
+            <div className="z-10 absolute inset-0 bg-black opacity-35 flex justify-center items-center"></div>
+            <div className="z-20 absolute inset-0 flex flex-col w-full h-full p-2 justify-center items-center gap-3 handwritten font-bold text-2xl text-white text-center whitespace-pre-wrap ">
+              <p>{body}</p>
+              <p>{verse}</p>
+            </div>
+            <span className="z-20 absolute bottom-5 right-5 font-bold text-white">
+              PrayU
+            </span>
           </div>
-          <span className="z-20 absolute bottom-5 right-5 font-bold text-white">
-            PrayU
-          </span>
-        </div>
+        )}
         {publicUrl && (
           <div
             className={`absolute inset-0 w-full h-full z-40 flex flex-col gap-1 transition-opacity duration-1000 ease-in ${
@@ -149,9 +151,6 @@ const BibleCardPage = () => {
                 setLoading(false);
               }}
             />
-            <p className="text-sm text-gray-400 text-center">
-              말씀카드를 꾹 눌러서 앨범에 저장할 수 있어요
-            </p>
           </div>
         )}
       </section>
@@ -171,7 +170,7 @@ const BibleCardPage = () => {
       >
         말씀카드 만들기
       </Button>
-      {!isimageLoaded && (
+      {isimageLoaded && (
         <div className="flex justify-center items-center gap-4">
           <CiLink size={30} onClick={() => onClickCopyLink()} />
           <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
