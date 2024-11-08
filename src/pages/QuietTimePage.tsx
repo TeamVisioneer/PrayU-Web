@@ -3,6 +3,7 @@ import { useState } from "react";
 import { createQT, QTData } from "@/apis/openai";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
+import { AiOutlineLoading } from "react-icons/ai";
 
 interface FormValues {
   content: string;
@@ -92,11 +93,19 @@ const QuietTimePage = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`text-white p-2 rounded-md w-full ${
+          className={`items-center justify-center text-white p-2 rounded-md w-full ${
             isSubmitting ? "bg-gray-400" : "bg-blue-500"
           }`}
         >
-          {isSubmitting ? "QT를 생성중이에요..." : "QT 생성하기"}
+          {isSubmitting ? (
+            <div className="flex justify-between items-center">
+              <AiOutlineLoading className="animate-spin mr-2" size={20} />
+              QT를 생성중이에요...
+              <span className="w-[15px]"></span>
+            </div>
+          ) : (
+            "QT 생성하기"
+          )}
         </button>
       </form>
     );
