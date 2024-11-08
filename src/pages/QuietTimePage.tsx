@@ -2,23 +2,76 @@ import { useForm, useFormState } from "react-hook-form";
 import { useState } from "react";
 import { createQT, QTData } from "@/apis/openai";
 import { analyticsTrack } from "@/analytics/analytics";
+import useBaseStore from "@/stores/baseStore";
+import { AiOutlineLoading } from "react-icons/ai";
 
 interface FormValues {
   content: string;
+}
+
+interface verseData {
+  label: string;
+  chapter: number;
+  paragraph: number;
+  endParagraph?: number;
+}
+
+function parseBibleVerse(input: string) {
+  const match = input.match(
+    /([가-힣]+)\s*(\d+)(?:장|편|:)?\s*(\d+)(?:절)?(?:\s*[-~]\s*(\d+)(?:절)?)?/
+  );
+
+  if (match) {
+    const [, label, chapter, paragraph, endParagraph] = match;
+    return {
+      label,
+      chapter: parseInt(chapter, 10),
+      paragraph: parseInt(paragraph, 10),
+      endParagraph: endParagraph ? parseInt(endParagraph, 10) : undefined,
+    };
+  } else {
+    throw new Error("올바르지 않은 입력 형식입니다.");
+  }
 }
 
 const QuietTimePage = () => {
   const { register, handleSubmit, control } = useForm<FormValues>();
   const { isSubmitting } = useFormState({ control });
   const [qtData, setQtData] = useState<QTData | null>(null);
+  const [verseData, setVerseData] = useState<verseData>({
+    label: "",
+    chapter: 0,
+    paragraph: 0,
+  });
+  const [verseSentence, setVerseSentence] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const getBible = useBaseStore((state) => state.getBible);
+
+  const checkBibleVerse = async (input: string) => {
+    try {
+      const { label, chapter, paragraph } = parseBibleVerse(input);
+      setVerseData({ label, chapter, paragraph });
+      const targetBible = await getBible(label, chapter, paragraph);
+      if (targetBible) {
+        setVerseSentence(targetBible.sentence);
+        return true;
+      } else return false;
+    } catch (err) {
+      return false;
+    }
+  };
 
   const onSubmit = async (data: FormValues) => {
     analyticsTrack("클릭_QT_생성", {});
     setError(null);
     try {
-      const fetchedData = await createQT(data.content);
-      setQtData(fetchedData);
+      const isVerse = await checkBibleVerse(data.content);
+      if (isVerse) {
+        const fetchedData = await createQT(data.content);
+        setQtData(fetchedData);
+      } else {
+        setError("올바른 성경 구절을 입력해주세요.");
+      }
     } catch (err) {
       setError("QT 데이터를 가져오는 중 오류가 발생했습니다.");
       console.error(err);
@@ -40,11 +93,19 @@ const QuietTimePage = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`text-white p-2 rounded-md w-full ${
+          className={`items-center justify-center text-white p-2 rounded-md w-full ${
             isSubmitting ? "bg-gray-400" : "bg-blue-500"
           }`}
         >
-          {isSubmitting ? "QT를 생성중이에요..." : "QT 생성하기"}
+          {isSubmitting ? (
+            <div className="flex justify-between items-center">
+              <AiOutlineLoading className="animate-spin mr-2" size={20} />
+              QT를 생성중이에요...
+              <span className="w-[15px]"></span>
+            </div>
+          ) : (
+            "QT 생성하기"
+          )}
         </button>
       </form>
     );
@@ -56,7 +117,8 @@ const QuietTimePage = () => {
         <section className="flex flex-col bg-white p-3 rounded-lg gap-3">
           <p className="text-xl font-bold">💬 본문 말씀</p>
           <p className="italic">
-            "{qtData!.scripture.text}" - {qtData!.scripture.reference}
+            "{verseSentence}" - {verseData.label} {verseData.chapter}:
+            {verseData.paragraph}
           </p>
         </section>
         <section className="flex flex-col bg-white p-3 rounded-lg gap-3">
