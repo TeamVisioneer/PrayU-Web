@@ -8,14 +8,17 @@ interface FormValues {
 }
 
 function parseBibleVerse(input: string) {
-  const match = input.match(/([가-힣]+)\s*(\d+)(?:장|편|:)?\s*(\d+)(?:절)?/);
+  const match = input.match(
+    /([가-힣]+)\s*(\d+)(?:장|편|:)?\s*(\d+)(?:절)?(?:\s*[-~]\s*(\d+)(?:절)?)?/
+  );
 
   if (match) {
-    const [, label, chapter, paragraph] = match;
+    const [, label, chapter, paragraph, endParagraph] = match;
     return {
       label,
       chapter: parseInt(chapter, 10),
       paragraph: parseInt(paragraph, 10),
+      endParagraph: endParagraph ? parseInt(endParagraph, 10) : undefined,
     };
   } else {
     throw new Error("올바르지 않은 입력 형식입니다.");
@@ -23,7 +26,7 @@ function parseBibleVerse(input: string) {
 }
 
 const QuietTimePage = () => {
-  console.log(parseBibleVerse("창세기 2편 1절"));
+  console.log(parseBibleVerse("창세기 1장 2절"));
   const { register, handleSubmit, control } = useForm<FormValues>();
   const { isSubmitting } = useFormState({ control });
   const [qtData, setQtData] = useState<QTData | null>(null);
