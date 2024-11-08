@@ -117,7 +117,10 @@ const BibleCardPage = () => {
   };
 
   const onClickInstagramShare = async () => {
-    const storyUrl = `instagram-stories://share?source_application=538115812331385`;
+    const instagramAppId = 538115812331385;
+    const storyUrl = `instagram-stories://share?source_application=${instagramAppId}&background_image=${encodeURIComponent(
+      publicUrl
+    )}`;
     navigator.clipboard
       .writeText(storyUrl)
       .then(() => window.open(storyUrl, "_blank"))
