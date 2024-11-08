@@ -24,7 +24,6 @@ const BibleCardPage = () => {
   const [inputName, setInputName] = useState("");
 
   const [publicUrl, setPublicUrl] = useState("");
-  const [isimageLoaded, setIsImageLoaded] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -33,18 +32,13 @@ const BibleCardPage = () => {
   }, [isEnded]);
 
   const onClickCreateBibleCard = async () => {
-    if (inputContent.length < 20) {
+    if (inputBody.length < 20) {
       alert("기도제목은 20자 이상이 필요해요😭");
       return;
     }
     setLoading(true);
     setIsEnded(false);
-    setBgImageUrl("");
-    setBody("");
-    setVerse("");
-    setPublicUrl("");
-    setIsImageLoaded(false);
-    const bibleVerseData = await createBibleVerse(inputContent);
+    const bibleVerseData = await createBibleVerse(inputBody);
     if (bibleVerseData.length == 0) {
       setIsEnded(false);
       setLoading(false);
@@ -52,23 +46,16 @@ const BibleCardPage = () => {
       return null;
     }
 
-    const { long_label, chapter, paragraph, nature } = bibleVerseData[0];
+    const { long_label, chapter, paragraph } = bibleVerseData[0];
 
     const targetBible = await getBible(long_label, chapter, paragraph);
-    const imageData = await fetchBgImage(nature);
-    if (!targetBible || imageData.length == 0) {
+    if (!targetBible) {
       setIsEnded(false);
       setLoading(false);
       alert("생성 버튼을 다시 눌러주세요😭");
       return null;
     }
-    setBgImageUrl(imageData[0]);
-    setBody(enterLine(targetBible.sentence));
-    setVerse(
-      `${long_label} ${chapter}${
-        long_label == "시편" ? "편" : "장"
-      } ${paragraph}절`
-    );
+
     setIsEnded(true);
   };
 
@@ -123,7 +110,9 @@ const BibleCardPage = () => {
 
       <section className="relative w-5/6 transition-all duration-300 ease-in">
         <BibleCardCarousel />
-        <BibleCardUI name="김명준" />
+        <div ref={bibleCardRef}>
+          <BibleCardUI name={inputName} />
+        </div>
       </section>
 
       <section className="w-5/6 flex-grow flex flex-col items-center gap-5 transition-all duration-300 ease-in">
@@ -131,8 +120,8 @@ const BibleCardPage = () => {
           <h3>이름</h3>
           <Input
             className="p-4 "
-            value={inputBody}
-            onChange={(e) => setInputBody(e.target.value)}
+            value={inputName}
+            onChange={(e) => setInputName(e.target.value)}
             placeholder="이름을 입력해 주세요"
             readOnly={loading}
           />
@@ -157,7 +146,15 @@ const BibleCardPage = () => {
         </Button>
       </section>
 
-      {isimageLoaded && (
+      <section className="w-5/6">
+        <img
+          src={publicUrl}
+          className="w-full"
+          onLoad={() => setLoading(false)}
+        />
+      </section>
+
+      {!loading && isEnded && (
         <section className="w-5/6 flex flex-col gap-4">
           <div className="w-full flex justify-center items-center gap-4 ">
             <hr className="flex-grow bg-gray-400" />

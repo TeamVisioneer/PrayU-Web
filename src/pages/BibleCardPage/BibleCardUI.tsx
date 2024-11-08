@@ -6,9 +6,6 @@ interface BibleCardUIProps {
 }
 
 const BibleCardUI: React.FC<BibleCardUIProps> = ({ name }) => {
-  const { year, month, day } = getISOTodayDateYMD();
-  const targetBible = useBaseStore((state) => state.targetBible);
-
   const Colors = [
     { primary: "#bdc3c7", secondary: "#2c3e50" },
     { primary: "#ee9ca7", secondary: "#ffdde1" },
@@ -33,7 +30,10 @@ const BibleCardUI: React.FC<BibleCardUIProps> = ({ name }) => {
     { primary: "#00B4DB", secondary: "#0083B0" },
   ];
 
-  const getRandomRadius = () => `${Math.floor(Math.random() * 300)}px`;
+  const { year, month, day } = getISOTodayDateYMD();
+  const targetBible = useBaseStore((state) => state.targetBible);
+
+  const getRandomRadius = () => `${Math.floor(Math.random() * 220)}px`;
   const { primary, secondary } =
     Colors[Math.floor(Math.random() * Colors.length)];
 
