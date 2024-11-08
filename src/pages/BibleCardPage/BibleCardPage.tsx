@@ -10,14 +10,13 @@ import useBaseStore from "@/stores/baseStore";
 import { dataURLToFile, enterLine, getTodayNumber } from "@/lib/utils";
 import { getPublicUrl, uploadImage } from "@/apis/file";
 import { UserBibleCardLink } from "@/components/share/KakaoShareBtn";
-import { BiDownload } from "react-icons/bi";
 import { analyticsTrack } from "@/analytics/analytics";
 import kakaoShareIcon from "@/assets/kakaoShareIcon.png";
-import instagramIcon from "@/assets/instagramIcon.png";
+import { CiSaveDown2, CiSaveUp2, CiLink } from "react-icons/ci";
+import { toast } from "@/components/ui/use-toast";
 
 const BibleCardPage = () => {
   const getBible = useBaseStore((state) => state.getBible);
-
   const bibleCardRef = useRef(null);
   const [inputContent, setInputContent] = useState("");
   const [body, setBody] = useState("");
@@ -25,7 +24,6 @@ const BibleCardPage = () => {
   const [bgImage, setBgImageUrl] = useState("");
 
   const [publicUrl, setPublicUrl] = useState("");
-  const [base64Url, setBase64Url] = useState("");
   const [isimageLoaded, setIsImageLoaded] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -89,7 +87,6 @@ const BibleCardPage = () => {
       );
       if (!pathData) return "";
       const publicUrl = getPublicUrl(pathData.path);
-      setBase64Url(dataUrl);
       setPublicUrl(publicUrl || "");
     } catch {
       return "";
@@ -107,6 +104,19 @@ const BibleCardPage = () => {
     }
   };
 
+  const onClickSocialShare = async () => {
+    await navigator.share({
+      url: "https://example.com/story-url",
+    });
+  };
+
+  const onClickCopyLink = async () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard
+      .writeText(currentUrl)
+      .then(() => toast({ description: "링크가 복사되었어요" }));
+  };
+
   const onClickKakaoShare = async () => {
     try {
       const kakaoLinkObject = UserBibleCardLink(publicUrl);
@@ -115,19 +125,6 @@ const BibleCardPage = () => {
     } catch {
       return null;
     }
-  };
-
-  const onClickInstagramShare = async () => {
-    const storyUrl = `instagram-stories://share?source_application=538115812331385&background_image=${encodeURIComponent(
-      base64Url
-    )}`;
-
-    console.log(storyUrl);
-
-    navigator.clipboard
-      .writeText(storyUrl)
-      .then(() => window.open(storyUrl, "_blank"))
-      .catch((err) => console.error("복사하는 중 오류가 발생했습니다: ", err));
   };
 
   return (
@@ -186,32 +183,18 @@ const BibleCardPage = () => {
       >
         말씀카드 만들기
       </Button>
-      {isimageLoaded && (
-        <div className="flex justify-center items-center gap-2">
-          <BiDownload size={30} onClick={() => onClickDownload()} />
+      {!isimageLoaded && (
+        <div className="flex justify-center items-center gap-4">
+          {/* <CiSaveDown2 size={30} onClick={() => onClickDownload()} /> */}
+          <CiLink size={30} onClick={() => onClickCopyLink()} />
+          <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
           <img
             src={kakaoShareIcon}
-            className="w-10 aspect-square"
+            className="w-8 aspect-square"
             onClick={() => onClickKakaoShare()}
-          />
-          <img
-            src={instagramIcon}
-            className="w-10 aspect-square"
-            onClick={() => onClickInstagramShare()}
           />
         </div>
       )}
-      <button
-        onClick={async () =>
-          navigator.share({
-            title: "Instagram Story",
-            text: "Check out this story!",
-            url: "https://prayu.site",
-          })
-        }
-      >
-        공유 예시
-      </button>
     </div>
   );
 };
