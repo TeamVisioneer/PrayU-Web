@@ -4,7 +4,6 @@ import { createBibleVerse, fetchBgImage } from "@/apis/openai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ClipLoader } from "react-spinners";
-import download from "downloadjs";
 import html2canvas from "html2canvas";
 import useBaseStore from "@/stores/baseStore";
 import { dataURLToFile, enterLine, getTodayNumber } from "@/lib/utils";
@@ -12,7 +11,7 @@ import { getPublicUrl, uploadImage } from "@/apis/file";
 import { UserBibleCardLink } from "@/components/share/KakaoShareBtn";
 import { analyticsTrack } from "@/analytics/analytics";
 import kakaoShareIcon from "@/assets/kakaoShareIcon.png";
-import { CiSaveDown2, CiSaveUp2, CiLink } from "react-icons/ci";
+import { CiSaveUp2, CiLink } from "react-icons/ci";
 import { toast } from "@/components/ui/use-toast";
 
 const BibleCardPage = () => {
@@ -90,17 +89,6 @@ const BibleCardPage = () => {
       setPublicUrl(publicUrl || "");
     } catch {
       return "";
-    }
-  };
-
-  const onClickDownload = async () => {
-    try {
-      const response = await fetch(publicUrl);
-      if (!response.ok) return null;
-      const blob = await response.blob();
-      download(blob, "BibleCard.jpeg");
-    } catch (error) {
-      return null;
     }
   };
 
@@ -185,7 +173,6 @@ const BibleCardPage = () => {
       </Button>
       {!isimageLoaded && (
         <div className="flex justify-center items-center gap-4">
-          {/* <CiSaveDown2 size={30} onClick={() => onClickDownload()} /> */}
           <CiLink size={30} onClick={() => onClickCopyLink()} />
           <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
           <img
