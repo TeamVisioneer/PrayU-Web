@@ -1,5 +1,5 @@
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import { getISODate, getISOToday, days } from "@/lib/utils";
+import { getISODate, getISOToday, days, getWeekInfo } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 
@@ -26,7 +26,7 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
   };
 
   const generateDates = (prayCard: PrayCardWithProfiles) => {
-    const startDate = getISODate(new Date(prayCard.created_at));
+    const startDate = getWeekInfo(prayCard.created_at).weekDates[0];
     const dateList = [];
 
     for (let i = 0; i < 7; i++) {

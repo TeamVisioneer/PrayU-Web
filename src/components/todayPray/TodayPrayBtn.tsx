@@ -1,7 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate } from "@/lib/utils";
+import { getISOTodayDate, getWeekInfo, getNextDate } from "@/lib/utils";
 
 interface TodayPrayBtnProps {
   eventOption: { where: string; total_member: number };
@@ -58,9 +58,9 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     setIsOpenMyPrayDrawer(false);
     setIsOpenMyMemberDrawer(false);
     setPrayCardCarouselList(null);
-    const startDt = getISOTodayDate(-6);
     const todayDt = getISOTodayDate();
-    const endDt = getISOTodayDate(1);
+    const startDt = getWeekInfo(todayDt).weekDates[0];
+    const endDt = getNextDate(getWeekInfo(todayDt).weekDates[6]);
     const groupPrayCardList = await fetchGroupPrayCardList(
       targetGroupId,
       myMember.profiles.id,
