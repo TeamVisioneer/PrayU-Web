@@ -61,7 +61,9 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     const todayDt = getISOTodayDate();
     const groupPrayCardList = await fetchGroupPrayCardList(
       targetGroupId,
-      myMember.profiles.id
+      myMember.profiles.id,
+      startDt,
+      endDt
     );
     const filterdGroupPrayCardList = groupPrayCardList
       ? groupPrayCardList
