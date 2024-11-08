@@ -195,9 +195,7 @@ export interface BaseStore {
   setPrayCardCarouselIndex: (index: number) => void;
   fetchGroupPrayCardList: (
     groupId: string,
-    currentUserId: string,
-    startDt: string,
-    endDt: string
+    currentUserId: string
   ) => Promise<PrayCardWithProfiles[] | null>;
   fetchOtherPrayCardListByGroupId: (
     currentUserId: string,
@@ -699,17 +697,10 @@ const useBaseStore = create<BaseStore>()(
         state.isEditingPrayCard = isEditingPrayCard;
       });
     },
-    fetchGroupPrayCardList: async (
-      groupId: string,
-      currentUserId: string,
-      startDt: string,
-      endDt: string
-    ) => {
+    fetchGroupPrayCardList: async (groupId: string, currentUserId: string) => {
       const groupPrayCardList = await fetchGroupPrayCardList(
         groupId,
-        currentUserId,
-        startDt,
-        endDt
+        currentUserId
       );
       const today = new Date(getISOToday());
       const startOfDay = new Date(today.setHours(0, 0, 0, 0));

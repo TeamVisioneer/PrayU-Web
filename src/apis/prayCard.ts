@@ -1,13 +1,11 @@
-import { getISOToday } from "@/lib/utils";
+import { getISOToday, getWeekInfo, getISOTodayDate } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
 import { PrayCard, PrayCardWithProfiles } from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 
 export const fetchGroupPrayCardList = async (
   groupId: string,
-  currentUserId: string,
-  startDt: string,
-  endDt: string
+  currentUserId: string
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -21,8 +19,6 @@ export const fetchGroupPrayCardList = async (
       )
       .eq("group_id", groupId)
       .eq("pray.user_id", currentUserId)
-      .gte("created_at", startDt)
-      .lt("created_at", endDt)
       .is("deleted_at", null)
       .is("pray.deleted_at", null)
       .order("updated_at", { ascending: false })
@@ -32,7 +28,16 @@ export const fetchGroupPrayCardList = async (
       Sentry.captureException(error.message);
       return null;
     }
-    return data as PrayCardWithProfiles[];
+
+    // 필터 조건에 맞는 요소만 반환
+    const todayDate = getISOTodayDate();
+    const filteredData =
+      data?.filter((item) => {
+        const weekEndDate = getWeekInfo(item.created_at)["weekDates"][6];
+        return weekEndDate >= todayDate;
+      }) || null;
+
+    return filteredData as PrayCardWithProfiles[];
   } catch (error) {
     Sentry.captureException(error);
     return null;
