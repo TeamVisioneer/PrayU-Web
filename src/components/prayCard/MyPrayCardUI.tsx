@@ -2,7 +2,12 @@ import useBaseStore from "@/stores/baseStore";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { getDateDistance } from "@toss/date";
-import { getISODateYMD, getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import {
+  getISODateYMD,
+  getISOOnlyDate,
+  getISOTodayDate,
+  getWeekInfo,
+} from "@/lib/utils";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { useRef } from "react";
@@ -71,7 +76,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
   if (
     userPrayCardList &&
     (userPrayCardList.length == 0 ||
-      userPrayCardList[0].created_at < getISOTodayDate(-6))
+      getWeekInfo(userPrayCardList[0].created_at)["weekDates"][6] <
+        getISOTodayDate())
   ) {
     return <ExpiredPrayCardUI />;
   }
