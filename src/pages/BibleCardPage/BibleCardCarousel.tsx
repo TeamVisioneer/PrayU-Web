@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import arcCard from "@/assets/bibleCard/arcCard.png";
 import { cn } from "@/lib/utils";
+import BibleCard1 from "@/assets/bibleCard/BibleCard1.jpeg";
+import BibleCard2 from "@/assets/bibleCard/BibleCard2.jpeg";
+import BibleCard3 from "@/assets/bibleCard/BibleCard3.jpeg";
+import BibleCard4 from "@/assets/bibleCard/BibleCard4.jpeg";
 
 interface BibleCardCarouselProps {
   className?: string;
 }
 
 const BibleCardCarousel: React.FC<BibleCardCarouselProps> = ({ className }) => {
-  const images = [arcCard, arcCard, arcCard, arcCard];
+  const images = [BibleCard1, BibleCard2, BibleCard3, BibleCard4];
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -21,10 +24,7 @@ const BibleCardCarousel: React.FC<BibleCardCarouselProps> = ({ className }) => {
 
   return (
     <div
-      className={cn(
-        className,
-        "relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg shadow-lg"
-      )}
+      className={cn(className, "relative w-full overflow-hidden rounded-lg")}
     >
       <div
         className="flex transition-transform duration-500 ease-in-out"
@@ -33,7 +33,7 @@ const BibleCardCarousel: React.FC<BibleCardCarouselProps> = ({ className }) => {
       >
         {images.map((src, index) => (
           <div key={index} className="w-full flex-shrink-0">
-            <img src={src} className="w-full aspect-[4/6]" />
+            <img src={src} className="w-full aspect-[4/6] border" />
           </div>
         ))}
       </div>

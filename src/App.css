@@ -80,6 +80,18 @@
   font-family: "handwrittenFont", cursive;
 }
 
+@font-face {
+  font-family: "JNE-Yuna-TTF-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408-1@1.0/JNE-Yuna-TTF-Regular.woff2")
+    format("woff2");
+  font-weight: normal, lighter;
+  font-style: normal;
+}
+
+.handwrittenV2 {
+  font-family: "JNE-Yuna-TTF-Regular", cursive;
+}
+
 .no-scrollbar {
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */
@@ -107,4 +119,17 @@ body {
   padding: 0;
   overflow: hidden;
   height: 100%;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+.backface-hidden {
+  backface-visibility: hidden;
 }
