@@ -124,7 +124,8 @@ const GroupPage: React.FC = () => {
   }, [targetGroup, currentUserId, setIsGroupLeader]);
 
   useEffect(() => {
-    if (memberCount! <= 1) return;
+    if (!memberCount) return;
+    if (memberCount <= 1) return;
     const existingFlag = localStorage.getItem("hasShownWeekUpdateDialog");
     if (!existingFlag) {
       localStorage.setItem("hasShownWeekUpdateDialog", "true");
