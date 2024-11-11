@@ -17,6 +17,7 @@ import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import BannerDialog from "@/components/notice/BannerDialog";
 import GroupHeader from "@/components/group/GroupHeader";
+import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -53,6 +54,10 @@ const GroupPage: React.FC = () => {
 
   const unionWorshipGroupId = String(
     import.meta.env.VITE_UNION_WORSHIP_GROUP_ID
+  );
+
+  const setIsOpenWeekUpdateDialog = useBaseStore(
+    (state) => state.setIsOpenWeekUpdateDialog
   );
 
   useEffect(() => {
@@ -117,6 +122,14 @@ const GroupPage: React.FC = () => {
     }
   }, [targetGroup, currentUserId, setIsGroupLeader]);
 
+  useEffect(() => {
+    const existingFlag = localStorage.getItem("hasShownWeekUpdateDialog");
+    if (!existingFlag) {
+      localStorage.setItem("hasShownWeekUpdateDialog", "true");
+      setIsOpenWeekUpdateDialog(true);
+    }
+  }, [setIsOpenWeekUpdateDialog]);
+
   if (!targetGroup || !groupList || !myMember || isPrayToday == null) {
     return (
       <div className="flex flex-col h-full gap-4 pt-[48px]">
@@ -139,6 +152,7 @@ const GroupPage: React.FC = () => {
       <PrayListDrawer />
       <ShareDrawer />
       <EventDialog />
+      <WeekUpdateDialog />
       <BannerDialog />
       <GroupSettingsDialog targetGroup={targetGroup} />
       <ReportAlert />
