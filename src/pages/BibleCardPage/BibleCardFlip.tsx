@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { createBibleVerse } from "@/apis/openai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
