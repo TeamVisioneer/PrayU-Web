@@ -306,7 +306,7 @@ export interface BaseStore {
   getBible: (
     longLabel: string,
     chapter: number,
-    paragraph: number,
+    paragraph: number
   ) => Promise<Bible | null>;
 
   // myPray drawer
@@ -322,6 +322,9 @@ export interface BaseStore {
   // event
   isOpenEventDialog: boolean;
   setIsOpenEventDialog: (isOpenEventDialog: boolean) => void;
+
+  isOpenWeekUpdateDialog: boolean;
+  setIsOpenWeekUpdateDialog: (isOpenWeekUpdateDialog: boolean) => void;
 
   bannerDialogContentType: "invite" | "reward" | null;
   isOpenBannerDialog: boolean;
@@ -1053,11 +1056,7 @@ const useBaseStore = create<BaseStore>()(
 
     // bible
     targetBible: null,
-    getBible: async (
-      longLabel: string,
-      chapter: number,
-      paragraph: number,
-    ) => {
+    getBible: async (longLabel: string, chapter: number, paragraph: number) => {
       const bible = await getBible(longLabel, chapter, paragraph);
       set((state) => {
         state.targetBible = bible;
@@ -1084,6 +1083,13 @@ const useBaseStore = create<BaseStore>()(
     setIsOpenEventDialog: (isOpenEventDialog: boolean) => {
       set((state) => {
         state.isOpenEventDialog = isOpenEventDialog;
+      });
+    },
+
+    isOpenWeekUpdateDialog: false,
+    setIsOpenWeekUpdateDialog: (isOpenWeekUpdateDialog: boolean) => {
+      set((state) => {
+        state.isOpenWeekUpdateDialog = isOpenWeekUpdateDialog;
       });
     },
 

@@ -17,6 +17,7 @@ import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
 import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import BannerDialog from "@/components/notice/BannerDialog";
 import GroupHeader from "@/components/group/GroupHeader";
+import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -32,6 +33,7 @@ const GroupPage: React.FC = () => {
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
+  const memberCount = useBaseStore((state) => state.memberCount);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
@@ -53,6 +55,10 @@ const GroupPage: React.FC = () => {
 
   const unionWorshipGroupId = String(
     import.meta.env.VITE_UNION_WORSHIP_GROUP_ID
+  );
+
+  const setIsOpenWeekUpdateDialog = useBaseStore(
+    (state) => state.setIsOpenWeekUpdateDialog
   );
 
   useEffect(() => {
@@ -117,6 +123,16 @@ const GroupPage: React.FC = () => {
     }
   }, [targetGroup, currentUserId, setIsGroupLeader]);
 
+  useEffect(() => {
+    if (!memberCount) return;
+    if (memberCount <= 1) return;
+    const existingFlag = localStorage.getItem("hasShownWeekUpdateDialog");
+    if (!existingFlag) {
+      localStorage.setItem("hasShownWeekUpdateDialog", "true");
+      setIsOpenWeekUpdateDialog(true);
+    }
+  }, [setIsOpenWeekUpdateDialog, memberCount]);
+
   if (!targetGroup || !groupList || !myMember || isPrayToday == null) {
     return (
       <div className="flex flex-col h-full gap-4 pt-[48px]">
@@ -139,6 +155,7 @@ const GroupPage: React.FC = () => {
       <PrayListDrawer />
       <ShareDrawer />
       <EventDialog />
+      <WeekUpdateDialog />
       <BannerDialog />
       <GroupSettingsDialog targetGroup={targetGroup} />
       <ReportAlert />
