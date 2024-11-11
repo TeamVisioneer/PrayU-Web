@@ -41,7 +41,7 @@ const BibleCardUI: React.FC<BibleCardUIProps> = ({ name, keywords }) => {
   return (
     <div className="relative w-[380px] h-[550px] flex flex-col rounded-[16px] px-[30px] py-[20px] bg-[#FEFDFC]">
       <div
-        className="w-full aspect-square flex flex-col justify-center items-center rounded-tl-[220px] rounded-tr-[220px] rounded-br-[220px] rounded-bl-[5px]"
+        className="w-full aspect-square flex flex-col justify-center items-center"
         style={{
           background: `linear-gradient(159deg, ${primary}, ${secondary})`,
           borderTopLeftRadius: getRandomRadius(),
@@ -50,7 +50,7 @@ const BibleCardUI: React.FC<BibleCardUIProps> = ({ name, keywords }) => {
           borderBottomLeftRadius: getRandomRadius(),
         }}
       >
-        <div className="handwrittenV2 flex flex-col w-full h-full justify-center items-center pt-[40px] pb-[20px] px-[50px] gap-[20px] text-white text-center whitespace-pre-wrap">
+        <div className="handwrittenV2 flex flex-col w-full h-full justify-center items-center py-[20px] px-[50px] gap-[20px] text-white text-center whitespace-pre-wrap">
           <div className="leading-[35px] tracking-[1px] text-[30px]">
             {targetBible?.sentence}
           </div>
@@ -64,7 +64,7 @@ const BibleCardUI: React.FC<BibleCardUIProps> = ({ name, keywords }) => {
       </div>
 
       <div style={{ color: primary }} className="flex flex-col mt-[0px]">
-        <div className="text-[40px] font-bold">{name}</div>
+        <div className="text-[40px] font-bold ">{name}</div>
         <div className="text-[20px] flex gap-[8px] text-black-500 ">
           {keywords.map((keyword, index) => (
             <span key={index}>#{keyword}</span>
