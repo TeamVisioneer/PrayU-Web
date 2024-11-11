@@ -33,6 +33,7 @@ const GroupPage: React.FC = () => {
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
+  const memberCount = useBaseStore((state) => state.memberCount);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
@@ -123,12 +124,13 @@ const GroupPage: React.FC = () => {
   }, [targetGroup, currentUserId, setIsGroupLeader]);
 
   useEffect(() => {
+    if (memberCount! <= 1) return;
     const existingFlag = localStorage.getItem("hasShownWeekUpdateDialog");
     if (!existingFlag) {
       localStorage.setItem("hasShownWeekUpdateDialog", "true");
       setIsOpenWeekUpdateDialog(true);
     }
-  }, [setIsOpenWeekUpdateDialog]);
+  }, [setIsOpenWeekUpdateDialog, memberCount]);
 
   if (!targetGroup || !groupList || !myMember || isPrayToday == null) {
     return (
