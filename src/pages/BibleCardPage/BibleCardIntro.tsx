@@ -19,10 +19,10 @@ const BibleCardIntro: React.FC<BibleCardIntroProps> = ({ className }) => {
       </section>
       <BibleCardCarousel />
       <section className="flex flex-col gap-1">
-        <p className="font-light">
+        <div className="font-light">
           <p>내 기도제목에 맞는 말씀 구절을 추천받고,</p>
           <p>나만의 말씀카드로 만들어 보아요 </p>
-        </p>
+        </div>
       </section>
     </div>
   );

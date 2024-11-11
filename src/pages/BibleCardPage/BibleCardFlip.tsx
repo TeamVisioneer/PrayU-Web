@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import BibleCardUI from "./BibleCardUI";
 import { cn } from "@/lib/utils";
 import { IoCaretUpOutline } from "react-icons/io5";
+import { SquareLoader } from "react-spinners";
 
 interface BibleCardFlipProps {
   className?: string;
@@ -119,7 +120,8 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
       const kakaoLinkObject = UserBibleCardLink(publicUrl);
       analyticsTrack("클릭_카카오_공유", { where: "BibleCardPage" });
       window.Kakao.Share.sendDefault(kakaoLinkObject);
-    } catch {
+    } catch (error) {
+      console.error(error);
       return null;
     }
   };
@@ -223,7 +225,14 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
               className="w-full"
               disabled={loading}
             >
-              {loading ? "말씀카드 만드는 중..." : "말씀카드 만들기"}
+              {loading ? (
+                <div className="flex gap-2 items-center">
+                  <span>말씀카드 만드는 중</span>
+                  <SquareLoader size={12} color="#f3f4f6" />
+                </div>
+              ) : (
+                "말씀카드 만들기"
+              )}
             </Button>
           </div>
         )}
