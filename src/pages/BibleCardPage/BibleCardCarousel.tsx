@@ -18,14 +18,14 @@ const BibleCardCarousel: React.FC = () => {
   }, [images.length]);
 
   return (
-    <div className="overflow-hidden rounded-lg shadow-lg">
+    <div className="w-5/6 overflow-hidden rounded-lg shadow-lg">
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         aria-live="polite"
       >
         {images.map((src, index) => (
-          <img key={index} src={src} className="w-full  aspect-auto" />
+          <img key={index} src={src} className="w-full " />
         ))}
       </div>
     </div>

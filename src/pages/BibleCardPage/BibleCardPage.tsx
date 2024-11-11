@@ -13,15 +13,15 @@ const BibleCardPage = () => {
   };
 
   return (
-    <div className="relative w-full h-screen flex flex-col items-center snap-y snap-mandatory overflow-y-auto no-scrollbar scroll-smooth">
+    <div className="relative w-full h-screen flex flex-col items-center snap-y snap-mandatory overflow-y-auto no-scrollbar">
       <MainHeader />
       <section
         ref={firstSectionRef}
-        className="w-full min-h-screen snap-start flex flex-col justify-center items-center p-10 gap-5"
+        className="w-full min-h-screen snap-start flex flex-col justify-center items-center px-10 gap-5"
       >
         <BibleCardIntro />
         <Button
-          className="w-full"
+          className="w-5/6"
           variant="primary"
           onClick={() => scrollToSecondSection()}
         >
@@ -30,7 +30,7 @@ const BibleCardPage = () => {
       </section>
       <section
         ref={secondSectionRef}
-        className="w-full min-h-screen snap-start flex flex-col justify-center items-center"
+        className="w-full min-h-screen snap-start flex flex-col justify-center items-center pt-14"
       >
         <BibleCardFlip />
       </section>

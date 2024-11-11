@@ -130,15 +130,18 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
 
   return (
     <div
-      className={cn(className, "w-full flex flex-col items-center gap-6 px-10")}
+      className={cn(
+        className,
+        "relative w-full h-full flex flex-col justify-start items-center gap-6 px-10 overflow-x-hidden overflow-y-scroll no-scrollbar"
+      )}
     >
       <section ref={bibleCardRef} className="absolute -z-10">
         <BibleCardUI name={inputName} keywords={keywords} />
       </section>
 
-      <div className="w-full perspective-1000">
+      <div className="w-full aspect-[2/3] perspective-1000 flex flex-col justify-center">
         <div
-          className={`relative w-full aspect-[2/3] transition-transform duration-700 transform-style-preserve-3d ${
+          className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
             isFlipped ? "rotate-y-180" : ""
           }`}
         >
@@ -147,10 +150,10 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
             onClick={() => onClickCard()}
             className="absolute w-full h-full bg-white shadow-lg rounded-lg backface-hidden flex flex-col items-center justify-center gap-5 p-5"
           >
-            <div className="w-full flex flex-col gap-2">
+            <div className="w-full flex flex-col gap-2 ]">
               <h3>이름</h3>
               <Input
-                className="p-4"
+                className="p-2 focus-visible:border-1 focus-visible:border-[#608CFF]"
                 value={inputName}
                 onChange={(e) => setInputName(e.target.value)}
                 placeholder="이름을 입력해 주세요"
@@ -160,10 +163,10 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
             <div className="w-full h-full flex flex-col gap-2">
               <h3>기도제목</h3>
               <Textarea
-                className="text-sm w-full h-full p-4 rounded-md overflow-y-auto no-scrollbar text-gray-700"
+                className="text-sm w-full h-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 focus-visible:border-1 focus-visible:border-[#608CFF]"
                 value={inputBody}
                 onChange={(e) => setInputBody(e.target.value)}
-                placeholder={`기도제목을 작성하고 나만의 말씀카드를 만들어요`}
+                placeholder="(예시) 삶 가운데에서 하나님을 더욱 찾을 수 있도록 도와주세요"
                 readOnly={loading || isEnded}
               />
             </div>
