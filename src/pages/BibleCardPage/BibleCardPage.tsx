@@ -3,12 +3,14 @@ import MainHeader from "../MainPage/MainHeader";
 import BibleCardFlip from "./BibleCardFlip";
 import BibleCardIntro from "./BibleCardIntro";
 import { useRef } from "react";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const BibleCardPage = () => {
   const firstSectionRef = useRef<HTMLElement | null>(null);
   const secondSectionRef = useRef<HTMLElement | null>(null);
 
   const scrollToSecondSection = () => {
+    analyticsTrack("클릭_말씀카드_시작", {});
     secondSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 

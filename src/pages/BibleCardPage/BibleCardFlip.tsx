@@ -34,6 +34,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const onClickCreateBibleCard = async () => {
+    analyticsTrack("클릭_말씀카드_생성", {});
     if (inputBody.length < 15) {
       alert("기도제목은 15자 이상이 필요해요😭");
       return;
@@ -69,12 +70,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
   };
 
   const loadImage = async () => {
-    if (bibleCardRef.current === null) {
-      setIsEnded(false);
-      setLoading(false);
-      alert("생성 버튼을 다시 눌러주세요😭");
-      return null;
-    }
+    if (bibleCardRef.current === null) return null;
     try {
       const canvas = await html2canvas(bibleCardRef.current);
       const dataUrl = canvas.toDataURL("image/jpeg", 2);
@@ -83,32 +79,24 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
         pngFile,
         `BibleCard/UserBibleCard/${pngFile.name}`
       );
-      if (!pathData) {
-        setIsEnded(false);
-        setLoading(false);
-        alert("생성 버튼을 다시 눌러주세요😭");
-        return null;
-      }
+      if (!pathData) return null;
       const publicUrl = getPublicUrl(pathData.path);
       setPublicUrl(publicUrl || "");
       return publicUrl;
     } catch {
-      setIsEnded(false);
-      setLoading(false);
-      alert("생성 버튼을 다시 눌러주세요😭");
       return null;
     }
   };
 
   const onClickSocialShare = async () => {
     const currentUrl = window.location.href;
-
     await navigator.share({
       url: `${currentUrl}/bible-card`,
     });
   };
 
   const onClickCopyLink = async () => {
+    analyticsTrack("클릭_공유_링크복사", { where: "BibleCardPage" });
     const currentUrl = window.location.href;
     navigator.clipboard
       .writeText(currentUrl)
