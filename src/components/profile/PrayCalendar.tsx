@@ -36,7 +36,7 @@ const PrayCalendar = () => {
   const weeklyDays = generateDates(weekInfo.weekDates, hasPrayedList);
 
   return (
-    <div className="aspect-[2.5] w-full flex-grow flex flex-col gap-1 bg-white p-5 rounded-xl">
+    <div className="w-full flex-grow flex flex-col gap-1 bg-white p-5 rounded-xl">
       <div className="flex flex-row justify-between">
         <span className="items-start text-sm font-semibold">기도 캘린더</span>
       </div>
