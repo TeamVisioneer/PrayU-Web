@@ -78,9 +78,17 @@ const TodayPrayCompletedItem = () => {
           showButton ? "opacity-100" : "opacity-0"
         }`}
       >
+        <KakaoShareButton
+          className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+            showButton ? "opacity-100" : "opacity-0"
+          }`}
+          buttonText="말씀카드 공유하기"
+          kakaoLinkObject={BibleCardLink()}
+          eventOption={{ where: "TodayPrayCompletedItem" }}
+        />
         <Button
           className="w-full relative flex items-center justify-center"
-          variant="new"
+          variant="primaryLight"
           onClick={() =>
             (window.location.href = `/qt?verse=${
               bibleVerses[contentNumber as keyof typeof bibleVerses]
@@ -90,14 +98,6 @@ const TodayPrayCompletedItem = () => {
           <img src={newIcon} className="absolute left-4" />
           <p>오늘의 QT 보기</p>
         </Button>
-        <KakaoShareButton
-          className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
-            showButton ? "opacity-100" : "opacity-0"
-          }`}
-          buttonText="말씀카드 공유하기"
-          kakaoLinkObject={BibleCardLink()}
-          eventOption={{ where: "TodayPrayCompletedItem" }}
-        />
 
         <TodayPrayReplayBtn eventOption={{ where: "TodayPrayCompletedItem" }} />
       </section>
