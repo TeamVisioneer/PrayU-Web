@@ -1,20 +1,35 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MainHeader from "../MainPage/MainHeader";
 import { createBibleVerse, fetchBgImage } from "@/apis/openai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ClipLoader } from "react-spinners";
+import html2canvas from "html2canvas";
 import useBaseStore from "@/stores/baseStore";
-import { enterLine } from "@/lib/utils";
+import { dataURLToFile, enterLine, getTodayNumber } from "@/lib/utils";
+import { getPublicUrl, uploadImage } from "@/apis/file";
+import { UserBibleCardLink } from "@/components/share/KakaoShareBtn";
+import { analyticsTrack } from "@/analytics/analytics";
+import kakaoShareIcon from "@/assets/kakaoShareIcon.png";
+import { CiSaveUp2, CiLink } from "react-icons/ci";
+import { toast } from "@/components/ui/use-toast";
 
 const BibleCardPage = () => {
   const getBible = useBaseStore((state) => state.getBible);
+  const bibleCardRef = useRef(null);
   const [inputContent, setInputContent] = useState("");
   const [body, setBody] = useState("");
   const [verse, setVerse] = useState("");
   const [bgImage, setBgImageUrl] = useState("");
+
+  const [publicUrl, setPublicUrl] = useState("");
+  const [isimageLoaded, setIsImageLoaded] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isEnded) loadImage();
+  }, [isEnded]);
 
   const onClickCreateBibleCard = async () => {
     if (inputContent.length < 20) {
@@ -26,6 +41,8 @@ const BibleCardPage = () => {
     setBgImageUrl("");
     setBody("");
     setVerse("");
+    setPublicUrl("");
+    setIsImageLoaded(false);
     const bibleVerseData = await createBibleVerse(inputContent);
     if (bibleVerseData.length == 0) {
       setIsEnded(false);
@@ -51,8 +68,51 @@ const BibleCardPage = () => {
         long_label == "시편" ? "편" : "장"
       } ${paragraph}절`
     );
-    setLoading(false);
     setIsEnded(true);
+  };
+
+  const loadImage = async () => {
+    if (bibleCardRef.current === null) return "";
+    try {
+      const canvas = await html2canvas(bibleCardRef.current, {
+        useCORS: true,
+        allowTaint: true,
+      });
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.5);
+      const pngFile = dataURLToFile(dataUrl, `Card_${getTodayNumber()}.jpeg`);
+      const pathData = await uploadImage(
+        pngFile,
+        `BibleCard/UserBibleCard/${pngFile.name}`
+      );
+      if (!pathData) return "";
+      const publicUrl = getPublicUrl(pathData.path);
+      setPublicUrl(publicUrl || "");
+    } catch {
+      return "";
+    }
+  };
+
+  const onClickSocialShare = async () => {
+    await navigator.share({
+      url: "https://example.com/story-url",
+    });
+  };
+
+  const onClickCopyLink = async () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard
+      .writeText(currentUrl)
+      .then(() => toast({ description: "링크가 복사되었어요" }));
+  };
+
+  const onClickKakaoShare = async () => {
+    try {
+      const kakaoLinkObject = UserBibleCardLink(publicUrl);
+      analyticsTrack("클릭_카카오_공유", { where: "BibleCardPage" });
+      window.Kakao.Share.sendDefault(kakaoLinkObject);
+    } catch {
+      return null;
+    }
   };
 
   return (
@@ -60,30 +120,40 @@ const BibleCardPage = () => {
       <MainHeader />
       <div className="text-xl font-light">말씀 카드 만들기</div>
 
-      <div
-        className={`relative w-5/6 aspect-square flex flex-col justify-center items-center rounded-2xl p-2 transition-colors duration-1000 ease-in ${
-          isEnded ? "bg-none" : "bg-gray-300"
-        }`}
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <ClipLoader size={20} loading={loading} />
-        <div className="absolute inset-0 bg-black opacity-35 rounded-2xl pointer-events-none"></div>
-        <div
-          className={`relative flex flex-col gap-3 handwritten font-bold text-2xl text-white text-center whitespace-pre-wrap transition-opacity duration-1000 ease-in ${
-            isEnded ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <p>{body}</p>
-          <p>{verse}</p>
+      <section className="relative w-5/6 aspect-square">
+        <div className="z-30 absolute inset-0 w-full h-full flex justify-center items-center bg-gray-300">
+          <ClipLoader size={20} loading={loading} />
         </div>
-        <span className="absolute bottom-3 right-5 font-bold text-white">
-          PrayU
-        </span>
-      </div>
+        {!isimageLoaded && (
+          <div ref={bibleCardRef} className="absolute inset-0 w-full h-full">
+            <img src={bgImage} className="z-0 absolute inset-0 w-full h-full" />
+            <div className="z-10 absolute inset-0 bg-black opacity-35 flex justify-center items-center"></div>
+            <div className="z-20 absolute inset-0 flex flex-col w-full h-full p-2 justify-center items-center gap-3 handwritten font-bold text-2xl text-white text-center whitespace-pre-wrap ">
+              <p>{body}</p>
+              <p>{verse}</p>
+            </div>
+            <span className="z-20 absolute bottom-5 right-5 font-bold text-white">
+              PrayU
+            </span>
+          </div>
+        )}
+        {publicUrl && (
+          <div
+            className={`absolute inset-0 w-full h-full z-40 flex flex-col gap-1 transition-opacity duration-1000 ease-in ${
+              isimageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img
+              src={publicUrl}
+              className="w-full h-full"
+              onLoad={() => {
+                setIsImageLoaded(true);
+                setLoading(false);
+              }}
+            />
+          </div>
+        )}
+      </section>
 
       <Textarea
         className="text-sm w-5/6 h-32 p-4 rounded-md overflow-y-auto no-scrollbar text-gray-700"
@@ -100,6 +170,17 @@ const BibleCardPage = () => {
       >
         말씀카드 만들기
       </Button>
+      {isimageLoaded && (
+        <div className="flex justify-center items-center gap-4">
+          <CiLink size={30} onClick={() => onClickCopyLink()} />
+          <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
+          <img
+            src={kakaoShareIcon}
+            className="w-8 aspect-square"
+            onClick={() => onClickKakaoShare()}
+          />
+        </div>
+      )}
     </div>
   );
 };

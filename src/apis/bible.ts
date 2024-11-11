@@ -1,5 +1,6 @@
 import { supabase } from "./../../supabase/client";
 import { Bible } from "../../supabase/types/tables";
+import * as Sentry from "@sentry/react";
 
 export const getBible = async (
   longLabel: string,
@@ -15,10 +16,13 @@ export const getBible = async (
       .eq("paragraph", paragraph)
       .single();
     if (error) {
+      Sentry.captureException(error.message);
       return null;
     }
     return data as Bible;
   } catch (error) {
+    Sentry.captureException(error);
+
     return null;
   }
 };

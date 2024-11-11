@@ -177,3 +177,23 @@ export const PlayListShareLink = () => {
     ],
   } as KakaoLinkObject;
 };
+
+export const UserBibleCardLink = (publicUrl: string) => {
+  const domainUrl = getDomainUrl();
+  const bibleCardPage = `${domainUrl}/bible-card`;
+  return {
+    objectType: "feed",
+    content: {
+      title: "PrayU 말씀카드",
+      description: "PrayU 에서 기도제목에 맞는 나만의 말씀카드를 만들어 보아요",
+      imageUrl: publicUrl,
+      link: { webUrl: bibleCardPage, mobileWebUrl: bibleCardPage },
+    },
+    buttons: [
+      {
+        title: "말씀카드 만들기",
+        link: { webUrl: bibleCardPage, mobileWebUrl: bibleCardPage },
+      },
+    ],
+  } as KakaoLinkObject;
+};
