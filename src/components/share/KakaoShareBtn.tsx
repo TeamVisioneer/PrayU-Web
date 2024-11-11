@@ -189,7 +189,7 @@ export const UserBibleCardLink = (publicUrl: string) => {
       description: "기도제목에 맞는 나만의 말씀카드를 만들어 보아요",
       imageUrl: publicUrl,
       imageWidth: 400,
-      imageHeight: 600,
+      imageHeight: 800,
       link: { webUrl: bibleCardPage, mobileWebUrl: bibleCardPage },
     },
     buttons: [
