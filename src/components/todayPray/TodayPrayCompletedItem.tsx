@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { BibleCardLink, KakaoShareButton } from "../share/KakaoShareBtn";
 import useBaseStore from "@/stores/baseStore";
 import TodayPrayReplayBtn from "./TodayPrayRePlayBtn";
+import { Button } from "../ui/button";
+import { bibleVerses } from "@/Enums/qtData";
+import newIcon from "@/assets/newIcon.svg";
 
 const TodayPrayCompletedItem = () => {
   const today = getISOTodayDateYMD();
@@ -69,7 +72,6 @@ const TodayPrayCompletedItem = () => {
         <h1 className="text-xl">
           {today.year}.{today.month}.{today.day} 오늘의 말씀
         </h1>
-        <p className="font-light">친구들에게 오늘의 말씀을 공유해 주세요</p>
       </div>
       <section
         className={`flex flex-col items-center gap-4 transition-opacity duration-1000 ease-in-out ${
@@ -84,6 +86,19 @@ const TodayPrayCompletedItem = () => {
           kakaoLinkObject={BibleCardLink()}
           eventOption={{ where: "TodayPrayCompletedItem" }}
         />
+        <Button
+          className="w-full relative flex items-center justify-center"
+          variant="primaryLight"
+          onClick={() =>
+            (window.location.href = `/qt?verse=${
+              bibleVerses[contentNumber as keyof typeof bibleVerses]
+            }`)
+          }
+        >
+          <img src={newIcon} className="absolute left-4" />
+          <p>오늘의 QT 보기</p>
+        </Button>
+
         <TodayPrayReplayBtn eventOption={{ where: "TodayPrayCompletedItem" }} />
       </section>
     </div>
