@@ -24,7 +24,7 @@ const WeekUpdateDialog = () => {
       <DialogContent className="w-11/12 h-auto overflow-auto rounded-2xl bg-mainBg">
         <DialogHeader>
           <DialogTitle className="text-xl text-left">
-            기도제목 주기 변경 안내
+            기도카드 시작일 변경 안내
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <div className="w-full flex flex-col gap-1 py-3 items-left">
@@ -51,9 +51,9 @@ const WeekUpdateDialog = () => {
             </div>
 
             <div className="flex flex-col items-start mt-3">
-              <p className="text-sm text-left text-gray-400 pt-1">
-                기존에는 기도제목을 어느 요일에도 작성할 수 있었는데, 이제부턴
-                일요일에만 기도제목을 작성할 수 있어요:)
+              <p className="text-sm text-left pt-1">
+                모든 기도카드 시작일이 항상 일요일로 통일되었어요 <br />
+                예시) 11.5(화) 작성 ➡️ 11.3(일)~11.9(토) 유지
               </p>
             </div>
           </div>
