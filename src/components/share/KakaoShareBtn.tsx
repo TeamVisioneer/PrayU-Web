@@ -183,10 +183,13 @@ export const UserBibleCardLink = (publicUrl: string) => {
   const bibleCardPage = `${domainUrl}/bible-card`;
   return {
     objectType: "feed",
+
     content: {
       title: "PrayU 말씀카드",
-      description: "PrayU 에서 기도제목에 맞는 나만의 말씀카드를 만들어 보아요",
+      description: "기도제목에 맞는 나만의 말씀카드를 만들어 보아요",
       imageUrl: publicUrl,
+      imageWidth: 400,
+      imageHeight: 800,
       link: { webUrl: bibleCardPage, mobileWebUrl: bibleCardPage },
     },
     buttons: [
