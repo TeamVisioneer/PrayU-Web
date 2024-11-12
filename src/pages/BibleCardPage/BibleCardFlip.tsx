@@ -143,7 +143,11 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
             <div className="w-full flex flex-col gap-2 ]">
               <h3>이름</h3>
               <Input
-                className="p-2 focus-visible:border-1 focus-visible:border-[#608CFF]"
+                className={`p-2  ${
+                  isEnded
+                    ? "border-none"
+                    : "focus-visible:border-1 focus-visible:border-[#608CFF]"
+                }`}
                 value={inputName}
                 onChange={(e) => setInputName(e.target.value)}
                 placeholder="이름을 입력해 주세요"
@@ -153,7 +157,11 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
             <div className="w-full h-full flex flex-col gap-2">
               <h3>기도제목</h3>
               <Textarea
-                className="text-sm w-full h-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 focus-visible:border-1 focus-visible:border-[#608CFF]"
+                className={`text-sm w-full h-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 ${
+                  isEnded
+                    ? "border-none"
+                    : "focus-visible:border-1 focus-visible:border-[#608CFF]"
+                }`}
                 value={inputBody}
                 onChange={(e) => setInputBody(e.target.value)}
                 placeholder="(예시) 삶 가운데에서 하나님을 더욱 찾을 수 있도록 도와주세요"
