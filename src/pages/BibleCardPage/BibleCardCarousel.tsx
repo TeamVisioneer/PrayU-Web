@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import BibleCard1 from "@/assets/bibleCard/BibleCard1.jpeg";
-import BibleCard2 from "@/assets/bibleCard/BibleCard2.jpeg";
-import BibleCard3 from "@/assets/bibleCard/BibleCard3.jpeg";
-import BibleCard4 from "@/assets/bibleCard/BibleCard4.jpeg";
+import Card1 from "@/assets/bibleCard/Card1.jpeg";
+import Card2 from "@/assets/bibleCard/Card2.jpeg";
+import Card3 from "@/assets/bibleCard/Card3.jpeg";
+import Card4 from "@/assets/bibleCard/Card4.jpeg";
 
 const BibleCardCarousel: React.FC = () => {
-  const images = [BibleCard1, BibleCard2, BibleCard3, BibleCard4];
+  const images = [Card1, Card2, Card3, Card4];
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -25,7 +25,7 @@ const BibleCardCarousel: React.FC = () => {
         aria-live="polite"
       >
         {images.map((src, index) => (
-          <img key={index} src={src} className="w-full " />
+          <img key={index} src={src} className="w-full" />
         ))}
       </div>
     </div>

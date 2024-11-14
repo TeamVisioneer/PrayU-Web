@@ -159,6 +159,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
                     : "focus-visible:border-1 focus-visible:border-[#608CFF]"
                 }`}
                 value={inputName}
+                maxLength={6}
                 onChange={(e) => setInputName(e.target.value)}
                 placeholder="이름을 입력해 주세요"
                 readOnly={loading || isEnded}
