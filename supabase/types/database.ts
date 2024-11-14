@@ -361,6 +361,42 @@ export type Database = {
         }
         Relationships: []
       }
+      qt_data: {
+        Row: {
+          chapter: number
+          created_at: string
+          end_paragraph: number
+          full_sentence: string
+          id: string
+          long_label: string
+          result: Json
+          start_paragragh: number
+          user_id: string | null
+        }
+        Insert: {
+          chapter: number
+          created_at?: string
+          end_paragraph: number
+          full_sentence: string
+          id?: string
+          long_label?: string
+          result?: Json
+          start_paragragh: number
+          user_id?: string | null
+        }
+        Update: {
+          chapter?: number
+          created_at?: string
+          end_paragraph?: number
+          full_sentence?: string
+          id?: string
+          long_label?: string
+          result?: Json
+          start_paragragh?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
