@@ -59,7 +59,7 @@ const BibleCardUI: React.FC<BibleCardUIProps> = ({ name, keywords }) => {
     { primary: "#cfd9df", secondary: "#e2ebf0" },
     { primary: "#c1dfc4", secondary: "#deecdd" },
     { primary: "#e0c3fc", secondary: "#8ec5fc" },
-    { primary: "#a8c0ff", secondary: "#3f2b96" },
+    { primary: "#3f2b96", secondary: "#a8c0ff" },
     { primary: "#ffd452", secondary: "#ff9a9e" },
   ];
 

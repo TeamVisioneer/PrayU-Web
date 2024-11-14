@@ -150,7 +150,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
             onClick={() => onClickCard()}
             className="absolute w-full h-full bg-white shadow-lg rounded-lg backface-hidden flex flex-col items-center justify-center gap-5 p-5"
           >
-            <div className="w-full flex flex-col gap-2 ]">
+            <div className="w-full flex flex-col gap-2">
               <h3>이름</h3>
               <Input
                 className={`p-2  ${
