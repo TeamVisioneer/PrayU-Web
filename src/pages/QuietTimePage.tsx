@@ -7,12 +7,14 @@ import { useSearchParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { parseBibleVerse } from "@/lib/utils";
+import useAuth from "@/hooks/useAuth";
 
 interface FormValues {
   content: string;
 }
 
 const QuietTimePage = () => {
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const { register, handleSubmit, control } = useForm<FormValues>();
   const { isSubmitting } = useFormState({ control });
@@ -20,9 +22,8 @@ const QuietTimePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const qtData = useBaseStore((state) => state.qtData);
-  const createOrFetchQtData = useBaseStore(
-    (state) => state.createOrFetchQtData
-  );
+  const setQtData = useBaseStore((state) => state.setQtData);
+  const createQtData = useBaseStore((state) => state.createQtData);
   const targetBibleList = useBaseStore((state) => state.targetBibleList);
   const fetchBibleList = useBaseStore((state) => state.fetchBibleList);
 
@@ -43,12 +44,17 @@ const QuietTimePage = () => {
         endParagraph
       );
       if (targetBibleList) {
-        await createOrFetchQtData(
+        const qtData = await createQtData(
+          user!.id,
           longLabel,
           chapter,
           startParagraph,
-          endParagraph
+          endParagraph,
+          targetBibleList[0].sentence
         );
+        if (qtData && typeof qtData.result === "string") {
+          setQtData(JSON.parse(qtData.result));
+        }
       } else {
         setError("입력한 성경구절이 존재하지 않습니다.");
       }
