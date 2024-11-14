@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import BibleCardUI from "./BibleCardUI";
 import { cn } from "@/lib/utils";
 import { IoCaretUpOutline } from "react-icons/io5";
-import { BeatLoader } from "react-spinners";
 import { PulseLoader } from "react-spinners";
 
 interface BibleCardFlipProps {
