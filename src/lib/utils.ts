@@ -194,3 +194,21 @@ export const dataURLToFile = (dataURL: string, fileName: string): File => {
 
   return new File([u8arr], fileName, { type: mime });
 };
+
+export const parseBibleVerse = (input: string) => {
+  const match = input.match(
+    /([가-힣]+)\s*(\d+)(?:장|편|:)?\s*(\d+)(?:절)?(?:\s*[-~]\s*(\d+)(?:절)?)?/,
+  );
+
+  if (match) {
+    const [, label, chapter, paragraph, endParagraph] = match;
+    return {
+      label,
+      chapter: parseInt(chapter, 10),
+      paragraph: parseInt(paragraph, 10),
+      endParagraph: endParagraph ? parseInt(endParagraph, 10) : undefined,
+    };
+  } else {
+    return null;
+  }
+};
