@@ -204,7 +204,7 @@ export interface createPrayCardParams {
   group_id?: string;
   user_id?: string | null;
   content: string;
-  bible_card_url?: string;
+  bible_card_url?: string | null;
 }
 
 export const createPrayCardWithParams = async (
