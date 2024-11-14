@@ -50,7 +50,9 @@ import {
   fetchUserPrayCardCount,
   fetchUserPrayCardList,
   fetchUserPrayCardListByGroupId,
+  updatePrayCard,
   updatePrayCardContent,
+  updatePrayCardParams,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
@@ -235,6 +237,10 @@ export interface BaseStore {
   ) => void;
   setIsDisabledSkipPrayCardBtn: (isDisabledSkipPrayCardBtn: boolean) => void;
   updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
+  updatePrayCard: (
+    prayCardId: string,
+    params: updatePrayCardParams,
+  ) => Promise<void>;
   setPrayCardContent: (content: string) => void;
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
   deletePrayCard: (prayCardId: string) => Promise<void>;
@@ -858,6 +864,12 @@ const useBaseStore = create<BaseStore>()(
         state.inputPrayCardContent = content;
         state.isEditingPrayCard = false;
       });
+    },
+    updatePrayCard: async (
+      prayCardId: string,
+      params: updatePrayCardParams,
+    ) => {
+      await updatePrayCard(prayCardId, params);
     },
     setPrayCardContent: (content: string) => {
       set((state) => {

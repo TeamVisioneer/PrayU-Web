@@ -18,6 +18,7 @@ const TermServicePage: React.FC = () => {
   const createGroup = useBaseStore((state) => state.createGroup);
   const createMember = useBaseStore((state) => state.createMember);
   const createPrayCard = useBaseStore((state) => state.createPrayCard);
+  const updatePrayCard = useBaseStore((state) => state.updatePrayCard);
   const groupList = useBaseStore((state) => state.groupList);
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
@@ -48,7 +49,15 @@ const TermServicePage: React.FC = () => {
     const myMember = await createMember(targetGroup.id, profile.id, "");
     if (!myMember) return;
 
-    await createPrayCard(targetGroup.id, profile.id, "");
+    const prayCardId = localStorage.getItem("prayCardId");
+    if (prayCardId) {
+      await updatePrayCard(prayCardId, {
+        group_id: targetGroup.id,
+        user_id: profile.id,
+      });
+    } else {
+      await createPrayCard(targetGroup.id, profile.id, "");
+    }
     return targetGroup.id;
   };
 

@@ -205,20 +205,31 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
               <p>꾹 눌러서 말씀카드 저장하기</p>
               <IoCaretUpOutline />
             </div>
-            <Button
-              onClick={() => {
-                setIsFlipped(false);
-                setIsEnded(false);
-                setLoading(false);
-                setInputName("");
-                setInputBody("");
-                setPublicUrl("");
-              }}
-              variant="primary"
-              className="w-full"
-            >
-              다시하기
-            </Button>
+            <div className="w-full flex flex-col gap-2 items-center">
+              <Button
+                variant="primary"
+                className="w-full"
+                onClick={() => (window.location.href = "/")}
+              >
+                PrayU 시작하기
+              </Button>
+            </div>
+            <section className="w-full flex flex-col gap-4">
+              <div className="w-full flex justify-center items-center gap-4 ">
+                <hr className="flex-grow bg-gray-400" />
+                <span className="text-sm text-gray-400">친구에게 공유하기</span>
+                <hr className="flex-grow bg-gray-400" />
+              </div>
+              <div className="flex justify-center items-center gap-4">
+                <CiLink size={30} onClick={() => onClickCopyLink()} />
+                <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
+                <img
+                  src={kakaoShareIcon}
+                  className="w-8 aspect-square"
+                  onClick={() => onClickKakaoShare()}
+                />
+              </div>
+            </section>
           </div>
         ) : (
           <div className="w-full flex flex-col items-center gap-4">
@@ -240,25 +251,6 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
           </div>
         )}
       </section>
-
-      {!loading && isEnded && (
-        <section className="w-full flex flex-col gap-4">
-          <div className="w-full flex justify-center items-center gap-4 ">
-            <hr className="flex-grow bg-gray-400" />
-            <span className="text-sm text-gray-400">친구에게 공유하기</span>
-            <hr className="flex-grow bg-gray-400" />
-          </div>
-          <div className="flex justify-center items-center gap-4">
-            <CiLink size={30} onClick={() => onClickCopyLink()} />
-            <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
-            <img
-              src={kakaoShareIcon}
-              className="w-8 aspect-square"
-              onClick={() => onClickKakaoShare()}
-            />
-          </div>
-        </section>
-      )}
     </div>
   );
 };

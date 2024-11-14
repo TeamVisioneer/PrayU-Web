@@ -200,7 +200,7 @@ export const createPrayCard = async (
   }
 };
 
-interface createPrayCardParams {
+export interface createPrayCardParams {
   group_id?: string;
   user_id?: string | null;
   content: string;
@@ -237,6 +237,33 @@ export async function updatePrayCardContent(
         content: newPrayContent,
         updated_at: getISOToday(),
       })
+      .eq("id", prayCardId);
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+}
+
+export interface updatePrayCardParams {
+  group_id?: string;
+  user_id?: string;
+  bible_card_url?: string;
+}
+
+export async function updatePrayCard(
+  prayCardId: string,
+  params: updatePrayCardParams,
+) {
+  try {
+    const { data, error } = await supabase
+      .from("pray_card")
+      .update(params)
       .eq("id", prayCardId);
 
     if (error) {

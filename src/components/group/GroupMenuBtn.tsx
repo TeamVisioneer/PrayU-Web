@@ -223,7 +223,17 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
             </a>
             <img src={newIcon} />
           </div>
-
+          <div className="flex gap-1 items-center">
+            <a
+              href="/bible-card"
+              onClick={() =>
+                analyticsTrack("클릭_말씀카드_페이지", { where: "groupMenu" })
+              }
+            >
+              말씀카드 만들기
+            </a>
+            <img src={newIcon} />
+          </div>
           <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
             공지사항
           </a>
