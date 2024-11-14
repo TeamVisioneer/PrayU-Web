@@ -7,14 +7,13 @@ import { useSearchParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { parseBibleVerse } from "@/lib/utils";
-import useAuth from "@/hooks/useAuth";
 
 interface FormValues {
   content: string;
 }
 
 const QuietTimePage = () => {
-  const { user } = useAuth();
+  const user = useBaseStore((state) => state.user);
   const [searchParams] = useSearchParams();
   const { register, handleSubmit, control } = useForm<FormValues>();
   const { isSubmitting } = useFormState({ control });
@@ -57,15 +56,15 @@ const QuietTimePage = () => {
       );
       if (targetBibleList) {
         const qtData = await createQtData(
-          user!.id,
+          user?.id || null,
           longLabel,
           chapter,
           startParagraph,
           endParagraph,
           targetBibleList[0].sentence
         );
-        if (qtData && typeof qtData.result === "string") {
-          setQtData(JSON.parse(qtData.result));
+        if (qtData) {
+          setQtData(JSON.parse(qtData.result as string));
         }
       } else {
         setError("입력한 성경구절이 존재하지 않습니다.");

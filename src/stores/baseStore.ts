@@ -323,7 +323,7 @@ export interface BaseStore {
   qtData: QTData | null;
   setQtData: (qtData: QTData | null) => void;
   createQtData(
-    userId: string,
+    userId: string | null,
     longLabel: string,
     chapter: number,
     startParagraph: number,
