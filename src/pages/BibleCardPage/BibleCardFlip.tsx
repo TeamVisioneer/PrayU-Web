@@ -23,6 +23,10 @@ interface BibleCardFlipProps {
 
 const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
   const getBible = useBaseStore((state) => state.getBible);
+  const createPrayCardWithParams = useBaseStore(
+    (state) => state.createPrayCardWithParams
+  );
+
   const bibleCardRef = useRef(null);
   const [inputBody, setInputBody] = useState("");
   const [inputName, setInputName] = useState("");
@@ -82,6 +86,12 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
       if (!pathData) return null;
       const publicUrl = getPublicUrl(pathData.path);
       setPublicUrl(publicUrl || "");
+
+      const praycard = await createPrayCardWithParams({
+        content: inputBody,
+        bible_card_url: publicUrl,
+      });
+      if (praycard) localStorage.setItem("prayCardId", praycard.id);
       return publicUrl;
     } catch {
       return null;

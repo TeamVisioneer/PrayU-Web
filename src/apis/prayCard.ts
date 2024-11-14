@@ -7,7 +7,7 @@ export const fetchGroupPrayCardList = async (
   groupId: string,
   currentUserId: string,
   startDt: string,
-  endDt: string
+  endDt: string,
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -17,7 +17,7 @@ export const fetchGroupPrayCardList = async (
       profiles (id, full_name, avatar_url, kakao_id),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
-      )`
+      )`,
       )
       .eq("group_id", groupId)
       .eq("pray.user_id", currentUserId)
@@ -44,7 +44,7 @@ export const fetchOtherPrayCardListByGroupId = async (
   userId: string,
   groupId: string,
   limit: number = 1,
-  offset: number = 0
+  offset: number = 0,
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -54,7 +54,7 @@ export const fetchOtherPrayCardListByGroupId = async (
         profiles (id, full_name, avatar_url, kakao_id),
         pray (*, 
           profiles (id, full_name, avatar_url, kakao_id)
-        )`
+        )`,
       )
       .eq("user_id", userId)
       .eq("group_id", groupId)
@@ -79,7 +79,7 @@ export const fetchUserPrayCardListByGroupId = async (
   currentUserId: string,
   groupId: string,
   limit: number = 1,
-  offset: number = 0
+  offset: number = 0,
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -89,7 +89,7 @@ export const fetchUserPrayCardListByGroupId = async (
       profiles (id, full_name, avatar_url, kakao_id),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
-      )`
+      )`,
       )
       .eq("user_id", currentUserId)
       .eq("group_id", groupId)
@@ -107,7 +107,7 @@ export const fetchUserPrayCardListByGroupId = async (
       ...data,
       pray: data.pray.sort(
         (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       ),
     }));
     return sortedData as PrayCardWithProfiles[];
@@ -120,7 +120,7 @@ export const fetchUserPrayCardListByGroupId = async (
 export const fetchUserPrayCardList = async (
   currentUserId: string,
   limit: number = 18,
-  offset: number = 0
+  offset: number = 0,
 ): Promise<PrayCardWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
@@ -131,7 +131,7 @@ export const fetchUserPrayCardList = async (
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
       ),
-      group(name)`
+      group(name)`,
       )
       .eq("user_id", currentUserId)
       .is("deleted_at", null)
@@ -148,7 +148,7 @@ export const fetchUserPrayCardList = async (
       ...data,
       pray: data.pray.sort(
         (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       ),
     }));
     return sortedData as PrayCardWithProfiles[];
@@ -159,7 +159,7 @@ export const fetchUserPrayCardList = async (
 };
 
 export const fetchUserPrayCardCount = async (
-  currentUserId: string
+  currentUserId: string,
 ): Promise<number | null> => {
   try {
     const { count, error } = await supabase
@@ -182,7 +182,7 @@ export const fetchUserPrayCardCount = async (
 export const createPrayCard = async (
   groupId: string,
   userId: string,
-  content: string
+  content: string,
 ): Promise<PrayCard | null> => {
   try {
     const { error, data } = await supabase
@@ -200,9 +200,35 @@ export const createPrayCard = async (
   }
 };
 
+interface createPrayCardParams {
+  group_id?: string;
+  user_id?: string | null;
+  content: string;
+  bible_card_url?: string;
+}
+
+export const createPrayCardWithParams = async (
+  params: createPrayCardParams,
+): Promise<PrayCard | null> => {
+  try {
+    const { error, data } = await supabase
+      .from("pray_card")
+      .insert([params])
+      .select();
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data ? data[0] : null;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export async function updatePrayCardContent(
   prayCardId: string,
-  newPrayContent: string
+  newPrayContent: string,
 ) {
   try {
     const { data, error } = await supabase
@@ -244,7 +270,7 @@ export const deletePrayCard = async (prayCardId: string) => {
 
 export const deletePrayCardByGroupId = async (
   userId: string,
-  groupId: string
+  groupId: string,
 ) => {
   try {
     const { error } = await supabase

@@ -41,6 +41,8 @@ import {
 } from "@/apis/member";
 import {
   createPrayCard,
+  createPrayCardParams,
+  createPrayCardWithParams,
   deletePrayCard,
   deletePrayCardByGroupId,
   fetchGroupPrayCardList,
@@ -223,6 +225,9 @@ export interface BaseStore {
     groupId: string,
     userId: string,
     content: string,
+  ) => Promise<PrayCard | null>;
+  createPrayCardWithParams: (
+    params: createPrayCardParams,
   ) => Promise<PrayCard | null>;
   setIsEditingPrayCard: (isEditingPrayCard: boolean) => void;
   setIsDisabledPrayCardCreateBtn: (
@@ -839,6 +844,12 @@ const useBaseStore = create<BaseStore>()(
       content: string,
     ) => {
       const prayCard = await createPrayCard(groupId, userId, content);
+      return prayCard;
+    },
+    createPrayCardWithParams: async (
+      params: createPrayCardParams,
+    ): Promise<PrayCard | null> => {
+      const prayCard = await createPrayCardWithParams(params);
       return prayCard;
     },
     updatePrayCardContent: async (prayCardId: string, content: string) => {

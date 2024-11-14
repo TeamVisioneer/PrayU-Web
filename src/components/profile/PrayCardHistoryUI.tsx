@@ -28,7 +28,9 @@ const PrayCardHistoryUI: React.FC = () => {
         <div className="bg-gradient-to-r from-start via-middle via-52% to-end flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
           <div className="flex items-center gap-2 w-full">
             <div className="flex gap-2 items-center">
-              <p className="text-xl text-white">{prayCard?.group!.name}</p>
+              <p className="text-xl text-white">
+                {prayCard?.group?.name || "내 기도카드"}
+              </p>
             </div>
           </div>
           <p className="text-sm text-white w-full text-left">
