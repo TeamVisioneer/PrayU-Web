@@ -26,7 +26,32 @@ export const createQtData = async (
       .select()
       .single();
 
-    console.log(data);
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const fetchQtData = async (
+  longLabel: string,
+  chapter: number,
+  startParagragh: number,
+  endParagraph: number
+) => {
+  try {
+    const { data, error } = await supabase
+      .from("qt_data")
+      .select()
+      .eq("long_label", longLabel)
+      .eq("chapter", chapter)
+      .eq("start_paragragh", startParagragh)
+      .eq("end_paragraph", endParagraph)
+      .order("created_at", { ascending: true });
 
     if (error) {
       Sentry.captureException(error.message);

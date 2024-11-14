@@ -75,7 +75,7 @@ import {
 } from "@/apis/notification";
 import { fetchBibleList, getBible } from "@/apis/bible";
 import { createQT, QTData } from "@/apis/openai";
-import { createQtData } from "@/apis/qt_data";
+import { createQtData, fetchQtData } from "@/apis/qt_data";
 
 export interface BaseStore {
   // user
@@ -330,6 +330,12 @@ export interface BaseStore {
     endParagraph: number,
     sentence: string
   ): Promise<QtData | null>;
+  fetchQtData: (
+    longLabel: string,
+    chapter: number,
+    startParagraph: number,
+    endParagraph: number
+  ) => Promise<QtData[] | null>;
 
   // myPray drawer
   isOpenMyPrayDrawer: boolean;
@@ -1132,6 +1138,20 @@ const useBaseStore = create<BaseStore>()(
         result
       );
       return qtData;
+    },
+    fetchQtData: async (
+      longLabel: string,
+      chapter: number,
+      startParagraph: number,
+      endParagraph: number
+    ) => {
+      const qtDataList = await fetchQtData(
+        longLabel,
+        chapter,
+        startParagraph,
+        endParagraph
+      );
+      return qtDataList;
     },
 
     // share
