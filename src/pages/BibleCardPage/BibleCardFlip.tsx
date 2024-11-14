@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import BibleCardUI from "./BibleCardUI";
 import { cn } from "@/lib/utils";
 import { IoCaretUpOutline } from "react-icons/io5";
-import { SquareLoader } from "react-spinners";
+import { PulseLoader } from "react-spinners";
 
 interface BibleCardFlipProps {
   className?: string;
@@ -122,7 +122,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
     <div
       className={cn(
         className,
-        "relative w-full h-full flex flex-col justify-start items-center gap-6 px-10 overflow-x-hidden overflow-y-scroll no-scrollbar"
+        "relative w-full h-full flex flex-col justify-center items-center gap-6 px-10 overflow-x-hidden overflow-y-scroll no-scrollbar"
       )}
     >
       <section ref={bibleCardRef} className="absolute -z-10">
@@ -222,12 +222,9 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
               disabled={loading}
             >
               {loading ? (
-                <div className="flex gap-2 items-center">
-                  <span>말씀카드 만드는 중</span>
-                  <SquareLoader size={12} color="#f3f4f6" />
-                </div>
+                <PulseLoader size={10} color="#f3f4f6" />
               ) : (
-                "말씀카드 만들기"
+                <span>말씀카드 만들기</span>
               )}
             </Button>
           </div>

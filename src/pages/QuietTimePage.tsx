@@ -1,82 +1,56 @@
 import { useForm, useFormState } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { createQT, QTData } from "@/apis/openai";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useSearchParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
+import { parseBibleVerse } from "@/lib/utils";
 
 interface FormValues {
   content: string;
-}
-
-interface verseData {
-  label: string;
-  chapter: number;
-  paragraph: number;
-  endParagraph?: number;
-}
-
-function parseBibleVerse(input: string) {
-  const match = input.match(
-    /([가-힣]+)\s*(\d+)(?:장|편|:)?\s*(\d+)(?:절)?(?:\s*[-~]\s*(\d+)(?:절)?)?/
-  );
-
-  if (match) {
-    const [, label, chapter, paragraph, endParagraph] = match;
-    return {
-      label,
-      chapter: parseInt(chapter, 10),
-      paragraph: parseInt(paragraph, 10),
-      endParagraph: endParagraph ? parseInt(endParagraph, 10) : undefined,
-    };
-  } else {
-    throw new Error("올바르지 않은 입력 형식입니다.");
-  }
 }
 
 const QuietTimePage = () => {
   const [searchParams] = useSearchParams();
   const { register, handleSubmit, control } = useForm<FormValues>();
   const { isSubmitting } = useFormState({ control });
-  const [qtData, setQtData] = useState<QTData | null>(null);
-  const [verseData, setVerseData] = useState<verseData>({
-    label: "",
-    chapter: 0,
-    paragraph: 0,
-  });
-  const [verseSentence, setVerseSentence] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const getBible = useBaseStore((state) => state.getBible);
+
+  const qtData = useBaseStore((state) => state.qtData);
+  const createOrFetchQtData = useBaseStore(
+    (state) => state.createOrFetchQtData
+  );
+  const targetBibleList = useBaseStore((state) => state.targetBibleList);
+  const fetchBibleList = useBaseStore((state) => state.fetchBibleList);
 
   const verseParams = searchParams.get("verse");
 
-  const checkBibleVerse = async (input: string) => {
-    try {
-      const { label, chapter, paragraph } = parseBibleVerse(input);
-      setVerseData({ label, chapter, paragraph });
-      const targetBible = await getBible(label, chapter, paragraph);
-      if (targetBible) {
-        setVerseSentence(targetBible.sentence);
-        return true;
-      } else return false;
-    } catch (err) {
-      return false;
-    }
-  };
-
-  const fetchQtData = async (verse: string) => {
+  const fetchQtData = async (
+    longLabel: string,
+    chapter: number,
+    startParagraph: number,
+    endParagraph: number
+  ) => {
     try {
       setLoading(true);
-      const isVerse = await checkBibleVerse(verse);
-      if (isVerse) {
-        const fetchedData = await createQT(verse);
-        setQtData(fetchedData);
+      const targetBibleList = await fetchBibleList(
+        longLabel,
+        chapter,
+        startParagraph,
+        endParagraph
+      );
+      if (targetBibleList) {
+        await createOrFetchQtData(
+          longLabel,
+          chapter,
+          startParagraph,
+          endParagraph
+        );
       } else {
-        setError("올바른 성경 구절을 입력해주세요.");
+        setError("입력한 성경구절이 존재하지 않습니다.");
       }
     } catch (err) {
       setError("QT 데이터를 가져오는 중 오류가 발생했습니다.");
@@ -88,14 +62,23 @@ const QuietTimePage = () => {
 
   useEffect(() => {
     if (verseParams) {
-      fetchQtData(verseParams);
+      const verseData = parseBibleVerse(verseParams);
+      if (!verseData) return;
+      const { label, chapter, paragraph, endParagraph } = verseData;
+      fetchQtData(label, chapter, paragraph, endParagraph || paragraph);
     }
   }, [verseParams]);
 
   const onSubmit = async (data: FormValues) => {
     analyticsTrack("클릭_QT_생성", {});
     setError(null);
-    fetchQtData(data.content);
+    const verseData = parseBibleVerse(data.content);
+    if (!verseData) {
+      setError("올바른 성경 구절을 입력해주세요.");
+      return;
+    }
+    const { label, chapter, paragraph, endParagraph } = verseData;
+    await fetchQtData(label, chapter, paragraph, endParagraph || paragraph);
   };
 
   const inputVerseForm = () => (
@@ -135,10 +118,21 @@ const QuietTimePage = () => {
     <div className="flex flex-col gap-5 fade-in">
       <section className="flex flex-col bg-white p-3 rounded-lg gap-3">
         <p className="text-xl font-bold">💬 본문 말씀</p>
-        <p className="italic">
-          "{verseSentence}" - {verseData.label} {verseData.chapter}:
-          {verseData.paragraph}
-        </p>
+        {targetBibleList && (
+          <div className="italic">
+            {targetBibleList.map((bible, idx) => (
+              <p key={idx}>
+                {bible.paragraph}. {bible.sentence}{" "}
+              </p>
+            ))}
+            <p>
+              {targetBibleList[0].long_label} {targetBibleList[0].chapter}:
+              {targetBibleList[0].paragraph}
+              {targetBibleList.length > 1 &&
+                -targetBibleList[targetBibleList.length - 1].paragraph}
+            </p>
+          </div>
+        )}
       </section>
       <section className="flex flex-col bg-white p-3 rounded-lg gap-3">
         <p className="text-xl font-bold">🤔 말씀 묵상</p>
