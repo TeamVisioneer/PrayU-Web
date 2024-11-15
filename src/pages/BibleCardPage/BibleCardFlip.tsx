@@ -184,11 +184,11 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
           {/* 뒷면 */}
           <section
             onClick={() => onClickCard()}
-            className="absolute bottom-0 w-full h-full bg-white shadow-lg rounded-lg rotate-y-180 backface-hidden flex flex-col items-center justify-center"
+            className="absolute bottom-0 w-full  shadow-lg rounded-[16px] rotate-y-180 backface-hidden flex flex-col items-center justify-center"
           >
             <img
               src={publicUrl}
-              className="w-full"
+              className="w-full rounded-[16px]"
               onLoad={() => {
                 setLoading(false);
                 setIsFlipped(true);
@@ -235,7 +235,9 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
         ) : (
           <div className="w-full flex flex-col items-center gap-4">
             <p className="font-light text-sm">
-              기도제목에 맞는 나만의 말씀카드를 만들어요
+              {!loading
+                ? "기도제목에 맞는 나만의 말씀카드를 만들어요"
+                : "카드가 만들어지는 동안 조금만 기다려주세요"}
             </p>
             <Button
               onClick={() => onClickCreateBibleCard()}
