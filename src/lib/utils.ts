@@ -152,8 +152,16 @@ export const isFutureDate = (date1: string, date2: string): boolean => {
   return secondDate > firstDate;
 };
 
-export const isPastWeek = (date: string): boolean => {
-  return getWeekInfo(date).weekDates[6] < getISOTodayDate();
+export const isCurrentWeek = (date: string): boolean => {
+  const targetDate = new Date(date);
+  const todayDate = new Date(getISOTodayDate());
+  const todayOfWeek = todayDate.getDay();
+
+  const startDate = new Date(todayDate);
+  startDate.setDate(todayDate.getDate() - todayOfWeek);
+  startDate.setHours(0, 0, 0, 0);
+
+  return startDate <= targetDate;
 };
 
 // sleep 함수

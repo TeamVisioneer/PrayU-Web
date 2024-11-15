@@ -6,7 +6,7 @@ import {
   getISODateYMD,
   getISOOnlyDate,
   getISOTodayDate,
-  isPastWeek,
+  isCurrentWeek,
 } from "@/lib/utils";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -75,7 +75,8 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
 
   if (
     userPrayCardList &&
-    (userPrayCardList.length == 0 || isPastWeek(userPrayCardList[0].created_at))
+    (userPrayCardList.length == 0 ||
+      !isCurrentWeek(userPrayCardList[0].created_at))
   ) {
     return <ExpiredPrayCardUI />;
   }

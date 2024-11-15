@@ -10,7 +10,7 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate, sleep } from "@/lib/utils";
+import { getISOTodayDate, isCurrentWeek, sleep } from "@/lib/utils";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
 import ReactionResultBox from "../pray/ReactionResultBox";
@@ -52,7 +52,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
     if (
       userPrayCardList &&
       (userPrayCardList.length == 0 ||
-        userPrayCardList[0].created_at < getISOTodayDate(-6))
+        !isCurrentWeek(userPrayCardList[0].created_at))
     ) {
       navigate(`/group/${groupId}/praycard/new`, { replace: true });
       return;
