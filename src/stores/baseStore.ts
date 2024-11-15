@@ -41,6 +41,8 @@ import {
 } from "@/apis/member";
 import {
   createPrayCard,
+  createPrayCardParams,
+  createPrayCardWithParams,
   deletePrayCard,
   deletePrayCardByGroupId,
   fetchGroupPrayCardList,
@@ -48,7 +50,9 @@ import {
   fetchUserPrayCardCount,
   fetchUserPrayCardList,
   fetchUserPrayCardListByGroupId,
+  updatePrayCard,
   updatePrayCardContent,
+  updatePrayCardParams,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
 import { getISOToday } from "@/lib/utils";
@@ -224,12 +228,19 @@ export interface BaseStore {
     userId: string,
     content: string,
   ) => Promise<PrayCard | null>;
+  createPrayCardWithParams: (
+    params: createPrayCardParams,
+  ) => Promise<PrayCard | null>;
   setIsEditingPrayCard: (isEditingPrayCard: boolean) => void;
   setIsDisabledPrayCardCreateBtn: (
     isDisabledPrayCardCreateBtn: boolean,
   ) => void;
   setIsDisabledSkipPrayCardBtn: (isDisabledSkipPrayCardBtn: boolean) => void;
   updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
+  updatePrayCard: (
+    prayCardId: string,
+    params: updatePrayCardParams,
+  ) => Promise<void>;
   setPrayCardContent: (content: string) => void;
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
   deletePrayCard: (prayCardId: string) => Promise<void>;
@@ -841,12 +852,24 @@ const useBaseStore = create<BaseStore>()(
       const prayCard = await createPrayCard(groupId, userId, content);
       return prayCard;
     },
+    createPrayCardWithParams: async (
+      params: createPrayCardParams,
+    ): Promise<PrayCard | null> => {
+      const prayCard = await createPrayCardWithParams(params);
+      return prayCard;
+    },
     updatePrayCardContent: async (prayCardId: string, content: string) => {
       await updatePrayCardContent(prayCardId, content);
       set((state) => {
         state.inputPrayCardContent = content;
         state.isEditingPrayCard = false;
       });
+    },
+    updatePrayCard: async (
+      prayCardId: string,
+      params: updatePrayCardParams,
+    ) => {
+      await updatePrayCard(prayCardId, params);
     },
     setPrayCardContent: (content: string) => {
       set((state) => {
