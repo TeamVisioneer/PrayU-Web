@@ -46,10 +46,17 @@ const TermServicePage: React.FC = () => {
     const groupName = userName ? `${userName}의 기도그룹` : "새 기도그룹";
     const targetGroup = await createGroup(profile.id, groupName, "intro");
     if (!targetGroup) return;
-    const myMember = await createMember(targetGroup.id, profile.id, "");
-    if (!myMember) return;
 
     const prayCardId = localStorage.getItem("prayCardId");
+    const prayCardContent = localStorage.getItem("prayCardContent");
+
+    const myMember = await createMember(
+      targetGroup.id,
+      profile.id,
+      prayCardContent as string
+    );
+    if (!myMember) return;
+
     if (prayCardId) {
       await updatePrayCard(prayCardId, {
         group_id: targetGroup.id,

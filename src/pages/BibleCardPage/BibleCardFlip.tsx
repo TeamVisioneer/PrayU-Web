@@ -99,7 +99,10 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
         content: inputBody,
         bible_card_url: publicUrl,
       });
-      if (praycard) localStorage.setItem("prayCardId", praycard.id);
+      if (praycard) {
+        localStorage.setItem("prayCardId", praycard.id);
+        localStorage.setItem("prayCardContent", inputBody);
+      }
       return publicUrl;
     } catch {
       return null;
@@ -107,6 +110,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
   };
 
   const onClickSocialShare = async () => {
+    analyticsTrack("클릭_공유_소셜공유", { where: "BibleCardPage" });
     const currentUrl = window.location.href;
     await navigator.share({
       url: currentUrl,
@@ -220,7 +224,10 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
               <Button
                 variant="primary"
                 className="w-full"
-                onClick={() => (window.location.href = "/")}
+                onClick={() => {
+                  analyticsTrack("클릭_PrayU_시작", {}),
+                    (window.location.href = "/");
+                }}
               >
                 PrayU 시작하기
               </Button>
