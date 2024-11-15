@@ -132,7 +132,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
     <div
       className={cn(
         className,
-        "relative w-full h-full flex flex-col justify-center items-center gap-6 px-10 overflow-x-hidden overflow-y-scroll no-scrollbar"
+        "relative w-full h-full flex flex-col justify-start items-center gap-6 px-10 overflow-x-hidden overflow-y-scroll no-scrollbar"
       )}
     >
       <section ref={bibleCardRef} className="absolute -z-10">

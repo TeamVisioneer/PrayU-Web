@@ -19,7 +19,7 @@ const BibleCardPage = () => {
       <MainHeader />
       <section
         ref={firstSectionRef}
-        className="w-full min-h-screen snap-start flex flex-col justify-center items-center px-10 gap-5"
+        className="w-full min-h-screen snap-start flex flex-col justify-start items-center px-10 pt-14 gap-5"
       >
         <BibleCardIntro />
         <Button
@@ -32,7 +32,7 @@ const BibleCardPage = () => {
       </section>
       <section
         ref={secondSectionRef}
-        className="w-full min-h-screen snap-start flex flex-col justify-center items-center pt-14"
+        className="w-full min-h-screen snap-start flex flex-col justify-start items-center pt-14"
       >
         <BibleCardFlip />
       </section>
