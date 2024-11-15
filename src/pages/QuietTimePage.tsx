@@ -46,6 +46,7 @@ const QuietTimePage = () => {
     startParagraph: number,
     endParagraph: number
   ) => {
+    if (loading) return;
     try {
       setLoading(true);
       const targetBibleList = await fetchBibleList(
@@ -83,6 +84,7 @@ const QuietTimePage = () => {
     startParagraph: number,
     endParagraph: number
   ) => {
+    if (loading) return;
     try {
       setLoading(true);
       const targetBibleList = await fetchBibleList(
@@ -230,7 +232,10 @@ const QuietTimePage = () => {
       <Button
         className=""
         variant="primary"
-        onClick={() => window.location.reload()}
+        onClick={() => {
+          window.history.replaceState(null, "", window.location.pathname);
+          window.location.reload();
+        }}
       >
         나만의 QT 만들기
       </Button>
