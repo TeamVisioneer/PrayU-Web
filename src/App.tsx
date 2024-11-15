@@ -32,6 +32,7 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
 import QuietTimePage from "./pages/QuietTimePage";
+import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage";
 
 const App = () => {
   useEffect(() => {
@@ -78,6 +79,10 @@ const App = () => {
               />
               <Route path="/tutorial" element={<TutorialPage />} />
               <Route path="/bible-card" element={<BibleCardPage />} />
+              <Route
+                path="/bible-card/generator"
+                element={<BibleCardGeneratorPage />}
+              />
               <Route path="/qt" element={<QuietTimePage />} />
 
               <Route path="/auth/kakao/callback" element={<KakaoCallBack />} />
