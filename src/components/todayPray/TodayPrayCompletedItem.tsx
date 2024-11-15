@@ -6,6 +6,7 @@ import TodayPrayReplayBtn from "./TodayPrayRePlayBtn";
 import { Button } from "../ui/button";
 import { bibleVerses } from "@/Enums/qtData";
 import newIcon from "@/assets/newIcon.svg";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const TodayPrayCompletedItem = () => {
   const today = getISOTodayDateYMD();
@@ -23,6 +24,13 @@ const TodayPrayCompletedItem = () => {
   const [showImage, setShowImage] = useState(false);
   const [showTitleText, setShowTitleText] = useState(false);
   const [showButton, setShowButton] = useState(false);
+
+  const onClickQtBtn = () => {
+    analyticsTrack("클릭_QT_페이지", { where: "TodayPrayCompletedItemP" });
+    window.location.href = `/qt?verse=${
+      bibleVerses[contentNumber as keyof typeof bibleVerses]
+    }`;
+  };
 
   useEffect(() => {
     if (
@@ -89,11 +97,7 @@ const TodayPrayCompletedItem = () => {
         <Button
           className="w-full relative flex items-center justify-center"
           variant="primaryLight"
-          onClick={() =>
-            (window.location.href = `/qt?verse=${
-              bibleVerses[contentNumber as keyof typeof bibleVerses]
-            }`)
-          }
+          onClick={() => onClickQtBtn()}
         >
           <img src={newIcon} className="absolute left-4" />
           <p>오늘의 QT 보기</p>
