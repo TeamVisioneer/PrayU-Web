@@ -229,7 +229,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
                     (window.location.href = "/");
                 }}
               >
-                PrayU 시작하기
+                PrayU 에서 기도제목 보기
               </Button>
             </div>
             <section className="w-full flex flex-col gap-4">
