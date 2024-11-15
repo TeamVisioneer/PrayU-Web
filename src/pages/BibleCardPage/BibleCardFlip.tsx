@@ -101,7 +101,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
   const onClickSocialShare = async () => {
     const currentUrl = window.location.href;
     await navigator.share({
-      url: `${currentUrl}/bible-card`,
+      url: currentUrl,
     });
   };
 
