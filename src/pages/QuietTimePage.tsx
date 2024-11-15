@@ -38,7 +38,7 @@ const QuietTimePage = () => {
       const { label, chapter, paragraph, endParagraph } = verseData;
       fetchQtDaily(label, chapter, paragraph, endParagraph || paragraph);
     }
-  }, [verseParams, user]);
+  }, [user]);
 
   const fetchQtByUser = async (
     longLabel: string,
