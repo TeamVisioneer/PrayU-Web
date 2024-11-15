@@ -1,6 +1,6 @@
 import useBaseStore from "@/stores/baseStore";
 import ReactionWithCalendar from "./ReactionWithCalendar";
-import { getISODateYMD, isPastWeek } from "@/lib/utils";
+import { getISODateYMD, isCurrentWeek } from "@/lib/utils";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
 import DeletedPrayCardUI from "./DeletedPrayCardUI";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
@@ -23,7 +23,8 @@ const OtherPrayCardUI: React.FC<OtherPrayCardProps> = ({ eventOption }) => {
   }
   if (otherPrayCardList.length == 0) return <DeletedPrayCardUI />;
 
-  if (isPastWeek(otherPrayCardList[0].created_at)) return <ExpiredPrayCardUI />;
+  if (!isCurrentWeek(otherPrayCardList[0].created_at))
+    return <ExpiredPrayCardUI />;
 
   const prayCard = otherPrayCardList[0];
   const createdDateYMD = getISODateYMD(prayCard.created_at);

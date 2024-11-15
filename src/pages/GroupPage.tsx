@@ -6,7 +6,7 @@ import ShareDrawer from "@/components/share/ShareDrawer";
 import EventDialog from "@/components/notice/EventDialog";
 import ReportAlert from "@/components/alert/ReportAlert";
 import { useNavigate } from "react-router-dom";
-import { isPastWeek } from "@/lib/utils";
+import { isCurrentWeek } from "@/lib/utils";
 import MyMember from "@/components/member/MyMember";
 import OtherMemberList from "@/components/member/OtherMemberList";
 import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDrawer";
@@ -85,7 +85,7 @@ const GroupPage: React.FC = () => {
   useEffect(() => {
     if (
       !memberLoading &&
-      (myMember == null || isPastWeek(myMember.updated_at))
+      (myMember == null || !isCurrentWeek(myMember.updated_at))
     ) {
       navigate(`/group/${groupId}/praycard/new`, { replace: true });
       return;
