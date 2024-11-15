@@ -6,7 +6,7 @@ export const createQtData = async (
   userId: string,
   longLabel: string,
   chapter: number,
-  startParagragh: number,
+  startParagraph: number,
   endParagraph: number,
   fullSentence: string,
   result: Json,
@@ -18,7 +18,7 @@ export const createQtData = async (
         user_id: userId,
         long_label: longLabel,
         chapter: chapter,
-        start_paragraph: startParagragh,
+        start_paragraph: startParagraph,
         end_paragraph: endParagraph,
         full_sentence: fullSentence,
         result: result,
@@ -40,7 +40,7 @@ export const createQtData = async (
 export const fetchQtData = async (
   longLabel: string,
   chapter: number,
-  startParagragh: number,
+  startParagraph: number,
   endParagraph: number,
 ) => {
   try {
@@ -49,7 +49,7 @@ export const fetchQtData = async (
       .select()
       .eq("long_label", longLabel)
       .eq("chapter", chapter)
-      .eq("start_paragraph", startParagragh)
+      .eq("start_paragraph", startParagraph)
       .eq("end_paragraph", endParagraph)
       .order("created_at", { ascending: true });
 
