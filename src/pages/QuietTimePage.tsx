@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { parseBibleVerse } from "@/lib/utils";
+import * as Sentry from "@sentry/react";
 
 interface FormValues {
   content: string;
@@ -19,6 +20,7 @@ const QuietTimePage = () => {
   const { isSubmitting } = useFormState({ control });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [qtDataId, setQtDataId] = useState<string>("");
 
   const qtData = useBaseStore((state) => state.qtData);
   const setQtData = useBaseStore((state) => state.setQtData);
@@ -66,6 +68,7 @@ const QuietTimePage = () => {
         );
         if (qtData) {
           setQtData(JSON.parse(qtData.result as string));
+          setQtDataId(qtData.id);
         }
       } else {
         setError("입력한 성경구절이 존재하지 않습니다.");
@@ -107,6 +110,7 @@ const QuietTimePage = () => {
           typeof qtData[0].result === "string"
         ) {
           setQtData(JSON.parse(qtData[0].result));
+          setQtDataId(qtData[0].id);
         } else {
           const newQtData = await createQtData(
             user!.id,
@@ -118,6 +122,7 @@ const QuietTimePage = () => {
           );
           if (newQtData && typeof newQtData.result === "string") {
             setQtData(JSON.parse(newQtData.result));
+            setQtDataId(newQtData.id);
           }
         }
       } else {
@@ -128,6 +133,43 @@ const QuietTimePage = () => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onClickReport = async () => {
+    analyticsTrack("클릭_문의", { where: "QtPage" });
+
+    const DISCORD_REPORT_WEBHOOK = import.meta.env.VITE_DISCORD_REPORT_WEBHOOK;
+    const payload = {
+      content: null,
+      embeds: [
+        {
+          title: "카테고리",
+          description: "QT 신고",
+          color: null,
+          fields: [
+            { name: "제보 유저 ID", value: user?.id },
+            { name: "신고 QT ID", value: qtDataId },
+          ],
+        },
+      ],
+      attachments: [],
+    };
+
+    try {
+      const response = await fetch(DISCORD_REPORT_WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        window.location.href = import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL;
+      } else {
+        Sentry.captureException(response.statusText);
+      }
+    } catch (error) {
+      Sentry.captureException(error);
     }
   };
 
@@ -239,6 +281,12 @@ const QuietTimePage = () => {
       >
         나만의 QT 만들기
       </Button>
+      <a
+        className="text-center text-sm text-gray-400 underline"
+        onClick={() => onClickReport()}
+      >
+        내용에 문제가 있나요?
+      </a>
     </div>
   );
 
