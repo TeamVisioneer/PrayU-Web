@@ -135,7 +135,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
         "relative w-full h-full flex flex-col justify-start items-center gap-6 px-10 overflow-x-hidden overflow-y-scroll no-scrollbar"
       )}
     >
-      <section ref={bibleCardRef} className="absolute -z-10">
+      <section ref={bibleCardRef} className="absolute -z-10 rounded-[16px]">
         <BibleCardUI name={inputName} keywords={keywords} />
       </section>
 
@@ -184,11 +184,11 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
           {/* 뒷면 */}
           <section
             onClick={() => onClickCard()}
-            className="absolute bottom-0 w-full h-full bg-white shadow-lg rounded-lg rotate-y-180 backface-hidden flex flex-col items-center justify-center"
+            className="absolute bottom-0 w-full bg-white shadow-lg rounded-lg rotate-y-180 backface-hidden flex flex-col items-center justify-center"
           >
             <img
               src={publicUrl}
-              className="w-full"
+              className="w-full rounded-lg"
               onLoad={() => {
                 setLoading(false);
                 setIsFlipped(true);
