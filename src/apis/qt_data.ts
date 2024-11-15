@@ -6,10 +6,10 @@ export const createQtData = async (
   userId: string,
   longLabel: string,
   chapter: number,
-  startParagragh: number,
+  startParagraph: number,
   endParagraph: number,
   fullSentence: string,
-  result: Json
+  result: Json,
 ) => {
   try {
     const { data, error } = await supabase
@@ -18,7 +18,7 @@ export const createQtData = async (
         user_id: userId,
         long_label: longLabel,
         chapter: chapter,
-        start_paragragh: startParagragh,
+        start_paragraph: startParagraph,
         end_paragraph: endParagraph,
         full_sentence: fullSentence,
         result: result,
@@ -40,8 +40,8 @@ export const createQtData = async (
 export const fetchQtData = async (
   longLabel: string,
   chapter: number,
-  startParagragh: number,
-  endParagraph: number
+  startParagraph: number,
+  endParagraph: number,
 ) => {
   try {
     const { data, error } = await supabase
@@ -49,7 +49,7 @@ export const fetchQtData = async (
       .select()
       .eq("long_label", longLabel)
       .eq("chapter", chapter)
-      .eq("start_paragragh", startParagragh)
+      .eq("start_paragraph", startParagraph)
       .eq("end_paragraph", endParagraph)
       .order("created_at", { ascending: true });
 

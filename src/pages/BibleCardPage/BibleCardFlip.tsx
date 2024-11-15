@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createBibleVerse } from "@/apis/openai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +22,14 @@ interface BibleCardFlipProps {
 }
 
 const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
+  const [isApp, setIsApp] = useState(false);
+
+  useEffect(() => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isApp = userAgent.includes("prayu");
+    setIsApp(isApp);
+  }, []);
+
   const getBible = useBaseStore((state) => state.getBible);
   const createPrayCardWithParams = useBaseStore(
     (state) => state.createPrayCardWithParams
@@ -201,11 +209,13 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
       <section className="w-full flex flex-col items-center gap-2">
         {!loading && isEnded ? (
           <div className="w-full flex flex-col items-center gap-4 ">
-            <div className="flex items-center gap-1 font-bold">
-              <IoCaretUpOutline />
-              <p>꾹 눌러서 말씀카드 저장하기</p>
-              <IoCaretUpOutline />
-            </div>
+            {!isApp && (
+              <div className="flex items-center gap-1 font-bold">
+                <IoCaretUpOutline />
+                <p>꾹 눌러서 말씀카드 저장하기</p>
+                <IoCaretUpOutline />
+              </div>
+            )}
             <div className="w-full flex flex-col gap-2 items-center">
               <Button
                 variant="primary"

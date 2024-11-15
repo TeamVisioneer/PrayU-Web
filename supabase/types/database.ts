@@ -273,6 +273,7 @@ export type Database = {
       }
       pray_card: {
         Row: {
+          bible_card_url: string | null
           content: string | null
           created_at: string
           deleted_at: string | null
@@ -282,6 +283,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          bible_card_url?: string | null
           content?: string | null
           created_at?: string
           deleted_at?: string | null
@@ -291,6 +293,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          bible_card_url?: string | null
           content?: string | null
           created_at?: string
           deleted_at?: string | null
@@ -370,7 +373,7 @@ export type Database = {
           id: string
           long_label: string
           result: Json
-          start_paragragh: number
+          start_paragraph: number
           user_id: string | null
         }
         Insert: {
@@ -381,7 +384,7 @@ export type Database = {
           id?: string
           long_label?: string
           result?: Json
-          start_paragragh: number
+          start_paragraph: number
           user_id?: string | null
         }
         Update: {
@@ -392,10 +395,18 @@ export type Database = {
           id?: string
           long_label?: string
           result?: Json
-          start_paragragh?: number
+          start_paragraph?: number
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "qt_data_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
