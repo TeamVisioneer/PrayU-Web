@@ -13,6 +13,8 @@ export type Pray = Database["public"]["Tables"]["pray"]["Row"];
 
 export type Bible = Database["public"]["Tables"]["bible"]["Row"];
 
+export type QtData = Database["public"]["Tables"]["qt_data"]["Row"];
+
 export type OriginNotification =
   Database["public"]["Tables"]["notification"]["Row"];
 export type Notification = Omit<OriginNotification, "data" | "fcm_result"> & {

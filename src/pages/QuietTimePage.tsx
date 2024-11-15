@@ -13,6 +13,7 @@ interface FormValues {
 }
 
 const QuietTimePage = () => {
+  const user = useBaseStore((state) => state.user);
   const [searchParams] = useSearchParams();
   const { register, handleSubmit, control } = useForm<FormValues>();
   const { isSubmitting } = useFormState({ control });
@@ -20,20 +21,32 @@ const QuietTimePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const qtData = useBaseStore((state) => state.qtData);
-  const createOrFetchQtData = useBaseStore(
-    (state) => state.createOrFetchQtData
-  );
+  const setQtData = useBaseStore((state) => state.setQtData);
+  const createQtData = useBaseStore((state) => state.createQtData);
+  const fetchQtData = useBaseStore((state) => state.fetchQtData);
   const targetBibleList = useBaseStore((state) => state.targetBibleList);
   const fetchBibleList = useBaseStore((state) => state.fetchBibleList);
 
   const verseParams = searchParams.get("verse");
 
-  const fetchQtData = async (
+  useEffect(() => {
+    if (!user) return;
+
+    if (verseParams) {
+      const verseData = parseBibleVerse(verseParams);
+      if (!verseData) return;
+      const { label, chapter, paragraph, endParagraph } = verseData;
+      fetchQtDaily(label, chapter, paragraph, endParagraph || paragraph);
+    }
+  }, [user]);
+
+  const fetchQtByUser = async (
     longLabel: string,
     chapter: number,
     startParagraph: number,
     endParagraph: number
   ) => {
+    if (loading) return;
     try {
       setLoading(true);
       const targetBibleList = await fetchBibleList(
@@ -43,12 +56,17 @@ const QuietTimePage = () => {
         endParagraph
       );
       if (targetBibleList) {
-        await createOrFetchQtData(
+        const qtData = await createQtData(
+          user?.id || null,
           longLabel,
           chapter,
           startParagraph,
-          endParagraph
+          endParagraph,
+          targetBibleList[0].sentence
         );
+        if (qtData) {
+          setQtData(JSON.parse(qtData.result as string));
+        }
       } else {
         setError("입력한 성경구절이 존재하지 않습니다.");
       }
@@ -60,14 +78,58 @@ const QuietTimePage = () => {
     }
   };
 
-  useEffect(() => {
-    if (verseParams) {
-      const verseData = parseBibleVerse(verseParams);
-      if (!verseData) return;
-      const { label, chapter, paragraph, endParagraph } = verseData;
-      fetchQtData(label, chapter, paragraph, endParagraph || paragraph);
+  const fetchQtDaily = async (
+    longLabel: string,
+    chapter: number,
+    startParagraph: number,
+    endParagraph: number
+  ) => {
+    if (loading) return;
+    try {
+      setLoading(true);
+      const targetBibleList = await fetchBibleList(
+        longLabel,
+        chapter,
+        startParagraph,
+        endParagraph
+      );
+      if (targetBibleList && targetBibleList.length > 0) {
+        const qtData = await fetchQtData(
+          longLabel,
+          chapter,
+          startParagraph,
+          endParagraph
+        );
+
+        if (
+          qtData &&
+          qtData.length > 0 &&
+          typeof qtData[0].result === "string"
+        ) {
+          setQtData(JSON.parse(qtData[0].result));
+        } else {
+          const newQtData = await createQtData(
+            user!.id,
+            longLabel,
+            chapter,
+            startParagraph,
+            endParagraph,
+            targetBibleList[0].sentence
+          );
+          if (newQtData && typeof newQtData.result === "string") {
+            setQtData(JSON.parse(newQtData.result));
+          }
+        }
+      } else {
+        setError("입력한 성경구절이 존재하지 않습니다.");
+      }
+    } catch (err) {
+      setError("QT 데이터를 가져오는 중 오류가 발생했습니다.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  }, [verseParams]);
+  };
 
   const onSubmit = async (data: FormValues) => {
     analyticsTrack("클릭_QT_생성", {});
@@ -78,7 +140,7 @@ const QuietTimePage = () => {
       return;
     }
     const { label, chapter, paragraph, endParagraph } = verseData;
-    await fetchQtData(label, chapter, paragraph, endParagraph || paragraph);
+    await fetchQtByUser(label, chapter, paragraph, endParagraph || paragraph);
   };
 
   const inputVerseForm = () => (
@@ -170,7 +232,10 @@ const QuietTimePage = () => {
       <Button
         className=""
         variant="primary"
-        onClick={() => window.location.reload()}
+        onClick={() => {
+          window.history.replaceState(null, "", window.location.pathname);
+          window.location.reload();
+        }}
       >
         나만의 QT 만들기
       </Button>
@@ -191,7 +256,7 @@ const QuietTimePage = () => {
             <AiOutlineLoading className="animate-spin mr-2" size={30} />
             <p className="text-lg font-bold">QT를 생성 중이에요...</p>
           </div>
-        ) : !qtData ? (
+        ) : !qtData && user ? (
           inputVerseForm()
         ) : (
           qtContent()
