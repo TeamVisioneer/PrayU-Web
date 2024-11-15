@@ -26,10 +26,10 @@ const TodayPrayCompletedItem = () => {
   const [showButton, setShowButton] = useState(false);
 
   const onClickQtBtn = () => {
+    analyticsTrack("클릭_QT_페이지", { where: "TodayPrayCompletedItemP" });
     window.location.href = `/qt?verse=${
       bibleVerses[contentNumber as keyof typeof bibleVerses]
     }`;
-    analyticsTrack("클릭_QT_페이지", { where: "TodayPrayCompletedItemP" });
   };
 
   useEffect(() => {
