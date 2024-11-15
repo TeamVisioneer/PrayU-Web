@@ -184,11 +184,11 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
           {/* 뒷면 */}
           <section
             onClick={() => onClickCard()}
-            className="absolute bottom-0 w-full bg-white shadow-lg rounded-lg rotate-y-180 backface-hidden flex flex-col items-center justify-center"
+            className="absolute bottom-0 w-full  shadow-lg rounded-[16px] rotate-y-180 backface-hidden flex flex-col items-center justify-center"
           >
             <img
               src={publicUrl}
-              className="w-full rounded-lg"
+              className="w-full rounded-[16px]"
               onLoad={() => {
                 setLoading(false);
                 setIsFlipped(true);
