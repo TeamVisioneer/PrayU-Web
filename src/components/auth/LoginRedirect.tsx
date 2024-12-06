@@ -27,6 +27,9 @@ const LoginRedirect = () => {
   const fcmToken = localStorage.getItem("fcmToken");
 
   useEffect(() => {
+    if (window.flutter_inappwebview?.callHandler) {
+      window.flutter_inappwebview.callHandler("onLogin", currentUserId);
+    }
     getProfile(currentUserId);
     if (from == "MyPrayCard") setIsOpenMyMemberDrawer(true);
   }, [currentUserId, getProfile, from, setIsOpenMyMemberDrawer]);
