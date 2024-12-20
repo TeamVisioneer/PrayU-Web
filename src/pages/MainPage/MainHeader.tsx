@@ -1,3 +1,4 @@
+import { analyticsTrack } from "@/analytics/analytics";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -7,6 +8,7 @@ interface MainHeaderProps {
 
 const MainHeader: React.FC<MainHeaderProps> = ({ className }) => {
   const onClickAppInstall = () => {
+    analyticsTrack("클릭_앱설치", { whrer: "MainHeader" });
     if (navigator.userAgent.match(/Android/i)) {
       window.location.href =
         "https://play.google.com/store/apps/details?id=com.team.visioneer.prayu";
