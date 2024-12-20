@@ -44,7 +44,7 @@ const MainPage: React.FC = () => {
       <section className="w-full flex flex-col items-center ">
         <div className="flex flex-col gap-8  items-center justify-center ">
           <div className="h-[80px] w-full flex flex-col items-center object-cover">
-            <img className="h-full" src="/images/PrayULogo.png" />
+            <img className="h-full" src="/images/PrayULogoV3.png" />
           </div>
           <div className="text-2xl font-bold">
             <h1>기도제목을 나누고,</h1>
