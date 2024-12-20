@@ -119,6 +119,8 @@ body {
   padding: 0;
   overflow: hidden;
   height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .perspective-1000 {

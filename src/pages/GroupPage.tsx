@@ -33,7 +33,6 @@ const GroupPage: React.FC = () => {
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
-  const memberCount = useBaseStore((state) => state.memberCount);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
@@ -55,10 +54,6 @@ const GroupPage: React.FC = () => {
 
   const unionWorshipGroupId = String(
     import.meta.env.VITE_UNION_WORSHIP_GROUP_ID
-  );
-
-  const setIsOpenWeekUpdateDialog = useBaseStore(
-    (state) => state.setIsOpenWeekUpdateDialog
   );
 
   useEffect(() => {
@@ -122,16 +117,6 @@ const GroupPage: React.FC = () => {
       setIsGroupLeader(true);
     }
   }, [targetGroup, currentUserId, setIsGroupLeader]);
-
-  useEffect(() => {
-    if (!memberCount) return;
-    if (memberCount <= 1) return;
-    const existingFlag = localStorage.getItem("hasShownWeekUpdateDialog");
-    if (!existingFlag) {
-      localStorage.setItem("hasShownWeekUpdateDialog", "true");
-      setIsOpenWeekUpdateDialog(true);
-    }
-  }, [setIsOpenWeekUpdateDialog, memberCount]);
 
   if (!targetGroup || !groupList || !myMember || isPrayToday == null) {
     return (
