@@ -205,7 +205,7 @@ export const dataURLToFile = (dataURL: string, fileName: string): File => {
 
 export const parseBibleVerse = (input: string) => {
   const match = input.match(
-    /([가-힣]+)\s*(\d+)(?:장|편|:)?\s*(\d+)(?:절)?(?:\s*[-~]\s*(\d+)(?:절)?)?/,
+    /([가-힣0-9]+)\s*(\d+)(?:장|편|:)?\s*(\d+)(?:절)?(?:\s*[-~]\s*(\d+)(?:절)?)?/,
   );
 
   if (match) {
