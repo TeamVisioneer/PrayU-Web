@@ -54,6 +54,9 @@ const PrayCardCreatePage: React.FC = () => {
     (state) => state.setIsDisabledSkipPrayCardBtn
   );
   const createNotification = useBaseStore((state) => state.createNotification);
+  const createOnesignalPush = useBaseStore(
+    (state) => state.createOnesignalPush
+  );
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
@@ -107,32 +110,41 @@ const PrayCardCreatePage: React.FC = () => {
     return upsertedMember;
   };
   const sendNotification = async (member: Member) => {
-    if (member.created_at === member.updated_at) {
-      await createNotification({
-        groupId: targetGroup.id,
-        userId: [targetGroup.profiles.id],
-        senderId: member.user_id!,
-        title: "PrayU 입장 알림",
-        body: `${user?.user_metadata.name}님이 기도그룹에 참여했어요!`,
-        type: NotificationType.SNS,
-      });
-      await KakaoTokenRepo.init();
-      await KakaoController.sendDirectMessage(
-        MemberJoinMessage(user?.user_metadata.name, targetGroup.id),
-        targetGroup.profiles.kakao_id
-      );
-    } else {
-      await createNotification({
-        groupId: targetGroup.id,
-        userId: memberList
-          .map((member) => member.user_id!)
-          .filter((userId) => userId !== member.user_id!),
-        senderId: member.user_id!,
-        title: "PrayU 기도카드 알림",
-        body: `${targetGroup.name}에 새로운 기도카드가 등록되었어요!`,
-        type: NotificationType.SNS,
-      });
-    }
+    // await KakaoTokenRepo.init();
+    // await KakaoController.sendDirectMessage(
+    //   MemberJoinMessage(user?.user_metadata.name, targetGroup.id),
+    //   targetGroup.profiles.kakao_id
+    // );
+
+    const subtitle =
+      member.created_at === member.updated_at ? "입장 알림" : "기도카드 알림";
+    const message =
+      member.created_at === member.updated_at
+        ? `${user?.user_metadata.name}님이 기도그룹에 참여했어요!`
+        : `${targetGroup.name}에 새로운 기도카드가 등록되었어요!`;
+
+    await createOnesignalPush({
+      title: "PrayU",
+      subtitle: subtitle,
+      message: message,
+      data: {
+        url: `${import.meta.env.VITE_BASE_URL}/group/${targetGroup.id}`,
+      },
+      userIds: memberList
+        .map((member) => member.user_id!)
+        .filter((userId) => userId !== member.user_id!),
+    });
+
+    await createNotification({
+      groupId: targetGroup.id,
+      userId: memberList
+        .map((member) => member.user_id!)
+        .filter((userId) => userId !== member.user_id!),
+      senderId: member.user_id!,
+      title: subtitle,
+      body: message,
+      type: NotificationType.SNS,
+    });
   };
 
   const onClickSkipPrayCard = async (
