@@ -24,6 +24,9 @@ const NotificationList = () => {
   const fetchNotificationCount = useBaseStore(
     (state) => state.fetchNotificationCount
   );
+  const checkAllNotification = useBaseStore(
+    (state) => state.checkAllNotification
+  );
 
   const userNotificationView = useBaseStore(
     (state) => state.userNotificationView
@@ -34,6 +37,14 @@ const NotificationList = () => {
   const [offset, setOffset] = useState(10);
 
   if (!user || !targetGroup) return null;
+
+  const onClickCheckAllNotification = async () => {
+    analyticsTrack("클릭_알림_모두읽음", {});
+    await checkAllNotification(user.id, targetGroup.id);
+    await fetchNotificationCount(user.id, targetGroup.id, true);
+    await fetchUserNotificationListByGroupId(user.id, targetGroup.id, true);
+    await fetchUserNotificationListByGroupId(user.id, targetGroup.id);
+  };
 
   const onClickNotificationTab = async (unreadOnly: boolean) => {
     const trackEvent = unreadOnly ? "클릭_알림_읽지않음" : "클릭_알림_전체";
@@ -76,7 +87,16 @@ const NotificationList = () => {
             그룹 알림
           </div>
           {userNotificationUnreadTotal > 0 && (
-            <Badge variant="destructive">{userNotificationUnreadTotal}</Badge>
+            <div className="flex item-center gap-2">
+              <Badge
+                className="cursor-pointer"
+                variant="secondary"
+                onClick={() => onClickCheckAllNotification()}
+              >
+                모두 읽음
+              </Badge>
+              <Badge variant="destructive">{userNotificationUnreadTotal}</Badge>
+            </div>
           )}
         </CardTitle>
       </CardHeader>

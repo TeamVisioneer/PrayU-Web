@@ -131,14 +131,14 @@ const SettingDialog = () => {
         <DialogHeader>
           <DialogTitle className="text-xl text-left">설정</DialogTitle>
           <DialogDescription></DialogDescription>
-          <div className="w-ful flex flex-col gap-6 items-center">
+          <div className="w-full flex flex-col gap-6 items-center">
             <div className="w-full flex flex-col items-center gap-4 ">
-              <div className="w-full h-14 flex items-center px-4 py-2 bg-white rounded-xl">
+              <div className="w-full h-14 flex justify-between items-center px-4 py-2 bg-white rounded-xl">
                 <span className="text-md font-semibold">이름</span>
-                <div className="flex flex-grow items-center gap-2">
+                <div className="flex items-center gap-2">
                   <Input
                     ref={inputRef}
-                    className="p-0 text-md border-none text-right"
+                    className="w-20 p-0 text-md border-none text-right"
                     type="text"
                     value={name}
                     onClick={() => onClickUpdateName()}
@@ -279,8 +279,10 @@ const SettingDialog = () => {
                       onClick={() => analyticsTrack("클릭_프로필_계정관리", {})}
                     >
                       <div className="w-full h-10 flex flex-grow justify-between items-center">
-                        <span className="font-semibold">계정 관리</span>
-                        <span className="text-sm p-2 max-w-56 whitespace-nowrap overflow-hidden text-ellipsis">
+                        <span className="font-semibold flex-shrink-0">
+                          계정 관리
+                        </span>
+                        <span className="flex-shrink text-sm p-2 max-w-56 whitespace-nowrap overflow-hidden text-ellipsis">
                           {user!.user_metadata.email}
                         </span>
                       </div>
