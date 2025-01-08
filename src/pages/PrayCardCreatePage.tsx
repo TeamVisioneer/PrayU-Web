@@ -110,11 +110,15 @@ const PrayCardCreatePage: React.FC = () => {
     return upsertedMember;
   };
   const sendNotification = async (member: Member) => {
-    // await KakaoTokenRepo.init();
-    // await KakaoController.sendDirectMessage(
-    //   MemberJoinMessage(user?.user_metadata.name, targetGroup.id),
-    //   targetGroup.profiles.kakao_id
-    // );
+    // TODO: 카카오 메세지 재기획 이후 진행
+    const kakaoMessageEnabled = false;
+    if (kakaoMessageEnabled) {
+      await KakaoTokenRepo.init();
+      await KakaoController.sendDirectMessage(
+        MemberJoinMessage(user?.user_metadata.name, targetGroup.id),
+        targetGroup.profiles.kakao_id
+      );
+    }
 
     const subtitle =
       member.created_at === member.updated_at ? "입장 알림" : "기도카드 알림";
