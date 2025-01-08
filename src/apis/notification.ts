@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/react";
 import { supabase } from "../../supabase/client";
 import { Notification } from "../../supabase/types/tables";
 import { NotificationType } from "@/components/notification/NotificationType";
+import { getISOToday } from "@/lib/utils";
 
 export const fetchUserNotificationListByGroupId = async (
   userId: string,
@@ -98,6 +99,29 @@ export const createNotification = async (
   } catch (error) {
     Sentry.captureException(error);
     return null;
+  }
+};
+
+export const checkAllNotification = async (
+  userId: string,
+  groupId: string,
+): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from("notification")
+      .update({ checked_at: getISOToday() })
+      .eq("user_id", userId)
+      .eq("group_id", groupId)
+      .is("deleted_at", null);
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    Sentry.captureException(error);
+    return false;
   }
 };
 

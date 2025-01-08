@@ -37,6 +37,9 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     (state) => state.setIsPrayTodayForMember
   );
   const createNotification = useBaseStore((state) => state.createNotification);
+  const createOnesignalPush = useBaseStore(
+    (state) => state.createOnesignalPush
+  );
 
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard.id]);
 
@@ -51,6 +54,15 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
       if (!newPray) return null;
 
       if (newPray.user_id !== prayCard.user_id) {
+        await createOnesignalPush({
+          title: "PrayU",
+          subtitle: "기도 알림",
+          message: "당신을 위해 기도해 준 친구가 있어요!",
+          data: {
+            url: `${import.meta.env.VITE_BASE_URL}/group/${targetGroup!.id}`,
+          },
+          userIds: prayCard.user_id ? [prayCard.user_id] : [],
+        });
         await createNotification({
           userId: prayCard.user_id ? [prayCard.user_id] : [],
           senderId: currentUserId,
