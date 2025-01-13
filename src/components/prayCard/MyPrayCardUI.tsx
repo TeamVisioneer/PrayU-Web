@@ -1,5 +1,4 @@
 import useBaseStore from "@/stores/baseStore";
-import { MemberWithProfiles } from "supabase/types/tables";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { getDateDistance } from "@toss/date";
 import {
@@ -10,62 +9,23 @@ import {
 } from "@/lib/utils";
 import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
-import { useRef } from "react";
-import { Textarea } from "../ui/textarea";
 import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
 import ExpiredPrayCardUI from "./ExpiredPrayCardUI";
-import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
+import { useNavigate } from "react-router-dom";
 
-interface PrayCardProps {
-  member: MemberWithProfiles;
-}
-
-const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+const MyPrayCardUI: React.FC = () => {
+  const navigate = useNavigate();
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
-
-  const inputPrayCardContent = useBaseStore(
-    (state) => state.inputPrayCardContent
-  );
-  const setPrayCardContent = useBaseStore((state) => state.setPrayCardContent);
-
-  const isEditingPrayCard = useBaseStore((state) => state.isEditingPrayCard);
-  const setIsEditingPrayCard = useBaseStore(
-    (state) => state.setIsEditingPrayCard
-  );
-
-  const updateMember = useBaseStore((state) => state.updateMember);
-  const updatePrayCardContent = useBaseStore(
-    (state) => state.updatePrayCardContent
-  );
   const setIsOpenMyPrayDrawer = useBaseStore(
     (state) => state.setIsOpenMyPrayDrawer
   );
+  const inputPrayCardContent = useBaseStore(
+    (state) => state.inputPrayCardContent
+  );
 
-  const onClickPrayerList = () => {
-    setIsOpenMyPrayDrawer(true);
-    analyticsTrack("클릭_기도카드_반응결과", { where: "MyPrayCard" });
-  };
-
-  const handleEditClick = () => {
-    if (textareaRef.current) textareaRef.current.focus();
-    setIsEditingPrayCard(true);
-    analyticsTrack("클릭_기도카드_수정", {});
-  };
-
-  const handleSaveClick = (
-    prayCardId: string,
-    content: string,
-    memberId: string
-  ) => {
-    updatePrayCardContent(prayCardId, content.trim());
-    updateMember(memberId, content);
-    setIsEditingPrayCard(false);
-    analyticsTrack("클릭_기도카드_저장", {});
-  };
-
-  if (!userPrayCardList) {
+  if (!userPrayCardList || !targetGroup) {
     return (
       <div className="flex justify-center items-center min-h-80vh max-h-80vh px-10 pt-[68px]">
         <Skeleton className="w-full h-[300px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
@@ -89,40 +49,42 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
     new Date(getISOTodayDate())
   );
 
+  const onClickPrayerList = () => {
+    setIsOpenMyPrayDrawer(true);
+    analyticsTrack("클릭_기도카드_반응결과", { where: "MyPrayCard" });
+  };
+
+  const handleEditClick = () => {
+    analyticsTrack("클릭_기도카드_수정", {});
+    navigate(`/group/${targetGroup.id}/praycard/${prayCard.id}/edit`);
+  };
+
   const MyPrayCardBody = (
     <div className="flex flex-col flex-grow">
-      <div
-        className={`flex flex-col bg-white rounded-2xl shadow-prayCard ${
-          isEditingPrayCard ? "h-[300px]" : "flex-grow"
-        }`}
-      >
-        {!isEditingPrayCard && (
-          <div className="bg-gradient-to-r from-start via-middle via-52% to-end flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
-            <div className="flex items-center gap-2 w-full">
-              <div className="flex gap-2 items-center">
-                <p className="text-xl text-white">
-                  기도 {dateDistance.days + 1}일차
-                </p>
-              </div>
+      <div className="flex flex-col bg-white rounded-2xl shadow-prayCard flex-grow">
+        <div className="bg-gradient-to-r from-start via-middle via-52% to-end flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+          <div className="flex items-center gap-2 w-full">
+            <div className="flex gap-2 items-center">
+              <p className="text-xl text-white">
+                기도 {dateDistance.days + 1}일차
+              </p>
             </div>
-            <p className="text-sm text-white w-full text-left">
-              시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
-              {createdDateYMD.day}
-            </p>
           </div>
-        )}
+          <p className="text-sm text-white w-full text-left">
+            시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
+            {createdDateYMD.day}
+          </p>
+        </div>
         <div className="flex flex-col flex-grow relative">
-          <Textarea
-            className="flex-grow w-full p-4  rounded-2xl overflow-y-auto no-scrollbar border-none focus:outline-gray-200 text-black"
-            ref={textareaRef}
-            value={inputPrayCardContent}
-            placeholder={`기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
-            onChange={(e) => setPrayCardContent(e.target.value)}
-            onFocus={() => setIsEditingPrayCard(true)}
-            onBlur={() =>
-              handleSaveClick(prayCard.id, inputPrayCardContent, member.id)
-            }
-          />
+          <p
+            onClick={() => handleEditClick()}
+            className={`flex-grow w-full p-4 rounded-2xl overflow-y-auto no-scrollbar border-none focus:outline-gray-200 whitespace-pre-wrap ${
+              inputPrayCardContent ? "text-black" : "text-gray-400"
+            }`}
+          >
+            {inputPrayCardContent ||
+              `기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
+          </p>
         </div>
       </div>
     </div>
@@ -131,16 +93,10 @@ const MyPrayCardUI: React.FC<PrayCardProps> = ({ member }) => {
   return (
     <div className="flex flex-col px-10 gap-2 h-70vh">
       <div className="flex justify-end px-2">
-        {!isEditingPrayCard ? (
-          <MyPrayCardMenuBtn
-            handleEditClick={handleEditClick}
-            prayCard={prayCard}
-          />
-        ) : (
-          <Badge className="absolute top-3 right-3 w-12 px-0 flex items-center justify-center">
-            완료
-          </Badge>
-        )}
+        <MyPrayCardMenuBtn
+          handleEditClick={handleEditClick}
+          prayCard={prayCard}
+        />
       </div>
       {MyPrayCardBody}
       <div

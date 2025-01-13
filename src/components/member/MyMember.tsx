@@ -120,7 +120,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <MyPrayCardUI member={myMember} />
+        <MyPrayCardUI />
       </DrawerContent>
     </Drawer>
   );
