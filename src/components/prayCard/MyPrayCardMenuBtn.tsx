@@ -141,11 +141,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
       <DropdownMenuContent>
         <DropdownMenuItem
           className="flex justify-between"
-          onClick={() => {
-            setTimeout(() => {
-              handleEditClick();
-            }, 180);
-          }}
+          onClick={() => handleEditClick()}
         >
           <FiEdit />
           수정하기

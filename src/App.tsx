@@ -33,6 +33,7 @@ import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
 import QuietTimePage from "./pages/QuietTimePage";
 import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage";
+import PrayCardEditPage from "./components/prayCard/PrayCardEditPage";
 
 const App = () => {
   useEffect(() => {
@@ -146,6 +147,10 @@ const App = () => {
               />
               <Route path="/login/email" element={<EmailLoginPage />} />
               <Route path="/story" element={<StoryPage />} />
+              <Route
+                path="/group/:groupId/praycard/:praycardId/edit"
+                element={<PrayCardEditPage />}
+              />
             </Routes>
           </AuthProvider>
         </BrowserRouter>
@@ -161,6 +166,10 @@ const AnalyticsTracker = () => {
   const from = location.state?.from?.pathname;
   const matchPraycardNew = matchPath(
     "/group/:groupId/praycard/new",
+    location.pathname
+  );
+  const matchPraycardEdit = matchPath(
+    "/group/:groupId/praycard/:praycardId/edit",
     location.pathname
   );
   const matchGroup = matchPath("/group/:groupId", location.pathname);
@@ -251,9 +260,21 @@ const AnalyticsTracker = () => {
             groupId: matchPraycardNew.params.groupId,
             where: from,
           });
+        } else if (matchPraycardEdit) {
+          analyticsTrack("페이지_기도카드_수정", {
+            title: "PrayCard Edit Page with Group ID",
+            groupId: matchPraycardEdit.params.groupId,
+            where: from,
+          });
         }
     }
-  }, [matchPraycardNew, matchGroup, location.pathname, from]);
+  }, [
+    matchPraycardNew,
+    matchPraycardEdit,
+    matchGroup,
+    location.pathname,
+    from,
+  ]);
 
   return null;
 };
