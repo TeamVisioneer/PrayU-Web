@@ -33,6 +33,7 @@ const GroupPage: React.FC = () => {
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
   const memberLoading = useBaseStore((state) => state.memberLoading);
+  const memberList = useBaseStore((state) => state.memberList);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
@@ -127,12 +128,25 @@ const GroupPage: React.FC = () => {
     );
   }
 
+  const AllMemberExpired = memberList
+    ?.filter(
+      (member) =>
+        member.user_id &&
+        member.user_id !== currentUserId &&
+        !myMember.profiles.blocking_users.includes(member.user_id)
+    )
+    .every((member) => !isCurrentWeek(member.updated_at));
+
   return (
     <div className="flex flex-col h-full gap-5">
       <GroupHeader groupList={groupList} targetGroup={targetGroup} />
       <div className="flex flex-col flex-grow gap-4">
         <MyMember myMember={myMember} />
-        {!isPrayToday ? <TodayPrayStartCard /> : <OtherMemberList />}
+        {isPrayToday || AllMemberExpired ? (
+          <OtherMemberList />
+        ) : (
+          <TodayPrayStartCard />
+        )}
       </div>
 
       <TodayPrayCardListDrawer />

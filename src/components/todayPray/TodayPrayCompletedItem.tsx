@@ -62,8 +62,8 @@ const TodayPrayCompletedItem = () => {
   }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi, isPrayToday]);
 
   return (
-    <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh pb-10">
-      <div className="h-[280px] w-full flex flex-col items-center">
+    <div className="relative flex flex-col gap-4 justify-center items-center min-h-[80vh] max-h-[80vh] ">
+      <div className="w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 aspect-square flex flex-col items-center">
         <img
           className={`h-full rounded-2xl transition-opacity duration-1000 ease-in ${
             showImage ? "opacity-100" : "opacity-0"
@@ -73,21 +73,21 @@ const TodayPrayCompletedItem = () => {
         />
       </div>
       <div
-        className={`flex flex-col justify-center items-center gap-1 transition-opacity duration-1000 ease-in-out ${
+        className={`flex flex-col justify-center items-center px-4 transition-opacity duration-1000 ease-in-out ${
           showTitleText ? "opacity-100" : "opacity-0"
         }`}
       >
-        <h1 className="text-xl">
+        <h1 className="text-lg md:text-xl lg:text-2xl">
           {today.year}.{today.month}.{today.day} 오늘의 말씀
         </h1>
       </div>
       <section
-        className={`flex flex-col items-center gap-4 transition-opacity duration-1000 ease-in-out ${
+        className={`flex flex-col items-center gap-3 w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 max-w-md transition-opacity duration-1000 ease-in-out ${
           showButton ? "opacity-100" : "opacity-0"
         }`}
       >
         <KakaoShareButton
-          className={`w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+          className={`w-full sm:w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
             showButton ? "opacity-100" : "opacity-0"
           }`}
           buttonText="말씀카드 공유하기"

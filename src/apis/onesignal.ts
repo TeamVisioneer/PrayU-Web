@@ -32,9 +32,8 @@ export const createOnesignalPush = async (
       },
     );
     const { data, error } = await response.json();
-    console.log(data, error);
     if (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message);
       return null;
     }
     return data as OnesignalPushResponse;
