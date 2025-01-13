@@ -42,8 +42,13 @@ const NotificationList = () => {
     analyticsTrack("클릭_알림_모두읽음", {});
     await checkAllNotification(user.id, targetGroup.id);
     await fetchNotificationCount(user.id, targetGroup.id, true);
-    await fetchUserNotificationListByGroupId(user.id, targetGroup.id, true);
-    await fetchUserNotificationListByGroupId(user.id, targetGroup.id);
+    setUserNotificationView([]);
+    setOffset(10);
+    const newNotificationList = await fetchUserNotificationListByGroupId(
+      user.id,
+      targetGroup.id
+    );
+    setUserNotificationView(newNotificationList);
   };
 
   const onClickNotificationTab = async (unreadOnly: boolean) => {

@@ -45,7 +45,7 @@ const PrayCardCreatePage: React.FC = () => {
     (state) => state.isDisabledPrayCardCreateBtn
   );
   const setIsDisabledPrayCardCreateBtn = useBaseStore(
-    (state) => state.setIsDisabledGroupCreateBtn
+    (state) => state.setIsDisabledPrayCardCreateBtn
   );
   const IsDisabledSkipPrayCardBtn = useBaseStore(
     (state) => state.isDisabledSkipPrayCardBtn
@@ -119,6 +119,7 @@ const PrayCardCreatePage: React.FC = () => {
         targetGroup.profiles.kakao_id
       );
     }
+    // TODO END
 
     const subtitle =
       member.created_at === member.updated_at ? "입장 알림" : "기도카드 알림";
