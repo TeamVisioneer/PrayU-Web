@@ -7,6 +7,7 @@ import { useToast } from "../components/ui/use-toast";
 import { analyticsTrack } from "@/analytics/analytics";
 import { IoChevronBack } from "react-icons/io5";
 import GroupMenuBtn from "@/components/group/GroupMenuBtn";
+import PrayUSquareImage from "@/assets/prayu_square.png";
 
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -68,8 +69,11 @@ const GroupCreatePage: React.FC = () => {
         <span className="text-xl font-bold">그룹 만들기</span>
         <GroupMenuBtn userGroupList={groupList} />
       </div>
-      <div className="h-[300px] w-full flex justify-center">
-        <img className="h-full object-cover" src="/images/intro_square.png" />
+      <div className="w-full aspect-square flex justify-center">
+        <img
+          className="h-full object-cover rounded-lg"
+          src={PrayUSquareImage}
+        />
       </div>
       <div className="flex flex-col items-center gap-4 w-full ">
         <Input
@@ -92,7 +96,7 @@ const GroupCreatePage: React.FC = () => {
             기존 그룹에 참여하고 싶은 경우
           </p>
           <p className="text-xs text-gray-500">
-            그룹장에게 초대 링크를 요청해 보아요
+            그룹장에게 초대 링크를 요청해 주세요
           </p>
         </div>
       </div>
