@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
-import { ChevronLeft } from "lucide-react";
+import { IoChevronBack } from "react-icons/io5";
 
 const PrayCardEditPage = () => {
   const { groupId, praycardId } = useParams<{
@@ -40,7 +40,7 @@ const PrayCardEditPage = () => {
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
       <header className="flex items-center p-4 border-b relative">
         <button onClick={() => navigate(-1)} className="absolute left-4">
-          <ChevronLeft className="w-6 h-6" />
+          <IoChevronBack size={20} />
         </button>
         <h1 className="text-lg font-bold w-full text-center">기도카드 수정</h1>
       </header>
