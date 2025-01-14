@@ -74,7 +74,7 @@ import {
   createNotification,
   createNotificationParams,
   fetchNotificationCount,
-  fetchUserNotificationListByGroupId,
+  fetchUserNotificationList,
   updateNotification,
   updateNotificationParams,
 } from "@/apis/notification";
@@ -305,19 +305,17 @@ export interface BaseStore {
   userNotificationList: Notification[] | null;
   userNotificationTotal: number;
   userNotificationUnreadTotal: number;
-  fetchUserNotificationListByGroupId: (
+  fetchUserNotificationList: (
     userId: string,
-    groupId: string,
     unreadOnly?: boolean,
     limit?: number,
     offset?: number,
   ) => Promise<Notification[]>;
   fetchNotificationCount: (
     userId: string,
-    groupId: string,
     unreadOnly?: boolean,
   ) => Promise<number>;
-  checkAllNotification: (userId: string, groupId: string) => Promise<void>;
+  checkAllNotification: (userId: string) => Promise<void>;
   createNotification: (
     params: createNotificationParams,
   ) => Promise<Notification | null>;
@@ -326,12 +324,7 @@ export interface BaseStore {
     params: updateNotificationParams,
   ) => Promise<Notification | null>;
   setUserNotificationView: (notificationView: Notification[]) => void;
-  setUserNotificationList: (notificationList: Notification[] | null) => void;
   setUserNotificationUnreadTotal: (total: number) => void;
-
-  // notification popover
-  isOpenNotificationPopover: boolean;
-  setIsOpenNotificationPopover: (isOpenNotificationPopover: boolean) => void;
 
   // bible
   targetBible: Bible | null;
@@ -1070,16 +1063,14 @@ const useBaseStore = create<BaseStore>()(
     userNotificationView: [],
     userNotificationTotal: 0,
     userNotificationUnreadTotal: 0,
-    fetchUserNotificationListByGroupId: async (
+    fetchUserNotificationList: async (
       userId: string,
-      groupId: string,
       unreadOnly?: boolean,
       limit?: number,
       offset?: number,
     ) => {
-      const notificationList = await fetchUserNotificationListByGroupId(
+      const notificationList = await fetchUserNotificationList(
         userId,
-        groupId,
         unreadOnly,
         limit,
         offset,
@@ -1091,18 +1082,17 @@ const useBaseStore = create<BaseStore>()(
     },
     fetchNotificationCount: async (
       userId: string,
-      groupId: string,
       unreadOnly: boolean = false,
     ) => {
-      const count = await fetchNotificationCount(userId, groupId, unreadOnly);
+      const count = await fetchNotificationCount(userId, unreadOnly);
       set((state) => {
         if (unreadOnly) state.userNotificationUnreadTotal = count;
         else state.userNotificationTotal = count;
       });
       return count;
     },
-    checkAllNotification: async (userId: string, groupId: string) => {
-      await checkAllNotification(userId, groupId);
+    checkAllNotification: async (userId: string) => {
+      await checkAllNotification(userId);
     },
     createNotification: async (params: createNotificationParams) => {
       const notification = await createNotification(params);
@@ -1120,22 +1110,9 @@ const useBaseStore = create<BaseStore>()(
         state.userNotificationView = notificationView;
       });
     },
-    setUserNotificationList: (notificationList: Notification[] | null) => {
-      set((state) => {
-        state.userNotificationList = notificationList;
-      });
-    },
     setUserNotificationUnreadTotal: (unread: number) => {
       set((state) => {
         state.userNotificationUnreadTotal = unread;
-      });
-    },
-
-    // notification popover
-    isOpenNotificationPopover: false,
-    setIsOpenNotificationPopover: (isOpenNotificationPopover: boolean) => {
-      set((state) => {
-        state.isOpenNotificationPopover = isOpenNotificationPopover;
       });
     },
 
