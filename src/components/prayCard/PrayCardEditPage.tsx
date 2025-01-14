@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
+import { ChevronLeft } from "lucide-react";
 
 const PrayCardEditPage = () => {
   const { groupId, praycardId } = useParams<{
@@ -37,14 +38,11 @@ const PrayCardEditPage = () => {
 
   return (
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
-      <header className="flex justify-between items-center p-4 border-b">
-        <Button variant="ghost" onClick={() => navigate(-1)}>
-          취소
-        </Button>
-        <h1 className="text-lg font-bold">기도카드 수정</h1>
-        <Button variant="primary" onClick={() => handleSave()}>
-          저장
-        </Button>
+      <header className="flex items-center p-4 border-b relative">
+        <button onClick={() => navigate(-1)} className="absolute left-4">
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <h1 className="text-lg font-bold w-full text-center">기도카드 수정</h1>
       </header>
 
       <main className="flex-1 p-4">
@@ -56,6 +54,23 @@ const PrayCardEditPage = () => {
           autoFocus
         />
       </main>
+
+      <footer className="grid grid-cols-2 gap-4 p-4 border-t">
+        <Button
+          variant="outline"
+          onClick={() => navigate(-1)}
+          className="w-full"
+        >
+          취소
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => handleSave()}
+          className="w-full"
+        >
+          저장
+        </Button>
+      </footer>
     </div>
   );
 };
