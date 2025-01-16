@@ -34,6 +34,7 @@ import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
 import QuietTimePage from "./pages/QuietTimePage";
 import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage";
 import PrayCardEditPage from "./components/prayCard/PrayCardEditPage";
+import AppInit from "./AppInit/AppInit";
 
 const App = () => {
   useEffect(() => {
@@ -54,6 +55,7 @@ const App = () => {
           window.location.pathname === "/story" ? "w-full" : "max-w-[480px] p-5"
         } h-100vh overflow-x-hidden no-scrollbar`}
       >
+        <AppInit />
         <MetaPixelInit />
         <KakaoInit />
         <BrowserRouter>

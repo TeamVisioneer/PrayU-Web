@@ -88,6 +88,14 @@ import {
 } from "@/apis/onesignal";
 
 export interface BaseStore {
+  // app
+  isApp: boolean;
+  isIOS: boolean;
+  isAndroid: boolean;
+  setIsApp: (isApp: boolean) => void;
+  setIsIOS: (isIOS: boolean) => void;
+  setIsAndroid: (isAndroid: boolean) => void;
+
   // user
   session: Session | null;
   user: User | null;
@@ -438,6 +446,23 @@ export interface BaseStore {
 
 const useBaseStore = create<BaseStore>()(
   immer((set) => ({
+    // app
+    isApp: false,
+    isIOS: false,
+    isAndroid: false,
+    setIsApp: (isApp: boolean) =>
+      set((state) => {
+        state.isApp = isApp;
+      }),
+    setIsIOS: (isIOS: boolean) =>
+      set((state) => {
+        state.isIOS = isIOS;
+      }),
+    setIsAndroid: (isAndroid: boolean) =>
+      set((state) => {
+        state.isAndroid = isAndroid;
+      }),
+
     // user
     session: null,
     user: null,
