@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { createBibleVerse } from "@/apis/openai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,14 +22,7 @@ interface BibleCardFlipProps {
 }
 
 const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
-  const [isApp, setIsApp] = useState(false);
-
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isApp = userAgent.includes("prayu");
-    setIsApp(isApp);
-  }, []);
-
+  const isApp = useBaseStore((state) => state.isApp);
   const getBible = useBaseStore((state) => state.getBible);
   const createPrayCardWithParams = useBaseStore(
     (state) => state.createPrayCardWithParams

@@ -10,10 +10,11 @@ import KakaoLoginBtn from "./KakaoLoginBtn";
 import AppleLoginBtn from "./AppleLoginBtn";
 import { useLocation } from "react-router-dom";
 import { getDomainUrl } from "@/lib/utils";
-import { useEffect, useState } from "react";
 import EmailLoginBtn from "./EmailLoginBtn";
 
 const LogInDrawer = () => {
+  const isApp = useBaseStore((state) => state.isApp);
+  const isIOS = useBaseStore((state) => state.isIOS);
   const isOpenLoginDrawer = useBaseStore((state) => state.isOpenLoginDrawer);
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
@@ -34,17 +35,6 @@ const LogInDrawer = () => {
     groupId = String(import.meta.env.VITE_UNION_WORSHIP_GROUP_ID);
   }
   const redirectUrl = `${baseUrl}/login-redirect?groupId=${groupId}&from=LogInDrawer`;
-
-  const [isApp, setIsApp] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
-
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isApp = userAgent.includes("prayu");
-    const isIOS = userAgent.includes("prayu-ios");
-    setIsApp(isApp);
-    setIsIOS(isIOS);
-  }, []);
 
   const LoginContent = (
     <div className="flex flex-col gap-6 px-10">
