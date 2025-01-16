@@ -19,7 +19,7 @@ const AppInit: React.FC = () => {
     const handlePushNotification = (event: MessageEvent) => {
       const { type, url } = event.data;
       if (type === "PUSH_NOTIFICATION_NAVIGATION") {
-        handlePushNotification(url);
+        window.location.href = url;
       }
     };
     window.addEventListener("message", handlePushNotification);
