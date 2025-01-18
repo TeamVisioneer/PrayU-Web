@@ -34,6 +34,7 @@ import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
 import QuietTimePage from "./pages/QuietTimePage";
 import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage";
 import PrayCardEditPage from "./components/prayCard/PrayCardEditPage";
+import NotificationPage from "./components/notification/NotificationPage";
 import AppInit from "./AppInit/AppInit";
 
 const App = () => {
@@ -153,6 +154,14 @@ const App = () => {
                 path="/group/:groupId/praycard/:praycardId/edit"
                 element={<PrayCardEditPage />}
               />
+              <Route
+                path="/notifications"
+                element={
+                  <PrivateRoute>
+                    <NotificationPage />
+                  </PrivateRoute>
+                }
+              />
             </Routes>
           </AuthProvider>
         </BrowserRouter>
@@ -246,6 +255,12 @@ const AnalyticsTracker = () => {
       case "/qt":
         analyticsTrack("페이지_QT", {
           title: "Quiet Time Page",
+          where: from,
+        });
+        break;
+      case "/notifications":
+        analyticsTrack("페이지_알림", {
+          title: "Notification Page",
           where: from,
         });
         break;

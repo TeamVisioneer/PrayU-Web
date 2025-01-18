@@ -50,7 +50,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   return (
     <div
       onClick={() => checkNotification(notification)}
-      className="flex items-start gap-2 p-2 hover:bg-muted/50 rounded-lg transition-colors"
+      className="w-full flex items-start gap-2 p-2 hover:bg-muted/50 rounded-lg transition-colors"
     >
       <span
         className={`mt-2 rounded-full w-[0.4rem] h-[0.4rem] ${
