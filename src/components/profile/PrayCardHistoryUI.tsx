@@ -5,6 +5,7 @@ import iconUserMono from "@/assets/icon-user-mono.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { Textarea } from "../ui/textarea";
 import { useRef } from "react";
+import MyPrayCardMenuBtn from "../prayCard/MyPrayCardMenuBtn";
 
 const PrayCardHistoryUI: React.FC = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -20,7 +21,9 @@ const PrayCardHistoryUI: React.FC = () => {
     });
   };
 
-  const createdDateYMD = getISODateYMD(prayCard!.created_at);
+  if (!prayCard) return null;
+
+  const createdDateYMD = getISODateYMD(prayCard.created_at);
 
   const MyPrayCardBody = (
     <div className="flex flex-col flex-grow">
@@ -29,7 +32,7 @@ const PrayCardHistoryUI: React.FC = () => {
           <div className="flex items-center gap-2 w-full">
             <div className="flex gap-2 items-center">
               <p className="text-xl text-white">
-                {prayCard?.group?.name || "내 기도카드"}
+                {prayCard.group?.name || "내 기도카드"}
               </p>
             </div>
           </div>
@@ -43,7 +46,7 @@ const PrayCardHistoryUI: React.FC = () => {
           <Textarea
             className="flex-grow w-full p-4  rounded-2xl overflow-y-auto no-scrollbar border-none focus:outline-gray-200 text-black"
             ref={textareaRef}
-            value={prayCard?.content || ""}
+            value={prayCard.content || ""}
             readOnly
             placeholder={`기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
           />
@@ -54,7 +57,9 @@ const PrayCardHistoryUI: React.FC = () => {
 
   return (
     <div className="flex flex-col px-10 gap-2 h-70vh">
-      <div className="flex justify-end px-2"></div>
+      <div className="flex justify-end px-2">
+        <MyPrayCardMenuBtn prayCard={prayCard} />
+      </div>
       {MyPrayCardBody}
       <div
         className="flex justify-center focus:outline-none gap-2 mt-4"
@@ -73,7 +78,7 @@ const PrayCardHistoryUI: React.FC = () => {
               />
             </div>
             <div className="text-sm">
-              {prayCard!.pray.filter((pray) => pray.pray_type === type).length}
+              {prayCard.pray.filter((pray) => pray.pray_type === type).length}
             </div>
           </div>
         ))}

@@ -20,7 +20,7 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import { PrayRequestMessage } from "../kakao/KakaoMessage";
 
 interface MyMoreBtnProps {
-  handleEditClick: () => void;
+  handleEditClick?: () => void;
   prayCard: PrayCardWithProfiles;
 }
 
@@ -28,29 +28,25 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   handleEditClick,
   prayCard,
 }) => {
-  const inputPrayCardContent = useBaseStore(
-    (state) => state.inputPrayCardContent
-  );
   const setAlertData = useBaseStore((state) => state.setAlertData);
   const setIsConfirmAlertOpen = useBaseStore(
     (state) => state.setIsConfirmAlertOpen
   );
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const myMember = useBaseStore((state) => state.myMember);
-  if (!targetGroup || !myMember) return null;
 
   const onClickCopyPrayCard = () => {
-    if (!inputPrayCardContent) {
+    if (!prayCard.content) {
       toast({
-        description: "⚠︎ 기도제목을 작성해주세요",
+        description: "⚠︎ 기도제목이 작성되어 있지 않아요",
       });
       return;
     }
     navigator.clipboard
-      .writeText(inputPrayCardContent)
+      .writeText(prayCard.content)
       .then(() => {
         toast({
-          description: "기도제목이 복사되었어요 🔗",
+          description: "🔗 기도제목이 복사되었어요",
         });
       })
       .catch((err) => {
@@ -71,7 +67,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
         actionText: "계속하기",
         cancelText: "취소",
         onAction: async () => {
-          const state = `groupId:${targetGroup.id};from:MyPrayCard`;
+          const state = `groupId:${targetGroup?.id};from:MyPrayCard`;
           const token = await KakaoTokenRepo.init();
           if (token) await sendPrayRequestMessage();
           else KakaoTokenRepo.openKakaoLoginPageWithKakao(state);
@@ -86,13 +82,13 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
     const selectFriendsResponse = await KakaoController.selectUsers();
     if (selectFriendsResponse?.users) {
       const myUUID = selectFriendsResponse.users.find(
-        (user) => user.id == myMember.profiles.kakao_id
+        (user) => user.id == myMember?.profiles.kakao_id
       )?.uuid;
       const friendsUUID = selectFriendsResponse.users
         .filter((user) => user.uuid != myUUID)
         .map((user) => user.uuid);
 
-      const message = PrayRequestMessage(myMember.profiles.full_name);
+      const message = PrayRequestMessage(myMember?.profiles.full_name || "");
       const myMessageResponse = myUUID
         ? await KakaoController.sendMessageForMe(message)
         : null;
@@ -115,8 +111,8 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   const onClickDeletePrayCard = () => {
     setAlertData({
       color: "bg-red-400",
-      title: "내 기도제목 삭제하기",
-      description: `내 기도제목이 없으면 친구들에게 기도를 해줄 수 없어요! \n삭제한 후 새로 작성해 보아요:)`,
+      title: "기도카드 삭제하기",
+      description: `기도카드를 삭제하면 다시 복구할 수 없어요!`,
       actionText: "삭제하기",
       cancelText: "취소",
       onAction: async () => {
@@ -129,6 +125,8 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
     return;
   };
 
+  const canPrayRequest = false;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -139,14 +137,18 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
         <RiMoreFill className="text-2xl" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem
-          className="flex justify-between"
-          onClick={() => handleEditClick()}
-        >
-          <FiEdit />
-          수정하기
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {handleEditClick && (
+          <>
+            <DropdownMenuItem
+              className="flex justify-between"
+              onClick={() => handleEditClick()}
+            >
+              <FiEdit />
+              수정하기
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem
           className="flex justify-between"
           onClick={() => onClickCopyPrayCard()}
@@ -155,14 +157,20 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
           복사하기
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="flex justify-between"
-          onClick={() => onClickPrayRequest()}
-        >
-          <MdMailOutline />
-          기도요청
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+
+        {canPrayRequest && (
+          <>
+            <DropdownMenuItem
+              className="flex justify-between"
+              onClick={() => onClickPrayRequest()}
+            >
+              <MdMailOutline />
+              기도요청
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
+
         <DropdownMenuItem
           className="flex justify-between text-red-600"
           onClick={() => onClickDeletePrayCard()}
