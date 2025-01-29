@@ -906,7 +906,6 @@ const useBaseStore = create<BaseStore>()(
     setPrayCardContent: (content: string) => {
       set((state) => {
         state.inputPrayCardContent = content;
-        state.isDisabledPrayCardCreateBtn = content.trim() === "";
       });
     },
     setIsDisabledPrayCardCreateBtn: (isDisabled: boolean) => {

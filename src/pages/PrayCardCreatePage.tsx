@@ -288,29 +288,30 @@ const PrayCardCreatePage: React.FC = () => {
       <p>당신의 기도제목을 기다리고 있어요 🙏🏻</p>
       <div className="w-full px-5">{PrayCardUI}</div>
 
-      <div className="flex flex-col items-center w-full p-5 gap-4">
-        <Button
-          className="w-full"
-          onClick={() => onClickJoinGroup(user!.id, targetGroup.id)}
-          disabled={isDisabledPrayCardCreateBtn}
-          variant="primary"
-        >
-          {isDisabledPrayCardCreateBtn ? (
-            <PulseLoader size={10} color="#f3f4f6" />
-          ) : myMember?.pray_summary ? (
-            "기도카드 만들기"
-          ) : (
-            "그룹 참여하기"
-          )}
-        </Button>
-        {!inputPrayCardContent && (
+      <div className="flex flex-col items-center w-full px-5 gap-4">
+        {inputPrayCardContent ? (
+          <Button
+            className="w-full"
+            onClick={() => onClickJoinGroup(user!.id, targetGroup.id)}
+            disabled={isDisabledPrayCardCreateBtn}
+            variant="primary"
+          >
+            {isDisabledPrayCardCreateBtn ? (
+              <PulseLoader size={10} color="#f3f4f6" />
+            ) : myMember?.pray_summary ? (
+              "기도카드 만들기"
+            ) : (
+              "그룹 참여하기"
+            )}
+          </Button>
+        ) : (
           <Button
             className="w-full"
             onClick={() => onClickSkipPrayCard(user!.id, targetGroup.id)}
             disabled={IsDisabledSkipPrayCardBtn}
             variant="primaryLight"
           >
-            {isDisabledPrayCardCreateBtn ? (
+            {IsDisabledSkipPrayCardBtn ? (
               <PulseLoader size={10} color="#f3f4f6" />
             ) : (
               "다음에 작성하기"
