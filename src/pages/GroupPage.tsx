@@ -121,7 +121,7 @@ const GroupPage: React.FC = () => {
 
   if (!targetGroup || !groupList || !myMember || isPrayToday == null) {
     return (
-      <div className="flex flex-col h-full gap-4 pt-[48px]">
+      <div className="p-5 flex flex-col h-full gap-4 pt-[48px]">
         <Skeleton className="w-full h-[150px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
         <Skeleton className="w-full flex-grow flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
       </div>
@@ -138,7 +138,7 @@ const GroupPage: React.FC = () => {
     .every((member) => !isCurrentWeek(member.updated_at));
 
   return (
-    <div className="flex flex-col h-full gap-5">
+    <div className="p-5 flex flex-col h-full gap-5">
       <GroupHeader groupList={groupList} targetGroup={targetGroup} />
       <div className="flex flex-col flex-grow gap-4">
         <MyMember myMember={myMember} />

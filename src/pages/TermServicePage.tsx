@@ -95,7 +95,7 @@ const TermServicePage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between items-center h-full">
+    <div className="p-5 flex flex-col justify-between items-center h-full">
       <span></span>
       <div className="flex flex-col items-center text-center gap-8">
         <div

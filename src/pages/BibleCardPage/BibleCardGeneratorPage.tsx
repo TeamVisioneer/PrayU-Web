@@ -50,7 +50,7 @@ const BibleCardGenerator: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col gap-4 items-center justify-center">
+    <div className="p-5 w-full h-full flex flex-col gap-4 items-center ">
       {!publicUrl && (
         <div className="w-full flex flex-col items-center">
           <div

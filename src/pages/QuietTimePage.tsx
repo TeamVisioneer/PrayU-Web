@@ -291,7 +291,7 @@ const QuietTimePage = () => {
   );
 
   return (
-    <>
+    <div className="p-5">
       <div className="w-full flex justify-between items-center">
         <div className="w-14">
           <IoChevronBack size={20} onClick={() => window.history.back()} />
@@ -311,7 +311,7 @@ const QuietTimePage = () => {
         )}
         {error && <div className="text-red-500">{error}</div>}
       </div>
-    </>
+    </div>
   );
 };
 

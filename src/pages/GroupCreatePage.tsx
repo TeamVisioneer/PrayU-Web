@@ -63,7 +63,7 @@ const GroupCreatePage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 items-center">
+    <div className="flex flex-col gap-6 items-center p-5">
       <div className="w-full flex justify-between items-center">
         <IoChevronBack size={20} onClick={() => window.history.back()} />
         <span className="text-xl font-bold">그룹 만들기</span>

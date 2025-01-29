@@ -15,6 +15,8 @@ const MainHeader: React.FC<MainHeaderProps> = ({ className }) => {
     } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
       window.location.href =
         "https://itunes.apple.com/kr/app/apple-store/id6711345171";
+    } else {
+      window.location.href = "https://linktr.ee/prayu.site";
     }
   };
 
@@ -33,7 +35,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ className }) => {
         {!navigator.userAgent.match(/prayu/i) && (
           <Badge
             variant="secondary"
-            className="text-base font-normal border-gray-300 rounded-sm"
+            className="text-base font-normal border-gray-300 rounded-sm cursor-pointer"
             onClick={() => onClickAppInstall()}
           >
             앱설치
