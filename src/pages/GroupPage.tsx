@@ -65,7 +65,7 @@ const GroupPage: React.FC = () => {
       fetchMemberListByGroupId(groupId);
       fetchMemberCountByGroupId(groupId);
       fetchTodayUserPrayByGroupId(currentUserId, groupId);
-      fetchNotificationCount(currentUserId, groupId, true);
+      fetchNotificationCount(currentUserId, true);
     }
   }, [
     fetchGroupListByUserId,

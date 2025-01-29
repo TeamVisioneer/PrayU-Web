@@ -4,18 +4,16 @@ import { Notification } from "../../supabase/types/tables";
 import { NotificationType } from "@/components/notification/NotificationType";
 import { getISOToday } from "@/lib/utils";
 
-export const fetchUserNotificationListByGroupId = async (
+export const fetchUserNotificationList = async (
   userId: string,
-  groupId: string,
   unreadOnly: boolean = false,
-  limit: number = 10,
+  limit: number = 20,
   offset: number = 0,
 ): Promise<Notification[]> => {
   try {
     let query = supabase
       .from("notification")
       .select("*")
-      .or(`group_id.eq.${groupId},group_id.is.null`)
       .eq("user_id", userId)
       .is("deleted_at", null);
     if (unreadOnly) query = query.is("checked_at", null);
@@ -37,14 +35,12 @@ export const fetchUserNotificationListByGroupId = async (
 
 export const fetchNotificationCount = async (
   userId: string,
-  groupId: string,
   unreadOnly: boolean = false,
 ): Promise<number> => {
   try {
     let query = supabase
       .from("notification")
       .select("*")
-      .or(`group_id.eq.${groupId},group_id.is.null`)
       .eq("user_id", userId)
       .is("deleted_at", null);
 
@@ -104,14 +100,12 @@ export const createNotification = async (
 
 export const checkAllNotification = async (
   userId: string,
-  groupId: string,
 ): Promise<boolean> => {
   try {
     const { error } = await supabase
       .from("notification")
       .update({ checked_at: getISOToday() })
       .eq("user_id", userId)
-      .eq("group_id", groupId)
       .is("deleted_at", null);
 
     if (error) {

@@ -11,9 +11,11 @@ import { analyticsTrack } from "@/analytics/analytics";
 import PrayCalendar from "@/components/profile/PrayCalendar";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const myProfile = useBaseStore((state) => state.myProfile);
   const profileList = useBaseStore((state) => state.profileList);
   const getProfile = useBaseStore((state) => state.getProfile);
@@ -45,18 +47,15 @@ const MyProfilePage = () => {
 
   useEffect(() => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
-  }, [myProfile, fetchProfileList]);
-
-  useEffect(() => {
-    fetchPrayListByDate(user!.id, startDt, endDt);
-  }, [user, fetchPrayListByDate, startDt, endDt]);
+    if (myProfile) fetchPrayListByDate(myProfile.id, startDt, endDt);
+  }, [myProfile, fetchProfileList, fetchPrayListByDate, startDt, endDt]);
 
   if (!myProfile || !profileList || !prayListByDate) {
     return (
       <div className="w-full flex flex-grow flex-col gap-4 items-center">
         <div className="w-full flex justify-between items-center">
           <div className="w-[60px]">
-            <IoChevronBack size={20} onClick={() => window.history.back()} />
+            <IoChevronBack size={20} onClick={() => navigate(-1)} />
           </div>
           <span className="text-lg font-bold">나의 정보</span>
           <div className="w-[60px] flex justify-end items-center"></div>

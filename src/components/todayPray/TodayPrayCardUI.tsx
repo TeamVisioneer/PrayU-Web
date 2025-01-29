@@ -24,10 +24,6 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
-  const setIsEditingPrayCard = useBaseStore(
-    (state) => state.setIsEditingPrayCard
-  );
-
   const prayCardCarouselIndex = useBaseStore(
     (state) => state.prayCardCarouselIndex
   );
@@ -79,7 +75,6 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
               onClick={() => {
                 setIsOpenTodayPrayDrawer(false);
                 setIsOpenMyMemberDrawer(true);
-                setIsEditingPrayCard(true);
               }}
               className="flex-grow w-full p-2 text-sm text-gray-400"
             >
