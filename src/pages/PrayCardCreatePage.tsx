@@ -13,6 +13,7 @@ import { KakaoController } from "@/components/kakao/KakaoController";
 import { MemberJoinMessage } from "@/components/kakao/KakaoMessage";
 import { NotificationType } from "@/components/notification/NotificationType";
 import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo";
+import { PulseLoader } from "react-spinners";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -57,6 +58,10 @@ const PrayCardCreatePage: React.FC = () => {
   const createOnesignalPush = useBaseStore(
     (state) => state.createOnesignalPush
   );
+  const setIsConfirmAlertOpen = useBaseStore(
+    (state) => state.setIsConfirmAlertOpen
+  );
+  const setAlertData = useBaseStore((state) => state.setAlertData);
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
@@ -73,8 +78,24 @@ const PrayCardCreatePage: React.FC = () => {
   ]);
 
   useEffect(() => {
-    setPrayCardContent(myMember?.pray_summary || "");
-  }, [myMember, setPrayCardContent]);
+    if (myMember?.pray_summary && targetGroup) {
+      setPrayCardContent(myMember?.pray_summary);
+      setIsConfirmAlertOpen(true);
+      setAlertData({
+        color: "bg-blue-500",
+        title: "기도카드 만료 안내",
+        description: `${targetGroup.name}의 기도카드가 만료되었어요😭\n이번 주 기도카드를 만들어 주세요!`,
+        actionText: "확인",
+        onAction: () => {},
+      });
+    }
+  }, [
+    targetGroup,
+    myMember,
+    setPrayCardContent,
+    setIsConfirmAlertOpen,
+    setAlertData,
+  ]);
 
   if (targetGroupLoading == false && targetGroup == null)
     window.location.href = "/group/not-found";
@@ -248,7 +269,7 @@ const PrayCardCreatePage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="p-5 flex flex-col items-center gap-3">
       <div className="w-full flex justify-between items-center">
         <div className="w-[48px]"></div>
         <div className="text-lg font-bold flex items-center gap-1">
@@ -274,7 +295,13 @@ const PrayCardCreatePage: React.FC = () => {
           disabled={isDisabledPrayCardCreateBtn}
           variant="primary"
         >
-          그룹 참여하기
+          {isDisabledPrayCardCreateBtn ? (
+            <PulseLoader size={10} color="#f3f4f6" />
+          ) : myMember?.pray_summary ? (
+            "기도카드 만들기"
+          ) : (
+            "그룹 참여하기"
+          )}
         </Button>
         {!inputPrayCardContent && (
           <Button
@@ -283,7 +310,11 @@ const PrayCardCreatePage: React.FC = () => {
             disabled={IsDisabledSkipPrayCardBtn}
             variant="primaryLight"
           >
-            다음에 작성하기
+            {isDisabledPrayCardCreateBtn ? (
+              <PulseLoader size={10} color="#f3f4f6" />
+            ) : (
+              "다음에 작성하기"
+            )}
           </Button>
         )}
       </div>

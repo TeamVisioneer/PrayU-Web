@@ -408,7 +408,7 @@ export interface BaseStore {
     color: string;
     title: string;
     description: string;
-    cancelText: string;
+    cancelText?: string;
     actionText: string;
     onAction: () => void;
   };
@@ -416,7 +416,7 @@ export interface BaseStore {
     color: string;
     title: string;
     description: string;
-    cancelText: string;
+    cancelText?: string;
     actionText: string;
     onAction: () => void;
   }) => void;

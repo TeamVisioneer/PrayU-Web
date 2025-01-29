@@ -363,7 +363,7 @@ const TutorialPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="p-5 flex flex-col w-full h-full">
       {DimUI}
       {index < 3 ? (
         <div className="flex flex-col w-full h-full gap-5">

@@ -17,7 +17,7 @@ const EmailLoginPage = () => {
   }, [user, navigate]);
 
   return (
-    <div className="w-full flex-col justify-between items-center">
+    <div className="w-full p-5 flex-col justify-between items-center">
       <div className="flex w-full items-center justify-between">
         <div className="w-[60px]">
           <IoChevronBack size={20} onClick={() => window.history.back()} />

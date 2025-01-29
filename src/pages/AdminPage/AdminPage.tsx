@@ -46,7 +46,7 @@ const AdminPage = () => {
   }
 
   return (
-    <div className="flex flex-grow flex-col gap-10 w-full items-center pt-11">
+    <div className="flex flex-grow flex-col gap-10 w-full items-center pt-14 px-5">
       <MainHeader />
       <section className="flex flex-col gap-4 w-full items-start">
         <h1 className="">대시보드</h1>

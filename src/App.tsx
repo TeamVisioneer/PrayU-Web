@@ -50,12 +50,8 @@ const App = () => {
     };
   }, []);
   return (
-    <div className="w-screen h-screen bg-mainBg ">
-      <div
-        className={`mx-auto ${
-          window.location.pathname === "/story" ? "w-full" : "max-w-[480px] p-5"
-        } h-100vh overflow-x-hidden no-scrollbar`}
-      >
+    <div className="w-screen h-screen">
+      <div className="mx-auto max-w-[480px] h-100vh overflow-x-hidden no-scrollbar bg-mainBg">
         <AppInit />
         <MetaPixelInit />
         <KakaoInit />

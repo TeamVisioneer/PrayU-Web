@@ -44,7 +44,10 @@ const NotificationPage = () => {
     const fetchNotification = async () => {
       if (!user) return;
       await fetchNotificationCount(user.id, true);
-      const newNotificationList = await fetchUserNotificationList(user.id);
+      const newNotificationList = await fetchUserNotificationList(
+        user.id,
+        true
+      );
       setUserNotificationView(newNotificationList);
     };
     fetchNotification();

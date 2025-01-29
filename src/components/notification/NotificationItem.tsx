@@ -6,6 +6,7 @@ import { getISOToday } from "@/lib/utils";
 import { useState } from "react";
 import { NotificationType } from "./NotificationType";
 import { Badge } from "../ui/badge";
+import { useNavigate } from "react-router-dom";
 
 interface NotificationItemProps {
   notification: Notification;
@@ -26,7 +27,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   const setIsOpenEventDialog = useBaseStore(
     (state) => state.setIsOpenEventDialog
   );
-
+  const navigate = useNavigate();
   const dateDistance = getDateDistance(
     new Date(notification.created_at),
     new Date()
@@ -44,6 +45,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     await updateNotification(notification.id, { checked_at: getISOToday() });
     if (notification.type == NotificationType.NOTICE) {
       setIsOpenEventDialog(true);
+    } else {
+      navigate("/group/" + notification.group_id);
     }
   };
 

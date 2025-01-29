@@ -52,7 +52,7 @@ const MyProfilePage = () => {
 
   if (!myProfile || !profileList || !prayListByDate) {
     return (
-      <div className="w-full flex flex-grow flex-col gap-4 items-center">
+      <div className="p-5 w-full flex flex-grow flex-col gap-4 items-center">
         <div className="w-full flex justify-between items-center">
           <div className="w-[60px]">
             <IoChevronBack size={20} onClick={() => navigate(-1)} />
@@ -78,7 +78,7 @@ const MyProfilePage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-1 items-center">
+    <div className="p-5 w-full flex flex-col gap-1 items-center">
       <div className="w-full flex flex-col gap-3 bg-mainBg z-10">
         <div className="w-full flex justify-between items-center">
           <div className="w-14 ">
