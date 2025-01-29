@@ -61,7 +61,7 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
           <DialogTitle>그룹 설정</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 p-4">
           <section className="flex flex-col gap-2">
             <label className="text-sm font-medium text-gray-700">그룹명</label>
             <Input
