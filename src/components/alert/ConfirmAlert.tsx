@@ -33,9 +33,11 @@ const ConfirmAlert: React.FC = () => {
           >
             {alertData.actionText}
           </AlertDialogAction>
-          <AlertDialogCancel className="w-3/4">
-            {alertData.cancelText}
-          </AlertDialogCancel>
+          {alertData.cancelText && (
+            <AlertDialogCancel className="w-3/4">
+              {alertData.cancelText}
+            </AlertDialogCancel>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
