@@ -15,6 +15,8 @@ const Sheet = ({
   useEffect(() => {
     if (open && window.history.state?.open !== true) {
       window.history.pushState({ open: true }, "", "");
+    } else {
+      window.history.replaceState(null, "", window.location.pathname);
     }
   }, [open]);
 
@@ -23,7 +25,6 @@ const Sheet = ({
       if (onOpenChange) onOpenChange(false);
     };
     window.addEventListener("popstate", handlePopState);
-    window.history.replaceState(null, "", window.location.pathname);
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };

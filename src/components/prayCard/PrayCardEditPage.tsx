@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
 import { IoChevronBack } from "react-icons/io5";
+import { useEffect, useRef } from "react";
 
 const PrayCardEditPage = () => {
   const { groupId, praycardId } = useParams<{
@@ -22,6 +23,18 @@ const PrayCardEditPage = () => {
   const updatePrayCardContent = useBaseStore(
     (state) => state.updatePrayCardContent
   );
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+      textareaRef.current.setSelectionRange(
+        textareaRef.current.value.length,
+        textareaRef.current.value.length
+      );
+    }
+  }, []);
 
   const handleSave = async () => {
     if (groupId && praycardId && user) {
@@ -47,11 +60,11 @@ const PrayCardEditPage = () => {
 
       <main className="flex-1 p-4">
         <Textarea
+          ref={textareaRef}
           className="w-full h-full p-4 border-none resize-none focus:ring-0"
           value={inputPrayCardContent}
           onChange={(e) => setPrayCardContent(e.target.value)}
           placeholder={`기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
-          autoFocus
         />
       </main>
 
