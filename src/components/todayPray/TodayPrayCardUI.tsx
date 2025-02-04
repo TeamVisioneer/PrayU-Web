@@ -70,15 +70,15 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
             {createdDateYMD.day} ({days[createdAtDate.getDay()]})
           </p>
         </div>
-        <div className="flex flex-col flex-grow min-h-full max-h-full items-start px-2 py-2 overflow-y-auto no-scrollbar">
+        <div
+          className="flex flex-col flex-grow min-h-full max-h-full items-start px-2 py-2 overflow-y-auto no-scrollbar"
+          onClick={() => {
+            setIsOpenTodayPrayDrawer(false);
+            setIsOpenMyMemberDrawer(true);
+          }}
+        >
           {!prayCard.content && prayCard.user_id == user!.id ? (
-            <p
-              onClick={() => {
-                setIsOpenTodayPrayDrawer(false);
-                setIsOpenMyMemberDrawer(true);
-              }}
-              className="flex-grow w-full p-2 text-sm text-gray-400"
-            >
+            <p className="flex-grow w-full p-2 text-sm text-gray-400">
               내 기도제목에서 <br />
               이번 주 기도카드를 작성해 보아요✏️
             </p>
