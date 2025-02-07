@@ -17,11 +17,16 @@ const AppInit: React.FC = () => {
     setIsAndroid(isAndroid);
 
     const handlePushNotification = (event: MessageEvent) => {
-      const { type, url } = event.data;
-      if (type === "PUSH_NOTIFICATION_NAVIGATION") {
-        window.location.href = url;
+      try {
+        const { type, url } = event.data;
+        if (type === "PUSH_NOTIFICATION_NAVIGATION") {
+          window.location.href = url;
+        }
+      } catch (error) {
+        console.error("Push notification handling error:", error);
       }
     };
+
     window.addEventListener("message", handlePushNotification);
 
     return () => {
