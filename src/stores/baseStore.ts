@@ -14,6 +14,7 @@ import {
   Group,
   GroupWithProfiles,
   Member,
+  MemberWithGroup,
   MemberWithProfiles,
   Notification,
   Pray,
@@ -37,6 +38,7 @@ import {
   deleteMemberbyGroupId,
   fetchMemberCountByGroupId,
   fetchMemberListByGroupId,
+  fetchMemberListByUserId,
   getMember,
   updateMember,
 } from "@/apis/member";
@@ -159,6 +161,7 @@ export interface BaseStore {
   // member
   memberList: MemberWithProfiles[] | null;
   memberListView: MemberWithProfiles[];
+  myMemberList: MemberWithGroup[] | null;
   memberCount: number | null;
   memberLoading: boolean;
   myMember: MemberWithProfiles | null;
@@ -173,6 +176,9 @@ export interface BaseStore {
     offset?: number,
   ) => Promise<MemberWithProfiles[] | null>;
   fetchMemberCountByGroupId: (groupId: string) => Promise<number | null>;
+  fetchMemberListByUserId: (
+    userId: string,
+  ) => Promise<MemberWithGroup[] | null>;
   createMember: (
     groupId: string,
     userId: string,
@@ -668,6 +674,7 @@ const useBaseStore = create<BaseStore>()(
     //member
     memberList: null,
     memberListView: [],
+    myMemberList: null,
     memberCount: 0,
     memberLoading: true,
     myMember: null,
@@ -705,6 +712,13 @@ const useBaseStore = create<BaseStore>()(
         state.memberCount = memberCount;
       });
       return memberCount;
+    },
+    fetchMemberListByUserId: async (userId: string) => {
+      const myMemberList = await fetchMemberListByUserId(userId);
+      set((state) => {
+        state.myMemberList = myMemberList;
+      });
+      return myMemberList;
     },
     createMember: async (
       groupId: string,
