@@ -50,7 +50,7 @@ const App = () => {
     };
   }, []);
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen bg-white">
       <div className="mx-auto max-w-[480px] h-100vh overflow-x-hidden no-scrollbar bg-mainBg">
         <AppInit />
         <MetaPixelInit />

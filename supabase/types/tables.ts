@@ -34,6 +34,10 @@ export interface MemberWithProfiles extends Member {
   profiles: Profiles;
 }
 
+export interface MemberWithGroup extends Member {
+  group: Group;
+}
+
 export interface PrayCardWithProfiles extends PrayCard {
   profiles: Profiles;
   pray: PrayWithProfiles[];

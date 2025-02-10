@@ -111,7 +111,7 @@ const MyProfilePage = () => {
       <PrayCardHistoryList />
 
       <footer className="fixed bottom-0 z-10 bg-mainBg w-full px-6 py-3 flex justify-between text-gray-400 text-[10px]">
-        <span>© 2024 PrayU. All rights reserved.</span>
+        <span>© 2025 PrayU. All rights reserved.</span>
         <div className="flex gap-2">
           <a href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html">
             개인정보 처리방침

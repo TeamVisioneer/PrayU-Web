@@ -1,6 +1,10 @@
 import { getISOToday } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
-import { Member, MemberWithProfiles } from "../../supabase/types/tables";
+import {
+  Member,
+  MemberWithGroup,
+  MemberWithProfiles,
+} from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 
 export const fetchMemberListByGroupId = async (
@@ -27,6 +31,29 @@ export const fetchMemberListByGroupId = async (
   }
 };
 
+export const fetchMemberListByUserId = async (
+  userId: string,
+  limit: number = 20,
+  offset: number = 0,
+): Promise<MemberWithGroup[] | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("member")
+      .select(`*, group (*)`)
+      .eq("user_id", userId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data.filter((member) => member.group != null) as MemberWithGroup[];
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
 export const fetchMemberCountByGroupId = async (
   groupId: string,
 ): Promise<number | null> => {
