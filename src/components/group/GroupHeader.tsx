@@ -2,21 +2,20 @@ import OpenShareDrawerBtn from "@/components/share/OpenShareDrawerBtn";
 import GroupMenuBtn from "./GroupMenuBtn";
 import { GroupWithProfiles, Group } from "supabase/types/tables";
 import NotificationBtn from "../notification/NotificationBtn";
-import useBaseStore from "@/stores/baseStore";
 
 interface GroupHeaderProps {
   targetGroup: GroupWithProfiles;
   groupList: Group[];
+  memberCount: number;
 }
 
 const GroupHeader: React.FC<GroupHeaderProps> = ({
   targetGroup,
   groupList,
+  memberCount,
 }) => {
-  const memberCount = useBaseStore((state) => state.memberCount);
-
   return (
-    <div className="flex justify-between items-center">
+    <div className="sticky top-0 flex justify-between items-center p-5 bg-mainBg z-10">
       <OpenShareDrawerBtn
         text="초대"
         eventOption={{ where: "GroupPage" }}

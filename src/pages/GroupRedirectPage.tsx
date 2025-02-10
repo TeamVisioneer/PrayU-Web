@@ -71,7 +71,7 @@ const GroupRedirectPage: React.FC = () => {
           </ul>
         )}
       </section>
-      <section className="fixed bottom-0 w-full flex justify-center p-4 pb-10 z-10">
+      <section className="fixed bottom-0 w-full flex flex-col items-center p-4 pb-10 z-10">
         <Button variant="primary" onClick={() => addGroup()} className="w-2/3">
           <PlusCircle className="h-5 w-5 mr-2" />새 그룹 만들기
         </Button>
