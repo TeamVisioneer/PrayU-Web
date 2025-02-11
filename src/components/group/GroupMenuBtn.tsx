@@ -17,6 +17,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import newIcon from "@/assets/newIcon.svg";
+import GroupMemberProfileList from "./GroupMemberProfileList";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -107,10 +108,10 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
     setIsOpenGroupSettingsDialog(true);
   };
 
-  const onClickOtherGroup = (groupId: string) => {
-    analyticsTrack("클릭_그룹_전환", { group_id: groupId });
-    window.location.href = `/group/${groupId}`;
-  };
+  // const onClickOtherGroup = (groupId: string) => {
+  //   analyticsTrack("클릭_그룹_전환", { group_id: groupId });
+  //   window.location.href = `/group/${groupId}`;
+  // };
 
   const onClickContactUs = () => {
     analyticsTrack("클릭_문의", {});
@@ -137,115 +138,131 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
       >
         <SlMenu size={20} />
       </SheetTrigger>
-      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-16 flex flex-col items-start overflow-y-auto no-scrollbar bg-mainBg">
-        <SheetHeader className="w-full">
-          <SheetTitle className="flex items-center gap-2 text-left text-[#222222]">
-            <p>PrayU 그룹</p>
-          </SheetTitle>
-          <hr className="w-full" />
+      <SheetContent
+        title={targetGroup?.name || "PrayU 그룹"}
+        className="max-w-[288px] mx-auto w-[60%] px-5 flex flex-col items-start overflow-y-auto no-scrollbar bg-mainBg"
+      >
+        <SheetHeader>
+          <SheetTitle></SheetTitle>
           <SheetDescription></SheetDescription>
         </SheetHeader>
-        <div className="flex flex-col gap-4 items-start text-gray-500 w-full">
-          {userGroupList.map((group) => (
-            <div key={group.id} className="flex items-center gap-1">
-              <span
-                className={`w-[5px] h-[18px]  rounded-md ${
-                  group.id == targetGroup?.id ? "bg-mainBtn" : ""
-                }`}
-              ></span>
+        <div className="flex flex-col items-start text-gray-500 w-full">
+          <section className="w-full py-5 border-t border-gray-200">
+            <GroupMemberProfileList
+              memberList={memberList!}
+              targetGroup={targetGroup!}
+            />
+          </section>
+          {/* {targetGroup && (
+            <div key={targetGroup?.id} className="flex items-center gap-1">
+              <span className="w-[5px] h-[18px]  rounded-md bg-mainBtn"></span>
               <a
-                key={group.id}
-                onClick={() => onClickOtherGroup(group.id)}
-                className={`cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis ${
-                  group.id == targetGroup?.id ? "font-bold text-[#222222]" : ""
-                }`}
+                key={targetGroup?.id}
+                onClick={() => onClickOtherGroup(targetGroup?.id ?? "")}
+                className="cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis font-bold text-[#222222]"
               >
-                {group.name}
+                {targetGroup?.name}
               </a>
             </div>
-          ))}
-          <hr className="w-full" />
-          <div className="flex items-center gap-2">
-            <IoPersonCircleOutline size={20} color="#222222" />
-            <a
-              href="/profile/me"
-              onClick={() => analyticsTrack("클릭_프로필_나", {})}
-              className="cursor-pointer text-[#222222] font-medium"
-            >
-              내 프로필
-            </a>
-          </div>
-          {targetGroup && (
-            <>
-              <div className="flex items-center gap-2">
-                <IoAddCircleOutline size={20} color="#222222" />
+          )} */}
+          {/* {userGroupList
+            .filter((group) => group.id != targetGroup?.id)
+            .map((group) => (
+              <div key={group.id} className="flex items-center gap-1">
+                <span className="w-[5px] h-[18px]  rounded-md"></span>
                 <a
-                  className="cursor-pointer text-[#222222] font-medium"
-                  onClick={() => handleClickCreateGroup()}
+                  key={group.id}
+                  onClick={() => onClickOtherGroup(group.id)}
+                  className="cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
                 >
-                  그룹 만들기
+                  {group.name}
                 </a>
               </div>
-              <div className="flex items-center gap-2">
-                <IoRemoveCircleOutline size={20} color="#222222" />
-                <a
-                  className="cursor-pointer text-[#222222] font-medium"
-                  onClick={() => handleClickExitGroup()}
-                >
-                  그룹 나가기
-                </a>
-              </div>
-              {isGroupLeader && (
+            ))} */}
+          <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
+            <div className="flex items-center gap-2">
+              <IoPersonCircleOutline size={20} color="#222222" />
+              <a
+                href="/profile/me"
+                onClick={() => analyticsTrack("클릭_프로필_나", {})}
+                className="cursor-pointer text-[#222222] font-medium"
+              >
+                내 프로필
+              </a>
+            </div>
+            {targetGroup && (
+              <>
                 <div className="flex items-center gap-2">
-                  <IoSettingsOutline size={20} color="#222222" />
+                  <IoAddCircleOutline size={20} color="#222222" />
                   <a
                     className="cursor-pointer text-[#222222] font-medium"
-                    onClick={() => handleClickUpdateGroup()}
+                    onClick={() => handleClickCreateGroup()}
                   >
-                    그룹 설정
+                    그룹 만들기
                   </a>
                 </div>
-              )}
-            </>
-          )}
-          <hr className="w-full" />
-          <a href="/" onClick={() => analyticsTrack("클릭_홈", {})}>
-            PrayU 홈
-          </a>
-          <div className="flex gap-1 items-center">
-            <a
-              href="/qt"
-              onClick={() =>
-                analyticsTrack("클릭_QT_페이지", { where: "groupMenu" })
-              }
-            >
-              나만의 QT
+                <div className="flex items-center gap-2">
+                  <IoRemoveCircleOutline size={20} color="#222222" />
+                  <a
+                    className="cursor-pointer text-[#222222] font-medium"
+                    onClick={() => handleClickExitGroup()}
+                  >
+                    그룹 나가기
+                  </a>
+                </div>
+                {isGroupLeader && (
+                  <div className="flex items-center gap-2">
+                    <IoSettingsOutline size={20} color="#222222" />
+                    <a
+                      className="cursor-pointer text-[#222222] font-medium"
+                      onClick={() => handleClickUpdateGroup()}
+                    >
+                      그룹 설정
+                    </a>
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+          <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
+            <a href="/" onClick={() => analyticsTrack("클릭_홈", {})}>
+              PrayU 홈
             </a>
-            <img src={newIcon} />
-          </div>
-          <div className="flex gap-1 items-center">
-            <a
-              href="/bible-card"
-              onClick={() =>
-                analyticsTrack("클릭_말씀카드_페이지", { where: "groupMenu" })
-              }
-            >
-              말씀카드 만들기
+            <div className="flex gap-1 items-center">
+              <a
+                href="/qt"
+                onClick={() =>
+                  analyticsTrack("클릭_QT_페이지", { where: "groupMenu" })
+                }
+              >
+                나만의 QT
+              </a>
+              <img src={newIcon} />
+            </div>
+            <div className="flex gap-1 items-center">
+              <a
+                href="/bible-card"
+                onClick={() =>
+                  analyticsTrack("클릭_말씀카드_페이지", { where: "groupMenu" })
+                }
+              >
+                말씀카드 만들기
+              </a>
+              <img src={newIcon} />
+            </div>
+            <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
+              공지사항
             </a>
-            <img src={newIcon} />
-          </div>
-          <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
-            공지사항
-          </a>
-          <a
-            href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
-            onClick={() => onClickContactUs()}
-          >
-            문의하기
-          </a>
-          <a className="cursor-pointer" onClick={() => onClickOpenTutorial()}>
-            가이드
-          </a>
+            <a
+              href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
+              onClick={() => onClickContactUs()}
+            >
+              문의하기
+            </a>
+            <a className="cursor-pointer" onClick={() => onClickOpenTutorial()}>
+              가이드
+            </a>
+          </section>
         </div>
         <SheetClose className="focus:outline-none"></SheetClose>
       </SheetContent>

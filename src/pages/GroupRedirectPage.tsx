@@ -36,9 +36,9 @@ const GroupRedirectPage: React.FC = () => {
       <GroupListHeader
         userGroupList={myMemberList.map((member) => member.group)}
       />
-      <section className="px-4">
+      <section className="px-5">
         {myMemberList.length === 0 ? (
-          <div className="px-4 py-5 sm:p-6 text-center">
+          <div className="px-5 py-5 sm:p-6 text-center">
             <h3 className="mt-2 text-sm font-medium text-gray-900">
               그룹이 없습니다
             </h3>
