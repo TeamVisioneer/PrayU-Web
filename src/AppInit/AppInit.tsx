@@ -17,14 +17,27 @@ const AppInit: React.FC = () => {
     setIsAndroid(isAndroid);
 
     const handlePushNotification = (event: MessageEvent) => {
-      const { type, url } = event.data;
-      if (type === "PUSH_NOTIFICATION_NAVIGATION") {
-        window.location.href = url;
+      try {
+        const { type, url } = event.data;
+        if (type === "PUSH_NOTIFICATION_NAVIGATION") {
+          window.location.href = url;
+        }
+      } catch (error) {
+        console.error("Push notification handling error:", error);
       }
     };
+
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+
+    setVh();
+    window.addEventListener("resize", setVh);
     window.addEventListener("message", handlePushNotification);
 
     return () => {
+      window.removeEventListener("resize", setVh);
       window.removeEventListener("message", handlePushNotification);
     };
   }, [setIsApp, setIsIOS, setIsAndroid]);

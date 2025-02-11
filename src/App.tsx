@@ -38,19 +38,8 @@ import NotificationPage from "./components/notification/NotificationPage";
 import AppInit from "./AppInit/AppInit";
 
 const App = () => {
-  useEffect(() => {
-    const setVh = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
-    };
-    setVh();
-    window.addEventListener("resize", setVh);
-    return () => {
-      window.removeEventListener("resize", setVh);
-    };
-  }, []);
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen bg-white">
       <div className="mx-auto max-w-[480px] h-100vh overflow-x-hidden no-scrollbar bg-mainBg">
         <AppInit />
         <MetaPixelInit />

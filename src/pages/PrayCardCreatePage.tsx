@@ -6,7 +6,6 @@ import { Member } from "supabase/types/tables";
 import prayerVerses from "@/data/prayCardTemplate.json";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
-import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 import { useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { KakaoController } from "@/components/kakao/KakaoController";
@@ -14,6 +13,10 @@ import { MemberJoinMessage } from "@/components/kakao/KakaoMessage";
 import { NotificationType } from "@/components/notification/NotificationType";
 import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo";
 import { PulseLoader } from "react-spinners";
+import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
+import GroupHeader from "@/components/group/GroupHeader";
+import { UserProfile } from "@/components/profile/UserProfile";
+import ShareDrawer from "@/components/share/ShareDrawer";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -100,7 +103,7 @@ const PrayCardCreatePage: React.FC = () => {
   if (targetGroupLoading == false && targetGroup == null)
     window.location.href = "/group/not-found";
 
-  if (!groupList || !targetGroup || !memberList || memberLoading) {
+  if (!groupList || !targetGroup || !myMember || !memberList || memberLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
@@ -229,31 +232,16 @@ const PrayCardCreatePage: React.FC = () => {
     : memberList;
 
   const PrayCardUI = (
-    <div className="flex flex-col gap-6 justify-center">
-      <div className="flex flex-col flex-grow min-h-full max-h-full bg-white rounded-2xl shadow-prayCard">
-        <div className="flex flex-col justify-center items-start gap-1 bg-gradient-to-r from-start via-middle via-30% to-end rounded-t-2xl p-5">
-          <div className="flex items-center gap-2">
-            <img
-              src={
-                myMember
-                  ? myMember?.profiles.avatar_url ||
-                    "/images/defaultProfileImage.png"
-                  : user?.user_metadata.picture ||
-                    "/images/defaultProfileImage.png"
-              }
-              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                e.currentTarget.src = "/images/defaultProfileImage.png";
-              }}
-              className="w-7 h-7 rounded-full object-cover"
-            />
-            <p className="text-white text-lg ">
-              {myMember
-                ? myMember?.profiles.full_name
-                : user?.user_metadata.name}
-            </p>
-          </div>
-          <p className="text-sm text-white w-full text-left">
-            시작일 :{todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
+    <div className="w-full flex flex-col gap-6 justify-center">
+      <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+        <div className="flex flex-col justify-center items-start gap-1 text-white bg-gradient-to-r from-start via-middle via-30% to-end rounded-t-2xl p-5">
+          <UserProfile
+            profile={myMember.profiles}
+            imgSize="w-7 h-7"
+            fontSize=""
+          />
+          <p className="text-sm w-full text-left">
+            시작일: {todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
           </p>
         </div>
         <div className="flex flex-col flex-grow min-h-[300px] px-[10px] py-[10px] overflow-y-auto no-scrollbar items-center">
@@ -269,56 +257,50 @@ const PrayCardCreatePage: React.FC = () => {
   );
 
   return (
-    <div className="p-5 flex flex-col items-center gap-3">
-      <div className="w-full flex justify-between items-center">
-        <div className="w-[48px]"></div>
-        <div className="text-lg font-bold flex items-center gap-1">
-          <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-            {targetGroup.name}
-          </div>
-          <span className="text-sm text-gray-500">
-            {filteredMemberList.length}
-          </span>
-        </div>
-        <div className="w-[48px] flex justify-center">
-          <GroupMenuBtn userGroupList={groupList} targetGroup={targetGroup} />
+    <div className="w-full ">
+      <GroupHeader
+        targetGroup={targetGroup}
+        groupList={groupList}
+        memberCount={filteredMemberList.length}
+      />
+      <div className="w-full flex flex-col items-center px-5 gap-3">
+        <p>이번 주 기도카드를 만들고 그룹에 참여해요 🙏🏻</p>
+        {PrayCardUI}
+
+        <div className="flex flex-col items-center w-full gap-4">
+          {inputPrayCardContent ? (
+            <Button
+              className="w-full"
+              onClick={() => onClickJoinGroup(user!.id, targetGroup.id)}
+              disabled={isDisabledPrayCardCreateBtn}
+              variant="primary"
+            >
+              {isDisabledPrayCardCreateBtn ? (
+                <PulseLoader size={10} color="#f3f4f6" />
+              ) : myMember?.pray_summary ? (
+                "기도카드 만들기"
+              ) : (
+                "그룹 참여하기"
+              )}
+            </Button>
+          ) : (
+            <Button
+              className="w-full"
+              onClick={() => onClickSkipPrayCard(user!.id, targetGroup.id)}
+              disabled={IsDisabledSkipPrayCardBtn}
+              variant="primaryLight"
+            >
+              {IsDisabledSkipPrayCardBtn ? (
+                <PulseLoader size={10} color="#f3f4f6" />
+              ) : (
+                "다음에 작성하기"
+              )}
+            </Button>
+          )}
         </div>
       </div>
-
-      <p>당신의 기도제목을 기다리고 있어요 🙏🏻</p>
-      <div className="w-full px-5">{PrayCardUI}</div>
-
-      <div className="flex flex-col items-center w-full px-5 gap-4">
-        {inputPrayCardContent ? (
-          <Button
-            className="w-full"
-            onClick={() => onClickJoinGroup(user!.id, targetGroup.id)}
-            disabled={isDisabledPrayCardCreateBtn}
-            variant="primary"
-          >
-            {isDisabledPrayCardCreateBtn ? (
-              <PulseLoader size={10} color="#f3f4f6" />
-            ) : myMember?.pray_summary ? (
-              "기도카드 만들기"
-            ) : (
-              "그룹 참여하기"
-            )}
-          </Button>
-        ) : (
-          <Button
-            className="w-full"
-            onClick={() => onClickSkipPrayCard(user!.id, targetGroup.id)}
-            disabled={IsDisabledSkipPrayCardBtn}
-            variant="primaryLight"
-          >
-            {IsDisabledSkipPrayCardBtn ? (
-              <PulseLoader size={10} color="#f3f4f6" />
-            ) : (
-              "다음에 작성하기"
-            )}
-          </Button>
-        )}
-      </div>
+      <GroupSettingsDialog targetGroup={targetGroup} />
+      <ShareDrawer />
     </div>
   );
 };

@@ -11,10 +11,8 @@ import { Group } from "supabase/types/tables";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import { UserProfile } from "../profile/UserProfile";
-import { Badge } from "../ui/badge";
 import GroupMemberSettingsBtn from "./GroupMemberSettingsBtn";
-import GroupMemberOptionTag from "./GroupMemberOptionTag";
+import GroupMemberProfileList from "./GroupMemberProfileList";
 
 interface GroupSettingsDialogProps {
   targetGroup: Group;
@@ -78,26 +76,10 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
               </label>
               <GroupMemberSettingsBtn />
             </div>
-            <div className="flex flex-col gap-3 max-h-40 p-1 overflow-auto">
-              {[...memberList]
-                .sort((member) =>
-                  member.user_id == targetGroup.user_id ? -1 : 1
-                )
-                .map((member) => (
-                  <div key={member.id} className="flex justify-between">
-                    <UserProfile
-                      profile={member.profiles}
-                      imgSize="w-7 h-7"
-                      fontSize="font-midium"
-                    />
-                    {member.user_id === targetGroup.user_id ? (
-                      <Badge>그룹장</Badge>
-                    ) : (
-                      <GroupMemberOptionTag member={member} />
-                    )}
-                  </div>
-                ))}
-            </div>
+            <GroupMemberProfileList
+              memberList={memberList}
+              targetGroup={targetGroup}
+            />
           </section>
           <footer className="flex gap-2 justify-center">
             <Button
