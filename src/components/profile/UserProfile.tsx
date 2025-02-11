@@ -21,7 +21,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
           e.currentTarget.src = "/images/defaultProfileImage.png";
         }}
       />
-      <p className={cn("", fontSize)}>{profile.full_name}</p>
+      <p className={cn("truncate", fontSize)}>{profile.full_name}</p>
     </div>
   );
 };

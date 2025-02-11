@@ -19,6 +19,12 @@ const GroupRedirectPage: React.FC = () => {
     if (user) fetchMemberListByUserId(user.id);
   }, [fetchMemberListByUserId, user]);
 
+  useEffect(() => {
+    if (myMemberList) {
+      navigate(`/group/${myMemberList[0].group.id}`);
+    }
+  }, [myMemberList, navigate]);
+
   if (!myMemberList) return null;
 
   const addGroup = () => {

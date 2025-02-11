@@ -3,8 +3,7 @@ import { Group, MemberWithProfiles } from "supabase/types/tables";
 import { Badge } from "../ui/badge";
 import { UserProfile } from "../profile/UserProfile";
 import GroupMemberOptionTag from "./GroupMemberOptionTag";
-
-// Define an interface for a group member, adjust as needed.
+import OpenShareDrawerBtn from "../share/OpenShareDrawerBtn";
 
 interface GroupMemberProfileListProps {
   memberList: MemberWithProfiles[];
@@ -15,7 +14,6 @@ const GroupMemberProfileList: React.FC<GroupMemberProfileListProps> = ({
   memberList,
   targetGroup,
 }) => {
-  // Sort members to always have the group leader at the top.
   const sortedMembers = [...memberList].sort((a, b) =>
     a.user_id === targetGroup.user_id
       ? -1
@@ -26,12 +24,11 @@ const GroupMemberProfileList: React.FC<GroupMemberProfileListProps> = ({
 
   return (
     <div className="w-full flex flex-col gap-3 max-h-40 overflow-auto scrollbar-rounded pr-2">
-      {/* <div className="flex items-center gap-2">
-        <div className="w-7 h-7 flex justify-center items-center rounded-full">
-          <IoMdPersonAdd size={20} color="#222222" />
-        </div>
-        <p className="font-midium">그룹원 초대</p>
-      </div> */}
+      <OpenShareDrawerBtn
+        text="그룹원 초대"
+        eventOption={{ where: "group" }}
+        type="profile"
+      />
       {sortedMembers.map((member) => (
         <div key={member.id} className="flex justify-between">
           <UserProfile

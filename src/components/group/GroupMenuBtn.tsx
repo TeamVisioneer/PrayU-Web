@@ -5,7 +5,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose,
 } from "@/components/ui/sheet";
 import { useToast } from "../ui/use-toast";
 import { Group } from "supabase/types/tables";
@@ -18,6 +17,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import newIcon from "@/assets/newIcon.svg";
 import GroupMemberProfileList from "./GroupMemberProfileList";
+import GroupDropdown from "./GroupListDropDown";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -133,52 +133,32 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   return (
     <Sheet open={isOpenGroupMenuSheet} onOpenChange={setIsOpenGroupMenuSheet}>
       <SheetTrigger
-        className="flex flex-col items-end focus:outline-none"
+        className="flex flex-col items-end focus:outline-none p-0"
         onClick={() => onClickSheetTrigeer()}
       >
         <SlMenu size={20} />
       </SheetTrigger>
-      <SheetContent
-        title={targetGroup?.name || "PrayU 그룹"}
-        className="max-w-[288px] mx-auto w-[60%] px-5 flex flex-col items-start overflow-y-auto no-scrollbar bg-mainBg"
-      >
+      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-10 flex flex-col items-start overflow-y-auto no-scrollbar bg-mainBg">
         <SheetHeader>
           <SheetTitle></SheetTitle>
           <SheetDescription></SheetDescription>
         </SheetHeader>
+        <div className="w-full pb-2">
+          <GroupDropdown
+            userGroupList={userGroupList}
+            targetGroup={targetGroup}
+          />
+        </div>
+
         <div className="flex flex-col items-start text-gray-500 w-full">
-          <section className="w-full py-5 border-t border-gray-200">
-            <GroupMemberProfileList
-              memberList={memberList!}
-              targetGroup={targetGroup!}
-            />
-          </section>
-          {/* {targetGroup && (
-            <div key={targetGroup?.id} className="flex items-center gap-1">
-              <span className="w-[5px] h-[18px]  rounded-md bg-mainBtn"></span>
-              <a
-                key={targetGroup?.id}
-                onClick={() => onClickOtherGroup(targetGroup?.id ?? "")}
-                className="cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis font-bold text-[#222222]"
-              >
-                {targetGroup?.name}
-              </a>
-            </div>
-          )} */}
-          {/* {userGroupList
-            .filter((group) => group.id != targetGroup?.id)
-            .map((group) => (
-              <div key={group.id} className="flex items-center gap-1">
-                <span className="w-[5px] h-[18px]  rounded-md"></span>
-                <a
-                  key={group.id}
-                  onClick={() => onClickOtherGroup(group.id)}
-                  className="cursor-pointer max-w-40 whitespace-nowrap overflow-hidden text-ellipsis"
-                >
-                  {group.name}
-                </a>
-              </div>
-            ))} */}
+          {memberList && targetGroup && (
+            <section className="w-full py-5 border-t border-gray-200">
+              <GroupMemberProfileList
+                memberList={memberList}
+                targetGroup={targetGroup}
+              />
+            </section>
+          )}
           <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
             <div className="flex items-center gap-2">
               <IoPersonCircleOutline size={20} color="#222222" />
@@ -264,7 +244,6 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
             </a>
           </section>
         </div>
-        <SheetClose className="focus:outline-none"></SheetClose>
       </SheetContent>
     </Sheet>
   );
