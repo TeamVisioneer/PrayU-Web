@@ -154,7 +154,6 @@ const App = () => {
       </div>
       <Toaster />
       <ConfirmAlert />
-      <GroupListDrawer />
     </div>
   );
 };

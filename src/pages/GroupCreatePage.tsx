@@ -8,6 +8,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { IoChevronBack } from "react-icons/io5";
 import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 import PrayUSquareImage from "@/assets/prayu_square.png";
+import GroupListDrawer from "@/components/group/GroupListDrawer";
 
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -100,6 +101,7 @@ const GroupCreatePage: React.FC = () => {
           </p>
         </div>
       </div>
+      <GroupListDrawer />
     </div>
   );
 };

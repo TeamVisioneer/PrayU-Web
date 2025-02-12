@@ -7,6 +7,7 @@ import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import GroupListHeader from "@/components/group/GroupListHeader";
+import GroupListDrawer from "@/components/group/GroupListDrawer";
 
 const GroupListPage: React.FC = () => {
   const { user } = useAuth();
@@ -37,10 +38,8 @@ const GroupListPage: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* 기존 header 및 title 영역 그대로 유지 */}
       <GroupListHeader userGroupList={groupList} />
 
-      {/* 리스트뷰 영역 - GroupListDrawer의 UI 스타일 적용 */}
       <div className="flex-1 overflow-y-auto px-5">
         {groupList.length === 0 ? (
           <div className="p-4 text-center">
@@ -95,6 +94,7 @@ const GroupListPage: React.FC = () => {
           <PlusCircle className="h-5 w-5 mr-2" /> 새 그룹 만들기
         </Button>
       </div>
+      <GroupListDrawer />
     </div>
   );
 };
