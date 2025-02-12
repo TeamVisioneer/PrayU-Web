@@ -92,7 +92,7 @@ const WeekUpdateDialog = () => {
       open={isOpenWeekUpdateDialog}
       onOpenChange={setIsOpenWeekUpdateDialog}
     >
-      <DialogContent className="w-11/12 h-auto overflow-auto rounded-2xl bg-mainBg">
+      <DialogContent className="w-11/12 h-auto overflow-auto rounded-2xl bg-mainBg transition-all duration-300 ease-in-out">
         <DialogHeader className="text-left">
           <DialogTitle className="text-lg">
             📢 그룹간 이동방법 변경안내
