@@ -195,7 +195,7 @@ const QuietTimePage = () => {
       </label>
       <input
         type="text"
-        placeholder="성경 구절을 입력해주세요 (ex. 창세기 1:1, 시편 23:1-6)"
+        placeholder="성경 구절을 입력하기(창세기 1:1, 시편 23:1-6)"
         {...register("content", { required: true })}
         className="border p-2 rounded-md w-full"
       />

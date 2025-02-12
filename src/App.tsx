@@ -19,7 +19,7 @@ import KakaoInit from "./components/kakao/KakaoInit";
 import KakaoCallBack from "./components/kakao/KakaoCallback";
 import MyProfilePage from "./pages/MyProfilePage";
 import GroupNotFoundPage from "./pages/GroupNotFoundPage";
-import GroupRedirectPage from "./pages/GroupRedirectPage";
+import GroupListPage from "./pages/GroupListPage";
 import GroupLimitPage from "./pages/GropuLimitPage";
 import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
@@ -91,7 +91,7 @@ const App = () => {
                 path="/group"
                 element={
                   <PrivateRoute>
-                    <GroupRedirectPage />
+                    <GroupListPage />
                   </PrivateRoute>
                 }
               />
@@ -192,6 +192,12 @@ const AnalyticsTracker = () => {
       case "/tutorial":
         analyticsTrack("페이지_튜토리얼", {
           title: "Tutorial Page",
+          where: from,
+        });
+        break;
+      case "/group":
+        analyticsTrack("페이지_그룹_리스트", {
+          title: "Group List Page",
           where: from,
         });
         break;

@@ -132,6 +132,7 @@ export interface BaseStore {
   groupList: Group[] | null;
   todayGroupList: Group[] | null;
   targetGroup: GroupWithProfiles | null;
+  setTargetGroup: (targetGroup: GroupWithProfiles | null) => void;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
   isGroupLeader: boolean;
@@ -157,6 +158,8 @@ export interface BaseStore {
   setIsOpenGroupMenuSheet: (isOpenGroupMenuSheet: boolean) => void;
   activeGroupMemberOption: string;
   setActiveGroupMemberOption: (activeGroupMemberOption: string) => void;
+  isOpenGroupListDrawer: boolean;
+  setIsOpenGroupListDrawer: (isOpenGroupListDrawer: boolean) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -636,6 +639,11 @@ const useBaseStore = create<BaseStore>()(
       const group = await updateGroup(groupId, params);
       return group;
     },
+    setTargetGroup: (targetGroup: GroupWithProfiles | null) => {
+      set((state) => {
+        state.targetGroup = targetGroup;
+      });
+    },
     setGroupName: (groupName: string) => {
       set((state) => {
         state.inputGroupName = groupName;
@@ -668,6 +676,12 @@ const useBaseStore = create<BaseStore>()(
     setActiveGroupMemberOption: (activeGroupMemberOption: string) => {
       set((state) => {
         state.activeGroupMemberOption = activeGroupMemberOption;
+      });
+    },
+    isOpenGroupListDrawer: false,
+    setIsOpenGroupListDrawer: (isOpenGroupListDrawer: boolean) => {
+      set((state) => {
+        state.isOpenGroupListDrawer = isOpenGroupListDrawer;
       });
     },
 

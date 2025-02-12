@@ -17,6 +17,7 @@ import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 import GroupHeader from "@/components/group/GroupHeader";
 import { UserProfile } from "@/components/profile/UserProfile";
 import ShareDrawer from "@/components/share/ShareDrawer";
+import GroupListDrawer from "@/components/group/GroupListDrawer";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -301,6 +302,7 @@ const PrayCardCreatePage: React.FC = () => {
       </div>
       <GroupSettingsDialog targetGroup={targetGroup} />
       <ShareDrawer />
+      <GroupListDrawer />
     </div>
   );
 };

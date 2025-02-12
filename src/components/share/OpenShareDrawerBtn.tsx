@@ -62,7 +62,7 @@ const OpenShareDrawerBtn: React.FC<OpenShareDrawerBtnProps> = ({
   if (type == "profile")
     return (
       <div
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 cursor-pointer"
         onClick={() => handleClickSharBtn()}
       >
         <div className="w-7 h-7 flex justify-center items-center rounded-full bg-gray-200">

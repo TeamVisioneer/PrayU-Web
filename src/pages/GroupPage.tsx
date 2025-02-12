@@ -18,6 +18,7 @@ import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import BannerDialog from "@/components/notice/BannerDialog";
 import GroupHeader from "@/components/group/GroupHeader";
 import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
+import GroupListDrawer from "@/components/group/GroupListDrawer";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -164,6 +165,7 @@ const GroupPage: React.FC = () => {
       <TodayPrayCardListDrawer />
       <OtherMemberDrawer />
       <PrayListDrawer />
+      <GroupListDrawer />
       <ShareDrawer />
       <EventDialog />
       <WeekUpdateDialog />
