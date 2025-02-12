@@ -36,7 +36,6 @@ import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage
 import PrayCardEditPage from "./components/prayCard/PrayCardEditPage";
 import NotificationPage from "./components/notification/NotificationPage";
 import AppInit from "./AppInit/AppInit";
-import GroupListDrawer from "./components/group/GroupListDrawer";
 
 const App = () => {
   return (
