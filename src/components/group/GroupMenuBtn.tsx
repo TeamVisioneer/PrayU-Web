@@ -260,6 +260,12 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
           <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
             <a onClick={() => onClickPrayUHome()}>PrayU 홈</a>
             <div className="flex gap-1 items-center">
+              <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
+                공지사항
+              </a>
+              <img src={newIcon} />
+            </div>
+            <div className="flex gap-1 items-center">
               <a onClick={() => onClickQT()}>나만의 QT</a>
               <img src={newIcon} />
             </div>
@@ -267,9 +273,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
               <a onClick={() => onClickBibleCard()}>말씀카드 만들기</a>
               <img src={newIcon} />
             </div>
-            <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
-              공지사항
-            </a>
+
             <a
               href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
               onClick={() => onClickContactUs()}

@@ -4,7 +4,6 @@ import { GroupWithProfiles, Group } from "supabase/types/tables";
 import NotificationBtn from "../notification/NotificationBtn";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
-
 interface GroupHeaderProps {
   targetGroup: GroupWithProfiles;
   groupList: Group[];
