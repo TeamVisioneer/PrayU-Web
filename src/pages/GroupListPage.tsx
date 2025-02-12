@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import GroupListHeader from "@/components/group/GroupListHeader";
 
-const GroupRedirectPage: React.FC = () => {
+const GroupListPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const fetchGroupListByUserId = useBaseStore(
@@ -99,4 +99,4 @@ const GroupRedirectPage: React.FC = () => {
   );
 };
 
-export default GroupRedirectPage;
+export default GroupListPage;
