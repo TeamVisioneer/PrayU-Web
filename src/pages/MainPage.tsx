@@ -5,9 +5,10 @@ import LogInDrawer from "@/components/auth/LogInDrawer";
 import MainHeader from "./MainPage/MainHeader";
 import { useEffect } from "react";
 import CountUp from "react-countup";
-
+import { useNavigate } from "react-router-dom";
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
+  const navigate = useNavigate();
   const userLoading = useBaseStore((state) => state.userLoading);
   const totalPrayCount = useBaseStore((state) => state.totalPrayCount);
   const fetchTotalPrayCount = useBaseStore(
@@ -27,7 +28,7 @@ const MainPage: React.FC = () => {
         className="w-52"
         onClick={() => {
           analyticsTrack("클릭_메인_시작하기", { where: "PrayUStartBtn" });
-          if (user) window.location.href = "/group";
+          if (user) navigate("/group");
           else setIsOpenLoginDrawer(true);
         }}
       >
