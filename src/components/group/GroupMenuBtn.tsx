@@ -18,6 +18,8 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import newIcon from "@/assets/newIcon.svg";
 import GroupMemberProfileList from "./GroupMemberProfileList";
 import { ChevronsUpDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { PiHandsPrayingFill } from "react-icons/pi";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -29,6 +31,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   targetGroup,
 }) => {
   const user = useBaseStore((state) => state.user);
+  const navigate = useNavigate();
   const deleteMemberbyGroupId = useBaseStore(
     (state) => state.deleteMemberbyGroupId
   );
@@ -112,6 +115,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   };
 
   const onClickContactUs = () => {
+    setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_문의", {});
   };
 
@@ -121,17 +125,49 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   };
 
   const onClickOpenNotice = () => {
+    setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_카카오_소식", {});
     window.location.href = "https://pf.kakao.com/_XaHDG/posts";
   };
   const onClickOpenTutorial = () => {
+    setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_튜토리얼", {});
-    window.location.href = "/tutorial";
+    navigate("/tutorial");
   };
 
   const onClickGroupName = () => {
     setIsOpenGroupListDrawer(true);
     analyticsTrack("클릭_그룹_이름", { where: "GroupMenuBtn" });
+  };
+
+  const onClickGroupHome = () => {
+    setIsOpenGroupMenuSheet(false);
+    analyticsTrack("클릭_그룹_홈", { where: "GroupMenuBtn" });
+    navigate("/group");
+  };
+
+  const onClickPrayUHome = () => {
+    setIsOpenGroupMenuSheet(false);
+    analyticsTrack("클릭_홈", { where: "GroupMenuBtn" });
+    navigate("/");
+  };
+
+  const onClickQT = () => {
+    setIsOpenGroupMenuSheet(false);
+    analyticsTrack("클릭_QT_페이지", { where: "GroupMenuBtn" });
+    navigate("/qt");
+  };
+
+  const onClickBibleCard = () => {
+    setIsOpenGroupMenuSheet(false);
+    analyticsTrack("클릭_말씀카드_페이지", { where: "GroupMenuBtn" });
+    navigate("/bible-card");
+  };
+
+  const onClickMyProfile = () => {
+    setIsOpenGroupMenuSheet(false);
+    analyticsTrack("클릭_프로필_나", { where: "GroupMenuBtn" });
+    navigate("/profile/me");
   };
 
   return (
@@ -169,13 +205,24 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
             <div className="flex items-center gap-2">
               <IoPersonCircleOutline size={20} color="#222222" />
               <a
-                href="/profile/me"
-                onClick={() => analyticsTrack("클릭_프로필_나", {})}
+                onClick={() => onClickMyProfile()}
                 className="cursor-pointer text-[#222222] font-medium"
               >
                 내 프로필
               </a>
             </div>
+            {/* 그룹 홈 */}
+            <div className="flex items-center gap-2">
+              <PiHandsPrayingFill size={20} color="#222222" />
+              <a
+                className="cursor-pointer text-[#222222] font-medium"
+                onClick={() => onClickGroupHome()}
+              >
+                그룹 홈
+              </a>
+              <img src={newIcon} />
+            </div>
+
             {targetGroup && (
               <>
                 <div className="flex items-center gap-2">
@@ -211,29 +258,13 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
             )}
           </section>
           <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
-            <a href="/" onClick={() => analyticsTrack("클릭_홈", {})}>
-              PrayU 홈
-            </a>
+            <a onClick={() => onClickPrayUHome()}>PrayU 홈</a>
             <div className="flex gap-1 items-center">
-              <a
-                href="/qt"
-                onClick={() =>
-                  analyticsTrack("클릭_QT_페이지", { where: "groupMenu" })
-                }
-              >
-                나만의 QT
-              </a>
+              <a onClick={() => onClickQT()}>나만의 QT</a>
               <img src={newIcon} />
             </div>
             <div className="flex gap-1 items-center">
-              <a
-                href="/bible-card"
-                onClick={() =>
-                  analyticsTrack("클릭_말씀카드_페이지", { where: "groupMenu" })
-                }
-              >
-                말씀카드 만들기
-              </a>
+              <a onClick={() => onClickBibleCard()}>말씀카드 만들기</a>
               <img src={newIcon} />
             </div>
             <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
