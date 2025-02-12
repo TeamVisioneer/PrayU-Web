@@ -17,7 +17,8 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import newIcon from "@/assets/newIcon.svg";
 import GroupMemberProfileList from "./GroupMemberProfileList";
-import GroupDropdown from "./GroupListDropDown";
+import { ChevronsUpDown } from "lucide-react";
+import { HiChevronUpDown } from "react-icons/hi2";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -56,6 +57,9 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   );
   const isGroupLeader = useBaseStore((state) => state.isGroupLeader);
   const memberList = useBaseStore((state) => state.memberList);
+  const setIsOpenGroupListDrawer = useBaseStore(
+    (state) => state.setIsOpenGroupListDrawer
+  );
 
   const handleClickCreateGroup = () => {
     if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
@@ -108,11 +112,6 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
     setIsOpenGroupSettingsDialog(true);
   };
 
-  // const onClickOtherGroup = (groupId: string) => {
-  //   analyticsTrack("클릭_그룹_전환", { group_id: groupId });
-  //   window.location.href = `/group/${groupId}`;
-  // };
-
   const onClickContactUs = () => {
     analyticsTrack("클릭_문의", {});
   };
@@ -130,6 +129,11 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
     window.location.href = "/tutorial";
   };
 
+  const onClickGroupName = () => {
+    setIsOpenGroupListDrawer(true);
+    analyticsTrack("클릭_그룹_이름", { where: "GroupMenuBtn" });
+  };
+
   return (
     <Sheet open={isOpenGroupMenuSheet} onOpenChange={setIsOpenGroupMenuSheet}>
       <SheetTrigger
@@ -143,11 +147,13 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
           <SheetTitle></SheetTitle>
           <SheetDescription></SheetDescription>
         </SheetHeader>
-        <div className="w-full pb-2">
-          <GroupDropdown
-            userGroupList={userGroupList}
-            targetGroup={targetGroup}
-          />
+
+        <div
+          className="max-w-full w-auto flex items-center py-3 border-none font-bold text-[#222222] text-xl gap-1 cursor-pointer"
+          onClick={() => onClickGroupName()}
+        >
+          <span className="truncate">{targetGroup?.name || "참여 그룹"}</span>
+          <ChevronsUpDown size={20} className="opacity-50 shrink-0" />
         </div>
 
         <div className="flex flex-col items-start text-gray-500 w-full">

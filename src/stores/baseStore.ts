@@ -157,6 +157,8 @@ export interface BaseStore {
   setIsOpenGroupMenuSheet: (isOpenGroupMenuSheet: boolean) => void;
   activeGroupMemberOption: string;
   setActiveGroupMemberOption: (activeGroupMemberOption: string) => void;
+  isOpenGroupListDrawer: boolean;
+  setIsOpenGroupListDrawer: (isOpenGroupListDrawer: boolean) => void;
 
   // member
   memberList: MemberWithProfiles[] | null;
@@ -668,6 +670,12 @@ const useBaseStore = create<BaseStore>()(
     setActiveGroupMemberOption: (activeGroupMemberOption: string) => {
       set((state) => {
         state.activeGroupMemberOption = activeGroupMemberOption;
+      });
+    },
+    isOpenGroupListDrawer: false,
+    setIsOpenGroupListDrawer: (isOpenGroupListDrawer: boolean) => {
+      set((state) => {
+        state.isOpenGroupListDrawer = isOpenGroupListDrawer;
       });
     },
 
