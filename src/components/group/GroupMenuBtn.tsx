@@ -18,7 +18,6 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import newIcon from "@/assets/newIcon.svg";
 import GroupMemberProfileList from "./GroupMemberProfileList";
 import { ChevronsUpDown } from "lucide-react";
-import { HiChevronUpDown } from "react-icons/hi2";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -118,6 +117,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
 
   const onClickSheetTrigeer = () => {
     analyticsTrack("클릭_그룹_메뉴", {});
+    setActiveGroupMemberOption("none");
   };
 
   const onClickOpenNotice = () => {

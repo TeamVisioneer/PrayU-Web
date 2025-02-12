@@ -69,11 +69,11 @@ const DrawerContent = React.forwardRef<
         )}
         {...props}
       >
-        <div className="px-3 mt-4 flex justify-between items-center">
+        <div className="px-2 mt-2 flex justify-between items-center">
           <DrawerClose>
-            <IoIosArrowDown className="w-8" size={20} color={"#728091"} />
+            <IoIosArrowDown className="w-8" size={20} color={"#9dacbe"} />
           </DrawerClose>
-          <div className="h-[4px] w-[70px] rounded-full bg-[#728091]" />
+          <div className="h-[4px] w-[50px] rounded-full bg-[#9dacbe]" />
           <div className="w-8" />
         </div>
         {children}
