@@ -152,7 +152,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
           className="max-w-full w-auto flex items-center py-3 border-none font-bold text-[#222222] text-xl gap-1 cursor-pointer"
           onClick={() => onClickGroupName()}
         >
-          <span className="truncate">{targetGroup?.name || "참여 그룹"}</span>
+          <span className="truncate">{targetGroup?.name || "그룹"}</span>
           <ChevronsUpDown size={20} className="opacity-50 shrink-0" />
         </div>
 

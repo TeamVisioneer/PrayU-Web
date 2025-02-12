@@ -132,6 +132,7 @@ export interface BaseStore {
   groupList: Group[] | null;
   todayGroupList: Group[] | null;
   targetGroup: GroupWithProfiles | null;
+  setTargetGroup: (targetGroup: GroupWithProfiles | null) => void;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
   isGroupLeader: boolean;
@@ -637,6 +638,11 @@ const useBaseStore = create<BaseStore>()(
     updateGroup: async (groupId: string, params: updateGroupParams) => {
       const group = await updateGroup(groupId, params);
       return group;
+    },
+    setTargetGroup: (targetGroup: GroupWithProfiles | null) => {
+      set((state) => {
+        state.targetGroup = targetGroup;
+      });
     },
     setGroupName: (groupName: string) => {
       set((state) => {
