@@ -25,11 +25,6 @@ const PrayCardCreatePage: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const targetGroupLoading = useBaseStore((state) => state.targetGroupLoading);
   const getGroup = useBaseStore((state) => state.getGroup);
-  const fetchGroupListByUserId = useBaseStore(
-    (state) => state.fetchGroupListByUserId
-  );
-  const groupList = useBaseStore((state) => state.groupList);
-
   const memberList = useBaseStore((state) => state.memberList);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
@@ -70,14 +65,12 @@ const PrayCardCreatePage: React.FC = () => {
   );
 
   useEffect(() => {
-    fetchGroupListByUserId(user!.id);
     fetchNotificationCount(user!.id, true);
     if (groupId) getGroup(groupId);
     if (groupId) getMember(user!.id, groupId);
     if (groupId) fetchMemberListByGroupId(groupId);
   }, [
     getMember,
-    fetchGroupListByUserId,
     fetchMemberListByGroupId,
     fetchNotificationCount,
     getGroup,
@@ -108,8 +101,7 @@ const PrayCardCreatePage: React.FC = () => {
   if (targetGroupLoading == false && targetGroup == null)
     window.location.href = "/group/not-found";
 
-  if (!groupList || !targetGroup || !memberList || memberLoading) {
-    console.log(groupList, targetGroup, myMember, memberList, memberLoading);
+  if (!targetGroup || !memberList || memberLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
@@ -229,13 +221,6 @@ const PrayCardCreatePage: React.FC = () => {
   };
 
   const todayDateYMD = getISOTodayDateYMD();
-  const filteredMemberList = myMember?.profiles.blocking_users
-    ? memberList.filter(
-        (member) =>
-          member.user_id &&
-          !myMember.profiles.blocking_users.includes(member.user_id)
-      )
-    : memberList;
 
   const PrayCardUI = (
     <div className="w-full flex flex-col gap-6 justify-center">
@@ -279,11 +264,7 @@ const PrayCardCreatePage: React.FC = () => {
 
   return (
     <div className="w-full ">
-      <GroupHeader
-        targetGroup={targetGroup}
-        groupList={groupList}
-        memberCount={filteredMemberList.length}
-      />
+      <GroupHeader />
       <div className="w-full flex flex-col items-center px-5 gap-3">
         <p>이번 주 기도카드를 만들고 그룹에 참여해요 🙏🏻</p>
         {PrayCardUI}

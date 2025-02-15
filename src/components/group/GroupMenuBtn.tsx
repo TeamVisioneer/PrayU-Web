@@ -7,7 +7,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useToast } from "../ui/use-toast";
-import { Group } from "supabase/types/tables";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import { SlMenu } from "react-icons/sl";
@@ -22,15 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { PiHandsPrayingFill } from "react-icons/pi";
 import kakaoIcon from "@/assets/kakaoIcon.svg";
 
-interface GroupMenuBtnProps {
-  userGroupList: Group[];
-  targetGroup?: Group;
-}
-
-const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
-  userGroupList,
-  targetGroup,
-}) => {
+const GroupMenuBtn: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const navigate = useNavigate();
   const deleteMemberbyGroupId = useBaseStore(
@@ -45,6 +36,8 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   const setIsConfirmAlertOpen = useBaseStore(
     (state) => state.setIsConfirmAlertOpen
   );
+  const targetGroup = useBaseStore((state) => state.targetGroup);
+  const groupList = useBaseStore((state) => state.groupList);
   const userPlan = useBaseStore((state) => state.userPlan);
   const isOpenGroupMenuSheet = useBaseStore(
     (state) => state.isOpenGroupMenuSheet
@@ -63,11 +56,15 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   const setIsOpenGroupListDrawer = useBaseStore(
     (state) => state.setIsOpenGroupListDrawer
   );
+  const fetchGroupListByUserId = useBaseStore(
+    (state) => state.fetchGroupListByUserId
+  );
 
   const handleClickCreateGroup = () => {
-    if (userGroupList.length < maxGroupCount || userPlan === "Premium") {
+    if (!groupList) return;
+    if (groupList.length < maxGroupCount || userPlan === "Premium") {
       window.location.href = "/group/new";
-      analyticsTrack("클릭_그룹_추가", { group_length: userGroupList.length });
+      analyticsTrack("클릭_그룹_추가", { group_length: groupList.length });
     } else {
       toast({
         description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
@@ -137,7 +134,8 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
     navigate("/tutorial");
   };
 
-  const onClickGroupName = () => {
+  const onClickGroupName = async () => {
+    if (user) await fetchGroupListByUserId(user!.id);
     setIsOpenGroupListDrawer(true);
     analyticsTrack("클릭_그룹_이름", { where: "GroupMenuBtn" });
   };
