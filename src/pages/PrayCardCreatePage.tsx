@@ -15,7 +15,6 @@ import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo";
 import { PulseLoader } from "react-spinners";
 import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 import GroupHeader from "@/components/group/GroupHeader";
-import { UserProfile } from "@/components/profile/UserProfile";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
 
