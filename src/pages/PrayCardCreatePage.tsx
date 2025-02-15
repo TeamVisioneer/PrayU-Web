@@ -65,9 +65,13 @@ const PrayCardCreatePage: React.FC = () => {
     (state) => state.setIsConfirmAlertOpen
   );
   const setAlertData = useBaseStore((state) => state.setAlertData);
+  const fetchNotificationCount = useBaseStore(
+    (state) => state.fetchNotificationCount
+  );
 
   useEffect(() => {
     fetchGroupListByUserId(user!.id);
+    fetchNotificationCount(user!.id, true);
     if (groupId) getGroup(groupId);
     if (groupId) getMember(user!.id, groupId);
     if (groupId) fetchMemberListByGroupId(groupId);
@@ -75,6 +79,7 @@ const PrayCardCreatePage: React.FC = () => {
     getMember,
     fetchGroupListByUserId,
     fetchMemberListByGroupId,
+    fetchNotificationCount,
     getGroup,
     user,
     groupId,

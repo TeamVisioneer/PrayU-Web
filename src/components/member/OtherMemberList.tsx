@@ -7,6 +7,7 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { MemberWithProfiles } from "supabase/types/tables";
+import useRealtimeMember from "./useRealtimeMember";
 
 const OtherMemberList: React.FC = () => {
   const myMember = useBaseStore((state) => state.myMember);
@@ -20,7 +21,6 @@ const OtherMemberList: React.FC = () => {
   const setMemberList = useBaseStore((state) => state.setMemberList);
   const setMemberListView = useBaseStore((state) => state.setMemberListView);
   const memberCount = useBaseStore((state) => state.memberCount);
-
   const pageSize = 25;
   const [offset, setOffset] = useState(pageSize);
 
@@ -28,6 +28,12 @@ const OtherMemberList: React.FC = () => {
     if (memberList && memberListView.length == 0)
       setMemberListView([...memberList]);
   }, [memberList, memberListView, setMemberListView]);
+
+  useRealtimeMember(targetGroup!.id, async () => {
+    const memberList = await fetchMemberListByGroupId(targetGroup!.id);
+    if (!memberList) return;
+    setMemberListView([...memberListView, ...memberList]);
+  });
 
   if (!targetGroup || !memberCount) return;
 

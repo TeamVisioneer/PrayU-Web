@@ -1,12 +1,21 @@
 import { RiNotification4Line } from "react-icons/ri";
 import useBaseStore from "@/stores/baseStore";
 import { useNavigate } from "react-router-dom";
+import useRealtimeNotification from "./useRealtimeNotification";
 
 const NotificationBtn = () => {
+  const navigate = useNavigate();
   const userNotificationUnreadTotal = useBaseStore(
     (state) => state.userNotificationUnreadTotal
   );
-  const navigate = useNavigate();
+  const setNotificationUnreadTotal = useBaseStore(
+    (state) => state.setUserNotificationUnreadTotal
+  );
+  const user = useBaseStore((state) => state.user);
+
+  useRealtimeNotification(user!.id, () => {
+    setNotificationUnreadTotal(userNotificationUnreadTotal + 1);
+  });
 
   return (
     <button

@@ -129,7 +129,7 @@ const WeekUpdateDialog = () => {
               onClick={() => onClickHideWeekUpdateDialog()}
               className="text-sm text-gray-400 underline text-center"
             >
-              더이상 보지 않기
+              더 이상 보지 않기
             </p>
           </div>
         </DialogHeader>

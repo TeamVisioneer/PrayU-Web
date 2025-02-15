@@ -20,6 +20,7 @@ import GroupMemberProfileList from "./GroupMemberProfileList";
 import { ChevronsUpDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PiHandsPrayingFill } from "react-icons/pi";
+import kakaoIcon from "@/assets/kakaoIcon.svg";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -117,6 +118,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
   const onClickContactUs = () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_문의", {});
+    window.location.href = import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL;
   };
 
   const onClickSheetTrigeer = () => {
@@ -178,111 +180,132 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
       >
         <SlMenu size={20} />
       </SheetTrigger>
-      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 py-10 flex flex-col items-start overflow-y-auto no-scrollbar bg-mainBg">
-        <SheetHeader>
-          <SheetTitle></SheetTitle>
-          <SheetDescription></SheetDescription>
-        </SheetHeader>
+      <SheetContent className="max-w-[288px] mx-auto w-[60%] px-5 pt-10 flex flex-col items-start overflow-y-auto no-scrollbar bg-mainBg">
+        <div className="flex flex-col w-full">
+          <div className="flex-1">
+            <SheetHeader>
+              <SheetTitle></SheetTitle>
+              <SheetDescription></SheetDescription>
+            </SheetHeader>
 
-        <div
-          className="max-w-full w-auto flex items-center py-3 border-none font-bold text-[#222222] text-xl gap-1 cursor-pointer"
-          onClick={() => onClickGroupName()}
-        >
-          <span className="truncate">{targetGroup?.name || "그룹"}</span>
-          <ChevronsUpDown size={20} className="opacity-50 shrink-0" />
-        </div>
-
-        <div className="flex flex-col items-start text-gray-500 w-full">
-          {memberList && targetGroup && (
-            <section className="w-full py-5 border-t border-gray-200">
-              <GroupMemberProfileList
-                memberList={memberList}
-                targetGroup={targetGroup}
-              />
-            </section>
-          )}
-          <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
-            <div className="flex items-center gap-2">
-              <IoPersonCircleOutline size={20} color="#222222" />
-              <a
-                onClick={() => onClickMyProfile()}
-                className="cursor-pointer text-[#222222] font-medium"
-              >
-                내 프로필
-              </a>
-            </div>
-            {/* 그룹 홈 */}
-            <div className="flex items-center gap-2">
-              <PiHandsPrayingFill size={20} color="#222222" />
-              <a
-                className="cursor-pointer text-[#222222] font-medium"
-                onClick={() => onClickGroupHome()}
-              >
-                그룹 홈
-              </a>
-              <img src={newIcon} />
-            </div>
-
-            {targetGroup && (
-              <>
-                <div className="flex items-center gap-2">
-                  <IoAddCircleOutline size={20} color="#222222" />
-                  <a
-                    className="cursor-pointer text-[#222222] font-medium"
-                    onClick={() => handleClickCreateGroup()}
-                  >
-                    그룹 만들기
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <IoRemoveCircleOutline size={20} color="#222222" />
-                  <a
-                    className="cursor-pointer text-[#222222] font-medium"
-                    onClick={() => handleClickExitGroup()}
-                  >
-                    그룹 나가기
-                  </a>
-                </div>
-                {isGroupLeader && (
-                  <div className="flex items-center gap-2">
-                    <IoSettingsOutline size={20} color="#222222" />
-                    <a
-                      className="cursor-pointer text-[#222222] font-medium"
-                      onClick={() => handleClickUpdateGroup()}
-                    >
-                      그룹 설정
-                    </a>
-                  </div>
-                )}
-              </>
-            )}
-          </section>
-          <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
-            <a onClick={() => onClickPrayUHome()}>PrayU 홈</a>
-            <div className="flex gap-1 items-center">
-              <a className="cursor-pointer" onClick={() => onClickOpenNotice()}>
-                공지사항
-              </a>
-              <img src={newIcon} />
-            </div>
-            <div className="flex gap-1 items-center">
-              <a onClick={() => onClickQT()}>나만의 QT</a>
-              <img src={newIcon} />
-            </div>
-            <div className="flex gap-1 items-center">
-              <a onClick={() => onClickBibleCard()}>말씀카드 만들기</a>
-              <img src={newIcon} />
-            </div>
-
-            <a
-              href={`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`}
-              onClick={() => onClickContactUs()}
+            <div
+              className="max-w-full w-auto flex items-center py-3 border-none font-bold text-[#222222] text-xl gap-1 cursor-pointer"
+              onClick={() => onClickGroupName()}
             >
-              문의하기
-            </a>
-            <a className="cursor-pointer" onClick={() => onClickOpenTutorial()}>
-              가이드
-            </a>
+              <span className="truncate">{targetGroup?.name || "그룹"}</span>
+              <ChevronsUpDown size={20} className="opacity-50 shrink-0" />
+            </div>
+
+            <div className="flex flex-col items-start text-gray-500 w-full">
+              {memberList && targetGroup && (
+                <section className="w-full py-5 border-t border-gray-200">
+                  <GroupMemberProfileList
+                    memberList={memberList}
+                    targetGroup={targetGroup}
+                  />
+                </section>
+              )}
+              <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
+                <div className="flex items-center gap-2">
+                  <IoPersonCircleOutline size={20} color="#222222" />
+                  <a
+                    onClick={() => onClickMyProfile()}
+                    className="cursor-pointer text-[#222222] font-medium"
+                  >
+                    내 프로필
+                  </a>
+                </div>
+                {/* 그룹 홈 */}
+                <div className="flex items-center gap-2">
+                  <PiHandsPrayingFill size={20} color="#222222" />
+                  <a
+                    className="cursor-pointer text-[#222222] font-medium"
+                    onClick={() => onClickGroupHome()}
+                  >
+                    그룹 홈
+                  </a>
+                  <img src={newIcon} />
+                </div>
+
+                {targetGroup && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <IoAddCircleOutline size={20} color="#222222" />
+                      <a
+                        className="cursor-pointer text-[#222222] font-medium"
+                        onClick={() => handleClickCreateGroup()}
+                      >
+                        그룹 만들기
+                      </a>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <IoRemoveCircleOutline size={20} color="#222222" />
+                      <a
+                        className="cursor-pointer text-[#222222] font-medium"
+                        onClick={() => handleClickExitGroup()}
+                      >
+                        그룹 나가기
+                      </a>
+                    </div>
+                    {isGroupLeader && (
+                      <div className="flex items-center gap-2">
+                        <IoSettingsOutline size={20} color="#222222" />
+                        <a
+                          className="cursor-pointer text-[#222222] font-medium"
+                          onClick={() => handleClickUpdateGroup()}
+                        >
+                          그룹 설정
+                        </a>
+                      </div>
+                    )}
+                  </>
+                )}
+              </section>
+              <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
+                <a onClick={() => onClickPrayUHome()}>PrayU 홈</a>
+                <div className="flex gap-1 items-center">
+                  <a
+                    className="cursor-pointer"
+                    onClick={() => onClickOpenNotice()}
+                  >
+                    공지사항
+                  </a>
+                  <img src={newIcon} />
+                </div>
+                <div className="flex gap-1 items-center">
+                  <a onClick={() => onClickQT()}>나만의 QT</a>
+                  <img src={newIcon} />
+                </div>
+                <div className="flex gap-1 items-center">
+                  <a onClick={() => onClickBibleCard()}>말씀카드 만들기</a>
+                  <img src={newIcon} />
+                </div>
+                <a
+                  className="cursor-pointer"
+                  onClick={() => onClickOpenTutorial()}
+                >
+                  가이드
+                </a>
+              </section>
+            </div>
+          </div>
+
+          {/* 카카오톡 톡상담 버튼 */}
+          <section
+            onClick={() => onClickContactUs()}
+            className="sticky bottom-0"
+          >
+            <div className="flex items-center bg-[#FFE812] text-black rounded-full px-2 shadow-md">
+              <div className="w-12 h-12 pl-3 py-3 rounded-full flex items-center justify-center">
+                <img src={kakaoIcon} className="w-full h-full rounded-full" />
+              </div>
+              <span className="w-full text-center font-semibold pr-3">
+                <span className="hidden min-[350px]:inline">
+                  카카오톡 문의하기
+                </span>
+                <span className="min-[350px]:hidden">톡문의</span>
+              </span>
+            </div>
           </section>
         </div>
       </SheetContent>
