@@ -24,7 +24,6 @@ const UnionWorshipPage = () => {
   const fetchMemberCountByGroupId = useBaseStore(
     (state) => state.fetchMemberCountByGroupId
   );
-  const groupList = useBaseStore((state) => state.groupList);
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
@@ -75,11 +74,7 @@ const UnionWorshipPage = () => {
 
   return (
     <div className="p-5 flex flex-col h-full gap-5">
-      <GroupHeader
-        groupList={groupList || []}
-        targetGroup={targetGroup}
-        memberCount={OtherMemberList.length}
-      />
+      <GroupHeader />
       <div className="flex flex-col flex-grow gap-4">
         {myMember ? <MyMember myMember={myMember} /> : MyMemberUI}
         <OtherMemberList />
