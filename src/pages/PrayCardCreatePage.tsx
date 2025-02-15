@@ -104,7 +104,8 @@ const PrayCardCreatePage: React.FC = () => {
   if (targetGroupLoading == false && targetGroup == null)
     window.location.href = "/group/not-found";
 
-  if (!groupList || !targetGroup || !myMember || !memberList || memberLoading) {
+  if (!groupList || !targetGroup || !memberList || memberLoading) {
+    console.log(groupList, targetGroup, myMember, memberList, memberLoading);
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
@@ -236,11 +237,26 @@ const PrayCardCreatePage: React.FC = () => {
     <div className="w-full flex flex-col gap-6 justify-center">
       <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
         <div className="flex flex-col justify-center items-start gap-1 text-white bg-gradient-to-r from-start via-middle via-30% to-end rounded-t-2xl p-5">
-          <UserProfile
-            profile={myMember.profiles}
-            imgSize="w-7 h-7"
-            fontSize=""
-          />
+          <div className="flex items-center gap-2">
+            <img
+              src={
+                myMember
+                  ? myMember?.profiles.avatar_url ||
+                    "/images/defaultProfileImage.png"
+                  : user?.user_metadata.picture ||
+                    "/images/defaultProfileImage.png"
+              }
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                e.currentTarget.src = "/images/defaultProfileImage.png";
+              }}
+              className="w-7 h-7 rounded-full object-cover"
+            />
+            <p className="text-white text-lg ">
+              {myMember
+                ? myMember?.profiles.full_name
+                : user?.user_metadata.name}
+            </p>
+          </div>
           <p className="text-sm w-full text-left">
             시작일: {todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
           </p>
