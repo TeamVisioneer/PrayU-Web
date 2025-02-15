@@ -20,7 +20,7 @@ import GroupMemberProfileList from "./GroupMemberProfileList";
 import { ChevronsUpDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PiHandsPrayingFill } from "react-icons/pi";
-import KakaoIcon from "@/assets/KakaoIcon.svg";
+import kakaoIcon from "@/assets/kakaoIcon.svg";
 
 interface GroupMenuBtnProps {
   userGroupList: Group[];
@@ -297,7 +297,7 @@ const GroupMenuBtn: React.FC<GroupMenuBtnProps> = ({
           >
             <div className="flex items-center bg-[#FFE812] text-black rounded-full px-2 shadow-md">
               <div className="w-12 h-12 pl-3 py-3 rounded-full flex items-center justify-center">
-                <img src={KakaoIcon} className="w-full h-full rounded-full" />
+                <img src={kakaoIcon} className="w-full h-full rounded-full" />
               </div>
               <span className="w-full text-center font-semibold pr-3">
                 <span className="hidden min-[350px]:inline">
