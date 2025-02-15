@@ -138,21 +138,9 @@ const GroupPage: React.FC = () => {
     )
     .every((member) => !isCurrentWeek(member.updated_at));
 
-  const filteredMemberList = myMember?.profiles.blocking_users
-    ? memberList?.filter(
-        (member) =>
-          member.user_id &&
-          !myMember.profiles.blocking_users.includes(member.user_id)
-      )
-    : memberList;
-
   return (
     <div className="flex flex-col h-full">
-      <GroupHeader
-        groupList={groupList}
-        targetGroup={targetGroup}
-        memberCount={filteredMemberList?.length || 0}
-      />
+      <GroupHeader />
       <div className="flex flex-col px-5 pb-5 flex-grow gap-4">
         <MyMember myMember={myMember} />
         {isPrayToday || AllMemberExpired ? (

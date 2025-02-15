@@ -27,15 +27,12 @@ const GroupCreatePage: React.FC = () => {
   const createPrayCard = useBaseStore((state) => state.createPrayCard);
   const groupList = useBaseStore((state) => state.groupList);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
-  const fetchGroupListByUserId = useBaseStore(
-    (state) => state.fetchGroupListByUserId
-  );
+
   const userPlan = useBaseStore((state) => state.userPlan);
 
   useEffect(() => {
-    fetchGroupListByUserId(user!.id);
     setGroupName("");
-  }, [fetchGroupListByUserId, user, setGroupName]);
+  }, [user, setGroupName]);
 
   if (!groupList) return null;
 
@@ -68,7 +65,7 @@ const GroupCreatePage: React.FC = () => {
       <div className="w-full flex justify-between items-center">
         <IoChevronBack size={20} onClick={() => window.history.back()} />
         <span className="text-xl font-bold">그룹 만들기</span>
-        <GroupMenuBtn userGroupList={groupList} />
+        <GroupMenuBtn />
       </div>
       <div className="w-full aspect-square flex justify-center">
         <img

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import GroupListHeader from "@/components/group/GroupListHeader";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const GroupListPage: React.FC = () => {
   const { user } = useAuth();
@@ -24,8 +25,6 @@ const GroupListPage: React.FC = () => {
     setTargetGroup(null);
   }, [fetchGroupListByUserId, user, setTargetGroup]);
 
-  if (!groupList) return null;
-
   const addGroup = () => {
     analyticsTrack("클릭_그룹_추가", {});
     navigate("/group/new");
@@ -36,9 +35,42 @@ const GroupListPage: React.FC = () => {
     window.location.href = `/group/${id}`;
   };
 
+  if (!groupList) {
+    return (
+      <div className="flex flex-col h-screen">
+        <GroupListHeader />
+        <div className="p-5 flex-grow overflow-y-auto">
+          {[...Array(3)].map((_, index) => (
+            <Skeleton
+              key={index}
+              className="cursor-pointer py-3 hover:bg-gray-100 rounded-lg truncate flex justify-between items-center"
+            >
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-10 h-10 bg-gray-200 rounded-lg" />
+                <div>
+                  <Skeleton className="w-24 h-5 bg-gray-200 mb-1" />
+                  <Skeleton className="w-16 h-4 bg-gray-200" />
+                </div>
+              </div>
+            </Skeleton>
+          ))}
+        </div>
+        <div className="p-4 border-t space-y-2">
+          <Button
+            variant="primary"
+            onClick={addGroup}
+            className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600"
+          >
+            <PlusCircle className="h-5 w-5 mr-2" /> 새 그룹 만들기
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-screen">
-      <GroupListHeader userGroupList={groupList} />
+      <GroupListHeader />
 
       <div className="flex-1 overflow-y-auto px-5">
         {groupList.length === 0 ? (
