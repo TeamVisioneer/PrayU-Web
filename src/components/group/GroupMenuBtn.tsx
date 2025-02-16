@@ -298,10 +298,10 @@ const GroupMenuBtn: React.FC = () => {
                 <img src={kakaoIcon} className="w-full h-full rounded-full" />
               </div>
               <span className="w-full text-center font-semibold pr-3">
-                <span className="hidden min-[350px]:inline">
+                <span className="hidden min-[360px]:inline">
                   카카오톡 문의하기
                 </span>
-                <span className="min-[350px]:hidden">톡문의</span>
+                <span className="min-[360px]:hidden">톡문의</span>
               </span>
             </div>
           </section>
