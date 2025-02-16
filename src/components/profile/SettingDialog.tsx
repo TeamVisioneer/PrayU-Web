@@ -90,6 +90,9 @@ const SettingDialog = () => {
         const success = await deleteUser(userId);
         if (success) {
           signOut();
+          localStorage.removeItem(
+            `sb-${import.meta.env.VITE_SUPABASE_PROJECT_ID}-auth-token`
+          );
           window.location.href = "/";
         }
       },

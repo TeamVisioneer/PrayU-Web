@@ -83,9 +83,14 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
               이번 주 기도카드를 작성해 보아요✏️
             </p>
           ) : (
-            <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
-              {prayCard.content || ""}
-            </p>
+            <div className="flex-grow w-full">
+              <p className="p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap">
+                {prayCard.content || ""}
+              </p>
+              {prayCard.updated_at !== prayCard.created_at && (
+                <p className="px-2 text-xs text-gray-400">(편집됨)</p>
+              )}
+            </div>
           )}
         </div>
       </div>
