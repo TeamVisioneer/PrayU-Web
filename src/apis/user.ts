@@ -86,9 +86,9 @@ export const deleteUser = async (userId: string): Promise<boolean> => {
       Sentry.captureException(error.message);
       return false;
     }
-    return true;
   } catch (error) {
     Sentry.captureException(error);
     return false;
   }
+  return true;
 };

@@ -60,38 +60,39 @@ const MyPrayCardUI: React.FC = () => {
   };
 
   const MyPrayCardBody = (
-    <div className="flex flex-col flex-grow">
-      <div className="flex flex-col bg-white rounded-2xl shadow-prayCard flex-grow">
-        <div className="bg-gradient-to-r from-start via-middle via-52% to-end flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
-          <div className="flex items-center gap-2 w-full">
-            <div className="flex gap-2 items-center">
-              <p className="text-xl text-white">
-                기도 {dateDistance.days + 1}일차
-              </p>
-            </div>
+    <div className="flex flex-col bg-white rounded-2xl shadow-prayCard flex-grow min-h-full max-h-full">
+      <div className="bg-gradient-to-r from-start via-middle via-52% to-end flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
+        <div className="flex items-center gap-2 w-full">
+          <div className="flex gap-2 items-center">
+            <p className="text-xl text-white">
+              기도 {dateDistance.days + 1}일차
+            </p>
           </div>
-          <p className="text-sm text-white w-full text-left">
-            시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
-            {createdDateYMD.day}
-          </p>
         </div>
-        <div className="flex flex-col flex-grow relative">
-          <p
-            onClick={() => handleEditClick()}
-            className={`flex-grow w-full p-4 rounded-2xl overflow-y-auto no-scrollbar border-none focus:outline-gray-200 whitespace-pre-wrap ${
-              inputPrayCardContent ? "text-black" : "text-gray-400"
-            }`}
-          >
-            {inputPrayCardContent ||
-              `기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
-          </p>
-        </div>
+        <p className="text-sm text-white w-full text-left">
+          시작일 : {createdDateYMD.year}.{createdDateYMD.month}.
+          {createdDateYMD.day}
+        </p>
+      </div>
+      <div className="p-2 flex flex-col flex-grow overflow-y-auto no-scrollbar">
+        <p
+          onClick={() => handleEditClick()}
+          className={`text-sm w-full p-2 overflow-y-auto no-scrollbar border-none whitespace-pre-wrap ${
+            inputPrayCardContent ? "text-black" : "text-gray-400"
+          }`}
+        >
+          {inputPrayCardContent ||
+            `기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
+        </p>
+        {prayCard.updated_at !== prayCard.created_at && (
+          <p className="px-2 text-xs text-gray-400">(편집됨)</p>
+        )}
       </div>
     </div>
   );
 
   return (
-    <div className="flex flex-col px-10 gap-2 h-70vh">
+    <div className="flex flex-col px-10 gap-2 min-h-70vh max-h-70vh">
       <div className="flex justify-end px-2">
         <MyPrayCardMenuBtn
           handleEditClick={handleEditClick}
