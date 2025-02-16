@@ -60,7 +60,7 @@ const MyPrayCardUI: React.FC = () => {
   };
 
   const MyPrayCardBody = (
-    <div className="flex flex-col bg-white rounded-2xl shadow-prayCard flex-grow min-h-full max-h-full">
+    <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard overflow-y-auto">
       <div className="bg-gradient-to-r from-start via-middle via-52% to-end flex flex-col justify-center items-start gap-1 rounded-t-2xl p-5">
         <div className="flex items-center gap-2 w-full">
           <div className="flex gap-2 items-center">
@@ -74,10 +74,12 @@ const MyPrayCardUI: React.FC = () => {
           {createdDateYMD.day}
         </p>
       </div>
-      <div className="p-2 flex flex-col flex-grow overflow-y-auto no-scrollbar">
+      <div
+        className="p-2 flex flex-col flex-grow overflow-y-auto no-scrollbar"
+        onClick={() => handleEditClick()}
+      >
         <p
-          onClick={() => handleEditClick()}
-          className={`text-sm w-full p-2 overflow-y-auto no-scrollbar border-none whitespace-pre-wrap ${
+          className={`text-sm w-full p-2 border-none whitespace-pre-wrap ${
             inputPrayCardContent ? "text-black" : "text-gray-400"
           }`}
         >
