@@ -20,7 +20,7 @@ const Popover = ({
       if (onOpenChange) onOpenChange(false);
     };
     window.addEventListener("popstate", handlePopState);
-    window.history.replaceState(null, "", window.location.pathname);
+    // window.history.replaceState(null, "", window.location.pathname);
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };

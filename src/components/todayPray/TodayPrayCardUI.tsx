@@ -73,8 +73,10 @@ const TodayPrayCardUI: React.FC<PrayCardProps> = ({
         <div
           className="flex flex-col flex-grow min-h-full max-h-full items-start px-2 py-2 overflow-y-auto no-scrollbar"
           onClick={() => {
-            setIsOpenTodayPrayDrawer(false);
-            setIsOpenMyMemberDrawer(true);
+            if (prayCard.user_id == user!.id) {
+              setIsOpenTodayPrayDrawer(false);
+              setIsOpenMyMemberDrawer(true);
+            }
           }}
         >
           {!prayCard.content && prayCard.user_id == user!.id ? (

@@ -108,7 +108,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       >
         {MyMemberUI}
       </DrawerTrigger>
-      <DrawerContent className="bg-mainBg pb-10">
+      <DrawerContent className="bg-mainBg pb-10 min-h-80vh max-h-80vh">
         <DrawerHeader className="p-0">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>

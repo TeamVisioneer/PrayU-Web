@@ -15,8 +15,6 @@ const Sheet = ({
   useEffect(() => {
     if (open && window.history.state?.open !== true) {
       window.history.pushState({ open: true }, "", "");
-    } else {
-      window.history.replaceState(null, "", window.location.pathname);
     }
   }, [open]);
 
