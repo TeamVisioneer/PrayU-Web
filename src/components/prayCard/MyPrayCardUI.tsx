@@ -74,16 +74,19 @@ const MyPrayCardUI: React.FC = () => {
           {createdDateYMD.day}
         </p>
       </div>
-      <div className="flex flex-col flex-grow overflow-y-auto no-scrollbar">
+      <div className="p-2 flex flex-col flex-grow overflow-y-auto no-scrollbar">
         <p
           onClick={() => handleEditClick()}
-          className={`w-full p-4 overflow-y-auto no-scrollbar border-none whitespace-pre-wrap ${
+          className={`text-sm w-full p-2 overflow-y-auto no-scrollbar border-none whitespace-pre-wrap ${
             inputPrayCardContent ? "text-black" : "text-gray-400"
           }`}
         >
           {inputPrayCardContent ||
             `기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
         </p>
+        {prayCard.updated_at !== prayCard.created_at && (
+          <p className="px-2 text-xs text-gray-400">(편집됨)</p>
+        )}
       </div>
     </div>
   );
