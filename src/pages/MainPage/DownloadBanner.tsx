@@ -2,7 +2,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 
 const DownloadBanner = () => {
   const onClickInstallPrayU = async () => {
-    analyticsTrack("클릭_PrayU_설치", { where: "DownloadBanner" });
+    analyticsTrack("클릭_앱설치", { where: "DownloadBanner" });
     if (navigator.userAgent.match(/Android/i)) {
       window.location.href =
         "https://play.google.com/store/apps/details?id=com.team.visioneer.prayu";

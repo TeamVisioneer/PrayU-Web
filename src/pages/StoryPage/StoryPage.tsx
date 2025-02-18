@@ -5,7 +5,7 @@ import DownloadBanner from "../MainPage/DownloadBanner";
 
 const StoryPage = () => {
   const onClickStartPrayU = async () => {
-    analyticsTrack("클릭_PrayU_시작", { where: "BannerImage" });
+    analyticsTrack("클릭_앱설치", { where: "BannerImage" });
     if (navigator.userAgent.match(/Android/i)) {
       window.location.href =
         "https://play.google.com/store/apps/details?id=com.team.visioneer.prayu";
