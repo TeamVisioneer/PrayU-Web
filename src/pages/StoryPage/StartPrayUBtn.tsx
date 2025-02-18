@@ -10,7 +10,7 @@ interface StartPrayUBtnProps {
 
 const StartPrayUBtn: React.FC<StartPrayUBtnProps> = ({ eventOption }) => {
   const onClickStartPrayUBtn = async () => {
-    analyticsTrack("클릭_PrayU_시작", { where: eventOption.where });
+    analyticsTrack("클릭_앱설치", { where: eventOption.where });
     if (navigator.userAgent.match(/Android/i)) {
       window.location.href =
         "https://play.google.com/store/apps/details?id=com.team.visioneer.prayu";
