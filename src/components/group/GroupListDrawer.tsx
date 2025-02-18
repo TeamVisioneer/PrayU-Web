@@ -1,5 +1,11 @@
 import { Group } from "supabase/types/tables";
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import { FaCircleCheck } from "react-icons/fa6";
@@ -36,6 +42,8 @@ export default function GroupListDrawer() {
   const deletePrayCardByGroupId = useBaseStore(
     (state) => state.deletePrayCardByGroupId
   );
+
+  const isGroupListPage = window.location.pathname === "/group";
 
   const handleClickGroup = (group: Group) => {
     setIsOpenGroupListDrawer(false);
@@ -98,6 +106,10 @@ export default function GroupListDrawer() {
       onOpenChange={setIsOpenGroupListDrawer}
     >
       <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle></DrawerTitle>
+          <DrawerDescription></DrawerDescription>
+        </DrawerHeader>
         <div className="flex flex-col h-[60vh]">
           <div className="flex-1 overflow-y-auto p-4">
             <ul className="space-y-2">
@@ -120,7 +132,7 @@ export default function GroupListDrawer() {
                       )}
                     </div>
                   </div>
-                  {targetGroup?.id === group.id && (
+                  {targetGroup?.id === group.id && !isGroupListPage && (
                     <span className="text-blue-500">
                       <FaCircleCheck size={20} />
                     </span>
@@ -137,7 +149,7 @@ export default function GroupListDrawer() {
             >
               새 그룹 만들기
             </button>
-            {targetGroup && (
+            {targetGroup && !isGroupListPage && (
               <button
                 className="w-full py-3 text-red-500 rounded-lg font-medium hover:bg-gray-100"
                 onClick={() => handleClickExitGroup()}
