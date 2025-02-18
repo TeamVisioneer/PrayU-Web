@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PlusCircle } from "lucide-react";
-import { FaCircleCheck } from "react-icons/fa6";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
@@ -17,13 +16,14 @@ const GroupListPage: React.FC = () => {
     (state) => state.fetchGroupListByUserId
   );
   const groupList = useBaseStore((state) => state.groupList);
-  const targetGroup = useBaseStore((state) => state.targetGroup);
-  const setTargetGroup = useBaseStore((state) => state.setTargetGroup);
+  const fetchNotificationCount = useBaseStore(
+    (state) => state.fetchNotificationCount
+  );
 
   useEffect(() => {
     if (user) fetchGroupListByUserId(user.id);
-    setTargetGroup(null);
-  }, [fetchGroupListByUserId, user, setTargetGroup]);
+    if (user) fetchNotificationCount(user.id, true);
+  }, [fetchGroupListByUserId, user, fetchNotificationCount]);
 
   const addGroup = () => {
     analyticsTrack("클릭_그룹_추가", {});
@@ -43,7 +43,7 @@ const GroupListPage: React.FC = () => {
           {[...Array(3)].map((_, index) => (
             <Skeleton
               key={index}
-              className="cursor-pointer py-3 hover:bg-gray-100 rounded-lg truncate flex justify-between items-center"
+              className="cursor-pointer py-3  rounded-lg truncate flex justify-between items-center"
             >
               <div className="flex items-center gap-3">
                 <Skeleton className="w-10 h-10 bg-gray-200 rounded-lg" />
@@ -59,7 +59,7 @@ const GroupListPage: React.FC = () => {
           <Button
             variant="primary"
             onClick={addGroup}
-            className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600"
+            className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium "
           >
             <PlusCircle className="h-5 w-5 mr-2" /> 새 그룹 만들기
           </Button>
@@ -88,7 +88,7 @@ const GroupListPage: React.FC = () => {
               return (
                 <li
                   key={group.id}
-                  className="cursor-pointer py-3 hover:bg-gray-100 rounded-lg truncate flex justify-between items-center"
+                  className="cursor-pointer py-3 rounded-lg truncate flex justify-between items-center"
                   onClick={() => handleGroupClick(group.id)}
                 >
                   <div className="flex items-center gap-3">
@@ -104,11 +104,6 @@ const GroupListPage: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  {targetGroup?.id === group.id && (
-                    <span className="text-blue-500">
-                      <FaCircleCheck size={20} />
-                    </span>
-                  )}
                 </li>
               );
             })}

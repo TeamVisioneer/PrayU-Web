@@ -60,6 +60,8 @@ const GroupMenuBtn: React.FC = () => {
     (state) => state.fetchGroupListByUserId
   );
 
+  const isGroupListPage = window.location.pathname === "/group";
+
   const handleClickCreateGroup = () => {
     if (!groupList) return;
     if (groupList.length < maxGroupCount || userPlan === "Premium") {
@@ -190,12 +192,14 @@ const GroupMenuBtn: React.FC = () => {
               className="max-w-full w-auto flex items-center py-3 border-none font-bold text-[#222222] text-xl gap-1 cursor-pointer"
               onClick={() => onClickGroupName()}
             >
-              <span className="truncate">{targetGroup?.name || "그룹"}</span>
+              <span className="truncate">
+                {targetGroup && !isGroupListPage ? targetGroup.name : "그룹"}
+              </span>
               <ChevronsUpDown size={20} className="opacity-50 shrink-0" />
             </div>
 
             <div className="flex flex-col items-start text-gray-500 w-full">
-              {memberList && targetGroup && (
+              {memberList && targetGroup && !isGroupListPage && (
                 <section className="w-full py-5 border-t border-gray-200">
                   <GroupMemberProfileList
                     memberList={memberList}
@@ -225,7 +229,7 @@ const GroupMenuBtn: React.FC = () => {
                   <img src={newIcon} />
                 </div>
 
-                {targetGroup && (
+                {targetGroup && !isGroupListPage && (
                   <>
                     <div className="flex items-center gap-2">
                       <IoAddCircleOutline size={20} color="#222222" />

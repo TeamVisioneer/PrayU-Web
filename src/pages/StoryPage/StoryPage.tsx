@@ -1,16 +1,34 @@
 import StartPrayUBtn from "./StartPrayUBtn";
 import MainHeader from "../MainPage/MainHeader";
+import { analyticsTrack } from "@/analytics/analytics";
+import DownloadBanner from "../MainPage/DownloadBanner";
 
 const StoryPage = () => {
+  const onClickStartPrayU = async () => {
+    analyticsTrack("클릭_PrayU_시작", { where: "BannerImage" });
+    if (navigator.userAgent.match(/Android/i)) {
+      window.location.href =
+        "https://play.google.com/store/apps/details?id=com.team.visioneer.prayu";
+    } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+      window.location.href =
+        "https://itunes.apple.com/kr/app/apple-store/id6711345171";
+    } else {
+      window.location.href = "https://linktr.ee/prayu.site";
+    }
+  };
+
   return (
     <div className="flex flex-grow flex-col justify-center text-center w-full items-center bg-white pt-11">
       <MainHeader className="bg-white" />
+
       <img
-        src="/images/story/cover.png"
+        src="/images/story/prayu_1000_600.png"
         className="w-full max-w-[480px] h-auto"
+        onClick={() => onClickStartPrayU()}
       />
       <div className="font-sans text-center">
-        <div className="container max-w-screen-lg mx-auto px-4 py-10">
+        <DownloadBanner />
+        <div className="container max-w-screen-lg mx-auto px-4 py-4">
           <h1 className="text-2xl mt-6 font-bold">카톡방 속 답장 없는</h1>
           <h1 className="text-2xl font-bold">
             <span className="underline text-purple-600">기도제목 나눔</span>은
@@ -23,7 +41,6 @@ const StoryPage = () => {
             </span>{" "}
             기도해요
           </h2>
-          <div className="h-20"></div>
 
           <div className="h-8"></div>
           <h3 className="mt-6">.</h3>

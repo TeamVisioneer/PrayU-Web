@@ -21,8 +21,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   const setUserNotificationUnreadTotal = useBaseStore(
     (state) => state.setUserNotificationUnreadTotal
   );
-  const user = useBaseStore((state) => state.user);
-  const targetGroup = useBaseStore((state) => state.targetGroup);
+
   const setIsOpenEventDialog = useBaseStore(
     (state) => state.setIsOpenEventDialog
   );
@@ -36,7 +35,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   );
 
   const checkNotification = async (notification: Notification) => {
-    if (!user || !targetGroup) return null;
     analyticsTrack("클릭_알림_확인", { notification_id: notification.id });
     setUnread(false);
     setUserNotificationUnreadTotal(userNotificationUnreadTotal - 1);

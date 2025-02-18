@@ -6,6 +6,8 @@ import MainHeader from "./MainPage/MainHeader";
 import { useEffect } from "react";
 import CountUp from "react-countup";
 import { useNavigate } from "react-router-dom";
+import DownloadBanner from "./MainPage/DownloadBanner";
+
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const navigate = useNavigate();
@@ -17,6 +19,9 @@ const MainPage: React.FC = () => {
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
   );
+
+  const isApp = useBaseStore((state) => state.isApp);
+
   useEffect(() => {
     fetchTotalPrayCount();
   }, [fetchTotalPrayCount]);
@@ -68,6 +73,12 @@ const MainPage: React.FC = () => {
             <PrayUStartBtn />
           </div>
         </div>
+
+        {!isApp && (
+          <div className="fixed bottom-0 w-full">
+            <DownloadBanner />
+          </div>
+        )}
       </section>
 
       <LogInDrawer />
