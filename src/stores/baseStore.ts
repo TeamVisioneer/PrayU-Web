@@ -137,7 +137,7 @@ export interface BaseStore {
   isDisabledGroupCreateBtn: boolean;
   isGroupLeader: boolean;
   targetGroupLoading: boolean;
-  fetchGroupListByUserId: (userId: string) => Promise<void>;
+  fetchGroupListByUserId: (userId: string) => Promise<Group[] | null>;
   fetchGroupListByDate: (createdAt: string) => Promise<Group[] | null>;
   getGroup: (groupId: string) => Promise<void>;
   setGroupName: (groupName: string) => void;
@@ -609,6 +609,7 @@ const useBaseStore = create<BaseStore>()(
       set((state) => {
         state.groupList = data;
       });
+      return data;
     },
     fetchGroupListByDate: async (createdAt: string) => {
       const data = await fetchGroupListByDate(createdAt);
