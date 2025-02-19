@@ -9,6 +9,7 @@ import { IoChevronBack } from "react-icons/io5";
 import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 import PrayUSquareImage from "@/assets/prayu_square.png";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
+import { PulseLoader } from "react-spinners";
 
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -25,8 +26,10 @@ const GroupCreatePage: React.FC = () => {
   );
   const createMember = useBaseStore((state) => state.createMember);
   const createPrayCard = useBaseStore((state) => state.createPrayCard);
-  const groupList = useBaseStore((state) => state.groupList);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
+  const fetchGroupListByUserId = useBaseStore(
+    (state) => state.fetchGroupListByUserId
+  );
 
   const userPlan = useBaseStore((state) => state.userPlan);
 
@@ -34,9 +37,9 @@ const GroupCreatePage: React.FC = () => {
     setGroupName("");
   }, [user, setGroupName]);
 
-  if (!groupList) return null;
-
   const handleCreateGroup = async (userId: string, inputGroupName: string) => {
+    const groupList = await fetchGroupListByUserId(userId);
+    if (!groupList) return;
     if (groupList.length >= maxGroupCount && userPlan != "Premium") {
       toast({
         description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
@@ -87,7 +90,11 @@ const GroupCreatePage: React.FC = () => {
           disabled={isDisabledGroupCreateBtn}
           variant="primary"
         >
-          그룹 생성하기
+          {isDisabledGroupCreateBtn && inputGroupName ? (
+            <PulseLoader size={10} color="#f3f4f6" />
+          ) : (
+            "그룹 생성하기"
+          )}
         </Button>
         <div className="text-center">
           <p className="text-xs text-gray-500">
