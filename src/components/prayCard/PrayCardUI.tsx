@@ -3,12 +3,15 @@ import { UserProfile } from "../profile/UserProfile";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 import { getDateDistance } from "@toss/date";
 import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import SkeletonPrayCardUI from "./SkeletonPrayCardUI";
 
 interface PrayCardProps {
-  prayCard: PrayCardWithProfiles;
+  prayCard: PrayCardWithProfiles | undefined;
 }
 
 const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard }) => {
+  if (!prayCard) return <SkeletonPrayCardUI />;
+
   const getDateText = (days: number) => {
     if (days === 0) return "오늘";
     if (days === 1) return "어제";

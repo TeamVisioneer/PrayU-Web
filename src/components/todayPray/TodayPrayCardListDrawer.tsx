@@ -30,7 +30,7 @@ const TodayPrayCardListDrawer: React.FC = () => {
       open={isOpenTodayPrayDrawer}
       onOpenChange={setIsOpenTodayPrayDrawer}
     >
-      <DrawerContent className="bg-mainBg min-h-90vh max-h-90vh flex flex-col">
+      <DrawerContent className="bg-mainBg flex flex-col">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription className="text-sm text-center text-gray-400 p-2 h-10">
@@ -42,10 +42,8 @@ const TodayPrayCardListDrawer: React.FC = () => {
               }번째 기도`}
           </DrawerDescription>
         </DrawerHeader>
-        <div className="flex flex-col flex-grow">
-          <TodayPrayCardList />
-        </div>
 
+        <TodayPrayCardList />
         {/* <div className="px-5 pt-5">
           <ReactionWithCalendar
             prayCard={prayCardCarouselList?.[prayCardCarouselIndex - 1]}

@@ -37,7 +37,7 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({ prayCard }) => {
   };
 
   return (
-    <div className="flex flex-col flex-grow mx-8 overflow-y-auto no-scrollbar bg-white rounded-2xl shadow-prayCard">
+    <div className="flex flex-col flex-grow overflow-y-auto no-scrollbar bg-white rounded-2xl shadow-prayCard">
       {/* 헤더 섹션 */}
       <div className="sticky top-0 p-4 bg-white flex items-center justify-between">
         <div className="flex items-center gap-2">
