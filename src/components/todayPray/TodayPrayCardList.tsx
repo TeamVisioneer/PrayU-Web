@@ -3,13 +3,13 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import TodayPrayCardUI from "./TodayPrayCardUI";
 import TodayPrayCompletedItem from "./TodayPrayCompletedItem";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import TodayPrayInviteCompletedItem from "./TodayPrayInviteCompletedItem";
 import DummyPrayCardUI from "../prayCard/DummyPrayCardUI";
-import ClipLoader from "react-spinners/ClipLoader";
+import PrayCardUI from "../prayCard/PrayCardUI";
+import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 
 const TodayPrayCardList = () => {
   const setPrayCardCarouselApi = useBaseStore(
@@ -40,18 +40,15 @@ const TodayPrayCardList = () => {
     });
   }, [prayCardCarouselApi, setPrayCardCarouselIndex]);
 
-  if (!memberList || !prayCardCarouselList)
-    return (
-      <div className="flex justify-center items-center min-h-80vh max-h-80vh">
-        <ClipLoader color="#70AAFF" size={20} />
-      </div>
-    );
-
   return (
-    <Carousel setApi={setPrayCardCarouselApi} opts={{ startIndex: 1 }}>
+    <Carousel
+      className="flex flex-grow"
+      setApi={setPrayCardCarouselApi}
+      opts={{ startIndex: 1 }}
+    >
       <CarouselContent>
         <CarouselItem className="basis-5/6"></CarouselItem>
-        {memberList.length == 1 && (
+        {memberList?.length == 1 && (
           <CarouselItem className="basis-5/6">
             <DummyPrayCardUI
               profileImage="/images/avatar/avatar_1.png"
@@ -61,20 +58,24 @@ const TodayPrayCardList = () => {
             />
           </CarouselItem>
         )}
-        {prayCardCarouselList.map((prayCard) => (
-          <CarouselItem key={prayCard.id} className="basis-5/6">
-            <TodayPrayCardUI
+        {prayCardCarouselList?.map((prayCard) => (
+          <CarouselItem
+            key={prayCard.id}
+            className="basis-5/6 flex flex-col gap-4"
+          >
+            <PrayCardUI prayCard={prayCard} />
+            <ReactionWithCalendar
               prayCard={prayCard}
               eventOption={{
-                where: "PrayCardList",
-                total_member: memberList.length,
+                where: "TodayPrayCardListDrawer",
+                total_member: prayCardCarouselList?.length || 0,
               }}
             />
           </CarouselItem>
         ))}
         {isPrayToday && (
-          <CarouselItem className="basis-5/6">
-            {memberList.length == 1 ? (
+          <CarouselItem className="basis-5/6 h-full pb-10">
+            {memberList?.length == 1 ? (
               <TodayPrayInviteCompletedItem />
             ) : (
               <TodayPrayCompletedItem />

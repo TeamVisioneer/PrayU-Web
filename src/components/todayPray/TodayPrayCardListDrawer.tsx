@@ -7,6 +7,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import TodayPrayCardList from "./TodayPrayCardList";
+// import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 
 const TodayPrayCardListDrawer: React.FC = () => {
   const isOpenTodayPrayDrawer = useBaseStore(
@@ -15,26 +16,45 @@ const TodayPrayCardListDrawer: React.FC = () => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
-  const setIsOpenHookingDialog = useBaseStore(
-    (state) => state.setIsOpenHookingDialog
-  );
 
-  const handleOnCloseTodayPrayDrawer = () => {
-    setIsOpenHookingDialog(true);
-  };
+  const prayCardCarouselList = useBaseStore(
+    (state) => state.prayCardCarouselList
+  );
+  const prayCardCarouselIndex = useBaseStore(
+    (state) => state.prayCardCarouselIndex
+  );
+  const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   return (
     <Drawer
       open={isOpenTodayPrayDrawer}
-      onClose={() => handleOnCloseTodayPrayDrawer()}
       onOpenChange={setIsOpenTodayPrayDrawer}
     >
-      <DrawerContent className="bg-mainBg pb-5">
-        <DrawerHeader className="pt-2">
+      <DrawerContent className="bg-mainBg min-h-90vh max-h-90vh flex flex-col">
+        <DrawerHeader>
           <DrawerTitle></DrawerTitle>
-          <DrawerDescription></DrawerDescription>
+          <DrawerDescription className="text-sm text-center text-gray-400 p-2 h-10">
+            {isPrayToday &&
+              prayCardCarouselList &&
+              prayCardCarouselIndex !== prayCardCarouselList.length + 1 &&
+              `${prayCardCarouselList?.length || 0}명 중 ${
+                prayCardCarouselList?.length == 1 ? 1 : prayCardCarouselIndex
+              }번째 기도`}
+          </DrawerDescription>
         </DrawerHeader>
-        <TodayPrayCardList />
+        <div className="flex flex-col flex-grow">
+          <TodayPrayCardList />
+        </div>
+
+        {/* <div className="px-5 pt-5">
+          <ReactionWithCalendar
+            prayCard={prayCardCarouselList?.[prayCardCarouselIndex - 1]}
+            eventOption={{
+              where: "TodayPrayCardListDrawer",
+              total_member: prayCardCarouselList?.length || 0,
+            }}
+          />
+        </div> */}
       </DrawerContent>
     </Drawer>
   );

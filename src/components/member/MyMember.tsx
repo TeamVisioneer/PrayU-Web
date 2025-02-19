@@ -14,6 +14,7 @@ import { getISOTodayDate, isCurrentWeek, sleep } from "@/lib/utils";
 import { MemberWithProfiles } from "supabase/types/tables";
 import { useNavigate } from "react-router-dom";
 import ReactionResultBox from "../pray/ReactionResultBox";
+import PrayListBtn from "../pray/PrayListBtn";
 
 interface MemberProps {
   myMember: MemberWithProfiles;
@@ -108,12 +109,13 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       >
         {MyMemberUI}
       </DrawerTrigger>
-      <DrawerContent className="bg-mainBg pb-10 min-h-80vh max-h-80vh">
-        <DrawerHeader className="p-0">
+      <DrawerContent className="bg-mainBg min-h-80vh max-h-80vh pb-10 gap-2 ">
+        <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <MyPrayCardUI />
+        <MyPrayCardUI prayCard={userPrayCardList?.[0]} />
+        <PrayListBtn prayDatas={userPrayCardList?.[0].pray} />
       </DrawerContent>
     </Drawer>
   );
