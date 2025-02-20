@@ -84,7 +84,7 @@ const MyProfilePage = () => {
           <div className="w-14 ">
             <IoChevronBack size={20} onClick={() => window.history.back()} />
           </div>
-          <span className="text-lg font-semibold">나의 정보</span>
+          <span className="text-lg font-bold">내 프로필</span>
           <div
             className="flex justify-end items-center w-14"
             onClick={onClickSettingBtn}
@@ -100,7 +100,7 @@ const MyProfilePage = () => {
                 src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
               />
             </div>
-            <p className="text-sm font-semibold pt-1">{myProfile.full_name}</p>
+            <p className="text-sm font-semibold pt-2">{myProfile.full_name}</p>
           </div>
           <PrayCalendar />
           <div className="w-full flex flex-col items-start text-sm font-semibold pt-1 pl-3">

@@ -82,7 +82,7 @@ const PrayCardHistoryList = () => {
           >
             <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
               <p className="text-xs text-white w-full text-left">
-                {formatDate(prayCard.created_at)}
+                {prayCard.group?.name}
               </p>
             </div>
             <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">

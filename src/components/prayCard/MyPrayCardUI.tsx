@@ -8,7 +8,7 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import { Skeleton } from "../ui/skeleton";
 import { UserProfile } from "../profile/MyProfile";
 interface MyPrayCardUIProps {
-  prayCard?: PrayCardWithProfiles;
+  prayCard?: PrayCardWithProfiles | null;
 }
 
 const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({ prayCard }) => {
