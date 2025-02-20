@@ -137,8 +137,8 @@ const GroupMenuBtn: React.FC = () => {
   };
 
   const onClickGroupName = async () => {
-    if (user) await fetchGroupListByUserId(user!.id);
     setIsOpenGroupListDrawer(true);
+    if (user) await fetchGroupListByUserId(user!.id);
     analyticsTrack("클릭_그룹_이름", { where: "GroupMenuBtn" });
   };
 
