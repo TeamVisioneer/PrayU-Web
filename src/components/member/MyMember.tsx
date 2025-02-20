@@ -23,7 +23,6 @@ interface MemberProps {
 const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   const navigate = useNavigate();
 
-  const getMember = useBaseStore((state) => state.getMember);
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
   );
@@ -43,10 +42,6 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   const groupId = myMember.group_id!;
 
   useEffect(() => {
-    fetchUserPrayCardListByGroupId(currentUserId, groupId);
-  }, [getMember, fetchUserPrayCardListByGroupId, currentUserId, groupId]);
-
-  useEffect(() => {
     if (
       userPrayCardList &&
       (userPrayCardList.length == 0 ||
@@ -55,7 +50,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       navigate(`/group/${groupId}/praycard/new`, { replace: true });
       return;
     }
-  });
+  }, [userPrayCardList, navigate, groupId]);
 
   useEffect(() => {
     setPrayCardContent(myMember.pray_summary || "");
@@ -91,14 +86,14 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
     </div>
   );
 
-  const onClickMyMember = () => {
+  const onClickMyMember = async () => {
     setIsOpenMyMemberDrawer(true);
     analyticsTrack("클릭_멤버_본인", {
       group_id: groupId,
       where: "MyMember",
     });
     sleep(100);
-    fetchUserPrayCardListByGroupId(currentUserId, groupId);
+    await fetchUserPrayCardListByGroupId(currentUserId, groupId);
   };
 
   return (
@@ -114,9 +109,9 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <div className="flex flex-col min-h-80vh max-h-80vh gap-2 p-10">
+        <div className="flex flex-col min-h-80vh max-h-80vh gap-2 px-10 pt-5 pb-10">
           <MyPrayCardUI prayCard={userPrayCardList?.[0]} />
-          <PrayListBtn prayDatas={userPrayCardList?.[0].pray} />
+          <PrayListBtn prayDatas={userPrayCardList?.[0]?.pray} />
         </div>
       </DrawerContent>
     </Drawer>
