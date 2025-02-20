@@ -1,9 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
-import { formatDate } from "@/lib/utils";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ShowMoreBtn from "../common/ShowMoreBtn";
 
 const PrayCardHistoryList = () => {
