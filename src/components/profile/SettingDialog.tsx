@@ -54,7 +54,10 @@ const SettingDialog = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (myProfile) setName(myProfile.full_name!);
+    if (myProfile) {
+      setName(myProfile.full_name!);
+      setIsEditing(false);
+    }
   }, [myProfile]);
 
   if (!myProfile || !profileList) return null;
@@ -132,10 +135,10 @@ const SettingDialog = () => {
     <Dialog open={isOpenSettingDialog} onOpenChange={setIsOpenSettingDialog}>
       <DialogContent className="w-11/12 h-[400px] overflow-auto rounded-2xl bg-mainBg">
         <DialogHeader>
-          <DialogTitle className="text-xl text-left">설정</DialogTitle>
+          <DialogTitle className="text-xl text-left pb-4">설정</DialogTitle>
           <DialogDescription></DialogDescription>
           <div className="w-full flex flex-col gap-6 items-center">
-            <div className="w-full flex flex-col items-center gap-4 ">
+            <div className="w-full flex flex-col items-center gap-4">
               <div className="w-full h-14 flex justify-between items-center px-4 py-2 bg-white rounded-xl">
                 <span className="text-md font-semibold">이름</span>
                 <div className="flex items-center gap-2">
@@ -149,6 +152,7 @@ const SettingDialog = () => {
                     onBlur={() => onBlurUpdateName()}
                     placeholder="이름을 입력해주세요!"
                     maxLength={12}
+                    readOnly={!isEditing}
                   />
                   {isEditing ? (
                     <LuSave size={16} />

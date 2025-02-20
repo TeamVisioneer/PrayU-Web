@@ -9,9 +9,13 @@ import { Skeleton } from "../ui/skeleton";
 import { UserProfile } from "../profile/MyProfile";
 interface MyPrayCardUIProps {
   prayCard?: PrayCardWithProfiles | null;
+  isHistoryView?: boolean;
 }
 
-const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({ prayCard }) => {
+const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
+  prayCard,
+  isHistoryView,
+}) => {
   const navigate = useNavigate();
   const targetGroup = useBaseStore((state) => state.targetGroup);
 
@@ -47,7 +51,9 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({ prayCard }) => {
           </span>
         </div>
         <MyPrayCardMenuBtn
-          handleEditClick={() => handleEditClick()}
+          handleEditClick={() => {
+            if (!isHistoryView) handleEditClick();
+          }}
           prayCard={prayCard}
         />
       </div>

@@ -33,7 +33,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         <div className="flex flex-col min-h-80vh max-h-80vh gap-2 px-10 pt-5 pb-10">
-          <MyPrayCardUI prayCard={historyCard} />
+          <MyPrayCardUI prayCard={historyCard} isHistoryView={true} />
           <PrayListBtn prayDatas={historyCard?.pray} />
         </div>
       </DrawerContent>

@@ -6,7 +6,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { IoSettingsOutline } from "react-icons/io5";
 import PrayCardHistoryList from "@/components/profile/PrayCardHistoryList";
 import PrayCardHistoryDrawer from "@/components/profile/PrayCardHistoryDrawer";
-import PrayCardHistoryPrayListDrawer from "@/components/profile/PrayCardHistoryPrayListDrawer";
 import { analyticsTrack } from "@/analytics/analytics";
 import PrayCalendar from "@/components/profile/PrayCalendar";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
@@ -124,7 +123,6 @@ const MyProfilePage = () => {
       </footer>
       <SettingDialog />
       <PrayCardHistoryDrawer />
-      <PrayCardHistoryPrayListDrawer />
     </div>
   );
 };
