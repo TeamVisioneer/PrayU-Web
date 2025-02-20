@@ -87,7 +87,7 @@ const TodayPrayCompletedItem = () => {
         }`}
       >
         <KakaoShareButton
-          className={`w-full sm:w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+          className={`w-full flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
             showButton ? "opacity-100" : "opacity-0"
           }`}
           buttonText="말씀카드 공유하기"

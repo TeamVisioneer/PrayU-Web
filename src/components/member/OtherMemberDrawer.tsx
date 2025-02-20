@@ -24,12 +24,12 @@ const OtherMemberDrawer: React.FC = () => {
       open={isOpenOtherMemberDrawer}
       onOpenChange={setIsOpenOtherMemberDrawer}
     >
-      <DrawerContent className="bg-mainBg min-h-90vh max-h-90vh flex flex-col gap-4">
+      <DrawerContent className="bg-mainBg flex flex-col">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <div className="px-6 flex flex-col flex-grow gap-4">
+        <div className="px-10 pt-5 flex flex-col flex-grow min-h-80vh max-h-80vh gap-4">
           <PrayCardUI prayCard={otherPrayCardList?.[0]} />
           <ReactionWithCalendar
             prayCard={otherPrayCardList?.[0]}

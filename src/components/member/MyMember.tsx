@@ -109,12 +109,12 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       >
         {MyMemberUI}
       </DrawerTrigger>
-      <DrawerContent className="bg-mainBg min-h-80vh max-h-80vh ">
+      <DrawerContent className="bg-mainBg">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <div className="flex flex-col flex-grow gap-2 p-10">
+        <div className="flex flex-col min-h-80vh max-h-80vh gap-2 p-10">
           <MyPrayCardUI prayCard={userPrayCardList?.[0]} />
           <PrayListBtn prayDatas={userPrayCardList?.[0].pray} />
         </div>
