@@ -80,7 +80,7 @@ const PrayCardCreatePage: React.FC = () => {
 
   useEffect(() => {
     if (myMember?.pray_summary && targetGroup) {
-      setPrayCardContent(myMember?.pray_summary);
+      setPrayCardContent(myMember.pray_summary);
       setIsConfirmAlertOpen(true);
       setAlertData({
         color: "bg-blue-500",

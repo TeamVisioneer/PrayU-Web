@@ -1,9 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
-import { formatDate } from "@/lib/utils";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ShowMoreBtn from "../common/ShowMoreBtn";
 
 const PrayCardHistoryList = () => {
@@ -82,7 +80,7 @@ const PrayCardHistoryList = () => {
           >
             <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
               <p className="text-xs text-white w-full text-left">
-                {formatDate(prayCard.created_at)}
+                {prayCard.group?.name}
               </p>
             </div>
             <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">

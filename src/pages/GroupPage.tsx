@@ -47,6 +47,9 @@ const GroupPage: React.FC = () => {
   const fetchTodayUserPrayByGroupId = useBaseStore(
     (state) => state.fetchTodayUserPrayByGroupId
   );
+  const fetchUserPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchUserPrayCardListByGroupId
+  );
   const fetchNotificationCount = useBaseStore(
     (state) => state.fetchNotificationCount
   );
@@ -65,6 +68,7 @@ const GroupPage: React.FC = () => {
       getGroup(groupId);
       fetchMemberListByGroupId(groupId);
       fetchMemberCountByGroupId(groupId);
+      fetchUserPrayCardListByGroupId(currentUserId, groupId);
       fetchTodayUserPrayByGroupId(currentUserId, groupId);
       fetchNotificationCount(currentUserId, true);
     }
@@ -74,11 +78,13 @@ const GroupPage: React.FC = () => {
     fetchMemberCountByGroupId,
     getMember,
     fetchTodayUserPrayByGroupId,
+    fetchUserPrayCardListByGroupId,
     fetchNotificationCount,
     currentUserId,
     groupId,
     getGroup,
   ]);
+
   useEffect(() => {
     if (
       !memberLoading &&

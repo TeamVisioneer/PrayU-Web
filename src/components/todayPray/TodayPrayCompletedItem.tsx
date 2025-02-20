@@ -62,7 +62,7 @@ const TodayPrayCompletedItem = () => {
   }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi, isPrayToday]);
 
   return (
-    <div className="relative flex flex-col gap-4 justify-center items-center min-h-80vh max-h-80vh">
+    <div className="h-full flex flex-col gap-4 justify-center items-center">
       <div className="w-5/6 md:w-3/4 lg:w-2/3 xl:w-1/2 aspect-square flex flex-col items-center">
         <img
           className={`h-full rounded-2xl transition-opacity duration-1000 ease-in ${
@@ -87,7 +87,7 @@ const TodayPrayCompletedItem = () => {
         }`}
       >
         <KakaoShareButton
-          className={`w-full sm:w-64 flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
+          className={`w-full flex flex-col items-center gap-2 transition-opacity duration-1000 ease-in-out ${
             showButton ? "opacity-100" : "opacity-0"
           }`}
           buttonText="말씀카드 공유하기"

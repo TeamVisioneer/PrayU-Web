@@ -34,6 +34,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   );
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const myMember = useBaseStore((state) => state.myMember);
+  const updateMember = useBaseStore((state) => state.updateMember);
 
   const onClickCopyPrayCard = () => {
     if (!prayCard.content) {
@@ -117,7 +118,8 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
       cancelText: "취소",
       onAction: async () => {
         await deletePrayCard(prayCard.id);
-        window.location.reload();
+        if (myMember) await updateMember(myMember.id, "");
+        await window.location.reload();
         analyticsTrack("클릭_기도카드_삭제", {});
       },
     });

@@ -144,6 +144,9 @@ const DumyReactionBtnWithCalendar = () => {
           );
         })}
       </div>
+      <div className="text-gray-400 text-sm text-center">
+        기도 반응 버튼을 눌러 친구에게 기도를 남겨요
+      </div>
     </div>
   );
 };

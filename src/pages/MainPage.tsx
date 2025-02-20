@@ -75,7 +75,7 @@ const MainPage: React.FC = () => {
         </div>
 
         {!isApp && (
-          <div className="fixed bottom-0 w-full">
+          <div className="fixed bottom-0 w-full max-w-[480px] mx-auto">
             <DownloadBanner />
           </div>
         )}
