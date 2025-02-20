@@ -45,11 +45,11 @@ const TodayPrayCardList = () => {
 
   return (
     <Carousel
-      className="flex flex-grow min-h-80vh max-h-80vh"
+      className="flex flex-col"
       setApi={setPrayCardCarouselApi}
       opts={{ startIndex: 1 }}
     >
-      <CarouselContent>
+      <CarouselContent className="min-h-80vh max-h-80vh">
         <CarouselItem className="basis-5/6"></CarouselItem>
         {memberList?.length == 1 && (
           <CarouselItem className="basis-5/6 flex flex-col gap-4 pb-5">
@@ -81,7 +81,7 @@ const TodayPrayCardList = () => {
           </CarouselItem>
         ))}
         {isPrayToday && (
-          <CarouselItem className="basis-5/6 h-full pb-10">
+          <CarouselItem className="basis-5/6 flex-grow pb-10">
             {memberList?.length == 1 ? (
               <TodayPrayInviteCompletedItem />
             ) : (
