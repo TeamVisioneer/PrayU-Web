@@ -50,13 +50,6 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({
         prayCard={prayCard}
         eventOption={eventOption}
       />
-      <p
-        className={`text-gray-400 text-sm text-center ${
-          isPrayToday ? "invisible" : ""
-        }`}
-      >
-        기도 반응 버튼을 눌러 오늘의 기도를 남겨요
-      </p>
     </div>
   );
 };
