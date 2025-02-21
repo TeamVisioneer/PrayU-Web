@@ -1,6 +1,6 @@
 import { analyticsTrack } from "@/analytics/analytics";
 import useAuth from "@/hooks/useAuth";
-import { getISOTodayDate, getISOTodayDateYMD } from "@/lib/utils";
+import { getISOTodayDate } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { Member } from "supabase/types/tables";
 import prayerVerses from "@/data/prayCardTemplate.json";
@@ -17,6 +17,7 @@ import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 import GroupHeader from "@/components/group/GroupHeader";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
+import InfoBtn from "@/components/alert/infoBtn";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -35,6 +36,9 @@ const PrayCardCreatePage: React.FC = () => {
   const createMember = useBaseStore((state) => state.createMember);
   const updateMember = useBaseStore((state) => state.updateMember);
   const createPrayCard = useBaseStore((state) => state.createPrayCard);
+  const createPrayCardWithParams = useBaseStore(
+    (state) => state.createPrayCardWithParams
+  );
 
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
@@ -56,6 +60,10 @@ const PrayCardCreatePage: React.FC = () => {
   const createOnesignalPush = useBaseStore(
     (state) => state.createOnesignalPush
   );
+  const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
+  const fetchUserPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchUserPrayCardListByGroupId
+  );
   const setIsConfirmAlertOpen = useBaseStore(
     (state) => state.setIsConfirmAlertOpen
   );
@@ -64,13 +72,30 @@ const PrayCardCreatePage: React.FC = () => {
     (state) => state.fetchNotificationCount
   );
 
+  const inputPrayCardLife = useBaseStore((state) => state.inputPrayCardLife);
+  const setPrayCardLife = useBaseStore((state) => state.setPrayCardLife);
+
+  const loadPrayCardLife = () => {
+    if (userPrayCardList?.[0]?.life) {
+      setPrayCardLife(userPrayCardList[0].life);
+    }
+  };
+
+  const loadPrayCardContent = () => {
+    if (userPrayCardList?.[0]?.content) {
+      setPrayCardContent(userPrayCardList[0].content);
+    }
+  };
+
   useEffect(() => {
-    fetchNotificationCount(user!.id, true);
+    if (user) fetchNotificationCount(user.id, true);
+    if (user && groupId) fetchUserPrayCardListByGroupId(user.id, groupId);
     if (groupId) getGroup(groupId);
     if (groupId) getMember(user!.id, groupId);
     if (groupId) fetchMemberListByGroupId(groupId);
   }, [
     getMember,
+    fetchUserPrayCardListByGroupId,
     fetchMemberListByGroupId,
     fetchNotificationCount,
     getGroup,
@@ -79,8 +104,7 @@ const PrayCardCreatePage: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (myMember?.pray_summary && targetGroup) {
-      setPrayCardContent(myMember.pray_summary);
+    if (targetGroup) {
       setIsConfirmAlertOpen(true);
       setAlertData({
         color: "bg-blue-500",
@@ -90,18 +114,12 @@ const PrayCardCreatePage: React.FC = () => {
         onAction: () => {},
       });
     }
-  }, [
-    targetGroup,
-    myMember,
-    setPrayCardContent,
-    setIsConfirmAlertOpen,
-    setAlertData,
-  ]);
+  }, [targetGroup, myMember, setIsConfirmAlertOpen, setAlertData]);
 
   if (targetGroupLoading == false && targetGroup == null)
     window.location.href = "/group/not-found";
 
-  if (!targetGroup || !memberList || memberLoading) {
+  if (!targetGroup || !memberList || memberLoading || !userPrayCardList) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={20} color={"#70AAFF"} loading={true} />
@@ -190,11 +208,11 @@ const PrayCardCreatePage: React.FC = () => {
       setIsDisabledSkipPrayCardBtn(false);
       return null;
     }
-    const newPrayCard = await createPrayCard(
-      groupId,
-      currentUserId,
-      randomContent
-    );
+    const newPrayCard = await createPrayCardWithParams({
+      group_id: groupId,
+      user_id: currentUserId,
+      content: randomContent,
+    });
     if (newPrayCard) await sendNotification(upsertedMember);
     window.location.replace(`/group/${groupId}`);
   };
@@ -211,52 +229,99 @@ const PrayCardCreatePage: React.FC = () => {
       setIsDisabledSkipPrayCardBtn(false);
       return null;
     }
-    const newPrayCard = await createPrayCard(
-      groupId,
-      currentUserId,
-      inputPrayCardContent
-    );
+    const newPrayCard = await createPrayCardWithParams({
+      group_id: groupId,
+      user_id: currentUserId,
+      content: inputPrayCardContent,
+      life: inputPrayCardLife,
+    });
     if (newPrayCard) await sendNotification(upsertedMember);
     window.location.replace(`/group/${groupId}`);
   };
 
-  const todayDateYMD = getISOTodayDateYMD();
-
   const PrayCardUI = (
-    <div className="w-full flex flex-col gap-6 justify-center">
-      <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
-        <div className="flex flex-col justify-center items-start gap-1 text-white bg-gradient-to-r from-start via-middle via-30% to-end rounded-t-2xl p-5">
-          <div className="flex items-center gap-2">
-            <img
-              src={
-                myMember
-                  ? myMember?.profiles.avatar_url ||
-                    "/images/defaultProfileImage.png"
-                  : user?.user_metadata.picture ||
-                    "/images/defaultProfileImage.png"
-              }
-              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                e.currentTarget.src = "/images/defaultProfileImage.png";
-              }}
-              className="w-7 h-7 rounded-full object-cover"
-            />
-            <p className="text-white text-lg ">
-              {myMember
-                ? myMember?.profiles.full_name
-                : user?.user_metadata.name}
-            </p>
-          </div>
-          <p className="text-sm w-full text-left">
-            시작일: {todayDateYMD.year}.{todayDateYMD.month}.{todayDateYMD.day}
-          </p>
-        </div>
-        <div className="flex flex-col flex-grow min-h-[300px] px-[10px] py-[10px] overflow-y-auto no-scrollbar items-center">
-          <textarea
-            className="text-sm flex-grow w-full p-2 rounded-md overflow-y-auto no-scrollbar text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
-            value={inputPrayCardContent}
-            onChange={(e) => setPrayCardContent(e.target.value)}
-            placeholder={`기도카드를 작성해 보아요 ✏️\n내용은 작성 후에도 수정할 수 있어요 :)\n\n1. PrayU와 함께 기도할 수 있기를\n2. `}
+    <div className="w-full flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
+      <div className="sticky top-0 p-4 bg-white rounded-2xl flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <img
+            src={
+              myMember
+                ? myMember?.profiles.avatar_url ||
+                  "/images/defaultProfileImage.png"
+                : user?.user_metadata.picture ||
+                  "/images/defaultProfileImage.png"
+            }
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+              e.currentTarget.src = "/images/defaultProfileImage.png";
+            }}
+            className="w-7 h-7 rounded-full object-cover"
           />
+          <p className="text-sm font-medium">
+            {myMember ? myMember?.profiles.full_name : user?.user_metadata.name}
+          </p>
+          <span className="text-xs text-gray-500 font-thin">오늘</span>
+        </div>
+      </div>
+
+      <div className="px-4 pb-4 space-y-4">
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-1">
+              <h3 className="text-sm font-medium text-gray-600">지난 한 주</h3>
+              <InfoBtn
+                text={[
+                  "기도카드에 <지난 한 주> 항목이 추가되었어요!",
+                  "기도제목보다 가벼운 일상을 나눠보세요 🙂",
+                ]}
+                eventOption={{ where: "PrayCardEditPage" }}
+                position="start"
+              />
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={loadPrayCardLife}
+              disabled={!userPrayCardList?.[0]?.life}
+              className="text-xs text-blue-500 hover:text-blue-600"
+            >
+              내용 불러오기
+            </Button>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <textarea
+              className="text-sm w-full bg-transparent resize-none text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
+              value={inputPrayCardLife}
+              onChange={(e) => setPrayCardLife(e.target.value)}
+              placeholder="회사에서 업무적, 관계적으로 힘들었던 한 주"
+              rows={4}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <h3 className="text-sm font-medium text-gray-600">
+              이번 주 기도제목
+            </h3>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={loadPrayCardContent}
+              disabled={!userPrayCardList?.[0]?.content}
+              className="text-xs text-blue-500 hover:text-blue-600"
+            >
+              기도제목 불러오기
+            </Button>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <textarea
+              className="text-sm w-full bg-transparent resize-none text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
+              value={inputPrayCardContent}
+              onChange={(e) => setPrayCardContent(e.target.value)}
+              placeholder={`1. 맡겨진 자리에서 하나님의 사명을 발견할 수 있도록\n2. 내 주변 사람을 내 몸과 같이 섬길 수 있도록`}
+              rows={4}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -270,7 +335,7 @@ const PrayCardCreatePage: React.FC = () => {
         {PrayCardUI}
 
         <div className="flex flex-col items-center w-full gap-4">
-          {inputPrayCardContent ? (
+          {inputPrayCardContent || inputPrayCardLife ? (
             <Button
               className="w-full"
               onClick={() => onClickJoinGroup(user!.id, targetGroup.id)}

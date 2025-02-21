@@ -77,7 +77,7 @@ const OtherMemberDrawer: React.FC = () => {
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <div className="px-10 pt-5 flex flex-col flex-grow min-h-80vh max-h-80vh gap-4">
+        <div className="px-8 pt-5 flex flex-col flex-grow min-h-80vh max-h-80vh gap-4">
           <PrayCardUI prayCard={otherPrayCardList?.[0]} />
           {!otherPrayCardList?.[0] ? (
             NoPrayCardSection

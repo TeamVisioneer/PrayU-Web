@@ -38,7 +38,7 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
           </h3>
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-700 whitespace-pre-wrap">
-              {/* {content} */}
+              회사에서 업무적, 관계적으로 힘들었던 한 주
             </p>
           </div>
         </div>
@@ -53,7 +53,11 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
           </h3>
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-700 whitespace-pre-wrap">
-              {content}
+              (예시)
+              <br />
+              1. 맡겨진 자리에서 하나님의 사명을 발견할 수 있도록
+              <br />
+              2. 내 주변 사람을 내 몸과 같이 섬길 수 있도록
             </p>
           </div>
         </div>

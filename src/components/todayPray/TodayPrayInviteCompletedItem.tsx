@@ -46,7 +46,7 @@ const TodayPrayDummyCompletedItem = () => {
   }, [isImageLoaded, prayCardCarouselIndex, prayCardCarouselApi]);
 
   return (
-    <div className="relative flex flex-col gap-4  justify-center items-center">
+    <div className="relative h-full flex flex-col gap-4  justify-center items-center">
       <section
         className={`flex flex-col gap-6 items-center transition-opacity duration-1000 ease-in ${
           showImage ? "opacity-100" : "opacity-0"

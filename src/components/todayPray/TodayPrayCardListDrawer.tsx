@@ -24,6 +24,7 @@ const TodayPrayCardListDrawer: React.FC = () => {
     (state) => state.prayCardCarouselIndex
   );
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
+  const memberList = useBaseStore((state) => state.memberList);
 
   return (
     <Drawer
@@ -34,12 +35,21 @@ const TodayPrayCardListDrawer: React.FC = () => {
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription className="text-sm text-center text-gray-400 p-2 h-10">
-            {isPrayToday &&
-              prayCardCarouselList &&
-              prayCardCarouselIndex !== prayCardCarouselList.length + 1 &&
-              `${prayCardCarouselList?.length || 0}명 중 ${
-                prayCardCarouselList?.length == 1 ? 1 : prayCardCarouselIndex
-              }번째 기도`}
+            {memberList?.length == 1 && prayCardCarouselIndex == 1
+              ? "나눔을 위한 예시 기도 카드입니다"
+              : prayCardCarouselList &&
+                ((memberList?.length === 1
+                  ? prayCardCarouselIndex === prayCardCarouselList.length + 2 &&
+                    !isPrayToday
+                  : prayCardCarouselIndex === prayCardCarouselList.length + 1 &&
+                    !isPrayToday) ||
+                  (memberList?.length === 1
+                    ? prayCardCarouselIndex !== prayCardCarouselList.length + 2
+                    : prayCardCarouselIndex !==
+                      prayCardCarouselList.length + 1)) &&
+                `${prayCardCarouselList?.length || 0}명 중 ${
+                  prayCardCarouselList?.length == 1 ? 1 : prayCardCarouselIndex
+                }번째 기도`}
           </DrawerDescription>
         </DrawerHeader>
 

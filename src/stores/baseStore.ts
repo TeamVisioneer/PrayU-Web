@@ -54,7 +54,6 @@ import {
   fetchUserPrayCardList,
   fetchUserPrayCardListByGroupId,
   updatePrayCard,
-  updatePrayCardContent,
   updatePrayCardParams,
 } from "@/apis/prayCard";
 import { PrayType } from "@/Enums/prayType";
@@ -218,6 +217,7 @@ export interface BaseStore {
   historyCard: PrayCardWithProfiles | null;
   setHistoryCard: (historyCard: PrayCardWithProfiles | null) => void;
   inputPrayCardContent: string;
+  inputPrayCardLife: string;
   isDisabledPrayCardCreateBtn: boolean;
   isDisabledSkipPrayCardBtn: boolean;
   prayCardCarouselApi: CarouselApi | null;
@@ -259,12 +259,12 @@ export interface BaseStore {
     isDisabledPrayCardCreateBtn: boolean,
   ) => void;
   setIsDisabledSkipPrayCardBtn: (isDisabledSkipPrayCardBtn: boolean) => void;
-  updatePrayCardContent: (prayCardId: string, content: string) => Promise<void>;
   updatePrayCard: (
     prayCardId: string,
     params: updatePrayCardParams,
   ) => Promise<void>;
   setPrayCardContent: (content: string) => void;
+  setPrayCardLife: (content: string) => void;
   setPrayCardCarouselApi: (prayCardCarouselApi: CarouselApi) => void;
   deletePrayCard: (prayCardId: string) => Promise<void>;
   deletePrayCardByGroupId: (userId: string, groupId: string) => Promise<void>;
@@ -791,6 +791,7 @@ const useBaseStore = create<BaseStore>()(
 
     otherPrayCardList: null,
     inputPrayCardContent: "",
+    inputPrayCardLife: "",
     isDisabledPrayCardCreateBtn: false,
     isDisabledSkipPrayCardBtn: false,
     prayCardCarouselApi: null,
@@ -920,12 +921,7 @@ const useBaseStore = create<BaseStore>()(
       const prayCard = await createPrayCardWithParams(params);
       return prayCard;
     },
-    updatePrayCardContent: async (prayCardId: string, content: string) => {
-      await updatePrayCardContent(prayCardId, content);
-      set((state) => {
-        state.inputPrayCardContent = content;
-      });
-    },
+
     updatePrayCard: async (
       prayCardId: string,
       params: updatePrayCardParams,
@@ -935,6 +931,11 @@ const useBaseStore = create<BaseStore>()(
     setPrayCardContent: (content: string) => {
       set((state) => {
         state.inputPrayCardContent = content;
+      });
+    },
+    setPrayCardLife: (content: string) => {
+      set((state) => {
+        state.inputPrayCardLife = content;
       });
     },
     setIsDisabledPrayCardCreateBtn: (isDisabled: boolean) => {

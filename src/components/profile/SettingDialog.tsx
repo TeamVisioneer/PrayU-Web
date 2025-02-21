@@ -19,16 +19,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { LuInfo, LuPencil, LuSave } from "react-icons/lu";
+import { LuPencil, LuSave } from "react-icons/lu";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { UserProfile } from "@/components/profile/UserProfile.tsx";
-
+import InfoBtn from "@/components/alert/infoBtn.tsx";
 const SettingDialog = () => {
   const isOpenSettingDialog = useBaseStore(
     (state) => state.isOpenSettingDialog
@@ -178,24 +173,12 @@ const SettingDialog = () => {
                           <div className="w-full flex justify-between items-center bg-white rounded-xl">
                             <div className="flex items-center gap-1">
                               <span>카카오 메세지 전송</span>
-                              <Popover>
-                                <PopoverTrigger
-                                  onClick={() =>
-                                    analyticsTrack(
-                                      "클릭_프로필_카카오메세지설명",
-                                      {}
-                                    )
-                                  }
-                                >
-                                  <LuInfo size={16} color="gray" />
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <span className="text-sm text-gray-500">
-                                    기도 반응 할 때 상대방에게 카카오 메세지가
-                                    전송됩니다
-                                  </span>
-                                </PopoverContent>
-                              </Popover>
+                              <InfoBtn
+                                text={[
+                                  "기도 반응 할 때 상대방에게 카카오 메세지가 전송됩니다",
+                                ]}
+                                eventOption={{ where: "SettingDialog" }}
+                              />
                             </div>
                             <Switch
                               defaultChecked={myProfile.kakao_notification}
@@ -208,24 +191,13 @@ const SettingDialog = () => {
                         <div className="w-full flex justify-between items-center bg-white rounded-xl">
                           <div className="flex items-center gap-1">
                             <span>모바일 푸시 알림</span>
-                            <Popover>
-                              <PopoverTrigger
-                                onClick={() =>
-                                  analyticsTrack("클릭_프로필_푸시알림설명", {})
-                                }
-                              >
-                                <LuInfo size={16} color="gray" />
-                              </PopoverTrigger>
-                              <PopoverContent className="p-3 w-48">
-                                <span className="text-sm text-gray-500">
-                                  모바일에서 오늘의 기도 알림,
-                                </span>
-                                <br />
-                                <span className="text-sm text-gray-500">
-                                  친구의 기도 알림을 받습니다
-                                </span>
-                              </PopoverContent>
-                            </Popover>
+                            <InfoBtn
+                              text={[
+                                "모바일에서 오늘의 기도 알림,",
+                                "친구의 기도 알림을 받습니다",
+                              ]}
+                              eventOption={{ where: "SettingDialog" }}
+                            />
                           </div>
                           <Switch
                             defaultChecked={myProfile.push_notification}

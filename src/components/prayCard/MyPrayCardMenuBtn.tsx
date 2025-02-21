@@ -44,10 +44,12 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
       return;
     }
     navigator.clipboard
-      .writeText(prayCard.content)
+      .writeText(
+        `📌지난 한 주\n${prayCard.life}\n\n📝기도제목\n${prayCard.content}`
+      )
       .then(() => {
         toast({
-          description: "🔗 기도제목이 복사되었어요",
+          description: "🔗 기도카드 내용이 복사되었어요",
         });
       })
       .catch((err) => {

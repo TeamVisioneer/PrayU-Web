@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { Skeleton } from "../ui/skeleton";
 import { UserProfile } from "../profile/MyProfile";
+import InfoBtn from "../alert/infoBtn";
 interface MyPrayCardUIProps {
   prayCard?: PrayCardWithProfiles | null;
   isHistoryView?: boolean;
@@ -43,7 +44,7 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
   return (
     <div className="flex flex-col flex-grow overflow-y-auto no-scrollbar bg-white rounded-2xl shadow-prayCard">
       {/* 헤더 섹션 */}
-      <div className="sticky top-0 p-4 bg-white flex items-center justify-between">
+      <div className="sticky top-0 z-30 h-14 p-4 bg-white flex items-center justify-between border-b transform-gpu">
         <div className="flex items-center gap-2">
           <UserProfile imgSize="w-7 h-7" fontSize="text-sm font-medium" />
           <span className="text-xs text-gray-500 font-thin">
@@ -51,24 +52,35 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
           </span>
         </div>
         <MyPrayCardMenuBtn
-          handleEditClick={() => {
-            if (!isHistoryView) handleEditClick();
-          }}
+          handleEditClick={isHistoryView ? undefined : handleEditClick}
           prayCard={prayCard}
         />
       </div>
 
       {/* 컨텐츠 섹션 */}
-      <div className="px-4 pb-4 space-y-2" onClick={() => handleEditClick()}>
+      <div className="flex flex-col gap-6 px-4 pb-4">
         {/* 지난 한주 섹션 */}
-        <div className="space-y-2">
-          <h3 className="text-sm font-medium text-gray-600 flex items-center gap-2">
-            지난 한 주
-          </h3>
-          <div className="bg-gray-50 rounded-lg p-4">
-            {prayCard.content ? (
+        <div className="relative">
+          <div className="sticky flex items-center gap-1 top-14 z-20 bg-white transform-gpu -mt-2 pt-2">
+            <h3 className="py-2 text-sm font-medium text-gray-600 flex items-center gap-2">
+              지난 한 주
+            </h3>
+            <InfoBtn
+              text={[
+                "기도카드에 <지난 한 주> 항목이 추가되었어요!",
+                "기도제목보다 가벼운 일상을 나눠보세요 🙂",
+              ]}
+              eventOption={{ where: "PrayCardEditPage" }}
+              position="start"
+            />
+          </div>
+          <div
+            className="bg-gray-50 rounded-lg p-4 mt-2"
+            onClick={() => handleEditClick()}
+          >
+            {prayCard.life ? (
               <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                {prayCard.content}
+                {prayCard.life}
               </p>
             ) : (
               <p className="text-sm text-gray-400 whitespace-pre-wrap">
@@ -79,14 +91,16 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
         </div>
 
         {/* 기도제목 섹션 */}
-        <div className="space-y-2">
-          <h3 className="text-sm font-medium text-gray-600 flex items-center gap-2">
-            이번 주 기도제목
-            {/* <span className="text-xs text-gray-400 font-normal">
-              (함께 기도할 제목들)
-            </span> */}
-          </h3>
-          <div className="bg-gray-50 rounded-lg p-4">
+        <div className="relative">
+          <div className="sticky top-14 z-20 bg-white transform-gpu -mt-2 pt-2">
+            <h3 className="py-2 text-sm font-medium text-gray-600 flex items-center gap-2">
+              이번 주 기도제목
+            </h3>
+          </div>
+          <div
+            className="bg-gray-50 rounded-lg p-4 mt-2"
+            onClick={() => handleEditClick()}
+          >
             {prayCard.content ? (
               <p className="text-sm text-gray-700 whitespace-pre-wrap">
                 {prayCard.content}
@@ -98,9 +112,10 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
             )}
           </div>
         </div>
+
         {/* 하단 정보 */}
         {prayCard.updated_at == prayCard.created_at && (
-          <p className="text-xs text-end text-gray-400 mt-2">(편집됨)</p>
+          <p className="text-xs text-end text-gray-400">(편집됨)</p>
         )}
       </div>
     </div>
