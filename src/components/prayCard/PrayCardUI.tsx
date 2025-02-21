@@ -27,12 +27,12 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard }) => {
   return (
     <div className="flex flex-col flex-grow overflow-y-auto no-scrollbar bg-white rounded-2xl shadow-prayCard">
       {/* 헤더 섹션 */}
-      <div className="sticky top-0 z-30 h-14 p-4 bg-white flex items-center justify-between border-b transform-gpu">
+      <div className="z-30 h-14 p-4 bg-white flex items-center justify-between border-b transform-gpu">
         <div className="flex items-center gap-2">
           <UserProfile
             profile={prayCard.profiles}
             imgSize="w-7 h-7"
-            fontSize="text- font-medium"
+            fontSize="text-sm font-medium"
           />
           <span className="text-xs text-gray-500 font-thin">
             {getDateText(dateDistance.days)}
@@ -45,42 +45,55 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard }) => {
       </div>
 
       {/* 컨텐츠 섹션 */}
-      <div className="flex flex-col gap-6 px-4 pb-4">
+      <div className="flex flex-col gap-4 px-4 pb-4 overflow-y-auto no-scrollbar">
         {/* 지난 한주 섹션 */}
-        <div className="relative">
-          <div className="sticky top-14 z-20 bg-white">
-            <h3 className="py-3 text-sm font-medium text-gray-600 flex items-center gap-1">
+        <section>
+          <div className="sticky top-0 py-3 flex items-center gap-1 z-20 bg-white">
+            <h3 className="text-sm font-medium text-gray-600 flex items-center gap-2">
               지난 한 주
-              <InfoBtn
-                text={[
-                  "기도카드에 <지난 한 주> 항목이 추가되었어요!",
-                  "기도제목보다 가벼운 일상을 나눠보세요 🙂",
-                ]}
-                eventOption={{ where: "PrayCardEditPage" }}
-                position="start"
-              />
             </h3>
+            <InfoBtn
+              text={[
+                "기도카드에 <지난 한 주> 항목이 추가되었어요!",
+                "기도제목보다 가벼운 일상을 나눠보세요 🙂",
+              ]}
+              eventOption={{ where: "PrayCardEditPage" }}
+              position="start"
+            />
           </div>
+
           <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-sm text-gray-700 whitespace-pre-wrap">
-              {prayCard.life}
-            </p>
+            {prayCard.life ? (
+              <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                {prayCard.life}
+              </p>
+            ) : (
+              <p className="text-sm text-gray-400 whitespace-pre-wrap">
+                아직 작성된 내용이 없습니다.
+              </p>
+            )}
           </div>
-        </div>
+        </section>
 
         {/* 기도제목 섹션 */}
-        <div className="relative">
-          <div className="sticky top-14 z-20 bg-white">
-            <h3 className="py-3 text-sm font-medium text-gray-600 flex items-center gap-2">
+        <section>
+          <div className="sticky top-0 py-3 z-20 bg-white">
+            <h3 className="text-sm font-medium text-gray-600 flex items-center gap-2">
               이번 주 기도제목
             </h3>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-sm text-gray-700 whitespace-pre-wrap">
-              {prayCard.content}
-            </p>
+            {prayCard.content ? (
+              <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                {prayCard.content}
+              </p>
+            ) : (
+              <p className="text-sm text-gray-400 whitespace-pre-wrap">
+                아직 작성된 내용이 없습니다.
+              </p>
+            )}
           </div>
-        </div>
+        </section>
 
         {/* 하단 정보 */}
         {prayCard.updated_at == prayCard.created_at && (
