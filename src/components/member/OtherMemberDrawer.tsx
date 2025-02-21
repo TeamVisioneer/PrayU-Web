@@ -79,7 +79,15 @@ const OtherMemberDrawer: React.FC = () => {
         </DrawerHeader>
         <div className="px-8 py-5 flex flex-col flex-grow min-h-80vh max-h-80vh gap-4">
           <PrayCardUI prayCard={otherPrayCardList?.[0]} />
-          {!otherPrayCardList?.[0] ? (
+          {!otherPrayCardList || otherPrayCardList.length > 0 ? (
+            <ReactionWithCalendar
+              prayCard={otherPrayCardList?.[0]}
+              eventOption={{
+                where: "TodayPrayCardListDrawer",
+                total_member: memberList?.length || 0,
+              }}
+            />
+          ) : otherPrayCardList.length === 0 ? (
             NoPrayCardSection
           ) : !isCurrentWeek(otherPrayCardList[0].created_at) ? (
             ExpiredSection
