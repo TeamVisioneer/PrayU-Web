@@ -35,7 +35,6 @@ const PrayCardCreatePage: React.FC = () => {
   const getMember = useBaseStore((state) => state.getMember);
   const createMember = useBaseStore((state) => state.createMember);
   const updateMember = useBaseStore((state) => state.updateMember);
-  const createPrayCard = useBaseStore((state) => state.createPrayCard);
   const createPrayCardWithParams = useBaseStore(
     (state) => state.createPrayCardWithParams
   );

@@ -43,7 +43,6 @@ const TodayPrayCardPage = () => {
                 <DummyPrayCardUI
                   profileImage="/images/avatar/avatar_1.png"
                   name="기도 카드"
-                  content={`PrayU에서 사용하는 기도카드입니다\n기도카드를 통해 친구들의 기도제목을 한눈에 보아요!`}
                 />
               </div>
             ),

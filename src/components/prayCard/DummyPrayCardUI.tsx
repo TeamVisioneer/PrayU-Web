@@ -1,13 +1,11 @@
 interface DumyPrayCardProps {
   profileImage: string;
   name: string;
-  content: string;
 }
 
 const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
   profileImage,
   name,
-  content,
 }) => {
   return (
     <div className="flex flex-col flex-grow overflow-y-auto no-scrollbar bg-white rounded-2xl shadow-prayCard">
