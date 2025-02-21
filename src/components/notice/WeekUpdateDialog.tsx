@@ -27,17 +27,16 @@ const WeekUpdateDialog = () => {
 
   const slides = [
     {
-      image: "/images/notice/Group_List_1.gif",
-      alt: "그룹 이동 방법 1",
+      image: "/images/notice/NewPrayCard.png",
       tip: "TIP 1",
       description:
-        "그룹 화면에서 그룹 이름을 클릭하여 목록을 확인할 수 있어요!",
+        "기도카드 디자인이 바뀌었어요. <지난 한 주> 항목을 통해 그룹원들과 일상을 나눠보아요",
     },
     {
-      image: "/images/notice/Group_List_2.gif",
-      alt: "그룹 이동 방법 2",
+      image: "/images/notice/NewPrayCardCreate.png",
       tip: "TIP 2",
-      description: "그룹 메뉴에서도 기존처럼 그룹간 이동이 가능해요!",
+      description:
+        "기도카드를 생성할 때 지난 주 내용을 불러와서 편하게 작성할 수 있어요",
     },
   ];
 
@@ -60,7 +59,7 @@ const WeekUpdateDialog = () => {
 
   const CarouselDots = () => (
     <div className="flex justify-center items-center mt-2 p-4">
-      {Array.from({ length: 2 }, (_, index) => (
+      {Array.from({ length: slides.length }, (_, index) => (
         <span
           key={index}
           className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
@@ -74,7 +73,7 @@ const WeekUpdateDialog = () => {
     </div>
   );
 
-  const currentUpdateDate = "2025-02-12";
+  const currentUpdateDate = "2025-02-22";
 
   useEffect(() => {
     const lastSeenDate = localStorage.getItem("WeekUpdateDialog");
@@ -95,7 +94,7 @@ const WeekUpdateDialog = () => {
       <DialogContent className="w-11/12 h-auto overflow-auto rounded-2xl bg-mainBg transition-all duration-300 ease-in-out">
         <DialogHeader className="text-left">
           <DialogTitle className="text-lg">
-            📢 그룹간 이동방법 변경안내
+            📢 기도카드 업데이트 안내
           </DialogTitle>
           <hr className="my-3" />
           <div className="w-full">
@@ -107,8 +106,7 @@ const WeekUpdateDialog = () => {
                       <div className="w-1/2">
                         <img
                           src={slide.image}
-                          alt={slide.alt}
-                          className="w-full rounded-lg shadow-md"
+                          className="w-full rounded-lg shadow-md border-gray-400 border"
                         />
                       </div>
                       <div className="w-1/2 space-y-2 text-left">
