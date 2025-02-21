@@ -43,7 +43,7 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({
   }
 
   return (
-    <div className="flex flex-col gap-6 p-2">
+    <div className="w-full flex flex-col gap-6 p-2">
       <WeeklyCalendar prayCard={prayCard} />
       <ReactionBtn
         currentUserId={currentUserId!}

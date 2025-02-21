@@ -11,6 +11,7 @@ import PrayCalendar from "@/components/profile/PrayCalendar";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import PrayListDrawer from "@/components/pray/PrayListDrawer";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -56,7 +57,7 @@ const MyProfilePage = () => {
           <div className="w-[60px]">
             <IoChevronBack size={20} onClick={() => navigate(-1)} />
           </div>
-          <span className="text-lg font-bold">나의 정보</span>
+          <span className="text-lg font-bold">내 프로필</span>
           <div className="w-[60px] flex justify-end items-center"></div>
         </div>
         <div className="flex justify-center h-[80px] object-cover">
@@ -123,6 +124,7 @@ const MyProfilePage = () => {
       </footer>
       <SettingDialog />
       <PrayCardHistoryDrawer />
+      <PrayListDrawer />
     </div>
   );
 };

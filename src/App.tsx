@@ -36,6 +36,7 @@ import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage
 import PrayCardEditPage from "./components/prayCard/PrayCardEditPage";
 import NotificationPage from "./components/notification/NotificationPage";
 import AppInit from "./AppInit/AppInit";
+import TodayPrayCardPage from "./pages/TodayPrayCardPage";
 
 const App = () => {
   return (
@@ -120,6 +121,14 @@ const App = () => {
                 }
               />
               <Route
+                path="/group/:groupId/praycard/:praycardId/edit"
+                element={<PrayCardEditPage />}
+              />
+              <Route
+                path="/group/:groupId/todaypray"
+                element={<TodayPrayCardPage />}
+              />
+              <Route
                 path="/group/open/1027-union"
                 element={<UnionWorshipPage />}
               />
@@ -135,10 +144,7 @@ const App = () => {
               />
               <Route path="/login/email" element={<EmailLoginPage />} />
               <Route path="/story" element={<StoryPage />} />
-              <Route
-                path="/group/:groupId/praycard/:praycardId/edit"
-                element={<PrayCardEditPage />}
-              />
+
               <Route
                 path="/notifications"
                 element={
@@ -162,6 +168,10 @@ const AnalyticsTracker = () => {
   const from = location.state?.from?.pathname;
   const matchPraycardNew = matchPath(
     "/group/:groupId/praycard/new",
+    location.pathname
+  );
+  const matchTodayPray = matchPath(
+    "/group/:groupId/todaypray",
     location.pathname
   );
   const matchPraycardEdit = matchPath(
@@ -268,6 +278,12 @@ const AnalyticsTracker = () => {
             groupId: matchPraycardNew.params.groupId,
             where: from,
           });
+        } else if (matchTodayPray) {
+          analyticsTrack("페이지_오늘의_기도", {
+            title: "Today Pray Page with Group ID",
+            groupId: matchTodayPray.params.groupId,
+            where: from,
+          });
         } else if (matchPraycardEdit) {
           analyticsTrack("페이지_기도카드_수정", {
             title: "PrayCard Edit Page with Group ID",
@@ -278,6 +294,7 @@ const AnalyticsTracker = () => {
     }
   }, [
     matchPraycardNew,
+    matchTodayPray,
     matchPraycardEdit,
     matchGroup,
     location.pathname,

@@ -31,6 +31,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   const inputPrayCardContent = useBaseStore(
     (state) => state.inputPrayCardContent
   );
+  const setPrayCardLife = useBaseStore((state) => state.setPrayCardLife);
   const isOpenMyMemberDrawer = useBaseStore(
     (state) => state.isOpenMyMemberDrawer
   );
@@ -54,7 +55,8 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
 
   useEffect(() => {
     setPrayCardContent(myMember.pray_summary || "");
-  }, [setPrayCardContent, myMember]);
+    if (userPrayCardList?.[0]) setPrayCardLife(userPrayCardList[0].life || "");
+  }, [setPrayCardContent, myMember, setPrayCardLife, userPrayCardList]);
 
   const prayCard = userPrayCardList?.[0];
   const prayDatasForMe = prayCard ? prayCard.pray : [];
@@ -109,7 +111,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <div className="flex flex-col min-h-80vh max-h-80vh gap-2 px-10 pt-5 pb-10">
+        <div className="flex flex-col min-h-80vh max-h-80vh gap-2 px-8 pt-5 pb-10">
           <MyPrayCardUI prayCard={userPrayCardList?.[0]} />
           <PrayListBtn prayDatas={userPrayCardList?.[0]?.pray} />
         </div>

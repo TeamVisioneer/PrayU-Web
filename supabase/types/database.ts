@@ -39,7 +39,6 @@ export type Database = {
           book: number
           cate: number
           chapter: number
-          embedding: string | null
           id: number
           long_label: string
           paragraph: number
@@ -51,7 +50,6 @@ export type Database = {
           book: number
           cate: number
           chapter: number
-          embedding?: string | null
           id?: number
           long_label: string
           paragraph: number
@@ -63,7 +61,6 @@ export type Database = {
           book?: number
           cate?: number
           chapter?: number
-          embedding?: string | null
           id?: number
           long_label?: string
           paragraph?: number
@@ -279,6 +276,7 @@ export type Database = {
           deleted_at: string | null
           group_id: string | null
           id: string
+          life: string
           updated_at: string
           user_id: string | null
         }
@@ -289,6 +287,7 @@ export type Database = {
           deleted_at?: string | null
           group_id?: string | null
           id?: string
+          life?: string
           updated_at?: string
           user_id?: string | null
         }
@@ -299,6 +298,7 @@ export type Database = {
           deleted_at?: string | null
           group_id?: string | null
           id?: string
+          life?: string
           updated_at?: string
           user_id?: string | null
         }
@@ -558,18 +558,6 @@ export type Database = {
           "": unknown[]
         }
         Returns: number
-      }
-      todaypray_reminder_am: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      todaypray_reminder_pm: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      todaypray_reminder_test: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
       }
       vector_avg: {
         Args: {
