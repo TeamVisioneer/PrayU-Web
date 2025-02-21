@@ -31,7 +31,7 @@ const TodayPrayCardListDrawer: React.FC = () => {
       open={isOpenTodayPrayDrawer}
       onOpenChange={setIsOpenTodayPrayDrawer}
     >
-      <DrawerContent className="bg-mainBg flex flex-col">
+      <DrawerContent className="bg-mainBg flex flex-col pb-5">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription className="text-sm text-center text-gray-400 p-2 h-10">
@@ -52,8 +52,14 @@ const TodayPrayCardListDrawer: React.FC = () => {
                 }번째 기도`}
           </DrawerDescription>
         </DrawerHeader>
-
         <TodayPrayCardList />
+        <p
+          className={`text-gray-400 text-sm text-center pt-2 ${
+            isPrayToday ? "invisible" : ""
+          }`}
+        >
+          기도 반응 버튼을 눌러 오늘의 기도를 남겨요
+        </p>
         {/* <div className="px-5 pt-5">
           <ReactionWithCalendar
             prayCard={prayCardCarouselList?.[prayCardCarouselIndex - 1]}

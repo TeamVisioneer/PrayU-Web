@@ -52,7 +52,7 @@ const TodayPrayCardList = () => {
       <CarouselContent className="min-h-80vh max-h-80vh">
         <CarouselItem className="basis-5/6"></CarouselItem>
         {memberList?.length == 1 && (
-          <CarouselItem className="basis-5/6 flex flex-col gap-4 pb-5">
+          <CarouselItem className="basis-5/6 flex flex-col gap-2">
             <DummyPrayCardUI
               profileImage="/images/avatar/avatar_1.png"
               name="기도 카드"
@@ -63,7 +63,7 @@ const TodayPrayCardList = () => {
         {prayCardCarouselList?.map((prayCard) => (
           <CarouselItem
             key={prayCard.id}
-            className="basis-5/6 flex flex-col gap-4 pb-5"
+            className="basis-5/6 flex flex-col gap-2"
           >
             {prayCard.user_id == user?.id ? (
               <MyPrayCardUI prayCard={prayCard} />

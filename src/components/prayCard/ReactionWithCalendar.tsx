@@ -13,7 +13,6 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({
   eventOption,
 }) => {
   const currentUserId = useBaseStore((state) => state.user?.id);
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   if (!prayCard) {
     const days = ["일", "월", "화", "수", "목", "금", "토"];
@@ -50,13 +49,6 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({
         prayCard={prayCard}
         eventOption={eventOption}
       />
-      <p
-        className={`text-gray-400 text-sm text-center ${
-          isPrayToday ? "invisible" : ""
-        }`}
-      >
-        기도 반응 버튼을 눌러 오늘의 기도를 남겨요
-      </p>
     </div>
   );
 };

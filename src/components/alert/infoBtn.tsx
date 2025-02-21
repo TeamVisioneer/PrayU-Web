@@ -24,12 +24,10 @@ const InfoBtn: React.FC<InfoBtnProps> = ({ text, eventOption, position }) => {
       </PopoverTrigger>
       <PopoverContent align={position} className="p-2 w-fit">
         {text.map((t, index) => (
-          <>
-            <span key={index} className="text-sm text-gray-500">
-              {t}
-            </span>
+          <div key={index}>
+            <span className="text-sm text-gray-500">{t}</span>
             {index < text.length - 1 && <br />}
-          </>
+          </div>
         ))}
       </PopoverContent>
     </Popover>
