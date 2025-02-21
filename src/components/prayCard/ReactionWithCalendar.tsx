@@ -13,7 +13,6 @@ const ReactionWithCalendar: React.FC<PrayCardProps> = ({
   eventOption,
 }) => {
   const currentUserId = useBaseStore((state) => state.user?.id);
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
 
   if (!prayCard) {
     const days = ["일", "월", "화", "수", "목", "금", "토"];
