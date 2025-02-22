@@ -115,7 +115,7 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
         </section>
 
         {/* 하단 정보 */}
-        {prayCard.updated_at == prayCard.created_at && (
+        {prayCard.updated_at !== prayCard.created_at && (
           <p className="text-xs text-end text-gray-400">(편집됨)</p>
         )}
       </div>

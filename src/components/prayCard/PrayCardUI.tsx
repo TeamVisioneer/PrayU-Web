@@ -82,7 +82,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard }) => {
               이번 주 기도제목
             </h3>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-gray-100 rounded-lg p-4">
             {prayCard.content ? (
               <p className="text-sm text-gray-700 whitespace-pre-wrap">
                 {prayCard.content}
@@ -96,7 +96,7 @@ const PrayCardUI: React.FC<PrayCardProps> = ({ prayCard }) => {
         </section>
 
         {/* 하단 정보 */}
-        {prayCard.updated_at == prayCard.created_at && (
+        {prayCard.updated_at !== prayCard.created_at && (
           <p className="text-xs text-end text-gray-400">(편집됨)</p>
         )}
       </div>
