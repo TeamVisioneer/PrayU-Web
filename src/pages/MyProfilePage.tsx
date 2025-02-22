@@ -11,7 +11,7 @@ import PrayCalendar from "@/components/profile/PrayCalendar";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import PrayListDrawer from "@/components/pray/PrayListDrawer";
+import PrayCardHistoryPrayListDrawer from "@/components/profile/PrayCardHistoryPrayListDrawer";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -124,7 +124,7 @@ const MyProfilePage = () => {
       </footer>
       <SettingDialog />
       <PrayCardHistoryDrawer />
-      <PrayListDrawer />
+      <PrayCardHistoryPrayListDrawer />
     </div>
   );
 };

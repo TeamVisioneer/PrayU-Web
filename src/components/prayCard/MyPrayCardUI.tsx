@@ -41,6 +41,7 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
 
   const handleEditClick = () => {
     if (!targetGroup) return;
+    if (isHistoryView) return;
     navigate(`/group/${targetGroup.id}/praycard/${prayCard.id}/edit`);
     analyticsTrack("클릭_기도카드_수정", {});
   };
@@ -83,7 +84,11 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
             className="bg-gray-100 rounded-lg p-4 mb-4"
             onClick={() => handleEditClick()}
           >
-            {inputPrayCardLife ? (
+            {isHistoryView ? (
+              <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                {prayCard.life}
+              </p>
+            ) : inputPrayCardLife ? (
               <p className="text-sm text-gray-700 whitespace-pre-wrap">
                 {inputPrayCardLife}
               </p>
@@ -106,7 +111,11 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
             className="bg-gray-100 rounded-lg p-4 flex flex-col flex-grow"
             onClick={() => handleEditClick()}
           >
-            {inputPrayCardContent ? (
+            {isHistoryView ? (
+              <p className="flex-grow text-sm text-gray-700 whitespace-pre-wrap">
+                {prayCard.content}
+              </p>
+            ) : inputPrayCardContent ? (
               <p className="flex-grow text-sm text-gray-700 whitespace-pre-wrap">
                 {inputPrayCardContent}
               </p>
