@@ -18,6 +18,7 @@ import GroupHeader from "@/components/group/GroupHeader";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
 import InfoBtn from "@/components/alert/infoBtn";
+import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -239,8 +240,8 @@ const PrayCardCreatePage: React.FC = () => {
   };
 
   const PrayCardUI = (
-    <div className="w-full flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
-      <div className="sticky top-0 p-4 bg-white rounded-2xl flex items-center justify-between">
+    <div className="w-full flex flex-col flex-grow overflow-y-auto no-scrollbar bg-white rounded-2xl shadow-prayCard">
+      <div className="z-30 min-h-14 px-4 my-4 bg-white flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img
             src={
@@ -253,29 +254,30 @@ const PrayCardCreatePage: React.FC = () => {
             onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
               e.currentTarget.src = "/images/defaultProfileImage.png";
             }}
-            className="w-7 h-7 rounded-full object-cover"
+            className="w-8 h-8 rounded-full object-cover"
           />
-          <p className="text-sm font-medium">
+          <span className="text-lg font-medium">
             {myMember ? myMember?.profiles.full_name : user?.user_metadata.name}
-          </p>
-          <span className="text-xs text-gray-500 font-thin">오늘</span>
+          </span>
+          <span className="text-gray-400">오늘</span>
         </div>
       </div>
 
-      <div className="px-4 pb-4 space-y-4">
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-1">
-              <h3 className="text-sm font-medium text-gray-600">지난 한 주</h3>
-              <InfoBtn
-                text={[
-                  "기도카드에 <지난 한 주> 항목이 추가되었어요!",
-                  "기도제목보다 가벼운 일상을 나눠보세요 🙂",
-                ]}
-                eventOption={{ where: "PrayCardEditPage" }}
-                position="start"
-              />
-            </div>
+      <div className="flex flex-col px-4 pb-4 overflow-y-auto no-scrollbar">
+        <section>
+          <div className="sticky top-0 py-2 flex items-center gap-1 z-20 bg-white">
+            <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
+              지난 한 주
+            </h3>
+            <InfoBtn
+              text={[
+                "기도카드에 <지난 한 주> 항목이 추가되었어요!",
+                "기도제목보다 가벼운 일상을 나눠보세요 🙂",
+              ]}
+              eventOption={{ where: "PrayCardEditPage" }}
+              position="start"
+            />
+            <div className="flex-grow" />
             <Button
               variant="ghost"
               size="sm"
@@ -286,22 +288,23 @@ const PrayCardCreatePage: React.FC = () => {
               내용 불러오기
             </Button>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
+
+          <div className="bg-gray-100 rounded-lg p-4 mb-4">
             <textarea
-              className="text-sm w-full bg-transparent resize-none text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
+              className="text-sm w-full bg-transparent text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
               value={inputPrayCardLife}
               onChange={(e) => setPrayCardLife(e.target.value)}
               placeholder="회사에서 업무적, 관계적으로 힘들었던 한 주"
-              rows={4}
             />
           </div>
-        </div>
+        </section>
 
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <h3 className="text-sm font-medium text-gray-600">
+        <section>
+          <div className="sticky top-0 py-2 flex items-center gap-1 z-20 bg-white">
+            <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
               이번 주 기도제목
             </h3>
+            <div className="flex-grow" />
             <Button
               variant="ghost"
               size="sm"
@@ -312,7 +315,7 @@ const PrayCardCreatePage: React.FC = () => {
               기도제목 불러오기
             </Button>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-gray-100 rounded-lg p-4">
             <textarea
               className="text-sm w-full bg-transparent resize-none text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
               value={inputPrayCardContent}
@@ -321,7 +324,7 @@ const PrayCardCreatePage: React.FC = () => {
               rows={4}
             />
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
@@ -368,6 +371,7 @@ const PrayCardCreatePage: React.FC = () => {
       <GroupSettingsDialog targetGroup={targetGroup} />
       <ShareDrawer />
       <GroupListDrawer />
+      <WeekUpdateDialog />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { LuInfo } from "react-icons/lu";
+import { FaRegQuestionCircle } from "react-icons/fa";
 
 interface InfoBtnProps {
   eventOption: {
@@ -20,7 +20,7 @@ const InfoBtn: React.FC<InfoBtnProps> = ({ text, eventOption, position }) => {
       <PopoverTrigger
         onClick={() => analyticsTrack("클릭_추가설명", eventOption)}
       >
-        <LuInfo size={16} color="gray" />
+        <FaRegQuestionCircle size={14} className="text-gray-300" />
       </PopoverTrigger>
       <PopoverContent align={position} className="p-2 w-fit">
         {text.map((t, index) => (
