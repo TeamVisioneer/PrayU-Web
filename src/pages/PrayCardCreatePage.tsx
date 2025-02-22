@@ -18,6 +18,7 @@ import GroupHeader from "@/components/group/GroupHeader";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
 import InfoBtn from "@/components/alert/infoBtn";
+import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -370,6 +371,7 @@ const PrayCardCreatePage: React.FC = () => {
       <GroupSettingsDialog targetGroup={targetGroup} />
       <ShareDrawer />
       <GroupListDrawer />
+      <WeekUpdateDialog />
     </div>
   );
 };
