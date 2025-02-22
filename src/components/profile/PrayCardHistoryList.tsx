@@ -79,7 +79,7 @@ const PrayCardHistoryList = () => {
             onClick={() => onClickStory(prayCard)}
           >
             <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
-              <p className="text-xs text-white w-full text-left">
+              <p className="text-xs text-white w-full text-left truncate">
                 {prayCard.group?.name || "말씀 카드"}
               </p>
             </div>
