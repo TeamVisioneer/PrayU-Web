@@ -19,6 +19,10 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
 }) => {
   const navigate = useNavigate();
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const inputPrayCardContent = useBaseStore(
+    (state) => state.inputPrayCardContent
+  );
+  const inputPrayCardLife = useBaseStore((state) => state.inputPrayCardLife);
 
   if (!prayCard) {
     return <Skeleton className="flex-grow bg-gray-200 rounded-xl" />;
@@ -44,10 +48,10 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
   return (
     <div className="flex flex-col flex-grow overflow-y-auto no-scrollbar bg-white rounded-2xl shadow-prayCard">
       {/* 헤더 섹션 */}
-      <div className="z-30 h-14 p-4 bg-white flex items-center justify-between border-b transform-gpu">
+      <div className="z-30 min-h-14 px-4 my-4 bg-white flex items-center justify-between ">
         <div className="flex items-center gap-2">
-          <UserProfile imgSize="w-7 h-7" fontSize="text-sm font-medium" />
-          <span className="text-xs text-gray-500 font-thin">
+          <UserProfile imgSize="w-8 h-8" fontSize="text-lg font-medium" />
+          <span className="text-gray-400">
             {getDateText(dateDistance.days)}
           </span>
         </div>
@@ -58,11 +62,11 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
       </div>
 
       {/* 컨텐츠 섹션 */}
-      <div className="flex flex-col px-4 pb-4  overflow-y-auto no-scrollbar">
+      <div className="flex flex-col flex-grow px-4 pb-4 overflow-y-auto no-scrollbar">
         {/* 지난 한주 섹션 */}
         <section>
-          <div className="sticky top-0 py-4 flex items-center gap-1 z-20 bg-white">
-            <h3 className="text-sm font-medium text-gray-600 flex items-center gap-2">
+          <div className="sticky top-0 py-2  flex items-center gap-1 z-20 bg-white">
+            <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
               지난 한 주
             </h3>
             <InfoBtn
@@ -76,12 +80,12 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
           </div>
 
           <div
-            className="bg-gray-50 rounded-lg p-4 mb-2"
+            className="bg-gray-100 rounded-lg p-4 mb-4"
             onClick={() => handleEditClick()}
           >
-            {prayCard.life ? (
+            {inputPrayCardLife ? (
               <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                {prayCard.life}
+                {inputPrayCardLife}
               </p>
             ) : (
               <p className="text-sm text-gray-400 whitespace-pre-wrap">
@@ -92,19 +96,19 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
         </section>
 
         {/* 기도제목 섹션 */}
-        <section>
-          <div className="sticky top-0 py-4 z-20 bg-white">
-            <h3 className="text-sm font-medium text-gray-600 flex items-center gap-2">
+        <section className="flex flex-col flex-grow">
+          <div className="sticky top-0 py-2 z-20 bg-white">
+            <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
               이번 주 기도제목
             </h3>
           </div>
           <div
-            className="bg-gray-50 rounded-lg p-4"
+            className="bg-gray-100 rounded-lg p-4 flex flex-col flex-grow"
             onClick={() => handleEditClick()}
           >
-            {prayCard.content ? (
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                {prayCard.content}
+            {inputPrayCardContent ? (
+              <p className="flex-grow text-sm text-gray-700 whitespace-pre-wrap">
+                {inputPrayCardContent}
               </p>
             ) : (
               <p className="text-sm text-gray-400 whitespace-pre-wrap">

@@ -61,7 +61,7 @@ const PrayCardEditPage = () => {
         <h1 className="text-lg font-bold w-full text-center">기도카드 수정</h1>
       </header>
 
-      <main className="flex-1 p-4 flex flex-col gap-4">
+      <main className="flex-1 p-4 flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-1">
             <h2 className="font-semibold">지난 한 주</h2>
@@ -76,16 +76,16 @@ const PrayCardEditPage = () => {
           </div>
           <Textarea
             className="w-full min-h-40 p-4 border resize-none focus:ring-0"
+            ref={textareaRef}
             value={inputPrayCardLife}
             onChange={(e) => setPrayCardLife(e.target.value)}
             placeholder="지난 한 주 동안 있었던 일들을 나눠보세요"
           />
         </div>
-        <div>
-          <h2 className="font-semibold mb-2">기도제목</h2>
+        <div className="flex flex-col gap-2 flex-grow">
+          <h2 className="font-semibold">기도제목</h2>
           <Textarea
-            ref={textareaRef}
-            className="w-full min-h-40 p-4 border resize-none focus:ring-0"
+            className="w-full min-h-40 h-full p-4 border resize-none focus:ring-0"
             value={inputPrayCardContent}
             onChange={(e) => setPrayCardContent(e.target.value)}
             placeholder="이번 주 기도제목을 작성해 보세요"

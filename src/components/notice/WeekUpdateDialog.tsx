@@ -27,10 +27,10 @@ const WeekUpdateDialog = () => {
 
   const slides = [
     {
-      image: "/images/notice/NewPrayCard.png",
+      image: "/images/notice/NewPrayCard.gif",
       tip: "TIP 1",
       description:
-        "기도카드 디자인이 바뀌었어요. <지난 한 주> 항목을 통해 그룹원들과 일상을 나눠보아요",
+        "기도카드 디자인이 바뀌었어요. <지난 한 주> 항목을 통해 그룹원들과 일상을 나눠보아요!",
     },
     {
       image: "/images/notice/NewPrayCardCreate.png",
@@ -102,11 +102,11 @@ const WeekUpdateDialog = () => {
               <CarouselContent>
                 {slides.map((slide, index) => (
                   <CarouselItem key={index}>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center h-full gap-4">
                       <div className="w-1/2">
                         <img
                           src={slide.image}
-                          className="w-full rounded-lg shadow-md border-gray-400 border"
+                          className="w-full rounded-lg border-gray-400 shadow-md"
                         />
                       </div>
                       <div className="w-1/2 space-y-2 text-left">
