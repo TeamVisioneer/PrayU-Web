@@ -241,7 +241,7 @@ const PrayCardCreatePage: React.FC = () => {
 
   const PrayCardUI = (
     <div className="w-full flex flex-col flex-grow overflow-y-auto no-scrollbar bg-white rounded-2xl shadow-prayCard">
-      <div className="z-30 min-h-14 px-4 my-4 bg-white flex items-center justify-between">
+      <div className="min-h-14 px-4 my-4 bg-white flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img
             src={
@@ -257,15 +257,17 @@ const PrayCardCreatePage: React.FC = () => {
             className="w-8 h-8 rounded-full object-cover"
           />
           <span className="text-lg font-medium">
-            {myMember ? myMember?.profiles.full_name : user?.user_metadata.name}
+            {/* {myMember ? myMember?.profiles.full_name : user?.user_metadata.name}
+             */}
+            내 기도카드
           </span>
           <span className="text-gray-400">오늘</span>
         </div>
       </div>
 
-      <div className="flex flex-col px-4 pb-4 overflow-y-auto no-scrollbar">
+      <div className="flex flex-col px-4 pb-4  no-scrollbar">
         <section>
-          <div className="sticky top-0 py-2 flex items-center gap-1 z-20 bg-white">
+          <div className="py-2 flex items-center gap-1 bg-white">
             <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
               지난 한 주
             </h3>
@@ -289,18 +291,19 @@ const PrayCardCreatePage: React.FC = () => {
             </Button>
           </div>
 
-          <div className="bg-gray-100 rounded-lg p-4 mb-4">
+          <div className="bg-gray-100 rounded-lg p-4 mb-4 pb-2">
             <textarea
               className="text-sm w-full bg-transparent text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
               value={inputPrayCardLife}
               onChange={(e) => setPrayCardLife(e.target.value)}
               placeholder="회사에서 업무적, 관계적으로 힘들었던 한 주"
+              rows={3}
             />
           </div>
         </section>
 
         <section>
-          <div className="sticky top-0 py-2 flex items-center gap-1 z-20 bg-white">
+          <div className=" py-2 flex items-center gap-1 bg-white">
             <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
               이번 주 기도제목
             </h3>
@@ -315,13 +318,12 @@ const PrayCardCreatePage: React.FC = () => {
               기도제목 불러오기
             </Button>
           </div>
-          <div className="bg-gray-100 rounded-lg p-4">
+          <div className="bg-gray-100 rounded-lg p-4 pb-2">
             <textarea
-              className="text-sm w-full bg-transparent resize-none text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
+              className="text-sm w-full min-h-40 bg-transparent text-gray-700 focus:outline-none focus:border-none"
               value={inputPrayCardContent}
               onChange={(e) => setPrayCardContent(e.target.value)}
               placeholder={`1. 맡겨진 자리에서 하나님의 사명을 발견할 수 있도록\n2. 내 주변 사람을 내 몸과 같이 섬길 수 있도록`}
-              rows={4}
             />
           </div>
         </section>

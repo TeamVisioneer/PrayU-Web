@@ -33,7 +33,7 @@ const GroupHeader: React.FC = () => {
     : memberList;
 
   return (
-    <div className="sticky top-0 flex justify-between items-center p-5 bg-mainBg z-10">
+    <div className="sticky top-0 flex justify-between items-center p-5 bg-mainBg z-50">
       <OpenShareDrawerBtn
         text="초대"
         eventOption={{ where: "GroupPage" }}
