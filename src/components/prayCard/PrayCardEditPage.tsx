@@ -53,8 +53,8 @@ const PrayCardEditPage = () => {
   };
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col">
-      <header className="flex items-center p-4 border-b relative">
+    <div className=" bg-white flex flex-col w-full h-full overflow-y-auto no-scrollbar">
+      <header className="sticky top-0 z-50 flex items-center p-4 border-b bg-white">
         <button onClick={() => navigate(-1)} className="absolute left-4">
           <IoChevronBack size={20} />
         </button>
@@ -93,7 +93,7 @@ const PrayCardEditPage = () => {
         </div>
       </main>
 
-      <footer className="grid grid-cols-2 gap-4 p-4 border-t">
+      <footer className="sticky bottom-0 bg-white z-50 grid grid-cols-2 gap-4 p-4 border-t">
         <Button
           variant="outline"
           onClick={() => navigate(-1)}
