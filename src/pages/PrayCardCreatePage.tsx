@@ -320,7 +320,7 @@ const PrayCardCreatePage: React.FC = () => {
           </div>
           <div className="bg-gray-100 rounded-lg p-4 pb-2">
             <textarea
-              className="text-sm w-full min-h-40 bg-transparent text-gray-700 focus:outline-none focus:border-none"
+              className="text-sm w-full min-h-36 bg-transparent text-gray-700 focus:outline-none focus:border-none"
               value={inputPrayCardContent}
               onChange={(e) => setPrayCardContent(e.target.value)}
               placeholder={`1. 맡겨진 자리에서 하나님의 사명을 발견할 수 있도록\n2. 내 주변 사람을 내 몸과 같이 섬길 수 있도록`}
@@ -338,7 +338,7 @@ const PrayCardCreatePage: React.FC = () => {
         <p>이번 주 기도카드를 만들고 그룹에 참여해요 🙏🏻</p>
         {PrayCardUI}
 
-        <div className="flex flex-col items-center w-full gap-4">
+        <div className="flex flex-col items-center w-full gap-4 pb-10">
           {inputPrayCardContent || inputPrayCardLife ? (
             <Button
               className="w-full"
