@@ -27,18 +27,18 @@ const AppInit: React.FC = () => {
       }
     };
 
-    // resize 이벤트는 방향 전환(orientation change)에만 대응
     const handleResize = () => {
-      // 방향 전환 시에만 vh 업데이트
-      if (window.innerWidth !== window.outerWidth) {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty("--vh", `${vh}px`);
+      // 현재 포커스된 요소가 input이나 textarea면 vh 업데이트 하지 않음
+      const activeElement = document.activeElement?.tagName.toLowerCase();
+      if (activeElement === "input" || activeElement === "textarea") {
+        return;
       }
+
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
     };
 
-    // 최초 한 번만 vh 값을 설정
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("message", handlePushNotification);
