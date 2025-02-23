@@ -27,24 +27,17 @@ const AppInit: React.FC = () => {
       }
     };
 
-    // resize 이벤트는 방향 전환(orientation change)에만 대응
-    const handleResize = () => {
-      // 방향 전환 시에만 vh 업데이트
-      if (window.innerWidth !== window.outerWidth) {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty("--vh", `${vh}px`);
-      }
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
     };
 
-    // 최초 한 번만 vh 값을 설정
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-
-    window.addEventListener("resize", handleResize);
+    setVh();
+    window.addEventListener("resize", setVh);
     window.addEventListener("message", handlePushNotification);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", setVh);
       window.removeEventListener("message", handlePushNotification);
     };
   }, [setIsApp, setIsIOS, setIsAndroid]);
