@@ -303,7 +303,7 @@ const PrayCardCreatePage: React.FC = () => {
         </section>
 
         <section>
-          <div className="py-2 flex items-center gap-1 bg-white">
+          <div className=" py-2 flex items-center gap-1 bg-white">
             <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
               이번 주 기도제목
             </h3>
@@ -332,7 +332,7 @@ const PrayCardCreatePage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col h-full w-full ">
+    <div className="w-full ">
       <GroupHeader />
       <div className="w-full flex flex-col items-center px-5 gap-3">
         <p>이번 주 기도카드를 만들고 그룹에 참여해요 🙏🏻</p>

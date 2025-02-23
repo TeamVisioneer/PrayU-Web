@@ -53,8 +53,8 @@ const PrayCardEditPage = () => {
   };
 
   return (
-    <div className="bg-white flex flex-col h-full w-full">
-      <header className="sticky top-0 z-50 flex items-center p-4 border-b">
+    <div className="fixed inset-0 bg-white z-50 flex flex-col">
+      <header className="flex items-center p-4 border-b relative">
         <button onClick={() => navigate(-1)} className="absolute left-4">
           <IoChevronBack size={20} />
         </button>

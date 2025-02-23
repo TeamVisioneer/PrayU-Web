@@ -27,23 +27,12 @@ const AppInit: React.FC = () => {
       }
     };
 
-    // 초기 실제 viewport 높이를 저장
-    const initialViewportHeight = window.innerHeight;
-
     const setVh = () => {
-      // 현재 높이가 초기 높이보다 작다면 키보드가 올라와 있는 상태로 판단
-      const isKeyboardVisible = window.innerHeight < initialViewportHeight;
-
-      // 키보드가 올라와 있지 않은 상태일 때만 vh 업데이트
-      if (!isKeyboardVisible) {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty("--vh", `${vh}px`);
-      }
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
     };
 
-    // 앱 시작시 한번 실행
     setVh();
-
     window.addEventListener("resize", setVh);
     window.addEventListener("message", handlePushNotification);
 
