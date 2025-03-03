@@ -30,7 +30,7 @@ const WeekUpdateDialog = () => {
       image: "/images/notice/NewPrayCard.gif",
       tip: "TIP 1",
       description:
-        "기도카드 디자인이 바뀌었어요. <지난 한 주> 항목을 통해 그룹원들과 일상을 나눠보아요!",
+        "기도카드 디자인이 바뀌었어요. <일상 나눔> 항목을 통해 그룹원들과 삶을 나눠보아요!",
     },
     {
       image: "/images/notice/NewPrayCardCreate.png",
@@ -75,10 +75,10 @@ const WeekUpdateDialog = () => {
 
   const currentUpdateDate = "2025-02-22";
 
-  useEffect(() => {
-    const lastSeenDate = localStorage.getItem("WeekUpdateDialog");
-    setIsOpenWeekUpdateDialog(lastSeenDate !== currentUpdateDate);
-  }, [setIsOpenWeekUpdateDialog]);
+  // useEffect(() => {
+  //   const lastSeenDate = localStorage.getItem("WeekUpdateDialog");
+  //   setIsOpenWeekUpdateDialog(lastSeenDate !== currentUpdateDate);
+  // }, [setIsOpenWeekUpdateDialog]);
 
   const onClickHideWeekUpdateDialog = () => {
     localStorage.setItem("WeekUpdateDialog", currentUpdateDate);

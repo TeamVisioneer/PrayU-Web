@@ -30,7 +30,7 @@ const DumyPrayCardUI: React.FC<DumyPrayCardProps> = ({
         <section>
           <div className="sticky top-0 py-2 flex items-center gap-1 z-20 bg-white">
             <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
-              지난 한 주
+              일상 나눔
             </h3>
           </div>
 

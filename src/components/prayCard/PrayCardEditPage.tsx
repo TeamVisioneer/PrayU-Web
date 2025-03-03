@@ -64,10 +64,10 @@ const PrayCardEditPage = () => {
       <main className="flex-1 p-4 flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-1">
-            <h2 className="font-semibold">지난 한 주</h2>
+            <h2 className="font-semibold">일상 나눔</h2>
             <InfoBtn
               text={[
-                "기도카드에 <지난 한 주> 항목이 추가되었어요!",
+                "기도카드에 <일상 나눔> 항목이 추가되었어요!",
                 "기도제목보다 가벼운 일상을 나눠보세요 🙂",
               ]}
               eventOption={{ where: "PrayCardEditPage" }}
@@ -79,7 +79,7 @@ const PrayCardEditPage = () => {
             ref={textareaRef}
             value={inputPrayCardLife}
             onChange={(e) => setPrayCardLife(e.target.value)}
-            placeholder="지난 한 주 동안 있었던 일들을 나눠보세요"
+            placeholder="삶 가운데 있었던 일들을 나눠보세요"
           />
         </div>
         <div className="flex flex-col gap-2 flex-grow">
