@@ -45,7 +45,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
     }
     navigator.clipboard
       .writeText(
-        `📌지난 한 주\n${prayCard.life}\n\n📝기도제목\n${prayCard.content}`
+        `📌일상 나눔\n${prayCard.life}\n\n📝기도제목\n${prayCard.content}`
       )
       .then(() => {
         toast({

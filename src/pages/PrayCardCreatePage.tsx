@@ -18,7 +18,6 @@ import GroupHeader from "@/components/group/GroupHeader";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
 import InfoBtn from "@/components/alert/infoBtn";
-import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 
 const PrayCardCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -104,7 +103,9 @@ const PrayCardCreatePage: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (targetGroup) {
+    setPrayCardContent("");
+    setPrayCardLife("");
+    if (targetGroup && myMember) {
       setIsConfirmAlertOpen(true);
       setAlertData({
         color: "bg-blue-500",
@@ -114,7 +115,14 @@ const PrayCardCreatePage: React.FC = () => {
         onAction: () => {},
       });
     }
-  }, [targetGroup, myMember, setIsConfirmAlertOpen, setAlertData]);
+  }, [
+    targetGroup,
+    myMember,
+    setIsConfirmAlertOpen,
+    setAlertData,
+    setPrayCardContent,
+    setPrayCardLife,
+  ]);
 
   if (targetGroupLoading == false && targetGroup == null)
     window.location.href = "/group/not-found";
@@ -269,11 +277,11 @@ const PrayCardCreatePage: React.FC = () => {
         <section>
           <div className="py-2 flex items-center gap-1 bg-white">
             <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
-              지난 한 주
+              일상 나눔
             </h3>
             <InfoBtn
               text={[
-                "기도카드에 <지난 한 주> 항목이 추가되었어요!",
+                "기도카드에 <일상 나눔> 항목이 추가되었어요!",
                 "기도제목보다 가벼운 일상을 나눠보세요 🙂",
               ]}
               eventOption={{ where: "PrayCardEditPage" }}
@@ -373,7 +381,6 @@ const PrayCardCreatePage: React.FC = () => {
       <GroupSettingsDialog targetGroup={targetGroup} />
       <ShareDrawer />
       <GroupListDrawer />
-      <WeekUpdateDialog />
     </div>
   );
 };

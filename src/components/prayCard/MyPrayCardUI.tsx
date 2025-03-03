@@ -68,11 +68,11 @@ const MyPrayCardUI: React.FC<MyPrayCardUIProps> = ({
         <section>
           <div className="sticky top-0 py-2  flex items-center gap-1 z-20 bg-white">
             <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
-              지난 한 주
+              일상 나눔
             </h3>
             <InfoBtn
               text={[
-                "기도카드에 <지난 한 주> 항목이 추가되었어요!",
+                "기도카드에 <일상 나눔> 항목이 추가되었어요!",
                 "기도제목보다 가벼운 일상을 나눠보세요 🙂",
               ]}
               eventOption={{ where: "PrayCardEditPage" }}
