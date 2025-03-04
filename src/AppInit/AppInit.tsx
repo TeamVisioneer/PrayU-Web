@@ -27,37 +27,10 @@ const AppInit: React.FC = () => {
       }
     };
 
-    // 키보드가 올라왔는지 여부를 감지하는 간단한 변수
-    let isKeyboardVisible = false;
-
     const setVh = () => {
       // 기존 vh 설정 로직 유지
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
-
-      // textarea나 input 간 포커스 이동시 추가 리사이즈 방지
-      const activeElement = document.activeElement as HTMLElement;
-      if (
-        activeElement &&
-        (activeElement.tagName === "INPUT" ||
-          activeElement.tagName === "TEXTAREA")
-      ) {
-        if (isKeyboardVisible) {
-          // 이미 키보드가 올라온 상태면 이벤트 전파 중단
-          setTimeout(() => {
-            activeElement.scrollIntoView({
-              block: "center",
-              behavior: "smooth",
-            });
-          }, 100);
-        } else {
-          // 키보드가 처음 올라오는 상태
-          isKeyboardVisible = true;
-        }
-      } else {
-        // input/textarea에 포커스가 없으면 키보드 내려간 상태로 간주
-        isKeyboardVisible = false;
-      }
     };
 
     setVh();
