@@ -37,6 +37,16 @@ import PrayCardEditPage from "./components/prayCard/PrayCardEditPage";
 import NotificationPage from "./components/notification/NotificationPage";
 import AppInit from "./AppInit/AppInit";
 import TodayPrayCardPage from "./pages/TodayPrayCardPage";
+import {
+  OfficePage,
+  ChurchSearchPage,
+  MyChurchesPage,
+  ChurchDetailPage,
+  MyCommunityPage,
+  CommunityDetailPage,
+  AddCommunityPage,
+  GroupDetailPage,
+} from "./pages/Office";
 
 const App = () => {
   return (
@@ -150,6 +160,70 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <NotificationPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office"
+                element={
+                  <PrivateRoute>
+                    <OfficePage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/search"
+                element={
+                  <PrivateRoute>
+                    <ChurchSearchPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/my-churches"
+                element={
+                  <PrivateRoute>
+                    <MyChurchesPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/church/:churchId"
+                element={
+                  <PrivateRoute>
+                    <ChurchDetailPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/my-communities"
+                element={
+                  <PrivateRoute>
+                    <MyCommunityPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/community/:communityId"
+                element={
+                  <PrivateRoute>
+                    <CommunityDetailPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/add-community"
+                element={
+                  <PrivateRoute>
+                    <AddCommunityPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/group/:groupId"
+                element={
+                  <PrivateRoute>
+                    <GroupDetailPage />
                   </PrivateRoute>
                 }
               />
