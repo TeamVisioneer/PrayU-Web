@@ -54,7 +54,7 @@ export const searchExternalChurches = async (
     const churches: ExternalChurchData[] = [];
 
     // Extract church data from the table
-    $(".tableList tbody tr").each((index: number, element: any) => {
+    $(".tableList tbody tr").each((_, element) => {
       const columns = $(element).find("td");
 
       // Make sure we have enough columns
