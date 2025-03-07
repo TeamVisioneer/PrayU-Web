@@ -120,11 +120,11 @@ const CommunityDetailPage: React.FC = () => {
         const mockGroups: GroupData[] = Array.from({ length: 5 }, (_, i) => ({
           id: `group-${i + 1}`,
           name: `${communityData.name} 소그룹 ${i + 1}`,
-          type: i % 2 === 0 ? "성경공부" : "기도모임",
+          type: i % 2 === 0 ? "GBS" : "리더모임",
           memberCount: Math.floor(Math.random() * 15) + 3,
           leaderName: `리더 ${i + 1}`,
           description: `${communityData.name}의 ${
-            i % 2 === 0 ? "성경공부" : "기도모임"
+            i % 2 === 0 ? "GBS" : "리더모임"
           } 소그룹입니다.`,
           createdAt: new Date(
             Date.now() - Math.floor(Math.random() * 90) * 24 * 60 * 60 * 1000
@@ -390,15 +390,6 @@ const CommunityDetailPage: React.FC = () => {
                 <h1 className="text-2xl font-bold text-gray-900 mr-3">
                   {community.name}
                 </h1>
-                <span
-                  className={`inline-block px-2 py-1 text-xs rounded-full ${
-                    community.groupType === "community"
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-purple-100 text-purple-800"
-                  }`}
-                >
-                  {community.groupType === "community" ? "소그룹" : "부서"}
-                </span>
               </div>
               <div className="flex flex-wrap items-center text-sm mt-1">
                 <span className="font-medium text-gray-700">
@@ -442,7 +433,7 @@ const CommunityDetailPage: React.FC = () => {
             >
               그룹 ({groups.length}개)
             </button>
-            <button
+            {/* <button
               onClick={() => setActiveTab("members")}
               className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
                 activeTab === "members"
@@ -461,13 +452,13 @@ const CommunityDetailPage: React.FC = () => {
               }`}
             >
               기도 기록
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
 
       {/* 콘텐츠 영역 */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ">
         {activeTab === "overview" && (
           <div>
             <h2 className="text-lg font-medium text-gray-900 mb-4">
@@ -475,8 +466,8 @@ const CommunityDetailPage: React.FC = () => {
             </h2>
 
             {/* 통계 카드 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div className="grid grid-cols-1 gap-4 mb-8">
+              {/* <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                 <h3 className="text-sm font-medium text-gray-500 mb-1">멤버</h3>
                 <p className="text-2xl font-bold">{community.memberCount}명</p>
                 <div className="mt-2 text-sm text-gray-600">
@@ -487,120 +478,135 @@ const CommunityDetailPage: React.FC = () => {
                     생성일: {new Date(community.createdAt).toLocaleDateString()}
                   </p>
                 </div>
-              </div>
+              </div> */}
 
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div
+                className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:border-blue-300"
+                onClick={() => setActiveTab("groups")}
+              >
                 <h3 className="text-sm font-medium text-gray-500 mb-1">그룹</h3>
                 <p className="text-2xl font-bold">{groups.length}개</p>
                 <div className="mt-2 text-sm text-gray-600">
-                  <p>
-                    기도모임:{" "}
-                    {groups.filter((g) => g.type === "기도모임").length}개
-                  </p>
-                  <p>
-                    성경공부:{" "}
-                    {groups.filter((g) => g.type === "성경공부").length}개
-                  </p>
+                  <p>함께 기도하는 그룹 공동체</p>
+                </div>
+                <div className="mt-3 text-blue-600 text-sm flex items-center justify-start">
+                  <span>그룹 목록 보기</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 ml-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
                 </div>
               </div>
 
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-1">
-                  오늘 기도
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center justify-between">
+                <div className="md:mb-0 md:flex-1 md:border-r md:border-gray-200 md:pr-4">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    오늘 기도
+                  </h3>
+                  <p className="text-xl md:text-2xl font-bold">
+                    {prayerStats.todayCount}개
+                  </p>
+                  <div className="mt-1 text-xs md:text-sm text-blue-600">
+                    <p>
+                      전체의{" "}
+                      {Math.round(
+                        (prayerStats.todayCount / community.memberCount) * 100
+                      )}
+                      % 참여
+                    </p>
+                  </div>
+                </div>
+
+                <div className="">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    이번 주 기도
+                  </h3>
+                  <p className="text-xl md:text-2xl font-bold">
+                    {prayerStats.weeklyCount}개
+                  </p>
+                  <div className="mt-1 text-xs md:text-sm text-green-600">
+                    <p>전주 대비 {Math.floor(Math.random() * 30) + 5}% 증가</p>
+                  </div>
+                </div>
+
+                <div className="md:flex-1 md:pl-4">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    누적 기도
+                  </h3>
+                  <p className="text-xl md:text-2xl font-bold">
+                    {prayerStats.totalCount}개
+                  </p>
+                  <div className="mt-1 text-xs md:text-sm text-gray-600">
+                    <p>
+                      멤버당 평균{" "}
+                      {Math.round(
+                        prayerStats.totalCount / community.memberCount
+                      )}
+                      개
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {/* 활동 요약 */}
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 className="text-md font-medium text-gray-900 mb-4">
+                  일간 기도 활동
                 </h3>
-                <p className="text-2xl font-bold">{prayerStats.todayCount}개</p>
-                <div className="mt-2 text-sm text-blue-600">
-                  <p>
-                    전체의{" "}
-                    {Math.round(
-                      (prayerStats.todayCount / community.memberCount) * 100
-                    )}
-                    % 참여
-                  </p>
-                </div>
-              </div>
+                <div className="h-60 flex items-end space-x-2 mb-10 pt-10">
+                  {Array.from({ length: 7 }, (_, i) => {
+                    // 실제 높이(픽셀)를 계산 (최소 10px, 최대 180px)
+                    const barHeight = 10 + Math.floor(Math.random() * 170);
+                    const day = new Date();
+                    day.setDate(day.getDate() - 6 + i);
+                    const dayStr = ["일", "월", "화", "수", "목", "금", "토"][
+                      day.getDay()
+                    ];
+                    const count = Math.floor(Math.random() * 20) + 5;
 
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-1">
-                  이번 주 기도
-                </h3>
-                <p className="text-2xl font-bold">
-                  {prayerStats.weeklyCount}개
-                </p>
-                <div className="mt-2 text-sm text-green-600">
-                  <p>전주 대비 {Math.floor(Math.random() * 30) + 5}% 증가</p>
-                </div>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-1">
-                  총 기도카드
-                </h3>
-                <p className="text-2xl font-bold">{prayerStats.totalCount}개</p>
-                <div className="mt-2 text-sm text-gray-600">
-                  <p>
-                    멤버당 평균{" "}
-                    {Math.round(prayerStats.totalCount / community.memberCount)}
-                    개
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 기도 활동 그래프 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
-              <h3 className="text-md font-medium text-gray-900 mb-4">
-                일간 기도 활동
-              </h3>
-              <div className="h-60 flex items-end space-x-2 mb-10 pt-10">
-                {Array.from({ length: 7 }, (_, i) => {
-                  // 실제 높이(픽셀)를 계산 (최소 10px, 최대 180px)
-                  const barHeight = 10 + Math.floor(Math.random() * 170);
-                  const day = new Date();
-                  day.setDate(day.getDate() - 6 + i);
-                  const dayStr = ["일", "월", "화", "수", "목", "금", "토"][
-                    day.getDay()
-                  ];
-                  const count = Math.floor(Math.random() * 20) + 5;
-                  const memberCount = Math.floor(Math.random() * 15) + 3;
-
-                  return (
-                    <div key={i} className="flex flex-col items-center flex-1">
-                      <div className="absolute -mt-8 text-center">
-                        <span className="text-xs font-medium text-gray-700">
-                          {count}개
-                        </span>
-                      </div>
+                    return (
                       <div
-                        className={`w-full ${
-                          i === 6 ? "bg-blue-500" : "bg-blue-200"
-                        } rounded-t-sm`}
-                        style={{ height: `${barHeight}px` }}
-                      ></div>
-                      <div className="text-xs text-gray-500 mt-2 text-center">
-                        <div>{dayStr}</div>
-                        <div className="text-xs mt-1 text-blue-600 font-medium">
-                          {memberCount}명
+                        key={i}
+                        className="flex flex-col items-center flex-1 relative"
+                      >
+                        <div className="relative -top-3 text-center">
+                          <span className="text-xs font-medium text-gray-700">
+                            {count}개
+                          </span>
+                        </div>
+                        <div
+                          className={`w-full ${
+                            i === 6 ? "bg-blue-500" : "bg-blue-200"
+                          } rounded-t-sm`}
+                          style={{ height: `${barHeight}px` }}
+                        ></div>
+                        <div className="text-xs text-gray-500 mt-2 text-center">
+                          <div>{dayStr}</div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+                <div className="text-sm text-gray-500 text-center mt-2">
+                  <span className="inline-block mr-4">
+                    <span className="inline-block w-3 h-3 bg-blue-200 mr-1 rounded-sm"></span>
+                    이전 기도 활동
+                  </span>
+                  <span className="inline-block">
+                    <span className="inline-block w-3 h-3 bg-blue-500 mr-1 rounded-sm"></span>
+                    오늘 기도 활동
+                  </span>
+                </div>
               </div>
-              <div className="text-sm text-gray-500 text-center mt-2">
-                <span className="inline-block mr-4">
-                  <span className="inline-block w-3 h-3 bg-blue-200 mr-1 rounded-sm"></span>
-                  이전 기도 활동
-                </span>
-                <span className="inline-block">
-                  <span className="inline-block w-3 h-3 bg-blue-500 mr-1 rounded-sm"></span>
-                  오늘 기도 활동
-                </span>
-              </div>
-            </div>
-
-            {/* 활동 요약 */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h3 className="text-md font-medium text-gray-900 mb-4">
                   최근 활동
@@ -676,15 +682,13 @@ const CommunityDetailPage: React.FC = () => {
                 {groups.map((group) => (
                   <div
                     key={group.id}
-                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-all"
+                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-all cursor-pointer hover:border-blue-300"
+                    onClick={() => navigate(`/office/group/${group.id}`)}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="text-lg font-medium text-gray-900">
                         {group.name}
                       </h3>
-                      <span className="inline-block px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
-                        {group.type}
-                      </span>
                     </div>
                     <p className="text-sm text-gray-600 mb-3">
                       {group.description}
@@ -709,17 +713,23 @@ const CommunityDetailPage: React.FC = () => {
                           그룹장: {group.leaderName}
                         </span>
                       </div>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end space-x-2">
-                      <button
-                        onClick={() => navigate(`/office/group/${group.id}`)}
-                        className="px-3 py-1 text-xs text-blue-600 hover:bg-blue-50 rounded"
-                      >
-                        상세보기
-                      </button>
-                      <button className="px-3 py-1 text-xs text-gray-600 hover:bg-gray-50 rounded">
-                        편집
-                      </button>
+                      <div className="text-blue-600 flex items-center">
+                        <span className="text-xs">상세보기</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 ml-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 ))}
