@@ -120,11 +120,11 @@ const CommunityDetailPage: React.FC = () => {
         const mockGroups: GroupData[] = Array.from({ length: 5 }, (_, i) => ({
           id: `group-${i + 1}`,
           name: `${communityData.name} 소그룹 ${i + 1}`,
-          type: i % 2 === 0 ? "성경공부" : "기도모임",
+          type: i % 2 === 0 ? "GBS" : "리더모임",
           memberCount: Math.floor(Math.random() * 15) + 3,
           leaderName: `리더 ${i + 1}`,
           description: `${communityData.name}의 ${
-            i % 2 === 0 ? "성경공부" : "기도모임"
+            i % 2 === 0 ? "GBS" : "리더모임"
           } 소그룹입니다.`,
           createdAt: new Date(
             Date.now() - Math.floor(Math.random() * 90) * 24 * 60 * 60 * 1000
@@ -174,115 +174,51 @@ const CommunityDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* CSS for hiding scrollbars */}
       <style>{hideScrollbarStyle}</style>
 
-      {/* 상단 헤더 - Office Page 스타일 적용 */}
-      <div className="bg-white border-b border-gray-200 p-3 flex items-center justify-between">
-        <div ref={dropdownRef} className="relative">
-          <button
-            onClick={() => setShowCommunityDropdown(!showCommunityDropdown)}
-            className="flex items-center text-gray-800 hover:text-blue-600 transition-colors"
-          >
-            <h2 className="text-lg font-bold">{community.name}</h2>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={`h-5 w-5 ml-1 transition-transform ${
-                showCommunityDropdown ? "rotate-180" : ""
-              }`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+      <div className="sticky top-0 z-30 bg-white shadow-sm">
+        {/* 상단 헤더 - Office Page 스타일 적용 */}
+        <div className="bg-white border-b border-gray-200 p-3 flex items-center justify-between">
+          <div ref={dropdownRef} className="relative">
+            <button
+              onClick={() => setShowCommunityDropdown(!showCommunityDropdown)}
+              className="flex items-center text-gray-800 hover:text-blue-600 transition-colors"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
+              <h2 className="text-lg font-bold">{community.name}</h2>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-5 w-5 ml-1 transition-transform ${
+                  showCommunityDropdown ? "rotate-180" : ""
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
 
-          {/* 공동체 드롭다운 메뉴 */}
-          {showCommunityDropdown && (
-            <div className="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg z-20 max-h-[calc(100vh-120px)] overflow-y-auto">
-              <div className="p-3 border-b border-gray-100">
-                <div className="flex items-center mb-2">
-                  <div
-                    className={`flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mr-3 ${
-                      community.groupType === "community"
-                        ? "bg-blue-100 text-blue-600"
-                        : "bg-purple-100 text-purple-600"
-                    }`}
-                  >
-                    {community.groupType === "community" ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      현재: {community.name}
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      {community.churchName}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="py-1 px-3 pt-2">
-                <h3 className="text-xs uppercase font-semibold text-gray-500 mb-1">
-                  다른 공동체
-                </h3>
-              </div>
-
-              {myCommunities
-                .filter((c) => c.id !== community.id)
-                .map((otherCommunity) => (
-                  <button
-                    key={otherCommunity.id}
-                    onClick={() => handleCommunitySelect(otherCommunity.id)}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                  >
+            {/* 공동체 드롭다운 메뉴 */}
+            {showCommunityDropdown && (
+              <div className="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg z-20 max-h-[calc(100vh-120px)] overflow-y-auto">
+                <div className="p-3 border-b border-gray-100">
+                  <div className="flex items-center mb-2">
                     <div
-                      className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center mr-2 ${
-                        otherCommunity.groupType === "community"
+                      className={`flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mr-3 ${
+                        community.groupType === "community"
                           ? "bg-blue-100 text-blue-600"
                           : "bg-purple-100 text-purple-600"
                       }`}
                     >
-                      {otherCommunity.groupType === "community" ? (
+                      {community.groupType === "community" ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4"
+                          className="h-5 w-5"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -297,7 +233,7 @@ const CommunityDetailPage: React.FC = () => {
                       ) : (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4"
+                          className="h-5 w-5"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -311,18 +247,106 @@ const CommunityDetailPage: React.FC = () => {
                         </svg>
                       )}
                     </div>
-                    <span className="truncate">{otherCommunity.name}</span>
-                  </button>
-                ))}
+                    <span className="font-medium">{community.name}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 pl-11">
+                    {community.churchName}
+                  </p>
+                </div>
 
-              <div className="py-2 px-3 border-t border-gray-100 mt-2">
-                <button
-                  onClick={() => navigate("/office")}
-                  className="w-full text-left px-2 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-md flex items-center"
-                >
+                {myCommunities
+                  .filter((c) => c.id !== community.id)
+                  .map((otherCommunity) => (
+                    <button
+                      key={otherCommunity.id}
+                      onClick={() => handleCommunitySelect(otherCommunity.id)}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <div
+                        className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center mr-2 ${
+                          otherCommunity.groupType === "community"
+                            ? "bg-blue-100 text-blue-600"
+                            : "bg-purple-100 text-purple-600"
+                        }`}
+                      >
+                        {otherCommunity.groupType === "community" ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="truncate">{otherCommunity.name}</span>
+                    </button>
+                  ))}
+
+                <div className="py-2 px-3 border-t border-gray-100 mt-2">
+                  <button
+                    onClick={() => navigate("/office")}
+                    className="w-full text-left px-2 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-md flex items-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      />
+                    </svg>
+                    공동체 목록으로 돌아가기
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 공동체 정보 */}
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex items-center">
+              <div
+                className={`flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 ${
+                  community.groupType === "community"
+                    ? "bg-blue-100 text-blue-600"
+                    : "bg-purple-100 text-purple-600"
+                }`}
+              >
+                {community.groupType === "community" ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 mr-2"
+                    className="h-8 w-8"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -331,137 +355,95 @@ const CommunityDetailPage: React.FC = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                   </svg>
-                  공동체 목록으로 돌아가기
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* 공동체 정보 */}
-      <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center">
-            <div
-              className={`flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 ${
-                community.groupType === "community"
-                  ? "bg-blue-100 text-blue-600"
-                  : "bg-purple-100 text-purple-600"
-              }`}
-            >
-              {community.groupType === "community" ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                  />
-                </svg>
-              )}
-            </div>
-            <div>
-              <div className="flex items-center">
-                <h1 className="text-2xl font-bold text-gray-900 mr-3">
-                  {community.name}
-                </h1>
-                <span
-                  className={`inline-block px-2 py-1 text-xs rounded-full ${
-                    community.groupType === "community"
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-purple-100 text-purple-800"
-                  }`}
-                >
-                  {community.groupType === "community" ? "소그룹" : "부서"}
-                </span>
-              </div>
-              <div className="flex flex-wrap items-center text-sm mt-1">
-                <span className="font-medium text-gray-700">
-                  {community.churchName}
-                </span>
-                {community.description && (
-                  <>
-                    <span className="mx-1.5 text-gray-400">•</span>
-                    <span className="text-gray-600">
-                      {community.description}
-                    </span>
-                  </>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    />
+                  </svg>
                 )}
+              </div>
+              <div>
+                <div className="flex items-center">
+                  <h1 className="text-2xl font-bold text-gray-900 mr-3">
+                    {community.name}
+                  </h1>
+                </div>
+                <div className="flex flex-wrap items-center text-sm mt-1">
+                  <span className="font-medium text-gray-700">
+                    {community.churchName}
+                  </span>
+                  {community.description && (
+                    <>
+                      <span className="mx-1.5 text-gray-400">•</span>
+                      <span className="text-gray-600">
+                        {community.description}
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* 탭 네비게이션 */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8 overflow-x-auto hide-scrollbar">
-            <button
-              onClick={() => setActiveTab("overview")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                activeTab === "overview"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              개요
-            </button>
-            <button
-              onClick={() => setActiveTab("groups")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                activeTab === "groups"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              그룹 ({groups.length}개)
-            </button>
-            <button
-              onClick={() => setActiveTab("members")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                activeTab === "members"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              멤버 ({community.memberCount}명)
-            </button>
-            <button
-              onClick={() => setActiveTab("prayers")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                activeTab === "prayers"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              기도 기록
-            </button>
+        {/* 탭 네비게이션 */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex space-x-8 overflow-x-auto hide-scrollbar">
+              <button
+                onClick={() => setActiveTab("overview")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeTab === "overview"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                개요
+              </button>
+              <button
+                onClick={() => setActiveTab("groups")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeTab === "groups"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                그룹 ({groups.length}개)
+              </button>
+              {/* <button
+                onClick={() => setActiveTab("members")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeTab === "members"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                멤버 ({community.memberCount}명)
+              </button>
+              <button
+                onClick={() => setActiveTab("prayers")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeTab === "prayers"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                기도 기록
+              </button> */}
+            </div>
           </div>
         </div>
       </div>
@@ -475,8 +457,8 @@ const CommunityDetailPage: React.FC = () => {
             </h2>
 
             {/* 통계 카드 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <div className="grid grid-cols-1 gap-4 mb-8">
+              {/* <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                 <h3 className="text-sm font-medium text-gray-500 mb-1">멤버</h3>
                 <p className="text-2xl font-bold">{community.memberCount}명</p>
                 <div className="mt-2 text-sm text-gray-600">
@@ -487,120 +469,135 @@ const CommunityDetailPage: React.FC = () => {
                     생성일: {new Date(community.createdAt).toLocaleDateString()}
                   </p>
                 </div>
-              </div>
+              </div> */}
 
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div
+                className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:border-blue-300"
+                onClick={() => setActiveTab("groups")}
+              >
                 <h3 className="text-sm font-medium text-gray-500 mb-1">그룹</h3>
                 <p className="text-2xl font-bold">{groups.length}개</p>
                 <div className="mt-2 text-sm text-gray-600">
-                  <p>
-                    기도모임:{" "}
-                    {groups.filter((g) => g.type === "기도모임").length}개
-                  </p>
-                  <p>
-                    성경공부:{" "}
-                    {groups.filter((g) => g.type === "성경공부").length}개
-                  </p>
+                  <p>함께 기도하는 그룹 공동체</p>
+                </div>
+                <div className="mt-3 text-blue-600 text-sm flex items-center justify-start">
+                  <span>그룹 목록 보기</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 ml-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
                 </div>
               </div>
 
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-1">
-                  오늘 기도
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center justify-between">
+                <div className="md:mb-0 md:flex-1 md:border-r md:border-gray-200 md:pr-4">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    오늘 기도
+                  </h3>
+                  <p className="text-xl md:text-2xl font-bold">
+                    {prayerStats.todayCount}개
+                  </p>
+                  <div className="mt-1 text-xs md:text-sm text-blue-600">
+                    <p>
+                      전체의{" "}
+                      {Math.round(
+                        (prayerStats.todayCount / community.memberCount) * 100
+                      )}
+                      % 참여
+                    </p>
+                  </div>
+                </div>
+
+                <div className="">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    이번 주 기도
+                  </h3>
+                  <p className="text-xl md:text-2xl font-bold">
+                    {prayerStats.weeklyCount}개
+                  </p>
+                  <div className="mt-1 text-xs md:text-sm text-green-600">
+                    <p>전주 대비 {Math.floor(Math.random() * 30) + 5}% 증가</p>
+                  </div>
+                </div>
+
+                <div className="md:flex-1 md:pl-4">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    누적 기도
+                  </h3>
+                  <p className="text-xl md:text-2xl font-bold">
+                    {prayerStats.totalCount}개
+                  </p>
+                  <div className="mt-1 text-xs md:text-sm text-gray-600">
+                    <p>
+                      멤버당 평균{" "}
+                      {Math.round(
+                        prayerStats.totalCount / community.memberCount
+                      )}
+                      개
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {/* 활동 요약 */}
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 className="text-md font-medium text-gray-900 mb-4">
+                  일간 기도 활동
                 </h3>
-                <p className="text-2xl font-bold">{prayerStats.todayCount}개</p>
-                <div className="mt-2 text-sm text-blue-600">
-                  <p>
-                    전체의{" "}
-                    {Math.round(
-                      (prayerStats.todayCount / community.memberCount) * 100
-                    )}
-                    % 참여
-                  </p>
-                </div>
-              </div>
+                <div className="h-60 flex items-end space-x-2 mb-10 pt-10">
+                  {Array.from({ length: 7 }, (_, i) => {
+                    // 실제 높이(픽셀)를 계산 (최소 10px, 최대 180px)
+                    const barHeight = 10 + Math.floor(Math.random() * 170);
+                    const day = new Date();
+                    day.setDate(day.getDate() - 6 + i);
+                    const dayStr = ["일", "월", "화", "수", "목", "금", "토"][
+                      day.getDay()
+                    ];
+                    const count = Math.floor(Math.random() * 20) + 5;
 
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-1">
-                  이번 주 기도
-                </h3>
-                <p className="text-2xl font-bold">
-                  {prayerStats.weeklyCount}개
-                </p>
-                <div className="mt-2 text-sm text-green-600">
-                  <p>전주 대비 {Math.floor(Math.random() * 30) + 5}% 증가</p>
-                </div>
-              </div>
-
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-500 mb-1">
-                  총 기도카드
-                </h3>
-                <p className="text-2xl font-bold">{prayerStats.totalCount}개</p>
-                <div className="mt-2 text-sm text-gray-600">
-                  <p>
-                    멤버당 평균{" "}
-                    {Math.round(prayerStats.totalCount / community.memberCount)}
-                    개
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 기도 활동 그래프 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
-              <h3 className="text-md font-medium text-gray-900 mb-4">
-                일간 기도 활동
-              </h3>
-              <div className="h-60 flex items-end space-x-2 mb-10 pt-10">
-                {Array.from({ length: 7 }, (_, i) => {
-                  // 실제 높이(픽셀)를 계산 (최소 10px, 최대 180px)
-                  const barHeight = 10 + Math.floor(Math.random() * 170);
-                  const day = new Date();
-                  day.setDate(day.getDate() - 6 + i);
-                  const dayStr = ["일", "월", "화", "수", "목", "금", "토"][
-                    day.getDay()
-                  ];
-                  const count = Math.floor(Math.random() * 20) + 5;
-                  const memberCount = Math.floor(Math.random() * 15) + 3;
-
-                  return (
-                    <div key={i} className="flex flex-col items-center flex-1">
-                      <div className="absolute -mt-8 text-center">
-                        <span className="text-xs font-medium text-gray-700">
-                          {count}개
-                        </span>
-                      </div>
+                    return (
                       <div
-                        className={`w-full ${
-                          i === 6 ? "bg-blue-500" : "bg-blue-200"
-                        } rounded-t-sm`}
-                        style={{ height: `${barHeight}px` }}
-                      ></div>
-                      <div className="text-xs text-gray-500 mt-2 text-center">
-                        <div>{dayStr}</div>
-                        <div className="text-xs mt-1 text-blue-600 font-medium">
-                          {memberCount}명
+                        key={i}
+                        className="flex flex-col items-center flex-1 relative"
+                      >
+                        <div className="relative -top-3 text-center">
+                          <span className="text-xs font-medium text-gray-700">
+                            {count}개
+                          </span>
+                        </div>
+                        <div
+                          className={`w-full ${
+                            i === 6 ? "bg-blue-500" : "bg-blue-200"
+                          } rounded-t-sm`}
+                          style={{ height: `${barHeight}px` }}
+                        ></div>
+                        <div className="text-xs text-gray-500 mt-2 text-center">
+                          <div>{dayStr}</div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+                <div className="text-sm text-gray-500 text-center mt-2">
+                  <span className="inline-block mr-4">
+                    <span className="inline-block w-3 h-3 bg-blue-200 mr-1 rounded-sm"></span>
+                    이전 기도 활동
+                  </span>
+                  <span className="inline-block">
+                    <span className="inline-block w-3 h-3 bg-blue-500 mr-1 rounded-sm"></span>
+                    오늘 기도 활동
+                  </span>
+                </div>
               </div>
-              <div className="text-sm text-gray-500 text-center mt-2">
-                <span className="inline-block mr-4">
-                  <span className="inline-block w-3 h-3 bg-blue-200 mr-1 rounded-sm"></span>
-                  이전 기도 활동
-                </span>
-                <span className="inline-block">
-                  <span className="inline-block w-3 h-3 bg-blue-500 mr-1 rounded-sm"></span>
-                  오늘 기도 활동
-                </span>
-              </div>
-            </div>
-
-            {/* 활동 요약 */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h3 className="text-md font-medium text-gray-900 mb-4">
                   최근 활동
@@ -676,15 +673,13 @@ const CommunityDetailPage: React.FC = () => {
                 {groups.map((group) => (
                   <div
                     key={group.id}
-                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-all"
+                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-all cursor-pointer hover:border-blue-300"
+                    onClick={() => navigate(`/office/group/${group.id}`)}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="text-lg font-medium text-gray-900">
                         {group.name}
                       </h3>
-                      <span className="inline-block px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
-                        {group.type}
-                      </span>
                     </div>
                     <p className="text-sm text-gray-600 mb-3">
                       {group.description}
@@ -709,17 +704,23 @@ const CommunityDetailPage: React.FC = () => {
                           그룹장: {group.leaderName}
                         </span>
                       </div>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end space-x-2">
-                      <button
-                        onClick={() => navigate(`/office/group/${group.id}`)}
-                        className="px-3 py-1 text-xs text-blue-600 hover:bg-blue-50 rounded"
-                      >
-                        상세보기
-                      </button>
-                      <button className="px-3 py-1 text-xs text-gray-600 hover:bg-gray-50 rounded">
-                        편집
-                      </button>
+                      <div className="text-blue-600 flex items-center">
+                        <span className="text-xs">상세보기</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 ml-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 ))}

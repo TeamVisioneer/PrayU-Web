@@ -70,7 +70,6 @@ const GroupDetailPage: React.FC = () => {
 
   const [loading, setLoading] = useState(true);
   const [groupName, setGroupName] = useState("");
-  const [groupType, setGroupType] = useState("");
   const [groupLeader, setGroupLeader] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
   const [members, setMembers] = useState<GroupMember[]>([]);
@@ -84,6 +83,30 @@ const GroupDetailPage: React.FC = () => {
     totalPrayerTime: "",
   });
 
+  // 어떤 멤버의 카드가 펼쳐져 있는지 추적하는 상태
+  const [expandedMembers, setExpandedMembers] = useState<
+    Record<string, boolean>
+  >({});
+
+  // 멤버 펼치기/접기 처리 함수
+  const toggleMemberExpand = (memberId: string) => {
+    // 현재 스크롤 위치 저장
+    const scrollPosition = window.scrollY;
+
+    setExpandedMembers((prev) => ({
+      ...prev,
+      [memberId]: !prev[memberId],
+    }));
+
+    // 스크롤 위치 복원
+    setTimeout(() => {
+      window.scrollTo({
+        top: scrollPosition,
+        behavior: "auto",
+      });
+    }, 0);
+  };
+
   // 인쇄 처리 함수
   const handlePrint = () => {
     window.print();
@@ -94,7 +117,6 @@ const GroupDetailPage: React.FC = () => {
       // 실제로는 API 호출로 대체됩니다
       // 목데이터 생성
       setGroupName(`소그룹 ${groupId.split("-")[1]}`);
-      setGroupType(Math.random() > 0.5 ? "성경공부" : "기도모임");
       setGroupLeader(`리더 ${Math.floor(Math.random() * 5) + 1}`);
       setGroupDescription(
         `이 그룹은 ${Math.random() > 0.5 ? "성경공부" : "기도모임"} 그룹입니다.`
@@ -106,7 +128,7 @@ const GroupDetailPage: React.FC = () => {
         (_, i) => ({
           id: `member-${i + 1}`,
           name: `멤버 ${i + 1}`,
-          role: i === 0 ? "그룹장" : i < 2 ? "부그룹장" : "멤버",
+          role: i === 0 ? "그룹장" : "멤버",
           lastActive: new Date(
             Date.now() - Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000
           )
@@ -237,11 +259,9 @@ const GroupDetailPage: React.FC = () => {
             content.dailyShares.length > 0 || content.prayerRequests.length > 0
         )
         .sort((a, b) => {
-          // 그룹장을 맨 위로, 부그룹장을 그 다음으로, 나머지는 이름 알파벳 순
+          // 그룹장을 맨 위로, 나머지는 이름 알파벳 순
           if (a.role === "그룹장") return -1;
           if (b.role === "그룹장") return 1;
-          if (a.role === "부그룹장" && b.role !== "그룹장") return -1;
-          if (b.role === "부그룹장" && a.role !== "그룹장") return 1;
           return a.memberName.localeCompare(b.memberName);
         });
 
@@ -317,59 +337,17 @@ const GroupDetailPage: React.FC = () => {
       `}</style>
 
       {/* 상단 헤더 */}
-      <div className="bg-green-700 text-white border-b border-green-800 p-3 flex items-center justify-between no-print">
-        <div className="flex items-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="mr-3 text-white hover:text-green-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <h1 className="text-lg font-bold">{groupName}</h1>
-        </div>
-        <button
-          onClick={handlePrint}
-          className="flex items-center text-sm bg-green-600 hover:bg-green-800 rounded-md px-3 py-1"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-            />
-          </svg>
-          인쇄하기
-        </button>
-      </div>
-
-      {/* 그룹 정보 */}
-      <div className="bg-white border-b border-gray-200 shadow-sm print:shadow-none print:border-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 print:px-0">
+      <div className="sticky top-0 z-30 no-print">
+        {/* 상단 헤더 */}
+        <div className="bg-green-700 text-white border-b border-green-800 p-3 flex items-center justify-between">
           <div className="flex items-center">
-            <div className="flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 bg-green-100 text-green-600 print:bg-white">
+            <button
+              onClick={() => navigate(-1)}
+              className="mr-3 text-white hover:text-green-200"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8"
+                className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -378,25 +356,74 @@ const GroupDetailPage: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  d="M15 19l-7-7 7-7"
                 />
               </svg>
-            </div>
-            <div>
-              <div className="flex items-center">
-                <h1 className="text-2xl font-bold text-gray-900 mr-3">
-                  {groupName}
-                </h1>
-                <span className="inline-block px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                  {groupType}
-                </span>
+            </button>
+            <h1 className="text-lg font-bold">{groupName}</h1>
+          </div>
+          <button
+            onClick={handlePrint}
+            className="flex items-center text-sm bg-green-600 hover:bg-green-800 rounded-md px-3 py-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              />
+            </svg>
+            인쇄하기
+          </button>
+        </div>
+
+        {/* 그룹 정보 */}
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 bg-green-100 text-green-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
               </div>
-              <div className="flex items-center text-sm mt-1">
-                <span className="font-medium text-gray-700">
-                  그룹장: {groupLeader}
-                </span>
+              <div>
+                <div className="flex flex-col">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    {groupName}
+                  </h2>
+                  <div className="flex flex-wrap items-center text-sm mt-1">
+                    <span className="font-medium text-gray-700">
+                      그룹장: {groupLeader}
+                    </span>
+                    {groupDescription && (
+                      <>
+                        <span className="mx-1.5 text-gray-400">•</span>
+                        <span className="text-gray-600">
+                          {groupDescription}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
-              <p className="text-gray-600 mt-2">{groupDescription}</p>
             </div>
           </div>
         </div>
@@ -404,177 +431,203 @@ const GroupDetailPage: React.FC = () => {
 
       {/* 그룹 통계 카드 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 print:px-0 print:py-2">
-        {/* 기도기록 통계 - 주석처리 */}
-        {/* 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 print:grid-cols-4 print:gap-2 print:mb-4">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 print:border print:border-gray-300 print:shadow-none print:p-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">이번주 기도 횟수</h3>
-            <p className="text-2xl font-bold text-green-700">{stats.weeklyPrayerCount}회</p>
-            <p className="text-sm text-gray-600 mt-1">전주 대비 {Math.floor(Math.random() * 20) + 5}% 증가</p>
-          </div>
+        {/* 섹션 타이틀 - 그룹현황 */}
+        <h2 className="text-lg font-medium text-gray-900 mb-4">그룹현황</h2>
 
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 print:border print:border-gray-300 print:shadow-none print:p-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">총 기도카드</h3>
-            <p className="text-2xl font-bold text-green-700">{stats.totalPrayerCards}개</p>
-            <p className="text-sm text-gray-600 mt-1">멤버당 평균 {Math.round(stats.totalPrayerCards / members.length)}개</p>
-          </div>
+        {/* 그룹 통계 지표 - 3개 지표를 가로로 배치 */}
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8 print:border print:border-gray-300 print:shadow-none print:mb-4">
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1">
+                오늘 기도
+              </h3>
+              <p className="text-xl md:text-2xl font-bold">
+                {Math.round(stats.weeklyPrayerCount / 7)}개
+              </p>
+              <p className="text-xs md:text-sm text-blue-600 mt-1">
+                전체의 {Math.round((stats.activeMembers / members.length) * 40)}
+                % 참여
+              </p>
+            </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 print:border print:border-gray-300 print:shadow-none print:p-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">활동 멤버</h3>
-            <p className="text-2xl font-bold text-green-700">{stats.activeMembers}명</p>
-            <p className="text-sm text-gray-600 mt-1">전체의 {Math.round((stats.activeMembers / members.length) * 100)}%</p>
-          </div>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1">
+                이번 주 기도
+              </h3>
+              <p className="text-xl md:text-2xl font-bold">
+                {stats.weeklyPrayerCount}개
+              </p>
+              <p className="text-xs md:text-sm text-green-600 mt-1">
+                전주 대비 {Math.floor(Math.random() * 30) + 10}% 증가
+              </p>
+            </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 print:border print:border-gray-300 print:shadow-none print:p-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">총 기도시간</h3>
-            <p className="text-2xl font-bold text-green-700">{stats.totalPrayerTime}</p>
-            <p className="text-sm text-gray-600 mt-1">멤버당 {Math.round(parseInt(stats.totalPrayerTime) / members.length)}시간</p>
-          </div>
-        </div>
-        */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 print:grid-cols-4 print:gap-2 print:mb-4">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 print:border print:border-gray-300 print:shadow-none print:p-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">
-              이번주 기도 횟수
-            </h3>
-            <p className="text-2xl font-bold text-green-700">
-              {stats.weeklyPrayerCount}회
-            </p>
-            <p className="text-sm text-gray-600 mt-1">
-              전주 대비 {Math.floor(Math.random() * 20) + 5}% 증가
-            </p>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 print:border print:border-gray-300 print:shadow-none print:p-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">
-              총 기도카드
-            </h3>
-            <p className="text-2xl font-bold text-green-700">
-              {stats.totalPrayerCards}개
-            </p>
-            <p className="text-sm text-gray-600 mt-1">
-              멤버당 평균 {Math.round(stats.totalPrayerCards / members.length)}
-              개
-            </p>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 print:border print:border-gray-300 print:shadow-none print:p-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">
-              활동 멤버
-            </h3>
-            <p className="text-2xl font-bold text-green-700">
-              {stats.activeMembers}명
-            </p>
-            <p className="text-sm text-gray-600 mt-1">
-              전체의 {Math.round((stats.activeMembers / members.length) * 100)}%
-            </p>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 print:border print:border-gray-300 print:shadow-none print:p-2">
-            <h3 className="text-sm font-medium text-gray-500 mb-1">
-              총 기도시간
-            </h3>
-            <p className="text-2xl font-bold text-green-700">
-              {stats.totalPrayerTime}
-            </p>
-            <p className="text-sm text-gray-600 mt-1">
-              멤버당{" "}
-              {Math.round(parseInt(stats.totalPrayerTime) / members.length)}시간
-            </p>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-1">
+                누적 기도
+              </h3>
+              <p className="text-xl md:text-2xl font-bold">
+                {stats.totalPrayerCards}개
+              </p>
+              <p className="text-xs md:text-sm text-gray-600 mt-1">
+                멤버당 평균{" "}
+                {Math.round(stats.totalPrayerCards / members.length)}개
+              </p>
+            </div>
           </div>
         </div>
 
         {/* 멤버별 콘텐츠 섹션 */}
         <div className="mt-6 print:mt-0">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 print:text-xl print:mb-2">
-            멤버별 일상나눔 및 기도제목
+          <h2 className="text-lg font-medium text-gray-900 mb-4">
+            맴버별 기도카드
           </h2>
-          <div className="space-y-8 print:space-y-4">
+
+          {/* 멤버 리스트 */}
+          <div className="space-y-2">
             {memberContents.map((memberContent) => (
               <div
                 key={memberContent.memberId}
-                className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 print:p-3 print:border print:border-gray-300 print:rounded member-card"
+                className="bg-white rounded-lg shadow-sm border border-gray-200"
               >
-                <div className="flex items-center mb-4 print:mb-2">
-                  <div className="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center mr-3 print:h-8 print:w-8">
-                    <span className="text-green-700 font-medium">
-                      {memberContent.memberName.substring(0, 2)}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 print:text-base">
-                      {memberContent.memberName}
-                    </h3>
-                    <span
-                      className={`text-xs inline-block px-2 py-0.5 rounded-full ${
-                        memberContent.role === "그룹장"
-                          ? "bg-green-100 text-green-800"
-                          : memberContent.role === "부그룹장"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : "bg-gray-100 text-gray-800"
-                      } print:bg-gray-100`}
-                    >
-                      {memberContent.role}
-                    </span>
-                  </div>
-                </div>
-
-                {/* 일상 나눔 */}
-                {memberContent.dailyShares.length > 0 && (
-                  <div className="mb-4 print:mb-3">
-                    <h4 className="font-medium text-green-700 mb-2 print:text-sm print:mb-1">
-                      일상 나눔
-                    </h4>
-                    <div className="space-y-2 print:space-y-1">
-                      {memberContent.dailyShares.slice(0, 2).map((share) => (
-                        <div
-                          key={share.id}
-                          className="pl-4 border-l-2 border-green-200 print:pl-2 print:border-l print:border-green-300"
-                        >
-                          <div className="flex justify-between mb-1 print:mb-0">
-                            <p className="text-sm text-gray-700 print:text-xs">
-                              {share.content}
-                            </p>
-                          </div>
-                          <p className="text-xs text-gray-500 print:text-[10px]">
-                            {share.date}
-                          </p>
-                        </div>
-                      ))}
+                {/* 멤버 헤더 - 클릭 시 드롭다운 토글 */}
+                <div
+                  className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50"
+                  onClick={() => toggleMemberExpand(memberContent.memberId)}
+                >
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                      <span className="text-green-700 font-medium">
+                        {memberContent.memberName.substring(0, 2)}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="text-base font-medium text-gray-900">
+                        {memberContent.memberName}
+                      </h3>
+                      <span
+                        className={`text-xs inline-block px-2 py-0.5 rounded-full ${
+                          memberContent.role === "그룹장"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {memberContent.role === "그룹장" ? "그룹장" : "멤버"}
+                      </span>
                     </div>
                   </div>
-                )}
 
-                {/* 기도 제목 */}
-                {memberContent.prayerRequests.length > 0 && (
-                  <div>
-                    <h4 className="font-medium text-green-700 mb-2 print:text-sm print:mb-1">
-                      기도 제목
-                    </h4>
-                    <div className="space-y-2 print:space-y-1">
-                      {memberContent.prayerRequests
-                        .slice(0, 2)
-                        .map((prayer) => (
+                  {/* 드롭다운 아이콘 */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-5 w-5 text-gray-400 transition-transform ${
+                      expandedMembers[memberContent.memberId]
+                        ? "rotate-180"
+                        : ""
+                    }`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
+
+                {/* 멤버별 기도카드 - 드롭다운 콘텐츠 */}
+                {expandedMembers[memberContent.memberId] && (
+                  <div className="border-t border-gray-200 p-4">
+                    {/* 기도카드 목록 */}
+                    <div className="space-y-4">
+                      {/* 기도카드 생성 - 일상나눔과 기도제목 맵핑하여 카드 만들기 */}
+                      {memberContent.dailyShares.map((share, index) => {
+                        // 해당 인덱스에 기도제목이 있는 경우에만 카드 생성
+                        const prayer =
+                          memberContent.prayerRequests[index] || null;
+
+                        return (
                           <div
-                            key={prayer.id}
-                            className="pl-4 border-l-2 border-green-200 print:pl-2 print:border-l print:border-green-300"
+                            key={share.id}
+                            className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-sm"
                           >
-                            <p className="text-sm text-gray-700 print:text-xs">
-                              {prayer.content}
-                            </p>
-                            <div className="flex items-center mt-1 print:mt-0">
-                              <span className="text-xs text-gray-500 print:text-[10px]">
-                                {prayer.date}
-                              </span>
-                              <span className="mx-2 text-gray-400 print:mx-1">
-                                •
-                              </span>
-                              <span className="text-xs text-gray-500 print:text-[10px]">
-                                {prayer.prayCount}명 함께 기도
+                            {/* 일상 나눔 */}
+                            <div className="mb-3">
+                              <h4 className="text-sm font-medium text-gray-900 mb-2">
+                                일상 나눔
+                              </h4>
+                              <div className="pl-3 border-l-2 border-green-200">
+                                <p className="text-sm text-gray-700">
+                                  {share.content}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* 기도 제목 */}
+                            {prayer && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-900 mb-2">
+                                  기도 제목
+                                </h4>
+                                <div className="pl-3 border-l-2 border-green-200">
+                                  <p className="text-sm text-gray-700">
+                                    {prayer.content}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* 날짜 및 함께 기도 정보 */}
+                            <div className="flex items-center mt-3 text-xs text-gray-500">
+                              <span>{share.date}</span>
+                              <span className="mx-2 text-gray-400">•</span>
+                              <span>
+                                {prayer ? prayer.prayCount : 0}명과 함께 기도
                               </span>
                             </div>
                           </div>
+                        );
+                      })}
+
+                      {/* 일상나눔이 없고 기도제목만 있는 경우 처리 */}
+                      {memberContent.prayerRequests
+                        .slice(memberContent.dailyShares.length)
+                        .map((prayer) => (
+                          <div
+                            key={prayer.id}
+                            className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-sm"
+                          >
+                            {/* 기도 제목 */}
+                            <div>
+                              <h4 className="text-sm font-medium text-gray-900 mb-2">
+                                기도 제목
+                              </h4>
+                              <div className="pl-3 border-l-2 border-green-200">
+                                <p className="text-sm text-gray-700">
+                                  {prayer.content}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* 날짜 및 함께 기도 정보 */}
+                            <div className="flex items-center mt-3 text-xs text-gray-500">
+                              <span>{prayer.date}</span>
+                              <span className="mx-2 text-gray-400">•</span>
+                              <span>{prayer.prayCount}명과 함께 기도</span>
+                            </div>
+                          </div>
                         ))}
+
+                      {/* 기도카드가 없는 경우 */}
+                      {memberContent.dailyShares.length === 0 &&
+                        memberContent.prayerRequests.length === 0 && (
+                          <div className="text-center py-4 text-gray-500">
+                            아직 작성된 기도카드가 없습니다.
+                          </div>
+                        )}
                     </div>
                   </div>
                 )}
@@ -582,9 +635,6 @@ const GroupDetailPage: React.FC = () => {
             ))}
           </div>
         </div>
-
-        {/* PDF 푸터 */}
-        <div className="pdf-footer no-screen">PrayU</div>
       </div>
     </div>
   );
