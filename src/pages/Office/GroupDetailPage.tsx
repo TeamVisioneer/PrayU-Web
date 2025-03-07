@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+// import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
 
 // 스크롤바 숨기기 스타일
 const hideScrollbarStyle = `
@@ -139,369 +139,369 @@ const GroupDetailPage: React.FC = () => {
   };
 
   // PDF 저장 처리 함수
-  const handleSavePDF = async () => {
-    try {
-      // PDF 생성 준비 중임을 알림
-      alert("PDF를 생성하는 중입니다. 잠시만 기다려주세요.");
+  // const handleSavePDF = async () => {
+  //   try {
+  //     // PDF 생성 준비 중임을 알림
+  //     alert("PDF를 생성하는 중입니다. 잠시만 기다려주세요.");
 
-      // 문서 내용이 있는 div 요소 선택
-      const pdfContent = pdfContentRef.current;
-      if (!pdfContent) {
-        throw new Error("PDF 내용을 찾을 수 없습니다.");
-      }
+  //     // 문서 내용이 있는 div 요소 선택
+  //     const pdfContent = pdfContentRef.current;
+  //     if (!pdfContent) {
+  //       throw new Error("PDF 내용을 찾을 수 없습니다.");
+  //     }
 
-      // PDF용 A4 크기 임시 컨테이너 생성
-      const pdfContainer = document.createElement("div");
-      pdfContainer.className = "pdf-container";
-      pdfContainer.style.width = "210mm";
-      pdfContainer.style.margin = "0 auto";
-      pdfContainer.style.background = "white";
-      pdfContainer.style.boxSizing = "border-box";
-      pdfContainer.style.fontFamily = "Pretendard, sans-serif";
-      pdfContainer.style.padding = "25mm 20mm";
-      document.body.appendChild(pdfContainer);
+  //     // PDF용 A4 크기 임시 컨테이너 생성
+  //     const pdfContainer = document.createElement("div");
+  //     pdfContainer.className = "pdf-container";
+  //     pdfContainer.style.width = "210mm";
+  //     pdfContainer.style.margin = "0 auto";
+  //     pdfContainer.style.background = "white";
+  //     pdfContainer.style.boxSizing = "border-box";
+  //     pdfContainer.style.fontFamily = "Pretendard, sans-serif";
+  //     pdfContainer.style.padding = "25mm 20mm";
+  //     document.body.appendChild(pdfContainer);
 
-      // PDF 헤더 영역 생성
-      const headerDiv = document.createElement("div");
-      headerDiv.style.textAlign = "center";
-      headerDiv.style.marginBottom = "15mm";
+  //     // PDF 헤더 영역 생성
+  //     const headerDiv = document.createElement("div");
+  //     headerDiv.style.textAlign = "center";
+  //     headerDiv.style.marginBottom = "15mm";
 
-      // 그룹명 추가
-      const titleEl = document.createElement("h1");
-      titleEl.textContent = groupName;
-      titleEl.style.fontSize = "28px";
-      titleEl.style.fontWeight = "bold";
-      titleEl.style.marginBottom = "8mm";
-      headerDiv.appendChild(titleEl);
+  //     // 그룹명 추가
+  //     const titleEl = document.createElement("h1");
+  //     titleEl.textContent = groupName;
+  //     titleEl.style.fontSize = "28px";
+  //     titleEl.style.fontWeight = "bold";
+  //     titleEl.style.marginBottom = "8mm";
+  //     headerDiv.appendChild(titleEl);
 
-      // 그룹 설명 추가
-      if (groupDescription) {
-        const descEl = document.createElement("p");
-        descEl.textContent = groupDescription;
-        descEl.style.fontSize = "14px";
-        descEl.style.color = "#666";
-        headerDiv.appendChild(descEl);
-      }
+  //     // 그룹 설명 추가
+  //     if (groupDescription) {
+  //       const descEl = document.createElement("p");
+  //       descEl.textContent = groupDescription;
+  //       descEl.style.fontSize = "14px";
+  //       descEl.style.color = "#666";
+  //       headerDiv.appendChild(descEl);
+  //     }
 
-      pdfContainer.appendChild(headerDiv);
+  //     pdfContainer.appendChild(headerDiv);
 
-      // 통계 영역 추가
-      const statsDiv = document.createElement("div");
-      statsDiv.style.marginBottom = "10mm";
+  //     // 통계 영역 추가
+  //     const statsDiv = document.createElement("div");
+  //     statsDiv.style.marginBottom = "10mm";
 
-      // 통계 제목
-      const statsTitleEl = document.createElement("h2");
-      statsTitleEl.textContent = "그룹 현황";
-      statsTitleEl.style.fontSize = "18px";
-      statsTitleEl.style.fontWeight = "bold";
-      statsTitleEl.style.marginBottom = "5mm";
-      statsDiv.appendChild(statsTitleEl);
+  //     // 통계 제목
+  //     const statsTitleEl = document.createElement("h2");
+  //     statsTitleEl.textContent = "그룹 현황";
+  //     statsTitleEl.style.fontSize = "18px";
+  //     statsTitleEl.style.fontWeight = "bold";
+  //     statsTitleEl.style.marginBottom = "5mm";
+  //     statsDiv.appendChild(statsTitleEl);
 
-      // 통계 카드 컨테이너
-      const statsCardsDiv = document.createElement("div");
-      statsCardsDiv.style.display = "flex";
-      statsCardsDiv.style.justifyContent = "space-between";
-      statsCardsDiv.style.gap = "10px";
+  //     // 통계 카드 컨테이너
+  //     const statsCardsDiv = document.createElement("div");
+  //     statsCardsDiv.style.display = "flex";
+  //     statsCardsDiv.style.justifyContent = "space-between";
+  //     statsCardsDiv.style.gap = "10px";
 
-      // 통계 카드 생성 함수
-      const createStatCard = (title: string, value: string, color: string) => {
-        const cardDiv = document.createElement("div");
-        cardDiv.style.flex = "1";
-        cardDiv.style.backgroundColor = "#f9f9f9";
-        cardDiv.style.border = "1px solid #eee";
-        cardDiv.style.borderRadius = "5px";
-        cardDiv.style.padding = "15px";
-        cardDiv.style.textAlign = "center";
+  //     // 통계 카드 생성 함수
+  //     const createStatCard = (title: string, value: string, color: string) => {
+  //       const cardDiv = document.createElement("div");
+  //       cardDiv.style.flex = "1";
+  //       cardDiv.style.backgroundColor = "#f9f9f9";
+  //       cardDiv.style.border = "1px solid #eee";
+  //       cardDiv.style.borderRadius = "5px";
+  //       cardDiv.style.padding = "15px";
+  //       cardDiv.style.textAlign = "center";
 
-        const valueEl = document.createElement("div");
-        valueEl.textContent = value;
-        valueEl.style.fontSize = "24px";
-        valueEl.style.fontWeight = "bold";
-        valueEl.style.color = color;
-        valueEl.style.marginBottom = "5px";
-        cardDiv.appendChild(valueEl);
+  //       const valueEl = document.createElement("div");
+  //       valueEl.textContent = value;
+  //       valueEl.style.fontSize = "24px";
+  //       valueEl.style.fontWeight = "bold";
+  //       valueEl.style.color = color;
+  //       valueEl.style.marginBottom = "5px";
+  //       cardDiv.appendChild(valueEl);
 
-        const titleEl = document.createElement("div");
-        titleEl.textContent = title;
-        titleEl.style.fontSize = "14px";
-        titleEl.style.color = "#666";
-        cardDiv.appendChild(titleEl);
+  //       const titleEl = document.createElement("div");
+  //       titleEl.textContent = title;
+  //       titleEl.style.fontSize = "14px";
+  //       titleEl.style.color = "#666";
+  //       cardDiv.appendChild(titleEl);
 
-        return cardDiv;
-      };
+  //       return cardDiv;
+  //     };
 
-      // 통계 카드 추가
-      statsCardsDiv.appendChild(
-        createStatCard(
-          "오늘 기도",
-          `${Math.round(stats.weeklyPrayerCount / 7)}개`,
-          "#1a73e8"
-        )
-      );
-      statsCardsDiv.appendChild(
-        createStatCard(
-          "이번 주 기도",
-          `${stats.weeklyPrayerCount}개`,
-          "#1a73e8"
-        )
-      );
-      statsCardsDiv.appendChild(
-        createStatCard("누적 기도", `${stats.totalPrayerCards}개`, "#1a73e8")
-      );
+  //     // 통계 카드 추가
+  //     statsCardsDiv.appendChild(
+  //       createStatCard(
+  //         "오늘 기도",
+  //         `${Math.round(stats.weeklyPrayerCount / 7)}개`,
+  //         "#1a73e8"
+  //       )
+  //     );
+  //     statsCardsDiv.appendChild(
+  //       createStatCard(
+  //         "이번 주 기도",
+  //         `${stats.weeklyPrayerCount}개`,
+  //         "#1a73e8"
+  //       )
+  //     );
+  //     statsCardsDiv.appendChild(
+  //       createStatCard("누적 기도", `${stats.totalPrayerCards}개`, "#1a73e8")
+  //     );
 
-      statsDiv.appendChild(statsCardsDiv);
-      pdfContainer.appendChild(statsDiv);
+  //     statsDiv.appendChild(statsCardsDiv);
+  //     pdfContainer.appendChild(statsDiv);
 
-      // 멤버별 기도카드 영역 추가
-      const cardsDiv = document.createElement("div");
-      cardsDiv.style.marginBottom = "10mm";
+  //     // 멤버별 기도카드 영역 추가
+  //     const cardsDiv = document.createElement("div");
+  //     cardsDiv.style.marginBottom = "10mm";
 
-      // 기도카드 제목
-      const cardsTitleEl = document.createElement("h2");
-      cardsTitleEl.textContent = "멤버별 기도카드";
-      cardsTitleEl.style.fontSize = "18px";
-      cardsTitleEl.style.fontWeight = "bold";
-      cardsTitleEl.style.marginBottom = "5mm";
-      cardsDiv.appendChild(cardsTitleEl);
+  //     // 기도카드 제목
+  //     const cardsTitleEl = document.createElement("h2");
+  //     cardsTitleEl.textContent = "멤버별 기도카드";
+  //     cardsTitleEl.style.fontSize = "18px";
+  //     cardsTitleEl.style.fontWeight = "bold";
+  //     cardsTitleEl.style.marginBottom = "5mm";
+  //     cardsDiv.appendChild(cardsTitleEl);
 
-      // 각 멤버별 컨텐츠 추가
-      for (const memberContent of memberContents) {
-        // 멤버 영역 생성
-        const memberDiv = document.createElement("div");
-        memberDiv.style.marginBottom = "22px";
-        memberDiv.style.breakInside = "avoid";
-        memberDiv.className = "member-card";
+  //     // 각 멤버별 컨텐츠 추가
+  //     for (const memberContent of memberContents) {
+  //       // 멤버 영역 생성
+  //       const memberDiv = document.createElement("div");
+  //       memberDiv.style.marginBottom = "22px";
+  //       memberDiv.style.breakInside = "avoid";
+  //       memberDiv.className = "member-card";
 
-        // 멤버 헤더
-        const memberHeaderDiv = document.createElement("div");
-        memberHeaderDiv.style.backgroundColor = "#f8f9fa";
-        memberHeaderDiv.style.padding = "12px 16px";
-        memberHeaderDiv.style.borderRadius = "8px";
-        memberHeaderDiv.style.marginBottom = "12px";
-        memberHeaderDiv.style.display = "flex";
-        memberHeaderDiv.style.alignItems = "center";
-        memberHeaderDiv.style.borderLeft = "3px solid #4caf50";
+  //       // 멤버 헤더
+  //       const memberHeaderDiv = document.createElement("div");
+  //       memberHeaderDiv.style.backgroundColor = "#f8f9fa";
+  //       memberHeaderDiv.style.padding = "12px 16px";
+  //       memberHeaderDiv.style.borderRadius = "8px";
+  //       memberHeaderDiv.style.marginBottom = "12px";
+  //       memberHeaderDiv.style.display = "flex";
+  //       memberHeaderDiv.style.alignItems = "center";
+  //       memberHeaderDiv.style.borderLeft = "3px solid #4caf50";
 
-        // 멤버 이름
-        const memberNameEl = document.createElement("div");
-        memberNameEl.textContent = memberContent.memberName;
-        memberNameEl.style.fontWeight = "bold";
-        memberNameEl.style.fontSize = "16px";
-        memberNameEl.style.marginRight = "12px";
-        memberHeaderDiv.appendChild(memberNameEl);
+  //       // 멤버 이름
+  //       const memberNameEl = document.createElement("div");
+  //       memberNameEl.textContent = memberContent.memberName;
+  //       memberNameEl.style.fontWeight = "bold";
+  //       memberNameEl.style.fontSize = "16px";
+  //       memberNameEl.style.marginRight = "12px";
+  //       memberHeaderDiv.appendChild(memberNameEl);
 
-        // 멤버 역할
-        const roleEl = document.createElement("span");
-        roleEl.textContent = memberContent.role;
-        roleEl.style.fontSize = "12px";
-        roleEl.style.padding = "3px 10px";
-        roleEl.style.borderRadius = "100px";
-        roleEl.style.display = "inline-block";
-        roleEl.style.lineHeight = "1.5";
-        roleEl.style.fontWeight = "500";
+  //       // 멤버 역할
+  //       const roleEl = document.createElement("span");
+  //       roleEl.textContent = memberContent.role;
+  //       roleEl.style.fontSize = "12px";
+  //       roleEl.style.padding = "3px 10px";
+  //       roleEl.style.borderRadius = "100px";
+  //       roleEl.style.display = "inline-block";
+  //       roleEl.style.lineHeight = "1.5";
+  //       roleEl.style.fontWeight = "500";
 
-        if (memberContent.role === "그룹장") {
-          roleEl.style.backgroundColor = "#e8f5e9";
-          roleEl.style.color = "#2e7d32";
-          roleEl.style.border = "1px solid #c8e6c9";
-        } else {
-          roleEl.style.backgroundColor = "#f5f5f5";
-          roleEl.style.color = "#616161";
-          roleEl.style.border = "1px solid #e0e0e0";
-        }
+  //       if (memberContent.role === "그룹장") {
+  //         roleEl.style.backgroundColor = "#e8f5e9";
+  //         roleEl.style.color = "#2e7d32";
+  //         roleEl.style.border = "1px solid #c8e6c9";
+  //       } else {
+  //         roleEl.style.backgroundColor = "#f5f5f5";
+  //         roleEl.style.color = "#616161";
+  //         roleEl.style.border = "1px solid #e0e0e0";
+  //       }
 
-        memberHeaderDiv.appendChild(roleEl);
-        memberDiv.appendChild(memberHeaderDiv);
+  //       memberHeaderDiv.appendChild(roleEl);
+  //       memberDiv.appendChild(memberHeaderDiv);
 
-        // 기도 카드 데이터 준비
-        const prayerCards = [];
+  //       // 기도 카드 데이터 준비
+  //       const prayerCards = [];
 
-        // 일상 나눔과 기도 제목 페어링
-        for (let i = 0; i < memberContent.dailyShares.length; i++) {
-          const share = memberContent.dailyShares[i];
-          const prayer = memberContent.prayerRequests[i] || null;
-          prayerCards.push({ share, prayer });
-        }
+  //       // 일상 나눔과 기도 제목 페어링
+  //       for (let i = 0; i < memberContent.dailyShares.length; i++) {
+  //         const share = memberContent.dailyShares[i];
+  //         const prayer = memberContent.prayerRequests[i] || null;
+  //         prayerCards.push({ share, prayer });
+  //       }
 
-        // 기도 제목만 있는 경우
-        for (
-          let i = memberContent.dailyShares.length;
-          i < memberContent.prayerRequests.length;
-          i++
-        ) {
-          prayerCards.push({
-            share: null,
-            prayer: memberContent.prayerRequests[i],
-          });
-        }
+  //       // 기도 제목만 있는 경우
+  //       for (
+  //         let i = memberContent.dailyShares.length;
+  //         i < memberContent.prayerRequests.length;
+  //         i++
+  //       ) {
+  //         prayerCards.push({
+  //           share: null,
+  //           prayer: memberContent.prayerRequests[i],
+  //         });
+  //       }
 
-        if (prayerCards.length === 0) {
-          // 기도 카드가 없는 경우
-          const noCardEl = document.createElement("div");
-          noCardEl.textContent = "아직 작성된 기도카드가 없습니다.";
-          noCardEl.style.color = "#999";
-          noCardEl.style.fontStyle = "italic";
-          noCardEl.style.textAlign = "center";
-          noCardEl.style.padding = "15px";
-          memberDiv.appendChild(noCardEl);
-        } else {
-          // 각 카드 내용 추가
-          for (const card of prayerCards) {
-            const cardDiv = document.createElement("div");
-            cardDiv.style.backgroundColor = "#f9f9f9";
-            cardDiv.style.borderRadius = "5px";
-            cardDiv.style.marginBottom = "10px";
-            cardDiv.style.position = "relative";
-            cardDiv.style.breakInside = "avoid";
-            cardDiv.style.borderLeft = "3px solid #4caf50";
-            cardDiv.style.padding = "12px 15px";
+  //       if (prayerCards.length === 0) {
+  //         // 기도 카드가 없는 경우
+  //         const noCardEl = document.createElement("div");
+  //         noCardEl.textContent = "아직 작성된 기도카드가 없습니다.";
+  //         noCardEl.style.color = "#999";
+  //         noCardEl.style.fontStyle = "italic";
+  //         noCardEl.style.textAlign = "center";
+  //         noCardEl.style.padding = "15px";
+  //         memberDiv.appendChild(noCardEl);
+  //       } else {
+  //         // 각 카드 내용 추가
+  //         for (const card of prayerCards) {
+  //           const cardDiv = document.createElement("div");
+  //           cardDiv.style.backgroundColor = "#f9f9f9";
+  //           cardDiv.style.borderRadius = "5px";
+  //           cardDiv.style.marginBottom = "10px";
+  //           cardDiv.style.position = "relative";
+  //           cardDiv.style.breakInside = "avoid";
+  //           cardDiv.style.borderLeft = "3px solid #4caf50";
+  //           cardDiv.style.padding = "12px 15px";
 
-            // 일상 나눔
-            if (card.share) {
-              const shareDiv = document.createElement("div");
-              shareDiv.style.marginBottom = card.prayer ? "10px" : "0";
+  //           // 일상 나눔
+  //           if (card.share) {
+  //             const shareDiv = document.createElement("div");
+  //             shareDiv.style.marginBottom = card.prayer ? "10px" : "0";
 
-              const shareTitle = document.createElement("div");
-              shareTitle.textContent = "일상 나눔";
-              shareTitle.style.fontWeight = "bold";
-              shareTitle.style.marginBottom = "5px";
-              shareTitle.style.fontSize = "14px";
-              shareDiv.appendChild(shareTitle);
+  //             const shareTitle = document.createElement("div");
+  //             shareTitle.textContent = "일상 나눔";
+  //             shareTitle.style.fontWeight = "bold";
+  //             shareTitle.style.marginBottom = "5px";
+  //             shareTitle.style.fontSize = "14px";
+  //             shareDiv.appendChild(shareTitle);
 
-              const shareContent = document.createElement("div");
-              shareContent.textContent = card.share.content;
-              shareContent.style.fontSize = "13px";
-              shareDiv.appendChild(shareContent);
+  //             const shareContent = document.createElement("div");
+  //             shareContent.textContent = card.share.content;
+  //             shareContent.style.fontSize = "13px";
+  //             shareDiv.appendChild(shareContent);
 
-              cardDiv.appendChild(shareDiv);
+  //             cardDiv.appendChild(shareDiv);
 
-              // 구분선 (기도 제목이 있는 경우)
-              if (card.prayer) {
-                const divider = document.createElement("hr");
-                divider.style.margin = "8px 0";
-                divider.style.border = "none";
-                divider.style.borderBottom = "1px solid #eee";
-                cardDiv.appendChild(divider);
-              }
-            }
+  //             // 구분선 (기도 제목이 있는 경우)
+  //             if (card.prayer) {
+  //               const divider = document.createElement("hr");
+  //               divider.style.margin = "8px 0";
+  //               divider.style.border = "none";
+  //               divider.style.borderBottom = "1px solid #eee";
+  //               cardDiv.appendChild(divider);
+  //             }
+  //           }
 
-            // 기도 제목
-            if (card.prayer) {
-              const prayerDiv = document.createElement("div");
+  //           // 기도 제목
+  //           if (card.prayer) {
+  //             const prayerDiv = document.createElement("div");
 
-              const prayerTitle = document.createElement("div");
-              prayerTitle.textContent = "기도 제목";
-              prayerTitle.style.fontWeight = "bold";
-              prayerTitle.style.marginBottom = "5px";
-              prayerTitle.style.fontSize = "14px";
-              prayerDiv.appendChild(prayerTitle);
+  //             const prayerTitle = document.createElement("div");
+  //             prayerTitle.textContent = "기도 제목";
+  //             prayerTitle.style.fontWeight = "bold";
+  //             prayerTitle.style.marginBottom = "5px";
+  //             prayerTitle.style.fontSize = "14px";
+  //             prayerDiv.appendChild(prayerTitle);
 
-              const prayerContent = document.createElement("div");
-              prayerContent.textContent = card.prayer.content;
-              prayerContent.style.fontSize = "13px";
-              prayerDiv.appendChild(prayerContent);
+  //             const prayerContent = document.createElement("div");
+  //             prayerContent.textContent = card.prayer.content;
+  //             prayerContent.style.fontSize = "13px";
+  //             prayerDiv.appendChild(prayerContent);
 
-              cardDiv.appendChild(prayerDiv);
-            }
+  //             cardDiv.appendChild(prayerDiv);
+  //           }
 
-            // 카드 푸터 (날짜 및 기도 횟수)
-            const cardFooter = document.createElement("div");
-            cardFooter.style.marginTop = "10px";
-            cardFooter.style.display = "flex";
-            cardFooter.style.justifyContent = "space-between";
-            cardFooter.style.borderTop = "1px solid #eee";
-            cardFooter.style.paddingTop = "8px";
-            cardFooter.style.fontSize = "11px";
-            cardFooter.style.color = "#999";
+  //           // 카드 푸터 (날짜 및 기도 횟수)
+  //           const cardFooter = document.createElement("div");
+  //           cardFooter.style.marginTop = "10px";
+  //           cardFooter.style.display = "flex";
+  //           cardFooter.style.justifyContent = "space-between";
+  //           cardFooter.style.borderTop = "1px solid #eee";
+  //           cardFooter.style.paddingTop = "8px";
+  //           cardFooter.style.fontSize = "11px";
+  //           cardFooter.style.color = "#999";
 
-            const dateSpan = document.createElement("span");
-            dateSpan.textContent = card.share
-              ? card.share.date
-              : card.prayer.date;
-            cardFooter.appendChild(dateSpan);
+  //           const dateSpan = document.createElement("span");
+  //           dateSpan.textContent = card.share
+  //             ? card.share.date
+  //             : card.prayer.date;
+  //           cardFooter.appendChild(dateSpan);
 
-            const prayCountSpan = document.createElement("span");
-            const prayCount = card.prayer ? card.prayer.prayCount : 0;
-            prayCountSpan.textContent = `${prayCount}명과 함께 기도`;
-            cardFooter.appendChild(prayCountSpan);
+  //           const prayCountSpan = document.createElement("span");
+  //           const prayCount = card.prayer ? card.prayer.prayCount : 0;
+  //           prayCountSpan.textContent = `${prayCount}명과 함께 기도`;
+  //           cardFooter.appendChild(prayCountSpan);
 
-            cardDiv.appendChild(cardFooter);
-            memberDiv.appendChild(cardDiv);
-          }
-        }
+  //           cardDiv.appendChild(cardFooter);
+  //           memberDiv.appendChild(cardDiv);
+  //         }
+  //       }
 
-        cardsDiv.appendChild(memberDiv);
-      }
+  //       cardsDiv.appendChild(memberDiv);
+  //     }
 
-      pdfContainer.appendChild(cardsDiv);
+  //     pdfContainer.appendChild(cardsDiv);
 
-      // 푸터 추가
-      const footerDiv = document.createElement("div");
-      footerDiv.style.textAlign = "center";
-      footerDiv.style.color = "#757575";
-      footerDiv.style.fontSize = "11px";
-      footerDiv.style.marginTop = "25mm";
-      footerDiv.style.paddingBottom = "10mm";
-      footerDiv.textContent = `PrayU - ${groupName} 그룹정보 - ${new Date().toLocaleDateString()}`;
-      pdfContainer.appendChild(footerDiv);
+  //     // 푸터 추가
+  //     const footerDiv = document.createElement("div");
+  //     footerDiv.style.textAlign = "center";
+  //     footerDiv.style.color = "#757575";
+  //     footerDiv.style.fontSize = "11px";
+  //     footerDiv.style.marginTop = "25mm";
+  //     footerDiv.style.paddingBottom = "10mm";
+  //     footerDiv.textContent = `PrayU - ${groupName} 그룹정보 - ${new Date().toLocaleDateString()}`;
+  //     pdfContainer.appendChild(footerDiv);
 
-      // jsPDF 인스턴스 생성
-      const doc = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
+  //     // jsPDF 인스턴스 생성
+  //     const doc = new jsPDF({
+  //       orientation: "portrait",
+  //       unit: "mm",
+  //       format: "a4",
+  //     });
 
-      // PDF 변환 및 저장
-      try {
-        // 생성한 HTML을 캔버스로 변환
-        const canvas = await html2canvas(pdfContainer, {
-          scale: 2,
-          useCORS: true,
-          allowTaint: true,
-          logging: false,
-        });
+  //     // PDF 변환 및 저장
+  //     try {
+  //       // 생성한 HTML을 캔버스로 변환
+  //       const canvas = await html2canvas(pdfContainer, {
+  //         scale: 2,
+  //         useCORS: true,
+  //         allowTaint: true,
+  //         logging: false,
+  //       });
 
-        // 캔버스를 이미지로 변환하여 PDF에 추가
-        const imgData = canvas.toDataURL("image/jpeg", 0.95);
-        const imgWidth = 210;
-        const pageHeight = 297;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 0;
+  //       // 캔버스를 이미지로 변환하여 PDF에 추가
+  //       const imgData = canvas.toDataURL("image/jpeg", 0.95);
+  //       const imgWidth = 210;
+  //       const pageHeight = 297;
+  //       const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //       let heightLeft = imgHeight;
+  //       let position = 0;
 
-        // 첫 페이지 추가
-        doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+  //       // 첫 페이지 추가
+  //       doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+  //       heightLeft -= pageHeight;
 
-        // 필요한 경우 추가 페이지 생성
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
-          doc.addPage();
-          doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
+  //       // 필요한 경우 추가 페이지 생성
+  //       while (heightLeft >= 0) {
+  //         position = heightLeft - imgHeight;
+  //         doc.addPage();
+  //         doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+  //         heightLeft -= pageHeight;
+  //       }
 
-        // PDF 저장
-        doc.save(`${groupName}_그룹정보.pdf`);
-      } catch (err) {
-        console.error("PDF 이미지 생성 오류:", err);
-        const errorMessage =
-          err instanceof Error ? err.message : "알 수 없는 오류";
-        throw new Error("PDF 변환 실패: " + errorMessage);
-      } finally {
-        // 임시 컨테이너 제거
-        if (pdfContainer && pdfContainer.parentNode) {
-          pdfContainer.parentNode.removeChild(pdfContainer);
-        }
-      }
-    } catch (err) {
-      console.error("PDF 생성 중 오류 발생:", err);
-      const errorMessage =
-        err instanceof Error ? err.message : "알 수 없는 오류";
-      alert("PDF 생성 중 오류가 발생했습니다: " + errorMessage);
-    }
-  };
+  //       // PDF 저장
+  //       doc.save(`${groupName}_그룹정보.pdf`);
+  //     } catch (err) {
+  //       console.error("PDF 이미지 생성 오류:", err);
+  //       const errorMessage =
+  //         err instanceof Error ? err.message : "알 수 없는 오류";
+  //       throw new Error("PDF 변환 실패: " + errorMessage);
+  //     } finally {
+  //       // 임시 컨테이너 제거
+  //       if (pdfContainer && pdfContainer.parentNode) {
+  //         pdfContainer.parentNode.removeChild(pdfContainer);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.error("PDF 생성 중 오류 발생:", err);
+  //     const errorMessage =
+  //       err instanceof Error ? err.message : "알 수 없는 오류";
+  //     alert("PDF 생성 중 오류가 발생했습니다: " + errorMessage);
+  //   }
+  // };
 
   useEffect(() => {
     if (groupId) {
