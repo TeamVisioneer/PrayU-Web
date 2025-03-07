@@ -15,12 +15,12 @@ const hideScrollbarStyle = `
 
 const OfficePage: React.FC = () => {
   const navigate = useNavigate();
-  const { myCommunities } = useOfficeStore();
+  const { myUnions } = useOfficeStore();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 공동체 선택 처리
-  const handleCommunitySelect = (communityId: string) => {
-    navigate(`/office/community/${communityId}`);
+  // 유니온 선택 처리
+  const handleUnionSelect = (unionId: string) => {
+    navigate(`/office/union/${unionId}`);
   };
 
   return (
@@ -36,7 +36,7 @@ const OfficePage: React.FC = () => {
 
         <div className="flex items-center">
           <button
-            onClick={() => navigate("/office/add-community")}
+            onClick={() => navigate("/office/add-union")}
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-full"
             aria-label="새 공동체 추가"
           >
@@ -103,24 +103,24 @@ const OfficePage: React.FC = () => {
           {/* 공동체 목록 */}
           <div>
             <h2 className="text-lg font-semibold mb-3">교회 공동체</h2>
-            {myCommunities.length > 0 ? (
+            {myUnions.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {myCommunities
-                  .filter((community) =>
+                {myUnions
+                  .filter((union) =>
                     searchQuery
-                      ? community.name
+                      ? union.name
                           .toLowerCase()
                           .includes(searchQuery.toLowerCase()) ||
-                        (community.description &&
-                          community.description
+                        (union.description &&
+                          union.description
                             .toLowerCase()
                             .includes(searchQuery.toLowerCase()))
                       : true
                   )
-                  .map((community) => (
+                  .map((union) => (
                     <div
-                      key={community.id}
-                      onClick={() => handleCommunitySelect(community.id)}
+                      key={union.id}
+                      onClick={() => handleUnionSelect(union.id)}
                       className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer"
                     >
                       <div className="flex items-center">
@@ -142,17 +142,17 @@ const OfficePage: React.FC = () => {
                         </div>
                         <div className="flex-1">
                           <h4 className="font-medium text-gray-900">
-                            {community.name}
+                            {union.name}
                           </h4>
                           <div className="flex flex-wrap items-center mt-1 text-sm text-gray-500">
                             <span className="font-medium text-gray-600">
-                              {community.churchName}
+                              {union.churchName}
                             </span>
-                            {community.description && (
+                            {union.description && (
                               <>
                                 <span className="mx-1.5">•</span>
                                 <span className="line-clamp-1">
-                                  {community.description}
+                                  {union.description}
                                 </span>
                               </>
                             )}
@@ -185,7 +185,7 @@ const OfficePage: React.FC = () => {
                   새로운 공동체를 만들어 시작하세요
                 </p>
                 <button
-                  onClick={() => navigate("/office/add-community")}
+                  onClick={() => navigate("/office/add-union")}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <svg
