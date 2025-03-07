@@ -23,7 +23,7 @@ export interface Group {
   createdAt: string;
   imageUrl?: string;
   pastorName?: string;
-  groupType?: "community" | "department";
+  groupType?: "union" | "department";
 }
 
 // Mock data for churches
@@ -93,7 +93,7 @@ export const mockGroups: Group[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2574&auto=format&fit=crop",
     pastorName: "김목사",
-    groupType: "community",
+    groupType: "union",
   },
   {
     id: "group-2",
@@ -132,7 +132,7 @@ export const mockGroups: Group[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=2574&auto=format&fit=crop",
     pastorName: "이목사",
-    groupType: "community",
+    groupType: "union",
   },
   {
     id: "group-5",
@@ -171,7 +171,7 @@ export const mockGroups: Group[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2574&auto=format&fit=crop",
     pastorName: "박목사",
-    groupType: "community",
+    groupType: "union",
   },
 ];
 

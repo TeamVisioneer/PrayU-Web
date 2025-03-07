@@ -2,32 +2,32 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useOfficeStore from "@/stores/officeStore";
 import { Church } from "@/data/mockOfficeData";
-import { CommunityFormData } from "@/stores/officeStore";
+import { UnionFormData } from "@/stores/officeStore";
 
 // 컴포넌트들
 import ChurchSearch from "@/components/office/ChurchSearch";
 
 // 단계 정의
-enum AddCommunitySteps {
+enum AddUnionSteps {
   SELECT_CHURCH = "select_church",
-  ENTER_COMMUNITY_INFO = "enter_community_info",
+  ENTER_UNION_INFO = "enter_union_info",
   COMPLETE = "complete",
 }
 
-const AddCommunityPage: React.FC = () => {
+const AddUnionPage: React.FC = () => {
   const navigate = useNavigate();
-  const { addChurch, isChurchAdded, addCommunity } = useOfficeStore();
+  const { addChurch, isChurchAdded, addUnion } = useOfficeStore();
 
   // 상태 관리
-  const [currentStep, setCurrentStep] = useState<AddCommunitySteps>(
-    AddCommunitySteps.SELECT_CHURCH
+  const [currentStep, setCurrentStep] = useState<AddUnionSteps>(
+    AddUnionSteps.SELECT_CHURCH
   );
   const [selectedChurch, setSelectedChurch] = useState<Church | null>(null);
-  const [communityName, setCommunityName] = useState("");
+  const [unionName, setUnionName] = useState("");
   const [description, setDescription] = useState("");
 
   // 유효성 검사 상태
-  const [communityNameError, setCommunityNameError] = useState("");
+  const [unionNameError, setUnionNameError] = useState("");
 
   // 로딩 상태
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,14 +48,14 @@ const AddCommunityPage: React.FC = () => {
   // 다음 단계로 이동
   const goToNextStep = () => {
     switch (currentStep) {
-      case AddCommunitySteps.SELECT_CHURCH:
+      case AddUnionSteps.SELECT_CHURCH:
         if (selectedChurch) {
-          setCurrentStep(AddCommunitySteps.ENTER_COMMUNITY_INFO);
+          setCurrentStep(AddUnionSteps.ENTER_UNION_INFO);
         }
         break;
-      case AddCommunitySteps.ENTER_COMMUNITY_INFO:
-        if (validateCommunityInfo()) {
-          handleSubmitCommunity();
+      case AddUnionSteps.ENTER_UNION_INFO:
+        if (validateUnionInfo()) {
+          handleSubmitUnion();
         }
         break;
       default:
@@ -66,8 +66,8 @@ const AddCommunityPage: React.FC = () => {
   // 이전 단계로 이동
   const goToPreviousStep = () => {
     switch (currentStep) {
-      case AddCommunitySteps.ENTER_COMMUNITY_INFO:
-        setCurrentStep(AddCommunitySteps.SELECT_CHURCH);
+      case AddUnionSteps.ENTER_UNION_INFO:
+        setCurrentStep(AddUnionSteps.SELECT_CHURCH);
         break;
       default:
         break;
@@ -75,41 +75,41 @@ const AddCommunityPage: React.FC = () => {
   };
 
   // 공동체 정보 유효성 검사
-  const validateCommunityInfo = () => {
-    if (!communityName.trim()) {
-      setCommunityNameError("공동체 이름을 입력해주세요.");
+  const validateUnionInfo = () => {
+    if (!unionName.trim()) {
+      setUnionNameError("공동체 이름을 입력해주세요.");
       return false;
     } else {
-      setCommunityNameError("");
+      setUnionNameError("");
       return true;
     }
   };
 
   // 공동체 추가 제출 핸들러
-  const handleSubmitCommunity = () => {
+  const handleSubmitUnion = () => {
     if (!selectedChurch) return;
 
     setIsSubmitting(true);
     try {
-      const formData: CommunityFormData = {
-        name: communityName,
+      const formData: UnionFormData = {
+        name: unionName,
         pastorName: "미지정", // 기본값 설정
         description: description.trim() ? description : undefined,
-        groupType: "community", // 기본값 설정
+        groupType: "union", // 기본값 설정
       };
 
       // 워크스페이스(공동체) 추가
-      addCommunity(selectedChurch.id, formData);
+      addUnion(selectedChurch.id, formData);
 
       // 완료 단계로 이동
-      setCurrentStep(AddCommunitySteps.COMPLETE);
+      setCurrentStep(AddUnionSteps.COMPLETE);
 
-      // 2초 후에 마이 커뮤니티 페이지로 이동
+      // 2초 후에 마이 공동체 페이지로 이동
       setTimeout(() => {
-        navigate("/office/my-communities");
+        navigate("/office");
       }, 2000);
     } catch (error) {
-      console.error("Error adding community:", error);
+      console.error("Error adding union:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -129,15 +129,15 @@ const AddCommunityPage: React.FC = () => {
     let description = "";
 
     switch (currentStep) {
-      case AddCommunitySteps.SELECT_CHURCH:
+      case AddUnionSteps.SELECT_CHURCH:
         title = "교회 선택";
         description = "소속 교회를 선택하세요";
         break;
-      case AddCommunitySteps.ENTER_COMMUNITY_INFO:
+      case AddUnionSteps.ENTER_UNION_INFO:
         title = "공동체 정보 입력";
         description = "공동체 이름과 정보를 입력하세요";
         break;
-      case AddCommunitySteps.COMPLETE:
+      case AddUnionSteps.COMPLETE:
         title = "완료";
         description = "공동체가 성공적으로 생성되었습니다";
         break;
@@ -153,7 +153,7 @@ const AddCommunityPage: React.FC = () => {
 
   // 진행 상태 표시
   const renderProgressBar = () => {
-    const steps = Object.values(AddCommunitySteps);
+    const steps = Object.values(AddUnionSteps);
     const currentIndex = steps.indexOf(currentStep);
     const percentage = ((currentIndex + 1) / steps.length) * 100;
 
@@ -247,29 +247,29 @@ const AddCommunityPage: React.FC = () => {
   };
 
   // 공동체 정보 입력 단계 UI
-  const renderCommunityInfoStep = () => {
+  const renderUnionInfoStep = () => {
     return (
       <div>
         <div className="space-y-4">
           <div>
             <label
-              htmlFor="communityName"
+              htmlFor="unionName"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               공동체 이름*
             </label>
             <input
               type="text"
-              id="communityName"
-              value={communityName}
-              onChange={(e) => setCommunityName(e.target.value)}
+              id="unionName"
+              value={unionName}
+              onChange={(e) => setUnionName(e.target.value)}
               placeholder="예: 청년부, 주일학교, 새가족부, 찬양팀"
               className={`w-full px-3 py-2 border ${
-                communityNameError ? "border-red-500" : "border-gray-300"
+                unionNameError ? "border-red-500" : "border-gray-300"
               } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
             />
-            {communityNameError && (
-              <p className="mt-1 text-sm text-red-600">{communityNameError}</p>
+            {unionNameError && (
+              <p className="mt-1 text-sm text-red-600">{unionNameError}</p>
             )}
           </div>
 
@@ -320,7 +320,7 @@ const AddCommunityPage: React.FC = () => {
             이제 그룹장들을 초대하여 공동체를 활성화해보세요.
           </p>
         </div>
-        <p className="text-gray-600 mb-4">마이 커뮤니티 페이지로 이동 중...</p>
+        <p className="text-gray-600 mb-4">메인 페이지로 이동 중...</p>
         <div className="animate-pulse flex justify-center">
           <div className="h-2 w-2 bg-blue-600 rounded-full mx-1"></div>
           <div className="h-2 w-2 bg-blue-600 rounded-full mx-1 delay-100"></div>
@@ -333,11 +333,11 @@ const AddCommunityPage: React.FC = () => {
   // 현재 단계에 따른 컨텐츠 렌더링
   const renderContent = () => {
     switch (currentStep) {
-      case AddCommunitySteps.SELECT_CHURCH:
+      case AddUnionSteps.SELECT_CHURCH:
         return renderSelectChurchStep();
-      case AddCommunitySteps.ENTER_COMMUNITY_INFO:
-        return renderCommunityInfoStep();
-      case AddCommunitySteps.COMPLETE:
+      case AddUnionSteps.ENTER_UNION_INFO:
+        return renderUnionInfoStep();
+      case AddUnionSteps.COMPLETE:
         return renderCompleteStep();
       default:
         return null;
@@ -346,11 +346,11 @@ const AddCommunityPage: React.FC = () => {
 
   // 하단 버튼 렌더링
   const renderButtons = () => {
-    if (currentStep === AddCommunitySteps.COMPLETE) return null;
+    if (currentStep === AddUnionSteps.COMPLETE) return null;
 
     return (
       <div className="flex justify-between mt-8">
-        {currentStep !== AddCommunitySteps.SELECT_CHURCH && (
+        {currentStep !== AddUnionSteps.SELECT_CHURCH && (
           <button
             type="button"
             onClick={goToPreviousStep}
@@ -378,13 +378,11 @@ const AddCommunityPage: React.FC = () => {
           type="button"
           onClick={goToNextStep}
           disabled={
-            (currentStep === AddCommunitySteps.SELECT_CHURCH &&
-              !selectedChurch) ||
+            (currentStep === AddUnionSteps.SELECT_CHURCH && !selectedChurch) ||
             isSubmitting
           }
           className={`px-5 py-2.5 text-white rounded-md transition-colors flex items-center ml-auto ${
-            (currentStep === AddCommunitySteps.SELECT_CHURCH &&
-              !selectedChurch) ||
+            (currentStep === AddUnionSteps.SELECT_CHURCH && !selectedChurch) ||
             isSubmitting
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-blue-500 hover:bg-blue-600"
@@ -416,10 +414,8 @@ const AddCommunityPage: React.FC = () => {
             </>
           ) : (
             <>
-              {currentStep === AddCommunitySteps.ENTER_COMMUNITY_INFO
-                ? "완료"
-                : "다음"}
-              {currentStep !== AddCommunitySteps.ENTER_COMMUNITY_INFO && (
+              {currentStep === AddUnionSteps.ENTER_UNION_INFO ? "완료" : "다음"}
+              {currentStep !== AddUnionSteps.ENTER_UNION_INFO && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-4 w-4 ml-1"
@@ -483,4 +479,4 @@ const AddCommunityPage: React.FC = () => {
   );
 };
 
-export default AddCommunityPage;
+export default AddUnionPage;

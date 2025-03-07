@@ -47,12 +47,12 @@ const GroupCard: React.FC<GroupCardProps> = ({
       <div className="flex items-center mb-2">
         <div
           className={`flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mr-2 ${
-            group.groupType === "community"
+            group.groupType === "union"
               ? "bg-blue-100 text-blue-600"
               : "bg-purple-100 text-purple-600"
           }`}
         >
-          {group.groupType === "community" ? (
+          {group.groupType === "union" ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -158,12 +158,12 @@ const GroupCard: React.FC<GroupCardProps> = ({
       <div className="mt-auto">
         <span
           className={`inline-block px-2 py-0.5 text-xs rounded-full ${
-            group.groupType === "community"
+            group.groupType === "union"
               ? "bg-blue-100 text-blue-800"
               : "bg-purple-100 text-purple-800"
           }`}
         >
-          {group.groupType === "community" ? "소그룹" : "부서"}
+          {group.groupType === "union" ? "소그룹" : "부서"}
         </span>
       </div>
     </div>

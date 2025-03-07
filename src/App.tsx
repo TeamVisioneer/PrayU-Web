@@ -40,11 +40,8 @@ import TodayPrayCardPage from "./pages/TodayPrayCardPage";
 import {
   OfficePage,
   ChurchSearchPage,
-  MyChurchesPage,
-  ChurchDetailPage,
-  MyCommunityPage,
-  CommunityDetailPage,
-  AddCommunityPage,
+  UnionDetailPage,
+  AddUnionPage,
   GroupDetailPage,
 } from "./pages/Office";
 
@@ -180,42 +177,18 @@ const App = () => {
                 }
               />
               <Route
-                path="/office/my-churches"
+                path="/office/union/:unionId"
                 element={
                   <PrivateRoute>
-                    <MyChurchesPage />
+                    <UnionDetailPage />
                   </PrivateRoute>
                 }
               />
               <Route
-                path="/office/church/:churchId"
+                path="/office/add-union"
                 element={
                   <PrivateRoute>
-                    <ChurchDetailPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/office/my-communities"
-                element={
-                  <PrivateRoute>
-                    <MyCommunityPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/office/community/:communityId"
-                element={
-                  <PrivateRoute>
-                    <CommunityDetailPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/office/add-community"
-                element={
-                  <PrivateRoute>
-                    <AddCommunityPage />
+                    <AddUnionPage />
                   </PrivateRoute>
                 }
               />

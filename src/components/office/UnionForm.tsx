@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Church } from "@/data/mockOfficeData";
-import { CommunityFormData } from "@/stores/officeStore";
+import { UnionFormData } from "@/stores/officeStore";
 
-interface CommunityFormProps {
+interface UnionFormProps {
   selectedChurch: Church;
-  onSubmit: (data: CommunityFormData) => void;
+  onSubmit: (data: UnionFormData) => void;
   onCancel: () => void;
 }
 
-const CommunityForm: React.FC<CommunityFormProps> = ({
+const UnionForm: React.FC<UnionFormProps> = ({
   selectedChurch,
   onSubmit,
   onCancel,
@@ -16,7 +16,7 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   const [name, setName] = useState("");
   const [pastorName, setPastorName] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState<"community" | "department">("community");
+  const [type, setType] = useState<"union" | "department">("union");
   const [nameError, setNameError] = useState("");
   const [pastorNameError, setPastorNameError] = useState("");
 
@@ -83,9 +83,9 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
           <label className="flex items-center">
             <input
               type="radio"
-              value="community"
-              checked={type === "community"}
-              onChange={() => setType("community")}
+              value="union"
+              checked={type === "union"}
+              onChange={() => setType("union")}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
             />
             <span className="ml-2 text-sm text-gray-700">
@@ -185,4 +185,4 @@ const CommunityForm: React.FC<CommunityFormProps> = ({
   );
 };
 
-export default CommunityForm;
+export default UnionForm;

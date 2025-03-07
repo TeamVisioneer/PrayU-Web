@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChurchSearch from "@/components/office/ChurchSearch";
 import ChurchCard from "@/components/office/ChurchCard";
-import CommunityForm from "@/components/office/CommunityForm";
+import UnionForm from "@/components/office/UnionForm";
 import useOfficeStore from "@/stores/officeStore";
 import { Church } from "@/data/mockOfficeData";
-import { CommunityFormData } from "@/stores/officeStore";
+import { UnionFormData } from "@/stores/officeStore";
 
 enum AddSteps {
   SEARCH_CHURCH = "search_church",
@@ -15,7 +15,7 @@ enum AddSteps {
 
 const ChurchSearchPage: React.FC = () => {
   const navigate = useNavigate();
-  const { addChurch, isChurchAdded, addCommunity } = useOfficeStore();
+  const { addChurch, isChurchAdded, addUnion } = useOfficeStore();
   const [selectedChurch, setSelectedChurch] = useState<Church | null>(null);
   const [useExternalApi, setUseExternalApi] = useState(false);
   const [currentStep, setCurrentStep] = useState<AddSteps>(
@@ -39,21 +39,21 @@ const ChurchSearchPage: React.FC = () => {
     setCurrentStep(AddSteps.WORKSPACE_INFO);
   };
 
-  const handleWorkspaceSubmit = (formData: CommunityFormData) => {
+  const handleWorkspaceSubmit = (formData: UnionFormData) => {
     if (!selectedChurch) return;
 
     setIsSubmitting(true);
     try {
       // 워크스페이스(공동체) 추가
-      addCommunity(selectedChurch.id, formData);
+      addUnion(selectedChurch.id, formData);
 
       // 완료 단계로 이동
       setCurrentStep(AddSteps.COMPLETE);
 
-      // 1.5초 후에 워크스페이스 페이지로 이동
+      // 잠시 후 메인 페이지로 이동
       setTimeout(() => {
-        navigate("/office/my-communities");
-      }, 1500);
+        navigate("/office");
+      }, 2000);
     } catch (error) {
       console.error("Error adding workspace:", error);
     } finally {
@@ -167,7 +167,7 @@ const ChurchSearchPage: React.FC = () => {
             </div>
 
             {selectedChurch && (
-              <CommunityForm
+              <UnionForm
                 selectedChurch={selectedChurch}
                 onSubmit={handleWorkspaceSubmit}
                 onCancel={() => setCurrentStep(AddSteps.SEARCH_CHURCH)}

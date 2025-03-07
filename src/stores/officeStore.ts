@@ -6,9 +6,9 @@ import { Church, Group } from "@/data/mockOfficeData";
 import { mockChurches } from "@/data/mockOfficeData";
 
 // 예시 커뮤니티 목데이터
-const mockCommunities: Group[] = [
+const mockUnions: Group[] = [
   {
-    id: "community-1",
+    id: "union-1",
     name: "청년부",
     churchId: "church-1",
     churchName: "은혜교회",
@@ -16,10 +16,10 @@ const mockCommunities: Group[] = [
     memberCount: 45,
     description: "청년들을 위한 공동체입니다.",
     createdAt: "2023-04-15",
-    groupType: "community",
+    groupType: "union",
   },
   {
-    id: "community-2",
+    id: "union-2",
     name: "주일 찬양팀",
     churchId: "church-1",
     churchName: "은혜교회",
@@ -30,7 +30,7 @@ const mockCommunities: Group[] = [
     groupType: "department",
   },
   {
-    id: "community-3",
+    id: "union-3",
     name: "새가족부",
     churchId: "church-2",
     churchName: "사랑교회",
@@ -43,11 +43,11 @@ const mockCommunities: Group[] = [
 ];
 
 // 공동체 생성을 위한 데이터 타입
-export interface CommunityFormData {
+export interface UnionFormData {
   name: string;
   pastorName: string;
   description?: string;
-  groupType?: "community" | "department";
+  groupType?: "union" | "department";
 }
 
 interface OfficeState {
@@ -57,8 +57,8 @@ interface OfficeState {
   selectedChurch: Church | null;
   // Groups belonging to the selected church
   churchGroups: Group[];
-  // User's created communities
-  myCommunities: Group[];
+  // User's created unions
+  myUnions: Group[];
 
   // Actions
   addChurch: (church: Church) => void;
@@ -68,11 +68,11 @@ interface OfficeState {
   isChurchAdded: (churchId: string) => boolean;
   getChurchById: (churchId: string) => Church | null;
 
-  // Community actions
-  addCommunity: (churchId: string, formData: CommunityFormData) => void;
-  removeCommunity: (communityId: string) => void;
-  getCommunityById: (communityId: string) => Group | null;
-  getCommunitiesByChurchId: (churchId: string) => Group[];
+  // Union actions
+  addUnion: (churchId: string, formData: UnionFormData) => void;
+  removeUnion: (unionId: string) => void;
+  getUnionById: (unionId: string) => Group | null;
+  getUnionsByChurchId: (churchId: string) => Group[];
 }
 
 const useOfficeStore = create<OfficeState>()(
@@ -81,7 +81,7 @@ const useOfficeStore = create<OfficeState>()(
       myChurches: mockChurches.slice(0, 2), // 초기 상태에 목데이터 추가
       selectedChurch: null,
       churchGroups: [],
-      myCommunities: mockCommunities, // 초기 상태에 목데이터 추가
+      myUnions: mockUnions, // 초기 상태에 목데이터 추가
 
       addChurch: (church) => {
         // 이미 추가된 교회인지 확인
@@ -103,8 +103,8 @@ const useOfficeStore = create<OfficeState>()(
             ? null
             : state.selectedChurch,
           // 삭제된 교회에 속한 공동체도 모두 삭제
-          myCommunities: state.myCommunities.filter(
-            (community) => community.churchId !== churchId,
+          myUnions: state.myUnions.filter(
+            (union) => union.churchId !== churchId,
           ),
         }));
       },
@@ -119,8 +119,8 @@ const useOfficeStore = create<OfficeState>()(
 
       loadChurchGroups: (churchId) => {
         // API 대신 목데이터에서 관련 그룹 필터링
-        const groups = get().myCommunities.filter(
-          (group) => group.churchId === churchId,
+        const groups = get().myUnions.filter(
+          (union) => union.churchId === churchId,
         );
         set({ churchGroups: groups });
       },
@@ -134,13 +134,16 @@ const useOfficeStore = create<OfficeState>()(
         return myChurches.find((church) => church.id === churchId) || null;
       },
 
-      // 공동체 관련 함수
-      addCommunity: (churchId, formData) => {
+      // Union actions
+      addUnion: (churchId, formData) => {
+        // 새 워크스페이스 추가
+        if (!churchId) return;
+
         const church = get().getChurchById(churchId);
         if (!church) return;
 
-        const newCommunity: Group = {
-          id: `community-${Date.now()}`,
+        const newUnion: Group = {
+          id: `union-${Date.now()}`,
           name: formData.name,
           churchId: churchId,
           churchName: church.name,
@@ -148,31 +151,33 @@ const useOfficeStore = create<OfficeState>()(
           description: formData.description || "",
           memberCount: 0,
           createdAt: new Date().toISOString(),
-          groupType: formData.groupType || "community",
+          groupType: formData.groupType || "union",
         };
 
         set((state) => ({
-          myCommunities: [...state.myCommunities, newCommunity],
+          myUnions: [...state.myUnions, newUnion],
         }));
       },
 
-      removeCommunity: (communityId) => {
+      removeUnion: (unionId) => {
         set((state) => ({
-          myCommunities: state.myCommunities.filter(
-            (community) => community.id !== communityId,
+          myUnions: state.myUnions.filter(
+            (union) => union.id !== unionId,
           ),
         }));
       },
 
-      getCommunityById: (communityId) => {
-        return get().myCommunities.find(
-          (community) => community.id === communityId,
+      getUnionById: (unionId) => {
+        const state = get();
+        return state.myUnions.find(
+          (union) => union.id === unionId,
         ) || null;
       },
 
-      getCommunitiesByChurchId: (churchId) => {
-        return get().myCommunities.filter(
-          (community) => community.churchId === churchId,
+      getUnionsByChurchId: (churchId) => {
+        const state = get();
+        return state.myUnions.filter(
+          (union) => union.churchId === churchId,
         );
       },
     }),
