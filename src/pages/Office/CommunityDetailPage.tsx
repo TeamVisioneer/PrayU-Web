@@ -174,51 +174,115 @@ const CommunityDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* CSS for hiding scrollbars */}
       <style>{hideScrollbarStyle}</style>
 
-      <div className="sticky top-0 z-30 bg-white shadow-sm">
-        {/* 상단 헤더 - Office Page 스타일 적용 */}
-        <div className="bg-white border-b border-gray-200 p-3 flex items-center justify-between">
-          <div ref={dropdownRef} className="relative">
-            <button
-              onClick={() => setShowCommunityDropdown(!showCommunityDropdown)}
-              className="flex items-center text-gray-800 hover:text-blue-600 transition-colors"
+      {/* 상단 헤더 - Office Page 스타일 적용 */}
+      <div className="bg-white border-b border-gray-200 p-3 flex items-center justify-between">
+        <div ref={dropdownRef} className="relative">
+          <button
+            onClick={() => setShowCommunityDropdown(!showCommunityDropdown)}
+            className="flex items-center text-gray-800 hover:text-blue-600 transition-colors"
+          >
+            <h2 className="text-lg font-bold">{community.name}</h2>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`h-5 w-5 ml-1 transition-transform ${
+                showCommunityDropdown ? "rotate-180" : ""
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <h2 className="text-lg font-bold">{community.name}</h2>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-5 w-5 ml-1 transition-transform ${
-                  showCommunityDropdown ? "rotate-180" : ""
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
 
-            {/* 공동체 드롭다운 메뉴 */}
-            {showCommunityDropdown && (
-              <div className="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg z-20 max-h-[calc(100vh-120px)] overflow-y-auto">
-                <div className="p-3 border-b border-gray-100">
-                  <div className="flex items-center mb-2">
+          {/* 공동체 드롭다운 메뉴 */}
+          {showCommunityDropdown && (
+            <div className="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg z-20 max-h-[calc(100vh-120px)] overflow-y-auto">
+              <div className="p-3 border-b border-gray-100">
+                <div className="flex items-center mb-2">
+                  <div
+                    className={`flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mr-3 ${
+                      community.groupType === "community"
+                        ? "bg-blue-100 text-blue-600"
+                        : "bg-purple-100 text-purple-600"
+                    }`}
+                  >
+                    {community.groupType === "community" ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900">
+                      현재: {community.name}
+                    </h4>
+                    <p className="text-xs text-gray-500">
+                      {community.churchName}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="py-1 px-3 pt-2">
+                <h3 className="text-xs uppercase font-semibold text-gray-500 mb-1">
+                  다른 공동체
+                </h3>
+              </div>
+
+              {myCommunities
+                .filter((c) => c.id !== community.id)
+                .map((otherCommunity) => (
+                  <button
+                    key={otherCommunity.id}
+                    onClick={() => handleCommunitySelect(otherCommunity.id)}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                  >
                     <div
-                      className={`flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mr-3 ${
-                        community.groupType === "community"
+                      className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center mr-2 ${
+                        otherCommunity.groupType === "community"
                           ? "bg-blue-100 text-blue-600"
                           : "bg-purple-100 text-purple-600"
                       }`}
                     >
-                      {community.groupType === "community" ? (
+                      {otherCommunity.groupType === "community" ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
+                          className="h-4 w-4"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -233,7 +297,7 @@ const CommunityDetailPage: React.FC = () => {
                       ) : (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
+                          className="h-4 w-4"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -247,106 +311,18 @@ const CommunityDetailPage: React.FC = () => {
                         </svg>
                       )}
                     </div>
-                    <span className="font-medium">{community.name}</span>
-                  </div>
-                  <p className="text-sm text-gray-600 pl-11">
-                    {community.churchName}
-                  </p>
-                </div>
-
-                {myCommunities
-                  .filter((c) => c.id !== community.id)
-                  .map((otherCommunity) => (
-                    <button
-                      key={otherCommunity.id}
-                      onClick={() => handleCommunitySelect(otherCommunity.id)}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                    >
-                      <div
-                        className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center mr-2 ${
-                          otherCommunity.groupType === "community"
-                            ? "bg-blue-100 text-blue-600"
-                            : "bg-purple-100 text-purple-600"
-                        }`}
-                      >
-                        {otherCommunity.groupType === "community" ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                            />
-                          </svg>
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                      <span className="truncate">{otherCommunity.name}</span>
-                    </button>
-                  ))}
-
-                <div className="py-2 px-3 border-t border-gray-100 mt-2">
-                  <button
-                    onClick={() => navigate("/office")}
-                    className="w-full text-left px-2 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-md flex items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                      />
-                    </svg>
-                    공동체 목록으로 돌아가기
+                    <span className="truncate">{otherCommunity.name}</span>
                   </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+                ))}
 
-        {/* 공동체 정보 */}
-        <div className="bg-white border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex items-center">
-              <div
-                className={`flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 ${
-                  community.groupType === "community"
-                    ? "bg-blue-100 text-blue-600"
-                    : "bg-purple-100 text-purple-600"
-                }`}
-              >
-                {community.groupType === "community" ? (
+              <div className="py-2 px-3 border-t border-gray-100 mt-2">
+                <button
+                  onClick={() => navigate("/office")}
+                  className="w-full text-left px-2 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-md flex items-center"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
+                    className="h-4 w-4 mr-2"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -355,101 +331,134 @@ const CommunityDetailPage: React.FC = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
                     />
                   </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
-                )}
-              </div>
-              <div>
-                <div className="flex items-center">
-                  <h1 className="text-2xl font-bold text-gray-900 mr-3">
-                    {community.name}
-                  </h1>
-                </div>
-                <div className="flex flex-wrap items-center text-sm mt-1">
-                  <span className="font-medium text-gray-700">
-                    {community.churchName}
-                  </span>
-                  {community.description && (
-                    <>
-                      <span className="mx-1.5 text-gray-400">•</span>
-                      <span className="text-gray-600">
-                        {community.description}
-                      </span>
-                    </>
-                  )}
-                </div>
+                  공동체 목록으로 돌아가기
+                </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
+      </div>
 
-        {/* 탭 네비게이션 */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex space-x-8 overflow-x-auto hide-scrollbar">
-              <button
-                onClick={() => setActiveTab("overview")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === "overview"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                개요
-              </button>
-              <button
-                onClick={() => setActiveTab("groups")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === "groups"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                그룹 ({groups.length}개)
-              </button>
-              {/* <button
-                onClick={() => setActiveTab("members")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === "members"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                멤버 ({community.memberCount}명)
-              </button>
-              <button
-                onClick={() => setActiveTab("prayers")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === "prayers"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                기도 기록
-              </button> */}
+      {/* 공동체 정보 */}
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center">
+            <div
+              className={`flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 ${
+                community.groupType === "community"
+                  ? "bg-blue-100 text-blue-600"
+                  : "bg-purple-100 text-purple-600"
+              }`}
+            >
+              {community.groupType === "community" ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              )}
+            </div>
+            <div>
+              <div className="flex items-center">
+                <h1 className="text-2xl font-bold text-gray-900 mr-3">
+                  {community.name}
+                </h1>
+              </div>
+              <div className="flex flex-wrap items-center text-sm mt-1">
+                <span className="font-medium text-gray-700">
+                  {community.churchName}
+                </span>
+                {community.description && (
+                  <>
+                    <span className="mx-1.5 text-gray-400">•</span>
+                    <span className="text-gray-600">
+                      {community.description}
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* 탭 네비게이션 */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex space-x-8 overflow-x-auto hide-scrollbar">
+            <button
+              onClick={() => setActiveTab("overview")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === "overview"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              개요
+            </button>
+            <button
+              onClick={() => setActiveTab("groups")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === "groups"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              그룹 ({groups.length}개)
+            </button>
+            {/* <button
+              onClick={() => setActiveTab("members")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === "members"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              멤버 ({community.memberCount}명)
+            </button>
+            <button
+              onClick={() => setActiveTab("prayers")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === "prayers"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              기도 기록
+            </button> */}
+          </div>
+        </div>
+      </div>
+
       {/* 콘텐츠 영역 */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ">
         {activeTab === "overview" && (
           <div>
             <h2 className="text-lg font-medium text-gray-900 mb-4">
