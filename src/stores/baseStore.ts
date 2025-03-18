@@ -62,6 +62,7 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import * as Sentry from "@sentry/react";
 import { analyticsIdentify } from "@/analytics/analytics";
 import {
+  fetchNewUserCount,
   fetchProfileCount,
   fetchProfileList,
   fetchProfileListByStartId,
