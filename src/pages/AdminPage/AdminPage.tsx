@@ -12,10 +12,12 @@ import { Badge } from "@/components/ui/badge";
 const AdminPage = () => {
   const { user } = useAuth();
   const profileCount = useBaseStore((state) => state.profileCount);
+  const newUserCount = useBaseStore((state) => state.newUserCount);
   const fetchProfileCount = useBaseStore((state) => state.fetchProfileCount);
   const fetchGroupListByDate = useBaseStore(
     (state) => state.fetchGroupListByDate
   );
+  const fetchNewUserCount = useBaseStore((state) => state.fetchNewUserCount);
   const deletePrayCard = useBaseStore((state) => state.deletePrayCard);
   const todayGroupList = useBaseStore((state) => state.todayGroupList);
 
@@ -25,15 +27,21 @@ const AdminPage = () => {
 
   useEffect(() => {
     fetchProfileCount();
+    fetchNewUserCount(todayDate);
     fetchGroupListByDate(todayDate);
-  }, [fetchProfileCount, fetchGroupListByDate, todayDate]);
+  }, [fetchProfileCount, fetchGroupListByDate, todayDate, fetchNewUserCount]);
 
   const onClickDeletePrayCard = async () => {
     await deletePrayCard(prayCardId);
     alert("삭제 완료");
   };
 
-  if (!user || user.user_metadata.email !== "team.visioneer15@gmail.com") {
+  if (
+    !user ||
+    !["team.visioneer15@gmail.com", "s2615s@naver.com"].includes(
+      user.user_metadata.email
+    )
+  ) {
     return (
       <div className="h-full w-ful flex flex-col justify-center items-center">
         <MainHeader />
@@ -70,7 +78,9 @@ const AdminPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-center">00</div>
+              <div className="text-2xl font-bold text-center">
+                {newUserCount}
+              </div>
             </CardContent>
           </Card>
           <Card className="w-1/3 overflow-hidden transition-all duration-200 hover:shadow-lg">

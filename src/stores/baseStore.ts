@@ -111,6 +111,7 @@ export interface BaseStore {
   myProfile: Profiles | null;
   profileList: Profiles[] | null;
   profileCount: number;
+  newUserCount: number;
   getProfile: (userId: string) => Promise<Profiles | null>;
   fetchProfileList: (userIds: string[]) => Promise<Profiles[] | null>;
   fetchProfileListByStartId: (
@@ -118,6 +119,7 @@ export interface BaseStore {
     limit: number,
   ) => Promise<string[] | null>;
   fetchProfileCount: () => Promise<number>;
+  fetchNewUserCount: (todayDate: string) => Promise<number>;
   updateProfile: (
     userId: string,
     params: updateProfilesParams,
@@ -551,6 +553,7 @@ const useBaseStore = create<BaseStore>()(
     myProfile: null,
     profileList: null,
     profileCount: 0,
+    newUserCount: 0,
     getProfile: async (userId: string) => {
       const data = await getProfile(userId);
       set((state) => {
@@ -573,6 +576,13 @@ const useBaseStore = create<BaseStore>()(
       const data = await fetchProfileCount();
       set((state) => {
         state.profileCount = data;
+      });
+      return data;
+    },
+    fetchNewUserCount: async (todayDate: string) => {
+      const data = await fetchNewUserCount(todayDate);
+      set((state) => {
+        state.newUserCount = data;
       });
       return data;
     },
