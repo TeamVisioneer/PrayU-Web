@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, CheckCircle, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
-import { groupUnionController } from "@/apis/office/groupUnion";
+import { groupUnionController } from "@/apis/office/groupUnionController";
 import useAuth from "@/hooks/useAuth";
 import useOfficeStore from "@/stores/officeStore";
 

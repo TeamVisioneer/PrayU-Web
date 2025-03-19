@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { Church, Group } from "@/data/mockOfficeData";
-import { groupUnionController } from "@/apis/office/groupUnion";
+import { groupUnionController } from "@/apis/office/groupUnionController";
 import { GroupUnion } from "../../supabase/types/tables";
 
 // 목데이터 추가

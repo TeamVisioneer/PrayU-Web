@@ -1,4 +1,4 @@
-import { supabase } from "./../../../supabase/client";
+import { supabase } from "../../../supabase/client";
 import * as Sentry from "@sentry/react";
 import { GroupUnion } from "../../../supabase/types/tables";
 
