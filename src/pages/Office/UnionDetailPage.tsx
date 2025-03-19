@@ -163,7 +163,7 @@ const UnionDetailPage: React.FC = () => {
           요청하신 공동체 정보를 찾을 수 없습니다. 다른 공동체를 선택해주세요.
         </p>
         <button
-          onClick={() => navigate("/office")}
+          onClick={() => navigate("/office/union")}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
         >
           공동체 목록으로 돌아가기
@@ -319,7 +319,7 @@ const UnionDetailPage: React.FC = () => {
 
                 <div className="py-2 px-3 border-t border-gray-100 mt-2">
                   <button
-                    onClick={() => navigate("/office")}
+                    onClick={() => navigate("/office/union")}
                     className="w-full text-left px-2 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-md flex items-center"
                   >
                     <svg

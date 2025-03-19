@@ -43,6 +43,7 @@ import {
   UnionDetailPage,
   AddUnionPage,
   GroupDetailPage,
+  CreateUnionPage,
 } from "./pages/Office";
 
 const App = () => {
@@ -161,7 +162,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/office"
+                path="/office/union"
                 element={
                   <PrivateRoute>
                     <OfficePage />
@@ -181,6 +182,14 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <UnionDetailPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/union/new"
+                element={
+                  <PrivateRoute>
+                    <CreateUnionPage />
                   </PrivateRoute>
                 }
               />
