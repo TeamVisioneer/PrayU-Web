@@ -575,7 +575,7 @@ const UnionDetailPage: React.FC = () => {
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-medium text-gray-900">그룹 목록</h2>
               <button className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
-                공동체 초대하기
+                공동체로 초대하기
               </button>
             </div>
 
@@ -593,9 +593,9 @@ const UnionDetailPage: React.FC = () => {
                           <h3 className="text-lg font-medium text-gray-900 mb-1">
                             {group.name || "이름 없음"}
                           </h3>
-                          <p className="text-sm text-gray-600 mb-2">
+                          {/* <p className="text-sm text-gray-600 mb-2">
                             {group.intro || "그룹 설명이 없습니다."}
-                          </p>
+                          </p> */}
                           <div className="flex items-center text-sm text-gray-500">
                             <span className="inline-flex items-center">
                               <svg
@@ -617,7 +617,7 @@ const UnionDetailPage: React.FC = () => {
                           </div>
                         </div>
                         <a
-                          href={`/office/group/${group.id}`}
+                          href={`/office/union/${unionId}/group/${group.id}`}
                           className="text-blue-600 hover:text-blue-800 self-start flex items-center text-sm"
                         >
                           상세보기
@@ -645,7 +645,9 @@ const UnionDetailPage: React.FC = () => {
                   <p className="text-gray-500">등록된 그룹이 없습니다.</p>
                   <button
                     className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    onClick={() => navigate("/office/group/new")}
+                    onClick={() =>
+                      navigate(`/office/union/${unionId}/group/new`)
+                    }
                   >
                     새 그룹 만들기
                   </button>

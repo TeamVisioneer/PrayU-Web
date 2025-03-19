@@ -95,7 +95,8 @@ interface MemberContent {
 }
 
 const GroupDetailPage: React.FC = () => {
-  const { groupId } = useParams<{ groupId: string }>();
+  const { groupId } = useParams<{ groupId: string; unionId: string }>();
+  // URL에 unionId도 포함되어 있지만 현재 컴포넌트에서는 사용하지 않음
   const navigate = useNavigate();
   const pdfContentRef = useRef<HTMLDivElement>(null);
 

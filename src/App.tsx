@@ -4,6 +4,8 @@ import {
   Route,
   useLocation,
   matchPath,
+  Navigate,
+  useParams,
 } from "react-router-dom";
 import { useEffect } from "react";
 import { AuthProvider } from "./components/auth/AuthProvider";
@@ -45,6 +47,11 @@ import {
   GroupDetailPage,
   CreateUnionPage,
 } from "./pages/Office";
+
+const GroupRedirect = () => {
+  const { groupId } = useParams<{ groupId: string }>();
+  return <Navigate to={`/office/union/unknown/group/${groupId}`} replace />;
+};
 
 const App = () => {
   return (
@@ -203,6 +210,14 @@ const App = () => {
               />
               <Route
                 path="/office/group/:groupId"
+                element={
+                  <PrivateRoute>
+                    <GroupRedirect />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/union/:unionId/group/:groupId"
                 element={
                   <PrivateRoute>
                     <GroupDetailPage />
