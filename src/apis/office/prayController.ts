@@ -1,67 +1,69 @@
+import { Pray } from "supabase/types/tables";
 import { supabase } from "../../../supabase/client";
 import * as Sentry from "@sentry/react";
-import { PrayCard } from "../../../supabase/types/tables";
-import { PostgrestError } from "@supabase/supabase-js";
-import {
-  fetchPrayCountByGroupIds,
-  getDirectPrayCount,
-} from "../../utils/prayUtils";
 
 export class PrayController {
   constructor(private supabaseClient = supabase) {}
 
-  private handleError(error: Error | PostgrestError): null {
-    Sentry.captureException(error);
-    return null;
-  }
-
-  async fetchPrayCardByGroupIds(
+  async getPrayCountByGroupIds(
     groupIds: string[],
-    startDt: string,
-    endDt: string,
-  ): Promise<PrayCard[] | null> {
+    startDt?: string,
+    endDt?: string,
+  ): Promise<number> {
     try {
-      const { data, error } = await this.supabaseClient
-        .from("pray_card")
-        .select(`
-          *,
-          pray(count)
-        `)
-        .in("group_id", groupIds)
-        .is("deleted_at", null)
-        .gte("created_at", startDt)
-        .lte("created_at", endDt);
+      const query = this.supabaseClient
+        .from("pray")
+        .select("*, pray_card!inner(*)", {
+          count: "exact",
+          head: true,
+        })
+        .in("pray_card.group_id", groupIds);
+      if (startDt) query.gte("created_at", startDt);
+      if (endDt) query.lt("created_at", endDt);
 
-      if (error) return this.handleError(error);
-
-      return data as PrayCard[];
+      const { count, error } = await query;
+      if (error) {
+        Sentry.captureException(error);
+        return 0;
+      }
+      return count || 0;
     } catch (error) {
-      return this.handleError(error as Error);
+      Sentry.captureException(error);
+      return 0;
     }
   }
 
-  /**
-   * Fetches the total prayer count for the specified group IDs in a date range
-   * This uses the utility function that accumulates pray[0].count values
-   */
-  async fetchPrayCountByGroupIds(
+  async getPrayDataByGroupIds(
     groupIds: string[],
     startDt: string,
     endDt: string,
-  ): Promise<number | null> {
-    return fetchPrayCountByGroupIds(groupIds, startDt, endDt);
-  }
+  ): Promise<Pray[]> {
+    const query = this.supabaseClient
+      .from("pray")
+      .select(
+        "*, pray_card!inner(group_id)",
+      )
+      .in("pray_card.group_id", groupIds)
+      .gte("created_at", startDt)
+      .lt("created_at", endDt)
+      .order("created_at", { ascending: true });
 
-  /**
-   * Directly counts prayers for the specified groups using a more optimized approach
-   * This is preferred when you only need the count and not the full pray card data
-   */
-  async getDirectPrayCount(
-    groupIds: string[],
-    startDt: string,
-    endDt: string,
-  ): Promise<number | null> {
-    return getDirectPrayCount(groupIds, startDt, endDt);
+    const { data, error } = await query;
+    if (error) {
+      Sentry.captureException(error);
+      return [];
+    }
+
+    // pray data 만 리턴, pray.pray_card 는 제외
+    return data?.map((pray) => ({
+      pray_card_id: pray.pray_card_id,
+      created_at: pray.created_at,
+      pray_type: pray.pray_type,
+      user_id: pray.user_id,
+      deleted_at: pray.deleted_at,
+      id: pray.id,
+      updated_at: pray.updated_at,
+    })) || [];
   }
 }
 

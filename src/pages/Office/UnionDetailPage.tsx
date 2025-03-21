@@ -3,12 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import useOfficeStore from "@/stores/officeStore";
 import { groupUnionController } from "@/apis/office/groupUnionController";
 import { groupController } from "@/apis/office/groupController";
-import { GroupUnion, GroupWithProfiles } from "../../../supabase/types/tables";
 import {
-  getPrayerStatsForGroups,
-  getDailyPrayerCountsForLastWeek,
-  DailyPrayerCount,
-} from "@/utils/prayUtils";
+  GroupUnion,
+  GroupWithProfiles,
+  Pray,
+} from "../../../supabase/types/tables";
+import { prayController } from "@/apis/office/prayController";
+import { getISOTodayDate } from "@/lib/utils";
 
 // 스크롤바 숨기기 스타일
 const hideScrollbarStyle = `
@@ -25,7 +26,6 @@ const hideScrollbarStyle = `
 interface PrayerStats {
   todayCount: number;
   weeklyCount: number;
-  monthlyCount: number;
   totalCount: number;
 }
 
@@ -40,18 +40,15 @@ const UnionDetailPage: React.FC = () => {
   const [prayerStats, setPrayerStats] = useState<PrayerStats>({
     todayCount: 0,
     weeklyCount: 0,
-    monthlyCount: 0,
     totalCount: 0,
   });
   // 멤버 데이터는 사용되지 않지만 향후 멤버 탭 구현을 위해 유지
   const [groupsData, setGroupsData] = useState<GroupWithProfiles[]>([]);
+  const [prayData, setPrayData] = useState<Pray[]>([]);
   const [activeTab, setActiveTab] = useState<
     "overview" | "members" | "prayers" | "groups"
   >("overview");
   const [showUnionDropdown, setShowUnionDropdown] = useState(false);
-  const [dailyPrayerCounts, setDailyPrayerCounts] = useState<
-    DailyPrayerCount[]
-  >([]);
 
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
@@ -89,28 +86,41 @@ const UnionDetailPage: React.FC = () => {
           return;
         }
 
+        const weekDay = new Date().getDay();
+        const today = getISOTodayDate();
+        const tomorrow = getISOTodayDate(1);
+        const sunday = getISOTodayDate(-weekDay);
+        const nextSunday = getISOTodayDate(7 - weekDay);
+        const sevenDaysAgo = getISOTodayDate(-7);
+
+        const groupIds = groups.map((group) => group.id);
+        const todayPrayCount = await prayController.getPrayCountByGroupIds(
+          groupIds,
+          today,
+          tomorrow
+        );
+        const weekPrayCount = await prayController.getPrayCountByGroupIds(
+          groupIds,
+          sunday,
+          nextSunday
+        );
+        const totalPrayCount = await prayController.getPrayCountByGroupIds(
+          groupIds
+        );
+        const prayData = await prayController.getPrayDataByGroupIds(
+          groupIds,
+          sevenDaysAgo,
+          tomorrow
+        );
+
         setUnionData(unionDetails);
         setGroupsData(groups);
-
-        // 2. 실제 기도 통계 데이터 가져오기
-        const groupIds = groups.map((group) => group.id);
-
-        // 2.1 기본 기도 통계 가져오기
-        const stats = await getPrayerStatsForGroups(groupIds);
-        if (stats) {
-          setPrayerStats(stats);
-        } else {
-          // 기도 통계 가져오기 실패 시 기본값 유지
-          console.error("Failed to fetch prayer statistics");
-        }
-
-        // 2.2 일간 기도 활동 데이터 가져오기
-        const dailyCounts = await getDailyPrayerCountsForLastWeek(groupIds);
-        if (dailyCounts) {
-          setDailyPrayerCounts(dailyCounts);
-        } else {
-          console.error("Failed to fetch daily prayer counts");
-        }
+        setPrayData(prayData);
+        setPrayerStats({
+          todayCount: todayPrayCount,
+          weeklyCount: weekPrayCount,
+          totalCount: totalPrayCount,
+        });
       } catch (error) {
         console.error("Error fetching union details:", error);
       } finally {
@@ -153,9 +163,6 @@ const UnionDetailPage: React.FC = () => {
       </div>
     );
   }
-
-  // 기도 통계 계산을 위한 멤버 수 기본값 설정
-  const memberCount = 10;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -403,13 +410,13 @@ const UnionDetailPage: React.FC = () => {
                   <p className="text-xl md:text-2xl font-bold">
                     {prayerStats.todayCount}개
                   </p>
-                  <div className="mt-1 text-xs md:text-sm text-blue-600">
+                  {/* <div className="mt-1 text-xs md:text-sm text-blue-600">
                     <p>
                       전체의{" "}
                       {Math.round((prayerStats.todayCount / memberCount) * 100)}
                       % 참여
                     </p>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="">
@@ -419,9 +426,9 @@ const UnionDetailPage: React.FC = () => {
                   <p className="text-xl md:text-2xl font-bold">
                     {prayerStats.weeklyCount}개
                   </p>
-                  <div className="mt-1 text-xs md:text-sm text-green-600">
+                  {/* <div className="mt-1 text-xs md:text-sm text-green-600">
                     <p>전주 대비 {Math.floor(Math.random() * 30) + 5}% 증가</p>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="md:flex-1 md:pl-4">
@@ -431,12 +438,12 @@ const UnionDetailPage: React.FC = () => {
                   <p className="text-xl md:text-2xl font-bold">
                     {prayerStats.totalCount}개
                   </p>
-                  <div className="mt-1 text-xs md:text-sm text-gray-600">
+                  {/* <div className="mt-1 text-xs md:text-sm text-gray-600">
                     <p>
                       멤버당 평균{" "}
                       {Math.round(prayerStats.totalCount / memberCount)}개
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -446,55 +453,86 @@ const UnionDetailPage: React.FC = () => {
                   일간 기도 활동
                 </h3>
                 <div className="h-60 flex items-end space-x-2 mb-10 pt-10">
-                  {dailyPrayerCounts.map((dayData, i) => {
-                    // 실제 높이(픽셀)를 계산 (최소 10px, 최대 180px)
-                    // 기도 수 0개일 경우 10px, 최대치는 현재 최대값의 비율로 계산
-                    const maxCount = Math.max(
-                      ...dailyPrayerCounts.map((d) => d.count),
-                      1
-                    ); // 0으로 나누기 방지
+                  {(() => {
+                    // 오늘 날짜 기준으로 지난 7일의 날짜 배열 생성
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+                    const days = Array.from({ length: 7 }, (_, i) => {
+                      const date = new Date(today);
+                      date.setDate(today.getDate() - 6 + i);
+                      return {
+                        date,
+                        dayStr: dayNames[date.getDay()],
+                        count: 0,
+                        isToday: i === 6,
+                      };
+                    });
+
+                    // prayData를 날짜별로 그룹화하여 카운트
+                    prayData.forEach((pray) => {
+                      const prayDate = new Date(pray.created_at);
+                      prayDate.setHours(0, 0, 0, 0);
+
+                      const dayIndex = days.findIndex(
+                        (day) =>
+                          day.date.getFullYear() === prayDate.getFullYear() &&
+                          day.date.getMonth() === prayDate.getMonth() &&
+                          day.date.getDate() === prayDate.getDate()
+                      );
+
+                      if (dayIndex !== -1) {
+                        days[dayIndex].count += 1;
+                      }
+                    });
+
+                    // 최대 기도 수 계산 (0으로 나누기 방지)
+                    const maxCount = Math.max(...days.map((d) => d.count), 1);
                     const scaleFactor = 170; // 최대 높이 170px
 
-                    // 0일 경우 최소 높이인 10px, 그렇지 않으면 비율에 따라 높이 계산
-                    const barHeight =
-                      dayData.count === 0
-                        ? 10
-                        : 10 +
-                          Math.min(
-                            Math.floor(
-                              (dayData.count / maxCount) * scaleFactor
-                            ),
-                            scaleFactor
-                          );
+                    return days.map((dayData, i) => {
+                      // 바 높이 계산
+                      const barHeight =
+                        dayData.count === 0
+                          ? 10
+                          : 10 +
+                            Math.min(
+                              Math.floor(
+                                (dayData.count / maxCount) * scaleFactor
+                              ),
+                              scaleFactor
+                            );
 
-                    return (
-                      <div
-                        key={i}
-                        className="flex flex-col items-center flex-1 relative"
-                      >
-                        <div className="relative -top-3 text-center">
-                          <span
-                            className={`text-xs font-medium ${
-                              dayData.count > 0
-                                ? "text-gray-700"
-                                : "text-gray-400"
-                            }`}
-                          >
-                            {dayData.count}개
-                          </span>
-                        </div>
+                      return (
                         <div
-                          className={`w-full ${
-                            dayData.isToday ? "bg-blue-500" : "bg-blue-200"
-                          } rounded-t-sm transition-all duration-300`}
-                          style={{ height: `${barHeight}px` }}
-                        ></div>
-                        <div className="text-xs text-gray-500 mt-2 text-center">
-                          <div>{dayData.dayStr}</div>
+                          key={i}
+                          className="flex flex-col items-center flex-1 relative"
+                        >
+                          <div className="relative -top-3 text-center">
+                            <span
+                              className={`text-xs font-medium ${
+                                dayData.count > 0
+                                  ? "text-gray-700"
+                                  : "text-gray-400"
+                              }`}
+                            >
+                              {dayData.count}개
+                            </span>
+                          </div>
+                          <div
+                            className={`w-full ${
+                              dayData.isToday ? "bg-blue-500" : "bg-blue-200"
+                            } rounded-t-sm transition-all duration-300`}
+                            style={{ height: `${barHeight}px` }}
+                          ></div>
+                          <div className="text-xs text-gray-500 mt-2 text-center">
+                            <div>{dayData.dayStr}</div>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    });
+                  })()}
                 </div>
                 <div className="text-sm text-gray-500 text-center mt-2">
                   <span className="inline-block mr-4">
@@ -586,6 +624,9 @@ const UnionDetailPage: React.FC = () => {
                   <div
                     key={group.id}
                     className="bg-white border border-gray-200 rounded mb-3"
+                    onClick={() =>
+                      navigate(`/office/union/${unionId}/group/${group.id}`)
+                    }
                   >
                     <div className="p-4">
                       <div className="flex justify-between">
