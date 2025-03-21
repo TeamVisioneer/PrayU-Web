@@ -15,12 +15,18 @@ export type Bible = Database["public"]["Tables"]["bible"]["Row"];
 
 export type QtData = Database["public"]["Tables"]["qt_data"]["Row"];
 
+export type GroupUnion = Database["public"]["Tables"]["group_union"]["Row"];
+
 export type OriginNotification =
   Database["public"]["Tables"]["notification"]["Row"];
 export type Notification = Omit<OriginNotification, "data" | "fcm_result"> & {
   data: unknown;
   fcm_result: unknown;
 };
+
+export interface GroupUnionWithProfiles extends GroupUnion {
+  profiles: Profiles;
+}
 
 export interface GroupWithProfiles extends Group {
   profiles: Profiles;

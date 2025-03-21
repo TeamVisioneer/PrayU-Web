@@ -1,54 +1,32 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { Church, Group } from "@/data/mockOfficeData";
+import { groupUnionController } from "@/apis/office/groupUnionController";
+import { GroupUnion } from "../../supabase/types/tables";
 
 // 목데이터 추가
 import { mockChurches } from "@/data/mockOfficeData";
 
-// 예시 커뮤니티 목데이터
-const mockUnions: Group[] = [
-  {
-    id: "union-1",
-    name: "청년부",
-    churchId: "church-1",
-    churchName: "은혜교회",
-    pastorName: "이청년 목사",
-    memberCount: 45,
-    description: "청년들을 위한 공동체입니다.",
-    createdAt: "2023-04-15",
-    groupType: "union",
-  },
-  {
-    id: "union-2",
-    name: "주일 찬양팀",
-    churchId: "church-1",
-    churchName: "은혜교회",
-    pastorName: "김찬양 전도사",
-    memberCount: 12,
-    description: "주일 예배 찬양을 담당하는 팀입니다.",
-    createdAt: "2023-05-20",
-    groupType: "department",
-  },
-  {
-    id: "union-3",
-    name: "새가족부",
-    churchId: "church-2",
-    churchName: "사랑교회",
-    pastorName: "박새가족 목사",
-    memberCount: 8,
-    description: "새가족을 환영하고 돌보는 부서입니다.",
-    createdAt: "2023-02-10",
-    groupType: "department",
-  },
-];
-
 // 공동체 생성을 위한 데이터 타입
 export interface UnionFormData {
   name: string;
-  pastorName: string;
-  description?: string;
-  groupType?: "union" | "department";
+  church: string;
+  intro: string;
 }
+
+// Supabase GroupUnion 타입을 애플리케이션 Group 타입으로 변환하는 함수
+const mapGroupUnionToGroup = (union: GroupUnion): Group => {
+  return {
+    id: union.id,
+    name: union.name,
+    churchId: "temp-id", // DB 구조에 따라 조정 필요
+    churchName: union.church,
+    description: union.intro,
+    memberCount: 0, // 기본값 설정
+    createdAt: union.created_at,
+    groupType: "union",
+  };
+};
 
 interface OfficeState {
   // User's churches
@@ -59,8 +37,11 @@ interface OfficeState {
   churchGroups: Group[];
   // User's created unions
   myUnions: Group[];
+  // Loading states
+  isLoadingUnions: boolean;
 
   // Actions
+  fetchMyUnions: (userId: string) => Promise<void>;
   addChurch: (church: Church) => void;
   removeChurch: (churchId: string) => void;
   selectChurch: (church: Church) => void;
@@ -69,7 +50,7 @@ interface OfficeState {
   getChurchById: (churchId: string) => Church | null;
 
   // Union actions
-  addUnion: (churchId: string, formData: UnionFormData) => void;
+  createUnion: (formData: UnionFormData) => Promise<Group | null>;
   removeUnion: (unionId: string) => void;
   getUnionById: (unionId: string) => Group | null;
   getUnionsByChurchId: (churchId: string) => Group[];
@@ -78,10 +59,37 @@ interface OfficeState {
 const useOfficeStore = create<OfficeState>()(
   devtools(
     (set, get) => ({
-      myChurches: mockChurches.slice(0, 2), // 초기 상태에 목데이터 추가
+      myChurches: mockChurches.slice(0, 2), // 초기 상태에 목데이터 추가 (추후 API로 대체 가능)
       selectedChurch: null,
       churchGroups: [],
-      myUnions: mockUnions, // 초기 상태에 목데이터 추가
+      myUnions: [],
+      isLoadingUnions: false,
+
+      // 사용자의 공동체 목록을 가져오는 함수
+      fetchMyUnions: async (userId: string) => {
+        set({ isLoadingUnions: true });
+
+        try {
+          if (!userId) {
+            set({ isLoadingUnions: false });
+            return;
+          }
+
+          const unions = await groupUnionController.fetchGroupUnionListByUserId(
+            userId,
+          );
+
+          if (unions) {
+            // GroupUnion을 Group 타입으로 변환
+            const transformedUnions = unions.map(mapGroupUnionToGroup);
+            set({ myUnions: transformedUnions });
+          }
+        } catch (error) {
+          console.error("Failed to fetch unions:", error);
+        } finally {
+          set({ isLoadingUnions: false });
+        }
+      },
 
       addChurch: (church) => {
         // 이미 추가된 교회인지 확인
@@ -135,28 +143,28 @@ const useOfficeStore = create<OfficeState>()(
       },
 
       // Union actions
-      addUnion: (churchId, formData) => {
-        // 새 워크스페이스 추가
-        if (!churchId) return;
+      createUnion: async (formData) => {
+        try {
+          const newGroupUnion = await groupUnionController.createGroupUnion({
+            church: formData.church,
+            name: formData.name,
+            intro: formData.intro,
+          });
 
-        const church = get().getChurchById(churchId);
-        if (!church) return;
+          if (newGroupUnion) {
+            const newGroup = mapGroupUnionToGroup(newGroupUnion);
 
-        const newUnion: Group = {
-          id: `union-${Date.now()}`,
-          name: formData.name,
-          churchId: churchId,
-          churchName: church.name,
-          pastorName: formData.pastorName,
-          description: formData.description || "",
-          memberCount: 0,
-          createdAt: new Date().toISOString(),
-          groupType: formData.groupType || "union",
-        };
+            set((state) => ({
+              myUnions: [...state.myUnions, newGroup],
+            }));
 
-        set((state) => ({
-          myUnions: [...state.myUnions, newUnion],
-        }));
+            return newGroup;
+          }
+          return null;
+        } catch (error) {
+          console.error("Failed to create union:", error);
+          return null;
+        }
       },
 
       removeUnion: (unionId) => {
