@@ -4,6 +4,8 @@ import {
   Route,
   useLocation,
   matchPath,
+  Navigate,
+  useParams,
 } from "react-router-dom";
 import { useEffect } from "react";
 import { AuthProvider } from "./components/auth/AuthProvider";
@@ -39,11 +41,15 @@ import AppInit from "./AppInit/AppInit";
 import TodayPrayCardPage from "./pages/TodayPrayCardPage";
 import {
   OfficePage,
-  ChurchSearchPage,
   UnionDetailPage,
-  AddUnionPage,
   GroupDetailPage,
+  CreateUnionPage,
 } from "./pages/Office";
+
+const GroupRedirect = () => {
+  const { groupId } = useParams<{ groupId: string }>();
+  return <Navigate to={`/office/union/unknown/group/${groupId}`} replace />;
+};
 
 const App = () => {
   return (
@@ -161,18 +167,10 @@ const App = () => {
                 }
               />
               <Route
-                path="/office"
+                path="/office/union"
                 element={
                   <PrivateRoute>
                     <OfficePage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/office/search"
-                element={
-                  <PrivateRoute>
-                    <ChurchSearchPage />
                   </PrivateRoute>
                 }
               />
@@ -185,15 +183,23 @@ const App = () => {
                 }
               />
               <Route
-                path="/office/add-union"
+                path="/office/union/new"
                 element={
                   <PrivateRoute>
-                    <AddUnionPage />
+                    <CreateUnionPage />
                   </PrivateRoute>
                 }
               />
               <Route
                 path="/office/group/:groupId"
+                element={
+                  <PrivateRoute>
+                    <GroupRedirect />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/union/:unionId/group/:groupId"
                 element={
                   <PrivateRoute>
                     <GroupDetailPage />

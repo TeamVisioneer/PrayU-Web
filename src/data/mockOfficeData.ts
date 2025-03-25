@@ -9,7 +9,6 @@ export interface Church {
   externalData?: {
     denomination?: string;
     phone?: string;
-    detailUrl?: string;
   };
 }
 

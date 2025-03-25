@@ -74,6 +74,7 @@ export type Database = {
         Row: {
           created_at: string
           deleted_at: string | null
+          group_union_id: string | null
           id: string
           intro: string | null
           name: string | null
@@ -83,6 +84,7 @@ export type Database = {
         Insert: {
           created_at?: string
           deleted_at?: string | null
+          group_union_id?: string | null
           id?: string
           intro?: string | null
           name?: string | null
@@ -92,6 +94,7 @@ export type Database = {
         Update: {
           created_at?: string
           deleted_at?: string | null
+          group_union_id?: string | null
           id?: string
           intro?: string | null
           name?: string | null
@@ -100,7 +103,55 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "group_group_union_id_fkey"
+            columns: ["group_union_id"]
+            isOneToOne: false
+            referencedRelation: "group_union"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "group_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_union: {
+        Row: {
+          church: string
+          created_at: string
+          deleted_at: string | null
+          id: string
+          intro: string
+          name: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          church?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          intro?: string
+          name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          church?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          intro?: string
+          name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_union_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
