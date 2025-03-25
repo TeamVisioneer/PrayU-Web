@@ -35,6 +35,7 @@ const UnionDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { myUnions } = useOfficeStore();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const groupListRef = useRef<HTMLDivElement>(null);
 
   const [unionData, setUnionData] = useState<GroupUnion | null>(null); // API로 가져온 공동체 상세 정보
   const [loading, setLoading] = useState(true);
@@ -46,10 +47,11 @@ const UnionDetailPage: React.FC = () => {
   // 멤버 데이터는 사용되지 않지만 향후 멤버 탭 구현을 위해 유지
   const [groupsData, setGroupsData] = useState<GroupWithProfiles[]>([]);
   const [prayData, setPrayData] = useState<Pray[]>([]);
-  const [activeTab, setActiveTab] = useState<
-    "overview" | "members" | "prayers" | "groups"
-  >("overview");
   const [showUnionDropdown, setShowUnionDropdown] = useState(false);
+
+  const scrollToGroupList = () => {
+    groupListRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
@@ -340,27 +342,9 @@ const UnionDetailPage: React.FC = () => {
         <div className="border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex space-x-8 overflow-x-auto hide-scrollbar">
-              <button
-                onClick={() => setActiveTab("overview")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === "overview"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                개요
-              </button>
-              <button
-                onClick={() => setActiveTab("groups")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === "groups"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                그룹 ({groupsData.length}개)
-              </button>
-              {/* 탭 메뉴 유지 */}
+              <h2 className="py-4 px-1 border-b-2 border-blue-500 text-blue-600 font-medium text-sm whitespace-nowrap">
+                공동체 현황
+              </h2>
             </div>
           </div>
         </div>
@@ -368,325 +352,265 @@ const UnionDetailPage: React.FC = () => {
 
       {/* 메인 콘텐츠 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {activeTab === "overview" && (
-          <div>
-            <h2 className="text-lg font-medium text-gray-900 mb-4">
-              공동체 현황
-            </h2>
+        <div>
+          {/* 중타이틀 */}
+          <h2 className="text-lg font-medium text-gray-900 mb-4">
+            공동체 현황
+          </h2>
 
-            {/* 통계 카드 */}
-            <div className="grid grid-cols-1 gap-4 mb-8">
-              <div
-                className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:border-blue-300"
-                onClick={() => setActiveTab("groups")}
-              >
-                <h3 className="text-sm font-medium text-gray-500 mb-1">그룹</h3>
-                <p className="text-2xl font-bold">{groupsData.length}개</p>
-                <div className="mt-2 text-sm text-gray-600">
-                  <p>함께 기도하는 그룹</p>
-                </div>
-                <div className="mt-3 text-blue-600 text-sm flex items-center justify-start">
-                  <span>그룹 목록 보기</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 ml-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </div>
+          {/* 통계 카드 */}
+          <div className="grid grid-cols-1 gap-4 mb-8">
+            <div
+              className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:border-blue-300"
+              onClick={scrollToGroupList}
+            >
+              <h3 className="text-sm font-medium text-gray-500 mb-1">
+                관리 중인 그룹
+              </h3>
+              <p className="text-2xl font-bold">{groupsData.length}개</p>
+              <div className="mt-2 text-sm text-gray-600">
+                <p className="truncate">
+                  {groupsData.length > 0
+                    ? groupsData.map((group) => group.name).join(", ")
+                    : "등록된 그룹이 없습니다"}
+                </p>
               </div>
-
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center ">
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">
-                      이번 주 기도카드
-                    </h3>
-                    <p className="text-2xl font-bold">
-                      {prayerStats.weeklyPrayCardCount}개
-                    </p>
-                  </div>
-
-                  <div className="text-center">
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">
-                      오늘 기도 수
-                    </h3>
-                    <p className="text-2xl font-bold">
-                      {prayerStats.todayPrayCount}개
-                    </p>
-                  </div>
-
-                  <div className="text-center">
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">
-                      누적 기도 수
-                    </h3>
-                    <p className="text-2xl font-bold">
-                      {prayerStats.totalPrayCount}개
-                    </p>
-                  </div>
-                </div>
+              <div className="mt-3 text-blue-600 text-sm flex items-center justify-start">
+                <span>그룹 목록 보기</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 ml-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
               </div>
-
-              {/* 활동 요약 */}
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-md font-medium text-gray-900 mb-4">
-                  일간 기도 활동
-                </h3>
-                <div className="h-60 flex items-end space-x-2 mb-10 pt-10">
-                  {(() => {
-                    // 오늘 날짜 기준으로 지난 7일의 날짜 배열 생성
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-
-                    const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
-                    const days = Array.from({ length: 7 }, (_, i) => {
-                      const date = new Date(today);
-                      date.setDate(today.getDate() - 6 + i);
-                      return {
-                        date,
-                        dayStr: dayNames[date.getDay()],
-                        count: 0,
-                        isToday: i === 6,
-                      };
-                    });
-
-                    // prayData를 날짜별로 그룹화하여 카운트
-                    prayData.forEach((pray) => {
-                      const prayDate = new Date(pray.created_at);
-                      prayDate.setHours(0, 0, 0, 0);
-
-                      const dayIndex = days.findIndex(
-                        (day) =>
-                          day.date.getFullYear() === prayDate.getFullYear() &&
-                          day.date.getMonth() === prayDate.getMonth() &&
-                          day.date.getDate() === prayDate.getDate()
-                      );
-
-                      if (dayIndex !== -1) {
-                        days[dayIndex].count += 1;
-                      }
-                    });
-
-                    // 최대 기도 수 계산 (0으로 나누기 방지)
-                    const maxCount = Math.max(...days.map((d) => d.count), 1);
-                    const scaleFactor = 170; // 최대 높이 170px
-
-                    return days.map((dayData, i) => {
-                      // 바 높이 계산
-                      const barHeight =
-                        dayData.count === 0
-                          ? 10
-                          : 10 +
-                            Math.min(
-                              Math.floor(
-                                (dayData.count / maxCount) * scaleFactor
-                              ),
-                              scaleFactor
-                            );
-
-                      return (
-                        <div
-                          key={i}
-                          className="flex flex-col items-center flex-1 relative"
-                        >
-                          <div className="relative -top-3 text-center">
-                            <span
-                              className={`text-xs font-medium ${
-                                dayData.count > 0
-                                  ? "text-gray-700"
-                                  : "text-gray-400"
-                              }`}
-                            >
-                              {dayData.count}개
-                            </span>
-                          </div>
-                          <div
-                            className={`w-full ${
-                              dayData.isToday ? "bg-blue-500" : "bg-blue-200"
-                            } rounded-t-sm transition-all duration-300`}
-                            style={{ height: `${barHeight}px` }}
-                          ></div>
-                          <div className="text-xs text-gray-500 mt-2 text-center">
-                            <div>{dayData.dayStr}</div>
-                          </div>
-                        </div>
-                      );
-                    });
-                  })()}
-                </div>
-                <div className="text-sm text-gray-500 text-center mt-2">
-                  <span className="inline-block mr-4">
-                    <span className="inline-block w-3 h-3 bg-blue-200 mr-1 rounded-sm"></span>
-                    이전 기도 활동
-                  </span>
-                  <span className="inline-block">
-                    <span className="inline-block w-3 h-3 bg-blue-500 mr-1 rounded-sm"></span>
-                    오늘 기도 활동
-                  </span>
-                </div>
-              </div>
-
-              {/* 나머지 통계 카드 유지 */}
-              {/* <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-md font-medium text-gray-900 mb-4">
-                  최근 활동
-                </h3>
-                <div className="space-y-4">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="flex">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                        <span className="text-gray-600 font-medium">{`멤${
-                          i + 1
-                        }`}</span>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">
-                          {`멤버 ${i + 1}`}님이 기도카드를 등록했습니다.
-                        </p>
-                        <p className="text-xs text-gray-500">{`${Math.floor(
-                          i * 3.5
-                        )} 시간 전`}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div> */}
-              {/* 
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-md font-medium text-gray-900 mb-4">
-                  인기 기도 주제
-                </h3>
-                <div className="space-y-3">
-                  {[
-                    "교회와 성도를 위한 기도",
-                    "가정을 위한 기도",
-                    "직장과 사업을 위한 기도",
-                    "건강을 위한 기도",
-                    "선교지를 위한 기도",
-                  ].map((topic, i) => (
-                    <div key={i} className="flex items-center">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3 text-blue-600 font-medium">
-                        {i + 1}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{topic}</p>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full"
-                            style={{ width: `${90 - i * 15}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                      <span className="text-sm text-gray-500 ml-3">
-                        {90 - i * 15}%
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div> */}
-            </div>
-          </div>
-        )}
-
-        {activeTab === "groups" && (
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-medium text-gray-900">그룹 목록</h2>
-              <button className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
-                공동체로 초대하기
-              </button>
             </div>
 
-            {/* 그룹 목록 - 새로운, 더 단순한 UI */}
-            <div>
-              {groupsData.length > 0 ? (
-                groupsData.map((group) => (
-                  <div
-                    key={group.id}
-                    className="bg-white border border-gray-200 rounded mb-3"
-                    onClick={() =>
-                      navigate(`/office/union/${unionId}/group/${group.id}`)
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center ">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    이번 주 기도카드
+                  </h3>
+                  <p className="text-2xl font-bold">
+                    {prayerStats.weeklyPrayCardCount}개
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    오늘 기도 수
+                  </h3>
+                  <p className="text-2xl font-bold">
+                    {prayerStats.todayPrayCount}개
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">
+                    누적 기도 수
+                  </h3>
+                  <p className="text-2xl font-bold">
+                    {prayerStats.totalPrayCount}개
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 활동 요약 */}
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <h3 className="text-md font-medium text-gray-900 mb-4">
+                일간 기도 활동
+              </h3>
+              <div className="h-60 flex items-end space-x-2 mb-10 pt-10">
+                {(() => {
+                  // 오늘 날짜 기준으로 지난 7일의 날짜 배열 생성
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+
+                  const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+                  const days = Array.from({ length: 7 }, (_, i) => {
+                    const date = new Date(today);
+                    date.setDate(today.getDate() - 6 + i);
+                    return {
+                      date,
+                      dayStr: dayNames[date.getDay()],
+                      count: 0,
+                      isToday: i === 6,
+                    };
+                  });
+
+                  // prayData를 날짜별로 그룹화하여 카운트
+                  prayData.forEach((pray) => {
+                    const prayDate = new Date(pray.created_at);
+                    prayDate.setHours(0, 0, 0, 0);
+
+                    const dayIndex = days.findIndex(
+                      (day) =>
+                        day.date.getFullYear() === prayDate.getFullYear() &&
+                        day.date.getMonth() === prayDate.getMonth() &&
+                        day.date.getDate() === prayDate.getDate()
+                    );
+
+                    if (dayIndex !== -1) {
+                      days[dayIndex].count += 1;
                     }
-                  >
-                    <div className="p-4">
-                      <div className="flex justify-between">
-                        <div>
-                          <h3 className="text-lg font-medium text-gray-900 mb-1">
-                            {group.name || "이름 없음"}
-                          </h3>
-                          {/* <p className="text-sm text-gray-600 mb-2">
-                            {group.intro || "그룹 설명이 없습니다."}
-                          </p> */}
-                          <div className="flex items-center text-sm text-gray-500">
-                            <span className="inline-flex items-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4 mr-1"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                />
-                              </svg>
-                              그룹장: {group.profiles?.full_name || "리더 1"}
-                            </span>
-                          </div>
-                        </div>
-                        <a
-                          href={`/office/union/${unionId}/group/${group.id}`}
-                          className="text-blue-600 hover:text-blue-800 self-start flex items-center text-sm"
-                        >
-                          상세보기
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 ml-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+                  });
+
+                  // 최대 기도 수 계산 (0으로 나누기 방지)
+                  const maxCount = Math.max(...days.map((d) => d.count), 1);
+                  const scaleFactor = 170; // 최대 높이 170px
+
+                  return days.map((dayData, i) => {
+                    // 바 높이 계산
+                    const barHeight =
+                      dayData.count === 0
+                        ? 10
+                        : 10 +
+                          Math.min(
+                            Math.floor(
+                              (dayData.count / maxCount) * scaleFactor
+                            ),
+                            scaleFactor
+                          );
+
+                    return (
+                      <div
+                        key={i}
+                        className="flex flex-col items-center flex-1 relative"
+                      >
+                        <div className="relative -top-3 text-center">
+                          <span
+                            className={`text-xs font-medium ${
+                              dayData.count > 0
+                                ? "text-gray-700"
+                                : "text-gray-400"
+                            }`}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5l7 7-7 7"
-                            />
-                          </svg>
-                        </a>
+                            {dayData.count}개
+                          </span>
+                        </div>
+                        <div
+                          className={`w-full ${
+                            dayData.isToday ? "bg-blue-500" : "bg-blue-200"
+                          } rounded-t-sm transition-all duration-300`}
+                          style={{ height: `${barHeight}px` }}
+                        ></div>
+                        <div className="text-xs text-gray-500 mt-2 text-center">
+                          <div>{dayData.dayStr}</div>
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+              <div className="text-sm text-gray-500 text-center mt-2">
+                <span className="inline-block mr-4">
+                  <span className="inline-block w-3 h-3 bg-blue-200 mr-1 rounded-sm"></span>
+                  이전 기도 활동
+                </span>
+                <span className="inline-block">
+                  <span className="inline-block w-3 h-3 bg-blue-500 mr-1 rounded-sm"></span>
+                  오늘 기도 활동
+                </span>
+              </div>
+            </div>
+
+            {/* 그룹 목록 섹션 */}
+            <div ref={groupListRef} className="mt-12">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-medium text-gray-900">그룹 목록</h2>
+                <button className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">
+                  관리 그룹 추가
+                </button>
+              </div>
+
+              {/* 그룹 목록 */}
+              <div>
+                {groupsData.length > 0 ? (
+                  groupsData.map((group) => (
+                    <div
+                      key={group.id}
+                      className="bg-white border border-gray-200 rounded mb-3"
+                      onClick={() =>
+                        navigate(`/office/union/${unionId}/group/${group.id}`)
+                      }
+                    >
+                      <div className="p-4">
+                        <div className="flex justify-between">
+                          <div>
+                            <h3 className="text-lg font-medium text-gray-900 mb-1">
+                              {group.name || "이름 없음"}
+                            </h3>
+                            <div className="flex items-center text-sm text-gray-500">
+                              <span className="inline-flex items-center">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 mr-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                  />
+                                </svg>
+                                그룹장: {group.profiles?.full_name || "리더 1"}
+                              </span>
+                            </div>
+                          </div>
+                          <a
+                            href={`/office/union/${unionId}/group/${group.id}`}
+                            className="text-blue-600 hover:text-blue-800 self-start flex items-center text-sm"
+                          >
+                            상세보기
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4 ml-1"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </a>
+                        </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">등록된 그룹이 없습니다.</p>
+                    <button
+                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      onClick={() =>
+                        navigate(`/office/union/${unionId}/group/new`)
+                      }
+                    >
+                      새 그룹 만들기
+                    </button>
                   </div>
-                ))
-              ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">등록된 그룹이 없습니다.</p>
-                  <button
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    onClick={() =>
-                      navigate(`/office/union/${unionId}/group/new`)
-                    }
-                  >
-                    새 그룹 만들기
-                  </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        )}
-
-        {/* 다른 탭 컨텐츠는 유지 */}
+        </div>
       </div>
     </div>
   );
