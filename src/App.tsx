@@ -41,9 +41,7 @@ import AppInit from "./AppInit/AppInit";
 import TodayPrayCardPage from "./pages/TodayPrayCardPage";
 import {
   OfficePage,
-  ChurchSearchPage,
   UnionDetailPage,
-  AddUnionPage,
   GroupDetailPage,
   CreateUnionPage,
 } from "./pages/Office";
@@ -177,14 +175,6 @@ const App = () => {
                 }
               />
               <Route
-                path="/office/search"
-                element={
-                  <PrivateRoute>
-                    <ChurchSearchPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
                 path="/office/union/:unionId"
                 element={
                   <PrivateRoute>
@@ -197,14 +187,6 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <CreateUnionPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/office/add-union"
-                element={
-                  <PrivateRoute>
-                    <AddUnionPage />
                   </PrivateRoute>
                 }
               />
