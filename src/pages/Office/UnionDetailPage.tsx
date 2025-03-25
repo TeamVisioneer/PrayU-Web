@@ -10,6 +10,7 @@ import {
 } from "../../../supabase/types/tables";
 import { prayController } from "@/apis/office/prayController";
 import { getISOTodayDate } from "@/lib/utils";
+import { prayCardController } from "@/apis/office/prayCardController";
 
 // 스크롤바 숨기기 스타일
 const hideScrollbarStyle = `
@@ -24,9 +25,9 @@ const hideScrollbarStyle = `
 
 // 목데이터: 실제로는 API로 대체될 데이터
 interface PrayerStats {
-  todayCount: number;
-  weeklyCount: number;
-  totalCount: number;
+  todayPrayCount: number;
+  weeklyPrayCardCount: number;
+  totalPrayCount: number;
 }
 
 const UnionDetailPage: React.FC = () => {
@@ -38,9 +39,9 @@ const UnionDetailPage: React.FC = () => {
   const [unionData, setUnionData] = useState<GroupUnion | null>(null); // API로 가져온 공동체 상세 정보
   const [loading, setLoading] = useState(true);
   const [prayerStats, setPrayerStats] = useState<PrayerStats>({
-    todayCount: 0,
-    weeklyCount: 0,
-    totalCount: 0,
+    todayPrayCount: 0,
+    weeklyPrayCardCount: 0,
+    totalPrayCount: 0,
   });
   // 멤버 데이터는 사용되지 않지만 향후 멤버 탭 구현을 위해 유지
   const [groupsData, setGroupsData] = useState<GroupWithProfiles[]>([]);
@@ -99,11 +100,12 @@ const UnionDetailPage: React.FC = () => {
           today,
           tomorrow
         );
-        const weekPrayCount = await prayController.getPrayCountByGroupIds(
-          groupIds,
-          sunday,
-          nextSunday
-        );
+        const weekPrayCardCount =
+          await prayCardController.getPrayCardCountByGroupIds(
+            groupIds,
+            sunday,
+            nextSunday
+          );
         const totalPrayCount = await prayController.getPrayCountByGroupIds(
           groupIds
         );
@@ -117,9 +119,9 @@ const UnionDetailPage: React.FC = () => {
         setGroupsData(groups);
         setPrayData(prayData);
         setPrayerStats({
-          todayCount: todayPrayCount,
-          weeklyCount: weekPrayCount,
-          totalCount: totalPrayCount,
+          todayPrayCount: todayPrayCount,
+          weeklyPrayCardCount: weekPrayCardCount,
+          totalPrayCount: totalPrayCount,
         });
       } catch (error) {
         console.error("Error fetching union details:", error);
@@ -402,48 +404,34 @@ const UnionDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center justify-between">
-                <div className="md:mb-0 md:flex-1 md:border-r md:border-gray-200 md:pr-4">
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">
-                    오늘 기도
-                  </h3>
-                  <p className="text-xl md:text-2xl font-bold">
-                    {prayerStats.todayCount}개
-                  </p>
-                  {/* <div className="mt-1 text-xs md:text-sm text-blue-600">
-                    <p>
-                      전체의{" "}
-                      {Math.round((prayerStats.todayCount / memberCount) * 100)}
-                      % 참여
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="text-center ">
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">
+                      이번 주 기도카드
+                    </h3>
+                    <p className="text-2xl font-bold">
+                      {prayerStats.weeklyPrayCardCount}개
                     </p>
-                  </div> */}
-                </div>
+                  </div>
 
-                <div className="">
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">
-                    이번 주 기도
-                  </h3>
-                  <p className="text-xl md:text-2xl font-bold">
-                    {prayerStats.weeklyCount}개
-                  </p>
-                  {/* <div className="mt-1 text-xs md:text-sm text-green-600">
-                    <p>전주 대비 {Math.floor(Math.random() * 30) + 5}% 증가</p>
-                  </div> */}
-                </div>
-
-                <div className="md:flex-1 md:pl-4">
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">
-                    누적 기도
-                  </h3>
-                  <p className="text-xl md:text-2xl font-bold">
-                    {prayerStats.totalCount}개
-                  </p>
-                  {/* <div className="mt-1 text-xs md:text-sm text-gray-600">
-                    <p>
-                      멤버당 평균{" "}
-                      {Math.round(prayerStats.totalCount / memberCount)}개
+                  <div className="text-center">
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">
+                      오늘 기도 수
+                    </h3>
+                    <p className="text-2xl font-bold">
+                      {prayerStats.todayPrayCount}개
                     </p>
-                  </div> */}
+                  </div>
+
+                  <div className="text-center">
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">
+                      누적 기도 수
+                    </h3>
+                    <p className="text-2xl font-bold">
+                      {prayerStats.totalPrayCount}개
+                    </p>
+                  </div>
                 </div>
               </div>
 

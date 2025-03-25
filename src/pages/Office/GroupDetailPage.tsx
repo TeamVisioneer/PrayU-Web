@@ -31,9 +31,9 @@ interface MemberContent {
 }
 
 interface PrayerStats {
-  todayCount: number;
-  weeklyCount: number;
-  totalCount: number;
+  todayPrayCount: number;
+  weeklyPrayCardCount: number;
+  totalPrayCount: number;
 }
 
 const GroupDetailPage: React.FC = () => {
@@ -49,9 +49,9 @@ const GroupDetailPage: React.FC = () => {
   const [memberContents, setMemberContents] = useState<MemberContent[]>([]);
 
   const [prayerStats, setPrayerStats] = useState<PrayerStats>({
-    todayCount: 0,
-    weeklyCount: 0,
-    totalCount: 0,
+    todayPrayCount: 0,
+    weeklyPrayCardCount: 0,
+    totalPrayCount: 0,
   });
 
   // 멤버별 콘텐츠 로딩 상태 추적
@@ -110,19 +110,20 @@ const GroupDetailPage: React.FC = () => {
           today,
           tomorrow
         );
-        const weekPrayCount = await prayController.getPrayCountByGroupIds(
-          [groupId],
-          sunday,
-          nextSunday
-        );
+        const weekPrayCardCount =
+          await prayCardController.getPrayCardCountByGroupIds(
+            [groupId],
+            sunday,
+            nextSunday
+          );
         const totalPrayCount = await prayController.getPrayCountByGroupIds([
           groupId,
         ]);
 
         setPrayerStats({
-          todayCount: todayPrayCount,
-          weeklyCount: weekPrayCount,
-          totalCount: totalPrayCount,
+          todayPrayCount: todayPrayCount,
+          weeklyPrayCardCount: weekPrayCardCount,
+          totalPrayCount: totalPrayCount,
         });
       } catch (error) {
         console.error("그룹 데이터 로드 실패:", error);
@@ -280,33 +281,33 @@ const GroupDetailPage: React.FC = () => {
         {/* 섹션 타이틀 - 그룹현황 */}
         <h2 className="text-lg font-medium text-gray-900 mb-4">그룹현황</h2>
 
-        {/* 그룹 통계 지표 - 3개 지표를 가로로 배치 */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
+        {/* 그룹 통계 지표 */}
+        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-8">
           <div className="grid grid-cols-3 gap-4">
-            <div>
+            <div className="text-center">
               <h3 className="text-sm font-medium text-gray-500 mb-1">
-                오늘 기도
+                이번 주 기도카드
               </h3>
-              <p className="text-xl md:text-2xl font-bold">
-                {prayerStats.todayCount}개
+              <p className="text-2xl font-bold">
+                {prayerStats.weeklyPrayCardCount}개
               </p>
             </div>
 
-            <div>
+            <div className="text-center">
               <h3 className="text-sm font-medium text-gray-500 mb-1">
-                이번 주 기도
+                오늘 기도 수
               </h3>
-              <p className="text-xl md:text-2xl font-bold">
-                {prayerStats.weeklyCount}개
+              <p className="text-2xl font-bold">
+                {prayerStats.todayPrayCount}개
               </p>
             </div>
 
-            <div>
+            <div className="text-center">
               <h3 className="text-sm font-medium text-gray-500 mb-1">
-                누적 기도
+                누적 기도 수
               </h3>
-              <p className="text-xl md:text-2xl font-bold">
-                {prayerStats.totalCount}개
+              <p className="text-2xl font-bold">
+                {prayerStats.totalPrayCount}개
               </p>
             </div>
           </div>

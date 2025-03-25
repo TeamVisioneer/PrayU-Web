@@ -5,6 +5,35 @@ import { PrayCardWithProfiles } from "../../../supabase/types/tables";
 export class PrayCardController {
   constructor(private supabaseClient = supabase) {}
 
+  // 여러 그룹들의 기도 카드 카운트 조회
+  async getPrayCardCountByGroupIds(
+    groupIds: string[],
+    startDt: string,
+    endDt: string,
+  ): Promise<number> {
+    try {
+      const { data, error } = await this.supabaseClient
+        .from("pray_card")
+        .select("id", { count: "exact", head: true })
+        .in("group_id", groupIds)
+        .gte("created_at", startDt)
+        .lt("created_at", endDt)
+        .is("deleted_at", null);
+
+      if (error) {
+        console.error("기도 카드 카운트 조회 오류:", error);
+        Sentry.captureException(error);
+        return 0;
+      }
+
+      return data?.length || 0;
+    } catch (error) {
+      console.error("기도 카드 카운트 조회 중 오류 발생:", error);
+      Sentry.captureException(error);
+      return 0;
+    }
+  }
+
   // 특정 사용자의 기도 카드 조회 (그룹 필터링 포함)
   async getPrayCardsByUserAndGroup(
     userId: string,
