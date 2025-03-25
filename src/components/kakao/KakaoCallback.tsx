@@ -26,8 +26,9 @@ const KakaoCallBack = () => {
   const state = params.get("state");
   const stateObj = parseState(state);
   const groupId = stateObj.groupId || "";
+  const unionId = stateObj.unionId || "";
   const from = stateObj.from || "";
-  const loginRedirectUrl = `/login-redirect?groupId=${groupId}&from=${from}`;
+  const loginRedirectUrl = `/login-redirect?groupId=${groupId}&unionId=${unionId}&from=${from}`;
   const redirectUrl = `${baseUrl}/auth/kakao/callback`;
 
   useEffect(() => {

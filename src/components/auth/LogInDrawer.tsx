@@ -24,8 +24,11 @@ const LogInDrawer = () => {
   const pathname = location.state?.from?.pathname || location.pathname;
   const pathParts = pathname.split("/");
   let groupId = "";
+  let unionId = "";
   if (pathParts.length === 3 && pathParts[1] === "group") {
     groupId = pathParts[2];
+  } else if (pathParts.length === 5 && pathParts[1] === "office") {
+    unionId = pathParts[3];
   } else if (
     pathParts.length === 4 &&
     pathParts[1] === "group" &&
@@ -34,7 +37,7 @@ const LogInDrawer = () => {
   ) {
     groupId = String(import.meta.env.VITE_UNION_WORSHIP_GROUP_ID);
   }
-  const redirectUrl = `${baseUrl}/login-redirect?groupId=${groupId}&from=LogInDrawer`;
+  const redirectUrl = `${baseUrl}/login-redirect?groupId=${groupId}&unionId=${unionId}&from=LogInDrawer`;
 
   const LoginContent = (
     <div className="flex flex-col gap-6 px-10">
@@ -49,7 +52,7 @@ const LogInDrawer = () => {
       <div className="flex flex-col w-full justify-center gap-4 pb-3">
         <KakaoLoginBtn
           redirectUri={`${baseUrl}/auth/kakao/callback`}
-          state={`groupId:${groupId}`}
+          state={`groupId:${groupId};unionId:${unionId}`}
         />
         {isApp && (
           <div className="flex flex-col items-center gap-3">
