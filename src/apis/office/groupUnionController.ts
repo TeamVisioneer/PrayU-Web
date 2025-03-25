@@ -1,6 +1,9 @@
 import { supabase } from "../../../supabase/client";
 import * as Sentry from "@sentry/react";
-import { GroupUnion } from "../../../supabase/types/tables";
+import {
+  GroupUnion,
+  GroupUnionWithProfiles,
+} from "../../../supabase/types/tables";
 
 interface CreateGroupUnionParams {
   church: string;
@@ -37,7 +40,10 @@ export class GroupUnionController {
     try {
       const { data, error } = await this.supabaseClient
         .from("group_union")
-        .select("*")
+        .select(`
+          *,
+          profiles:user_id (*)
+        `)
         .eq("id", groupUnionId)
         .single();
 
@@ -46,7 +52,12 @@ export class GroupUnionController {
         return null;
       }
 
-      return data;
+      const unionWithProfiles = data as unknown as GroupUnionWithProfiles;
+
+      return {
+        ...unionWithProfiles,
+        creator_name: unionWithProfiles.profiles?.full_name || null,
+      };
     } catch (error) {
       Sentry.captureException(error);
       return null;

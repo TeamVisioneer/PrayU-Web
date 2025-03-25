@@ -44,6 +44,7 @@ import {
   UnionDetailPage,
   GroupDetailPage,
   CreateUnionPage,
+  UnionJoinPage,
 } from "./pages/Office";
 
 const GroupRedirect = () => {
@@ -203,6 +204,14 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <GroupDetailPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/office/union/:unionId/join"
+                element={
+                  <PrivateRoute>
+                    <UnionJoinPage />
                   </PrivateRoute>
                 }
               />
