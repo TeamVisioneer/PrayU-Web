@@ -156,7 +156,17 @@ const OfficePage: React.FC = () => {
       {/* 상단 네비게이션 바 */}
       <div className="bg-white border-b border-gray-200 p-3 flex items-center justify-between">
         <div className="flex items-center">
-          <h2 className="text-lg font-bold text-gray-800">PrayU Office</h2>
+          <h2
+            onClick={() => {
+              navigate("/group");
+            }}
+            className="text-lg font-bold text-gray-800"
+          >
+            PrayU Office
+          </h2>
+          <span className="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+            Beta
+          </span>
         </div>
 
         <div className="flex items-center">
@@ -229,6 +239,38 @@ const OfficePage: React.FC = () => {
           <div>
             {/* <h2 className="text-lg font-semibold mb-3">교회 공동체</h2> */}
             {renderContent()}
+          </div>
+
+          {/* 베타 서비스 알림 */}
+          <div className="mt-8 p-4 bg-yellow-50 border border-yellow-100 rounded-lg shadow-sm">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-yellow-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-yellow-800">
+                  베타 서비스 안내
+                </h3>
+                <div className="mt-2 text-sm text-yellow-700">
+                  <p>
+                    PrayU Office는 현재 베타 서비스로 운영 중입니다. 서비스 이용
+                    중 불편하신 점이나 개선 사항이 있으시면 언제든지 피드백
+                    부탁드립니다.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

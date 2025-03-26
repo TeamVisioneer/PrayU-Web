@@ -12,6 +12,7 @@ import { prayController } from "@/apis/office/prayController";
 import { getISOTodayDate } from "@/lib/utils";
 import { prayCardController } from "@/apis/office/prayCardController";
 import useAuth from "@/hooks/useAuth";
+import { UnionInviteLink } from "@/components/share/KakaoShareBtn";
 
 // 스크롤바 숨기기 스타일
 const hideScrollbarStyle = `
@@ -180,30 +181,12 @@ const UnionDetailPage: React.FC = () => {
     }
   };
 
-  // Handle send invitation message
-  const handleSendMessage = () => {
-    const link = generateInviteLink();
-    // 공유할 메시지 구성
-    const message = `${unionData?.name || "공동체"} 초대 링크입니다: ${link}`;
-
-    // 기본 공유 API 사용 (모바일에서 더 자연스럽게 작동)
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "공동체 초대",
-          text: message,
-          url: link,
-        })
-        .catch((error) => {
-          console.error("Error sharing:", error);
-          // 폴백: 클립보드에 복사
-          navigator.clipboard.writeText(message);
-          alert("초대 메시지가 클립보드에 복사되었습니다.");
-        });
-    } else {
-      // 공유 API를 지원하지 않는 경우 WhatsApp으로 열기 (또는 다른 대안)
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
-    }
+  const handleShareKakao = () => {
+    const kakaoLinkObject = UnionInviteLink(
+      unionData?.name || "",
+      unionId || ""
+    );
+    window.Kakao.Share.sendDefault(kakaoLinkObject);
   };
 
   if (loading) {
@@ -468,9 +451,7 @@ const UnionDetailPage: React.FC = () => {
               className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:border-blue-300"
               onClick={scrollToGroupList}
             >
-              <h3 className="text-sm font-medium text-gray-500 mb-1">
-                관리 중인 그룹
-              </h3>
+              <h3 className="text-sm font-medium text-gray-500 mb-1">그룹</h3>
               <p className="text-2xl font-bold">{groupsData.length}개</p>
               <div className="mt-2 text-sm text-gray-600">
                 <p className="truncate">
@@ -636,7 +617,7 @@ const UnionDetailPage: React.FC = () => {
                   className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
                   onClick={() => setShowInviteModal(true)}
                 >
-                  관리 그룹 추가
+                  공동체 그룹 등록
                 </button>
               </div>
 
@@ -783,17 +764,18 @@ const UnionDetailPage: React.FC = () => {
                     className="text-lg leading-6 font-medium text-gray-900"
                     id="modal-title"
                   >
-                    그룹장에게 등록 요청
+                    공동체 그룹 등록
                   </h3>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      공동체에 등록할 그룹의 그룹장에게 초대링크를 전달해주세요.
+                      공동체에 등록할 그룹의 그룹장에게 요청 링크를
+                      전달해주세요.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 sm:mt-8 space-y-4 w-full">
+              <div className="mt-6 sm:mt-8 space-y-2 w-full">
                 <button
                   type="button"
                   onClick={handleCopyLink}
@@ -831,7 +813,7 @@ const UnionDetailPage: React.FC = () => {
 
                 <button
                   type="button"
-                  onClick={handleSendMessage}
+                  onClick={handleShareKakao}
                   className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-3 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:text-sm h-[46px] transition-colors duration-200"
                 >
                   <div className="flex items-center justify-center w-full">
@@ -849,7 +831,7 @@ const UnionDetailPage: React.FC = () => {
                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                       />
                     </svg>
-                    <span>초대 메시지 보내기</span>
+                    <span>카카오로 공유하기</span>
                   </div>
                 </button>
               </div>

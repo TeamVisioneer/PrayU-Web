@@ -72,24 +72,39 @@ const PrayCardHistoryList = () => {
   return (
     <div className="flex flex-col gap-1 pb-10 items-center">
       <div className="w-full grid grid-cols-3 gap-3 p-1 pb-5">
-        {historyPrayCardListView.map((prayCard, index) => (
-          <div
-            key={index}
-            className="aspect-[0.76] border-none items-center flex flex-col rounded-lg "
-            onClick={() => onClickStory(prayCard)}
-          >
-            <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
-              <p className="text-xs text-white w-full text-left truncate">
-                {prayCard.group?.name || "말씀 카드"}
-              </p>
+        {historyPrayCardListView.map((prayCard, index) => {
+          if (prayCard.bible_card_url) {
+            return (
+              <div
+                className="aspect-[0.76] border-none flex items-center justify-center"
+                onClick={() => onClickStory(prayCard)}
+              >
+                <img
+                  src={prayCard.bible_card_url}
+                  className="h-full object-cover rounded-lg"
+                />
+              </div>
+            );
+          }
+          return (
+            <div
+              key={index}
+              className="aspect-[0.76] border-none items-center flex flex-col rounded-lg "
+              onClick={() => onClickStory(prayCard)}
+            >
+              <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
+                <p className="text-xs text-white w-full text-left truncate">
+                  {prayCard.group?.name || "말씀 카드"}
+                </p>
+              </div>
+              <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">
+                <span className="text-[0.7rem] text-gray-400 line-clamp-3">
+                  {prayCard.content}
+                </span>
+              </div>
             </div>
-            <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">
-              <span className="text-[0.7rem] text-gray-400 line-clamp-3">
-                {prayCard.content}
-              </span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       {offset < historyPrayCardCount && (
         <ShowMoreBtn

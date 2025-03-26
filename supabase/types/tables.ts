@@ -31,6 +31,7 @@ export interface GroupUnionWithProfiles extends GroupUnion {
 export interface GroupWithProfiles extends Group {
   profiles: Profiles;
   member?: MemberWithProfiles[];
+  group_union?: GroupUnionWithProfiles;
 }
 
 export interface MemberWithGroup extends Member {
