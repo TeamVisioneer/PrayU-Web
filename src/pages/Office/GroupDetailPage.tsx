@@ -10,6 +10,8 @@ import {
 } from "supabase/types/tables";
 import { getISOTodayDate } from "@/lib/utils";
 import { prayController } from "@/apis/office/prayController";
+import useAuth from "@/hooks/useAuth";
+import { groupUnionController } from "@/apis/office/groupUnionController";
 
 // 스크롤바 숨기기 스타일
 const hideScrollbarStyle = `
@@ -31,15 +33,18 @@ interface MemberContent {
 }
 
 interface PrayerStats {
-  todayCount: number;
-  weeklyCount: number;
-  totalCount: number;
+  todayPrayCount: number;
+  weeklyPrayCardCount: number;
+  totalPrayCount: number;
 }
 
 const GroupDetailPage: React.FC = () => {
-  const { groupId } = useParams<{ groupId: string; unionId: string }>();
-  // URL에 unionId도 포함되어 있지만 현재 컴포넌트에서는 사용하지 않음
+  const { groupId, unionId } = useParams<{
+    groupId: string;
+    unionId: string;
+  }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [groupData, setGroupData] = useState<GroupWithProfiles | null>(null);
@@ -47,11 +52,13 @@ const GroupDetailPage: React.FC = () => {
   const [groupLeader, setGroupLeader] = useState("");
   const [members, setMembers] = useState<MemberWithProfiles[]>([]);
   const [memberContents, setMemberContents] = useState<MemberContent[]>([]);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [unionName, setUnionName] = useState("");
 
   const [prayerStats, setPrayerStats] = useState<PrayerStats>({
-    todayCount: 0,
-    weeklyCount: 0,
-    totalCount: 0,
+    todayPrayCount: 0,
+    weeklyPrayCardCount: 0,
+    totalPrayCount: 0,
   });
 
   // 멤버별 콘텐츠 로딩 상태 추적
@@ -80,50 +87,71 @@ const GroupDetailPage: React.FC = () => {
   // 그룹 정보 및 멤버 목록 로드
   useEffect(() => {
     const fetchGroupData = async () => {
-      if (!groupId) return;
+      if (!groupId || !unionId || !user) {
+        setLoading(false);
+        return;
+      }
 
       setLoading(true);
       try {
-        // 그룹 기본 정보 조회
-        const group = await groupController.getGroup(groupId);
-        if (group) {
-          setGroupData(group);
-          setGroupName(group.name || "");
-          setGroupLeader(group.profiles?.full_name || "");
+        // 1. 공동체(Union) 정보 조회 및 권한 확인
+        const unionDetails = await groupUnionController.getGroupUnion(unionId);
+        if (!unionDetails) {
+          setLoading(false);
+          return;
         }
 
-        // 그룹 멤버 목록 조회
-        const membersData = await memberController.getGroupMembers(groupId);
-        if (membersData) {
-          setMembers(membersData);
+        // 권한 검사: 로그인한 사용자가 공동체 생성자인지 확인
+        if (unionDetails.user_id === user.id) {
+          setIsAuthorized(true);
+          setUnionName(unionDetails.name || "");
+
+          // 권한이 있으면 나머지 데이터 로드
+          // 그룹 기본 정보 조회
+          const group = await groupController.getGroup(groupId);
+          if (group) {
+            setGroupData(group);
+            setGroupName(group.name || "");
+            setGroupLeader(group.profiles?.full_name || "");
+          }
+
+          // 그룹 멤버 목록 조회
+          const membersData = await memberController.getGroupMembers(groupId);
+          if (membersData) {
+            setMembers(membersData);
+          }
+
+          // 그룹 통계 정보 조회
+          const weekDay = new Date().getDay();
+          const today = getISOTodayDate();
+          const tomorrow = getISOTodayDate(1);
+          const sunday = getISOTodayDate(-weekDay);
+          const nextSunday = getISOTodayDate(7 - weekDay);
+          const todayPrayCount = await prayController.getPrayCountByGroupIds(
+            [groupId],
+            today,
+            tomorrow
+          );
+          const weekPrayCardCount =
+            await prayCardController.getPrayCardCountByGroupIds(
+              [groupId],
+              sunday,
+              nextSunday
+            );
+          const totalPrayCount = await prayController.getPrayCountByGroupIds([
+            groupId,
+          ]);
+
+          setPrayerStats({
+            todayPrayCount: todayPrayCount,
+            weeklyPrayCardCount: weekPrayCardCount,
+            totalPrayCount: totalPrayCount,
+          });
+        } else {
+          // 권한이 없는 경우
+          setIsAuthorized(false);
+          setUnionName(unionDetails.name || "");
         }
-
-        // 그룹 통계 정보 조회
-
-        const weekDay = new Date().getDay();
-        const today = getISOTodayDate();
-        const tomorrow = getISOTodayDate(1);
-        const sunday = getISOTodayDate(-weekDay);
-        const nextSunday = getISOTodayDate(7 - weekDay);
-        const todayPrayCount = await prayController.getPrayCountByGroupIds(
-          [groupId],
-          today,
-          tomorrow
-        );
-        const weekPrayCount = await prayController.getPrayCountByGroupIds(
-          [groupId],
-          sunday,
-          nextSunday
-        );
-        const totalPrayCount = await prayController.getPrayCountByGroupIds([
-          groupId,
-        ]);
-
-        setPrayerStats({
-          todayCount: todayPrayCount,
-          weeklyCount: weekPrayCount,
-          totalCount: totalPrayCount,
-        });
       } catch (error) {
         console.error("그룹 데이터 로드 실패:", error);
       } finally {
@@ -132,7 +160,7 @@ const GroupDetailPage: React.FC = () => {
     };
 
     fetchGroupData();
-  }, [groupId]);
+  }, [groupId, unionId, user]);
 
   // 멤버 펼치기/접기 처리 함수 (멤버별 콘텐츠 로드 포함)
   const toggleMemberExpand = async (memberId: string) => {
@@ -214,6 +242,45 @@ const GroupDetailPage: React.FC = () => {
     );
   }
 
+  // 권한 없음 화면 표시
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8 text-red-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          접근 권한이 없습니다
+        </h2>
+        <p className="text-gray-600 mb-2">
+          {unionName} 공동체의 관리자만 이 페이지에 접근할 수 있습니다.
+        </p>
+        <p className="text-gray-500 mb-6">
+          공동체 생성자에게 문의하거나 다른 공동체를 선택해주세요.
+        </p>
+        <button
+          onClick={() => navigate("/office/union")}
+          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+        >
+          공동체 목록으로 돌아가기
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* CSS for hiding scrollbars */}
@@ -280,33 +347,33 @@ const GroupDetailPage: React.FC = () => {
         {/* 섹션 타이틀 - 그룹현황 */}
         <h2 className="text-lg font-medium text-gray-900 mb-4">그룹현황</h2>
 
-        {/* 그룹 통계 지표 - 3개 지표를 가로로 배치 */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
+        {/* 그룹 통계 지표 */}
+        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-8">
           <div className="grid grid-cols-3 gap-4">
-            <div>
+            <div className="text-center">
               <h3 className="text-sm font-medium text-gray-500 mb-1">
-                오늘 기도
+                이번 주 기도카드
               </h3>
-              <p className="text-xl md:text-2xl font-bold">
-                {prayerStats.todayCount}개
+              <p className="text-2xl font-bold">
+                {prayerStats.weeklyPrayCardCount}개
               </p>
             </div>
 
-            <div>
+            <div className="text-center">
               <h3 className="text-sm font-medium text-gray-500 mb-1">
-                이번 주 기도
+                오늘 기도 수
               </h3>
-              <p className="text-xl md:text-2xl font-bold">
-                {prayerStats.weeklyCount}개
+              <p className="text-2xl font-bold">
+                {prayerStats.todayPrayCount}개
               </p>
             </div>
 
-            <div>
+            <div className="text-center">
               <h3 className="text-sm font-medium text-gray-500 mb-1">
-                누적 기도
+                누적 기도 수
               </h3>
-              <p className="text-xl md:text-2xl font-bold">
-                {prayerStats.totalCount}개
+              <p className="text-2xl font-bold">
+                {prayerStats.totalPrayCount}개
               </p>
             </div>
           </div>

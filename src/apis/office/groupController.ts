@@ -11,6 +11,33 @@ export class GroupController {
     return null;
   }
 
+  async fetchGroupListByUserId(
+    userId: string,
+  ): Promise<GroupWithProfiles[] | null> {
+    try {
+      const { data, error } = await this.supabaseClient
+        .from("group")
+        .select(`
+          *,
+          profiles (id, full_name, avatar_url),
+          member!inner (
+            id,
+            profiles (id, full_name, avatar_url)
+          )
+        `)
+        .eq("user_id", userId)
+        .is("group_union_id", null)
+        .is("deleted_at", null)
+        .is("member.deleted_at", null)
+        .order("created_at", { ascending: false });
+
+      if (error) return this.handleError(error);
+
+      return data as GroupWithProfiles[];
+    } catch (error) {
+      return this.handleError(error as Error);
+    }
+  }
   async fetchGroupListByUnionId(
     unionId: string,
   ): Promise<GroupWithProfiles[] | null> {
