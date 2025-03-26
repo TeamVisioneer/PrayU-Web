@@ -36,13 +36,15 @@ export class GroupUnionController {
     }
   }
 
-  async getGroupUnion(groupUnionId: string): Promise<GroupUnion | null> {
+  async getGroupUnion(
+    groupUnionId: string,
+  ): Promise<GroupUnionWithProfiles | null> {
     try {
       const { data, error } = await this.supabaseClient
         .from("group_union")
         .select(`
           *,
-          profiles:user_id (*)
+          profiles (id, full_name, avatar_url)
         `)
         .eq("id", groupUnionId)
         .single();
@@ -51,13 +53,7 @@ export class GroupUnionController {
         Sentry.captureException(error);
         return null;
       }
-
-      const unionWithProfiles = data as unknown as GroupUnionWithProfiles;
-
-      return {
-        ...unionWithProfiles,
-        creator_name: unionWithProfiles.profiles?.full_name || null,
-      };
+      return data as GroupUnionWithProfiles;
     } catch (error) {
       Sentry.captureException(error);
       return null;

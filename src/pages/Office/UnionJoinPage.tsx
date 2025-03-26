@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { groupUnionController } from "@/apis/office/groupUnionController";
-import { GroupUnion, GroupWithProfiles } from "../../../supabase/types/tables";
+import {
+  GroupUnionWithProfiles,
+  GroupWithProfiles,
+} from "../../../supabase/types/tables";
 import useAuth from "@/hooks/useAuth";
 import { groupController } from "@/apis/office/groupController";
 import { updateGroup } from "@/apis/group";
@@ -29,7 +32,9 @@ const UnionJoinPage: React.FC = () => {
 
   // States
   const [currentStep, setCurrentStep] = useState<JoinStep>(JoinStep.INVITATION);
-  const [unionData, setUnionData] = useState<GroupUnion | null>(null);
+  const [unionData, setUnionData] = useState<GroupUnionWithProfiles | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [myGroups, setMyGroups] = useState<GroupWithProfiles[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<GroupWithProfiles[]>([]);
@@ -257,8 +262,8 @@ const UnionJoinPage: React.FC = () => {
 
             <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
               <h3 className="font-medium text-gray-900 mb-4">
-                {unionData.creator_name
-                  ? `${unionData.creator_name}님이 공동체 등록을 요청하셨습니다.`
+                {unionData.profiles.full_name
+                  ? `${unionData.profiles.full_name}님이 공동체 등록을 요청하셨습니다.`
                   : "공동체 등록 요청을 수락하시겠습니까?"}
               </h3>
               <p className="text-gray-600 text-sm mb-6">
