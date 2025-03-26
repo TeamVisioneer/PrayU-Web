@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, CheckCircle2 } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
@@ -93,10 +93,18 @@ const GroupListPage: React.FC = () => {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                      {group?.name?.[0]}
+                      {group?.name ? [...group.name][0] : ""}
                     </div>
                     <div>
-                      <div className="font-medium">{group.name}</div>
+                      <div className="font-medium flex items-center gap-2">
+                        {group.name}
+                        {group.group_union_id && (
+                          <CheckCircle2
+                            className="h-4 w-4 text-blue-500"
+                            aria-label="인증된 그룹"
+                          />
+                        )}
+                      </div>
                       {group.user_id === user?.id ? (
                         <div className="text-sm text-mainBtn">그룹장</div>
                       ) : (

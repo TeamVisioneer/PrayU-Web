@@ -121,7 +121,7 @@ export default function GroupListDrawer() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                      {group?.name?.[0]}
+                      {group?.name ? [...group.name][0] : ""}
                     </div>
                     <div>
                       <div className="font-medium">{group?.name}</div>

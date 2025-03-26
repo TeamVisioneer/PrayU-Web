@@ -57,7 +57,9 @@ export const getGroup = async (
   try {
     const { error, data } = await supabase
       .from("group")
-      .select(`*, profiles (id, full_name, avatar_url, kakao_id)`)
+      .select(
+        `*, profiles (id, full_name, avatar_url, kakao_id), group_union (id, name, profiles (id, full_name, avatar_url))`,
+      )
       .eq("id", groupId)
       .single();
     if (error) {

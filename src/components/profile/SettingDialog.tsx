@@ -19,11 +19,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { LuPencil, LuSave } from "react-icons/lu";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { UserProfile } from "@/components/profile/UserProfile.tsx";
 import InfoBtn from "@/components/alert/infoBtn.tsx";
+
 const SettingDialog = () => {
   const isOpenSettingDialog = useBaseStore(
     (state) => state.isOpenSettingDialog
@@ -42,16 +42,14 @@ const SettingDialog = () => {
   const profileList = useBaseStore((state) => state.profileList);
   const fetchProfileList = useBaseStore((state) => state.fetchProfileList);
   const updateProfile = useBaseStore((state) => state.updateProfile);
+  const getProfile = useBaseStore((state) => state.getProfile);
   const signOut = useBaseStore((state) => state.signOut);
 
   const [name, setName] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (myProfile) {
       setName(myProfile.full_name!);
-      setIsEditing(false);
     }
   }, [myProfile]);
 
@@ -63,15 +61,12 @@ const SettingDialog = () => {
     signOut();
   };
 
-  const onClickUpdateName = () => {
-    setIsEditing(true);
-    inputRef.current?.focus();
-  };
-
-  const onBlurUpdateName = () => {
-    setIsEditing(false);
+  const onBlurUpdateName = async () => {
     if (name.trim() === "") setName(myProfile?.full_name || "");
-    else updateProfile(user!.id, { full_name: name });
+    else {
+      await updateProfile(user!.id, { full_name: name });
+      await getProfile(user!.id);
+    }
   };
 
   const onClickExitPrayU = () => {
@@ -138,22 +133,14 @@ const SettingDialog = () => {
                 <span className="text-md font-semibold">이름</span>
                 <div className="flex items-center gap-2">
                   <Input
-                    ref={inputRef}
-                    className="w-20 p-0 text-md border-none text-right"
+                    className="flex-1 text-md "
                     type="text"
                     value={name}
-                    onClick={() => onClickUpdateName()}
                     onChange={(e) => setName(e.target.value)}
                     onBlur={() => onBlurUpdateName()}
+                    maxLength={8}
                     placeholder="이름을 입력해주세요!"
-                    maxLength={12}
-                    readOnly={!isEditing}
                   />
-                  {isEditing ? (
-                    <LuSave size={16} />
-                  ) : (
-                    <LuPencil size={16} onClick={() => onClickUpdateName()} />
-                  )}
                 </div>
               </div>
 
