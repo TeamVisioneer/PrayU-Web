@@ -8,6 +8,7 @@ import { toast } from "@/components/ui/use-toast";
 import { groupUnionController } from "@/apis/office/groupUnionController";
 import useAuth from "@/hooks/useAuth";
 import useOfficeStore from "@/stores/officeStore";
+import { UnionInviteLink } from "@/components/share/KakaoShareBtn";
 
 // 스텝별 프로그래스 컴포넌트
 const ProgressBar = ({
@@ -242,6 +243,7 @@ const Step2 = ({
 const Step3 = ({
   groupUnionData,
   onComplete,
+  unionId,
 }: {
   groupUnionData: {
     church: string;
@@ -249,7 +251,35 @@ const Step3 = ({
     intro: string;
   };
   onComplete: () => void;
+  unionId: string | null;
 }) => {
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  // Generate invitation link
+  const generateInviteLink = () => {
+    if (!unionId) return "";
+    return `${window.location.origin}/office/union/${unionId}/join`;
+  };
+
+  // Handle copy link
+  const handleCopyLink = async () => {
+    const link = generateInviteLink();
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy link:", err);
+    }
+  };
+
+  const handleShareKakao = () => {
+    if (!unionId) return;
+    const kakaoLinkObject = UnionInviteLink(groupUnionData.name || "", unionId);
+    window.Kakao.Share.sendDefault(kakaoLinkObject);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col items-center justify-center py-6">
@@ -284,13 +314,7 @@ const Step3 = ({
       <div className="pt-4 space-y-3">
         <Button
           className="w-full bg-blue-500 hover:bg-blue-600"
-          onClick={() => {
-            // 초대 메세지 보내기 로직 구현
-            toast({
-              title: "초대 메시지 전송",
-              description: "그룹장에게 초대 메시지가 전송되었습니다.",
-            });
-          }}
+          onClick={() => setShowInviteModal(true)}
         >
           그룹장에게 공동체 등록 요청하기
         </Button>
@@ -303,6 +327,145 @@ const Step3 = ({
           생성한 공동체 보기
         </Button>
       </div>
+
+      {/* 초대 모달 */}
+      {showInviteModal && (
+        <div
+          className="fixed inset-0 z-50 overflow-y-auto"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="flex items-center justify-center min-h-screen p-4 text-center">
+            {/* 배경 오버레이 */}
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              aria-hidden="true"
+              onClick={() => setShowInviteModal(false)}
+            ></div>
+
+            {/* 모달 패널 */}
+            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full sm:p-6 relative">
+              {/* X 버튼 추가 */}
+              <button
+                type="button"
+                onClick={() => setShowInviteModal(false)}
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-500"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+                <span className="sr-only">닫기</span>
+              </button>
+
+              <div>
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-blue-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="mt-3 text-center sm:mt-5">
+                  <h3
+                    className="text-lg leading-6 font-medium text-gray-900"
+                    id="modal-title"
+                  >
+                    공동체 그룹 등록
+                  </h3>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      공동체에 등록할 그룹의 그룹장에게 요청 링크를
+                      전달해주세요.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 sm:mt-8 space-y-2 w-full">
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-3 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:text-sm h-[46px] transition-colors duration-200"
+                >
+                  <div className="flex items-center justify-center w-full transition-all duration-200">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2 text-gray-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke={copySuccess ? "currentColor" : "currentColor"}
+                    >
+                      {copySuccess ? (
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      ) : (
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                        />
+                      )}
+                    </svg>
+                    <span className={`${copySuccess ? "text-green-600" : ""}`}>
+                      {copySuccess ? "링크가 복사되었습니다" : "초대링크 복사"}
+                    </span>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleShareKakao}
+                  className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-3 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:text-sm h-[46px] transition-colors duration-200"
+                >
+                  <div className="flex items-center justify-center w-full">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                      />
+                    </svg>
+                    <span>카카오로 공유하기</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -442,7 +605,11 @@ const CreateUnionPage = () => {
         )}
 
         {currentStep === 3 && (
-          <Step3 groupUnionData={formData} onComplete={handleComplete} />
+          <Step3
+            groupUnionData={formData}
+            onComplete={handleComplete}
+            unionId={createdUnionId}
+          />
         )}
       </div>
     </div>

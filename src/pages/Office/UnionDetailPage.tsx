@@ -56,7 +56,15 @@ const UnionDetailPage: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   const scrollToGroupList = () => {
-    groupListRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (groupListRef.current) {
+      const elementPosition = groupListRef.current.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - 20; // 20px offset from the top
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
   };
 
   // 드롭다운 외부 클릭 시 닫기
@@ -685,14 +693,6 @@ const UnionDetailPage: React.FC = () => {
                 ) : (
                   <div className="text-center py-8">
                     <p className="text-gray-500">등록된 그룹이 없습니다.</p>
-                    <button
-                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                      onClick={() =>
-                        navigate(`/office/union/${unionId}/group/new`)
-                      }
-                    >
-                      새 그룹 만들기
-                    </button>
                   </div>
                 )}
               </div>
