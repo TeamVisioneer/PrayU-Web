@@ -86,6 +86,33 @@ export const GroupInviteLink = (groupName: string) => {
   } as KakaoLinkObject;
 };
 
+export const UnionInviteLink = (unionName: string, unionId: string) => {
+  return {
+    objectType: "feed",
+    content: {
+      title: "PrayU 공동체 등록 요청 알림",
+      description: `${unionName} 에서 등록 요청이 왔어요\n요청을 수락해 주세요!`,
+      imageUrl:
+        "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu//KakaoUnionInvite.png",
+      imageWidth: 400,
+      imageHeight: 240,
+      link: {
+        webUrl: `${window.location.origin}/office/union/${unionId}/join`,
+        mobileWebUrl: `${window.location.origin}/office/union/${unionId}/join`,
+      },
+    },
+    buttons: [
+      {
+        title: "요청 수락하기",
+        link: {
+          mobileWebUrl: `${window.location.origin}/office/union/${unionId}/join`,
+          webUrl: `${window.location.origin}/office/union/${unionId}/join`,
+        },
+      },
+    ],
+  } as KakaoLinkObject;
+};
+
 export const TodayPrayLink = () => {
   return {
     objectType: "feed",
