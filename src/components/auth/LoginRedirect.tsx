@@ -22,6 +22,7 @@ const LoginRedirect = () => {
   const kakaoId = user!.user_metadata.provider_id;
   const params = new URLSearchParams(location.search);
   const groupId = params.get("groupId");
+  const unionId = params.get("unionId");
   const from = params.get("from");
   const groupPageUrl = groupId ? `/group/${groupId}` : "/group";
   const fcmToken = localStorage.getItem("fcmToken");
@@ -62,11 +63,14 @@ const LoginRedirect = () => {
     }
     if (!myProfile.terms_agreed_at) {
       navigate(`/term?groupId=${groupId}`, { replace: true });
+    } else if (unionId) {
+      navigate(`/office/union/${unionId}/join`, { replace: true });
     } else {
       navigate(groupPageUrl, { replace: true });
     }
   }, [
     myProfile,
+    unionId,
     currentUserId,
     kakaoId,
     provider,
