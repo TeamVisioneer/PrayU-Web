@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
-import { useRef } from "react";
 import { analyticsTrack } from "@/analytics/analytics.ts";
 import useBaseStore from "@/stores/baseStore";
 import { Input } from "@/components/ui/input";

@@ -189,32 +189,6 @@ const UnionDetailPage: React.FC = () => {
     window.Kakao.Share.sendDefault(kakaoLinkObject);
   };
 
-  // Handle send invitation message
-  const handleSendMessage = () => {
-    const link = generateInviteLink();
-    // 공유할 메시지 구성
-    const message = `${unionData?.name || "공동체"} 초대 링크입니다: ${link}`;
-
-    // 기본 공유 API 사용 (모바일에서 더 자연스럽게 작동)
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "공동체 초대",
-          text: message,
-          url: link,
-        })
-        .catch((error) => {
-          console.error("Error sharing:", error);
-          // 폴백: 클립보드에 복사
-          navigator.clipboard.writeText(message);
-          alert("초대 메시지가 클립보드에 복사되었습니다.");
-        });
-    } else {
-      // 공유 API를 지원하지 않는 경우 WhatsApp으로 열기 (또는 다른 대안)
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
