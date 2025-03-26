@@ -33,7 +33,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {historyCard?.bible_card_url ? (
-          <div className="flex flex-col min-h-80vh max-h-80vh gap-2 px-10 pt-5 pb-10">
+          <div className="flex flex-col min-h-80vh max-h-80vh gap-2 px-10 pt-5 pb-10 overflow-auto">
             <div className="flex-shrink-0 rounded-xl overflow-hidden shadow-md">
               <img
                 src={historyCard.bible_card_url}
