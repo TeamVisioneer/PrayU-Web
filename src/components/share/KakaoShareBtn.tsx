@@ -91,7 +91,7 @@ export const UnionInviteLink = (unionName: string, unionId: string) => {
     objectType: "feed",
     content: {
       title: "PrayU 공동체 등록 요청 알림",
-      description: `${unionName} 에서 등록 요청이 왔어요\n요청을 수락해 주세요!`,
+      description: `${unionName}에서 등록 요청이 왔어요\n요청을 수락해 주세요!`,
       imageUrl:
         "https://qggewtakkrwcclyxtxnz.supabase.co/storage/v1/object/public/prayu//KakaoUnionInvite.png",
       imageWidth: 400,
