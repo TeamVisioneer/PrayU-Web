@@ -1,6 +1,5 @@
 import { supabase } from "../../../supabase/client";
 import * as Sentry from "@sentry/react";
-import { PostgrestError } from "@supabase/supabase-js";
 import { MemberWithProfiles } from "../../../supabase/types/tables";
 
 export interface MemberWithActivity extends MemberWithProfiles {
@@ -10,11 +9,6 @@ export interface MemberWithActivity extends MemberWithProfiles {
 
 export class MemberController {
   constructor(private supabaseClient = supabase) {}
-
-  private handleError(error: Error | PostgrestError): null {
-    Sentry.captureException(error);
-    return null;
-  }
 
   /**
    * 그룹의 모든 멤버 정보를 조회합니다.
@@ -32,9 +26,10 @@ export class MemberController {
         .eq("group_id", groupId)
         .is("deleted_at", null);
 
-      if (error) return this.handleError(error);
-
-      if (!data) return [];
+      if (error) {
+        Sentry.captureException(error.message);
+        return [];
+      }
 
       // 활동 정보를 가공하여 반환
       const membersWithActivity = data.map((member) => {
@@ -51,7 +46,8 @@ export class MemberController {
 
       return membersWithActivity;
     } catch (error) {
-      return this.handleError(error as Error);
+      Sentry.captureException(error);
+      return [];
     }
   }
 }

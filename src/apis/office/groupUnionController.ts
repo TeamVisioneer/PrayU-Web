@@ -50,7 +50,7 @@ export class GroupUnionController {
         .single();
 
       if (error) {
-        Sentry.captureException(error);
+        Sentry.captureException(error.message);
         return null;
       }
       return data as GroupUnionWithProfiles;
@@ -72,7 +72,7 @@ export class GroupUnionController {
         .order("created_at", { ascending: false });
 
       if (error) {
-        Sentry.captureException(error);
+        Sentry.captureException(error.message);
         return null;
       }
 

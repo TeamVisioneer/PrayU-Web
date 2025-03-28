@@ -1,15 +1,9 @@
 import { supabase } from "./../../../supabase/client";
 import * as Sentry from "@sentry/react";
 import { GroupWithProfiles } from "../../../supabase/types/tables";
-import { PostgrestError } from "@supabase/supabase-js";
 
 export class GroupController {
   constructor(private supabaseClient = supabase) {}
-
-  private handleError(error: Error | PostgrestError): null {
-    Sentry.captureException(error);
-    return null;
-  }
 
   async fetchGroupListByUserId(
     userId: string,
@@ -31,11 +25,15 @@ export class GroupController {
         .is("member.deleted_at", null)
         .order("created_at", { ascending: false });
 
-      if (error) return this.handleError(error);
+      if (error) {
+        Sentry.captureException(error.message);
+        return [];
+      }
 
       return data as GroupWithProfiles[];
     } catch (error) {
-      return this.handleError(error as Error);
+      Sentry.captureException(error);
+      return [];
     }
   }
   async fetchGroupListByUnionId(
@@ -53,11 +51,15 @@ export class GroupController {
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
 
-      if (error) return this.handleError(error);
+      if (error) {
+        Sentry.captureException(error.message);
+        return [];
+      }
 
       return data as GroupWithProfiles[];
     } catch (error) {
-      return this.handleError(error as Error);
+      Sentry.captureException(error);
+      return [];
     }
   }
 
@@ -72,10 +74,14 @@ export class GroupController {
         .eq("id", groupId)
         .single();
 
-      if (error) return this.handleError(error);
+      if (error) {
+        Sentry.captureException(error.message);
+        return null;
+      }
       return data as GroupWithProfiles;
     } catch (error) {
-      return this.handleError(error as Error);
+      Sentry.captureException(error);
+      return null;
     }
   }
 }

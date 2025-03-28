@@ -57,12 +57,9 @@ const UnionDetailPage: React.FC = () => {
 
   const scrollToGroupList = () => {
     if (groupListRef.current) {
-      const elementPosition = groupListRef.current.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - 20; // 20px offset from the top
-
-      window.scrollTo({
-        top: offsetPosition,
+      groupListRef.current.scrollIntoView({
         behavior: "smooth",
+        block: "nearest",
       });
     }
   };
