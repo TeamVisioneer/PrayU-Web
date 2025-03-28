@@ -15,6 +15,7 @@ import kakaoIcon from "@/assets/kakaoIcon.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import { NotificationType } from "../notification/NotificationType";
 import { useToast } from "@/components/ui/use-toast";
+import { RiNotification4Line } from "react-icons/ri";
 
 const OtherMemberDrawer: React.FC = () => {
   const memberList = useBaseStore((state) => state.memberList);
@@ -105,9 +106,10 @@ const OtherMemberDrawer: React.FC = () => {
           카카오톡 메세지 보내기
         </button>
         <button
-          className="w-full rounded-lg bg-white border border-gray-300 py-3 text-gray-700 font-medium hover:bg-gray-50"
+          className="w-full rounded-lg bg-white border border-gray-300 py-3 text-gray-700 font-medium hover:bg-gray-50 flex items-center justify-center gap-2"
           onClick={() => onClickSendNotificationRequest()}
         >
+          <RiNotification4Line className="w-5 h-5" />
           작성 요청 알림 보내기
         </button>
       </div>
@@ -129,9 +131,10 @@ const OtherMemberDrawer: React.FC = () => {
           카카오톡 메세지 보내기
         </button>
         <button
-          className="w-full rounded-lg bg-white border border-gray-300 py-3 text-gray-700 font-medium hover:bg-gray-50"
+          className="w-full rounded-lg bg-white border border-gray-300 py-3 text-gray-700 font-medium hover:bg-gray-50 flex items-center justify-center gap-2"
           onClick={() => onClickSendNotificationRequest()}
         >
+          <RiNotification4Line className="w-5 h-5" />
           작성 요청 알림 보내기
         </button>
       </div>
