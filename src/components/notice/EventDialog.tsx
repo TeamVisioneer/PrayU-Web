@@ -14,7 +14,13 @@ const EventDialog = () => {
   );
 
   return (
-    <Dialog open={isOpenEventDialog} onOpenChange={setIsOpenEventDialog}>
+    <Dialog
+      open={isOpenEventDialog}
+      onOpenChange={(open) => {
+        setIsOpenEventDialog(open);
+        if (!open && window.history.state?.open === true) window.history.back();
+      }}
+    >
       <DialogContent className="w-11/12 h-96 overflow-auto rounded-2xl bg-mainBg">
         <DialogHeader>
           <DialogTitle className="text-xl text-left">

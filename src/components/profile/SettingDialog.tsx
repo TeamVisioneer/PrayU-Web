@@ -121,7 +121,13 @@ const SettingDialog = () => {
   const kakaoMessageEnabled = false;
 
   return (
-    <Dialog open={isOpenSettingDialog} onOpenChange={setIsOpenSettingDialog}>
+    <Dialog
+      open={isOpenSettingDialog}
+      onOpenChange={(open) => {
+        setIsOpenSettingDialog(open);
+        if (!open && window.history.state?.open === true) window.history.back();
+      }}
+    >
       <DialogContent className="w-11/12 h-[400px] overflow-auto rounded-2xl bg-mainBg">
         <DialogHeader>
           <DialogTitle className="text-xl text-left pb-4">설정</DialogTitle>
