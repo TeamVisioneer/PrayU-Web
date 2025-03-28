@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { MemberWithProfiles } from "supabase/types/tables";
 import useRealtimeMember from "./useRealtimeMember";
-import { CheckCircle2 } from "lucide-react";
 
 const OtherMemberList: React.FC = () => {
   const myMember = useBaseStore((state) => state.myMember);
