@@ -13,17 +13,6 @@ import { prayController } from "@/apis/office/prayController";
 import useAuth from "@/hooks/useAuth";
 import { groupUnionController } from "@/apis/office/groupUnionController";
 
-// 스크롤바 숨기기 스타일
-const hideScrollbarStyle = `
-  .hide-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari, Opera */
-  }
-`;
-
 // 멤버별 콘텐츠를 합치기 위한 인터페이스
 interface MemberContent {
   memberId: string;
@@ -236,8 +225,110 @@ const GroupDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      <div className="min-h-screen bg-gray-50">
+        {/* Skeleton for sticky header */}
+        <div className="bg-green-600 sticky top-0 z-10">
+          <div className="px-4 py-5 flex items-center">
+            <div className="h-6 w-6 bg-green-400 rounded-md animate-pulse"></div>
+            <div className="h-7 w-36 bg-green-400 rounded-md animate-pulse ml-4"></div>
+          </div>
+        </div>
+
+        {/* Skeleton for group info */}
+        <div className="bg-white">
+          <div className="max-w-7xl mx-auto p-4">
+            <div className="flex items-center">
+              <div className="w-14 h-14 bg-gray-200 rounded-lg animate-pulse mr-4"></div>
+              <div>
+                <div className="h-6 w-40 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                <div className="h-5 w-48 bg-gray-200 rounded-md animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Skeleton for group stats */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Skeleton section title */}
+          <div className="h-7 w-28 bg-gray-200 rounded-md animate-pulse mb-4"></div>
+
+          {/* Skeleton for stats card */}
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-8">
+            <div className="grid grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="text-center">
+                  <div className="h-5 w-28 mx-auto bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                  <div className="h-8 w-16 mx-auto bg-gray-200 rounded-md animate-pulse"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Skeleton for member section */}
+          <div className="mt-6">
+            <div className="h-7 w-32 bg-gray-200 rounded-md animate-pulse mb-4"></div>
+
+            {/* Skeleton for member list */}
+            <div className="space-y-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-lg shadow-sm border border-gray-200"
+                >
+                  <div className="p-4 flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 animate-pulse mr-3"></div>
+                      <div>
+                        <div className="h-5 w-28 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                        <div className="h-4 w-16 bg-gray-200 rounded-full animate-pulse"></div>
+                      </div>
+                    </div>
+                    <div className="h-5 w-5 bg-gray-200 rounded-md animate-pulse"></div>
+                  </div>
+
+                  {/* Skeleton for prayer cards (shown for the first member) */}
+                  {i === 1 && (
+                    <div className="border-t border-gray-200 p-4">
+                      <div className="space-y-4">
+                        {[1, 2].map((j) => (
+                          <div
+                            key={j}
+                            className="bg-white p-4 rounded-lg border border-gray-200"
+                          >
+                            {/* Skeleton for prayer card content */}
+                            <div className="mb-3">
+                              <div className="h-5 w-20 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                              <div className="pl-3 border-l-2 border-green-200">
+                                <div className="h-4 w-full bg-gray-200 rounded-md animate-pulse mb-1"></div>
+                                <div className="h-4 w-3/4 bg-gray-200 rounded-md animate-pulse"></div>
+                              </div>
+                            </div>
+
+                            <div>
+                              <div className="h-5 w-20 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                              <div className="pl-3 border-l-2 border-green-200">
+                                <div className="h-4 w-full bg-gray-200 rounded-md animate-pulse mb-1"></div>
+                                <div className="h-4 w-5/6 bg-gray-200 rounded-md animate-pulse mb-1"></div>
+                                <div className="h-4 w-4/6 bg-gray-200 rounded-md animate-pulse"></div>
+                              </div>
+                            </div>
+
+                            {/* Skeleton for date */}
+                            <div className="flex items-center mt-3">
+                              <div className="h-3 w-20 bg-gray-200 rounded-md animate-pulse"></div>
+                              <div className="mx-2 h-3 w-3 bg-gray-200 rounded-full animate-pulse"></div>
+                              <div className="h-3 w-24 bg-gray-200 rounded-md animate-pulse"></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -283,9 +374,6 @@ const GroupDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* CSS for hiding scrollbars */}
-      <style>{hideScrollbarStyle}</style>
-
       {/* 상단 헤더 - 녹색 배경으로 변경, sticky로 설정 */}
       <div className="bg-green-600 sticky top-0 z-10">
         <div className="px-4 py-5 flex items-center">

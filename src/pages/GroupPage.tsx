@@ -19,6 +19,7 @@ import BannerDialog from "@/components/notice/BannerDialog";
 import GroupHeader from "@/components/group/GroupHeader";
 import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
+import TextBanner from "@/components/member/textBanner";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -148,7 +149,14 @@ const GroupPage: React.FC = () => {
     <div className="flex flex-col h-full">
       <GroupHeader />
       <div className="flex flex-col px-5 pb-5 flex-grow gap-4">
-        <MyMember myMember={myMember} />
+        <div className="flex flex-col gap-2">
+          <MyMember myMember={myMember} />
+          {targetGroup.group_union && (
+            <TextBanner
+              text={`${targetGroup.group_union.name} 공동체에서 함께 하는 기도 그룹이에요`}
+            />
+          )}
+        </div>
         {isPrayToday || AllMemberExpired ? (
           <OtherMemberList />
         ) : (

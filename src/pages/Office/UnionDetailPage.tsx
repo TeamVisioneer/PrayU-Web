@@ -14,18 +14,6 @@ import { prayCardController } from "@/apis/office/prayCardController";
 import useAuth from "@/hooks/useAuth";
 import { UnionInviteLink } from "@/components/share/KakaoShareBtn";
 
-// 스크롤바 숨기기 스타일
-const hideScrollbarStyle = `
-  .hide-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari, Opera */
-  }
-`;
-
-// 목데이터: 실제로는 API로 대체될 데이터
 interface PrayerStats {
   todayPrayCount: number;
   weeklyPrayCardCount: number;
@@ -47,7 +35,7 @@ const UnionDetailPage: React.FC = () => {
     weeklyPrayCardCount: 0,
     totalPrayCount: 0,
   });
-  // 멤버 데이터는 사용되지 않지만 향후 멤버 탭 구현을 위해 유지
+
   const [groupsData, setGroupsData] = useState<GroupWithProfiles[]>([]);
   const [prayData, setPrayData] = useState<Pray[]>([]);
   const [showUnionDropdown, setShowUnionDropdown] = useState(false);
@@ -57,12 +45,9 @@ const UnionDetailPage: React.FC = () => {
 
   const scrollToGroupList = () => {
     if (groupListRef.current) {
-      const elementPosition = groupListRef.current.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - 20; // 20px offset from the top
-
-      window.scrollTo({
-        top: offsetPosition,
+      groupListRef.current.scrollIntoView({
         behavior: "smooth",
+        block: "nearest",
       });
     }
   };
@@ -199,8 +184,111 @@ const UnionDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen bg-gray-50">
+        {/* Skeleton for sticky header */}
+        <div className="sticky top-0 z-30 bg-white shadow-sm">
+          {/* Skeleton for top header */}
+          <div className="border-b border-gray-200 p-3 flex items-center justify-between">
+            <div className="h-7 w-32 bg-gray-200 rounded-md animate-pulse"></div>
+          </div>
+
+          {/* Skeleton for union info */}
+          <div className="border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-gray-200 animate-pulse mr-4"></div>
+                <div className="flex-1">
+                  <div className="h-8 w-48 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                  <div className="h-5 w-64 bg-gray-200 rounded-md animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Skeleton for tab navigation */}
+          <div className="border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex space-x-8">
+                <div className="py-4 px-1 border-b-2 border-blue-500">
+                  <div className="h-5 w-24 bg-gray-200 rounded-md animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Skeleton for main content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Skeleton section title */}
+          <div className="h-7 w-32 bg-gray-200 rounded-md animate-pulse mb-6"></div>
+
+          {/* Skeleton for stats cards */}
+          <div className="grid grid-cols-1 gap-4 mb-8">
+            {/* Group card skeleton */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="h-5 w-16 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+              <div className="h-8 w-12 bg-gray-200 rounded-md animate-pulse mb-3"></div>
+              <div className="h-5 w-full bg-gray-200 rounded-md animate-pulse mb-3"></div>
+              <div className="h-5 w-28 bg-gray-200 rounded-md animate-pulse"></div>
+            </div>
+
+            {/* Stats card skeleton */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="grid grid-cols-3 gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="text-center">
+                    <div className="h-5 w-24 mx-auto bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                    <div className="h-8 w-16 mx-auto bg-gray-200 rounded-md animate-pulse"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Chart skeleton */}
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div className="h-6 w-36 bg-gray-200 rounded-md animate-pulse mb-6"></div>
+              <div className="h-60 flex items-end space-x-2 mb-10 pt-10">
+                {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                  <div key={i} className="flex flex-col items-center flex-1">
+                    <div
+                      className={`w-full bg-gray-200 rounded-t-sm animate-pulse`}
+                      style={{ height: `${50 + Math.random() * 120}px` }}
+                    ></div>
+                    <div className="h-5 w-5 bg-gray-200 rounded-md animate-pulse mt-2"></div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-center space-x-8 mt-4">
+                <div className="h-5 w-28 bg-gray-200 rounded-md animate-pulse"></div>
+                <div className="h-5 w-28 bg-gray-200 rounded-md animate-pulse"></div>
+              </div>
+            </div>
+
+            {/* Group list skeleton */}
+            <div className="mt-12">
+              <div className="flex justify-between items-center mb-4">
+                <div className="h-6 w-24 bg-gray-200 rounded-md animate-pulse"></div>
+                <div className="h-8 w-32 bg-gray-200 rounded-md animate-pulse"></div>
+              </div>
+
+              {/* Group items skeletons */}
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="bg-white border border-gray-200 rounded mb-3 p-4"
+                >
+                  <div className="flex justify-between">
+                    <div>
+                      <div className="h-6 w-40 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+                      <div className="h-5 w-64 bg-gray-200 rounded-md animate-pulse"></div>
+                    </div>
+                    <div className="h-5 w-20 bg-gray-200 rounded-md animate-pulse"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -265,9 +353,6 @@ const UnionDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* CSS for hiding scrollbars */}
-      <style>{hideScrollbarStyle}</style>
-
       {/* 상단 고정 영역 */}
       <div className="sticky top-0 z-30 bg-white shadow-sm">
         {/* 상단 헤더 */}
@@ -436,10 +521,18 @@ const UnionDetailPage: React.FC = () => {
         {/* 탭 네비게이션 */}
         <div className="border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex space-x-8 overflow-x-auto hide-scrollbar">
-              <h2 className="py-4 px-1 border-b-2 border-blue-500 text-blue-600 font-medium text-sm whitespace-nowrap">
-                공동체 현황
-              </h2>
+            <div className="flex justify-between items-center">
+              <div className="flex space-x-8 overflow-x-auto hide-scrollbar">
+                <h2 className="py-4 px-1 border-b-2 border-blue-500 text-blue-600 font-medium text-sm whitespace-nowrap">
+                  공동체 현황
+                </h2>
+              </div>
+              <button
+                className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
+                onClick={() => setShowInviteModal(true)}
+              >
+                공동체 그룹 등록
+              </button>
             </div>
           </div>
         </div>
@@ -621,12 +714,6 @@ const UnionDetailPage: React.FC = () => {
             <div ref={groupListRef} className="mt-12">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-medium text-gray-900">그룹 목록</h2>
-                <button
-                  className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
-                  onClick={() => setShowInviteModal(true)}
-                >
-                  공동체 그룹 등록
-                </button>
               </div>
 
               {/* 그룹 목록 */}

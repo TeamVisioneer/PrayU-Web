@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { MemberWithProfiles } from "supabase/types/tables";
 import useRealtimeMember from "./useRealtimeMember";
-import { CheckCircle2 } from "lucide-react";
 
 const OtherMemberList: React.FC = () => {
   const myMember = useBaseStore((state) => state.myMember);
@@ -68,15 +67,6 @@ const OtherMemberList: React.FC = () => {
     <div className="flex flex-col pb-10">
       <div className="text-sm text-gray-500 py-2">
         <div className="mb-2">기도 구성원</div>
-        {targetGroup.group_union_id && (
-          <div className="w-full bg-white text-blue-500 px-4 py-1.5 rounded-md text-xs flex items-center justify-center gap-1">
-            <CheckCircle2 className="h-4 w-4 text-blue-500" />
-            <span>
-              {targetGroup.group_union?.profiles.full_name}님의 공동체에서 함께
-              하는 기도 그룹이에요
-            </span>
-          </div>
-        )}
       </div>
 
       <div className="flex flex-col gap-4 pb-20">
