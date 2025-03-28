@@ -29,7 +29,10 @@ const TodayPrayCardListDrawer: React.FC = () => {
   return (
     <Drawer
       open={isOpenTodayPrayDrawer}
-      onOpenChange={setIsOpenTodayPrayDrawer}
+      onOpenChange={(open) => {
+        setIsOpenTodayPrayDrawer(open);
+        if (!open && window.history.state?.open === true) window.history.back();
+      }}
     >
       <DrawerContent className="bg-mainBg flex flex-col pb-5">
         <DrawerHeader>

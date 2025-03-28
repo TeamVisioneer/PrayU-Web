@@ -173,7 +173,13 @@ const GroupMenuBtn: React.FC = () => {
   };
 
   return (
-    <Sheet open={isOpenGroupMenuSheet} onOpenChange={setIsOpenGroupMenuSheet}>
+    <Sheet
+      open={isOpenGroupMenuSheet}
+      onOpenChange={(open) => {
+        setIsOpenGroupMenuSheet(open);
+        if (!open && window.history.state?.open === true) window.history.back();
+      }}
+    >
       <SheetTrigger
         className="flex flex-col items-end focus:outline-none p-0"
         onClick={() => onClickSheetTrigeer()}

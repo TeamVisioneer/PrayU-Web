@@ -103,7 +103,10 @@ export default function GroupListDrawer() {
   return (
     <Drawer
       open={isOpenGroupListDrawer}
-      onOpenChange={setIsOpenGroupListDrawer}
+      onOpenChange={(open) => {
+        setIsOpenGroupListDrawer(open);
+        if (!open && window.history.state?.open === true) window.history.back();
+      }}
     >
       <DrawerContent>
         <DrawerHeader>

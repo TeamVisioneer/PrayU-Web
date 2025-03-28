@@ -15,7 +15,13 @@ const PrayCardHistoryPrayListDrawer: React.FC = () => {
   );
 
   return (
-    <Drawer open={isOpenMyPrayDrawer} onOpenChange={setIsOpenMyPrayDrawer}>
+    <Drawer
+      open={isOpenMyPrayDrawer}
+      onOpenChange={(open) => {
+        setIsOpenMyPrayDrawer(open);
+        if (!open && window.history.state?.open === true) window.history.back();
+      }}
+    >
       <DrawerContent className="h-[400px] bg-mainBg">
         <DrawerHeader>
           <DrawerTitle className="p-4 text-center">기도해 준 친구</DrawerTitle>
