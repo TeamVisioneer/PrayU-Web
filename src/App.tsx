@@ -46,6 +46,7 @@ import {
   CreateUnionPage,
   UnionJoinPage,
 } from "./pages/Office";
+import ExternalLinkDialog from "./components/notice/ExternalLinkDialog";
 
 const GroupRedirect = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -221,6 +222,7 @@ const App = () => {
       </div>
       <Toaster />
       <ConfirmAlert />
+      <ExternalLinkDialog />
     </div>
   );
 };

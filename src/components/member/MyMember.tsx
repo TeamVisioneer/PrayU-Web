@@ -99,7 +99,13 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   };
 
   return (
-    <Drawer open={isOpenMyMemberDrawer} onOpenChange={setIsOpenMyMemberDrawer}>
+    <Drawer
+      open={isOpenMyMemberDrawer}
+      onOpenChange={(open) => {
+        setIsOpenMyMemberDrawer(open);
+        if (!open && window.history.state?.open === true) window.history.back();
+      }}
+    >
       <DrawerTrigger
         className="focus:outline-none"
         onClick={() => onClickMyMember()}

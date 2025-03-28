@@ -433,6 +433,10 @@ export interface BaseStore {
     onAction: () => void;
   }) => void;
 
+  // external link
+  externalUrl: string | null;
+  setExternalUrl: (url: string | null) => void;
+
   // drawer
   isOpenOnboardingDrawer: boolean;
   setIsOpenOnboardingDrawer: (isOpenOnboardingDrawer: boolean) => void;
@@ -1271,21 +1275,6 @@ const useBaseStore = create<BaseStore>()(
       });
     },
 
-    //drawer
-    isOpenOnboardingDrawer: false,
-    setIsOpenOnboardingDrawer: (isOpenOnboardingDrawer: boolean) => {
-      set((state) => {
-        state.isOpenOnboardingDrawer = isOpenOnboardingDrawer;
-      });
-    },
-
-    isOpenLoginDrawer: false,
-    setIsOpenLoginDrawer: (isOpenLoginDrawer: boolean) => {
-      set((state) => {
-        state.isOpenLoginDrawer = isOpenLoginDrawer;
-      });
-    },
-
     // etc
     isConfirmAlertOpen: false,
     setIsConfirmAlertOpen(isOpen) {
@@ -1329,6 +1318,29 @@ const useBaseStore = create<BaseStore>()(
     setAlertData: (alertData) => {
       set((state) => {
         state.alertData = alertData;
+      });
+    },
+
+    // external link
+    externalUrl: null,
+    setExternalUrl: (url) => {
+      set((state) => {
+        state.externalUrl = url;
+      });
+    },
+
+    // drawer
+    isOpenOnboardingDrawer: false,
+    setIsOpenOnboardingDrawer: (isOpenOnboardingDrawer: boolean) => {
+      set((state) => {
+        state.isOpenOnboardingDrawer = isOpenOnboardingDrawer;
+      });
+    },
+
+    isOpenLoginDrawer: false,
+    setIsOpenLoginDrawer: (isOpenLoginDrawer: boolean) => {
+      set((state) => {
+        state.isOpenLoginDrawer = isOpenLoginDrawer;
       });
     },
 

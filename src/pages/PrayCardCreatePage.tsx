@@ -77,12 +77,14 @@ const PrayCardCreatePage: React.FC = () => {
   const loadPrayCardLife = () => {
     if (userPrayCardList?.[0]?.life) {
       setPrayCardLife(userPrayCardList[0].life);
+      localStorage.setItem("prayCardLife", userPrayCardList[0].life);
     }
   };
 
   const loadPrayCardContent = () => {
     if (userPrayCardList?.[0]?.content) {
       setPrayCardContent(userPrayCardList[0].content);
+      localStorage.setItem("prayCardContent", userPrayCardList[0].content);
     }
   };
 
@@ -103,9 +105,15 @@ const PrayCardCreatePage: React.FC = () => {
   ]);
 
   useEffect(() => {
-    setPrayCardContent("");
-    setPrayCardLife("");
-    if (targetGroup && myMember) {
+    const savedContent = localStorage.getItem("prayCardContent");
+    const savedLife = localStorage.getItem("prayCardLife");
+
+    if (savedContent) setPrayCardContent(savedContent);
+    else setPrayCardContent("");
+    if (savedLife) setPrayCardLife(savedLife);
+    else setPrayCardLife("");
+
+    if (targetGroup && myMember && !savedContent && !savedLife) {
       setIsConfirmAlertOpen(true);
       setAlertData({
         color: "bg-blue-500",
@@ -124,8 +132,10 @@ const PrayCardCreatePage: React.FC = () => {
     setPrayCardLife,
   ]);
 
-  if (targetGroupLoading == false && targetGroup == null)
-    window.location.href = "/group/not-found";
+  useEffect(() => {
+    if (targetGroupLoading == false && targetGroup == null)
+      window.location.href = "/group/not-found";
+  }, [targetGroup, targetGroupLoading]);
 
   if (!targetGroup || !memberList || memberLoading || !userPrayCardList) {
     return (
@@ -222,6 +232,9 @@ const PrayCardCreatePage: React.FC = () => {
       content: randomContent,
     });
     if (newPrayCard) await sendNotification(upsertedMember);
+    // Clear localStorage on successful form submission
+    localStorage.removeItem("prayCardContent");
+    localStorage.removeItem("prayCardLife");
     window.location.replace(`/group/${groupId}`);
   };
 
@@ -244,6 +257,9 @@ const PrayCardCreatePage: React.FC = () => {
       life: inputPrayCardLife,
     });
     if (newPrayCard) await sendNotification(upsertedMember);
+    // Clear localStorage on successful form submission
+    localStorage.removeItem("prayCardContent");
+    localStorage.removeItem("prayCardLife");
     window.location.replace(`/group/${groupId}`);
   };
 
@@ -303,7 +319,10 @@ const PrayCardCreatePage: React.FC = () => {
             <textarea
               className="text-sm w-full bg-transparent text-gray-700 !opacity-100 !border-none !cursor-default focus:outline-none focus:border-none"
               value={inputPrayCardLife}
-              onChange={(e) => setPrayCardLife(e.target.value)}
+              onChange={(e) => {
+                setPrayCardLife(e.target.value);
+                localStorage.setItem("prayCardLife", e.target.value);
+              }}
               placeholder="회사에서 업무적, 관계적으로 힘들었던 한 주"
               rows={3}
             />
@@ -330,7 +349,10 @@ const PrayCardCreatePage: React.FC = () => {
             <textarea
               className="text-sm w-full min-h-36 bg-transparent text-gray-700 focus:outline-none focus:border-none"
               value={inputPrayCardContent}
-              onChange={(e) => setPrayCardContent(e.target.value)}
+              onChange={(e) => {
+                setPrayCardContent(e.target.value);
+                localStorage.setItem("prayCardContent", e.target.value);
+              }}
               placeholder={`1. 맡겨진 자리에서 하나님의 사명을 발견할 수 있도록\n2. 내 주변 사람을 내 몸과 같이 섬길 수 있도록`}
             />
           </div>

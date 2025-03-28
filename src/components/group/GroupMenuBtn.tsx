@@ -59,6 +59,7 @@ const GroupMenuBtn: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
+  const setExternalUrl = useBaseStore((state) => state.setExternalUrl);
 
   const isGroupListPage = window.location.pathname === "/group";
 
@@ -117,7 +118,7 @@ const GroupMenuBtn: React.FC = () => {
   const onClickContactUs = () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_문의", {});
-    window.location.href = import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL;
+    setExternalUrl(import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL);
   };
 
   const onClickSheetTrigeer = () => {
@@ -128,7 +129,7 @@ const GroupMenuBtn: React.FC = () => {
   const onClickOpenNotice = () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_카카오_소식", {});
-    window.location.href = "https://pf.kakao.com/_XaHDG/posts";
+    setExternalUrl("https://pf.kakao.com/_XaHDG/posts");
   };
   const onClickOpenTutorial = () => {
     setIsOpenGroupMenuSheet(false);
@@ -173,7 +174,13 @@ const GroupMenuBtn: React.FC = () => {
   };
 
   return (
-    <Sheet open={isOpenGroupMenuSheet} onOpenChange={setIsOpenGroupMenuSheet}>
+    <Sheet
+      open={isOpenGroupMenuSheet}
+      onOpenChange={(open) => {
+        setIsOpenGroupMenuSheet(open);
+        if (!open && window.history.state?.open === true) window.history.back();
+      }}
+    >
       <SheetTrigger
         className="flex flex-col items-end focus:outline-none p-0"
         onClick={() => onClickSheetTrigeer()}
