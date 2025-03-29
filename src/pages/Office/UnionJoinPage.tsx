@@ -322,6 +322,41 @@ const UnionJoinPage: React.FC = () => {
                       } cursor-pointer transition-all hover:bg-gray-50`}
                     >
                       <div className="flex items-start">
+                        {selectedGroups.some((g) => g.id === group.id) ? (
+                          <div className="bg-blue-500 text-white rounded-full p-0.5 mt-0.5 mr-2 w-5 h-5 flex items-center justify-center border-2 border-blue-500">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-3 w-3"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                        ) : (
+                          <div className="border-2 border-gray-300 rounded-full p-0.5 mt-0.5 mr-2 w-5 h-5 flex items-center justify-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-3 w-3 text-transparent"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                        )}
                         <div className="flex-1">
                           <h3 className="font-medium text-gray-900">
                             {group.name}
@@ -384,24 +419,6 @@ const UnionJoinPage: React.FC = () => {
                             </div>
                           )}
                         </div>
-                        {selectedGroups.some((g) => g.id === group.id) && (
-                          <div className="bg-blue-500 text-white rounded-full p-1">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </div>
-                        )}
                       </div>
                     </div>
                   ))}
