@@ -20,12 +20,6 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const setIsOpenTodayPrayDrawer = useBaseStore(
     (state) => state.setIsOpenTodayPrayDrawer
   );
-  const setIsOpenMyPrayDrawer = useBaseStore(
-    (state) => state.setIsOpenMyPrayDrawer
-  );
-  const setIsOpenMyMemberDrawer = useBaseStore(
-    (state) => state.setIsOpenMyMemberDrawer
-  );
   const setIsPrayToday = useBaseStore((state) => state.setIsPrayToday);
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
@@ -50,13 +44,8 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
     analyticsTrack("클릭_오늘의기도_시작", eventOption);
-    if (eventOption.total_member >= 2) {
-      window.fbq("track", "클릭_초대후_오늘의기도", eventOption);
-    }
 
     setIsOpenTodayPrayDrawer(true);
-    setIsOpenMyPrayDrawer(false);
-    setIsOpenMyMemberDrawer(false);
     setPrayCardCarouselList(null);
     const todayDt = getISOTodayDate();
     const startDt = getWeekInfo(todayDt).weekDates[0];
