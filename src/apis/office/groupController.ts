@@ -16,6 +16,7 @@ export class GroupController {
           profiles (id, full_name, avatar_url),
           member!inner (
             id,
+            user_id,
             profiles (id, full_name, avatar_url)
           )
         `)

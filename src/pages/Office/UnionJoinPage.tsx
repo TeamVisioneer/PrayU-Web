@@ -61,12 +61,14 @@ const UnionJoinPage: React.FC = () => {
         setUnionData(unionDetails);
 
         // 2. Get groups where the user is a leader
-        const allGroups = await groupController.fetchGroupListByUserId(user.id);
-        if (allGroups) {
-          const leaderGroups = allGroups.filter(
-            (group) => group.user_id === user.id
-          );
-          setMyGroups(leaderGroups);
+        const leaderGroups = await groupController.fetchGroupListByUserId(
+          user.id
+        );
+        if (leaderGroups) {
+          const leaderGroupsWithMe = leaderGroups.filter((group) => {
+            return group.member?.some((member) => member.user_id === user.id);
+          });
+          setMyGroups(leaderGroupsWithMe);
         }
       } catch (err) {
         console.error("Error fetching data:", err);
