@@ -8,6 +8,8 @@ import {
 import useAuth from "@/hooks/useAuth";
 import { groupController } from "@/apis/office/groupController";
 import { updateGroup } from "@/apis/group";
+import useBaseStore from "@/stores/baseStore";
+import LogInDrawer from "@/components/auth/LogInDrawer";
 
 // Extend the updateGroupParams to include group_union_id
 interface ExtendedGroupParams {
@@ -29,6 +31,9 @@ const UnionJoinPage: React.FC = () => {
   const { unionId } = useParams<{ unionId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const setIsOpenLoginDrawer = useBaseStore(
+    (state) => state.setIsOpenLoginDrawer
+  );
 
   // States
   const [currentStep, setCurrentStep] = useState<JoinStep>(JoinStep.INVITATION);
@@ -41,10 +46,19 @@ const UnionJoinPage: React.FC = () => {
   const [joinLoading, setJoinLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Handle login check and drawer
+  const handleLoginCheck = () => {
+    if (!user) {
+      setIsOpenLoginDrawer(true);
+      return;
+    }
+    goToNextStep();
+  };
+
   // Load union data and user's groups
   useEffect(() => {
     const fetchData = async () => {
-      if (!unionId || !user) {
+      if (!unionId) {
         setLoading(false);
         return;
       }
@@ -59,6 +73,11 @@ const UnionJoinPage: React.FC = () => {
           return;
         }
         setUnionData(unionDetails);
+
+        if (!user) {
+          setLoading(false);
+          return;
+        }
 
         // 2. Get groups where the user is a leader
         const leaderGroups = await groupController.fetchGroupListByUserId(
@@ -174,6 +193,9 @@ const UnionJoinPage: React.FC = () => {
   // Render step-by-step UI
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Include the LogInDrawer component */}
+      <LogInDrawer />
+
       {/* Header */}
       <div className="sticky top-0 bg-white shadow-sm border-b border-gray-200 z-20">
         <div className="flex items-center h-14 px-4">
@@ -276,7 +298,7 @@ const UnionJoinPage: React.FC = () => {
             </div>
 
             <button
-              onClick={goToNextStep}
+              onClick={handleLoginCheck}
               className="w-full py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
             >
               다음
