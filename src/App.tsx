@@ -210,11 +210,7 @@ const App = () => {
               />
               <Route
                 path="/office/union/:unionId/join"
-                element={
-                  <PrivateRoute>
-                    <UnionJoinPage />
-                  </PrivateRoute>
-                }
+                element={<UnionJoinPage />}
               />
             </Routes>
           </AuthProvider>

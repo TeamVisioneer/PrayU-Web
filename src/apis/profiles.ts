@@ -117,16 +117,15 @@ export const fetchProfileCount = async (): Promise<number> => {
 
 export const fetchNewUserCount = async (todayDate: string): Promise<number> => {
   try {
-    const { data, error } = await supabase
+    const { count, error } = await supabase
       .from("profiles")
-      .select("id")
-      .gte("created_at", todayDate)
-      .lt("created_at", todayDate);
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", todayDate);
     if (error) {
       Sentry.captureException(error.message);
       return 0;
     }
-    return data ? data.length : 0;
+    return count ? count : 0;
   } catch (error) {
     Sentry.captureException(error);
     return 0;
