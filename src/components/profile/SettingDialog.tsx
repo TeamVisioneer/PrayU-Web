@@ -71,22 +71,18 @@ const SettingDialog = () => {
   const onClickExitPrayU = () => {
     analyticsTrack("클릭_프로필_회원탈퇴", {});
     setAlertData({
-      color: "bg-red-400",
-      title: "PrayU 탈퇴하기",
+      color: "bg-red-400 hover:bg-red-500",
+      title: "회원 탈퇴",
       description:
-        "PrayU 계정을 탈퇴하시겠습니까?\nPrayU 의 모든 데이터가 삭제됩니다.",
+        "계정을 탈퇴하시겠습니까?\nPrayU 의 모든 데이터가 삭제됩니다.",
       actionText: "탈퇴하기",
       cancelText: "취소",
       onAction: async () => {
         const userId = user!.id;
-        const success = await deleteUser(userId);
-        if (success) {
-          signOut();
-          localStorage.removeItem(
-            `sb-${import.meta.env.VITE_SUPABASE_PROJECT_ID}-auth-token`
-          );
-          window.location.href = "/";
-        }
+        await deleteUser(userId);
+        signOut();
+
+        window.location.href = "/";
       },
     });
     setIsConfirmAlertOpen(true);

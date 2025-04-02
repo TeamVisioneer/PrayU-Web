@@ -6,15 +6,17 @@ import { Button } from "@/components/ui/button";
 import { UserRound, X } from "lucide-react";
 import { analyticsTrack } from "@/analytics/analytics";
 import prayerVerses from "@/data/prayCardTemplate.json";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { getISOTodayDate } from "@/lib/utils";
 import { PulseLoader } from "react-spinners";
+import LogInDrawer from "@/components/auth/LogInDrawer";
+import check from "@/assets/lottie/check2.json";
+import Lottie from "react-lottie";
 
 const GroupJoinPage: React.FC = () => {
   const navigate = useNavigate();
   const { groupId } = useParams();
   const [isJoining, setIsJoining] = useState(false);
-  const [joined, setJoined] = useState(false);
+  const [joined, setJoined] = useState(true);
 
   const createMember = useBaseStore((state) => state.createMember);
   const updateMember = useBaseStore((state) => state.updateMember);
@@ -123,9 +125,15 @@ const GroupJoinPage: React.FC = () => {
 
         <div className="flex flex-col p-5 pt-20 pb-8 flex-grow items-center">
           <div className="flex flex-col items-center p-8 pt-0 text-center max-w-md w-full">
-            <DotLottieReact
-              src="https://lottie.host/15e77410-a829-435a-b101-2a97cbfd2de5/wFw5i9ojoB.lottie"
-              autoplay
+            {/* <DotLottieReact src="../../assets/lottie/check.json" autoplay /> */}
+            <Lottie
+              height={200}
+              width={200}
+              options={{
+                loop: false,
+                autoplay: true,
+                animationData: check,
+              }}
             />
             <div className="space-y-6">
               <div className="space-y-2">
@@ -153,6 +161,8 @@ const GroupJoinPage: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-mainbg">
+      <LogInDrawer path={`/group/${groupId}/join`} />
+
       <Header />
 
       <div className="flex flex-col p-5 pt-20 pb-8 flex-grow items-center">
@@ -173,7 +183,7 @@ const GroupJoinPage: React.FC = () => {
               </h2>
 
               <p className="text-base text-gray-600 mb-4">
-                {targetGroup.name}에서 초대 메세지가 도착했어요
+                {targetGroup.name}에서 그룹 초대 요청을 보냈어요
               </p>
             </div>
 

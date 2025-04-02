@@ -68,6 +68,21 @@ export const deleteUser = async (userId: string): Promise<boolean> => {
   }
 
   try {
+    const { error } = await supabase
+      .from("profiles")
+      .update({ terms_agreed_at: null })
+      .eq("id", userId);
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return false;
+    }
+  } catch (error) {
+    Sentry.captureException(error);
+    return false;
+  }
+
+  try {
     // user hard delete
     const { data: { session } } = await supabase.auth.getSession();
     const response = await fetch(

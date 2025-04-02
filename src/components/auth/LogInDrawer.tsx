@@ -8,36 +8,21 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import KakaoLoginBtn from "./KakaoLoginBtn";
 import AppleLoginBtn from "./AppleLoginBtn";
-import { useLocation } from "react-router-dom";
-import { getDomainUrl } from "@/lib/utils";
 import EmailLoginBtn from "./EmailLoginBtn";
 
-const LogInDrawer = () => {
+interface LogInDrawerProps {
+  path?: string;
+}
+
+const LogInDrawer = ({ path }: LogInDrawerProps) => {
   const isApp = useBaseStore((state) => state.isApp);
   const isIOS = useBaseStore((state) => state.isIOS);
   const isOpenLoginDrawer = useBaseStore((state) => state.isOpenLoginDrawer);
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
   );
-  const location = useLocation();
-  const baseUrl = getDomainUrl();
-  const pathname = location.state?.from?.pathname || location.pathname;
-  const pathParts = pathname.split("/");
-  let groupId = "";
-  let unionId = "";
-  if (pathParts.length === 3 && pathParts[1] === "group") {
-    groupId = pathParts[2];
-  } else if (pathParts.length === 5 && pathParts[1] === "office") {
-    unionId = pathParts[3];
-  } else if (
-    pathParts.length === 4 &&
-    pathParts[1] === "group" &&
-    pathParts[2] === "open" &&
-    pathParts[3] === "1027-union"
-  ) {
-    groupId = String(import.meta.env.VITE_UNION_WORSHIP_GROUP_ID);
-  }
-  const redirectUrl = `${baseUrl}/login-redirect?groupId=${groupId}&unionId=${unionId}&from=LogInDrawer`;
+
+  const baseUrl = window.location.origin;
 
   const LoginContent = (
     <div className="flex flex-col gap-6 px-10">
@@ -52,7 +37,7 @@ const LogInDrawer = () => {
       <div className="flex flex-col w-full justify-center gap-4 pb-3">
         <KakaoLoginBtn
           redirectUri={`${baseUrl}/auth/kakao/callback`}
-          state={`groupId:${groupId};unionId:${unionId}`}
+          state={path ? `path:${path}` : ""}
         />
         {isApp && (
           <div className="flex flex-col items-center gap-3">
@@ -64,7 +49,15 @@ const LogInDrawer = () => {
               <div className="border-t border-gray-300 flex-grow"></div>
             </div>
             <div className="flex justify-center gap-5">
-              {isIOS && <AppleLoginBtn redirectUrl={redirectUrl} />}
+              {isIOS && (
+                <AppleLoginBtn
+                  redirectUrl={
+                    path
+                      ? `${baseUrl}/login-redirect?path=${path}`
+                      : `${baseUrl}/login-redirect`
+                  }
+                />
+              )}
               <EmailLoginBtn />
             </div>
           </div>
