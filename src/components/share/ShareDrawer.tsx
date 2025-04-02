@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 import { analyticsTrack } from "@/analytics/analytics";
 import { useEffect, useState } from "react";
+import GroupInviteMessage from "@/assets/Kakao/GroupInviteMessage.png";
 
 const ShareDrawer: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -31,7 +32,7 @@ const ShareDrawer: React.FC = () => {
       .writeText(currentUrl)
       .then(() => {
         toast({
-          description: "🔗 그룹 링크가 복사되었어요",
+          description: "🔗 초대 링크가 복사되었어요",
         });
       })
       .catch((err) => {
@@ -60,7 +61,7 @@ const ShareDrawer: React.FC = () => {
 
   const CarouselDots = () => (
     <div className="flex justify-center items-center pb-4">
-      {Array.from({ length: 3 }, (_, index) => (
+      {Array.from({ length: 2 }, (_, index) => (
         <span
           key={index}
           className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
@@ -92,7 +93,7 @@ const ShareDrawer: React.FC = () => {
             </div>
           </div>
         </CarouselItem>
-        <CarouselItem className="flex flex-col items-center gap-4">
+        {/* <CarouselItem className="flex flex-col items-center gap-4">
           <div className="h-[200px] w-full flex flex-col  items-center">
             <img
               className="h-full rounded-md shadow-prayCard"
@@ -106,12 +107,12 @@ const ShareDrawer: React.FC = () => {
               <p>채팅방에서 편하게 접근해요</p>
             </div>
           </div>
-        </CarouselItem>
+        </CarouselItem> */}
         <CarouselItem className="flex flex-col items-center gap-4">
           <div className="h-[200px] w-full flex flex-col items-center">
             <img
               className="h-full rounded-md shadow-prayCard"
-              src="/images/KakaoShareMessage.png"
+              src={GroupInviteMessage}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -143,7 +144,7 @@ const ShareDrawer: React.FC = () => {
           className="w-60 h-11 text-[0.95rem] rounded-[10px]"
           onClick={() => onClickCopyLink()}
         >
-          그룹 링크 복사하기
+          초대 링크 복사하기
         </Button>
       </div>
     </div>

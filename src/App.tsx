@@ -27,6 +27,7 @@ import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
+import LogInDrawer from "./components/auth/LogInDrawer";
 import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
 import MetaPixelInit from "./analytics/metaPixelInit";
@@ -46,6 +47,7 @@ import {
   CreateUnionPage,
   UnionJoinPage,
 } from "./pages/Office";
+import GroupJoinPage from "./pages/Group/GroupJoinPage";
 import ExternalLinkDialog from "./components/notice/ExternalLinkDialog";
 
 const GroupRedirect = () => {
@@ -127,6 +129,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route path="/group/:groupId/join" element={<GroupJoinPage />} />
               <Route
                 path="/group/:groupId/praycard/new"
                 element={
@@ -214,11 +217,14 @@ const App = () => {
               />
             </Routes>
           </AuthProvider>
+          {/* 전역 컴포넌트 */}
+          <Toaster />
+          <LogInDrawer />
+          <ConfirmAlert />
+          <ExternalLinkDialog />
+          {/* 전역 컴포넌트 끝 */}
         </BrowserRouter>
       </div>
-      <Toaster />
-      <ConfirmAlert />
-      <ExternalLinkDialog />
     </div>
   );
 };
@@ -238,6 +244,7 @@ const AnalyticsTracker = () => {
     "/group/:groupId/praycard/:praycardId/edit",
     location.pathname
   );
+  const matchGroupJoin = matchPath("/group/:groupId/join", location.pathname);
   const matchGroup = matchPath("/group/:groupId", location.pathname);
   useEffect(() => {
     switch (location.pathname) {
@@ -350,12 +357,19 @@ const AnalyticsTracker = () => {
             groupId: matchPraycardEdit.params.groupId,
             where: from,
           });
+        } else if (matchGroupJoin) {
+          analyticsTrack("페이지_그룹_참여", {
+            title: "Group Join Page",
+            groupId: matchGroupJoin.params.groupId,
+            where: from,
+          });
         }
     }
   }, [
     matchPraycardNew,
     matchTodayPray,
     matchPraycardEdit,
+    matchGroupJoin,
     matchGroup,
     location.pathname,
     from,

@@ -60,6 +60,15 @@ export const BibleCardLink = () => {
 };
 
 export const GroupInviteLink = (groupName: string) => {
+  // Extract groupId from current URL
+  const currentPath = window.location.pathname;
+  const groupIdMatch = currentPath.match(/\/group\/([^/]+)/);
+  const groupId = groupIdMatch ? groupIdMatch[1] : "";
+
+  // Create join URL
+  const origin = window.location.origin;
+  const joinUrl = `${origin}/group/${groupId}/join`;
+
   return {
     objectType: "feed",
     content: {
@@ -70,16 +79,16 @@ export const GroupInviteLink = (groupName: string) => {
       imageWidth: 400,
       imageHeight: 240,
       link: {
-        webUrl: window.location.href,
-        mobileWebUrl: window.location.href,
+        webUrl: joinUrl,
+        mobileWebUrl: joinUrl,
       },
     },
     buttons: [
       {
         title: "그룹 입장하기",
         link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
+          mobileWebUrl: joinUrl,
+          webUrl: joinUrl,
         },
       },
     ],
