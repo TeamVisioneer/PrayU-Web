@@ -27,7 +27,6 @@ import TermServicePage from "./pages/TermServicePage";
 import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
-import LogInDrawer from "./components/auth/LogInDrawer";
 import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
 import MetaPixelInit from "./analytics/metaPixelInit";
@@ -219,7 +218,6 @@ const App = () => {
           </AuthProvider>
           {/* 전역 컴포넌트 */}
           <Toaster />
-          <LogInDrawer />
           <ConfirmAlert />
           <ExternalLinkDialog />
           {/* 전역 컴포넌트 끝 */}

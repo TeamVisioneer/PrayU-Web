@@ -25,11 +25,12 @@ const KakaoCallBack = () => {
   const code = params.get("code");
   const state = params.get("state");
   const stateObj = parseState(state);
-  const groupId = stateObj.groupId || "";
-  const unionId = stateObj.unionId || "";
+  const path = stateObj.path || "";
   const from = stateObj.from || "";
-  const loginRedirectUrl = `/login-redirect?groupId=${groupId}&unionId=${unionId}&from=${from}`;
-  const redirectUrl = `${baseUrl}/auth/kakao/callback`;
+
+  const encodedPath = encodeURIComponent(path);
+  const loginRedirectUrl = `/login-redirect?path=${encodedPath}&from=${from}`;
+  const callBackUrl = `${baseUrl}/auth/kakao/callback`;
 
   useEffect(() => {
     const KakaoLogin = async () => {
@@ -37,7 +38,7 @@ const KakaoCallBack = () => {
         navigate("/", { replace: true });
         return;
       }
-      const response = await KakaoTokenRepo.fetchKakaoToken(code, redirectUrl);
+      const response = await KakaoTokenRepo.fetchKakaoToken(code, callBackUrl);
       if (!response || !response.id_token) {
         navigate("/", { replace: true });
         return;
@@ -55,7 +56,7 @@ const KakaoCallBack = () => {
       }
     };
     KakaoLogin();
-  }, [navigate, code, redirectUrl, loginRedirectUrl]);
+  }, [navigate, code, loginRedirectUrl, callBackUrl]);
 
   return null;
 };

@@ -28,7 +28,7 @@ const TermServicePage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const groupId = queryParams.get("groupId");
+  const path = queryParams.get("path");
 
   const [isChecked, setIsChecked] = useState(false);
   const [isDisabledAgreeBtn, setIsDisabledAgreeBtn] = useState(false);
@@ -79,8 +79,10 @@ const TermServicePage: React.FC = () => {
       return;
     }
 
-    if (groupId) navigate(`/group/${groupId}`, { replace: true });
-    else {
+    if (path) {
+      const decodedPath = decodeURIComponent(path);
+      navigate(decodedPath, { replace: true });
+    } else {
       if (groupList.length > 0)
         window.location.replace(`/group/${groupList[0].id}`);
       else {

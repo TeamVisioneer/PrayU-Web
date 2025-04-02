@@ -20,12 +20,10 @@ const LoginRedirect = () => {
   const currentUserId = user!.id;
   const provider = user!.app_metadata.provider;
   const kakaoId = user!.user_metadata.provider_id;
+
   const params = new URLSearchParams(location.search);
-  const groupId = params.get("groupId");
-  const unionId = params.get("unionId");
+  const path = params.get("path");
   const from = params.get("from");
-  const groupPageUrl = groupId ? `/group/${groupId}` : "/group";
-  const fcmToken = localStorage.getItem("fcmToken");
 
   useEffect(() => {
     if (window.flutter_inappwebview?.callHandler) {
@@ -53,8 +51,7 @@ const LoginRedirect = () => {
       if (!myProfile.kakao_id)
         updatedProfileData.kakao_id = user!.user_metadata.kakaoId;
     }
-    if (fcmToken && myProfile.fcm_token !== fcmToken)
-      updatedProfileData.fcm_token = fcmToken;
+
     if (Object.keys(updatedUserMetaData).length > 0) {
       updateUserMetaData(updatedUserMetaData);
     }
@@ -62,25 +59,21 @@ const LoginRedirect = () => {
       updateProfile(currentUserId, updatedProfileData);
     }
     if (!myProfile.terms_agreed_at) {
-      navigate(`/term?groupId=${groupId}`, { replace: true });
-    } else if (unionId) {
-      navigate(`/office/union/${unionId}/join`, { replace: true });
+      navigate(`/term?path=${path}`, { replace: true });
     } else {
-      navigate(groupPageUrl, { replace: true });
+      const decodedPath = decodeURIComponent(path || "/group");
+      navigate(decodedPath, { replace: true });
     }
   }, [
     myProfile,
-    unionId,
     currentUserId,
     kakaoId,
     provider,
     updateUserMetaData,
     updateProfile,
     navigate,
-    groupId,
-    groupPageUrl,
+    path,
     user,
-    fcmToken,
   ]);
 
   return null;

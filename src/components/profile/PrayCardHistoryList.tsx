@@ -1,7 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ShowMoreBtn from "../common/ShowMoreBtn";
 
 const PrayCardHistoryList = () => {
@@ -33,15 +33,6 @@ const PrayCardHistoryList = () => {
   const pageSize = 18;
   const [offset, setOffset] = useState(pageSize);
 
-  useEffect(() => {
-    if (historyPrayCardList && historyPrayCardListView.length == 0)
-      setHistoryPrayCardListView([...historyPrayCardList]);
-  }, [
-    historyPrayCardList,
-    historyPrayCardListView,
-    setHistoryPrayCardListView,
-  ]);
-
   if (!historyPrayCardCount) return;
 
   const onClickMoreHistoryPrayCardList = async () => {
@@ -70,7 +61,7 @@ const PrayCardHistoryList = () => {
   };
 
   return (
-    <div className="flex flex-col gap-1 pb-10 items-center">
+    <div className="flex flex-col gap-1 pb-10 items-center w-full">
       <div className="w-full grid grid-cols-3 gap-3 p-1 pb-5">
         {historyPrayCardListView.map((prayCard, index) => {
           if (prayCard.bible_card_url) {

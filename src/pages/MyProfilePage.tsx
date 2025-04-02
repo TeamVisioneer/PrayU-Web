@@ -34,16 +34,35 @@ const MyProfilePage = () => {
     (state) => state.fetchPrayListByDate
   );
 
+  const setHistoryPrayCardListView = useBaseStore(
+    (state) => state.setHistoryPrayCardListView
+  );
   const currentDate = getISOTodayDate();
   const weekInfo = getWeekInfo(currentDate);
   const startDt = weekInfo.weekDates[0];
   const endDt = getNextDate(weekInfo.weekDates[6]);
 
   useEffect(() => {
+    const fetchHistoryPrayCardList = async () => {
+      const newHistoryPrayCardList = await fetchUserPrayCardList(
+        user!.id,
+        18,
+        0
+      );
+      if (!newHistoryPrayCardList) return;
+      setHistoryPrayCardListView([...newHistoryPrayCardList]);
+    };
+
     getProfile(user!.id);
-    fetchUserPrayCardList(user!.id);
     fetchUserPrayCardCount(user!.id);
-  }, [user, getProfile, fetchUserPrayCardList, fetchUserPrayCardCount]);
+    fetchHistoryPrayCardList();
+  }, [
+    user,
+    getProfile,
+    fetchUserPrayCardList,
+    fetchUserPrayCardCount,
+    setHistoryPrayCardListView,
+  ]);
 
   useEffect(() => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
@@ -110,7 +129,7 @@ const MyProfilePage = () => {
       </div>
       <PrayCardHistoryList />
 
-      <footer className="fixed bottom-0 z-10 bg-mainBg w-full px-6 py-3 flex justify-between text-gray-400 text-[10px]">
+      <footer className="fixed max-w-[480px] bottom-0 z-10 bg-mainBg w-full px-6 py-3 flex justify-between text-gray-400 text-[10px]">
         <span>© 2025 PrayU. All rights reserved.</span>
         <div className="flex gap-2">
           <a href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html">
