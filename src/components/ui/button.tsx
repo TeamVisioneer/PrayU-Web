@@ -20,7 +20,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         // custom
         primary:
-          "shadow-md bg-gradient-to-br from-[#608CFF] to-[#4574F1] text-white cursor-pointer",
+          "shadow-md bg-gradient-to-br from-[#608CFF] to-[#4574F1] text-white cursor-pointer hover:bg-gradient-to-br hover:from-[#608CFF]/90 hover:to-[#4574F1]/90",
         primaryLight: "shadow-sm bg-white text-[#222222] cursor-pointer",
       },
       size: {
