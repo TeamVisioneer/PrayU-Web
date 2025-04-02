@@ -16,7 +16,7 @@ const GroupJoinPage: React.FC = () => {
   const navigate = useNavigate();
   const { groupId } = useParams();
   const [isJoining, setIsJoining] = useState(false);
-  const [joined, setJoined] = useState(true);
+  const [joined, setJoined] = useState(false);
 
   const createMember = useBaseStore((state) => state.createMember);
   const updateMember = useBaseStore((state) => state.updateMember);
@@ -125,7 +125,6 @@ const GroupJoinPage: React.FC = () => {
 
         <div className="flex flex-col p-5 pt-20 pb-8 flex-grow items-center">
           <div className="flex flex-col items-center p-8 pt-0 text-center max-w-md w-full">
-            {/* <DotLottieReact src="../../assets/lottie/check.json" autoplay /> */}
             <Lottie
               height={200}
               width={200}
