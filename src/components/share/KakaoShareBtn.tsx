@@ -59,13 +59,7 @@ export const BibleCardLink = () => {
   } as KakaoLinkObject;
 };
 
-export const GroupInviteLink = (groupName: string) => {
-  // Extract groupId from current URL
-  const currentPath = window.location.pathname;
-  const groupIdMatch = currentPath.match(/\/group\/([^/]+)/);
-  const groupId = groupIdMatch ? groupIdMatch[1] : "";
-
-  // Create join URL
+export const GroupInviteLink = (groupId: string, groupName: string) => {
   const origin = window.location.origin;
   const joinUrl = `${origin}/group/${groupId}/join`;
 

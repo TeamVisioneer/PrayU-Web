@@ -27,9 +27,10 @@ const ShareDrawer: React.FC = () => {
   );
 
   const onClickCopyLink = () => {
-    const currentUrl = window.location.href;
+    const copyUrl =
+      window.location.origin + "/group/" + targetGroup?.id + "/join";
     navigator.clipboard
-      .writeText(currentUrl)
+      .writeText(copyUrl)
       .then(() => {
         toast({
           description: "🔗 초대 링크가 복사되었어요",
@@ -136,7 +137,10 @@ const ShareDrawer: React.FC = () => {
         <KakaoShareButton
           className="w-60 h-11 text-[0.95rem] rounded-[10px]"
           buttonText="카카오톡 공유하기"
-          kakaoLinkObject={GroupInviteLink(targetGroup?.name || "")}
+          kakaoLinkObject={GroupInviteLink(
+            targetGroup?.id || "",
+            targetGroup?.name || ""
+          )}
           eventOption={{ where: "GroupPage" }}
         />
         <Button
