@@ -173,7 +173,7 @@ const GroupJoinPage: React.FC = () => {
               </h2>
 
               <p className="text-base text-gray-600 mb-4">
-                PrayU 에서 함께 기도를 나누는 그룹입니다
+                {targetGroup.name}에서 초대 메세지가 도착했어요
               </p>
             </div>
 

@@ -23,7 +23,7 @@ const ExternalLinkDialog: React.FC = () => {
       }}
     >
       <DialogContent
-        className="w-full h-[70vh] p-0 flex flex-col"
+        className="w-11/12 h-[70vh] p-0 flex flex-col rounded-lg"
         showCloseButton={false}
       >
         <DialogHeader>
@@ -33,7 +33,7 @@ const ExternalLinkDialog: React.FC = () => {
           {externalUrl && (
             <iframe
               src={externalUrl}
-              className="w-full h-full border-0"
+              className="w-full h-full border-0 rounded-lg"
               title="External content"
             />
           )}
