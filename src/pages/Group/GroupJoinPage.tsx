@@ -5,7 +5,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { UserRound, X } from "lucide-react";
 import { analyticsTrack } from "@/analytics/analytics";
-import prayerVerses from "@/data/prayCardTemplate.json";
 import { getISOTodayDate } from "@/lib/utils";
 import { PulseLoader } from "react-spinners";
 import LogInDrawer from "@/components/auth/LogInDrawer";
@@ -40,11 +39,6 @@ const GroupJoinPage: React.FC = () => {
     }
   }, [getGroup, fetchMemberListByGroupId, groupId]);
 
-  const getRandomVerse = () => {
-    const randomIndex = Math.floor(Math.random() * prayerVerses.length);
-    return `(${prayerVerses[randomIndex].verse})\n${prayerVerses[randomIndex].text}`;
-  };
-
   const handleJoinGroup = async () => {
     analyticsTrack("클릭_그룹_참여", { where: "GroupJoinPage" });
     if (!user) {
@@ -55,12 +49,11 @@ const GroupJoinPage: React.FC = () => {
 
     try {
       setIsJoining(true);
-      const content = getRandomVerse();
       const updatedAt = getISOTodayDate();
       const myMember = await getMember(user.id, groupId);
 
-      if (myMember) await updateMember(myMember.id, content, updatedAt);
-      else await createMember(groupId, user.id, content);
+      if (myMember) await updateMember(myMember.id, "", updatedAt);
+      else await createMember(groupId, user.id, "");
       setJoined(true);
     } catch (error) {
       setIsJoining(false);
