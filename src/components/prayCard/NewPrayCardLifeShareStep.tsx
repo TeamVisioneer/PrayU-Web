@@ -20,7 +20,18 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <h1 className="text-xl font-bold mb-4">이번 주 나의 일상을 나눠주세요</h1>
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-lg font-bold">이번 주 나의 일상을 나눠주세요</h1>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {}}
+          disabled={false}
+          className="text-xs text-blue-500 hover:text-blue-600"
+        >
+          기존 내용 불러오기
+        </Button>
+      </div>
 
       <div className="mb-4 flex-1">
         <div className="h-full max-h-24 relative">
@@ -34,12 +45,6 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
               }
             }}
           />
-          {/* {value.length === 0 && (
-            <div className="absolute -translate-y-1/2 top-1/2 left-1/2 -translate-x-1/2 text-center text-gray-400 pointer-events-none w-4/5">
-              <p className="text-sm mb-1">한 마디라도 괜찮아요!</p>
-              <p className="text-sm">간단히 나눌 수 있는 일상을 적어보세요</p>
-            </div>
-          )} */}
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-xs text-gray-500">

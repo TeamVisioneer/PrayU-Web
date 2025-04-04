@@ -109,8 +109,8 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <h1 className="text-xl font-bold mb-4">
-        이번 주 기도제목을 추가해주세요
+      <h1 className="text-lg font-bold mb-4">
+        이번 주 기도제목을 작성해주세요
       </h1>
 
       <div className="mb-4 flex-1">
@@ -196,11 +196,18 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
               ))}
             </Reorder.Group>
           ) : (
-            <div className="text-center py-8 text-gray-400">
-              <p>기도제목을 추가해주세요</p>
-              <p className="text-xs mt-1">
-                상단의 버튼을 클릭하여 추가할 수 있어요
-              </p>
+            <div className="text-xs text-center py-8 text-gray-400 border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center">
+              <p className="mt-1">기도제목을 추가해주세요</p>
+              <p className="mt-1">최대 10개까지 추가할 수 있어요</p>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {}}
+                disabled={false}
+                className="text-xs text-blue-500 hover:text-blue-600"
+              >
+                기존 내용 불러오기
+              </Button>
             </div>
           )}
         </div>
