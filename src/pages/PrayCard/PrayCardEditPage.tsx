@@ -1,11 +1,11 @@
 import useBaseStore from "@/stores/baseStore";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import { useToast } from "../ui/use-toast";
+import { Button } from "../../components/ui/button";
+import { Textarea } from "../../components/ui/textarea";
+import { useToast } from "../../components/ui/use-toast";
 import { IoChevronBack } from "react-icons/io5";
 import { useEffect, useRef } from "react";
-import InfoBtn from "../alert/infoBtn";
+import InfoBtn from "../../components/alert/infoBtn";
 
 const PrayCardEditPage = () => {
   const { groupId, praycardId } = useParams<{

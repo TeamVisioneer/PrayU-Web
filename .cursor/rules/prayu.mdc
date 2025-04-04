@@ -1,0 +1,93 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# PrayU-web Project Guidelines
+
+## Technology Stack
+- **Frontend**: React + Vite + TypeScript
+- **Styling**: Tailwind CSS with custom components
+- **UI Components**: Radix UI components with custom styling
+- **State Management**: Zustand for global state
+- **Backend**: Supabase (serverless)
+- **API Integration**: React Query + Axios
+- **Routing**: React Router
+
+## Project Structure
+- `src/components/` - Reusable UI components organized by feature
+- `src/pages/` - Page components that compose the application
+- `src/hooks/` - Custom React hooks
+- `src/stores/` - Zustand state stores
+- `src/lib/` - Utility functions and helpers
+- `src/apis/` - API integration functions
+- `src/assets/` - Static assets like images
+- `src/types/` - TypeScript type definitions
+- `supabase/` - Supabase configuration and types
+
+## Coding Standards
+
+### Component Development
+1. **Component-Based Architecture**
+   - Each component should be focused on a single responsibility
+   - Larger features should be broken down into smaller components
+   - Keep components under 300 lines where possible
+
+2. **Component Structure**
+   - Use named exports for components
+   - Prefer functional components with hooks
+   - Use TypeScript interfaces for props
+   - Group related components in feature-specific directories
+
+3. **Component Implementation**
+   - Use destructuring for props
+   - Leverage custom hooks for complex logic
+   - Extract complex calculations to utility functions
+
+### Code Readability
+1. **Naming Conventions**
+   - PascalCase for React components
+   - camelCase for variables, functions, and instances
+   - Use descriptive, intention-revealing names
+
+2. **Code Organization**
+   - Group related code together
+   - Keep functions small and focused
+   - Use comments sparingly, only for complex logic
+   - Use consistent indentation and formatting
+
+3. **State Management**
+   - Use local state for component-specific state
+   - Use Zustand for shared state across components
+   - Keep state minimal and normalized
+
+### Supabase Integration
+1. **Database Access**
+   - Use strongly typed Supabase client
+   - Keep database queries in dedicated API functions
+   - Handle errors and loading states appropriately
+
+2. **Authentication**
+   - Use Supabase Auth for user authentication
+   - Implement proper authorization checks
+
+### Styles
+1. **Tailwind Usage**
+   - Use utility classes directly in components
+   - Extract common patterns to custom components
+   - Use consistent spacing and sizing
+
+2. **Responsive Design**
+   - Mobile-first approach
+   - Use Tailwind's responsive prefixes consistently
+
+## Flutter Web App Considerations
+- Ensure consistent APIs and data structures between web and Flutter
+- Focus on performance optimization for web view in Flutter
+- Implement responsive designs that work well in Flutter WebView
+
+## Pull Request Guidelines
+- Keep PRs focused on a single feature or fix
+- Include test coverage for new features
+- Ensure passing CI checks before requesting review
+- Reference related issues in PR description
