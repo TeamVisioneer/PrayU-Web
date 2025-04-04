@@ -108,6 +108,10 @@ module.exports = {
           "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        flip: {
+          "0%": { transform: "rotateY(0deg)" },
+          "100%": { transform: "rotateY(180deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -115,6 +119,7 @@ module.exports = {
         "fade-in": "fade-in 0.3s ease-out forwards",
         "scale-in": "scale-in 0.3s ease-out forwards",
         "slide-in": "slide-in 0.4s ease-out forwards",
+        flip: "flip 0.7s ease-out forwards",
       },
       animationDelay: {
         200: "200ms",
@@ -207,6 +212,18 @@ module.exports = {
         },
         ".delay-500": {
           "animation-delay": "500ms",
+        },
+        ".perspective-1000": {
+          perspective: "1000px",
+        },
+        ".transform-style-3d": {
+          "transform-style": "preserve-3d",
+        },
+        ".backface-hidden": {
+          "backface-visibility": "hidden",
+        },
+        ".rotate-y-180": {
+          transform: "rotateY(180deg)",
         },
       };
       addUtilities(newUtilities);

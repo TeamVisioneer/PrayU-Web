@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Group } from "supabase/types/tables";
+// import FlippablePrayCard from "./FlippablePrayCard";
 import PrayCard from "./PrayCard";
 
 interface NewPrayCardCompletionStepProps {
@@ -27,55 +28,65 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
     name: "나",
   },
 }) => {
+  const [showCard, setShowCard] = useState(false);
+
+  useEffect(() => {
+    // Trigger card reveal animation after component mount
+    const timer = setTimeout(() => {
+      setShowCard(true);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="flex flex-col h-full">
-      <div className="mb-6 text-center">
-        <div className="inline-block p-3 mb-4 rounded-full bg-blue-50">
-          <div className="animate-scale-in">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8 text-blue-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
+    <div className="flex flex-col h-full relative">
+      {/* Dimmed overlay */}
+      {/* <div className="fixed inset-0 bg-black/85 z-10" /> */}
+
+      {/* Card container with spotlight effect */}
+      <div
+        className={`w-3/4 mx-auto relative z-20 my-6 transition-all duration-1000 transform ${
+          showCard ? "scale-100 opacity-100" : "scale-90 opacity-0"
+        }`}
+      >
+        {/* Glow effect */}
+        <div className="absolute inset-0 -m-6 bg-blue-400/20 rounded-3xl blur-xl"></div>
+
+        {/* Card */}
+        <div className="relative">
+          {/* <FlippablePrayCard
+            bibleVerse={bibleVerse}
+            prayCardProps={{
+              user,
+              lifeShare,
+              prayContent,
+              createdAt: new Date(),
+            }}
+            initialSide="front"
+          /> */}
+          <PrayCard
+            user={user}
+            lifeShare={lifeShare}
+            prayContent={prayContent}
+            createdAt={new Date()}
+          />
+
+          <div className="hidden">{bibleVerse.verse}</div>
         </div>
+      </div>
+
+      <div className="mb-6 text-center relative z-20">
         <h1 className="text-2xl font-bold mb-2 animate-fade-in">
           기도카드가 생성 완료!
         </h1>
-        <p className="text-gray-600 animate-fade-in delay-200">
-          이번 주도 함께 기도해요
-        </p>
-      </div>
-
-      <div className="my-6 animate-slide-in delay-300">
-        <PrayCard
-          user={user}
-          lifeShare={lifeShare}
-          prayContent={prayContent}
-          createdAt={new Date()}
-        />
-      </div>
-
-      <div className="bg-amber-50 p-4 rounded-lg mb-4 animate-slide-in delay-400">
-        <p className="text-amber-900 font-medium text-sm mb-1">
-          {bibleVerse.verse}
-        </p>
-        <p className="text-amber-700 text-xs text-right">
-          {bibleVerse.reference}
+        <p className="text-gray-500 animate-fade-in delay-200">
+          이번 주도 그룹원들과 함께 기도해요
         </p>
       </div>
 
       {selectedGroups.length > 0 && (
-        <div className="bg-blue-50 p-4 rounded-lg mb-4 animate-slide-in delay-500">
+        <div className="hidden bg-blue-50/90 p-4 rounded-lg mb-4 animate-slide-in delay-500 relative z-20">
           <h3 className="text-sm font-medium text-gray-700 mb-2">공유 그룹</h3>
           <div className="flex flex-wrap gap-2">
             {selectedGroups.map((group) => (
@@ -98,7 +109,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
         </div>
       )}
 
-      <div className="mt-auto">
+      <div className="relative z-20">
         <Button
           onClick={onComplete}
           className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600"
