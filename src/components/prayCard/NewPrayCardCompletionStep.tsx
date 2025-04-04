@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Group } from "supabase/types/tables";
+import PrayCard from "./PrayCard";
 
 interface NewPrayCardCompletionStepProps {
   lifeShare: string;
@@ -8,6 +9,11 @@ interface NewPrayCardCompletionStepProps {
   bibleVerse: { verse: string; reference: string };
   selectedGroups: Group[];
   onComplete: () => void;
+  user?: {
+    id: string;
+    name: string;
+    avatarUrl?: string;
+  };
 }
 
 const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
@@ -16,6 +22,10 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   bibleVerse,
   selectedGroups,
   onComplete,
+  user = {
+    id: "current-user",
+    name: "나",
+  },
 }) => {
   return (
     <div className="flex flex-col h-full">
@@ -46,17 +56,26 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
         </p>
       </div>
 
-      <div className="bg-amber-50 p-6 rounded-lg mb-6 animate-slide-in delay-300">
-        <p className="text-amber-900 font-medium text-base mb-2">
+      <div className="my-6 animate-slide-in delay-300">
+        <PrayCard
+          user={user}
+          lifeShare={lifeShare}
+          prayContent={prayContent}
+          createdAt={new Date()}
+        />
+      </div>
+
+      <div className="bg-amber-50 p-4 rounded-lg mb-4 animate-slide-in delay-400">
+        <p className="text-amber-900 font-medium text-sm mb-1">
           {bibleVerse.verse}
         </p>
-        <p className="text-amber-700 text-sm text-right">
+        <p className="text-amber-700 text-xs text-right">
           {bibleVerse.reference}
         </p>
       </div>
 
       {selectedGroups.length > 0 && (
-        <div className="bg-blue-50 p-4 rounded-lg mb-4 animate-slide-in delay-400">
+        <div className="bg-blue-50 p-4 rounded-lg mb-4 animate-slide-in delay-500">
           <h3 className="text-sm font-medium text-gray-700 mb-2">공유 그룹</h3>
           <div className="flex flex-wrap gap-2">
             {selectedGroups.map((group) => (
@@ -78,16 +97,6 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
           </p>
         </div>
       )}
-
-      <div className="bg-gray-50 p-4 rounded-lg mb-4 animate-slide-in delay-500">
-        <h3 className="text-sm font-medium text-gray-700 mb-1">일상 나눔</h3>
-        <p className="text-sm text-gray-600 line-clamp-2">{lifeShare}</p>
-      </div>
-
-      <div className="bg-gray-50 p-4 rounded-lg mb-8 animate-slide-in delay-600">
-        <h3 className="text-sm font-medium text-gray-700 mb-1">기도제목</h3>
-        <p className="text-sm text-gray-600 line-clamp-2">{prayContent}</p>
-      </div>
 
       <div className="mt-auto">
         <Button
