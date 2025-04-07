@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Group } from "supabase/types/tables";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Components
 import ProgressBar from "@/components/common/ProgressBar";
@@ -30,6 +31,22 @@ const SAMPLE_BIBLE_VERSES = [
   },
 ];
 
+// Animation variants for staggered animations
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.2 },
+  },
+};
+
 const PrayCardCreatePage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,19 +73,7 @@ const PrayCardCreatePage = () => {
   };
 
   const handleComplete = () => {
-    // In real implementation, this would save data to the database for each selected group
-    if (selectedGroups.length > 0) {
-      selectedGroups.forEach((group) => {
-        console.log({
-          lifeShare,
-          prayContent,
-          group,
-          selectedBibleVerse,
-        });
-        // Here you would call API to create a prayer card for each group
-      });
-    }
-    navigate("/home"); // Navigate to home page after completion
+    navigate("/group"); // Navigate to home page after completion
   };
 
   const handleGroupSelect = (groups: Group[]) => {
@@ -124,19 +129,25 @@ const PrayCardCreatePage = () => {
   return (
     <div className="flex flex-col h-screen bg-mainBg">
       {/* Header */}
-      <PrayCardHeader title="기도카드 생성" onBack={handlePrev} />
+      <PrayCardHeader />
 
       {/* Progress bar */}
       <ProgressBar currentStep={step} totalSteps={totalSteps} />
 
       {/* Content area */}
       <div className="flex-1 overflow-y-auto p-6">
-        <div
-          key={step}
-          className="h-full transition-opacity duration-300 ease-in-out"
-        >
-          {getStepContent()}
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            className="h-full"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={containerVariants}
+          >
+            {getStepContent()}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

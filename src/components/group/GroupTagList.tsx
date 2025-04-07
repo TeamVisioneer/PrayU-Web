@@ -1,5 +1,6 @@
 import React from "react";
 import { Group } from "supabase/types/tables";
+import { motion } from "framer-motion";
 
 interface GroupTagListProps {
   groupList: Group[];
@@ -9,6 +10,18 @@ interface GroupTagListProps {
   emptyMessage?: React.ReactNode;
 }
 
+// Animation for skeleton loading
+const skeletonAnimation = {
+  animate: {
+    backgroundPosition: ["0% 0%", "100% 0%"],
+    transition: {
+      duration: 1.5,
+      repeat: Infinity,
+      ease: "linear",
+    },
+  },
+};
+
 const GroupTagList: React.FC<GroupTagListProps> = ({
   groupList,
   selectedGroups,
@@ -17,9 +30,21 @@ const GroupTagList: React.FC<GroupTagListProps> = ({
   emptyMessage,
 }) => {
   if (loading) {
+    // Create skeleton group tags
     return (
-      <div className="flex justify-center items-center h-32">
-        <p className="text-gray-500">그룹 목록을 불러오는 중...</p>
+      <div className="flex flex-wrap gap-2">
+        {[...Array(6)].map((_, index) => (
+          <motion.div
+            key={index}
+            className="px-3 py-2 rounded-full flex items-center gap-2 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 background-size-200"
+            animate={skeletonAnimation.animate}
+            style={{
+              backgroundSize: "200% 100%",
+              width: `${Math.floor(Math.random() * 30) + 90}px`,
+              height: "32px",
+            }}
+          ></motion.div>
+        ))}
       </div>
     );
   }

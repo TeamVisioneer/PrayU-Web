@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { MdDragIndicator } from "react-icons/md";
-import { Reorder } from "framer-motion";
+import { Reorder, motion } from "framer-motion";
 
 interface NewPrayCardRequestStepProps {
   value: string;
@@ -11,6 +11,16 @@ interface NewPrayCardRequestStepProps {
   onPrev: () => void;
 }
 
+// Animation variants for staggered child elements
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+};
+
 const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   value,
   onChange,
@@ -18,10 +28,9 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   onPrev,
 }) => {
   const maxLength = 100;
-  console.log(value);
 
   const [prayRequests, setPrayRequests] = useState<string[]>(
-    value.split("\n").filter((request) => request.trim() !== "")
+    value.split("\n\n").filter((request) => request.trim() !== "")
   );
   const [showAddForm, setShowAddForm] = useState(false);
   const [currentInput, setCurrentInput] = useState("");
@@ -46,7 +55,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
       setShowAddForm(false);
       setEditingIndex(null);
 
-      onChange(newRequests.join("\n"));
+      onChange(newRequests.join("\n\n"));
     }
   };
 
@@ -59,12 +68,12 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   const handleDeleteRequest = (index: number) => {
     const newRequests = prayRequests.filter((_, i) => i !== index);
     setPrayRequests(newRequests);
-    onChange(newRequests.join("\n"));
+    onChange(newRequests.join("\n\n"));
   };
 
   if (showAddForm) {
     return (
-      <div className="flex flex-col  bg-white rounded-xl shadow-sm">
+      <div className="flex flex-col bg-white rounded-xl shadow-sm">
         <div className="flex justify-between items-center p-4 border-b">
           <button
             onClick={() => {
@@ -93,9 +102,9 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
             className="h-full w-full overflow-y-auto resize-none text-base border-0 focus:ring-0 p-0 placeholder:text-gray-300 text-gray-800 mb-6"
             value={currentInput}
             onChange={(e) => {
-              // if (e.target.value.length <= maxLength) {
-              setCurrentInput(e.target.value);
-              // }
+              if (e.target.value.length <= maxLength) {
+                setCurrentInput(e.target.value);
+              }
             }}
             autoFocus
           />
@@ -109,51 +118,60 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <h1 className="text-lg font-bold mb-4">
-        이번 주 기도제목을 작성해주세요
-      </h1>
+      <motion.div
+        className="flex justify-between items-center mb-2"
+        variants={itemVariants}
+      >
+        <motion.h1 className="text-lg font-bold" variants={itemVariants}>
+          이번 주 기도제목을 작성해주세요
+        </motion.h1>
+      </motion.div>
 
-      <div className="mb-4 flex-1">
-        <Button
-          onClick={() => {
-            setEditingIndex(null);
-            setCurrentInput("");
-            setShowAddForm(true);
-          }}
-          className="w-full bg-white hover:bg-gray-50 text-gray-500 mb-4 flex justify-start items-center border border-gray-200 shadow-sm p-3 h-auto rounded-lg"
-        >
-          <div className="w-6 h-6 bg-blue-50 rounded-full flex items-center justify-center mr-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-blue-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
+      <motion.div className="mb-4 flex-1" variants={itemVariants}>
+        <motion.div variants={itemVariants}>
+          <Button
+            onClick={() => {
+              setEditingIndex(null);
+              setCurrentInput("");
+              setShowAddForm(true);
+            }}
+            className="w-full bg-white hover:bg-gray-50 text-gray-500 mb-4 flex justify-start items-center border border-gray-200 shadow-sm p-3 h-auto rounded-lg"
+          >
+            <div className="w-6 h-6 bg-blue-50 rounded-full flex items-center justify-center mr-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 text-blue-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </div>
+            <span className="text-gray-400">새 기도제목 추가하기</span>
+          </Button>
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
+          <div className="text-xs text-gray-500 mb-4">
+            <span className="text-blue-500 font-medium">Tip</span> 기도제목을
+            클릭하면 수정할 수 있어요. 드래그하여 순서를 변경할 수도 있어요!
           </div>
-          <span className="text-gray-400">새 기도제목 추가하기</span>
-        </Button>
+        </motion.div>
 
-        <div className="text-xs text-gray-500 mb-4">
-          <span className="text-blue-500 font-medium">Tip</span> 기도제목을
-          클릭하면 수정할 수 있어요. 드래그하여 순서를 변경할 수도 있어요!
-        </div>
-
-        <div className="h-80 overflow-y-auto">
+        <motion.div className="h-80 overflow-y-auto" variants={itemVariants}>
           {prayRequests.length > 0 ? (
             <Reorder.Group
               axis="y"
               values={prayRequests}
               onReorder={(newRequests) => {
                 setPrayRequests(newRequests);
-                onChange(newRequests.join("\n"));
+                onChange(newRequests.join("\n\n"));
               }}
               className="space-y-2"
             >
@@ -161,9 +179,9 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
                 <Reorder.Item
                   key={request}
                   value={request}
-                  className="flex items-center p-3 bg-white rounded-lg shadow-sm border border-gray-100 hover:border-blue-200 "
+                  className="flex items-center p-3 bg-white rounded-lg shadow-sm border border-gray-100 hover:border-blue-200"
                 >
-                  <div className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-500 mr-2 ">
+                  <div className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-500 mr-2">
                     <MdDragIndicator size={20} />
                   </div>
                   <p
@@ -210,10 +228,10 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
               </Button>
             </div>
           )}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="flex gap-2 mt-auto">
+      <motion.div className="flex gap-2 mt-auto" variants={itemVariants}>
         <Button
           onClick={onPrev}
           variant="outline"
@@ -232,7 +250,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
         >
           다음
         </Button>
-      </div>
+      </motion.div>
     </div>
   );
 };

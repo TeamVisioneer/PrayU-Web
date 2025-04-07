@@ -32,7 +32,9 @@ const PrayCardEditPage = () => {
   const [currentPrayInput, setCurrentPrayInput] = useState("");
   const [editingPrayIndex, setEditingPrayIndex] = useState<number | null>(null);
   const [prayRequests, setPrayRequests] = useState<string[]>(
-    inputPrayCardContent.split("\n").filter((request) => request.trim() !== "")
+    inputPrayCardContent
+      .split("\n\n")
+      .filter((request) => request.trim() !== "")
   );
 
   const lifeShareMaxLength = 100;
@@ -95,6 +97,7 @@ const PrayCardEditPage = () => {
       setCurrentPrayInput("");
       setShowAddPrayForm(false);
       setEditingPrayIndex(null);
+      setPrayCardContent(newRequests.join("\n\n"));
     }
   };
 
@@ -107,6 +110,7 @@ const PrayCardEditPage = () => {
   const handleDeletePrayRequest = (index: number) => {
     const newRequests = prayRequests.filter((_, i) => i !== index);
     setPrayRequests(newRequests);
+    setPrayCardContent(newRequests.join("\n\n"));
   };
 
   return (
@@ -334,7 +338,7 @@ const PrayCardEditPage = () => {
                   values={prayRequests}
                   onReorder={(newRequests) => {
                     setPrayRequests(newRequests);
-                    setPrayCardContent(newRequests.join("\n"));
+                    setPrayCardContent(newRequests.join("\n\n"));
                   }}
                   className="space-y-2"
                 >

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import useBaseStore from "@/stores/baseStore";
 import { Group } from "supabase/types/tables";
 import GroupTagList from "../group/GroupTagList";
+import { motion } from "framer-motion";
 
 interface NewPrayCardGroupSelectStepProps {
   selectedGroups: Group[];
@@ -10,6 +11,16 @@ interface NewPrayCardGroupSelectStepProps {
   onNext: () => void;
   onPrev: () => void;
 }
+
+// Animation variants for staggered child elements
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+};
 
 const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   selectedGroups,
@@ -52,9 +63,14 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <h1 className="text-xl font-bold mb-4">기도카드를 올릴 그룹 선택</h1>
+      <motion.h1 className="text-xl font-bold mb-4" variants={itemVariants}>
+        기도카드를 올릴 그룹 선택
+      </motion.h1>
 
-      <div className="bg-gray-50 rounded-lg p-4 mb-6">
+      <motion.div
+        className="bg-gray-50 rounded-lg p-4 mb-6"
+        variants={itemVariants}
+      >
         <div className="flex items-start gap-2">
           <div className="mt-0.5 text-blue-500 flex-shrink-0">
             <svg
@@ -75,9 +91,12 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
             <br />각 그룹에 생성된 기도카드는 이후 수정이 가능해요!
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="flex-1 mb-4 overflow-hidden">
+      <motion.div
+        className="flex-1 mb-4 overflow-hidden"
+        variants={itemVariants}
+      >
         <div className="h-full max-h-[350px] overflow-y-auto">
           <GroupTagList
             groupList={groupList || []}
@@ -98,9 +117,9 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
             }
           />
         </div>
-      </div>
+      </motion.div>
 
-      <div className="flex gap-2 mt-auto">
+      <motion.div className="flex gap-2 mt-auto" variants={itemVariants}>
         <Button
           onClick={onPrev}
           variant="outline"
@@ -119,7 +138,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
         >
           다음
         </Button>
-      </div>
+      </motion.div>
     </div>
   );
 };

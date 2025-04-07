@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Group } from "supabase/types/tables";
 // import FlippablePrayCard from "./FlippablePrayCard";
 import PrayCard from "./PrayCard";
+import { motion } from "framer-motion";
 
 interface NewPrayCardCompletionStepProps {
   lifeShare: string;
@@ -17,6 +18,25 @@ interface NewPrayCardCompletionStepProps {
   };
 }
 
+// Animation variants for staggered child elements
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.8, delay: 0.3 },
+  },
+};
+
 const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   lifeShare,
   prayContent,
@@ -28,27 +48,15 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
     name: "나",
   },
 }) => {
-  const [showCard, setShowCard] = useState(false);
-
-  useEffect(() => {
-    // Trigger card reveal animation after component mount
-    const timer = setTimeout(() => {
-      setShowCard(true);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <div className="flex flex-col h-full relative">
+    <div className="flex flex-col items-center h-full relative">
       {/* Dimmed overlay */}
       {/* <div className="fixed inset-0 bg-black/85 z-10" /> */}
 
       {/* Card container with spotlight effect */}
-      <div
-        className={`w-3/4 mx-auto relative z-20 my-6 transition-all duration-1000 transform ${
-          showCard ? "scale-100 opacity-100" : "scale-90 opacity-0"
-        }`}
+      <motion.div
+        className="w-3/4 mx-auto relative z-20 my-10"
+        variants={cardVariants}
       >
         {/* Glow effect */}
         <div className="absolute inset-0 -m-6 bg-blue-400/20 rounded-3xl blur-xl"></div>
@@ -74,20 +82,13 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
           <div className="hidden">{bibleVerse.verse}</div>
         </div>
-      </div>
-
-      <div className="mb-6 text-center relative z-20">
-        <h1 className="text-2xl font-bold mb-2 animate-fade-in">
-          기도카드가 생성 완료!
-        </h1>
-        <p className="text-gray-500 animate-fade-in delay-200">
-          이번 주도 그룹원들과 함께 기도해요
-        </p>
-      </div>
+      </motion.div>
 
       {selectedGroups.length > 0 && (
-        <div className="hidden bg-blue-50/90 p-4 rounded-lg mb-4 animate-slide-in delay-500 relative z-20">
-          <h3 className="text-sm font-medium text-gray-700 mb-2">공유 그룹</h3>
+        <motion.div
+          className="bg-blue-50/90 rounded-lg my-4 relative z-20 flex flex-col items-center"
+          variants={itemVariants}
+        >
           <div className="flex flex-wrap gap-2">
             {selectedGroups.map((group) => (
               <div
@@ -103,20 +104,29 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-500 mt-2">
-            각 그룹별로 기도카드가 생성되며, 그룹 페이지에서 확인할 수 있어요
-          </p>
-        </div>
+        </motion.div>
       )}
 
-      <div className="relative z-20">
+      <motion.div
+        className="text-center relative z-20 mb-10"
+        variants={itemVariants}
+      >
+        <motion.h1 className="text-2xl font-bold mb-1" variants={itemVariants}>
+          기도카드가 생성 완료!
+        </motion.h1>
+        <motion.p className="text-gray-500" variants={itemVariants}>
+          총 {selectedGroups.length}개의 그룹에 기도카드가 생성 되었어요!
+        </motion.p>
+      </motion.div>
+
+      <motion.div className="relative z-20 w-3/4" variants={itemVariants}>
         <Button
           onClick={onComplete}
           className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600"
         >
-          홈으로
+          그룹 홈으로 가기
         </Button>
-      </div>
+      </motion.div>
     </div>
   );
 };
