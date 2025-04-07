@@ -134,6 +134,7 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
+        className="focus:outline-none"
         onClick={() => {
           analyticsTrack("클릭_기도카드_더보기", {});
         }}

@@ -6,8 +6,8 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
-import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import PrayListBtn from "../pray/PrayListBtn";
+import { PrayCard } from "../prayCard/PrayCard";
 
 const PrayCardHistoryDrawer: React.FC = () => {
   const isOpenHistoryDrawer = useBaseStore(
@@ -31,7 +31,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {historyCard?.bible_card_url ? (
-          <div className="flex flex-col min-h-80vh max-h-80vh gap-2 px-10 pt-5 pb-10 overflow-auto">
+          <div className="flex flex-col gap-2 px-10 pt-5 pb-10 overflow-auto">
             <div className="flex-shrink-0 rounded-xl overflow-hidden shadow-md">
               <img
                 src={historyCard.bible_card_url}
@@ -49,8 +49,8 @@ const PrayCardHistoryDrawer: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col min-h-80vh max-h-80vh gap-2 px-10 pt-5 pb-10">
-            <MyPrayCardUI prayCard={historyCard} isHistoryView={true} />
+          <div className="flex flex-col gap-2 px-10 pt-5 pb-10">
+            <PrayCard prayCard={historyCard || undefined} />
             <PrayListBtn prayDatas={historyCard?.pray} />
           </div>
         )}

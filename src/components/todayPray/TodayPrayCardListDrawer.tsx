@@ -63,15 +63,6 @@ const TodayPrayCardListDrawer: React.FC = () => {
         >
           기도 반응 버튼을 눌러 오늘의 기도를 남겨요
         </p>
-        {/* <div className="px-5 pt-5">
-          <ReactionWithCalendar
-            prayCard={prayCardCarouselList?.[prayCardCarouselIndex - 1]}
-            eventOption={{
-              where: "TodayPrayCardListDrawer",
-              total_member: prayCardCarouselList?.length || 0,
-            }}
-          />
-        </div> */}
       </DrawerContent>
     </Drawer>
   );

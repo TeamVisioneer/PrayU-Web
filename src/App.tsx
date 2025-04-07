@@ -38,7 +38,6 @@ import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage
 import PrayCardEditPage from "./pages/PrayCard/PrayCardEditPage";
 import NotificationPage from "./components/notification/NotificationPage";
 import AppInit from "./AppInit/AppInit";
-import TodayPrayCardPage from "./pages/TodayPrayCardPage";
 import {
   OfficePage,
   UnionDetailPage,
@@ -148,10 +147,6 @@ const App = () => {
               <Route
                 path="/group/:groupId/praycard/:praycardId/edit"
                 element={<PrayCardEditPage />}
-              />
-              <Route
-                path="/group/:groupId/todaypray"
-                element={<TodayPrayCardPage />}
               />
               <Route
                 path="/group/open/1027-union"

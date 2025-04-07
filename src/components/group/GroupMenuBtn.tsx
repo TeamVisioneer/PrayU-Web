@@ -170,7 +170,7 @@ const GroupMenuBtn: React.FC = () => {
   const onClickMyProfile = () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_프로필_나", { where: "GroupMenuBtn" });
-    navigate("/profile/me");
+    navigate("/profile/me", { replace: true });
   };
 
   return (
