@@ -1,14 +1,8 @@
 import React from "react";
+import { PrayCardWithProfiles } from "supabase/types/tables";
 
 interface PrayCardProps {
-  user: {
-    id: string;
-    name: string;
-    avatarUrl?: string;
-  };
-  lifeShare: string;
-  prayContent: string;
-  createdAt: Date;
+  prayCard: PrayCardWithProfiles | null;
 }
 
 // Helper function to format date to "X days ago" in Korean
@@ -26,23 +20,73 @@ const formatTimeAgo = (date: Date): string => {
   }
 };
 
-export const PrayCard: React.FC<PrayCardProps> = ({
-  user,
-  lifeShare,
-  prayContent,
-  createdAt,
-}) => {
+export const PrayCard: React.FC<PrayCardProps> = ({ prayCard }) => {
+  if (!prayCard) {
+    return (
+      <div className="w-full aspect-[3/4] bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl overflow-hidden border border-gray-100 flex flex-col">
+        {/* Header skeleton */}
+        <div className="p-4 pb-3 flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse"></div>
+            <div className="space-y-2">
+              <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-3 w-16 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content skeleton */}
+        <div className="p-4 space-y-4 overflow-y-auto flex-grow">
+          {/* Daily sharing skeleton */}
+          <div>
+            <div className="h-4 w-20 bg-gray-200 rounded mb-2 animate-pulse"></div>
+            <div className="flex items-start gap-2">
+              <div className="min-w-5 self-stretch flex justify-center">
+                <div className="w-0.5 h-full bg-gray-200 flex-shrink-0"></div>
+              </div>
+              <div className="space-y-2 w-full">
+                <div className="h-3 w-full bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-3 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-3 w-5/6 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Prayer requests skeleton */}
+          <div>
+            <div className="h-4 w-20 bg-gray-200 rounded mb-2 animate-pulse"></div>
+            <ul className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <div className="min-w-5 h-5 bg-gray-200 rounded-full flex-shrink-0 animate-pulse"></div>
+                  <div className="space-y-2 w-full">
+                    <div className="h-3 w-full bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-3 w-2/3 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Parse prayer content by newlines
-  const prayRequests = prayContent
-    .split("\n")
+  const prayRequests = prayCard.content
+    ?.split("\n\n")
     .filter((item) => item.trim() !== "") // Filter out empty lines
     .map((content, index) => ({
       id: `pray-${index}`,
       content: content.trim(),
     }));
 
-  const timeAgo = formatTimeAgo(createdAt);
-  const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "";
+  const timeAgo = formatTimeAgo(
+    prayCard.created_at ? new Date(prayCard.created_at) : new Date()
+  );
+  const userInitial = prayCard.profiles.full_name
+    ? prayCard.profiles.full_name.charAt(0).toUpperCase()
+    : "";
 
   return (
     // Fixed aspect ratio container (3:4 aspect ratio)
@@ -51,10 +95,10 @@ export const PrayCard: React.FC<PrayCardProps> = ({
       <div className="p-4 pb-3 flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 rounded-full overflow-hidden">
-            {user.avatarUrl ? (
+            {prayCard.profiles.avatar_url ? (
               <img
-                src={user.avatarUrl}
-                alt={user.name}
+                src={prayCard.profiles.avatar_url}
+                alt={prayCard.profiles.full_name || ""}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -64,7 +108,9 @@ export const PrayCard: React.FC<PrayCardProps> = ({
             )}
           </div>
           <div>
-            <h3 className="font-medium text-gray-900">{user.name}</h3>
+            <h3 className="font-medium text-gray-900">
+              {prayCard.profiles.full_name}
+            </h3>
             <p className="text-xs text-gray-500">{timeAgo}</p>
           </div>
         </div>
@@ -79,7 +125,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
               <div className="w-0.5 self-stretch bg-blue-100 flex-shrink-0"></div>
             </div>
             <p className="text-sm text-gray-600 whitespace-pre-line">
-              {lifeShare}
+              {prayCard.life}
             </p>
           </div>
         </div>
@@ -87,7 +133,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
         <div>
           <h4 className="text-sm font-medium text-gray-700 mb-2">기도제목</h4>
           <ul className="space-y-2">
-            {prayRequests.map((request) => (
+            {prayRequests?.map((request) => (
               <li key={request.id} className="flex items-start gap-2">
                 <div className="min-w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
                   <svg
@@ -111,7 +157,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
       </div>
 
       {/* Footer - actions - fixed */}
-      <div className="pt-2 pb-4 px-4 flex justify-end flex-shrink-0 border-t border-gray-100">
+      {/* <div className="pt-2 pb-4 px-4 flex justify-end flex-shrink-0 border-t border-gray-100">
         <div className="flex space-x-2">
           <button className="text-xs text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-1">
             <svg
@@ -129,7 +175,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
             <span>함께 기도</span>
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,21 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Group } from "supabase/types/tables";
-// import FlippablePrayCard from "./FlippablePrayCard";
 import PrayCard from "./PrayCard";
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
+import useBaseStore from "@/stores/baseStore";
+import { Group } from "supabase/types/tables";
 interface NewPrayCardCompletionStepProps {
-  lifeShare: string;
-  prayContent: string;
-  bibleVerse: { verse: string; reference: string };
   selectedGroups: Group[];
-  onComplete: () => void;
-  user?: {
-    id: string;
-    name: string;
-    avatarUrl?: string;
-  };
 }
 
 // Animation variants for staggered child elements
@@ -38,16 +29,31 @@ const cardVariants = {
 };
 
 const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
-  lifeShare,
-  prayContent,
-  bibleVerse,
   selectedGroups,
-  onComplete,
-  user = {
-    id: "current-user",
-    name: "나",
-  },
 }) => {
+  const navigate = useNavigate();
+
+  const user = useBaseStore((state) => state.user);
+
+  const fetchUserPrayCardList = useBaseStore(
+    (state) => state.fetchUserPrayCardList
+  );
+  const historyPrayCardList = useBaseStore(
+    (state) => state.historyPrayCardList
+  );
+
+  const handleComplete = () => {
+    localStorage.removeItem("prayCardContent");
+    localStorage.removeItem("prayCardLife");
+    navigate("/group");
+  };
+
+  useEffect(() => {
+    if (user) fetchUserPrayCardList(user.id);
+  }, [user, fetchUserPrayCardList]);
+
+  const prayCard = historyPrayCardList?.[0];
+
   return (
     <div className="flex flex-col items-center h-full relative">
       {/* Dimmed overlay */}
@@ -63,24 +69,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
         {/* Card */}
         <div className="relative">
-          {/* <FlippablePrayCard
-            bibleVerse={bibleVerse}
-            prayCardProps={{
-              user,
-              lifeShare,
-              prayContent,
-              createdAt: new Date(),
-            }}
-            initialSide="front"
-          /> */}
-          <PrayCard
-            user={user}
-            lifeShare={lifeShare}
-            prayContent={prayContent}
-            createdAt={new Date()}
-          />
-
-          <div className="hidden">{bibleVerse.verse}</div>
+          <PrayCard prayCard={prayCard || null} />
         </div>
       </motion.div>
 
@@ -101,19 +90,21 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
             variants={itemVariants}
           >
             <div className="flex flex-wrap gap-2 w-full items-center justify-center">
-              {selectedGroups.map((group) => (
-                <div
-                  key={group.id}
-                  className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full"
-                >
-                  <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-xs">
-                    {group?.name ? [...group.name][0] : ""}
+              {selectedGroups.map((group) => {
+                return (
+                  <div
+                    key={group.id}
+                    className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full"
+                  >
+                    <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-xs">
+                      {group?.name ? [...group.name][0] : ""}
+                    </div>
+                    <p className="text-sm font-medium text-gray-800">
+                      {group?.name}
+                    </p>
                   </div>
-                  <p className="text-sm font-medium text-gray-800">
-                    {group.name}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </motion.div>
         )}
@@ -121,7 +112,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
       <motion.div className="relative z-20 w-3/4" variants={itemVariants}>
         <Button
-          onClick={onComplete}
+          onClick={handleComplete}
           className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600"
         >
           그룹 홈으로 가기

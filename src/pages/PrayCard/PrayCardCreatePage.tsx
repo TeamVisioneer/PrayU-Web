@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Group } from "supabase/types/tables";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,25 +12,6 @@ import NewPrayCardGroupSelectStep from "@/components/prayCard/NewPrayCardGroupSe
 import NewPrayCardCompletionStep from "@/components/prayCard/NewPrayCardCompletionStep";
 import PrayCardHeader from "@/components/prayCard/PrayCardHeader";
 import useBaseStore from "@/stores/baseStore";
-
-// Sample Bible verses - In real implementation, these would come from an API or database
-const SAMPLE_BIBLE_VERSES = [
-  {
-    verse:
-      "내가 진실로 진실로 너희에게 이르노니 한 알의 밀이 땅에 떨어져 죽지 아니하면 한 알 그대로 있고 죽으면 많은 열매를 맺느니라",
-    reference: "요한복음 12:24",
-  },
-  {
-    verse:
-      "그러므로 형제들아 내가 하나님의 모든 자비하심으로 너희를 권하노니 너희 몸을 하나님이 기뻐하시는 거룩한 산 제물로 드리라 이는 너희의 드릴 영적 예배니라",
-    reference: "로마서 12:1",
-  },
-  {
-    verse:
-      "여호와를 의뢰하고 선을 행하라 땅에 머무는 동안 그의 성실을 먹을 거리로 삼을지어다",
-    reference: "시편 37:3",
-  },
-];
 
 // Animation variants for staggered animations
 const containerVariants = {
@@ -50,11 +31,12 @@ const containerVariants = {
 
 const PrayCardCreatePage = () => {
   const user = useBaseStore((state) => state.user);
+  const targetGroup = useBaseStore((state) => state.targetGroup);
+
   const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
 
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const step = parseInt(searchParams.get("step") || "0");
 
@@ -64,9 +46,8 @@ const PrayCardCreatePage = () => {
   const [prayContent, setPrayContent] = useState(
     localStorage.getItem("prayCardContent") || ""
   );
-  const [selectedGroups, setSelectedGroups] = useState<Group[]>([]);
-  const [selectedBibleVerse] = useState(
-    SAMPLE_BIBLE_VERSES[Math.floor(Math.random() * SAMPLE_BIBLE_VERSES.length)]
+  const [selectedGroups, setSelectedGroups] = useState<Group[]>(
+    targetGroup ? [targetGroup] : []
   );
 
   useEffect(() => {
@@ -86,10 +67,6 @@ const PrayCardCreatePage = () => {
     if (step > 0) {
       setSearchParams({ step: (step - 1).toString() });
     }
-  };
-
-  const handleComplete = () => {
-    navigate("/group"); // Navigate to home page after completion
   };
 
   const handleGroupSelect = (groups: Group[]) => {
@@ -128,15 +105,7 @@ const PrayCardCreatePage = () => {
           />
         );
       case 4:
-        return (
-          <NewPrayCardCompletionStep
-            lifeShare={lifeShare}
-            prayContent={prayContent}
-            bibleVerse={selectedBibleVerse}
-            selectedGroups={selectedGroups}
-            onComplete={handleComplete}
-          />
-        );
+        return <NewPrayCardCompletionStep selectedGroups={selectedGroups} />;
       default:
         return null;
     }
