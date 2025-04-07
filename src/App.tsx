@@ -48,7 +48,7 @@ import {
 } from "./pages/Office";
 import GroupJoinPage from "./pages/Group/GroupJoinPage";
 import ExternalLinkDialog from "./components/notice/ExternalLinkDialog";
-
+import GroupListDrawer from "./components/group/GroupListDrawer";
 const GroupRedirect = () => {
   const { groupId } = useParams<{ groupId: string }>();
   return <Navigate to={`/office/union/unknown/group/${groupId}`} replace />;
@@ -228,6 +228,7 @@ const App = () => {
           <Toaster />
           <ConfirmAlert />
           <ExternalLinkDialog />
+          <GroupListDrawer />
           {/* 전역 컴포넌트 끝 */}
         </BrowserRouter>
       </div>

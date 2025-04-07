@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
-
+import useBaseStore from "@/stores/baseStore";
 interface NewPrayCardLifeShareStepProps {
   value: string;
   onChange: (value: string) => void;
@@ -26,8 +26,26 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
   onNext,
   onPrev,
 }) => {
+  const historyPrayCardList = useBaseStore(
+    (state) => state.historyPrayCardList
+  );
   const maxLength = 300;
   const isValid = value.trim().length > 0;
+
+  const handleLoadPreviousLifeShare = () => {
+    const previousLifeShare = historyPrayCardList?.[0]?.life;
+    if (previousLifeShare) {
+      onChange(previousLifeShare);
+      localStorage.setItem("prayCardLife", previousLifeShare);
+    }
+  };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length <= maxLength) {
+      onChange(e.target.value);
+      localStorage.setItem("prayCardLife", e.target.value);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -42,8 +60,8 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => {}}
-            disabled={false}
+            onClick={() => handleLoadPreviousLifeShare()}
+            disabled={!historyPrayCardList}
             className="text-xs text-blue-500 hover:text-blue-600"
           >
             기존 내용 불러오기
@@ -60,11 +78,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
             placeholder="최근에 있었던 일, 감사한 일, 어려운 일 등을 자유롭게 적어주세요"
             className="w-full h-full resize-none p-4 rounded-xl placeholder:text-gray-400 border-gray-200 focus:border-blue-300 focus:ring-blue-200 bg-gray-50/50"
             value={value}
-            onChange={(e) => {
-              if (e.target.value.length <= maxLength) {
-                onChange(e.target.value);
-              }
-            }}
+            onChange={(e) => handleOnChange(e)}
           />
         </motion.div>
         <motion.div

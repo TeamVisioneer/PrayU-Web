@@ -18,7 +18,6 @@ import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import BannerDialog from "@/components/notice/BannerDialog";
 import GroupHeader from "@/components/group/GroupHeader";
 import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
-import GroupListDrawer from "@/components/group/GroupListDrawer";
 import TextBanner from "@/components/member/textBanner";
 
 const GroupPage: React.FC = () => {
@@ -58,10 +57,6 @@ const GroupPage: React.FC = () => {
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
 
-  const unionWorshipGroupId = String(
-    import.meta.env.VITE_UNION_WORSHIP_GROUP_ID
-  );
-
   useEffect(() => {
     fetchGroupListByUserId(currentUserId);
     if (groupId) {
@@ -87,11 +82,8 @@ const GroupPage: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (
-      !memberLoading &&
-      (myMember == null || !isCurrentWeek(myMember.updated_at))
-    ) {
-      navigate(`/group/${groupId}/praycard/new`, { replace: true });
+    if (!memberLoading && myMember == null) {
+      navigate(`/praycard/new`, { replace: true });
       return;
     } else if (
       groupList &&
@@ -104,9 +96,6 @@ const GroupPage: React.FC = () => {
     } else if (targetGroupLoading == false && targetGroup == null) {
       navigate("/group/not-found");
       return;
-    } else if (!memberLoading && groupId === unionWorshipGroupId) {
-      navigate("/group/open/1027-union", { replace: true });
-      return;
     }
   }, [
     navigate,
@@ -118,7 +107,6 @@ const GroupPage: React.FC = () => {
     targetGroupLoading,
     maxGroupCount,
     userPlan,
-    unionWorshipGroupId,
   ]);
 
   useEffect(() => {
@@ -167,7 +155,6 @@ const GroupPage: React.FC = () => {
       <TodayPrayCardListDrawer />
       <OtherMemberDrawer />
       <PrayListDrawer />
-      <GroupListDrawer />
       <ShareDrawer />
       <EventDialog />
       <WeekUpdateDialog />

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { MdDragIndicator } from "react-icons/md";
 import { Reorder, motion } from "framer-motion";
+import useBaseStore from "@/stores/baseStore";
 
 interface NewPrayCardRequestStepProps {
   value: string;
@@ -27,10 +28,17 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   onNext,
   onPrev,
 }) => {
-  const maxLength = 100;
+  const historyPrayCardList = useBaseStore(
+    (state) => state.historyPrayCardList
+  );
 
+  const maxLength = 100;
   const [prayRequests, setPrayRequests] = useState<string[]>(
-    value.split("\n\n").filter((request) => request.trim() !== "")
+    localStorage
+      .getItem("prayCardContent")
+      ?.split("\n\n")
+      .filter((request) => request.trim() !== "") ||
+      value.split("\n\n").filter((request) => request.trim() !== "")
   );
   const [showAddForm, setShowAddForm] = useState(false);
   const [currentInput, setCurrentInput] = useState("");
@@ -38,17 +46,19 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
 
   const isValid = prayRequests.length > 0;
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length <= maxLength) {
+      setCurrentInput(e.target.value);
+    }
+  };
+
   const handleAddRequest = () => {
     if (currentInput.trim()) {
       let newRequests = [...prayRequests];
 
-      if (editingIndex !== null) {
-        // 기존 항목 수정
+      if (editingIndex !== null)
         newRequests[editingIndex] = currentInput.trim();
-      } else {
-        // 새 항목 추가
-        newRequests = [...prayRequests, currentInput.trim()];
-      }
+      else newRequests = [...prayRequests, currentInput.trim()];
 
       setPrayRequests(newRequests);
       setCurrentInput("");
@@ -56,6 +66,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
       setEditingIndex(null);
 
       onChange(newRequests.join("\n\n"));
+      localStorage.setItem("prayCardContent", newRequests.join("\n\n"));
     }
   };
 
@@ -69,6 +80,25 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
     const newRequests = prayRequests.filter((_, i) => i !== index);
     setPrayRequests(newRequests);
     onChange(newRequests.join("\n\n"));
+    localStorage.setItem("prayCardContent", newRequests.join("\n\n"));
+  };
+
+  const handleReorderPrayRequest = (newRequests: string[]) => {
+    setPrayRequests(newRequests);
+    onChange(newRequests.join("\n\n"));
+    localStorage.setItem("prayCardContent", newRequests.join("\n\n"));
+  };
+
+  const handleLoadPreviousPrayRequest = () => {
+    const previousPrayRequest = historyPrayCardList?.[0]?.content;
+    const previousPrayRequests = previousPrayRequest?.split("\n\n");
+    if (previousPrayRequests) {
+      setPrayRequests(previousPrayRequests);
+      localStorage.setItem(
+        "prayCardContent",
+        previousPrayRequests.join("\n\n")
+      );
+    }
   };
 
   if (showAddForm) {
@@ -101,11 +131,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
             placeholder="기도제목을 입력하세요"
             className="h-full w-full overflow-y-auto resize-none text-base border-0 focus:ring-0 p-0 placeholder:text-gray-300 text-gray-800 mb-6"
             value={currentInput}
-            onChange={(e) => {
-              if (e.target.value.length <= maxLength) {
-                setCurrentInput(e.target.value);
-              }
-            }}
+            onChange={(e) => handleOnChange(e)}
             autoFocus
           />
         </div>
@@ -169,10 +195,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
             <Reorder.Group
               axis="y"
               values={prayRequests}
-              onReorder={(newRequests) => {
-                setPrayRequests(newRequests);
-                onChange(newRequests.join("\n\n"));
-              }}
+              onReorder={(newRequests) => handleReorderPrayRequest(newRequests)}
               className="space-y-2"
             >
               {prayRequests.map((request, index) => (
@@ -220,8 +243,8 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => {}}
-                disabled={false}
+                onClick={() => handleLoadPreviousPrayRequest()}
+                disabled={!historyPrayCardList}
                 className="text-xs text-blue-500 hover:text-blue-600"
               >
                 기존 내용 불러오기

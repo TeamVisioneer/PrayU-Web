@@ -84,31 +84,8 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
         </div>
       </motion.div>
 
-      {selectedGroups.length > 0 && (
-        <motion.div
-          className="bg-blue-50/90 rounded-lg my-4 relative z-20 flex flex-col items-center"
-          variants={itemVariants}
-        >
-          <div className="flex flex-wrap gap-2">
-            {selectedGroups.map((group) => (
-              <div
-                key={group.id}
-                className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full"
-              >
-                <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-xs">
-                  {group?.name ? [...group.name][0] : ""}
-                </div>
-                <p className="text-sm font-medium text-gray-800">
-                  {group.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      )}
-
       <motion.div
-        className="text-center relative z-20 mb-10"
+        className="text-center relative z-20 mb-3"
         variants={itemVariants}
       >
         <motion.h1 className="text-2xl font-bold mb-1" variants={itemVariants}>
@@ -117,6 +94,29 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
         <motion.p className="text-gray-500" variants={itemVariants}>
           총 {selectedGroups.length}개의 그룹에 기도카드가 생성 되었어요!
         </motion.p>
+
+        {selectedGroups.length > 0 && (
+          <motion.div
+            className="bg-blue-50/90 rounded-lg my-4 relative z-20 flex flex-col items-center w-full"
+            variants={itemVariants}
+          >
+            <div className="flex flex-wrap gap-2 w-full items-center justify-center">
+              {selectedGroups.map((group) => (
+                <div
+                  key={group.id}
+                  className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full"
+                >
+                  <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-xs">
+                    {group?.name ? [...group.name][0] : ""}
+                  </div>
+                  <p className="text-sm font-medium text-gray-800">
+                    {group.name}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </motion.div>
 
       <motion.div className="relative z-20 w-3/4" variants={itemVariants}>

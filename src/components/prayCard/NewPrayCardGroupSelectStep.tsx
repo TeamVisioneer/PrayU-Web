@@ -4,6 +4,8 @@ import useBaseStore from "@/stores/baseStore";
 import { Group } from "supabase/types/tables";
 import GroupTagList from "../group/GroupTagList";
 import { motion } from "framer-motion";
+import { bulkCreatePrayCard } from "@/apis/prayCard";
+import { PulseLoader } from "react-spinners";
 
 interface NewPrayCardGroupSelectStepProps {
   selectedGroups: Group[];
@@ -34,6 +36,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
     (state) => state.fetchGroupListByUserId
   );
   const [loading, setLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     const loadGroups = async () => {
@@ -47,7 +50,19 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
     loadGroups();
   }, [user, fetchGroupListByUserId]);
 
-  const isNextEnabled = selectedGroups.length > 0;
+  const handleCreatePrayCard = async () => {
+    setIsCreating(true);
+    await bulkCreatePrayCard(
+      selectedGroups.map((group) => group.id),
+      user?.id || null,
+      localStorage.getItem("prayCardContent") || "",
+      localStorage.getItem("prayCardLife") || ""
+    );
+    localStorage.removeItem("prayCardContent");
+    localStorage.removeItem("prayCardLife");
+    onNext();
+    setIsCreating(false);
+  };
 
   const handleGroupToggle = (group: Group) => {
     const isSelected = selectedGroups.some((g) => g.id === group.id);
@@ -105,11 +120,14 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
             loading={loading}
             emptyMessage={
               <div className="flex flex-col justify-center items-center">
-                <p className="text-gray-500 mb-2">참여 중인 그룹이 없습니다</p>
+                <p className="text-sm text-gray-500">
+                  참여 중인 그룹이 없습니다
+                </p>
                 <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => (window.location.href = "/group/new")}
-                  variant="outline"
-                  className="text-sm"
+                  className="text-xs text-blue-500 hover:text-blue-600"
                 >
                   새 그룹 만들기
                 </Button>
@@ -119,24 +137,29 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
         </div>
       </motion.div>
 
-      <motion.div className="flex gap-2 mt-auto" variants={itemVariants}>
+      <motion.div
+        className="flex flex-col gap-2 mt-auto"
+        variants={itemVariants}
+      >
+        <Button
+          onClick={() => handleCreatePrayCard()}
+          className="flex-1 py-4 text-base bg-blue-500 hover:bg-blue-600"
+          disabled={
+            selectedGroups.length === 0 && groupList?.length !== 0 && isCreating
+          }
+        >
+          {isCreating ? (
+            <PulseLoader size={10} color="#f3f4f6" />
+          ) : (
+            "기도카드 만들기"
+          )}
+        </Button>
         <Button
           onClick={onPrev}
           variant="outline"
-          className="flex-1 py-6 text-base"
+          className="flex-1 py-4 text-base"
         >
           이전
-        </Button>
-        <Button
-          onClick={onNext}
-          disabled={!isNextEnabled}
-          className={`flex-1 py-6 text-base ${
-            isNextEnabled
-              ? "bg-blue-500 hover:bg-blue-600"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-        >
-          다음
         </Button>
       </motion.div>
     </div>

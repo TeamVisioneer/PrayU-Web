@@ -48,14 +48,16 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       (userPrayCardList.length == 0 ||
         !isCurrentWeek(userPrayCardList[0].created_at))
     ) {
-      navigate(`/group/${groupId}/praycard/new`, { replace: true });
+      navigate("/praycard/new", { replace: true });
       return;
     }
   }, [userPrayCardList, navigate, groupId]);
 
   useEffect(() => {
-    setPrayCardContent(myMember.pray_summary || "");
-    if (userPrayCardList?.[0]) setPrayCardLife(userPrayCardList[0].life || "");
+    if (userPrayCardList?.[0]) {
+      setPrayCardContent(userPrayCardList[0].content || "");
+      setPrayCardLife(userPrayCardList[0].life || "");
+    }
   }, [setPrayCardContent, myMember, setPrayCardLife, userPrayCardList]);
 
   const prayCard = userPrayCardList?.[0];

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Group } from "supabase/types/tables";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +11,7 @@ import NewPrayCardRequestStep from "@/components/prayCard/NewPrayCardRequestStep
 import NewPrayCardGroupSelectStep from "@/components/prayCard/NewPrayCardGroupSelectStep";
 import NewPrayCardCompletionStep from "@/components/prayCard/NewPrayCardCompletionStep";
 import PrayCardHeader from "@/components/prayCard/PrayCardHeader";
+import useBaseStore from "@/stores/baseStore";
 
 // Sample Bible verses - In real implementation, these would come from an API or database
 const SAMPLE_BIBLE_VERSES = [
@@ -48,15 +49,30 @@ const containerVariants = {
 };
 
 const PrayCardCreatePage = () => {
+  const user = useBaseStore((state) => state.user);
+  const fetchUserPrayCardList = useBaseStore(
+    (state) => state.fetchUserPrayCardList
+  );
+
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const step = parseInt(searchParams.get("step") || "0");
-  const [lifeShare, setLifeShare] = useState("");
-  const [prayContent, setPrayContent] = useState("");
+
+  const [lifeShare, setLifeShare] = useState(
+    localStorage.getItem("prayCardLife") || ""
+  );
+  const [prayContent, setPrayContent] = useState(
+    localStorage.getItem("prayCardContent") || ""
+  );
   const [selectedGroups, setSelectedGroups] = useState<Group[]>([]);
   const [selectedBibleVerse] = useState(
     SAMPLE_BIBLE_VERSES[Math.floor(Math.random() * SAMPLE_BIBLE_VERSES.length)]
   );
+
+  useEffect(() => {
+    if (user) fetchUserPrayCardList(user.id, 1, 0);
+    console.log(user);
+  }, [user, fetchUserPrayCardList]);
 
   const totalSteps = 5; // Increased by 1 for the group selection step
 
