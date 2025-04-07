@@ -1,8 +1,13 @@
+import useBaseStore from "@/stores/baseStore";
 import React from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
-
+import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
+import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
+import { useNavigate } from "react-router-dom";
 interface PrayCardProps {
-  prayCard: PrayCardWithProfiles | null;
+  prayCard: PrayCardWithProfiles | undefined;
+  isMoreBtn?: boolean;
+  editable?: boolean;
 }
 
 // Helper function to format date to "X days ago" in Korean
@@ -20,10 +25,30 @@ const formatTimeAgo = (date: Date): string => {
   }
 };
 
-export const PrayCard: React.FC<PrayCardProps> = ({ prayCard }) => {
+export const PrayCard: React.FC<PrayCardProps> = ({
+  prayCard,
+  isMoreBtn = true,
+  editable = false,
+}) => {
+  const user = useBaseStore((state) => state.user);
+  const setIsOpenMyMemberDrawer = useBaseStore(
+    (state) => state.setIsOpenMyMemberDrawer
+  );
+  const navigate = useNavigate();
+  const isMyPrayCard = prayCard?.user_id == user?.id;
+
+  const handleClickPrayCard = () => {
+    if (isMyPrayCard && editable) {
+      setIsOpenMyMemberDrawer(false);
+      navigate(`/group/${prayCard?.group_id}/prayCard/${prayCard?.id}/edit`, {
+        replace: true,
+      });
+    }
+  };
+
   if (!prayCard) {
     return (
-      <div className="w-full aspect-[3/4] bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl overflow-hidden border border-gray-100 flex flex-col">
+      <div className="w-full aspect-[3/4] bg-white shadow-prayCard hover:shadow-md transition-shadow rounded-xl overflow-hidden border border-gray-100 flex flex-col">
         {/* Header skeleton */}
         <div className="p-4 pb-3 flex-shrink-0">
           <div className="flex items-center gap-3">
@@ -90,9 +115,9 @@ export const PrayCard: React.FC<PrayCardProps> = ({ prayCard }) => {
 
   return (
     // Fixed aspect ratio container (3:4 aspect ratio)
-    <div className="w-full aspect-[3/4] bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl overflow-hidden border border-gray-100 flex flex-col">
+    <div className="w-full aspect-[3/4] bg-white shadow-prayCard rounded-xl overflow-hidden border border-gray-100 flex flex-col">
       {/* Header - user info - fixed */}
-      <div className="p-4 pb-3 flex-shrink-0">
+      <div className="p-4 pb-3 flex justify-between items-center flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 rounded-full overflow-hidden">
             {prayCard.profiles.avatar_url ? (
@@ -109,15 +134,30 @@ export const PrayCard: React.FC<PrayCardProps> = ({ prayCard }) => {
           </div>
           <div>
             <h3 className="font-medium text-gray-900">
-              {prayCard.profiles.full_name}
+              {isMyPrayCard ? "나" : prayCard.profiles.full_name}
             </h3>
             <p className="text-xs text-gray-500">{timeAgo}</p>
           </div>
         </div>
+        {isMoreBtn &&
+          (isMyPrayCard ? (
+            <MyPrayCardMenuBtn
+              handleEditClick={editable ? handleClickPrayCard : undefined}
+              prayCard={prayCard}
+            />
+          ) : (
+            <OtherPrayCardMenuBtn
+              targetUserId={prayCard.user_id || ""}
+              prayContent={prayCard.content || ""}
+            />
+          ))}
       </div>
 
       {/* Scrollable content area */}
-      <div className="p-4 space-y-4 overflow-y-auto flex-grow scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+      <div
+        onClick={() => editable && handleClickPrayCard()}
+        className="p-4 space-y-4 overflow-y-auto flex-grow scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+      >
         <div>
           <h4 className="text-sm font-medium text-gray-700 mb-1">일상 나눔</h4>
           <div className="flex items-start gap-2">

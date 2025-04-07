@@ -67,6 +67,7 @@ const PrayCardHistoryList = () => {
           if (prayCard.bible_card_url) {
             return (
               <div
+                key={index}
                 className="aspect-[0.76] border-none flex items-center justify-center"
                 onClick={() => onClickStory(prayCard)}
               >

@@ -6,7 +6,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
-import PrayCardUI from "../prayCard/PrayCardUI";
+import PrayCard from "../prayCard/PrayCard";
 import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 import { getISOOnlyDate, getISOTodayDate, isCurrentWeek } from "@/lib/utils";
 import { ExpiredMemberLink } from "../share/KakaoShareBtn";
@@ -149,13 +149,13 @@ const OtherMemberDrawer: React.FC = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DrawerContent className="bg-mainBg flex flex-col">
+      <DrawerContent className="bg-mainBg flex flex-col max-h-90vh">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <div className="px-8 py-5 flex flex-col flex-grow min-h-85vh max-h-85vh gap-4">
-          <PrayCardUI prayCard={otherPrayCardList?.[0]} />
+        <div className="px-8 py-5 flex flex-col flex-grow gap-4 overflow-y-auto">
+          <PrayCard prayCard={otherPrayCardList?.[0]} />
           {!otherPrayCardList || otherPrayCardList.length === 0 ? (
             NoPrayCardSection
           ) : !isCurrentWeek(otherPrayCardList[0].created_at) ? (

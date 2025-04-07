@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import PrayCard from "./PrayCard";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import { Group } from "supabase/types/tables";
+import PrayCard from "./PrayCard";
+
 interface NewPrayCardCompletionStepProps {
   selectedGroups: Group[];
 }
@@ -69,7 +70,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
         {/* Card */}
         <div className="relative">
-          <PrayCard prayCard={prayCard || null} />
+          <PrayCard prayCard={prayCard} isMoreBtn={false} />
         </div>
       </motion.div>
 
@@ -113,7 +114,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
       <motion.div className="relative z-20 w-3/4" variants={itemVariants}>
         <Button
           onClick={handleComplete}
-          className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600"
+          className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600 mb-10"
         >
           그룹 홈으로 가기
         </Button>

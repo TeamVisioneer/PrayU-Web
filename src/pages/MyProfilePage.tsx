@@ -101,7 +101,7 @@ const MyProfilePage = () => {
       <div className="w-full flex flex-col gap-3 bg-mainBg z-10">
         <div className="w-full flex justify-between items-center">
           <div className="w-14 ">
-            <IoChevronBack size={20} onClick={() => window.history.back()} />
+            <IoChevronBack size={20} onClick={() => navigate(-1)} />
           </div>
           <span className="text-lg font-bold">내 프로필</span>
           <div

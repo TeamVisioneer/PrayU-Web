@@ -7,14 +7,12 @@ import TodayPrayCompletedItem from "./TodayPrayCompletedItem";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import TodayPrayInviteCompletedItem from "./TodayPrayInviteCompletedItem";
-import DummyPrayCardUI from "../prayCard/DummyPrayCardUI";
-import PrayCardUI from "../prayCard/PrayCardUI";
+import PrayCard from "../prayCard/PrayCard";
 import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 import DumyReactionBtnWithCalendar from "../prayCard/DummyReactionWithCalendar";
-import MyPrayCardUI from "../prayCard/MyPrayCardUI";
+import { PrayCardWithProfiles, Profiles } from "supabase/types/tables";
 
 const TodayPrayCardList = () => {
-  const user = useBaseStore((state) => state.user);
   const setPrayCardCarouselApi = useBaseStore(
     (state) => state.setPrayCardCarouselApi
   );
@@ -29,6 +27,25 @@ const TodayPrayCardList = () => {
   );
   const memberList = useBaseStore((state) => state.memberList);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
+
+  const dummyPrayCard = {
+    id: "1",
+    user_id: "1",
+    created_at: new Date().toISOString(),
+    life: "(예시) 회사에서 업무적, 관계적으로 힘들었던 한 주",
+    content:
+      "(예시)맡겨진 자리에서 하나님의 사명을 발견할 수 있도록\n\n(예시)내 주변 사람을 내 몸과 같이 섬길 수 있도록",
+    pray: [],
+    profiles: {
+      id: "1",
+      full_name: "기도 카드",
+      avatar_url: "/images/avatar/avatar_1.png",
+    } as Profiles,
+    bible_card_url: "",
+    deleted_at: "",
+    group_id: "",
+    updated_at: "",
+  } as PrayCardWithProfiles;
 
   useEffect(() => {
     setPrayCardCarouselIndex(1);
@@ -49,14 +66,11 @@ const TodayPrayCardList = () => {
       setApi={setPrayCardCarouselApi}
       opts={{ startIndex: 1 }}
     >
-      <CarouselContent className="min-h-75vh max-h-75vh">
+      <CarouselContent className="min-h-70vh max-h-70vh">
         <CarouselItem className="basis-5/6"></CarouselItem>
         {memberList?.length == 1 && (
           <CarouselItem className="basis-5/6 flex flex-col gap-2">
-            <DummyPrayCardUI
-              profileImage="/images/avatar/avatar_1.png"
-              name="기도 카드"
-            />
+            <PrayCard prayCard={dummyPrayCard} isMoreBtn={false} />
             <DumyReactionBtnWithCalendar />
           </CarouselItem>
         )}
@@ -65,11 +79,7 @@ const TodayPrayCardList = () => {
             key={prayCard.id}
             className="basis-5/6 flex flex-col gap-2"
           >
-            {prayCard.user_id == user?.id ? (
-              <MyPrayCardUI prayCard={prayCard} />
-            ) : (
-              <PrayCardUI prayCard={prayCard} />
-            )}
+            <PrayCard prayCard={prayCard} />
             <ReactionWithCalendar
               prayCard={prayCard}
               eventOption={{
