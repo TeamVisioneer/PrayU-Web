@@ -200,6 +200,35 @@ export const createPrayCard = async (
   }
 };
 
+export const bulkCreatePrayCard = async (
+  groupIds: string[],
+  userId: string | null,
+  content: string,
+  life: string,
+): Promise<PrayCard[] | null> => {
+  try {
+    const { error, data } = await supabase
+      .from("pray_card")
+      .insert(
+        groupIds.map((groupId) => ({
+          group_id: groupId,
+          user_id: userId,
+          content,
+          life,
+        })),
+      )
+      .select();
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export interface createPrayCardParams {
   group_id?: string;
   user_id?: string | null;

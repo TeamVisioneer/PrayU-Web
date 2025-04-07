@@ -16,7 +16,7 @@ import GroupCreatePage from "./pages/GroupCreatePage";
 import { analyticsTrack } from "@/analytics/analytics";
 import ConfirmAlert from "./components/alert/ConfirmAlert";
 import { Toaster } from "./components/ui/toaster";
-import PrayCardCreatePage from "./pages/PrayCardCreatePage";
+import PrayCardCreatePage from "./pages/PrayCard/PrayCardCreatePage";
 import KakaoInit from "./components/kakao/KakaoInit";
 import KakaoCallBack from "./components/kakao/KakaoCallback";
 import MyProfilePage from "./pages/MyProfilePage";
@@ -35,7 +35,7 @@ import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
 import QuietTimePage from "./pages/QuietTimePage";
 import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage";
-import PrayCardEditPage from "./components/prayCard/PrayCardEditPage";
+import PrayCardEditPage from "./pages/PrayCard/PrayCardEditPage";
 import NotificationPage from "./components/notification/NotificationPage";
 import AppInit from "./AppInit/AppInit";
 import TodayPrayCardPage from "./pages/TodayPrayCardPage";
@@ -48,7 +48,7 @@ import {
 } from "./pages/Office";
 import GroupJoinPage from "./pages/Group/GroupJoinPage";
 import ExternalLinkDialog from "./components/notice/ExternalLinkDialog";
-
+import GroupListDrawer from "./components/group/GroupListDrawer";
 const GroupRedirect = () => {
   const { groupId } = useParams<{ groupId: string }>();
   return <Navigate to={`/office/union/unknown/group/${groupId}`} replace />;
@@ -101,6 +101,14 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <TermServicePage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/praycard/new"
+                element={
+                  <PrivateRoute>
+                    <PrayCardCreatePage />
                   </PrivateRoute>
                 }
               />
@@ -220,6 +228,7 @@ const App = () => {
           <Toaster />
           <ConfirmAlert />
           <ExternalLinkDialog />
+          <GroupListDrawer />
           {/* 전역 컴포넌트 끝 */}
         </BrowserRouter>
       </div>

@@ -96,10 +96,37 @@ module.exports = {
             height: "0",
           },
         },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "scale-in": {
+          "0%": { transform: "scale(0)" },
+          "100%": { transform: "scale(1)" },
+        },
+        "slide-in": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        flip: {
+          "0%": { transform: "rotateY(0deg)" },
+          "100%": { transform: "rotateY(180deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.3s ease-out forwards",
+        "scale-in": "scale-in 0.3s ease-out forwards",
+        "slide-in": "slide-in 0.4s ease-out forwards",
+        flip: "flip 0.7s ease-out forwards",
+      },
+      animationDelay: {
+        200: "200ms",
+        300: "300ms",
+        400: "400ms",
+        500: "500ms",
+        600: "600ms",
       },
       height: {
         "5vh": "calc(var(--vh) * 5)",
@@ -169,5 +196,37 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/line-clamp"),
+    function ({ addUtilities }) {
+      const newUtilities = {
+        ".delay-200": {
+          "animation-delay": "200ms",
+        },
+        ".delay-300": {
+          "animation-delay": "300ms",
+        },
+        ".delay-400": {
+          "animation-delay": "400ms",
+        },
+        ".delay-500": {
+          "animation-delay": "500ms",
+        },
+        ".perspective-1000": {
+          perspective: "1000px",
+        },
+        ".transform-style-3d": {
+          "transform-style": "preserve-3d",
+        },
+        ".backface-hidden": {
+          "backface-visibility": "hidden",
+        },
+        ".rotate-y-180": {
+          transform: "rotateY(180deg)",
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };

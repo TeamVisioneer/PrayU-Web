@@ -82,7 +82,9 @@ const SettingDialog = () => {
         await deleteUser(userId);
         signOut();
 
-        window.location.href = "/";
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 100);
       },
     });
     setIsConfirmAlertOpen(true);
