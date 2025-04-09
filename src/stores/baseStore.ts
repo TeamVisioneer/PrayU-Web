@@ -34,6 +34,7 @@ import {
   updateGroupParams,
 } from "@/apis/group";
 import {
+  bulkUpdateMembers,
   createMember,
   deleteMemberbyGroupId,
   fetchMemberCountByGroupId,
@@ -194,6 +195,11 @@ export interface BaseStore {
     praySummary: string,
     updatedAt?: string,
   ) => Promise<Member | null>;
+  bulkUpdateMembers: (
+    memberIds: string[],
+    praySummary: string,
+    updatedAt?: boolean,
+  ) => Promise<Member[] | null>;
   getMember: (
     userId: string,
     groupId: string,
@@ -766,6 +772,18 @@ const useBaseStore = create<BaseStore>()(
         member = await updateMember(memberId, praySummary);
       }
       return member;
+    },
+    bulkUpdateMembers: async (
+      memberIds: string[],
+      praySummary: string,
+      updatedAt?: boolean,
+    ) => {
+      const members = await bulkUpdateMembers(
+        memberIds,
+        praySummary,
+        updatedAt,
+      );
+      return members;
     },
     getMember: async (userId: string, groupId: string) => {
       const member = await getMember(userId, groupId);

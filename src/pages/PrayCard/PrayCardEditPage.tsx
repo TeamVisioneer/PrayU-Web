@@ -8,6 +8,9 @@ import { useEffect, useRef, useState } from "react";
 import InfoBtn from "../../components/alert/infoBtn";
 import { Reorder } from "framer-motion";
 import PrayRequestItem from "../../components/prayCard/PrayRequestItem";
+import PrayCard from "../../components/prayCard/PrayCard";
+import { PrayCardWithProfiles } from "supabase/types/tables";
+import { getISOTodayDate } from "@/lib/utils";
 
 const PrayCardEditPage = () => {
   const { groupId, praycardId } = useParams<{
@@ -24,6 +27,7 @@ const PrayCardEditPage = () => {
   const setPrayCardLife = useBaseStore((state) => state.setPrayCardLife);
   const updateMember = useBaseStore((state) => state.updateMember);
   const getMember = useBaseStore((state) => state.getMember);
+  const myMember = useBaseStore((state) => state.myMember);
   const user = useBaseStore((state) => state.user);
   const updatePrayCard = useBaseStore((state) => state.updatePrayCard);
 
@@ -55,21 +59,30 @@ const PrayCardEditPage = () => {
     }
   }, [showAddPrayForm]);
 
-  // Get user's name for display
-  const getUserName = () => {
-    if (!user) return "사용자";
-    return user.email?.split("@")[0] || user.id?.substring(0, 8) || "사용자";
-  };
-
-  const getUserInitial = () => {
-    const name = getUserName();
-    return name.charAt(0).toUpperCase();
-  };
+  // Generate preview prayCard object based on current input
+  // Using as PrayCardWithProfiles for preview only
+  const previewPrayCard = {
+    id: praycardId || "preview",
+    user_id: user?.id,
+    group_id: groupId || "preview",
+    content: inputPrayCardContent,
+    life: inputPrayCardLife,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at: null,
+    bible_card_url: null,
+    profiles: myMember?.profiles,
+    pray: [],
+  } as PrayCardWithProfiles; // Type assertion for preview purposes
 
   const handleSave = async () => {
     if (groupId && praycardId && user) {
       const member = await getMember(user.id, groupId);
-      await updateMember(member?.id as string, inputPrayCardContent.trim());
+      await updateMember(
+        member?.id as string,
+        inputPrayCardContent.trim(),
+        getISOTodayDate()
+      );
       await updatePrayCard(praycardId, {
         life: inputPrayCardLife.trim(),
         content: inputPrayCardContent.trim(),
@@ -129,71 +142,14 @@ const PrayCardEditPage = () => {
       </header>
 
       {previewMode ? (
-        // Preview mode
+        // Preview mode using PrayCard component
         <main className="flex-1 p-4 flex flex-col">
-          <div className="w-full max-w-md mx-auto bg-white shadow-sm rounded-xl overflow-hidden border border-gray-100 flex flex-col">
-            {/* Header - user info */}
-            <div className="p-4 pb-3 border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="relative h-10 w-10 rounded-full overflow-hidden bg-blue-100 flex items-center justify-center text-blue-600">
-                  {getUserInitial()}
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900">{getUserName()}</h3>
-                  <p className="text-xs text-gray-500">미리보기</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Content preview */}
-            <div className="p-4 space-y-4 overflow-y-auto flex-grow">
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-1">
-                  일상 나눔
-                </h4>
-                <div className="flex items-start gap-2">
-                  <div className="min-w-5 self-stretch flex justify-center">
-                    <div className="w-0.5 self-stretch bg-blue-100 flex-shrink-0"></div>
-                  </div>
-                  <p className="text-sm text-gray-600 whitespace-pre-line">
-                    {inputPrayCardLife || "일상 나눔 내용이 없습니다."}
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-2">
-                  기도제목
-                </h4>
-                <ul className="space-y-2">
-                  {prayRequests.length > 0 ? (
-                    prayRequests.map((request, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <div className="min-w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-3 w-3 text-blue-600"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                        <p className="text-sm text-gray-700">{request}</p>
-                      </li>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-500 italic">
-                      기도제목을 입력해주세요.
-                    </p>
-                  )}
-                </ul>
-              </div>
-            </div>
+          <div className="w-full max-w-md mx-auto">
+            <PrayCard
+              prayCard={previewPrayCard}
+              isMoreBtn={false}
+              editable={false}
+            />
           </div>
         </main>
       ) : (

@@ -147,6 +147,33 @@ export const updateMember = async (
   }
 };
 
+export const bulkUpdateMembers = async (
+  memberIds: string[],
+  praySummary: string,
+  updatedAt?: boolean,
+): Promise<Member[] | null> => {
+  try {
+    const updateParams = {
+      deleted_at: null,
+      pray_summary: praySummary,
+      ...(updatedAt && { updated_at: getISOToday() }),
+    };
+    const { error, data } = await supabase
+      .from("member")
+      .update(updateParams)
+      .in("id", memberIds)
+      .select();
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data as Member[];
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const deleteMemberbyGroupId = async (
   userId: string,
   groupId: string,

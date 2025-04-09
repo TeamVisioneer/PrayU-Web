@@ -34,7 +34,6 @@ const GroupPage: React.FC = () => {
   const getMember = useBaseStore((state) => state.getMember);
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
-  const memberLoading = useBaseStore((state) => state.memberLoading);
   const memberList = useBaseStore((state) => state.memberList);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
@@ -54,9 +53,8 @@ const GroupPage: React.FC = () => {
   const fetchNotificationCount = useBaseStore(
     (state) => state.fetchNotificationCount
   );
-  const userPlan = useBaseStore((state) => state.userPlan);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
+  const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
 
   useEffect(() => {
     fetchGroupListByUserId(currentUserId);
@@ -83,16 +81,18 @@ const GroupPage: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (!memberLoading && myMember == null) {
-      navigate(`/praycard/new`, { replace: true });
+    if (!groupList) {
+      return;
+    } else if (groupList.every((group) => group.id !== groupId)) {
+      // TODO: alert 창으로
+      navigate(`/group/${groupId}/join`, { replace: true });
       return;
     } else if (
-      groupList &&
-      groupList.length >= maxGroupCount &&
-      !groupList.some((group) => group.id === groupId) &&
-      userPlan != "Premium"
+      userPrayCardList &&
+      (userPrayCardList.length == 0 ||
+        !isCurrentWeek(userPrayCardList[0].created_at))
     ) {
-      navigate("/group/limit", { replace: true });
+      navigate("/praycard/new", { replace: true });
       return;
     } else if (targetGroupLoading == false && targetGroup == null) {
       navigate("/group/not-found");
@@ -100,14 +100,11 @@ const GroupPage: React.FC = () => {
     }
   }, [
     navigate,
-    memberLoading,
-    myMember,
     groupId,
     groupList,
+    userPrayCardList,
     targetGroup,
     targetGroupLoading,
-    maxGroupCount,
-    userPlan,
   ]);
 
   useEffect(() => {

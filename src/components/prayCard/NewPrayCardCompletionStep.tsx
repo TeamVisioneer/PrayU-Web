@@ -35,7 +35,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   const navigate = useNavigate();
 
   const user = useBaseStore((state) => state.user);
-
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
@@ -46,7 +46,10 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   const handleComplete = () => {
     localStorage.removeItem("prayCardContent");
     localStorage.removeItem("prayCardLife");
-    navigate("/group");
+    if (targetGroup) navigate(`/group/${targetGroup.id}`);
+    else if (selectedGroups.length > 0)
+      navigate(`/group/${selectedGroups[0].id}`);
+    else navigate("/group");
   };
 
   useEffect(() => {
@@ -116,7 +119,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
           onClick={handleComplete}
           className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600 mb-10"
         >
-          그룹 홈으로 가기
+          그룹 바로가기
         </Button>
       </motion.div>
     </div>
