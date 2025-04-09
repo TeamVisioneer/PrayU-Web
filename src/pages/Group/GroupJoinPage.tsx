@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Member } from "supabase/types/tables";
 import { useParams, useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,6 +11,7 @@ import { PulseLoader } from "react-spinners";
 import LogInDrawer from "@/components/auth/LogInDrawer";
 import check from "@/assets/lottie/check2.json";
 import Lottie from "react-lottie";
+import { NotificationType } from "@/components/notification/NotificationType";
 
 const GroupJoinPage: React.FC = () => {
   const navigate = useNavigate();
@@ -36,6 +38,10 @@ const GroupJoinPage: React.FC = () => {
     (state) => state.setIsOpenLoginDrawer
   );
   const userPlan = useBaseStore((state) => state.userPlan);
+  const createNotification = useBaseStore((state) => state.createNotification);
+  const createOnesignalPush = useBaseStore(
+    (state) => state.createOnesignalPush
+  );
 
   useEffect(() => {
     if (user) fetchMemberListByUserId(user.id);
@@ -64,6 +70,36 @@ const GroupJoinPage: React.FC = () => {
     }
   }, [myMemberList, groupId, userPlan, navigate]);
 
+  const sendNotification = async (member: Member) => {
+    if (!memberList || !targetGroup) return;
+
+    const title = "입장 알림";
+    const description = `${user?.user_metadata.name}님이 기도그룹에 참여했어요!`;
+
+    await createOnesignalPush({
+      title: "PrayU",
+      subtitle: title,
+      message: description,
+      data: {
+        url: `${import.meta.env.VITE_BASE_URL}/group/${targetGroup.id}`,
+      },
+      userIds: memberList
+        .map((member) => member.user_id!)
+        .filter((userId) => userId !== member.user_id!),
+    });
+
+    await createNotification({
+      groupId: targetGroup.id,
+      userId: memberList
+        .map((member) => member.user_id!)
+        .filter((userId) => userId !== member.user_id!),
+      senderId: member.user_id!,
+      title: title,
+      body: description,
+      type: NotificationType.SNS,
+    });
+  };
+
   const handleJoinGroup = async () => {
     analyticsTrack("클릭_그룹_참여", { where: "GroupJoinPage" });
     if (!user) {
@@ -76,9 +112,17 @@ const GroupJoinPage: React.FC = () => {
       setIsJoining(true);
       const updatedAt = getISOTodayDate();
       const myMember = await getMember(user.id, groupId);
+      let newMember;
 
-      if (myMember) await updateMember(myMember.id, "", updatedAt);
-      else await createMember(groupId, user.id, "");
+      if (myMember) {
+        newMember = await updateMember(myMember.id, "", updatedAt);
+      } else {
+        newMember = await createMember(groupId, user.id, "");
+      }
+
+      if (!newMember) return;
+      await sendNotification(newMember);
+
       setJoined(true);
     } catch (error) {
       setIsJoining(false);

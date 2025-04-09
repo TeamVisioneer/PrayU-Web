@@ -6,6 +6,8 @@ import GroupTagList from "../group/GroupTagList";
 import { motion } from "framer-motion";
 import { bulkCreatePrayCard } from "@/apis/prayCard";
 import { PulseLoader } from "react-spinners";
+import { analyticsTrack } from "@/analytics/analytics";
+import { NotificationType } from "@/components/notification/NotificationType";
 
 interface NewPrayCardGroupSelectStepProps {
   selectedGroups: Group[];
@@ -32,10 +34,62 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 }) => {
   const user = useBaseStore((state) => state.user);
   const bulkUpdateMembers = useBaseStore((state) => state.bulkUpdateMembers);
+  const getGroupWithMemberList = useBaseStore(
+    (state) => state.getGroupWithMemberList
+  );
+
   const myMemberList = useBaseStore((state) => state.myMemberList);
+  const createNotification = useBaseStore((state) => state.createNotification);
+  const createOnesignalPush = useBaseStore(
+    (state) => state.createOnesignalPush
+  );
+
   const [isCreating, setIsCreating] = useState(false);
 
+  const sendNotification = async (groups: Group[]) => {
+    if (!user) return;
+
+    // 각 그룹마다 알림 전송
+    for (const group of groups) {
+      const subtitle = "기도카드 알림";
+      const message = `${group.name}에 새로운 기도카드가 등록되었어요!`;
+
+      //TODO: 재시도 필요
+      const groupWithMemberList = await getGroupWithMemberList(group.id);
+      if (!groupWithMemberList?.member) continue;
+
+      const memberIds: string[] = groupWithMemberList.member
+        .map((member) => member.user_id)
+        .filter((user_id) => user_id !== null)
+        .filter((user_id) => user_id !== user.id);
+
+      if (memberIds.length === 0) continue;
+
+      // OneSignal 푸시 알림 전송
+      await createOnesignalPush({
+        title: "PrayU",
+        subtitle: subtitle,
+        message: message,
+        data: {
+          url: `${import.meta.env.VITE_BASE_URL}/group/${group.id}`,
+        },
+        userIds: memberIds,
+      });
+
+      // 앱 내 알림 생성
+      await createNotification({
+        groupId: group.id,
+        userId: memberIds,
+        senderId: user.id,
+        title: subtitle,
+        body: message,
+        type: NotificationType.SNS,
+      });
+    }
+  };
+
   const handleCreatePrayCard = async () => {
+    analyticsTrack("클릭_기도카드생성_만들기", { where: "그룹선택" });
     setIsCreating(true);
     if (!user) {
       setIsCreating(false);
@@ -61,6 +115,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
     }
 
     if (prayCardList) {
+      await sendNotification(selectedGroups);
       localStorage.removeItem("prayCardContent");
       localStorage.removeItem("prayCardLife");
       onNext();
@@ -69,6 +124,10 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   };
 
   const handleGroupToggle = (group: Group) => {
+    analyticsTrack("클릭_기도카드생성_그룹선택", {
+      where: "그룹선택",
+      group_name: group.name,
+    });
     const isSelected = selectedGroups.some((g) => g.id === group.id);
 
     if (isSelected) {
@@ -78,6 +137,16 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       // Add the group if not already selected
       onGroupSelect([...selectedGroups, group]);
     }
+  };
+
+  const handlePrevClick = () => {
+    analyticsTrack("클릭_기도카드생성_이전", { where: "그룹선택" });
+    onPrev();
+  };
+
+  const handleNewGroupClick = () => {
+    analyticsTrack("클릭_기도카드생성_새그룹생성", { where: "그룹선택" });
+    window.location.href = "/group/new";
   };
 
   return (
@@ -130,7 +199,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => (window.location.href = "/group/new")}
+                  onClick={handleNewGroupClick}
                   className="text-xs text-blue-500 hover:text-blue-600"
                 >
                   새 그룹 만들기
@@ -141,10 +210,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
         </div>
       </motion.div>
 
-      <motion.div
-        className="flex flex-col gap-2 mt-auto"
-        variants={itemVariants}
-      >
+      <motion.div className="flex flex-col gap-2" variants={itemVariants}>
         <Button
           onClick={() => handleCreatePrayCard()}
           className="flex-1 py-4 text-base bg-blue-500 hover:bg-blue-600"
@@ -161,7 +227,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
           )}
         </Button>
         <Button
-          onClick={onPrev}
+          onClick={handlePrevClick}
           variant="outline"
           className="flex-1 py-4 text-base"
         >

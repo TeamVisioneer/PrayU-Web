@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import useBaseStore from "@/stores/baseStore";
+import { analyticsTrack } from "@/analytics/analytics";
+
 interface NewPrayCardLifeShareStepProps {
   value: string;
   onChange: (value: string) => void;
@@ -33,6 +35,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
   const isValid = value.trim().length > 0;
 
   const handleLoadPreviousLifeShare = () => {
+    analyticsTrack("클릭_기도카드생성_이전내용불러오기", { where: "일상나눔" });
     const previousLifeShare = historyPrayCardList?.[0]?.life;
     if (previousLifeShare) {
       onChange(previousLifeShare);
@@ -45,6 +48,16 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
       onChange(e.target.value);
       localStorage.setItem("prayCardLife", e.target.value);
     }
+  };
+
+  const handleNext = () => {
+    analyticsTrack("클릭_기도카드생성_다음", { where: "일상나눔" });
+    onNext();
+  };
+
+  const handlePrev = () => {
+    analyticsTrack("클릭_기도카드생성_이전", { where: "일상나눔" });
+    onPrev();
   };
 
   return (
@@ -69,7 +82,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
         </motion.div>
       </motion.div>
 
-      <motion.div className="mb-4 flex-1" variants={itemVariants}>
+      <motion.div className="flex-grow" variants={itemVariants}>
         <motion.div
           className="h-full max-h-24 relative"
           variants={itemVariants}
@@ -94,16 +107,17 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
           </div>
         </motion.div>
       </motion.div>
-      <motion.div className="flex gap-2 mt-auto" variants={itemVariants}>
+
+      <motion.div className="flex gap-2" variants={itemVariants}>
         <Button
-          onClick={onPrev}
+          onClick={handlePrev}
           variant="outline"
           className="flex-1 py-6 text-base"
         >
           이전
         </Button>
         <Button
-          onClick={onNext}
+          onClick={handleNext}
           disabled={!isValid}
           className={`flex-1 py-6 text-base ${
             isValid

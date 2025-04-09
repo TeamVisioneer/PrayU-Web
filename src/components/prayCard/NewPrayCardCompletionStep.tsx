@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import { Group } from "supabase/types/tables";
 import PrayCard from "./PrayCard";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface NewPrayCardCompletionStepProps {
   selectedGroups: Group[];
@@ -43,9 +44,12 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
     (state) => state.historyPrayCardList
   );
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
+    analyticsTrack("클릭_기도카드생성_그룹이동", { where: "완료페이지" });
+    if (!user) return;
     localStorage.removeItem("prayCardContent");
     localStorage.removeItem("prayCardLife");
+    await fetchUserPrayCardList(user.id);
     if (targetGroup) navigate(`/group/${targetGroup.id}`);
     else if (selectedGroups.length > 0)
       navigate(`/group/${selectedGroups[0].id}`);

@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Reorder, motion } from "framer-motion";
 import useBaseStore from "@/stores/baseStore";
 import PrayRequestItem from "./PrayRequestItem";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface NewPrayCardRequestStepProps {
   value: string;
@@ -53,6 +54,9 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   };
 
   const handleAddRequest = () => {
+    analyticsTrack("클릭_기도카드생성_기도제목_생성수정", {
+      where: "기도제목",
+    });
     if (currentInput.trim()) {
       let newRequests = [...prayRequests];
 
@@ -71,12 +75,18 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   };
 
   const handleEditRequest = (index: number) => {
+    analyticsTrack("클릭_기도카드생성_기도제목_수정시작", {
+      where: "기도제목",
+    });
     setCurrentInput(prayRequests[index]);
     setEditingIndex(index);
     setShowAddForm(true);
   };
 
   const handleDeleteRequest = (index: number) => {
+    analyticsTrack("클릭_기도카드생성_기도제목_삭제", {
+      where: "기도제목",
+    });
     const newRequests = prayRequests.filter((_, i) => i !== index);
     setPrayRequests(newRequests);
     onChange(newRequests.join("\n\n"));
@@ -84,20 +94,45 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   };
 
   const handleReorderPrayRequest = (newRequests: string[]) => {
+    analyticsTrack("클릭_기도카드생성_기도제목_순서변경", {
+      where: "기도제목",
+    });
     setPrayRequests(newRequests);
     onChange(newRequests.join("\n\n"));
     localStorage.setItem("prayCardContent", newRequests.join("\n\n"));
   };
 
   const handleLoadPreviousPrayRequest = () => {
-    const previousPrayRequest = historyPrayCardList?.[0]?.content;
-    const previousPrayRequests = previousPrayRequest?.split("\n\n");
-    if (previousPrayRequests) {
+    analyticsTrack("클릭_기도카드생성_이전내용불러오기", { where: "기도제목" });
+    const previousPrayCard = historyPrayCardList?.[0];
+    if (previousPrayCard?.content) {
+      const previousPrayRequests = previousPrayCard.content
+        .split("\n\n")
+        .filter((request: string) => request.trim() !== "");
       setPrayRequests(previousPrayRequests);
-      localStorage.setItem(
-        "prayCardContent",
-        previousPrayRequests.join("\n\n")
-      );
+      onChange(previousPrayCard.content);
+      localStorage.setItem("prayCardContent", previousPrayCard.content);
+    }
+  };
+
+  const handleNextClick = () => {
+    analyticsTrack("클릭_기도카드생성_다음", { where: "기도제목" });
+    onNext();
+  };
+
+  const handlePrevClick = () => {
+    analyticsTrack("클릭_기도카드생성_이전", { where: "기도제목" });
+    onPrev();
+  };
+
+  const handleToggleAddForm = () => {
+    analyticsTrack("클릭_기도카드생성_기도제목_추가시작", {
+      where: "기도제목",
+    });
+    setShowAddForm(!showAddForm);
+    if (!showAddForm) {
+      setEditingIndex(null);
+      setCurrentInput("");
     }
   };
 
@@ -153,14 +188,13 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
         </motion.h1>
       </motion.div>
 
-      <motion.div className="mb-4 flex-1" variants={itemVariants}>
+      <motion.div
+        className="flex flex-col flex-1 overflow-hidden"
+        variants={itemVariants}
+      >
         <motion.div variants={itemVariants}>
           <Button
-            onClick={() => {
-              setEditingIndex(null);
-              setCurrentInput("");
-              setShowAddForm(true);
-            }}
+            onClick={handleToggleAddForm}
             className="w-full bg-white hover:bg-gray-50 text-gray-500 mb-4 flex justify-start items-center border border-gray-200 shadow-sm p-3 h-auto rounded-lg"
           >
             <div className="w-6 h-6 bg-blue-50 rounded-full flex items-center justify-center mr-3">
@@ -190,7 +224,10 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
           </div>
         </motion.div>
 
-        <motion.div className="h-80 overflow-y-auto" variants={itemVariants}>
+        <motion.div
+          className="overflow-y-auto flex-1 min-h-0 pb-5"
+          variants={itemVariants}
+        >
           {prayRequests.length > 0 ? (
             <Reorder.Group
               axis="y"
@@ -227,16 +264,16 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
         </motion.div>
       </motion.div>
 
-      <motion.div className="flex gap-2 mt-auto" variants={itemVariants}>
+      <motion.div className="flex gap-2 mt-5" variants={itemVariants}>
         <Button
-          onClick={onPrev}
+          onClick={handlePrevClick}
           variant="outline"
           className="flex-1 py-6 text-base"
         >
           이전
         </Button>
         <Button
-          onClick={onNext}
+          onClick={handleNextClick}
           disabled={!isValid}
           className={`flex-1 py-6 text-base ${
             isValid

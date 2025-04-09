@@ -316,6 +316,12 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
+      case "/praycard/new":
+        analyticsTrack("페이지_기도카드_생성", {
+          title: "PrayCard Create Page",
+          where: from,
+        });
+        break;
       case "/bible-card":
         analyticsTrack("페이지_말씀카드", {
           title: "Bible Card Page",

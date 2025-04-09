@@ -30,6 +30,7 @@ import {
   fetchGroupListByDate,
   fetchGroupListByUserId,
   getGroup,
+  getGroupWithMemberList,
   updateGroup,
   updateGroupParams,
 } from "@/apis/group";
@@ -143,6 +144,9 @@ export interface BaseStore {
   fetchGroupListByUserId: (userId: string) => Promise<Group[] | null>;
   fetchGroupListByDate: (createdAt: string) => Promise<Group[] | null>;
   getGroup: (groupId: string) => Promise<void>;
+  getGroupWithMemberList: (
+    groupId: string,
+  ) => Promise<GroupWithProfiles | null>;
   setGroupName: (groupName: string) => void;
   setIsDisabledGroupCreateBtn: (isDisabled: boolean) => void;
   setIsGroupLeader: (isGroupLeader: boolean) => void;
@@ -645,6 +649,10 @@ const useBaseStore = create<BaseStore>()(
         state.targetGroup = data;
         state.targetGroupLoading = false;
       });
+    },
+    getGroupWithMemberList: async (groupId: string) => {
+      const data = await getGroupWithMemberList(groupId);
+      return data;
     },
     createGroup: async (
       userId: string,
