@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface NewPrayCardIntroStepProps {
   onNext: () => void;
@@ -19,6 +20,11 @@ const itemVariants = {
 const NewPrayCardIntroStep: React.FC<NewPrayCardIntroStepProps> = ({
   onNext,
 }) => {
+  const handleStart = () => {
+    analyticsTrack("클릭_기도카드생성_시작하기", { where: "인트로" });
+    onNext();
+  };
+
   return (
     <div className="flex flex-col justify-center items-center h-full">
       <motion.div className="mb-6 text-center" variants={itemVariants}>
@@ -31,7 +37,7 @@ const NewPrayCardIntroStep: React.FC<NewPrayCardIntroStepProps> = ({
       </motion.div>
       <motion.div className="w-full" variants={itemVariants}>
         <Button
-          onClick={onNext}
+          onClick={handleStart}
           className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600"
         >
           시작하기

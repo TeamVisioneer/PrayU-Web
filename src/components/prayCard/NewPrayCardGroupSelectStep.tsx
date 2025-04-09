@@ -6,6 +6,7 @@ import GroupTagList from "../group/GroupTagList";
 import { motion } from "framer-motion";
 import { bulkCreatePrayCard } from "@/apis/prayCard";
 import { PulseLoader } from "react-spinners";
+import { analyticsTrack } from "@/analytics/analytics";
 
 interface NewPrayCardGroupSelectStepProps {
   selectedGroups: Group[];
@@ -36,6 +37,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreatePrayCard = async () => {
+    analyticsTrack("클릭_기도카드생성_만들기", { where: "그룹선택" });
     setIsCreating(true);
     if (!user) {
       setIsCreating(false);
@@ -69,6 +71,10 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   };
 
   const handleGroupToggle = (group: Group) => {
+    analyticsTrack("클릭_기도카드생성_그룹선택", {
+      where: "그룹선택",
+      group_name: group.name,
+    });
     const isSelected = selectedGroups.some((g) => g.id === group.id);
 
     if (isSelected) {
@@ -78,6 +84,16 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       // Add the group if not already selected
       onGroupSelect([...selectedGroups, group]);
     }
+  };
+
+  const handlePrevClick = () => {
+    analyticsTrack("클릭_기도카드생성_이전", { where: "그룹선택" });
+    onPrev();
+  };
+
+  const handleNewGroupClick = () => {
+    analyticsTrack("클릭_기도카드생성_새그룹생성", { where: "그룹선택" });
+    window.location.href = "/group/new";
   };
 
   return (
@@ -130,7 +146,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => (window.location.href = "/group/new")}
+                  onClick={handleNewGroupClick}
                   className="text-xs text-blue-500 hover:text-blue-600"
                 >
                   새 그룹 만들기
@@ -158,7 +174,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
           )}
         </Button>
         <Button
-          onClick={onPrev}
+          onClick={handlePrevClick}
           variant="outline"
           className="flex-1 py-4 text-base"
         >
