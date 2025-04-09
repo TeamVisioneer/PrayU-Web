@@ -153,7 +153,10 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
         </motion.h1>
       </motion.div>
 
-      <motion.div className="mb-4 flex-1" variants={itemVariants}>
+      <motion.div
+        className="flex flex-col flex-1 overflow-hidden"
+        variants={itemVariants}
+      >
         <motion.div variants={itemVariants}>
           <Button
             onClick={() => {
@@ -190,7 +193,10 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
           </div>
         </motion.div>
 
-        <motion.div className="h-80 overflow-y-auto" variants={itemVariants}>
+        <motion.div
+          className="overflow-y-auto flex-1 min-h-0 pb-5"
+          variants={itemVariants}
+        >
           {prayRequests.length > 0 ? (
             <Reorder.Group
               axis="y"
@@ -227,7 +233,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
         </motion.div>
       </motion.div>
 
-      <motion.div className="flex gap-2 mt-auto" variants={itemVariants}>
+      <motion.div className="flex gap-2 mt-5" variants={itemVariants}>
         <Button
           onClick={onPrev}
           variant="outline"

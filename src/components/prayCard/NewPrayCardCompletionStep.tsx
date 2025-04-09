@@ -43,9 +43,11 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
     (state) => state.historyPrayCardList
   );
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
+    if (!user) return;
     localStorage.removeItem("prayCardContent");
     localStorage.removeItem("prayCardLife");
+    await fetchUserPrayCardList(user.id);
     if (targetGroup) navigate(`/group/${targetGroup.id}`);
     else if (selectedGroups.length > 0)
       navigate(`/group/${selectedGroups[0].id}`);

@@ -24,14 +24,16 @@ const PrayRequestItem: React.FC<PrayRequestItemProps> = ({
       drag="y"
       dragListener={false}
       dragControls={dragControls}
-      onPointerDown={(e: React.PointerEvent) => {
-        e.preventDefault();
-        dragControls.start(e);
-      }}
-      style={{ touchAction: "none" }}
       className="flex items-center p-3 bg-white rounded-lg shadow-sm border border-gray-100 hover:border-blue-200 select-none active:text-blue-500"
     >
-      <div className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-500 mr-2 cursor-grab active:cursor-grabbing active:text-blue-500">
+      <div
+        onPointerDown={(e: React.PointerEvent) => {
+          e.preventDefault();
+          dragControls.start(e);
+        }}
+        style={{ touchAction: "none" }}
+        className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-500 mr-2 cursor-grab active:cursor-grabbing active:text-blue-500"
+      >
         <MdDragIndicator size={20} />
       </div>
       <p

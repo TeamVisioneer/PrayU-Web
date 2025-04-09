@@ -69,7 +69,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
         </motion.div>
       </motion.div>
 
-      <motion.div className="mb-4 flex-1" variants={itemVariants}>
+      <motion.div className="flex-grow" variants={itemVariants}>
         <motion.div
           className="h-full max-h-24 relative"
           variants={itemVariants}
@@ -94,7 +94,8 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
           </div>
         </motion.div>
       </motion.div>
-      <motion.div className="flex gap-2 mt-auto" variants={itemVariants}>
+
+      <motion.div className="flex gap-2" variants={itemVariants}>
         <Button
           onClick={onPrev}
           variant="outline"
