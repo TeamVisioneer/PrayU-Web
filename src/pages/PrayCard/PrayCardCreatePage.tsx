@@ -36,6 +36,9 @@ const PrayCardCreatePage = () => {
   const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
+  const fetchMemberListByUserId = useBaseStore(
+    (state) => state.fetchMemberListByUserId
+  );
 
   const [searchParams, setSearchParams] = useSearchParams();
   const step = parseInt(searchParams.get("step") || "0");
@@ -52,8 +55,8 @@ const PrayCardCreatePage = () => {
 
   useEffect(() => {
     if (user) fetchUserPrayCardList(user.id, 1, 0);
-    console.log(user);
-  }, [user, fetchUserPrayCardList]);
+    if (user) fetchMemberListByUserId(user.id);
+  }, [user, fetchUserPrayCardList, fetchMemberListByUserId]);
 
   const totalSteps = 5; // Increased by 1 for the group selection step
 

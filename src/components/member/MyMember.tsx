@@ -2,9 +2,8 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 // import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate, isCurrentWeek, sleep } from "@/lib/utils";
+import { getISOTodayDate, sleep } from "@/lib/utils";
 import { MemberWithProfiles } from "supabase/types/tables";
-import { useNavigate } from "react-router-dom";
 import ReactionResultBox from "../pray/ReactionResultBox";
 
 interface MemberProps {
@@ -12,8 +11,6 @@ interface MemberProps {
 }
 
 const MyMember: React.FC<MemberProps> = ({ myMember }) => {
-  const navigate = useNavigate();
-
   const fetchUserPrayCardListByGroupId = useBaseStore(
     (state) => state.fetchUserPrayCardListByGroupId
   );
@@ -29,17 +26,6 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
 
   const currentUserId = myMember.user_id!;
   const groupId = myMember.group_id!;
-
-  useEffect(() => {
-    if (
-      userPrayCardList &&
-      (userPrayCardList.length == 0 ||
-        !isCurrentWeek(userPrayCardList[0].created_at))
-    ) {
-      navigate("/praycard/new", { replace: true });
-      return;
-    }
-  }, [userPrayCardList, navigate, groupId]);
 
   useEffect(() => {
     if (userPrayCardList?.[0]) {

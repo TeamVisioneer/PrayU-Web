@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import useBaseStore from "@/stores/baseStore";
 import { Group } from "supabase/types/tables";
@@ -31,36 +31,40 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   onPrev,
 }) => {
   const user = useBaseStore((state) => state.user);
-  const groupList = useBaseStore((state) => state.groupList);
-  const fetchGroupListByUserId = useBaseStore(
-    (state) => state.fetchGroupListByUserId
-  );
-  const [loading, setLoading] = useState(true);
+  const bulkUpdateMembers = useBaseStore((state) => state.bulkUpdateMembers);
+  const myMemberList = useBaseStore((state) => state.myMemberList);
   const [isCreating, setIsCreating] = useState(false);
-
-  useEffect(() => {
-    const loadGroups = async () => {
-      if (user) {
-        setLoading(true);
-        await fetchGroupListByUserId(user.id);
-        setLoading(false);
-      }
-    };
-
-    loadGroups();
-  }, [user, fetchGroupListByUserId]);
 
   const handleCreatePrayCard = async () => {
     setIsCreating(true);
-    await bulkCreatePrayCard(
+    if (!user) {
+      setIsCreating(false);
+      return;
+    }
+    const prayCardContent = localStorage.getItem("prayCardContent") || "";
+    const prayCardLife = localStorage.getItem("prayCardLife") || "";
+    const prayCardList = await bulkCreatePrayCard(
       selectedGroups.map((group) => group.id),
-      user?.id || null,
-      localStorage.getItem("prayCardContent") || "",
-      localStorage.getItem("prayCardLife") || ""
+      user.id,
+      prayCardContent,
+      prayCardLife
     );
-    localStorage.removeItem("prayCardContent");
-    localStorage.removeItem("prayCardLife");
-    onNext();
+
+    // 멤버 정보를 bulk로 업데이트
+    const selectedGroupIds = selectedGroups.map((g) => g.id);
+    const selectedMemberIds = myMemberList
+      ?.filter((member) => selectedGroupIds.includes(member.group_id as string))
+      .map((member) => member.id);
+
+    if (selectedMemberIds && selectedMemberIds.length > 0) {
+      await bulkUpdateMembers(selectedMemberIds, prayCardContent, true);
+    }
+
+    if (prayCardList) {
+      localStorage.removeItem("prayCardContent");
+      localStorage.removeItem("prayCardLife");
+      onNext();
+    }
     setIsCreating(false);
   };
 
@@ -114,10 +118,10 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       >
         <div className="h-full max-h-[350px] overflow-y-auto">
           <GroupTagList
-            groupList={groupList || []}
+            groupList={myMemberList?.map((member) => member.group) || []}
             selectedGroups={selectedGroups}
             onGroupToggle={handleGroupToggle}
-            loading={loading}
+            loading={Boolean(!myMemberList)}
             emptyMessage={
               <div className="flex flex-col justify-center items-center">
                 <p className="text-sm text-gray-500">
@@ -145,7 +149,9 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
           onClick={() => handleCreatePrayCard()}
           className="flex-1 py-4 text-base bg-blue-500 hover:bg-blue-600"
           disabled={
-            selectedGroups.length === 0 && groupList?.length !== 0 && isCreating
+            selectedGroups.length === 0 &&
+            myMemberList?.length !== 0 &&
+            isCreating
           }
         >
           {isCreating ? (

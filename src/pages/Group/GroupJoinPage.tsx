@@ -27,17 +27,42 @@ const GroupJoinPage: React.FC = () => {
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
+  const myMemberList = useBaseStore((state) => state.myMemberList);
+  const fetchMemberListByUserId = useBaseStore(
+    (state) => state.fetchMemberListByUserId
+  );
   const user = useBaseStore((state) => state.user);
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
   );
+  const userPlan = useBaseStore((state) => state.userPlan);
 
   useEffect(() => {
+    if (user) fetchMemberListByUserId(user.id);
     if (groupId) {
       getGroup(groupId);
       fetchMemberListByGroupId(groupId);
     }
-  }, [getGroup, fetchMemberListByGroupId, groupId]);
+  }, [
+    user,
+    groupId,
+    getGroup,
+    fetchMemberListByGroupId,
+    fetchMemberListByUserId,
+  ]);
+
+  useEffect(() => {
+    const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
+    if (
+      myMemberList &&
+      myMemberList.length >= maxGroupCount &&
+      myMemberList.every((member) => member.group_id !== groupId) &&
+      userPlan != "Premium"
+    ) {
+      navigate("/group/limit", { replace: true });
+      return;
+    }
+  }, [myMemberList, groupId, userPlan, navigate]);
 
   const handleJoinGroup = async () => {
     analyticsTrack("클릭_그룹_참여", { where: "GroupJoinPage" });

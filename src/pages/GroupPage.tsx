@@ -34,7 +34,6 @@ const GroupPage: React.FC = () => {
   const getMember = useBaseStore((state) => state.getMember);
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
-  const memberLoading = useBaseStore((state) => state.memberLoading);
   const memberList = useBaseStore((state) => state.memberList);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
@@ -54,9 +53,12 @@ const GroupPage: React.FC = () => {
   const fetchNotificationCount = useBaseStore(
     (state) => state.fetchNotificationCount
   );
-  const userPlan = useBaseStore((state) => state.userPlan);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
+  const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
+  const setIsConfirmAlertOpen = useBaseStore(
+    (state) => state.setIsConfirmAlertOpen
+  );
+  const setAlertData = useBaseStore((state) => state.setAlertData);
 
   useEffect(() => {
     fetchGroupListByUserId(currentUserId);
@@ -83,16 +85,33 @@ const GroupPage: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (!memberLoading && myMember == null) {
-      navigate(`/praycard/new`, { replace: true });
+    if (!groupList) {
+      return;
+    } else if (groupList.every((group) => group.id !== groupId)) {
+      navigate(`/group/${groupId}/join`, { replace: true });
       return;
     } else if (
-      groupList &&
-      groupList.length >= maxGroupCount &&
-      !groupList.some((group) => group.id === groupId) &&
-      userPlan != "Premium"
+      userPrayCardList &&
+      (userPrayCardList.length == 0 ||
+        !isCurrentWeek(userPrayCardList[0].created_at))
     ) {
-      navigate("/group/limit", { replace: true });
+      let title = "";
+      let description = "";
+      if (userPrayCardList.length == 0) {
+        title = "기도카드 작성 안내";
+        description = `${targetGroup?.name} 그룹에 이번 주 기도카드를 만들어 주세요!`;
+      } else {
+        title = "기도카드 작성 안내";
+        description = `${targetGroup?.name}의 기도카드가 만료되었어요😭\n이번 주 기도카드를 만들어 주세요!`;
+      }
+      setAlertData({
+        color: "bg-blue-500",
+        title: title,
+        description: description,
+        actionText: "확인",
+        onAction: () => navigate("/praycard/new"),
+      });
+      setIsConfirmAlertOpen(true);
       return;
     } else if (targetGroupLoading == false && targetGroup == null) {
       navigate("/group/not-found");
@@ -100,14 +119,13 @@ const GroupPage: React.FC = () => {
     }
   }, [
     navigate,
-    memberLoading,
-    myMember,
     groupId,
     groupList,
+    userPrayCardList,
     targetGroup,
     targetGroupLoading,
-    maxGroupCount,
-    userPlan,
+    setIsConfirmAlertOpen,
+    setAlertData,
   ]);
 
   useEffect(() => {

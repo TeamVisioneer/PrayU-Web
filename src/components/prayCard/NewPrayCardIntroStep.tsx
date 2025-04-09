@@ -21,8 +21,8 @@ const NewPrayCardIntroStep: React.FC<NewPrayCardIntroStepProps> = ({
 }) => {
   return (
     <div className="flex flex-col justify-center items-center h-full">
-      <motion.div className="mb-10 text-center" variants={itemVariants}>
-        <motion.h1 className="text-2xl font-bold mb-4" variants={itemVariants}>
+      <motion.div className="mb-6 text-center" variants={itemVariants}>
+        <motion.h1 className="text-2xl font-bold mb-2" variants={itemVariants}>
           이번 주 기도카드 만들기
         </motion.h1>
         <motion.p className="text-gray-600" variants={itemVariants}>
