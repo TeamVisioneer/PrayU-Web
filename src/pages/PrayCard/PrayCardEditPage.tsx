@@ -41,9 +41,6 @@ const PrayCardEditPage = () => {
       .filter((request) => request.trim() !== "")
   );
 
-  const lifeShareMaxLength = 100;
-  const prayRequestMaxLength = 100;
-
   const lifeShareRef = useRef<HTMLTextAreaElement>(null);
   const prayRequestRef = useRef<HTMLTextAreaElement>(null);
 
@@ -175,9 +172,7 @@ const PrayCardEditPage = () => {
                 ref={lifeShareRef}
                 value={inputPrayCardLife}
                 onChange={(e) => {
-                  if (e.target.value.length <= lifeShareMaxLength) {
-                    setPrayCardLife(e.target.value);
-                  }
+                  setPrayCardLife(e.target.value);
                 }}
                 placeholder="삶 가운데 있었던 일들을 나눠보세요"
               />
@@ -188,7 +183,7 @@ const PrayCardEditPage = () => {
                 필요 없어요. 간단하게 나눠보세요!
               </div>
               <div className="text-xs text-gray-400">
-                {inputPrayCardLife.length}/{lifeShareMaxLength}
+                {inputPrayCardLife.length}
               </div>
             </div>
           </div>
@@ -238,14 +233,12 @@ const PrayCardEditPage = () => {
                     className="w-full min-h-[150px] resize-none p-4 rounded-xl placeholder:text-gray-400 border-gray-200 focus:border-blue-300 focus:ring-blue-200 bg-gray-50/50"
                     value={currentPrayInput}
                     onChange={(e) => {
-                      if (e.target.value.length <= prayRequestMaxLength) {
-                        setCurrentPrayInput(e.target.value);
-                      }
+                      setCurrentPrayInput(e.target.value);
                     }}
                   />
                   <div className="flex justify-end mt-2">
                     <div className="text-xs text-gray-400">
-                      {currentPrayInput.length}/{prayRequestMaxLength}
+                      {currentPrayInput.length}
                     </div>
                   </div>
                 </div>
