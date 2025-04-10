@@ -8,6 +8,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import GroupListHeader from "@/components/group/GroupListHeader";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
+import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 
 const GroupListPage: React.FC = () => {
   const { user } = useAuth();
@@ -130,6 +131,7 @@ const GroupListPage: React.FC = () => {
         </Button>
       </div>
       <GroupListDrawer />
+      <WeekUpdateDialog />
     </div>
   );
 };

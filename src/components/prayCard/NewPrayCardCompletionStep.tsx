@@ -40,6 +40,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
+
   const historyPrayCardList = useBaseStore(
     (state) => state.historyPrayCardList
   );
@@ -47,12 +48,11 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   const handleComplete = async () => {
     analyticsTrack("클릭_기도카드생성_그룹이동", { where: "완료페이지" });
     if (!user) return;
-    localStorage.removeItem("prayCardContent");
-    localStorage.removeItem("prayCardLife");
-    await fetchUserPrayCardList(user.id);
-    if (targetGroup) navigate(`/group/${targetGroup.id}`);
+
+    if (selectedGroups.some((g) => g.id == targetGroup?.id))
+      window.location.replace(`/group/${targetGroup?.id}`);
     else if (selectedGroups.length > 0)
-      navigate(`/group/${selectedGroups[0].id}`);
+      window.location.replace(`/group/${selectedGroups[0].id}`);
     else navigate("/group");
   };
 
@@ -69,7 +69,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
       {/* Card container with spotlight effect */}
       <motion.div
-        className="w-3/4 mx-auto relative z-20 my-10"
+        className="w-5/6 mx-auto relative z-20 my-10"
         variants={cardVariants}
       >
         {/* Glow effect */}

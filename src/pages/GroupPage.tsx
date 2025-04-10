@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import ShareDrawer from "@/components/share/ShareDrawer";
-import EventDialog from "@/components/notice/EventDialog";
-import ReportAlert from "@/components/alert/ReportAlert";
 import { useNavigate } from "react-router-dom";
 import { isCurrentWeek } from "@/lib/utils";
 import MyMember from "@/components/member/MyMember";
@@ -176,11 +174,9 @@ const GroupPage: React.FC = () => {
       <OtherMemberDrawer />
       <PrayListDrawer />
       <ShareDrawer />
-      <EventDialog />
       <WeekUpdateDialog />
       <BannerDialog />
       <GroupSettingsDialog targetGroup={targetGroup} />
-      <ReportAlert />
     </div>
   );
 };
