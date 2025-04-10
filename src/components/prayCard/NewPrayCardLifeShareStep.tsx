@@ -31,7 +31,6 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
   const historyPrayCardList = useBaseStore(
     (state) => state.historyPrayCardList
   );
-  const maxLength = 300;
   const isValid = value.trim().length > 0;
 
   const handleLoadPreviousLifeShare = () => {
@@ -44,10 +43,8 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= maxLength) {
-      onChange(e.target.value);
-      localStorage.setItem("prayCardLife", e.target.value);
-    }
+    onChange(e.target.value);
+    localStorage.setItem("prayCardLife", e.target.value);
   };
 
   const handleNext = () => {
@@ -102,9 +99,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
             <span className="text-blue-500 font-medium">Tip</span> 길게 쓸 필요
             없어요. 간단하게 나눠보세요!
           </div>
-          <div className="text-xs text-gray-400">
-            {value.length}/{maxLength}
-          </div>
+          <div className="text-xs text-gray-400">{value.length}</div>
         </motion.div>
       </motion.div>
 

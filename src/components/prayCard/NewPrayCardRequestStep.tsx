@@ -33,7 +33,6 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
     (state) => state.historyPrayCardList
   );
 
-  const maxLength = 100;
   const [prayRequests, setPrayRequests] = useState<string[]>(
     localStorage
       .getItem("prayCardContent")
@@ -48,9 +47,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   const isValid = prayRequests.length > 0;
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= maxLength) {
-      setCurrentInput(e.target.value);
-    }
+    setCurrentInput(e.target.value);
   };
 
   const handleAddRequest = () => {
@@ -161,17 +158,17 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
           </button>
         </div>
 
-        <div className="h-40 p-4">
+        <div className="h-40 p-4 pb-0">
           <Textarea
             placeholder="기도제목을 입력하세요"
-            className="h-full w-full overflow-y-auto resize-none text-base border-0 focus:ring-0 p-0 placeholder:text-gray-300 text-gray-800 mb-6"
+            className="h-full w-full overflow-y-auto resize-none text-base border-0 focus:ring-0 p-0 placeholder:text-gray-300 text-gray-800 "
             value={currentInput}
             onChange={(e) => handleOnChange(e)}
             autoFocus
           />
         </div>
         <div className="p-4 text-xs text-gray-400 text-right">
-          {currentInput.length}/{maxLength}
+          {currentInput.length}
         </div>
       </div>
     );
