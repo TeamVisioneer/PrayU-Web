@@ -158,10 +158,10 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
           </button>
         </div>
 
-        <div className="h-40 p-4">
+        <div className="h-40 p-4 pb-0">
           <Textarea
             placeholder="기도제목을 입력하세요"
-            className="h-full w-full overflow-y-auto resize-none text-base border-0 focus:ring-0 p-0 placeholder:text-gray-300 text-gray-800 mb-6"
+            className="h-full w-full overflow-y-auto resize-none text-base border-0 focus:ring-0 p-0 placeholder:text-gray-300 text-gray-800 "
             value={currentInput}
             onChange={(e) => handleOnChange(e)}
             autoFocus
