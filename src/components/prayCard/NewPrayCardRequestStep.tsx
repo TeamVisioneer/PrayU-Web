@@ -33,7 +33,6 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
     (state) => state.historyPrayCardList
   );
 
-  const maxLength = 100;
   const [prayRequests, setPrayRequests] = useState<string[]>(
     localStorage
       .getItem("prayCardContent")
@@ -48,9 +47,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   const isValid = prayRequests.length > 0;
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= maxLength) {
-      setCurrentInput(e.target.value);
-    }
+    setCurrentInput(e.target.value);
   };
 
   const handleAddRequest = () => {
@@ -171,7 +168,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
           />
         </div>
         <div className="p-4 text-xs text-gray-400 text-right">
-          {currentInput.length}/{maxLength}
+          {currentInput.length}
         </div>
       </div>
     );
