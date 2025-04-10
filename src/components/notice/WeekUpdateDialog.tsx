@@ -3,6 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import useBaseStore from "@/stores/baseStore";
 import { Badge } from "../ui/badge";
@@ -27,16 +28,16 @@ const WeekUpdateDialog = () => {
 
   const slides = [
     {
-      image: "/images/notice/NewPrayCard.gif",
+      image: "/images/notice/NewPrayCardFlow.gif",
       tip: "TIP 1",
       description:
-        "기도카드 디자인이 바뀌었어요. <일상 나눔> 항목을 통해 그룹원들과 삶을 나눠보아요!",
+        "기도카드 생성 과정을 업데이트 했어요! 한번에 여러그룹에 기도카드를 올려보아요.",
     },
     {
-      image: "/images/notice/NewPrayCardCreate.png",
+      image: "/images/notice/GroupJoinFlow.gif",
       tip: "TIP 2",
       description:
-        "기도카드를 생성할 때 지난 주 내용을 불러와서 편하게 작성할 수 있어요",
+        "그룹원 초대 과정을 업데이트 했어요! 링크를 통해 참여 완료 후 앱에서 그룹을 확인해보아요.",
     },
   ];
 
@@ -73,12 +74,12 @@ const WeekUpdateDialog = () => {
     </div>
   );
 
-  const currentUpdateDate = "2025-02-22";
+  const currentUpdateDate = "2025-04-10";
 
-  // useEffect(() => {
-  //   const lastSeenDate = localStorage.getItem("WeekUpdateDialog");
-  //   setIsOpenWeekUpdateDialog(lastSeenDate !== currentUpdateDate);
-  // }, [setIsOpenWeekUpdateDialog]);
+  useEffect(() => {
+    const lastSeenDate = localStorage.getItem("WeekUpdateDialog");
+    setIsOpenWeekUpdateDialog(lastSeenDate !== currentUpdateDate);
+  }, [setIsOpenWeekUpdateDialog]);
 
   const onClickHideWeekUpdateDialog = () => {
     localStorage.setItem("WeekUpdateDialog", currentUpdateDate);
@@ -99,6 +100,7 @@ const WeekUpdateDialog = () => {
           <DialogTitle className="text-lg">
             📢 기도카드 업데이트 안내
           </DialogTitle>
+          <DialogDescription />
           <hr className="my-3" />
           <div className="w-full">
             <Carousel setApi={setApi}>

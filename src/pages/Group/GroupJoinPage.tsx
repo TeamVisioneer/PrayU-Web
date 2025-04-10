@@ -185,7 +185,7 @@ const GroupJoinPage: React.FC = () => {
       <div className="flex flex-col h-full bg-mainbg">
         <Header />
 
-        <div className="flex flex-col p-5 pt-20 pb-8 flex-grow items-center">
+        <div className="flex flex-col px-5 py-8 flex-grow items-center justify-center">
           <div className="flex flex-col items-center p-8 pt-0 text-center max-w-md w-full">
             <Lottie
               height={200}
@@ -226,7 +226,7 @@ const GroupJoinPage: React.FC = () => {
 
       <Header />
 
-      <div className="flex flex-col p-5 pt-20 pb-8 flex-grow items-center">
+      <div className="flex flex-col px-5 py-8 flex-grow items-center justify-center">
         <div className="bg-white rounded-xl shadow-sm p-6 w-full max-w-md">
           <div className="flex flex-col items-center gap-6">
             {/* Group Icon/Avatar */}
