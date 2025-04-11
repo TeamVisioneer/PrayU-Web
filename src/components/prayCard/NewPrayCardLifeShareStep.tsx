@@ -71,7 +71,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
             variant="ghost"
             size="sm"
             onClick={() => handleLoadPreviousLifeShare()}
-            disabled={!historyPrayCardList}
+            disabled={!historyPrayCardList?.[0].life}
             className="text-xs text-blue-500 hover:text-blue-600"
           >
             기존 내용 불러오기
