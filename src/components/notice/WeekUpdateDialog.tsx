@@ -95,7 +95,7 @@ const WeekUpdateDialog = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DialogContent className="w-11/12 h-auto overflow-auto rounded-2xl bg-mainBg transition-all duration-300 ease-in-out">
+      <DialogContent className="w-11/12 h-auto overflow-auto rounded-2xl transition-all duration-300 ease-in-out">
         <DialogHeader className="text-left">
           <DialogTitle className="text-lg">
             📢 기도카드 업데이트 안내
