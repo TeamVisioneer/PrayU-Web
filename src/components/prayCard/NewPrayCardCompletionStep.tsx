@@ -69,7 +69,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
       {/* Card container with spotlight effect */}
       <motion.div
-        className="w-5/6 mx-auto relative z-20 my-10"
+        className="w-5/6 mx-auto relative z-20 mt-5 mb-10"
         variants={cardVariants}
       >
         {/* Glow effect */}
