@@ -8,6 +8,7 @@ import { bulkCreatePrayCard } from "@/apis/prayCard";
 import { PulseLoader } from "react-spinners";
 import { analyticsTrack } from "@/analytics/analytics";
 import { NotificationType } from "@/components/notification/NotificationType";
+import { updateOnesignalUser } from "@/apis/onesignal";
 
 interface NewPrayCardGroupSelectStepProps {
   selectedGroups: Group[];
@@ -48,6 +49,13 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
   const sendNotification = async (groups: Group[]) => {
     if (!user) return;
+
+    // 알림관련 유저 태그 업데이트
+    await updateOnesignalUser({
+      properties: {
+        tags: { praycardCreatedAt: new Date().getTime().toString() },
+      },
+    });
 
     // 각 그룹마다 알림 전송
     for (const group of groups) {
