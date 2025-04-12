@@ -148,7 +148,7 @@ const GroupJoinPage: React.FC = () => {
 
   // Header component for reuse
   const Header = () => (
-    <div className="fixed top-0 left-0 right-0 h-14 flex items-center justify-between px-4 bg-white border-b z-10 max-w-[480px] mx-auto">
+    <div className="fixed top-0 left-0 right-0 h-14 flex items-center justify-between px-4 border-b z-10 max-w-[480px] mx-auto">
       <button onClick={() => navigate("/")} className="p-2">
         <X size={20} />
       </button>

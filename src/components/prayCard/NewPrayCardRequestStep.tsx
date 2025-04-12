@@ -23,6 +23,17 @@ const itemVariants = {
   },
 };
 
+// Prayer request suggestions
+const PRAYER_SUGGESTIONS = [
+  "영적으로 더 성장할 수 있게 도와주세요",
+  "직장에서 지혜롭게 결정할 수 있기를",
+  "가족들의 건강을 지켜주세요",
+  "친구 관계의 회복을 위해",
+  "새로운 환경에 잘 적응할 수 있도록",
+  "스트레스와 불안함을 이겨낼 수 있는 힘을",
+  "사랑하는 이들이 믿음 안에서 성장하기를",
+];
+
 const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   value,
   onChange,
@@ -69,6 +80,14 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
       onChange(newRequests.join("\n\n"));
       localStorage.setItem("prayCardContent", newRequests.join("\n\n"));
     }
+  };
+
+  const handleSelectSuggestion = (suggestion: string) => {
+    analyticsTrack("클릭_기도카드생성_추천문구", {
+      text: suggestion,
+      where: "기도제목",
+    });
+    setCurrentInput(suggestion);
   };
 
   const handleEditRequest = (index: number) => {
@@ -167,8 +186,20 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
             autoFocus
           />
         </div>
-        <div className="p-4 text-xs text-gray-400 text-right">
-          {currentInput.length}
+        <div className="p-4 pt-2">
+          <div className="flex flex-wrap gap-2 mb-2">
+            {PRAYER_SUGGESTIONS.map((suggestion) => (
+              <Button
+                key={suggestion}
+                variant="outline"
+                size="sm"
+                className="text-xs rounded-full bg-gray-50 border-gray-200 hover:bg-blue-50 hover:text-blue-600"
+                onClick={() => handleSelectSuggestion(suggestion)}
+              >
+                {suggestion}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -251,11 +282,30 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => handleLoadPreviousPrayRequest()}
-                disabled={!historyPrayCardList?.[0].content}
-                className="text-xs text-blue-500 hover:text-blue-600"
+                disabled={
+                  !historyPrayCardList?.[0]?.content ||
+                  value == historyPrayCardList?.[0]?.content
+                }
+                className="text-xs text-blue-500 hover:text-blue-600 mt-2"
               >
                 기존 내용 불러오기
               </Button>
+              <div className="flex flex-wrap gap-2 mt-4 max-w-md">
+                {PRAYER_SUGGESTIONS.slice(0, 3).map((suggestion) => (
+                  <Button
+                    key={suggestion}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs rounded-full bg-gray-50 border-gray-200 hover:bg-blue-50 hover:text-blue-600"
+                    onClick={() => {
+                      setCurrentInput(suggestion);
+                      setShowAddForm(true);
+                    }}
+                  >
+                    {suggestion}
+                  </Button>
+                ))}
+              </div>
             </div>
           )}
         </motion.div>
@@ -278,7 +328,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
               : "bg-gray-300 cursor-not-allowed"
           }`}
         >
-          다음
+          {isValid ? "다음" : "기도제목을 추가해주세요"}
         </Button>
       </motion.div>
     </div>

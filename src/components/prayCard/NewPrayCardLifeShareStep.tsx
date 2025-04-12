@@ -22,6 +22,16 @@ const itemVariants = {
   },
 };
 
+const SUGGESTIONS = [
+  "요즘 운동 열심히 하고 있어요",
+  "친구랑 오랜만에 만나서 맛있는 거 먹고 수다 떨었어요",
+  "요즘 감기 기운이 있어서 컨디션이 좋지 않아요",
+  "가족이랑 주말에 캠핑 다녀왔는데 힐링이었어요",
+  "요즘 자격증 공부 중이라 정신이 없어요",
+  "집 근처에 새로 생긴 카페에 다녀왔는데 분위기가 좋았어요",
+  "강아지가 아파서 병원 다녀왔는데 걱정이 많아요",
+];
+
 const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
   value,
   onChange,
@@ -31,7 +41,6 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
   const historyPrayCardList = useBaseStore(
     (state) => state.historyPrayCardList
   );
-  const isValid = value.trim().length > 0;
 
   const handleLoadPreviousLifeShare = () => {
     analyticsTrack("클릭_기도카드생성_이전내용불러오기", { where: "일상나눔" });
@@ -57,6 +66,12 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
     onPrev();
   };
 
+  const handleSelectSuggestion = (suggestion: string) => {
+    analyticsTrack("클릭_기도카드생성_추천문구", { text: suggestion });
+    onChange(suggestion);
+    localStorage.setItem("prayCardLife", suggestion);
+  };
+
   return (
     <div className="flex flex-col h-full">
       <motion.div
@@ -71,7 +86,10 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
             variant="ghost"
             size="sm"
             onClick={() => handleLoadPreviousLifeShare()}
-            disabled={!historyPrayCardList?.[0].life}
+            disabled={
+              !historyPrayCardList?.[0]?.life ||
+              value == historyPrayCardList?.[0]?.life
+            }
             className="text-xs text-blue-500 hover:text-blue-600"
           >
             기존 내용 불러오기
@@ -90,16 +108,20 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
             value={value}
             onChange={(e) => handleOnChange(e)}
           />
-        </motion.div>
-        <motion.div
-          className="flex justify-between items-center mt-2"
-          variants={itemVariants}
-        >
-          <div className="text-xs text-gray-500">
-            <span className="text-blue-500 font-medium">Tip</span> 길게 쓸 필요
-            없어요. 간단하게 나눠보세요!
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {SUGGESTIONS.map((suggestion) => (
+              <Button
+                key={suggestion}
+                variant="outline"
+                size="sm"
+                className="text-xs rounded-full bg-gray-50 border-gray-200 hover:bg-blue-50 hover:text-blue-600"
+                onClick={() => handleSelectSuggestion(suggestion)}
+              >
+                {suggestion}
+              </Button>
+            ))}
           </div>
-          <div className="text-xs text-gray-400">{value.length}</div>
         </motion.div>
       </motion.div>
 
@@ -113,14 +135,9 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
         </Button>
         <Button
           onClick={handleNext}
-          disabled={!isValid}
-          className={`flex-1 py-6 text-base ${
-            isValid
-              ? "bg-blue-500 hover:bg-blue-600"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
+          className="flex-1 py-6 text-base bg-blue-500 hover:bg-blue-600"
         >
-          다음
+          {value.length > 0 ? "다음" : "건너뛰기"}
         </Button>
       </motion.div>
     </div>
