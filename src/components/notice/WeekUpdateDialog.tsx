@@ -6,7 +6,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import useBaseStore from "@/stores/baseStore";
-import { Badge } from "../ui/badge";
 import {
   Carousel,
   CarouselContent,
@@ -17,7 +16,6 @@ import {
 } from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
 import { analyticsTrack } from "@/analytics/analytics";
-
 const WeekUpdateDialog = () => {
   const isOpenWeekUpdateDialog = useBaseStore(
     (state) => state.isOpenWeekUpdateDialog
@@ -76,15 +74,20 @@ const WeekUpdateDialog = () => {
 
   const currentUpdateDate = "2025-04-10";
 
-  useEffect(() => {
-    const lastSeenDate = localStorage.getItem("WeekUpdateDialog");
-    setIsOpenWeekUpdateDialog(lastSeenDate !== currentUpdateDate);
-  }, [setIsOpenWeekUpdateDialog]);
+  // useEffect(() => {
+  //   const lastSeenDate = localStorage.getItem("WeekUpdateDialog");
+  //   setIsOpenWeekUpdateDialog(lastSeenDate !== currentUpdateDate);
+  // }, [setIsOpenWeekUpdateDialog]);
 
   const onClickHideWeekUpdateDialog = () => {
     localStorage.setItem("WeekUpdateDialog", currentUpdateDate);
     setIsOpenWeekUpdateDialog(false);
     analyticsTrack("클릭_공지_안내팝업", { where: "WeekUpdateDialog" });
+  };
+
+  const onClickClose = () => {
+    setIsOpenWeekUpdateDialog(false);
+    analyticsTrack("클릭_공지_닫기", { where: "WeekUpdateDialog" });
   };
 
   return (
@@ -95,47 +98,54 @@ const WeekUpdateDialog = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DialogContent className="w-11/12 h-auto overflow-auto rounded-2xl transition-all duration-300 ease-in-out">
-        <DialogHeader className="text-left">
+      <DialogContent className="p-0 w-11/12 rounded-2xl focus:outline-none">
+        <DialogHeader className="text-left p-5 pb-0">
           <DialogTitle className="text-lg">
             📢 기도카드 업데이트 안내
           </DialogTitle>
           <DialogDescription />
-          <hr className="my-3" />
-          <div className="w-full">
-            <Carousel setApi={setApi}>
-              <CarouselContent>
-                {slides.map((slide, index) => (
-                  <CarouselItem key={index}>
-                    <div className="flex items-center h-full gap-4">
-                      <div className="w-1/2">
-                        <img
-                          src={slide.image}
-                          className="w-full rounded-lg border-gray-400 shadow-md"
-                        />
-                      </div>
-                      <div className="w-1/2 space-y-2 text-left">
-                        <Badge variant="secondary" className="px-0">
-                          {slide.tip}
-                        </Badge>
-                        <p className="text-sm">{slide.description}</p>
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselDots />
-              <CarouselPrevious className="h-6 w-6 -left-4" />
-              <CarouselNext className="h-6 w-6 -right-4" />
-            </Carousel>
-            <p
-              onClick={() => onClickHideWeekUpdateDialog()}
-              className="text-sm text-gray-400 underline text-center"
-            >
-              더 이상 보지 않기
-            </p>
-          </div>
         </DialogHeader>
+
+        <div className="w-full px-5">
+          <hr className="my-3" />
+          <Carousel setApi={setApi}>
+            <CarouselContent>
+              {slides.map((slide, index) => (
+                <CarouselItem key={index}>
+                  <div className="flex items-center h-full gap-4">
+                    <div className="w-1/2">
+                      <img
+                        src={slide.image}
+                        className="w-full rounded-lg border-gray-400 shadow-md"
+                      />
+                    </div>
+                    <div className="w-1/2 space-y-2 text-left">
+                      <span className="text-sm font-bold">{slide.tip}</span>
+                      <p className="text-sm">{slide.description}</p>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselDots />
+            <CarouselPrevious className="h-6 w-6 -left-4" />
+            <CarouselNext className="h-6 w-6 -right-4" />
+          </Carousel>
+        </div>
+        <div className="grid grid-cols-2 w-full mt-6 border-t border-gray-200 ">
+          <button
+            onClick={onClickHideWeekUpdateDialog}
+            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 font-medium"
+          >
+            더 이상 보지 않기
+          </button>
+          <button
+            onClick={onClickClose}
+            className="bg-[#608CFF] hover:bg-[#4a70e2] text-white p-4 font-medium rounded-br-2xl"
+          >
+            확인
+          </button>
+        </div>
       </DialogContent>
     </Dialog>
   );
