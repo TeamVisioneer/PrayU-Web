@@ -32,6 +32,39 @@ export class PrayCardController {
     }
   }
 
+  async fetchPrayCardByGroupIds(
+    unionId: string,
+    startDt: string,
+    endDt: string,
+  ): Promise<PrayCardWithProfiles[]> {
+    try {
+      const { data, error } = await this.supabaseClient
+        .from("pray_card")
+        .select(`
+          *,
+          group!inner (id, name, group_union_id),
+          profiles!inner (*),
+          pray (*)
+        `)
+        .eq("group.group_union_id", unionId)
+        .gte("created_at", startDt)
+        .lt("created_at", endDt)
+        .is("deleted_at", null)
+        .is("pray.deleted_at", null)
+        .order("group_id", { ascending: true });
+
+      if (error) {
+        Sentry.captureException(error.message);
+        return [];
+      }
+
+      return data as PrayCardWithProfiles[] || [];
+    } catch (error) {
+      Sentry.captureException(error);
+      return [];
+    }
+  }
+
   // 특정 사용자의 기도 카드 조회 (그룹 필터링 포함)
   async getPrayCardsByUserAndGroup(
     userId: string,
