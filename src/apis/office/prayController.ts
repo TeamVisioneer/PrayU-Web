@@ -70,6 +70,35 @@ export class PrayController {
       return [];
     }
   }
+
+  // 기도 기록 저장
+  async createPray(
+    userId: string,
+    prayCardId: string,
+    prayType: string = "pray",
+  ): Promise<boolean> {
+    try {
+      const { data, error } = await this.supabaseClient
+        .from("pray")
+        .insert({
+          user_id: userId,
+          pray_card_id: prayCardId,
+          pray_type: prayType,
+        })
+        .select("id")
+        .single();
+
+      if (error) {
+        Sentry.captureException(error.message);
+        return false;
+      }
+
+      return !!data;
+    } catch (error) {
+      Sentry.captureException(error);
+      return false;
+    }
+  }
 }
 
 export const prayController = new PrayController();
