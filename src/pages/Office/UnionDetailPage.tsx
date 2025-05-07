@@ -12,11 +12,10 @@ import {
 import { prayController } from "@/apis/office/prayController";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 import { prayCardController } from "@/apis/office/prayCardController";
-import useAuth from "@/hooks/useAuth";
 import { UnionInviteLink } from "@/components/share/KakaoShareBtn";
 import { SimplePrayerCardCarousel } from "@/components/prayCard/SimplePrayerCardFeed";
 import PrayerTimerButton from "@/components/prayCard/PrayerTimerButton";
-
+import useBaseStore from "@/stores/baseStore";
 interface PrayerStats {
   todayPrayCount: number;
   weeklyPrayCardCount: number;
@@ -29,8 +28,7 @@ const UnionDetailPage: React.FC = () => {
   const { myUnions } = useOfficeStore();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const groupListRef = useRef<HTMLDivElement>(null);
-  const { user } = useAuth();
-
+  const user = useBaseStore((state) => state.user);
   const [unionData, setUnionData] = useState<GroupUnion | null>(null); // API로 가져온 공동체 상세 정보
   const [loading, setLoading] = useState(true);
   const [prayerStats, setPrayerStats] = useState<PrayerStats>({
@@ -51,7 +49,6 @@ const UnionDetailPage: React.FC = () => {
   );
   const [selectedPrayCard, setSelectedPrayCard] =
     useState<PrayCardWithProfiles | null>(null);
-  const [hasPrayedToday, setHasPrayedToday] = useState<boolean>(false);
 
   // New state for tab selection
   const [activeTab, setActiveTab] = useState<"community" | "prayerCards">(
@@ -198,49 +195,6 @@ const UnionDetailPage: React.FC = () => {
     window.Kakao.Share.sendDefault(kakaoLinkObject);
   };
 
-  // Enhanced function to handle prayer completion
-  const handlePrayerComplete = async () => {
-    if (!user || !selectedPrayCard) return;
-
-    // 기도 기록 저장
-    const success = await prayController.createPray(
-      user.id,
-      selectedPrayCard.id
-    );
-
-    if (success) {
-      // 기도 완료 후 상태 업데이트
-      setHasPrayedToday(true);
-
-      // 기도 통계 업데이트 (선택사항)
-      setPrayerStats((prev) => ({
-        ...prev,
-        todayPrayCount: prev.todayPrayCount + 1,
-        totalPrayCount: prev.totalPrayCount + 1,
-      }));
-    } else {
-      console.error("Failed to record prayer");
-    }
-  };
-
-  // 현재 선택된 기도카드 업데이트 핸들러
-  const handleCardChange = async (card: PrayCardWithProfiles | null) => {
-    setSelectedPrayCard(card);
-
-    // 기도카드가 선택되면 해당 카드에 대해 오늘 기도했는지 체크
-    if (card && user) {
-      const hasPrayed = card.pray.some(
-        (pray) =>
-          pray.user_id === user.id &&
-          pray.created_at >= getISOTodayDate() &&
-          pray.created_at < getISOTodayDate(1)
-      );
-      setHasPrayedToday(hasPrayed);
-    } else {
-      setHasPrayedToday(false);
-    }
-  };
-
   const handlePrayerCardsTab = async () => {
     setActiveTab("prayerCards");
 
@@ -253,6 +207,7 @@ const UnionDetailPage: React.FC = () => {
       endDt
     );
     setPrayerCards(prayerCards);
+    setSelectedPrayCard(prayerCards[0]);
   };
 
   if (loading) {
@@ -572,48 +527,6 @@ const UnionDetailPage: React.FC = () => {
           </button>
         </div>
 
-        {/* 공동체 정보 */}
-        <div className="border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 bg-blue-100 text-blue-600">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div className="flex items-center">
-                  <h1 className="text-2xl font-bold text-gray-900 mr-3">
-                    {unionData.name || "공동체"}
-                  </h1>
-                </div>
-                <div className="flex flex-wrap items-center text-sm mt-1">
-                  <span className="font-medium text-gray-700">
-                    {unionData.church || "교회 정보 없음"}
-                  </span>
-                  {unionData.intro && (
-                    <>
-                      <span className="mx-1.5 text-gray-400">•</span>
-                      <span className="text-gray-600">{unionData.intro}</span>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* 탭 네비게이션 */}
         <div className="border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -655,10 +568,43 @@ const UnionDetailPage: React.FC = () => {
       <div className="max-w-7xl mx-auto py-5">
         {activeTab === "community" ? (
           <div className="px-4 sm:px-6 lg:px-8">
-            {/* 중타이틀 */}
-            <h2 className="text-lg font-medium text-gray-900 mb-4">
-              공동체 현황
-            </h2>
+            {/* 공동체 정보 */}
+            <div className="flex items-center pb-5">
+              <div className="flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 bg-blue-100 text-blue-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div className="flex items-center">
+                  <h1 className="text-2xl font-bold text-gray-900 mr-3">
+                    {unionData.name || "공동체"}
+                  </h1>
+                </div>
+                <div className="flex flex-wrap items-center text-sm mt-1">
+                  <span className="font-medium text-gray-700">
+                    {unionData.church || "교회 정보 없음"}
+                  </span>
+                  {unionData.intro && (
+                    <>
+                      <span className="mx-1.5 text-gray-400">•</span>
+                      <span className="text-gray-600">{unionData.intro}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
 
             {/* 통계 카드 */}
             <div className="grid grid-cols-1 gap-4 mb-8">
@@ -901,35 +847,30 @@ const UnionDetailPage: React.FC = () => {
                   )}
                 </div>
               </div>
+
+              {/* 기도하기 플로팅 버튼 */}
+              <div className="fixed bottom-8 left-0 right-0 flex justify-center">
+                <button
+                  onClick={handlePrayerCardsTab}
+                  className=" w-40 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-3 flex items-center justify-center shadow-lg transform transition-transform hover:scale-105 active:scale-95 font-medium"
+                  aria-label="오늘의 기도"
+                >
+                  오늘의 기도
+                </button>
+              </div>
             </div>
           </div>
         ) : (
           <div className="flex flex-col items-center">
             <SimplePrayerCardCarousel
               prayerCards={prayerCards}
-              onCardChange={handleCardChange}
+              onCardChange={setSelectedPrayCard}
             />
             <div className="flex flex-col items-center">
               <PrayerTimerButton
-                onComplete={handlePrayerComplete}
                 prayDuration={10}
                 currentPrayCard={selectedPrayCard}
-                hasPrayedToday={hasPrayedToday}
               />
-              {/* Add prayer count info */}
-              <div className="w-full max-w-md text-center mt-2">
-                <p className="text-sm text-gray-500">
-                  이번주 기도한 횟수:{" "}
-                  <span className="font-medium text-blue-600">
-                    {
-                      selectedPrayCard?.pray.filter(
-                        (pray) => pray.user_id === user?.id
-                      ).length
-                    }
-                    회
-                  </span>
-                </p>
-              </div>
             </div>
           </div>
         )}

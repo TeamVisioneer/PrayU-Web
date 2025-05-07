@@ -18,42 +18,26 @@ export const SimplePrayerCardCarousel: React.FC<SimplePrayerCardFeedProps> = ({
   onCardChange,
 }) => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    setCurrentIndex(1);
     carouselApi?.on("select", () => {
-      const currentIndex = carouselApi.selectedScrollSnap();
-      setCurrentIndex(currentIndex);
+      const index = carouselApi.selectedScrollSnap();
+      const carouselLength = carouselApi.scrollSnapList().length;
+      if (index === 0) carouselApi.scrollNext();
+      if (index === carouselLength - 1) {
+        carouselApi.scrollPrev();
+      }
 
       // Update parent component with selected card
       if (onCardChange && prayerCards && prayerCards.length > 0) {
         // Adjust index for edge slides
-        const adjustedIndex = currentIndex - 1;
+        const adjustedIndex = index - 1;
         if (adjustedIndex >= 0 && adjustedIndex < prayerCards.length) {
           onCardChange(prayerCards[adjustedIndex]);
-        } else {
-          onCardChange(null);
         }
       }
-
-      const carouselLength = carouselApi.scrollSnapList().length;
-      if (currentIndex === 0) carouselApi.scrollNext();
-      if (currentIndex === carouselLength - 1) {
-        carouselApi.scrollPrev();
-      }
     });
-  }, [carouselApi, setCurrentIndex, currentIndex, onCardChange, prayerCards]);
-
-  // Initial card selection notification
-  useEffect(() => {
-    if (onCardChange && prayerCards && prayerCards.length > 0) {
-      // Default to first card
-      onCardChange(prayerCards[0]);
-    } else if (onCardChange) {
-      onCardChange(null);
-    }
-  }, [prayerCards, onCardChange]);
+  }, [carouselApi, prayerCards, onCardChange]);
 
   return (
     <div className="w-full">
