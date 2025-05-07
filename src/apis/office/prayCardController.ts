@@ -12,7 +12,7 @@ export class PrayCardController {
     endDt: string,
   ): Promise<number> {
     try {
-      const { data, error } = await this.supabaseClient
+      const { count, error } = await this.supabaseClient
         .from("pray_card")
         .select("id", { count: "exact", head: true })
         .in("group_id", groupIds)
@@ -25,7 +25,7 @@ export class PrayCardController {
         return 0;
       }
 
-      return data?.length || 0;
+      return count || 0;
     } catch (error) {
       Sentry.captureException(error);
       return 0;
