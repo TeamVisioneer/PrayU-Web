@@ -569,7 +569,7 @@ const UnionDetailPage: React.FC = () => {
         {activeTab === "community" ? (
           <div className="px-4 sm:px-6 lg:px-8">
             {/* 공동체 정보 */}
-            <div className="flex items-center pb-5">
+            {/* <div className="flex items-center pb-5">
               <div className="flex-shrink-0 w-16 h-16 rounded-lg flex items-center justify-center mr-4 bg-blue-100 text-blue-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -604,7 +604,7 @@ const UnionDetailPage: React.FC = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* 통계 카드 */}
             <div className="grid grid-cols-1 gap-4 mb-8">
