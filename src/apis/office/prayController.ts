@@ -1,4 +1,4 @@
-import { Pray } from "supabase/types/tables";
+import { Pray, PrayWithProfiles } from "supabase/types/tables";
 import { supabase } from "../../../supabase/client";
 import * as Sentry from "@sentry/react";
 
@@ -76,7 +76,7 @@ export class PrayController {
     userId: string,
     prayCardId: string,
     prayType: string = "pray",
-  ): Promise<boolean> {
+  ): Promise<PrayWithProfiles | null> {
     try {
       const { data, error } = await this.supabaseClient
         .from("pray")
@@ -85,18 +85,18 @@ export class PrayController {
           pray_card_id: prayCardId,
           pray_type: prayType,
         })
-        .select("id")
+        .select(`*, profiles!inner (*)`)
         .single();
 
       if (error) {
         Sentry.captureException(error.message);
-        return false;
+        return null;
       }
 
-      return !!data;
+      return data as PrayWithProfiles;
     } catch (error) {
       Sentry.captureException(error);
-      return false;
+      return null;
     }
   }
 }

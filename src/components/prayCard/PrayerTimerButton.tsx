@@ -3,6 +3,7 @@ import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import React, { useState, useEffect, useRef } from "react";
 import { PrayCardWithProfiles } from "supabase/types/tables";
+import { useBottomToast } from "@/components/ui/use-bottom-toast";
 
 interface PrayerTimerButtonProps {
   prayDuration?: number; // in seconds
@@ -14,7 +15,7 @@ const PrayerTimerButton: React.FC<PrayerTimerButtonProps> = ({
   currentPrayCard,
 }) => {
   const user = useBaseStore((state) => state.user);
-
+  const { toast } = useBottomToast();
   const [isPraying, setIsPraying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(prayDuration);
   const [progress, setProgress] = useState(0); // Start at 0 progress
@@ -94,10 +95,17 @@ const PrayerTimerButton: React.FC<PrayerTimerButtonProps> = ({
       setPrayCount(prayCount + 1);
       setIsPraying(false);
       setTimeLeft(0);
-      await prayController.createPray(
+      const pray = await prayController.createPray(
         user?.id || "",
         currentPrayCard?.id || ""
       );
+      if (pray) {
+        currentPrayCard?.pray.push(pray);
+        toast({
+          variant: "success",
+          title: "기도 알림이 전달되었어요",
+        });
+      }
     }
   };
 
