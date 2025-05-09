@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { analyticsTrack } from "@/analytics/analytics";
 import PrayCard from "./PrayCard";
-import { dummyPrayCard, dummyPrayCard2 } from "@/mocks/dummyPrayCard";
+import { dummyPrayCard2 } from "@/mocks/dummyPrayCard";
 
 interface NewPrayCardIntroStepProps {
   onNext: () => void;

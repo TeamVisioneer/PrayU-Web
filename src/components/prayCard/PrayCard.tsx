@@ -12,21 +12,6 @@ interface PrayCardProps {
   editable?: boolean;
 }
 
-// Helper function to format date to "X days ago" in Korean
-const formatTimeAgo = (date: Date): string => {
-  const now = new Date();
-  const diffInMs = now.getTime() - date.getTime();
-  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-
-  if (diffInDays === 0) {
-    return "오늘";
-  } else if (diffInDays === 1) {
-    return "어제";
-  } else {
-    return `${diffInDays}일 전`;
-  }
-};
-
 const dateDistanceText = (dateString: string) => {
   const dateDistance = getDateDistance(
     new Date(getISOOnlyDate(dateString)),

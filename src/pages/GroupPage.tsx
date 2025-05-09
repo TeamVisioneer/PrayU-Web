@@ -33,7 +33,6 @@ const GroupPage: React.FC = () => {
   const getMember = useBaseStore((state) => state.getMember);
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
-  const memberList = useBaseStore((state) => state.memberList);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );

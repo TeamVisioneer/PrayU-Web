@@ -21,6 +21,7 @@ const TermServicePage: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
+  const setExternalUrl = useBaseStore((state) => state.setExternalUrl);
 
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -101,11 +102,7 @@ const TermServicePage: React.FC = () => {
               className="flex items-center gap-2"
               onClick={() => {
                 analyticsTrack("클릭_동의_서비스이용_자세히", {});
-                window.open(
-                  "https://mmyeong.notion.site/PrayU-ee61275fa48842cda5a5f2ed5b608ec0?pvs=4",
-                  "_blank",
-                  "noopener,noreferrer"
-                );
+                setExternalUrl("/term/240909");
               }}
             >
               <p className="text-sm font-medium">

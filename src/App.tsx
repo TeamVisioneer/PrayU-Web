@@ -23,7 +23,8 @@ import MyProfilePage from "./pages/MyProfilePage";
 import GroupNotFoundPage from "./pages/GroupNotFoundPage";
 import GroupListPage from "./pages/GroupListPage";
 import GroupLimitPage from "./pages/GropuLimitPage";
-import TermServicePage from "./pages/TermServicePage";
+import TermServicePage from "./pages/TermService/TermServicePage";
+import Term from "./pages/TermService/Term";
 import EmailLoginPage from "./pages/EmailLoginPage";
 import KakaoShareCallBack from "./components/share/KakaoShareCallBack";
 import LoginRedirect from "./components/auth/LoginRedirect";
@@ -50,6 +51,7 @@ import ExternalLinkDialog from "./components/notice/ExternalLinkDialog";
 import GroupListDrawer from "./components/group/GroupListDrawer";
 import ReportAlert from "./components/alert/ReportAlert";
 import { BottomToaster } from "@/components/ui/bottom-toaster";
+
 const GroupRedirect = () => {
   const { groupId } = useParams<{ groupId: string }>();
   return <Navigate to={`/office/union/unknown/group/${groupId}`} replace />;
@@ -102,6 +104,14 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <TermServicePage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/term/:version"
+                element={
+                  <PrivateRoute>
+                    <Term />
                   </PrivateRoute>
                 }
               />
@@ -266,6 +276,12 @@ const AnalyticsTracker = () => {
         break;
       case "/term":
         analyticsTrack("페이지_약관", {
+          title: "Term Page",
+          where: from,
+        });
+        break;
+      case "/term/:version":
+        analyticsTrack("페이지_약관_버전", {
           title: "Term Page",
           where: from,
         });

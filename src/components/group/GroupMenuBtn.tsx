@@ -301,7 +301,13 @@ const GroupMenuBtn: React.FC = () => {
 
           {/* 카카오톡 톡상담 버튼 */}
           <section
-            onClick={() => onClickContactUs()}
+            onClick={() => {
+              analyticsTrack("클릭_문의", {});
+              window.open(
+                import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL,
+                "_blank"
+              );
+            }}
             className="sticky bottom-0"
           >
             <div className="flex items-center bg-[#FFE812] text-black rounded-full px-2 shadow-md">
