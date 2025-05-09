@@ -12,11 +12,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
-import TodayPrayStartCard from "@/components/todayPray/TodayPrayStartCard";
 import BannerDialog from "@/components/notice/BannerDialog";
 import GroupHeader from "@/components/group/GroupHeader";
 import TextBanner from "@/components/member/textBanner";
 import MyMemberDrawer from "@/components/member/MyMemberDrawer";
+import TodayPrayBtn from "@/components/todayPray/TodayPrayBtn";
+import NewPrayCardRedirectBtn from "@/components/prayCard/NewPrayCardRedirectBtn";
+import EmptyMyMember from "@/components/member/EmptyMyMember";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -56,6 +58,12 @@ const GroupPage: React.FC = () => {
     (state) => state.setIsConfirmAlertOpen
   );
   const setAlertData = useBaseStore((state) => state.setAlertData);
+  const setHasPrayCardCurrentWeek = useBaseStore(
+    (state) => state.setHasPrayCardCurrentWeek
+  );
+  const hasPrayCardCurrentWeek = useBaseStore(
+    (state) => state.hasPrayCardCurrentWeek
+  );
 
   useEffect(() => {
     fetchGroupListByUserId(currentUserId);
@@ -87,29 +95,6 @@ const GroupPage: React.FC = () => {
     } else if (groupList.every((group) => group.id !== groupId)) {
       navigate(`/group/${groupId}/join`, { replace: true });
       return;
-    } else if (
-      userPrayCardList &&
-      (userPrayCardList.length == 0 ||
-        !isCurrentWeek(userPrayCardList[0].created_at))
-    ) {
-      let title = "";
-      let description = "";
-      if (userPrayCardList.length == 0) {
-        title = "기도카드 작성 안내";
-        description = `${targetGroup?.name} 그룹에 이번 주 기도카드를 만들어 주세요!`;
-      } else {
-        title = "기도카드 작성 안내";
-        description = `${targetGroup?.name}의 기도카드가 만료되었어요😭\n이번 주 기도카드를 만들어 주세요!`;
-      }
-      setAlertData({
-        color: "bg-blue-500",
-        title: title,
-        description: description,
-        actionText: "확인",
-        onAction: () => navigate("/praycard/new"),
-      });
-      setIsConfirmAlertOpen(true);
-      return;
     } else if (targetGroupLoading == false && targetGroup == null) {
       navigate("/group/not-found");
       return;
@@ -129,7 +114,16 @@ const GroupPage: React.FC = () => {
     if (targetGroup && targetGroup.user_id === currentUserId) {
       setIsGroupLeader(true);
     }
-  }, [targetGroup, currentUserId, setIsGroupLeader]);
+    if (isCurrentWeek(userPrayCardList?.[0]?.created_at)) {
+      setHasPrayCardCurrentWeek(true);
+    }
+  }, [
+    targetGroup,
+    currentUserId,
+    setIsGroupLeader,
+    setHasPrayCardCurrentWeek,
+    userPrayCardList,
+  ]);
 
   if (!targetGroup || !groupList || !myMember || isPrayToday == null) {
     return (
@@ -140,31 +134,38 @@ const GroupPage: React.FC = () => {
     );
   }
 
-  const AllMemberExpired = memberList
-    ?.filter(
-      (member) =>
-        member.user_id &&
-        member.user_id !== currentUserId &&
-        !myMember.profiles.blocking_users.includes(member.user_id)
-    )
-    .every((member) => !isCurrentWeek(member.updated_at));
+  // const AllMemberExpired = memberList
+  //   ?.filter(
+  //     (member) =>
+  //       member.user_id &&
+  //       member.user_id !== currentUserId &&
+  //       !myMember.profiles.blocking_users.includes(member.user_id)
+  //   )
+  //   .every((member) => !isCurrentWeek(member.updated_at));
 
   return (
     <div className="flex flex-col h-full">
       <GroupHeader />
       <div className="flex flex-col px-5 pb-5 flex-grow gap-4">
         <div className="flex flex-col gap-2">
-          <MyMember myMember={myMember} />
+          {userPrayCardList?.[0] ? (
+            <MyMember myMember={myMember} />
+          ) : (
+            <EmptyMyMember />
+          )}
           {targetGroup.group_union && (
             <TextBanner
               text={`${targetGroup.group_union.name} 공동체에서 함께 하는 기도 그룹이에요`}
             />
           )}
         </div>
-        {isPrayToday || AllMemberExpired ? (
-          <OtherMemberList />
+        <OtherMemberList />
+      </div>
+      <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
+        {hasPrayCardCurrentWeek ? (
+          <TodayPrayBtn eventOption={{ where: "GroupPage" }} />
         ) : (
-          <TodayPrayStartCard />
+          <NewPrayCardRedirectBtn />
         )}
       </div>
 

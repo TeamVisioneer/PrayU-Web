@@ -4,6 +4,8 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 import { useNavigate } from "react-router-dom";
+import { getDateDistance } from "@toss/date";
+import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles | undefined;
   isMoreBtn?: boolean;
@@ -23,6 +25,20 @@ const formatTimeAgo = (date: Date): string => {
   } else {
     return `${diffInDays}일 전`;
   }
+};
+
+const dateDistanceText = (dateString: string) => {
+  const dateDistance = getDateDistance(
+    new Date(getISOOnlyDate(dateString)),
+    new Date(getISOTodayDate())
+  );
+  if (dateDistance.days < 1) return "오늘";
+  else if (dateDistance.days < 7) return `${dateDistance.days}일 전`;
+  else if (dateDistance.days < 30)
+    return `${Math.floor(dateDistance.days / 7)}주 전`;
+  else if (dateDistance.days < 365)
+    return `${Math.floor(dateDistance.days / 30)}달 전`;
+  else return "오래 전";
 };
 
 export const PrayCard: React.FC<PrayCardProps> = ({
@@ -106,9 +122,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
       content: content.trim(),
     }));
 
-  const timeAgo = formatTimeAgo(
-    prayCard.created_at ? new Date(prayCard.created_at) : new Date()
-  );
+  const timeAgo = dateDistanceText(prayCard.created_at);
   const userInitial = prayCard.profiles.full_name
     ? prayCard.profiles.full_name.charAt(0).toUpperCase()
     : "";

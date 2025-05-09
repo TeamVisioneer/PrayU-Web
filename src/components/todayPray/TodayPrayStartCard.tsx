@@ -26,7 +26,6 @@ export const TodayPrayStartCard = () => {
           <TodayPrayBtn
             eventOption={{
               where: "TodayPrayStartCard",
-              total_member: memberList.length,
             }}
           />
         </div>

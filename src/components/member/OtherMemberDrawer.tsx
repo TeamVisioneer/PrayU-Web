@@ -16,10 +16,14 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { NotificationType } from "../notification/NotificationType";
 import { useToast } from "@/components/ui/use-toast";
 import { RiNotification4Line } from "react-icons/ri";
+import NewPrayCardRedirectBtn from "../prayCard/NewPrayCardRedirectBtn";
+import { dummyPrayCard } from "@/mocks/dummyPrayCard";
+import DumyReactionBtnWithCalendar from "../prayCard/DummyReactionWithCalendar";
 
 const OtherMemberDrawer: React.FC = () => {
   const memberList = useBaseStore((state) => state.memberList);
   const otherMember = useBaseStore((state) => state.otherMember);
+  const setOtherMember = useBaseStore((state) => state.setOtherMember);
   const user = useBaseStore((state) => state.user);
   const isOpenOtherMemberDrawer = useBaseStore(
     (state) => state.isOpenOtherMemberDrawer
@@ -31,6 +35,9 @@ const OtherMemberDrawer: React.FC = () => {
   const createNotification = useBaseStore((state) => state.createNotification);
   const createOnesignalPush = useBaseStore(
     (state) => state.createOnesignalPush
+  );
+  const hasPrayCardCurrentWeek = useBaseStore(
+    (state) => state.hasPrayCardCurrentWeek
   );
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const { toast } = useToast();
@@ -144,25 +151,50 @@ const OtherMemberDrawer: React.FC = () => {
   return (
     <Drawer
       open={isOpenOtherMemberDrawer}
+      onClose={() => {
+        setOtherMember(null);
+      }}
       onOpenChange={(open) => {
         setIsOpenOtherMemberDrawer(open);
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DrawerContent className="bg-mainBg flex flex-col max-h-90vh">
+      <DrawerContent className="bg-mainBg flex flex-col max-h-90vh border-none">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <div className="px-8 py-5 flex flex-col flex-grow gap-4 overflow-y-auto">
-          <PrayCard prayCard={otherPrayCardList?.[0]} />
-          {!otherPrayCardList || otherPrayCardList.length === 0 ? (
+
+        {otherMember && !hasPrayCardCurrentWeek && (
+          <div className="absolute w-full h-full rounded-t-[20px] inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-3">
+            <div className="text-gray-800 text-lg text-center">
+              <div>내 기도카드를 만들고</div>
+              <div>다른 사람의 기도카드를 확인해요!</div>
+            </div>
+            <NewPrayCardRedirectBtn />
+          </div>
+        )}
+
+        <div
+          className={`px-8 py-5 flex flex-col flex-grow gap-4 overflow-y-auto 
+          ${otherMember && !hasPrayCardCurrentWeek ? "blur" : ""}`}
+        >
+          {otherMember ? (
+            <PrayCard prayCard={otherPrayCardList?.[0]} />
+          ) : (
+            <PrayCard prayCard={dummyPrayCard} isMoreBtn={false} />
+          )}
+
+          {!otherMember ? (
+            <DumyReactionBtnWithCalendar />
+          ) : otherPrayCardList && otherPrayCardList.length === 0 ? (
             NoPrayCardSection
-          ) : !isCurrentWeek(otherPrayCardList[0].created_at) ? (
+          ) : otherPrayCardList &&
+            !isCurrentWeek(otherPrayCardList[0].created_at) ? (
             ExpiredSection
           ) : (
             <ReactionWithCalendar
-              prayCard={otherPrayCardList[0]}
+              prayCard={otherPrayCardList?.[0]}
               eventOption={{
                 where: "TodayPrayCardListDrawer",
                 total_member: memberList?.length || 0,

@@ -853,9 +853,9 @@ const UnionDetailPage: React.FC = () => {
                 <button
                   onClick={handlePrayerCardsTab}
                   className=" w-40 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-3 flex items-center justify-center shadow-lg transform transition-transform hover:scale-105 active:scale-95 font-medium"
-                  aria-label="오늘의 기도"
+                  aria-label="공동체 기도하기"
                 >
-                  오늘의 기도
+                  공동체 기도하기
                 </button>
               </div>
             </div>

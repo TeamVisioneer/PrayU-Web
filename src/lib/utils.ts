@@ -152,7 +152,8 @@ export const isFutureDate = (date1: string, date2: string): boolean => {
   return secondDate > firstDate;
 };
 
-export const isCurrentWeek = (date: string): boolean => {
+export const isCurrentWeek = (date: string | undefined): boolean => {
+  if (!date) return false;
   const targetDate = new Date(date);
   const todayDate = new Date(getISOTodayDate());
   const todayOfWeek = todayDate.getDay();

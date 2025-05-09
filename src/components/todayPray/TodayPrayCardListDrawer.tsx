@@ -7,7 +7,6 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import TodayPrayCardList from "./TodayPrayCardList";
-// import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 
 const TodayPrayCardListDrawer: React.FC = () => {
   const isOpenTodayPrayDrawer = useBaseStore(
@@ -34,7 +33,7 @@ const TodayPrayCardListDrawer: React.FC = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DrawerContent className="bg-mainBg flex flex-col pb-5">
+      <DrawerContent className="bg-mainBg flex flex-col pb-5 border-none">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription className="text-sm text-center text-gray-400 p-2 h-10">

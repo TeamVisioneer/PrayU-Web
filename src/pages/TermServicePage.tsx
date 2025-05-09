@@ -17,8 +17,6 @@ const TermServicePage: React.FC = () => {
 
   const createGroup = useBaseStore((state) => state.createGroup);
   const createMember = useBaseStore((state) => state.createMember);
-  const createPrayCard = useBaseStore((state) => state.createPrayCard);
-  const updatePrayCard = useBaseStore((state) => state.updatePrayCard);
   const groupList = useBaseStore((state) => state.groupList);
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
@@ -44,27 +42,11 @@ const TermServicePage: React.FC = () => {
   const handleCreateGroup = async () => {
     const userName = profile.full_name || user?.user_metadata.name;
     const groupName = userName ? `${userName}의 기도그룹` : "새 기도그룹";
-    const targetGroup = await createGroup(profile.id, groupName, "intro");
+    const targetGroup = await createGroup(profile.id, groupName, "");
     if (!targetGroup) return;
 
-    const prayCardId = localStorage.getItem("prayCardId");
-    const prayCardContent = localStorage.getItem("prayCardContent");
-
-    const myMember = await createMember(
-      targetGroup.id,
-      profile.id,
-      prayCardContent as string
-    );
+    const myMember = await createMember(targetGroup.id, profile.id, "");
     if (!myMember) return;
-
-    if (prayCardId) {
-      await updatePrayCard(prayCardId, {
-        group_id: targetGroup.id,
-        user_id: profile.id,
-      });
-    } else {
-      await createPrayCard(targetGroup.id, profile.id, "");
-    }
     return targetGroup.id;
   };
 

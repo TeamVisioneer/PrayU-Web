@@ -10,7 +10,7 @@ import TodayPrayInviteCompletedItem from "./TodayPrayInviteCompletedItem";
 import PrayCard from "../prayCard/PrayCard";
 import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 import DumyReactionBtnWithCalendar from "../prayCard/DummyReactionWithCalendar";
-import { PrayCardWithProfiles, Profiles } from "supabase/types/tables";
+import { dummyPrayCard } from "@/mocks/dummyPrayCard";
 
 const TodayPrayCardList = () => {
   const setPrayCardCarouselApi = useBaseStore(
@@ -27,25 +27,9 @@ const TodayPrayCardList = () => {
   );
   const memberList = useBaseStore((state) => state.memberList);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
-
-  const dummyPrayCard = {
-    id: "1",
-    user_id: "1",
-    created_at: new Date().toISOString(),
-    life: "(예시) 회사에서 업무적, 관계적으로 힘들었던 한 주",
-    content:
-      "(예시)맡겨진 자리에서 하나님의 사명을 발견할 수 있도록\n\n(예시)내 주변 사람을 내 몸과 같이 섬길 수 있도록",
-    pray: [],
-    profiles: {
-      id: "1",
-      full_name: "기도 카드",
-      avatar_url: "/images/avatar/avatar_1.png",
-    } as Profiles,
-    bible_card_url: "",
-    deleted_at: "",
-    group_id: "",
-    updated_at: "",
-  } as PrayCardWithProfiles;
+  const hasPrayCardCurrentWeek = useBaseStore(
+    (state) => state.hasPrayCardCurrentWeek
+  );
 
   useEffect(() => {
     setPrayCardCarouselIndex(1);
@@ -89,7 +73,7 @@ const TodayPrayCardList = () => {
             />
           </CarouselItem>
         ))}
-        {isPrayToday && (
+        {isPrayToday && hasPrayCardCurrentWeek && (
           <CarouselItem className="basis-5/6 flex-grow">
             {memberList?.length == 1 ? (
               <TodayPrayInviteCompletedItem />
