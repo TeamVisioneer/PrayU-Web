@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Group } from "supabase/types/tables";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -30,9 +30,9 @@ const containerVariants = {
 };
 
 const PrayCardCreatePage = () => {
+  const navigate = useNavigate();
   const user = useBaseStore((state) => state.user);
   const targetGroup = useBaseStore((state) => state.targetGroup);
-
   const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
@@ -68,7 +68,7 @@ const PrayCardCreatePage = () => {
 
   const handlePrev = () => {
     if (step > 0) {
-      setSearchParams({ step: (step - 1).toString() });
+      navigate(-1);
     }
   };
 

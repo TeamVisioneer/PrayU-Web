@@ -1,7 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDate, sleep } from "@/lib/utils";
+import { getISOTodayDate, sleep, isCurrentWeek } from "@/lib/utils";
 import { MemberWithProfiles } from "supabase/types/tables";
 import ReactionResultBox from "../pray/ReactionResultBox";
 
@@ -40,6 +40,8 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
       pray.created_at > getISOTodayDate() && pray.user_id !== currentUserId
   );
 
+  const isExpired = prayCard && !isCurrentWeek(prayCard.created_at);
+
   const onClickMyMember = async () => {
     setIsOpenMyMemberDrawer(true);
     analyticsTrack("클릭_멤버_본인", {
@@ -53,10 +55,17 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   return (
     <div
       onClick={() => onClickMyMember()}
-      className="w-full flex flex-col gap-3 cursor-pointer bg-white p-6 rounded-[15px]"
+      className="w-full flex flex-col gap-3 cursor-pointer bg-white p-5 rounded-[15px]"
     >
       <div className="flex flex-col gap-1">
-        <h3 className="flex font-bold text-lg">내 기도제목</h3>
+        <div className="flex items-center gap-2 justify-between">
+          <h3 className="font-bold text-lg">내 기도제목</h3>
+          {isExpired && (
+            <span className="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full">
+              만료됨
+            </span>
+          )}
+        </div>
         <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis">
           {inputPrayCardContent || "✏️ 기도카드를 작성해 보아요"}
         </div>

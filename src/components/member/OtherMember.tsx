@@ -1,5 +1,9 @@
 import { MemberWithProfiles } from "supabase/types/tables";
-import { getISOOnlyDate, getISOTodayDate } from "../../lib/utils";
+import {
+  getISOOnlyDate,
+  getISOTodayDate,
+  isCurrentWeek,
+} from "../../lib/utils";
 import { getDateDistance } from "@toss/date";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
@@ -50,13 +54,26 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
     else return "오래 전";
   };
 
+  const isExpired = member.pray_summary && !isCurrentWeek(member.updated_at);
+
   return (
     <div
       className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl h-32"
       onClick={() => onClickOtherMember()}
     >
       {member.profiles && (
-        <UserProfile profile={member.profiles} imgSize="w-8 h-8" fontSize="" />
+        <div className="flex items-center justify-between">
+          <UserProfile
+            profile={member.profiles}
+            imgSize="w-8 h-8"
+            fontSize=""
+          />
+          {isExpired && (
+            <span className="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full">
+              만료됨
+            </span>
+          )}
+        </div>
       )}
 
       {member.pray_summary ? (

@@ -25,14 +25,14 @@ const PrayCardHistoryDrawer: React.FC = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DrawerContent className="bg-mainBg">
+      <DrawerContent className="bg-mainBg max-h-90vh">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
         {historyCard?.bible_card_url ? (
-          <div className="flex flex-col gap-2 px-10 pt-5 pb-10 overflow-auto">
-            <div className="flex-shrink-0 rounded-xl overflow-hidden shadow-md">
+          <div className="flex flex-col gap-2 px-10 pt-5 pb-10 overflow-y-auto">
+            <div className="flex-shrink-0 w-11/12 mx-auto rounded-xl overflow-hidden shadow-md">
               <img
                 src={historyCard.bible_card_url}
                 className="w-full object-cover rounded-xl"

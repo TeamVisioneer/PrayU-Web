@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
@@ -30,6 +30,17 @@ const SUGGESTIONS = [
   "요즘 자격증 공부 중이라 정신이 없어요",
   "집 근처에 새로 생긴 카페에 다녀왔는데 분위기가 좋았어요",
   "강아지가 아파서 병원 다녀왔는데 걱정이 많아요",
+  "새로운 취미를 시작해서 요즘 그것에 푹 빠져있어요",
+  "직장에서 업무량이 많아 조금 지쳐있어요",
+  "최근에 좋은 책을 읽었는데 많은 도움이 되었어요",
+  "부모님 건강이 안 좋아서 자주 연락하고 있어요",
+  "오랜만에 여행 계획을 세우고 있어요",
+  "집 정리를 하면서 오래된 추억들을 되살렸어요",
+  "새로운 동네로 이사왔는데 적응하는 중이에요",
+  "요즘 새벽기도에 참석하고 있는데 많은 은혜를 받고 있어요",
+  "영화 한 편 봤는데 너무 감동적이었어요",
+  "아이들이 학교 생활 잘하고 있어서 감사해요",
+  "요즘 다이어트 중인데 의지가 약해져서 고민이에요",
 ];
 
 const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
@@ -41,6 +52,12 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
   const historyPrayCardList = useBaseStore(
     (state) => state.historyPrayCardList
   );
+
+  // 랜덤 추천 문구는 컴포넌트가 마운트될 때 한 번만 계산
+  const randomSuggestions = useMemo(() => {
+    const shuffled = [...SUGGESTIONS].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 3);
+  }, []);
 
   const handleLoadPreviousLifeShare = () => {
     analyticsTrack("클릭_기도카드생성_이전내용불러오기", { where: "일상나눔" });
@@ -110,7 +127,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
           />
 
           <div className="mt-3 flex flex-wrap gap-2">
-            {SUGGESTIONS.map((suggestion) => (
+            {randomSuggestions.map((suggestion) => (
               <Button
                 key={suggestion}
                 variant="outline"
