@@ -118,7 +118,7 @@ const GroupMenuBtn: React.FC = () => {
   const onClickContactUs = () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_문의", {});
-    setExternalUrl(import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL);
+    window.open(import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL, "_blank");
   };
 
   const onClickSheetTrigeer = () => {
@@ -301,13 +301,7 @@ const GroupMenuBtn: React.FC = () => {
 
           {/* 카카오톡 톡상담 버튼 */}
           <section
-            onClick={() => {
-              analyticsTrack("클릭_문의", {});
-              window.open(
-                import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL,
-                "_blank"
-              );
-            }}
+            onClick={() => onClickContactUs()}
             className="sticky bottom-0"
           >
             <div className="flex items-center bg-[#FFE812] text-black rounded-full px-2 shadow-md">
