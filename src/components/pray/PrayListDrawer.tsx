@@ -26,9 +26,10 @@ const PrayListDrawer: React.FC = () => {
     (state) => state.isPrayTodayForMember
   );
 
-  if (!userPrayCardList || userPrayCardList.length == 0) return null;
-
-  const prayerList = groupAndSortByUserId(user!.id, userPrayCardList[0].pray);
+  const prayerList = groupAndSortByUserId(
+    user!.id,
+    userPrayCardList?.[0]?.pray || []
+  );
   const lenPrayerList = Object.keys(prayerList).length;
   const isOnlyMyPrayInPrayerList =
     lenPrayerList == 1 && Object.keys(prayerList).includes(user!.id);

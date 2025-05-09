@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Reorder, motion } from "framer-motion";
 import useBaseStore from "@/stores/baseStore";
 import PrayRequestItem from "./PrayRequestItem";
+import ExamplePrayRequestItem from "./ExamplePrayRequestItem";
 import { analyticsTrack } from "@/analytics/analytics";
 
 interface NewPrayCardRequestStepProps {
@@ -32,6 +33,20 @@ const PRAYER_SUGGESTIONS = [
   "새로운 환경에 잘 적응할 수 있도록",
   "스트레스와 불안함을 이겨낼 수 있는 힘을",
   "사랑하는 이들이 믿음 안에서 성장하기를",
+  "하나님과의 더 깊은 관계를 위해",
+  "일과 삶의 균형을 찾을 수 있도록",
+  "경제적인 어려움 가운데 지혜를 주세요",
+  "마음의 평안과 감사함으로 하루를 살 수 있게",
+  "교회와 공동체 안에서 선한 영향력을 끼칠 수 있도록",
+  "자녀(아이들)의 믿음 성장을 위해",
+  "부모님의 건강과 평안을 위해",
+  "나의 정서적 건강을 위해",
+  "중요한 결정 앞에서 지혜를 주시길",
+  "하나님의 뜻에 따라 올바른 선택을 할 수 있도록",
+  "학업에 집중하고 지혜롭게 공부할 수 있게",
+  "사역과 봉사에 기쁨과 은혜가 있기를",
+  "주변 사람들에게 그리스도의 사랑을 전할 수 있도록",
+  "믿음이 흔들리지 않고 굳건할 수 있게",
 ];
 
 const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
@@ -56,6 +71,12 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const isValid = prayRequests.length > 0;
+
+  // 랜덤 추천 기도제목은 컴포넌트가 마운트될 때 한 번만 계산
+  const randomPrayerSuggestions = useMemo(() => {
+    const shuffled = [...PRAYER_SUGGESTIONS].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 3);
+  }, []);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCurrentInput(e.target.value);
@@ -188,7 +209,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
         </div>
         <div className="p-4 pt-2">
           <div className="flex flex-wrap gap-2 mb-2">
-            {PRAYER_SUGGESTIONS.map((suggestion) => (
+            {randomPrayerSuggestions.map((suggestion) => (
               <Button
                 key={suggestion}
                 variant="outline"
@@ -214,6 +235,18 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
         <motion.h1 className="text-lg font-bold" variants={itemVariants}>
           이번 주 기도제목을 작성해주세요
         </motion.h1>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => handleLoadPreviousPrayRequest()}
+          disabled={
+            !historyPrayCardList?.[0]?.content ||
+            value == historyPrayCardList?.[0]?.content
+          }
+          className="text-xs text-blue-500 hover:text-blue-600"
+        >
+          기존 내용 불러오기
+        </Button>
       </motion.div>
 
       <motion.div
@@ -275,38 +308,47 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
               ))}
             </Reorder.Group>
           ) : (
-            <div className="text-xs text-center py-8 text-gray-400 border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center">
-              <p className="mt-1">기도제목을 추가해주세요</p>
-              <p className="mt-1">최대 10개까지 추가할 수 있어요</p>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleLoadPreviousPrayRequest()}
-                disabled={
-                  !historyPrayCardList?.[0]?.content ||
-                  value == historyPrayCardList?.[0]?.content
-                }
-                className="text-xs text-blue-500 hover:text-blue-600 mt-2"
-              >
-                기존 내용 불러오기
-              </Button>
-              <div className="flex flex-wrap gap-2 mt-4 max-w-md">
-                {PRAYER_SUGGESTIONS.slice(0, 3).map((suggestion) => (
-                  <Button
-                    key={suggestion}
-                    variant="outline"
-                    size="sm"
-                    className="text-xs rounded-full bg-gray-50 border-gray-200 hover:bg-blue-50 hover:text-blue-600"
-                    onClick={() => {
-                      setCurrentInput(suggestion);
-                      setShowAddForm(true);
-                    }}
-                  >
-                    {suggestion}
-                  </Button>
-                ))}
-              </div>
-            </div>
+            <Reorder.Group
+              axis="y"
+              values={randomPrayerSuggestions}
+              onReorder={handleReorderPrayRequest}
+              layoutScroll
+              className="space-y-2"
+            >
+              <ExamplePrayRequestItem
+                key={randomPrayerSuggestions[0]}
+                request={randomPrayerSuggestions[0]}
+                onClick={() => {
+                  setCurrentInput(randomPrayerSuggestions[0]);
+                  setShowAddForm(true);
+                  analyticsTrack("클릭_기도카드생성_예시기도제목", {
+                    text: randomPrayerSuggestions[0],
+                  });
+                }}
+              />
+              <ExamplePrayRequestItem
+                key={randomPrayerSuggestions[1]}
+                request={randomPrayerSuggestions[1]}
+                onClick={() => {
+                  setCurrentInput(randomPrayerSuggestions[1]);
+                  setShowAddForm(true);
+                  analyticsTrack("클릭_기도카드생성_예시기도제목", {
+                    text: randomPrayerSuggestions[1],
+                  });
+                }}
+              />
+              <ExamplePrayRequestItem
+                key={randomPrayerSuggestions[2]}
+                request={randomPrayerSuggestions[2]}
+                onClick={() => {
+                  setCurrentInput(randomPrayerSuggestions[2]);
+                  setShowAddForm(true);
+                  analyticsTrack("클릭_기도카드생성_예시기도제목", {
+                    text: randomPrayerSuggestions[2],
+                  });
+                }}
+              />
+            </Reorder.Group>
           )}
         </motion.div>
       </motion.div>

@@ -148,6 +148,11 @@ const OtherMemberDrawer: React.FC = () => {
     </div>
   );
 
+  const isExpired =
+    otherMember &&
+    !hasPrayCardCurrentWeek &&
+    isCurrentWeek(otherMember.updated_at);
+
   return (
     <Drawer
       open={isOpenOtherMemberDrawer}
@@ -165,7 +170,7 @@ const OtherMemberDrawer: React.FC = () => {
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
 
-        {otherMember && !hasPrayCardCurrentWeek && (
+        {isExpired && (
           <div className="absolute w-full h-full rounded-t-[20px] inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-3">
             <div className="text-gray-800 text-lg text-center">
               <div>내 기도카드를 만들고</div>
@@ -177,7 +182,7 @@ const OtherMemberDrawer: React.FC = () => {
 
         <div
           className={`px-8 py-5 flex flex-col flex-grow gap-4 overflow-y-auto 
-          ${otherMember && !hasPrayCardCurrentWeek ? "blur" : ""}`}
+          ${isExpired && "blur"}`}
         >
           {otherMember ? (
             <PrayCard prayCard={otherPrayCardList?.[0]} />

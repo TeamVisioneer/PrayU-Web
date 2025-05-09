@@ -40,7 +40,7 @@ const NewPrayCardIntroStep: React.FC<NewPrayCardIntroStepProps> = ({
           이번 주 기도카드 만들기
         </motion.h1>
         <motion.p className="text-gray-600" variants={itemVariants}>
-          매주 나의 일상과 기도제목을 나누고 말씀을 받아보세요
+          매 주 나의 일상과 기도제목을 나누고 말씀을 받아보세요
         </motion.p>
       </motion.div>
       <motion.div className="w-3/4" variants={itemVariants}>
