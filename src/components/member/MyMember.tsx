@@ -1,6 +1,5 @@
 import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
-// import MyPrayCardUI from "../prayCard/MyPrayCardUI";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate, sleep } from "@/lib/utils";
 import { MemberWithProfiles } from "supabase/types/tables";

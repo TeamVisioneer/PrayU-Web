@@ -10,6 +10,10 @@ import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import completed from "@/assets/completed.svg";
 import { MdOutlineTouchApp } from "react-icons/md";
+import OtherMemberList from "@/components/member/OtherMemberList";
+import { Play } from "lucide-react";
+import PrayCard from "@/components/prayCard/PrayCard";
+import { dummyPrayCard } from "@/mocks/dummyPrayCard";
 
 const TutorialPage: React.FC = () => {
   const [index, setIndex] = useState(0);
@@ -146,36 +150,6 @@ const TutorialPage: React.FC = () => {
     </div>
   );
 
-  const TodayPrayStartCard = (
-    <div className="w-full flex-grow flex flex-col items-center">
-      <div className="relative flex flex-col w-[85%] flex-grow justify-center items-center max-h-[500px]">
-        <div className="flex w-full flex-col flex-grow py-10 justify-center items-center text-center gap-5 border rounded-2xl bg-gradient-to-t from-[#FFF8F8] via-[#FFEBFA] via-41.75% to-[#AAC7FF] opacity-100">
-          <section>
-            <div className="flex flex-col gap-4">
-              <h1 className="font-bold text-xl">오늘의 기도</h1>
-              <div className="text-grayText">
-                <h1>당신의 기도가 필요한 오늘,</h1>
-                <h1>서로를 위해 기도해 보아요</h1>
-              </div>
-            </div>
-            <img
-              src={"/images/Hand.png"}
-              className={`w-40 rounded-full ${index === 2 && "z-40"}`}
-            ></img>
-          </section>
-          <Button
-            onClick={() => onClickRight({ where: "TodayPrayStartCard" })}
-            variant="primary"
-            className={`w-[188px] h-[46px] text-md font-bold rounded-[10px]  
-              ${index === 2 && "z-40 animate-pulse duration-1000"}`}
-          >
-            기도 시작하기
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-
   const Calendar = (
     <div className="flex justify-around">
       {days.map((day, index) => (
@@ -244,36 +218,6 @@ const TutorialPage: React.FC = () => {
     </div>
   );
 
-  const PrayCardUI = (
-    <div className="h-full flex flex-col gap-2">
-      <div className="flex flex-col flex-grow bg-white rounded-2xl shadow-prayCard">
-        <div className="flex flex-col justify-center items-start gap-2 bg-gradient-to-r from-start via-middle via-52% to-end rounded-t-2xl p-5">
-          <div className="flex items-center gap-2">
-            <img
-              src="/images/defaultProfileImage.png"
-              className="w-7 h-7 rounded-full object-cover"
-            />
-            <p className="text-white text-lg">PrayU</p>
-          </div>
-          <p className="text-sm text-white text-left">
-            시작일: 2021.08.01 (일)
-          </p>
-        </div>
-        <div className="flex flex-col flex-grow items-start px-[10px] py-[10px] overflow-y-auto no-scrollbar">
-          <p className="flex-grow w-full p-2 rounded-md text-sm overflow-y-auto no-scrollbar whitespace-pre-wrap ">
-            PrayU를 위해 기도해주세요! 🙏🏻
-          </p>
-        </div>
-      </div>
-      <div className={`${index === 3 ? "z-50" : ""}`}>
-        <div className="flex flex-col gap-6 p-2 pb-4 mb-5 bg-mainBg rounded-md">
-          {Calendar}
-          {ReactionBtn}
-        </div>
-      </div>
-    </div>
-  );
-
   const CompletedUI = (
     <div className="relative flex flex-col justify-center items-center h-80vh">
       <div className="flex flex-col gap-4 justify-center items-center">
@@ -289,7 +233,7 @@ const TutorialPage: React.FC = () => {
         </div>
         <Button
           variant="primary"
-          className={`w-56 h-[46px] text-md font-bold rounded-[10px] ${
+          className={`w-56 h-[46px] text-md rounded-[10px] ${
             index === 4 && "z-40 animate-pulse duration-1000"
           }`}
           onClick={() => {
@@ -306,7 +250,17 @@ const TutorialPage: React.FC = () => {
   const TodayPrayDrawer = (
     <div className="h-full -m-5 flex flex-col justify-end bg-black/50">
       <div className="bg-mainBg rounded-t-2xl px-10 pt-10 h-80vh border-2 border-gray">
-        {index == 3 && PrayCardUI}
+        {index == 3 && (
+          <div className="flex flex-col gap-2">
+            <PrayCard prayCard={dummyPrayCard} />
+            <div className={`${index === 3 ? "z-50" : ""}`}>
+              <div className="flex flex-col gap-6 p-2 pb-4 mb-5 bg-mainBg rounded-md">
+                {Calendar}
+                {ReactionBtn}
+              </div>
+            </div>
+          </div>
+        )}
         {index == 4 && CompletedUI}
       </div>
     </div>
@@ -345,6 +299,12 @@ const TutorialPage: React.FC = () => {
               </span>
               <FaAngleRight size={24} />
             </div>
+            <a
+              className="text-white/50 cursor-pointer"
+              onClick={() => onClickCompletedTutorial()}
+            >
+              {index == TutorialComponentProps.length - 1 ? "" : "건너뛰기"}
+            </a>
           </div>
           {index == 0 && (
             <div className="flex flex-col gap-1 animate-pulse duration-700">
@@ -353,12 +313,6 @@ const TutorialPage: React.FC = () => {
           )}
         </footer>
       </div>
-      <a
-        className="text-white/50 cursor-pointer"
-        onClick={() => onClickCompletedTutorial()}
-      >
-        {index == TutorialComponentProps.length - 1 ? "" : "건너뛰기"}
-      </a>
     </div>
   );
 
@@ -370,7 +324,25 @@ const TutorialPage: React.FC = () => {
           {TopBar}
           <div className="flex flex-col h-full gap-4">
             {MyMemberUI}
-            {TodayPrayStartCard}
+            <OtherMemberList />
+            <div
+              className={`fixed bottom-10 left-1/2 transform -translate-x-1/2 ${
+                index === 2 && "z-40 animate-pulse duration-1000"
+              }`}
+            >
+              <Button
+                variant="primary"
+                className="bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 px-8 py-5 h-auto rounded-xl active:scale-95"
+                onClick={() => {
+                  onClickRight({ where: "TodayPrayStartCard" });
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <Play className="h-5 w-5" />
+                  <span className="text-lg font-medium">기도 시작하기</span>
+                </div>
+              </Button>
+            </div>
           </div>
         </div>
       ) : (

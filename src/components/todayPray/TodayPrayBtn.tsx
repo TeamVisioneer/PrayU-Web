@@ -2,14 +2,16 @@ import useBaseStore from "@/stores/baseStore";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getISOTodayDate, getWeekInfo, getNextDate } from "@/lib/utils";
+import { Play } from "lucide-react";
 
 interface TodayPrayBtnProps {
-  eventOption: { where: string; total_member: number };
+  eventOption: { where: string };
 }
 
 const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   const myMember = useBaseStore((state) => state.myMember);
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const memberList = useBaseStore((state) => state.memberList);
 
   const fetchGroupPrayCardList = useBaseStore(
     (state) => state.fetchGroupPrayCardList
@@ -33,7 +35,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     return (
       <Button
         variant="primary"
-        className="w-48 h-12 text-md font-bold rounded-[10px]"
+        className="w-48 h-12 text-md rounded-[10px]"
         onClick={() => {
           onClickTodayPrayBtnNoUser();
         }}
@@ -43,7 +45,10 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
     );
 
   const onClickTodayPrayBtn = async (targetGroupId: string) => {
-    analyticsTrack("클릭_오늘의기도_시작", eventOption);
+    analyticsTrack("클릭_오늘의기도_시작", {
+      ...eventOption,
+      total_member: memberList?.length || 0,
+    });
 
     setIsOpenTodayPrayDrawer(true);
     setPrayCardCarouselList(null);
@@ -74,10 +79,13 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({ eventOption }) => {
   return (
     <Button
       variant="primary"
-      className="w-48 h-12 text-md font-bold rounded-[10px]"
+      className="bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 px-8 py-5 h-auto rounded-xl active:scale-95"
       onClick={() => onClickTodayPrayBtn(targetGroup.id)}
     >
-      기도 시작하기
+      <div className="flex items-center gap-3">
+        <Play className="h-5 w-5" />
+        <span className="text-lg font-medium">기도 시작하기</span>
+      </div>
     </Button>
   );
 };

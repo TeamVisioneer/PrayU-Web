@@ -25,7 +25,6 @@ const GroupCreatePage: React.FC = () => {
     (state) => state.setIsDisabledGroupCreateBtn
   );
   const createMember = useBaseStore((state) => state.createMember);
-  const createPrayCard = useBaseStore((state) => state.createPrayCard);
   const maxGroupCount = Number(import.meta.env.VITE_MAX_GROUP_COUNT);
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
@@ -48,7 +47,7 @@ const GroupCreatePage: React.FC = () => {
     }
     setIsDisabledGroupCreateBtn(true);
     analyticsTrack("클릭_그룹_생성", { group_name: inputGroupName });
-    const targetGroup = await createGroup(userId, inputGroupName, "intro");
+    const targetGroup = await createGroup(userId, inputGroupName, "");
     if (!targetGroup) {
       setIsDisabledGroupCreateBtn(false);
       return;
@@ -58,7 +57,6 @@ const GroupCreatePage: React.FC = () => {
       setIsDisabledGroupCreateBtn(false);
       return;
     }
-    await createPrayCard(targetGroup.id, userId, "");
 
     window.location.replace(`/group/${targetGroup.id}`);
   };

@@ -217,6 +217,8 @@ export interface BaseStore {
   groupPrayCardList: PrayCardWithProfiles[] | null;
   otherPrayCardList: PrayCardWithProfiles[] | null;
   userPrayCardList: PrayCardWithProfiles[] | null;
+  hasPrayCardCurrentWeek: boolean;
+  setHasPrayCardCurrentWeek: (hasPrayCardCurrentWeek: boolean) => void;
   historyPrayCardList: PrayCardWithProfiles[] | null;
   historyPrayCardListView: PrayCardWithProfiles[];
   setHistoryPrayCardListView: (
@@ -819,6 +821,7 @@ const useBaseStore = create<BaseStore>()(
     // prayCard
     groupPrayCardList: null,
     userPrayCardList: null,
+    hasPrayCardCurrentWeek: false,
     historyPrayCardList: null,
     historyPrayCardCount: 0,
     historyPrayCardListView: [],
@@ -827,6 +830,11 @@ const useBaseStore = create<BaseStore>()(
     ) => {
       set((state) => {
         state.historyPrayCardListView = historyPrayCardListView;
+      });
+    },
+    setHasPrayCardCurrentWeek: (hasPrayCardCurrentWeek: boolean) => {
+      set((state) => {
+        state.hasPrayCardCurrentWeek = hasPrayCardCurrentWeek;
       });
     },
 

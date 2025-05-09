@@ -118,7 +118,7 @@ const GroupMenuBtn: React.FC = () => {
   const onClickContactUs = () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_문의", {});
-    setExternalUrl(import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL);
+    window.open(import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL, "_blank");
   };
 
   const onClickSheetTrigeer = () => {

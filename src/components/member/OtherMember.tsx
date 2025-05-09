@@ -21,39 +21,55 @@ const OtherMember: React.FC<OtherMemberProps> = ({ member }) => {
   const setIsOpenLoginDrawer = useBaseStore(
     (state) => state.setIsOpenLoginDrawer
   );
-  const dateDistance = getDateDistance(
-    new Date(getISOOnlyDate(member.updated_at)),
-    new Date(getISOTodayDate())
-  );
 
   const onClickOtherMember = async () => {
     analyticsTrack("클릭_멤버_구성원", { member: member.user_id });
     if (!user) setIsOpenLoginDrawer(true);
     else {
       setIsOpenOtherMemberDrawer(true);
-      setOtherMember(null);
+      setOtherMember(member);
       await fetchOtherPrayCardListByGroupId(
         user.id,
         member.user_id!,
         member.group_id!
       );
-      setOtherMember(member);
     }
+  };
+
+  const dateDistanceText = () => {
+    const dateDistance = getDateDistance(
+      new Date(getISOOnlyDate(member.updated_at)),
+      new Date(getISOTodayDate())
+    );
+    if (dateDistance.days < 1) return "오늘";
+    else if (dateDistance.days < 7) return `${dateDistance.days}일 전`;
+    else if (dateDistance.days < 30)
+      return `${Math.floor(dateDistance.days / 7)}주 전`;
+    else if (dateDistance.days < 365)
+      return `${Math.floor(dateDistance.days / 30)}달 전`;
+    else return "오래 전";
   };
 
   return (
     <div
-      className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl"
+      className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl h-32"
       onClick={() => onClickOtherMember()}
     >
       {member.profiles && (
         <UserProfile profile={member.profiles} imgSize="w-8 h-8" fontSize="" />
       )}
-      <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
-        {member.pray_summary}
-      </div>
+
+      {member.pray_summary ? (
+        <div className="text-left text-sm text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
+          {member.pray_summary}
+        </div>
+      ) : (
+        <div className="text-left text-sm text-gray-400 whitespace-nowrap overflow-hidden text-ellipsis w-full block">
+          아직 기도카드가 작성되지 않았어요
+        </div>
+      )}
       <div className="text-gray-400 text-left text-xs">
-        {dateDistance.days < 1 ? "오늘" : `${dateDistance.days}일 전`}
+        {dateDistanceText()}
       </div>
     </div>
   );
