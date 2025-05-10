@@ -23,7 +23,7 @@ const GroupMemberProfileList: React.FC<GroupMemberProfileListProps> = ({
   );
 
   return (
-    <div className="w-full flex flex-col gap-3 max-h-48 overflow-auto scrollbar-rounded pr-2">
+    <div className="w-full gap-3 flex flex-col max-h-52 overflow-auto scrollbar-rounded pr-2 mb-3">
       <OpenShareDrawerBtn
         text="그룹원 초대"
         eventOption={{ where: "group" }}

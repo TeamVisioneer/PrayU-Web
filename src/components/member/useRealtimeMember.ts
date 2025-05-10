@@ -3,7 +3,7 @@ import { supabase } from "../../../supabase/client";
 import { Member } from "../../../supabase/types/tables";
 
 const useRealtimeMember = (
-  groupId: string,
+  groupId: string | undefined,
   onMemberChanged: (member: Member) => Promise<void>,
 ) => {
   useEffect(() => {

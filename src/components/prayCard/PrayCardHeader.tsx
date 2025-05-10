@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
-import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 
 const PrayCardHeader = () => {
   const navigate = useNavigate();
@@ -15,9 +14,6 @@ const PrayCardHeader = () => {
         <IoChevronBack size={20} />
       </button>
       <h1 className="text-lg font-bold w-full text-center">기도카드 만들기</h1>
-      <div className="absolute right-4">
-        <GroupMenuBtn />
-      </div>
     </header>
   );
 };
