@@ -221,23 +221,24 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       <motion.div className="flex flex-col gap-2 mb-5" variants={itemVariants}>
         <Button
           onClick={() => handleCreatePrayCard()}
-          className="flex-1 py-4 text-base bg-blue-500 hover:bg-blue-600"
+          className="flex-1 py-4 h-12 text-base bg-blue-500 hover:bg-blue-600"
           disabled={
-            selectedGroups.length === 0 &&
-            myMemberList?.length !== 0 &&
-            isCreating
+            selectedGroups.length === 0 ||
+            (myMemberList?.length !== 0 && isCreating)
           }
         >
           {isCreating ? (
             <PulseLoader size={10} color="#f3f4f6" />
+          ) : selectedGroups.length > 0 ? (
+            <div>{selectedGroups.length}개의 그룹에 기도카드 만들기</div>
           ) : (
-            "기도카드 만들기"
+            <div>그룹을 선택해 주세요</div>
           )}
         </Button>
         <Button
           onClick={handlePrevClick}
           variant="outline"
-          className="flex-1 py-4 text-base"
+          className="flex-1 py-4 h-12 text-base"
         >
           이전
         </Button>
