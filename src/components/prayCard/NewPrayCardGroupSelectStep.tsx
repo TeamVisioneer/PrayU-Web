@@ -218,7 +218,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
         </div>
       </motion.div>
 
-      <motion.div className="flex flex-col gap-2" variants={itemVariants}>
+      <motion.div className="flex flex-col gap-2 mb-5" variants={itemVariants}>
         <Button
           onClick={() => handleCreatePrayCard()}
           className="flex-1 py-4 text-base bg-blue-500 hover:bg-blue-600"
