@@ -353,7 +353,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
         </motion.div>
       </motion.div>
 
-      <motion.div className="flex gap-2 mt-5" variants={itemVariants}>
+      <motion.div className="flex gap-2 my-5" variants={itemVariants}>
         <Button
           onClick={handlePrevClick}
           variant="outline"

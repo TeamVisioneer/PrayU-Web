@@ -8,6 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { MemberWithProfiles } from "supabase/types/tables";
 import useRealtimeMember from "./useRealtimeMember";
 import InviteOtherMember from "./InviteOtherMember";
+import { Skeleton } from "../ui/skeleton";
 
 const OtherMemberList: React.FC = () => {
   const myMember = useBaseStore((state) => state.myMember);
@@ -18,6 +19,9 @@ const OtherMemberList: React.FC = () => {
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
+  const fetchMemberCountByGroupId = useBaseStore(
+    (state) => state.fetchMemberCountByGroupId
+  );
   const setMemberList = useBaseStore((state) => state.setMemberList);
   const setMemberListView = useBaseStore((state) => state.setMemberListView);
   const memberCount = useBaseStore((state) => state.memberCount);
@@ -25,19 +29,26 @@ const OtherMemberList: React.FC = () => {
   const [offset, setOffset] = useState(pageSize);
 
   useEffect(() => {
-    if (memberList && memberListView.length == 0)
-      setMemberListView([...memberList]);
-  }, [memberList, memberListView, setMemberListView]);
+    if (targetGroup) {
+      fetchMemberListByGroupId(targetGroup.id);
+      fetchMemberCountByGroupId(targetGroup.id);
+    }
+  }, [fetchMemberListByGroupId, fetchMemberCountByGroupId, targetGroup]);
 
-  useRealtimeMember(targetGroup!.id, async () => {
-    const memberList = await fetchMemberListByGroupId(targetGroup!.id);
+  useRealtimeMember(targetGroup?.id, async () => {
+    if (!targetGroup) return;
+    const memberList = await fetchMemberListByGroupId(targetGroup.id);
     if (!memberList) return;
     setMemberListView([...memberListView, ...memberList]);
   });
 
-  if (!targetGroup || !memberCount) return;
+  useEffect(() => {
+    if (memberList && memberListView.length == 0)
+      setMemberListView([...memberList]);
+  }, [memberList, memberListView, setMemberListView]);
 
   const onClickMoreMemberList = async () => {
+    if (!targetGroup || !memberCount) return;
     if (offset >= memberCount) return;
 
     setMemberList(null);
@@ -62,6 +73,21 @@ const OtherMemberList: React.FC = () => {
     }
     return true;
   };
+
+  if (!memberCount || !memberListView) {
+    return (
+      <div className="flex flex-col pb-10">
+        <div className="text-sm text-gray-500 py-2">
+          <div className="mb-2">그룹원 기도카드</div>
+        </div>
+        <div className="flex flex-col pb-10 gap-4">
+          <Skeleton className="w-full rounded-2xl h-32 bg-gray-200" />
+          <Skeleton className="w-full rounded-2xl h-32 bg-gray-200" />
+          <Skeleton className="w-full rounded-2xl h-32 bg-gray-200" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col pb-10">

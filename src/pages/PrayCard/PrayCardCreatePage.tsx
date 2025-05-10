@@ -123,7 +123,7 @@ const PrayCardCreatePage = () => {
       <ProgressBar currentStep={step} totalSteps={totalSteps} />
 
       {/* Content area */}
-      <div className="flex-grow overflow-y-auto p-6">
+      <div className="flex-grow overflow-y-auto px-6 pt-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={step}

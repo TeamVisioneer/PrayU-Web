@@ -32,7 +32,7 @@ const NewPrayCardIntroStep: React.FC<NewPrayCardIntroStepProps> = ({
       <motion.div className="mb-8 text-center" variants={itemVariants}>
         <motion.div
           variants={itemVariants}
-          className="text-left w-5/6 mx-auto my-10"
+          className="text-left w-5/6 mx-auto mb-10"
         >
           <PrayCard prayCard={dummyPrayCard2} isMoreBtn={false} />
         </motion.div>

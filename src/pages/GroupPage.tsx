@@ -4,11 +4,9 @@ import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
 import ShareDrawer from "@/components/share/ShareDrawer";
 import { useNavigate } from "react-router-dom";
-import { isCurrentWeek } from "@/lib/utils";
 import MyMember from "@/components/member/MyMember";
 import OtherMemberList from "@/components/member/OtherMemberList";
 import TodayPrayCardListDrawer from "@/components/todayPray/TodayPrayCardListDrawer";
-import { Skeleton } from "@/components/ui/skeleton";
 import GroupSettingsDialog from "@/components/group/GroupSettingsDialog";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import OtherMemberDrawer from "@/components/member/OtherMemberDrawer";
@@ -18,7 +16,6 @@ import TextBanner from "@/components/member/textBanner";
 import MyMemberDrawer from "@/components/member/MyMemberDrawer";
 import TodayPrayBtn from "@/components/todayPray/TodayPrayBtn";
 import NewPrayCardRedirectBtn from "@/components/prayCard/NewPrayCardRedirectBtn";
-import EmptyMyMember from "@/components/member/EmptyMyMember";
 
 const GroupPage: React.FC = () => {
   const { user } = useAuth();
@@ -26,133 +23,70 @@ const GroupPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { groupId } = useParams();
-  const groupList = useBaseStore((state) => state.groupList);
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const targetGroupLoading = useBaseStore((state) => state.targetGroupLoading);
   const getGroup = useBaseStore((state) => state.getGroup);
   const getMember = useBaseStore((state) => state.getMember);
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
+  const memberLoading = useBaseStore((state) => state.memberLoading);
   const fetchMemberListByGroupId = useBaseStore(
     (state) => state.fetchMemberListByGroupId
   );
   const fetchMemberCountByGroupId = useBaseStore(
     (state) => state.fetchMemberCountByGroupId
   );
-  const fetchGroupListByUserId = useBaseStore(
-    (state) => state.fetchGroupListByUserId
-  );
-  const fetchTodayUserPrayByGroupId = useBaseStore(
-    (state) => state.fetchTodayUserPrayByGroupId
-  );
-  const fetchUserPrayCardListByGroupId = useBaseStore(
-    (state) => state.fetchUserPrayCardListByGroupId
-  );
-  const fetchNotificationCount = useBaseStore(
-    (state) => state.fetchNotificationCount
-  );
-  const isPrayToday = useBaseStore((state) => state.isPrayToday);
-  const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
-  const setIsConfirmAlertOpen = useBaseStore(
-    (state) => state.setIsConfirmAlertOpen
-  );
-  const setAlertData = useBaseStore((state) => state.setAlertData);
-  const setHasPrayCardCurrentWeek = useBaseStore(
-    (state) => state.setHasPrayCardCurrentWeek
-  );
   const hasPrayCardCurrentWeek = useBaseStore(
     (state) => state.hasPrayCardCurrentWeek
   );
 
   useEffect(() => {
-    fetchGroupListByUserId(currentUserId);
     if (groupId) {
       getMember(currentUserId, groupId);
       getGroup(groupId);
       fetchMemberListByGroupId(groupId);
       fetchMemberCountByGroupId(groupId);
-      fetchUserPrayCardListByGroupId(currentUserId, groupId);
-      fetchTodayUserPrayByGroupId(currentUserId, groupId);
-      fetchNotificationCount(currentUserId, true);
     }
   }, [
-    fetchGroupListByUserId,
     fetchMemberListByGroupId,
     fetchMemberCountByGroupId,
     getMember,
-    fetchTodayUserPrayByGroupId,
-    fetchUserPrayCardListByGroupId,
-    fetchNotificationCount,
     currentUserId,
     groupId,
     getGroup,
   ]);
 
   useEffect(() => {
-    if (!groupList) {
-      return;
-    } else if (groupList.every((group) => group.id !== groupId)) {
+    if (memberLoading == false && myMember == null) {
       navigate(`/group/${groupId}/join`, { replace: true });
       return;
-    } else if (targetGroupLoading == false && targetGroup == null) {
+    }
+    if (targetGroupLoading == false && targetGroup == null) {
       navigate("/group/not-found");
       return;
     }
   }, [
     navigate,
     groupId,
-    groupList,
-    userPrayCardList,
     targetGroup,
     targetGroupLoading,
-    setIsConfirmAlertOpen,
-    setAlertData,
+    memberLoading,
+    myMember,
   ]);
 
   useEffect(() => {
     if (targetGroup && targetGroup.user_id === currentUserId) {
       setIsGroupLeader(true);
     }
-    if (isCurrentWeek(userPrayCardList?.[0]?.created_at)) {
-      setHasPrayCardCurrentWeek(true);
-    }
-  }, [
-    targetGroup,
-    currentUserId,
-    setIsGroupLeader,
-    setHasPrayCardCurrentWeek,
-    userPrayCardList,
-  ]);
-
-  if (!targetGroup || !groupList || !myMember || isPrayToday == null) {
-    return (
-      <div className="p-5 flex flex-col h-full gap-4 pt-[48px]">
-        <Skeleton className="w-full h-[150px] flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
-        <Skeleton className="w-full flex-grow flex items-center gap-4 p-4 bg-gray-200 rounded-xl" />
-      </div>
-    );
-  }
-
-  // const AllMemberExpired = memberList
-  //   ?.filter(
-  //     (member) =>
-  //       member.user_id &&
-  //       member.user_id !== currentUserId &&
-  //       !myMember.profiles.blocking_users.includes(member.user_id)
-  //   )
-  //   .every((member) => !isCurrentWeek(member.updated_at));
+  }, [targetGroup, currentUserId, setIsGroupLeader]);
 
   return (
     <div className="flex flex-col h-full">
       <GroupHeader />
       <div className="flex flex-col px-5 pb-5 flex-grow gap-4">
         <div className="flex flex-col gap-2">
-          {userPrayCardList?.[0] ? (
-            <MyMember myMember={myMember} />
-          ) : (
-            <EmptyMyMember />
-          )}
-          {targetGroup.group_union && (
+          <MyMember myMember={myMember} />
+          {targetGroup?.group_union && (
             <TextBanner
               text={`${targetGroup.group_union.name} 공동체에서 함께 하는 기도 그룹이에요`}
             />
@@ -174,7 +108,7 @@ const GroupPage: React.FC = () => {
       <PrayListDrawer />
       <ShareDrawer />
       <BannerDialog />
-      <GroupSettingsDialog targetGroup={targetGroup} />
+      <GroupSettingsDialog />
     </div>
   );
 };

@@ -207,7 +207,7 @@ const GroupMenuBtn: React.FC = () => {
 
             <div className="flex flex-col items-start text-gray-500 w-full">
               {memberList && targetGroup && !isGroupListPage && (
-                <section className="w-full py-5 border-t border-gray-200">
+                <section className="w-full pt-5 border-t border-gray-200">
                   <GroupMemberProfileList
                     memberList={memberList}
                     targetGroup={targetGroup}

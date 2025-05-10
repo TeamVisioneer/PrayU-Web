@@ -2,6 +2,7 @@ import { RiNotification4Line } from "react-icons/ri";
 import useBaseStore from "@/stores/baseStore";
 import { useNavigate } from "react-router-dom";
 import useRealtimeNotification from "./useRealtimeNotification";
+import { useEffect } from "react";
 
 const NotificationBtn = () => {
   const navigate = useNavigate();
@@ -16,6 +17,14 @@ const NotificationBtn = () => {
   useRealtimeNotification(user!.id, () => {
     setNotificationUnreadTotal(userNotificationUnreadTotal + 1);
   });
+
+  const fetchNotificationCount = useBaseStore(
+    (state) => state.fetchNotificationCount
+  );
+
+  useEffect(() => {
+    if (user) fetchNotificationCount(user.id, true);
+  }, [user, fetchNotificationCount]);
 
   return (
     <button

@@ -8,7 +8,6 @@ import { analyticsTrack } from "@/analytics/analytics";
 import GroupListHeader from "@/components/group/GroupListHeader";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
-import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 
 const GroupListPage: React.FC = () => {
   const { user } = useAuth();
@@ -17,14 +16,10 @@ const GroupListPage: React.FC = () => {
     (state) => state.fetchGroupListByUserId
   );
   const groupList = useBaseStore((state) => state.groupList);
-  const fetchNotificationCount = useBaseStore(
-    (state) => state.fetchNotificationCount
-  );
 
   useEffect(() => {
     if (user) fetchGroupListByUserId(user.id);
-    if (user) fetchNotificationCount(user.id, true);
-  }, [fetchGroupListByUserId, user, fetchNotificationCount]);
+  }, [fetchGroupListByUserId, user]);
 
   const addGroup = () => {
     analyticsTrack("클릭_그룹_추가", {});
@@ -55,15 +50,6 @@ const GroupListPage: React.FC = () => {
               </div>
             </Skeleton>
           ))}
-        </div>
-        <div className="p-4 border-t space-y-2">
-          <Button
-            variant="primary"
-            onClick={addGroup}
-            className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium "
-          >
-            <PlusCircle className="h-5 w-5 mr-2" /> 새 그룹 만들기
-          </Button>
         </div>
       </div>
     );
@@ -120,18 +106,17 @@ const GroupListPage: React.FC = () => {
         )}
       </div>
 
-      {/* 하단 액션 버튼 영역 */}
-      <div className="p-4 border-t space-y-2">
-        <Button
-          variant="primary"
-          onClick={addGroup}
-          className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600"
-        >
-          <PlusCircle className="h-5 w-5 mr-2" /> 새 그룹 만들기
-        </Button>
-      </div>
+      {/* 플로팅 버튼 */}
+      <Button
+        variant="primary"
+        onClick={addGroup}
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 flex items-center justify-center p-0 z-10"
+        aria-label="새 그룹 만들기"
+      >
+        <PlusCircle className="h-6 w-6" />
+      </Button>
+
       <GroupListDrawer />
-      <WeekUpdateDialog />
     </div>
   );
 };

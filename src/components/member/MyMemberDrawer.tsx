@@ -33,12 +33,12 @@ const MyMemberDrawer = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DrawerContent className="bg-mainBg">
+      <DrawerContent className="bg-mainBg max-h-[90vh]">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        <div className="flex flex-col gap-2 px-8 pt-5 pb-10">
+        <div className="flex flex-col gap-2 px-8 pt-5 pb-10  overflow-y-auto">
           {isExpired && (
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-2">
               <div className="">

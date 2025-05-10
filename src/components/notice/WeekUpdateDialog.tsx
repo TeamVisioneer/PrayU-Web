@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
 import { analyticsTrack } from "@/analytics/analytics";
+
 const WeekUpdateDialog = () => {
   const isOpenWeekUpdateDialog = useBaseStore(
     (state) => state.isOpenWeekUpdateDialog

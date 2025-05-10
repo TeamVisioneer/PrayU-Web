@@ -7,20 +7,14 @@ import {
 } from "@/components/ui/dialog";
 import useBaseStore from "@/stores/baseStore";
 import { Input } from "../ui/input";
-import { Group } from "supabase/types/tables";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import GroupMemberSettingsBtn from "./GroupMemberSettingsBtn";
 import GroupMemberProfileList from "./GroupMemberProfileList";
 
-interface GroupSettingsDialogProps {
-  targetGroup: Group;
-}
-
-const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
-  targetGroup,
-}) => {
+const GroupSettingsDialog: React.FC = () => {
+  const targetGroup = useBaseStore((state) => state.targetGroup);
   const isOpenGroupSettingsDialog = useBaseStore(
     (state) => state.isOpenGroupSettingsDialog
   );
@@ -34,6 +28,7 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
   const getGroup = useBaseStore((state) => state.getGroup);
 
   const onClickSaveGroup = async () => {
+    if (!targetGroup) return;
     if (inputGroupName.trim() === "") return;
     analyticsTrack("클릭_그룹_이름변경", { group_name: GroupSettingsDialog });
     const group = await updateGroup(targetGroup.id, { name: inputGroupName });
@@ -44,10 +39,10 @@ const GroupSettingsDialog: React.FC<GroupSettingsDialogProps> = ({
   };
 
   useEffect(() => {
-    setGroupName(targetGroup.name || "");
+    setGroupName(targetGroup?.name || "");
   }, [setGroupName, targetGroup]);
 
-  if (!memberList) return null;
+  if (!memberList || !targetGroup) return null;
 
   return (
     <Dialog

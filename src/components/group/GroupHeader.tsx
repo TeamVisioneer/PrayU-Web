@@ -3,6 +3,7 @@ import GroupMenuBtn from "./GroupMenuBtn";
 import NotificationBtn from "../notification/NotificationBtn";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
+import { Skeleton } from "../ui/skeleton";
 
 const GroupHeader: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -39,17 +40,21 @@ const GroupHeader: React.FC = () => {
         eventOption={{ where: "GroupPage" }}
         type="tag"
       />
-      <div
-        className="text-lg font-bold flex items-center gap-1 cursor-pointer"
-        onClick={() => handleClickGroupName()}
-      >
-        <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-          {targetGroup?.name}
+      {targetGroup ? (
+        <div
+          className="text-lg font-bold flex items-center gap-1 cursor-pointer h-6"
+          onClick={() => handleClickGroupName()}
+        >
+          <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
+            {targetGroup.name}
+          </div>
+          <span className="text-sm text-gray-500">
+            {filteredMemberList?.length || 0}
+          </span>
         </div>
-        <span className="text-sm text-gray-500">
-          {filteredMemberList?.length || 0}
-        </span>
-      </div>
+      ) : (
+        <Skeleton className="w-24 h-6 bg-gray-200" />
+      )}
       <div className="w-[48px] flex justify-between items-center ">
         <NotificationBtn />
         <GroupMenuBtn />
