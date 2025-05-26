@@ -56,7 +56,7 @@ const GroupListPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen relative">
       <GroupListHeader />
 
       <div className="flex-1 overflow-y-auto px-5">
@@ -110,7 +110,7 @@ const GroupListPage: React.FC = () => {
       <Button
         variant="primary"
         onClick={addGroup}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 flex items-center justify-center p-0 z-10"
+        className="absolute bottom-6 right-6 w-14 h-14 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 flex items-center justify-center p-0 z-10"
         aria-label="새 그룹 만들기"
       >
         <PlusCircle className="h-6 w-6" />
