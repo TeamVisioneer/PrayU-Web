@@ -173,6 +173,27 @@ const GroupMenuBtn: React.FC = () => {
     navigate("/profile/me", { replace: true });
   };
 
+  const onClickAppReview = async () => {
+    setIsOpenGroupMenuSheet(false);
+    analyticsTrack("클릭_앱_리뷰", {});
+    if (
+      window.flutter_inappwebview &&
+      window.flutter_inappwebview.callHandler
+    ) {
+      await window.flutter_inappwebview.callHandler("requestAppReview");
+    } else {
+      if (navigator.userAgent.match(/Android/i)) {
+        window.location.href =
+          "https://play.google.com/store/apps/details?id=com.team.visioneer.prayu";
+      } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+        window.location.href =
+          "https://itunes.apple.com/kr/app/apple-store/id6711345171";
+      } else {
+        window.location.href = "https://linktr.ee/prayu.site";
+      }
+    }
+  };
+
   return (
     <Sheet
       open={isOpenGroupMenuSheet}
@@ -272,29 +293,11 @@ const GroupMenuBtn: React.FC = () => {
               </section>
               <section className="w-full flex flex-col gap-4 py-5 border-t border-gray-200">
                 <a onClick={() => onClickPrayUHome()}>PrayU 홈</a>
-                <div className="flex gap-1 items-center">
-                  <a
-                    className="cursor-pointer"
-                    onClick={() => onClickOpenNotice()}
-                  >
-                    공지사항
-                  </a>
-                  <img src={newIcon} />
-                </div>
-                <div className="flex gap-1 items-center">
-                  <a onClick={() => onClickQT()}>나만의 QT</a>
-                  <img src={newIcon} />
-                </div>
-                <div className="flex gap-1 items-center">
-                  <a onClick={() => onClickBibleCard()}>말씀카드 만들기</a>
-                  <img src={newIcon} />
-                </div>
-                <a
-                  className="cursor-pointer"
-                  onClick={() => onClickOpenTutorial()}
-                >
-                  가이드
-                </a>
+                <a onClick={() => onClickOpenNotice()}>공지사항</a>
+                <a onClick={() => onClickQT()}>나만의 QT</a>
+                <a onClick={() => onClickBibleCard()}>말씀카드 만들기</a>
+                <a onClick={() => onClickAppReview()}>앱 리뷰</a>
+                <a onClick={() => onClickOpenTutorial()}>가이드</a>
               </section>
             </div>
           </div>
