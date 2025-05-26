@@ -35,6 +35,9 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const myMember = useBaseStore((state) => state.myMember);
   const updateMember = useBaseStore((state) => state.updateMember);
+  const fetchUserPrayCardListByGroupId = useBaseStore(
+    (state) => state.fetchUserPrayCardListByGroupId
+  );
 
   const onClickCopyPrayCard = () => {
     if (!prayCard.content) {
@@ -119,9 +122,14 @@ const MyPrayCardMenuBtn: React.FC<MyMoreBtnProps> = ({
       actionText: "삭제하기",
       cancelText: "취소",
       onAction: async () => {
-        await deletePrayCard(prayCard.id);
-        if (myMember) await updateMember(myMember.id, "");
-        await window.location.reload();
+        const isDeleted = await deletePrayCard(prayCard.id);
+        const userPrayCardList = await fetchUserPrayCardListByGroupId(
+          myMember?.user_id || "",
+          myMember?.group_id || ""
+        );
+        const praySummary = userPrayCardList?.[0]?.content || "";
+        if (isDeleted && myMember) await updateMember(myMember.id, praySummary);
+        window.location.reload();
         analyticsTrack("클릭_기도카드_삭제", {});
       },
     });
