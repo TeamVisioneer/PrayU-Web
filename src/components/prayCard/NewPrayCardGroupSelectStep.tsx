@@ -47,7 +47,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
   const [isCreating, setIsCreating] = useState(false);
 
-  const sendNotification = async (groups: Group[]) => {
+  const sendNotification = async (groups: Group[], prayCardContent: string) => {
     if (!user) return;
 
     // 알림관련 유저 태그 업데이트
@@ -59,8 +59,8 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
     // 각 그룹마다 알림 전송
     for (const group of groups) {
-      const subtitle = "기도카드 알림";
-      const message = `${group.name}에 새로운 기도카드가 등록되었어요!`;
+      const subtitle = `${group.name} 기도카드 알림`;
+      const message = `${prayCardContent.slice(0, 25)}...`;
 
       //TODO: 재시도 필요
       const groupWithMemberList = await getGroupWithMemberList(group.id);
@@ -118,17 +118,16 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       ?.filter((member) => selectedGroupIds.includes(member.group_id as string))
       .map((member) => member.id);
 
-    if (selectedMemberIds && selectedMemberIds.length > 0) {
-      await bulkUpdateMembers(selectedMemberIds, prayCardContent, true);
+    if (!selectedMemberIds || selectedMemberIds.length === 0 || !prayCardList) {
+      setIsCreating(false);
+      return;
     }
 
-    if (prayCardList) {
-      await sendNotification(selectedGroups);
-      localStorage.removeItem("prayCardContent");
-      localStorage.removeItem("prayCardLife");
-      onNext();
-    }
-    setIsCreating(false);
+    await bulkUpdateMembers(selectedMemberIds, prayCardContent, true);
+    await sendNotification(selectedGroups, prayCardContent);
+    localStorage.removeItem("prayCardContent");
+    localStorage.removeItem("prayCardLife");
+    onNext();
   };
 
   const handleGroupToggle = (group: Group) => {
@@ -221,11 +220,8 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       <motion.div className="flex flex-col gap-2 mb-5" variants={itemVariants}>
         <Button
           onClick={() => handleCreatePrayCard()}
-          className="flex-1 py-4 h-12 text-base bg-blue-500 hover:bg-blue-600"
-          disabled={
-            selectedGroups.length === 0 ||
-            (myMemberList?.length !== 0 && isCreating)
-          }
+          className="py-4 h-14 text-base bg-blue-500 hover:bg-blue-600"
+          disabled={selectedGroups.length === 0 || isCreating}
         >
           {isCreating ? (
             <PulseLoader size={10} color="#f3f4f6" />
@@ -238,7 +234,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
         <Button
           onClick={handlePrevClick}
           variant="outline"
-          className="flex-1 py-4 h-12 text-base"
+          className="py-4 h-14 text-base"
         >
           이전
         </Button>
