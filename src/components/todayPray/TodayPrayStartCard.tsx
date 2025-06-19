@@ -3,8 +3,9 @@ import TodayPrayBtn from "./TodayPrayBtn";
 
 export const TodayPrayStartCard = () => {
   const memberList = useBaseStore((state) => state.memberList);
+  const targetGroup = useBaseStore((state) => state.targetGroup);
 
-  if (!memberList) return null;
+  if (!memberList || !targetGroup) return null;
   return (
     <div className="w-full flex-grow flex flex-col items-center">
       <div className="relative flex flex-col w-[85%] flex-grow justify-center items-center max-h-[500px]">
@@ -24,6 +25,7 @@ export const TodayPrayStartCard = () => {
             </div>
           </section>
           <TodayPrayBtn
+            groupId={targetGroup.id}
             eventOption={{
               where: "TodayPrayStartCard",
             }}

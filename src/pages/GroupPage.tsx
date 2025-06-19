@@ -26,6 +26,7 @@ const GroupPage: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
   const targetGroupLoading = useBaseStore((state) => state.targetGroupLoading);
   const getGroup = useBaseStore((state) => state.getGroup);
+  const getProfile = useBaseStore((state) => state.getProfile);
   const getMember = useBaseStore((state) => state.getMember);
   const setIsGroupLeader = useBaseStore((state) => state.setIsGroupLeader);
   const myMember = useBaseStore((state) => state.myMember);
@@ -41,6 +42,7 @@ const GroupPage: React.FC = () => {
   );
 
   useEffect(() => {
+    getProfile(user!.id);
     if (groupId) {
       getMember(currentUserId, groupId);
       getGroup(groupId);
@@ -54,6 +56,8 @@ const GroupPage: React.FC = () => {
     currentUserId,
     groupId,
     getGroup,
+    getProfile,
+    user,
   ]);
 
   useEffect(() => {
@@ -96,7 +100,10 @@ const GroupPage: React.FC = () => {
       </div>
       <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
         {hasPrayCardCurrentWeek ? (
-          <TodayPrayBtn eventOption={{ where: "GroupPage" }} />
+          <TodayPrayBtn
+            groupId={groupId}
+            eventOption={{ where: "GroupPage" }}
+          />
         ) : (
           <NewPrayCardRedirectBtn />
         )}
