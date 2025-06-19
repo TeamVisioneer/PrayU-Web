@@ -117,6 +117,7 @@ export const UnionInviteLink = (unionName: string, unionId: string) => {
 };
 
 export const TodayPrayLink = () => {
+  const origin = window.location.origin;
   return {
     objectType: "feed",
     content: {
@@ -127,16 +128,16 @@ export const TodayPrayLink = () => {
       imageWidth: 400,
       imageHeight: 240,
       link: {
-        webUrl: window.location.href,
-        mobileWebUrl: window.location.href,
+        webUrl: origin,
+        mobileWebUrl: origin,
       },
     },
     buttons: [
       {
         title: "오늘의 기도 시작하기",
         link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
+          mobileWebUrl: origin,
+          webUrl: origin,
         },
       },
     ],

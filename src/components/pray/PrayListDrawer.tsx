@@ -55,7 +55,10 @@ const PrayListDrawer: React.FC = () => {
 
         {blurCondition && (
           <div className="absolute w-full h-full rounded-t-[20px] inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-3">
-            <TodayPrayBtn eventOption={{ where: "PrayList" }} />
+            <TodayPrayBtn
+              groupId={targetPrayCard?.group_id || undefined}
+              eventOption={{ where: "PrayList" }}
+            />
             <p className="text-gray-500 text-sm">
               오늘의 기도를 완료해야 볼 수 있어요!
             </p>
