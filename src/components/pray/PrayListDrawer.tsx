@@ -9,7 +9,7 @@ import {
 import TodayPrayBtn from "../todayPray/TodayPrayBtn";
 import { KakaoShareButton, TodayPrayLink } from "../share/KakaoShareBtn";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import { isToday } from "@/lib/utils";
+import { isCurrentWeek, isToday } from "@/lib/utils";
 
 const PrayListDrawer: React.FC = () => {
   const isOpenMyPrayDrawer = useBaseStore((state) => state.isOpenMyPrayDrawer);
@@ -21,18 +21,23 @@ const PrayListDrawer: React.FC = () => {
   const groupAndSortByUserId = useBaseStore(
     (state) => state.groupAndSortByUserId
   );
-  const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
   const isPrayTodayForMember = useBaseStore(
     (state) => state.isPrayTodayForMember
   );
+  const targetPrayCard = useBaseStore((state) => state.targetPrayCard);
 
-  const prayerList = groupAndSortByUserId(
-    user!.id,
-    userPrayCardList?.[0]?.pray || []
-  );
+  const prayerList = groupAndSortByUserId(user!.id, targetPrayCard?.pray || []);
   const lenPrayerList = Object.keys(prayerList).length;
   const isOnlyMyPrayInPrayerList =
     lenPrayerList == 1 && Object.keys(prayerList).includes(user!.id);
+
+  const isExpired = !isCurrentWeek(targetPrayCard?.created_at);
+
+  const blurCondition =
+    lenPrayerList > 0 &&
+    !isExpired &&
+    !isPrayTodayForMember &&
+    !isOnlyMyPrayInPrayerList;
 
   return (
     <Drawer
@@ -47,16 +52,15 @@ const PrayListDrawer: React.FC = () => {
           <DrawerTitle className="p-4 text-center">기도해 준 친구</DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        {lenPrayerList > 0 &&
-          !isPrayTodayForMember &&
-          !isOnlyMyPrayInPrayerList && (
-            <div className="absolute w-full h-full rounded-t-[20px] inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-3">
-              <TodayPrayBtn eventOption={{ where: "PrayList" }} />
-              <p className="text-gray-500 text-sm">
-                오늘의 기도를 완료해야 볼 수 있어요!
-              </p>
-            </div>
-          )}
+
+        {blurCondition && (
+          <div className="absolute w-full h-full rounded-t-[20px] inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-3">
+            <TodayPrayBtn eventOption={{ where: "PrayList" }} />
+            <p className="text-gray-500 text-sm">
+              오늘의 기도를 완료해야 볼 수 있어요!
+            </p>
+          </div>
+        )}
         <div className="overflow-y-auto justify-center items-center">
           {lenPrayerList === 0 ? (
             <div className="flex flex-col items-center gap-6 px-4">
@@ -82,7 +86,7 @@ const PrayListDrawer: React.FC = () => {
               <div
                 key={user_id}
                 className={`flex items-center justify-between p-3 px-4 ${
-                  !isPrayTodayForMember && !isOnlyMyPrayInPrayerList && "blur"
+                  blurCondition && "blur"
                 }`}
               >
                 <div className="flex items-center gap-2">

@@ -6,10 +6,10 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
-import PrayListBtn from "../pray/PrayListBtn";
 import PrayCard from "../prayCard/PrayCard";
 import { isCurrentWeek } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import ReactionResultBox from "../pray/ReactionResultBox";
 
 const MyMemberDrawer = () => {
   const userPrayCardList = useBaseStore((state) => state.userPrayCardList);
@@ -59,7 +59,11 @@ const MyMemberDrawer = () => {
             </div>
           )}
           <PrayCard prayCard={userPrayCardList?.[0]} editable={true} />
-          <PrayListBtn prayDatas={userPrayCardList?.[0]?.pray} />
+          <ReactionResultBox
+            prayCard={userPrayCardList?.[0]}
+            variant="separated"
+            eventOption={{ where: "MyMember" }}
+          />
         </div>
       </DrawerContent>
     </Drawer>

@@ -105,7 +105,8 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
 
       <div className="flex gap-2">
         <ReactionResultBox
-          prayData={prayDatasForMe}
+          prayCard={prayCard}
+          variant="combined"
           eventOption={{ where: "MyMember" }}
         />
         {prayDatasForMeToday && prayDatasForMeToday.length > 0 && (
