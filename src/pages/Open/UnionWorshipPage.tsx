@@ -67,7 +67,10 @@ const UnionWorshipPage = () => {
         </div>
       </div>
       <div className="flex gap-2">
-        <ReactionResultBox prayData={[]} eventOption={{ where: "MyMember" }} />
+        <ReactionResultBox
+          prayCard={undefined}
+          eventOption={{ where: "MyMember" }}
+        />
       </div>
     </div>
   );

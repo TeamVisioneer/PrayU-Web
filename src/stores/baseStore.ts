@@ -230,6 +230,8 @@ export interface BaseStore {
   historyPrayCardCount: number | null;
   fetchUserPrayCardCount: (currentUserId: string) => Promise<number | null>;
   historyCard: PrayCardWithProfiles | null;
+  targetPrayCard: PrayCardWithProfiles | null;
+  setTargetPrayCard: (targetPrayCard: PrayCardWithProfiles | null) => void;
   setHistoryCard: (historyCard: PrayCardWithProfiles | null) => void;
   inputPrayCardContent: string;
   inputPrayCardLife: string;
@@ -847,6 +849,12 @@ const useBaseStore = create<BaseStore>()(
     prayCardCarouselList: null,
     prayCardCarouselIndex: 0,
     historyCard: null,
+    targetPrayCard: null,
+    setTargetPrayCard: (targetPrayCard: PrayCardWithProfiles | null) => {
+      set((state) => {
+        state.targetPrayCard = targetPrayCard;
+      });
+    },
     setPrayCardCarouselIndex: (index: number) => {
       set((state) => {
         state.prayCardCarouselIndex = index;

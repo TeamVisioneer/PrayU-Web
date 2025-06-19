@@ -6,8 +6,8 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
-import PrayListBtn from "../pray/PrayListBtn";
 import { PrayCard } from "../prayCard/PrayCard";
+import ReactionResultBox from "../pray/ReactionResultBox";
 
 const PrayCardHistoryDrawer: React.FC = () => {
   const isOpenHistoryDrawer = useBaseStore(
@@ -51,7 +51,11 @@ const PrayCardHistoryDrawer: React.FC = () => {
         ) : (
           <div className="flex flex-col gap-2 px-10 pt-5 pb-10">
             <PrayCard prayCard={historyCard || undefined} />
-            <PrayListBtn prayDatas={historyCard?.pray} />
+            <ReactionResultBox
+              prayCard={historyCard || undefined}
+              variant="separated"
+              eventOption={{ where: "HistoryCard" }}
+            />
           </div>
         )}
       </DrawerContent>
