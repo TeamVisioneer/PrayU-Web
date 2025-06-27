@@ -8,8 +8,11 @@ import { getISOTodayDate } from "@/lib/utils";
 import { FaLock } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const profileCount = useBaseStore((state) => state.profileCount);
   const newUserCount = useBaseStore((state) => state.newUserCount);
@@ -118,6 +121,30 @@ const AdminPage = () => {
           </Badge>
         </div>
         <div></div>
+      </section>
+      <section className="flex flex-col gap-4 w-full items-start">
+        <h1 className="">목업 페이지</h1>
+        <div className="w-full flex items-start gap-4">
+          <Button
+            variant="primaryLight"
+            className="w-52"
+            onClick={() => {
+              navigate("/group/mock");
+            }}
+          >
+            그룹 목업 페이지
+          </Button>
+          {/* 말씀카드 생성 페이지 */}
+          <Button
+            variant="primaryLight"
+            className="w-52"
+            onClick={() => {
+              navigate("/bible-card/generator");
+            }}
+          >
+            말씀카드 생성 페이지
+          </Button>
+        </div>
       </section>
     </div>
   );
