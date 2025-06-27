@@ -144,6 +144,16 @@ const AdminPage = () => {
           >
             말씀카드 생성 페이지
           </Button>
+          {/* 새 어드민 대시보드 페이지 */}
+          <Button
+            variant="primaryLight"
+            className="w-52"
+            onClick={() => {
+              navigate("/admin/new");
+            }}
+          >
+            새 어드민 대시보드
+          </Button>
         </div>
       </section>
     </div>

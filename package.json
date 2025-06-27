@@ -55,6 +55,7 @@
     "react-lottie": "^1.2.10",
     "react-router-dom": "^6.25.1",
     "react-spinners": "^0.14.1",
+    "recharts": "^3.0.2",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.1",
