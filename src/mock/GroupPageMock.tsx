@@ -82,11 +82,6 @@ const GroupPageMock: React.FC = () => {
       profiles: mockCurrentUser,
     });
 
-    // 그룹 리스트 설정 (OtherMemberList에서 사용)
-    useBaseStore.setState({
-      groupList: [mockGroup],
-    });
-
     // 멤버 관련 상태 설정 (OtherMemberList Skeleton 방지)
     useBaseStore.setState({
       memberList: mockMembers,
