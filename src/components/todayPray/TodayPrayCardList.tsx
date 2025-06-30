@@ -8,9 +8,10 @@ import useBaseStore from "@/stores/baseStore";
 import { useEffect } from "react";
 import TodayPrayInviteCompletedItem from "./TodayPrayInviteCompletedItem";
 import PrayCard from "../prayCard/PrayCard";
-import ReactionWithCalendar from "../prayCard/ReactionWithCalendar";
 import DumyReactionBtnWithCalendar from "../prayCard/DummyReactionWithCalendar";
 import { dummyPrayCard } from "@/mocks/dummyPrayCard";
+import WeeklyCalendar from "@/components/pray/WeeklyCalendar";
+import ReactionBtn from "@/components/pray/ReactionBtn";
 
 const TodayPrayCardList = () => {
   const setPrayCardCarouselApi = useBaseStore(
@@ -64,13 +65,13 @@ const TodayPrayCardList = () => {
             className="basis-5/6 flex flex-col gap-2"
           >
             <PrayCard prayCard={prayCard} />
-            <ReactionWithCalendar
-              prayCard={prayCard}
-              eventOption={{
-                where: "TodayPrayCardListDrawer",
-                total_member: prayCardCarouselList?.length || 0,
-              }}
-            />
+            <section className="w-full flex flex-col gap-6 p-2">
+              <WeeklyCalendar prayCard={prayCard} />
+              <ReactionBtn
+                prayCard={prayCard}
+                eventOption={{ where: "TodayPrayCardListDrawer" }}
+              />
+            </section>
           </CarouselItem>
         ))}
         {isPrayToday && hasPrayCardCurrentWeek && (

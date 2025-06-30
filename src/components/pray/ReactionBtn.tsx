@@ -9,18 +9,15 @@ import { PrayReactionMessage } from "../kakao/KakaoMessage";
 import { NotificationType } from "../notification/NotificationType";
 
 interface ReactionBtnProps {
-  currentUserId: string;
-  prayCard: PrayCardWithProfiles;
-  eventOption: { where: string; total_member: number };
+  prayCard: PrayCardWithProfiles | undefined;
+  eventOption: { where: string };
 }
 
-const ReactionBtn: React.FC<ReactionBtnProps> = ({
-  currentUserId,
-  prayCard,
-  eventOption,
-}) => {
+const ReactionBtn: React.FC<ReactionBtnProps> = ({ prayCard, eventOption }) => {
   const { toast } = useToast();
+  const user = useBaseStore((state) => state.user);
   const targetGroup = useBaseStore((state) => state.targetGroup);
+  const memberList = useBaseStore((state) => state.memberList);
   const myMember = useBaseStore((state) => state.myMember);
   const todayPrayTypeHash = useBaseStore((state) => state.todayPrayTypeHash);
   const isPrayToday = useBaseStore((state) => state.isPrayToday);
@@ -41,16 +38,28 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     (state) => state.createOnesignalPush
   );
 
+  if (!prayCard)
+    return (
+      <div className="w-full flex justify-around">
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={i}
+            className="flex justify-center items-center w-1/5 p-2 max-w-20 aspect-square rounded-full bg-gray-200 opacity-50"
+          />
+        ))}
+      </div>
+    );
+
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard.id]);
 
   const handleClick = async (prayType: PrayType) => {
     if (!isPrayToday) setIsPrayToday(true);
-    if (!isPrayTodayForMember && prayCard.user_id !== currentUserId) {
+    if (!isPrayTodayForMember && prayCard.user_id !== user?.id) {
       setIsPrayTodayForMember(true);
     }
 
     if (!hasPrayed) {
-      const newPray = await createPray(prayCard.id, currentUserId, prayType);
+      const newPray = await createPray(prayCard.id, user!.id, prayType);
       if (!newPray) return null;
 
       if (newPray.user_id !== prayCard.user_id) {
@@ -65,7 +74,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
         });
         await createNotification({
           userId: prayCard.user_id ? [prayCard.user_id] : [],
-          senderId: currentUserId,
+          senderId: user!.id,
           groupId: targetGroup!.id,
           title: "PrayU 기도 알림",
           body: "당신을 위해 기도해 준 친구가 있어요!",
@@ -96,7 +105,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
           }
         }
       }
-    } else updatePray(prayCard.id, currentUserId, prayType);
+    } else updatePray(prayCard.id, user!.id, prayType);
 
     if (prayCardCarouselApi) {
       sleep(1000).then(() => {
@@ -107,7 +116,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({
     analyticsTrack("클릭_기도카드_반응", {
       pray_type: prayType,
       where: eventOption.where,
-      total_member: eventOption.total_member,
+      total_member: memberList?.length || 0,
     });
   };
 
