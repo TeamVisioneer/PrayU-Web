@@ -38,11 +38,11 @@ export const fetchGroupListByGroupIds = async (
 
 export const fetchGroupListByUserId = async (
   userId: string,
-): Promise<Group[] | null> => {
+): Promise<GroupWithProfiles[] | null> => {
   try {
     const { data, error } = await supabase
       .from("member")
-      .select(`group (*)`)
+      .select(`group (*), profiles (id, full_name, avatar_url)`)
       .eq("user_id", userId)
       .is("deleted_at", null)
       .order("created_at", { ascending: false });
@@ -50,7 +50,7 @@ export const fetchGroupListByUserId = async (
       Sentry.captureException(error.message);
       return null;
     }
-    return (data as MemberWithGroup[])
+    return (data as GroupWithProfiles[])
       .filter((member) => member.group != null)
       .map((member) => member.group);
   } catch (error) {

@@ -29,7 +29,7 @@ export interface GroupUnionWithProfiles extends GroupUnion {
 }
 
 export interface GroupWithProfiles extends Group {
-  profiles: Profiles;
+  profiles?: Profiles;
   member?: MemberWithProfiles[];
   group_union?: GroupUnionWithProfiles;
 }
