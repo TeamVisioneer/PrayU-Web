@@ -54,14 +54,19 @@ const PrayListDrawer: React.FC = () => {
         </DrawerHeader>
 
         {blurCondition && (
-          <div className="absolute w-full h-full rounded-t-[20px] inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-20 gap-3">
+          <div className="absolute w-full h-full rounded-t-[20px] inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-30 gap-6 px-6">
             <TodayPrayBtn
               groupId={targetPrayCard?.group_id || undefined}
               eventOption={{ where: "PrayList" }}
             />
-            <p className="text-gray-500 text-sm">
-              오늘의 기도를 완료해야 볼 수 있어요!
-            </p>
+            <div className="text-gray-900 text-base text-center leading-relaxed">
+              <div className="font-medium">
+                오늘의 기도를 완료해야 볼 수 있어요.
+              </div>
+              <div className="text-gray-600 text-sm mt-1">
+                기도를 마무리하고 다시 들어와 보세요
+              </div>
+            </div>
           </div>
         )}
         <div className="overflow-y-auto justify-center items-center">
