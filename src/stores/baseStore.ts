@@ -134,7 +134,7 @@ export interface BaseStore {
   setIsOpenHistoryDrawer: (isOpenHistoryDrawer: boolean) => void;
 
   // group
-  groupList: GroupWithProfiles[] | null;
+  groupList: GroupWithProfiles[] | Group[] | null;
   todayGroupList: Group[] | null;
   targetGroup: GroupWithProfiles | null;
   fetchGroupListByGroupIds: (
