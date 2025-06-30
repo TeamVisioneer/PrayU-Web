@@ -32,6 +32,7 @@ import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
 import MetaPixelInit from "./analytics/metaPixelInit";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import NewAdminPage from "./pages/AdminPage/NewAdminPage";
 import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
 import QuietTimePage from "./pages/QuietTimePage";
@@ -51,6 +52,7 @@ import ExternalLinkDialog from "./components/notice/ExternalLinkDialog";
 import GroupListDrawer from "./components/group/GroupListDrawer";
 import ReportAlert from "./components/alert/ReportAlert";
 import { BottomToaster } from "@/components/ui/bottom-toaster";
+import GroupPageMock from "@/mock/GroupPageMock";
 
 const GroupRedirect = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -83,6 +85,14 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <AdminPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin/new"
+                element={
+                  <PrivateRoute>
+                    <NewAdminPage />
                   </PrivateRoute>
                 }
               />
@@ -164,6 +174,7 @@ const App = () => {
                 path="/group/open/1027-union"
                 element={<UnionWorshipPage />}
               />
+              <Route path="/group/mock" element={<GroupPageMock />} />
               <Route path="/group/not-found" element={<GroupNotFoundPage />} />
               <Route path="/group/limit" element={<GroupLimitPage />} />
               <Route

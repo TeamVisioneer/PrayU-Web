@@ -61,7 +61,7 @@ const GroupPage: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (memberLoading == false && myMember == null) {
+    if (memberLoading == false && (myMember == null || myMember.deleted_at)) {
       navigate(`/group/${groupId}/join`, { replace: true });
       return;
     }

@@ -2,7 +2,6 @@ import useBaseStore from "@/stores/baseStore";
 import { Button } from "@/components/ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import LogInDrawer from "@/components/auth/LogInDrawer";
-import MainHeader from "./MainPage/MainHeader";
 import { useEffect } from "react";
 import CountUp from "react-countup";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +33,7 @@ const MainPage: React.FC = () => {
         className="w-52"
         onClick={() => {
           analyticsTrack("클릭_메인_시작하기", { where: "PrayUStartBtn" });
+          if (userLoading) return;
           if (user) navigate("/group");
           else setIsOpenLoginDrawer(true);
         }}
@@ -43,11 +43,8 @@ const MainPage: React.FC = () => {
     );
   };
 
-  if (userLoading) return null;
-
   return (
     <div className="flex flex-col items-center justify-center text-center h-full">
-      <MainHeader />
       <section className="w-full flex flex-col items-center ">
         <div className="flex flex-col gap-8  items-center justify-center ">
           <div className="h-[80px] w-full flex flex-col items-center object-cover">
@@ -72,6 +69,86 @@ const MainPage: React.FC = () => {
           </div>
           <div className="flex flex-col gap-4">
             <PrayUStartBtn />
+            {["team.visioneer15@gmail.com", "s2615s@naver.com"].includes(
+              user?.user_metadata.email
+            ) && (
+              <Button
+                variant="ghost"
+                className="w-52"
+                onClick={() => {
+                  navigate("/admin");
+                }}
+              >
+                관리자 페이지
+              </Button>
+            )}
+            {/* <Button
+              variant="primary"
+              className="w-52"
+              onClick={() => {
+                navigate("/group/mock");
+              }}
+            >
+              목업 페이지
+            </Button>
+            <Button
+              variant="primary"
+              className="w-52"
+              onClick={async () => {
+                if (window.flutter_inappwebview?.callHandler) {
+                  await window.flutter_inappwebview.callHandler(
+                    "downloadImages",
+                    [
+                      "https://cguxpeghdqcqfdhvkmyv.supabase.co/storage/v1/object/public/prayu/BibleCard/UserBibleCard/Card_250116165310658.jpeg",
+                      "http://prayu.site/images/PrayULogoV3.png",
+                    ]
+                  );
+                }
+              }}
+            >
+              이미지 다운로드 테스트
+            </Button>
+            <Button
+              variant="primary"
+              className="w-52"
+              onClick={async () => {
+                if (window.flutter_inappwebview?.callHandler) {
+                  await window.flutter_inappwebview.callHandler(
+                    "shareInstagramStory",
+                    "https://cguxpeghdqcqfdhvkmyv.supabase.co/storage/v1/object/public/prayu/BibleCard/UserBibleCard/Card_250116165310658.jpeg"
+                  );
+                }
+              }}
+            >
+              인스타 테스트
+            </Button>
+            <Button
+              variant="primary"
+              className="w-52"
+              onClick={async () => {
+                if (window.flutter_inappwebview?.callHandler) {
+                  await window.flutter_inappwebview.callHandler(
+                    "openAppSettings"
+                  );
+                }
+              }}
+            >
+              설정 테스트
+            </Button>
+            <Button
+              variant="primary"
+              className="w-52"
+              onClick={async () => {
+                if (window.flutter_inappwebview?.callHandler) {
+                  const version = await window.flutter_inappwebview.callHandler(
+                    "getAppVersion"
+                  );
+                  alert(JSON.stringify(version));
+                }
+              }}
+            >
+              앱 버전 테스트
+            </Button> */}
           </div>
         </div>
 
