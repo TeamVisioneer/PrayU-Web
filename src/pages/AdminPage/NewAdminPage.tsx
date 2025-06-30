@@ -327,7 +327,7 @@ const NewAdminPage = () => {
                           `${name} ${((percent || 0) * 100).toFixed(0)}%`
                         }
                       >
-                        {mockPrayTypeData.map((entry, index) => (
+                        {mockPrayTypeData.map((_, index) => (
                           <Cell
                             key={`cell-${index}`}
                             fill={COLORS[index % COLORS.length]}
