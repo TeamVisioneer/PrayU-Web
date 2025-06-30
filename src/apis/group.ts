@@ -7,6 +7,35 @@ import {
 import * as Sentry from "@sentry/react";
 import { getISOToday } from "@/lib/utils";
 
+export const fetchGroupListByGroupIds = async (
+  groupIds: string[],
+  limit: number = 20,
+  offset: number = 0,
+): Promise<GroupWithProfiles[] | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("group")
+      .select(`
+        *, 
+        profiles (id, full_name, avatar_url),
+        member (id,user_id, profiles (id, full_name, avatar_url))
+      `)
+      .in("id", groupIds)
+      .is("deleted_at", null)
+      .is("member.deleted_at", null)
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data as GroupWithProfiles[];
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const fetchGroupListByUserId = async (
   userId: string,
 ): Promise<Group[] | null> => {

@@ -28,6 +28,7 @@ import {
 import {
   createGroup,
   fetchGroupListByDate,
+  fetchGroupListByGroupIds,
   fetchGroupListByUserId,
   getGroup,
   getGroupWithMemberList,
@@ -133,9 +134,12 @@ export interface BaseStore {
   setIsOpenHistoryDrawer: (isOpenHistoryDrawer: boolean) => void;
 
   // group
-  groupList: Group[] | null;
+  groupList: GroupWithProfiles[] | null;
   todayGroupList: Group[] | null;
   targetGroup: GroupWithProfiles | null;
+  fetchGroupListByGroupIds: (
+    groupIds: string[],
+  ) => Promise<GroupWithProfiles[] | null>;
   setTargetGroup: (targetGroup: GroupWithProfiles | null) => void;
   inputGroupName: string;
   isDisabledGroupCreateBtn: boolean;
@@ -633,6 +637,13 @@ const useBaseStore = create<BaseStore>()(
     inputGroupName: "",
     isDisabledGroupCreateBtn: false,
     isGroupLeader: false,
+    fetchGroupListByGroupIds: async (groupIds: string[]) => {
+      const data = await fetchGroupListByGroupIds(groupIds);
+      set((state) => {
+        state.groupList = data;
+      });
+      return data;
+    },
     fetchGroupListByUserId: async (userId: string) => {
       const data = await fetchGroupListByUserId(userId);
       set((state) => {
