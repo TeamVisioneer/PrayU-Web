@@ -83,13 +83,13 @@ const PrayCardHistoryList = () => {
           return (
             <div
               key={index}
-              className="aspect-[0.76] flex cursor-pointer flex-col gap-1.5 rounded-xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md"
+              className="aspect-[0.76] grid cursor-pointer grid-rows-[auto_1fr_auto] gap-1.5 overflow-hidden rounded-xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md"
               onClick={() => onClickStory(prayCard)}
             >
               <p className="truncate text-xs font-bold text-indigo-600">
                 {prayCard.group?.name || "말씀 카드"}
               </p>
-              <p className="line-clamp-5 flex-grow text-xs leading-relaxed text-gray-700">
+              <p className="line-clamp-5 text-xs leading-relaxed text-gray-700">
                 {prayCard.content}
               </p>
               <div className="flex items-center space-x-1 pt-1">
