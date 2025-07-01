@@ -1,6 +1,5 @@
-import { RiNotification4Line } from "react-icons/ri";
+import { RiNotification4Line, RiCheckLine } from "react-icons/ri";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import NotificationItem from "./NotificationItem";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -124,12 +123,13 @@ const NotificationPage = () => {
             <div className="flex items-center gap-2">
               {userNotificationUnreadTotal > 0 && (
                 <>
-                  <Badge
-                    className="cursor-pointer hover:bg-mainBtn hover:text-white transition-all duration-200 bg-white text-gray-700 border border-gray-200 px-3 py-1 rounded-full font-medium"
+                  <button
                     onClick={() => onClickCheckAllNotification()}
+                    className="flex items-center gap-1.5 rounded-lg border border-violet-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-violet-600 shadow-sm transition-colors hover:bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-300 focus:ring-offset-2"
                   >
-                    모두 읽음
-                  </Badge>
+                    <RiCheckLine className="h-4 w-4" />
+                    <span>모두 읽음</span>
+                  </button>
                   <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-full min-w-[24px] text-center">
                     {userNotificationUnreadTotal > 99
                       ? "99+"

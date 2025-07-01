@@ -33,11 +33,11 @@ const NotificationBtn = () => {
     >
       {userNotificationUnreadTotal > 0 &&
         (userNotificationUnreadTotal < 10 ? (
-          <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-destructive rounded-full text-xs text-white">
+          <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-gradient-to-r from-red-500 to-red-600 rounded-full text-xs text-white font-bold">
             {userNotificationUnreadTotal}
           </div>
         ) : (
-          <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-destructive rounded-full text-[0.5rem] text-white">
+          <div className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-gradient-to-r from-red-500 to-red-600 rounded-full text-[0.5rem] text-white">
             10+
           </div>
         ))}
