@@ -25,7 +25,7 @@ export type Notification = Omit<OriginNotification, "data" | "fcm_result"> & {
 };
 
 export type Profiles = Omit<OriginProfiles, "app_settings"> & {
-  app_settings?: AppSettings;
+  app_settings?: Record<string, unknown>;
 };
 
 // App Settings 타입 정의
