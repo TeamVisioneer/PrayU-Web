@@ -157,7 +157,10 @@ const SettingDialog = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DialogContent className="w-11/12 h-fit overflow-auto rounded-2xl bg-mainBg">
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="w-11/12 h-fit overflow-auto rounded-2xl bg-mainBg"
+      >
         <DialogHeader>
           <DialogTitle className="text-xl text-left pb-4">설정</DialogTitle>
           <DialogDescription></DialogDescription>
@@ -332,15 +335,25 @@ const SettingDialog = () => {
                         <span className="font-semibold flex-shrink-0">
                           계정 관리
                         </span>
-                        <span className="flex-shrink text-sm p-2 max-w-56 whitespace-nowrap overflow-hidden text-ellipsis">
+                        <span className="flex-shrink text-sm text-gray-500 p-2 max-w-56 whitespace-nowrap overflow-hidden text-ellipsis">
                           {user!.user_metadata.email}
                         </span>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="w-full flex p-2 gap-2 text-sm text-gray-400 text-end cursor-pointer justify-between">
-                        <p onClick={() => onClickExitPrayU()}>회원탈퇴</p>
-                        <p onClick={() => onClickSignOut()}>로그아웃</p>
+                      <div className="w-full flex p-2 gap-6 text-sm justify-end">
+                        <button
+                          className="cursor-pointer text-gray-600 hover:text-gray-900"
+                          onClick={onClickSignOut}
+                        >
+                          로그아웃
+                        </button>
+                        <button
+                          className="cursor-pointer text-red-500 hover:text-red-700"
+                          onClick={onClickExitPrayU}
+                        >
+                          회원탈퇴
+                        </button>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
