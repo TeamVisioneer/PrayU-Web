@@ -3,6 +3,7 @@ import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
 import { useState } from "react";
 import ShowMoreBtn from "../common/ShowMoreBtn";
+import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 
 const PrayCardHistoryList = () => {
   const user = useBaseStore((state) => state.user);
@@ -33,7 +34,7 @@ const PrayCardHistoryList = () => {
   const pageSize = 18;
   const [offset, setOffset] = useState(pageSize);
 
-  if (!historyPrayCardCount) return;
+  if (!historyPrayCardCount) return null;
 
   const onClickMoreHistoryPrayCardList = async () => {
     if (offset >= historyPrayCardCount) return;
@@ -52,28 +53,29 @@ const PrayCardHistoryList = () => {
       ...newHistoryPrayCardList,
     ]);
     setOffset(offset + pageSize);
+    analyticsTrack("클릭_기도카드_히스토리", {});
   };
 
   const onClickStory = (prayCard: PrayCardWithProfiles) => {
     setHistoryCard(prayCard);
     setIsOpenHistoryDrawer(true);
-    analyticsTrack("클릭_기도카드_히스토리", {});
   };
 
   return (
-    <div className="flex flex-col gap-1 pb-10 items-center w-full">
-      <div className="w-full grid grid-cols-3 gap-3 p-1 pb-5">
+    <div className="flex w-full flex-col items-center gap-4">
+      <div className="grid w-full grid-cols-3 gap-3">
         {historyPrayCardListView.map((prayCard, index) => {
           if (prayCard.bible_card_url) {
             return (
               <div
                 key={index}
-                className="aspect-[0.76] border-none flex items-center justify-center"
+                className="aspect-[0.76] cursor-pointer overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md"
                 onClick={() => onClickStory(prayCard)}
               >
                 <img
                   src={prayCard.bible_card_url}
-                  className="h-full object-cover rounded-lg"
+                  alt="Bible Card"
+                  className="h-full w-full object-cover"
                 />
               </div>
             );
@@ -81,18 +83,30 @@ const PrayCardHistoryList = () => {
           return (
             <div
               key={index}
-              className="aspect-[0.76] border-none items-center flex flex-col rounded-lg "
+              className="aspect-[0.76] flex cursor-pointer flex-col gap-1.5 rounded-xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md"
               onClick={() => onClickStory(prayCard)}
             >
-              <div className="w-full flex flex-col bg-[#BBBFE6] p-2 rounded-t-xl  ">
-                <p className="text-xs text-white w-full text-left truncate">
-                  {prayCard.group?.name || "말씀 카드"}
-                </p>
-              </div>
-              <div className="w-full flex-grow flex flex-col bg-white p-2 rounded-b-xl">
-                <span className="text-[0.7rem] text-gray-400 line-clamp-3">
-                  {prayCard.content}
-                </span>
+              <p className="truncate text-xs font-bold text-indigo-600">
+                {prayCard.group?.name || "말씀 카드"}
+              </p>
+              <p className="line-clamp-5 flex-grow text-xs leading-relaxed text-gray-700">
+                {prayCard.content}
+              </p>
+              <div className="flex items-center space-x-1 pt-1">
+                <div className="flex -space-x-2">
+                  {prayCard.pray.slice(0, 5).map((pray) => (
+                    <img
+                      key={pray.id}
+                      src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
+                      className="h-5 w-5 rounded-full border-2 border-white object-cover"
+                    />
+                  ))}
+                </div>
+                {prayCard.pray.length > 5 && (
+                  <span className="text-xs text-gray-500">
+                    +{prayCard.pray.length - 5}
+                  </span>
+                )}
               </div>
             </div>
           );

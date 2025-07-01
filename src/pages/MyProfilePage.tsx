@@ -12,11 +12,16 @@ import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const myProfile = useBaseStore((state) => state.myProfile);
+  const historyPrayCardCount = useBaseStore(
+    (state) => state.historyPrayCardCount
+  );
+  const userTotalPrayCount = useBaseStore((state) => state.userTotalPrayCount);
   const profileList = useBaseStore((state) => state.profileList);
   const getProfile = useBaseStore((state) => state.getProfile);
   const fetchProfileList = useBaseStore((state) => state.fetchProfileList);
@@ -32,6 +37,9 @@ const MyProfilePage = () => {
   const prayListByDate = useBaseStore((state) => state.prayListByDate);
   const fetchPrayListByDate = useBaseStore(
     (state) => state.fetchPrayListByDate
+  );
+  const fetchUserTotalPrayCount = useBaseStore(
+    (state) => state.fetchUserTotalPrayCount
   );
 
   const setHistoryPrayCardListView = useBaseStore(
@@ -55,12 +63,14 @@ const MyProfilePage = () => {
 
     getProfile(user!.id);
     fetchUserPrayCardCount(user!.id);
+    fetchUserTotalPrayCount(user!.id);
     fetchHistoryPrayCardList();
   }, [
     user,
     getProfile,
     fetchUserPrayCardList,
     fetchUserPrayCardCount,
+    fetchUserTotalPrayCount,
     setHistoryPrayCardListView,
   ]);
 
@@ -69,25 +79,50 @@ const MyProfilePage = () => {
     if (myProfile) fetchPrayListByDate(myProfile.id, startDt, endDt);
   }, [myProfile, fetchProfileList, fetchPrayListByDate, startDt, endDt]);
 
-  if (!myProfile || !profileList || !prayListByDate) {
+  if (
+    !myProfile ||
+    !profileList ||
+    !prayListByDate ||
+    historyPrayCardCount === null
+  ) {
     return (
-      <div className="p-5 w-full flex flex-grow flex-col gap-4 items-center">
-        <div className="w-full flex justify-between items-center">
-          <div className="w-[60px]">
-            <IoChevronBack size={20} onClick={() => navigate(-1)} />
+      <div className="w-full min-h-screen bg-mainBg flex flex-col">
+        <header className="sticky top-0 z-50 bg-mainBg border-b border-gray-100 shadow-sm">
+          <div className="max-w-5xl mx-auto flex items-center justify-between p-5">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => navigate(-1)}
+                className="p-1 hover:bg-white/50 rounded-lg transition-colors"
+              >
+                <IoChevronBack size={20} className="text-gray-700" />
+              </button>
+              <h1 className="text-xl font-bold text-gray-800">내 프로필</h1>
+            </div>
+            <div className="p-1">
+              <IoSettingsOutline size={20} className="text-gray-700" />
+            </div>
           </div>
-          <span className="text-lg font-bold">내 프로필</span>
-          <div className="w-[60px] flex justify-end items-center"></div>
-        </div>
-        <div className="flex justify-center h-[80px] object-cover">
-          <Skeleton className="h-[80px] w-[80px] rounded-full bg-gray-300" />
-        </div>
-        <div className="w-full flex flex-col gap-4">
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-          <Skeleton className="w-full h-[55px] flex items-center gap-4 p-4 bg-gray-300 rounded-xl" />
-        </div>
+        </header>
+
+        <main className="flex-grow p-4 space-y-6 animate-pulse">
+          <section className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-5">
+            <Skeleton className="h-20 w-20 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-24 rounded-md" />
+              <Skeleton className="h-4 w-40 rounded-md" />
+            </div>
+          </section>
+
+          <div className="w-full">
+            <Skeleton className="h-12 w-full rounded-xl" />
+            <div className="mt-4 space-y-3">
+              <Skeleton className="h-24 w-full rounded-xl" />
+              <Skeleton className="h-24 w-full rounded-xl" />
+              <Skeleton className="h-24 w-full rounded-xl" />
+              <Skeleton className="h-24 w-full rounded-xl" />
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
@@ -97,50 +132,84 @@ const MyProfilePage = () => {
   };
 
   return (
-    <div className="p-5 w-full flex flex-col gap-1 items-center">
-      <div className="w-full flex flex-col gap-3 bg-mainBg z-10">
-        <div className="w-full flex justify-between items-center">
-          <div className="w-14 ">
-            <IoChevronBack size={20} onClick={() => navigate(-1)} />
+    <div className="w-full min-h-screen bg-mainBg flex flex-col">
+      <header className="sticky top-0 z-50 bg-mainBg border-b border-gray-100 shadow-sm">
+        <div className="max-w-5xl mx-auto flex items-center justify-between p-5">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-1 hover:bg-white/50 rounded-lg transition-colors"
+            >
+              <IoChevronBack size={20} className="text-gray-700" />
+            </button>
+            <h1 className="text-xl font-bold text-gray-800">내 프로필</h1>
           </div>
-          <span className="text-lg font-bold">내 프로필</span>
-          <div
-            className="flex justify-end items-center w-14"
+          <button
             onClick={onClickSettingBtn}
+            className="p-1 hover:bg-white/50 rounded-lg transition-colors"
           >
-            <IoSettingsOutline size={20} color="#222222" />
-          </div>
+            <IoSettingsOutline size={20} className="text-gray-700" />
+          </button>
         </div>
-        <div className="flex flex-col justify-center gap-4">
-          <div className="flex flex-col items-center">
-            <div className="flex justify-center h-[70px] object-cover">
-              <img
-                className="h-full aspect-square rounded-full object-cover"
-                src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
-              />
-            </div>
-            <p className="text-sm font-semibold pt-2">{myProfile.full_name}</p>
-          </div>
-          <PrayCalendar />
-          <div className="w-full flex flex-col items-start text-sm font-semibold pt-1 pl-3">
-            지난 기도카드
-          </div>
-        </div>
-      </div>
-      <PrayCardHistoryList />
+      </header>
 
-      <footer className="fixed max-w-[480px] bottom-0 z-10 bg-mainBg w-full px-6 py-3 flex justify-between text-gray-400 text-[10px]">
-        <span>© 2025 PrayU. All rights reserved.</span>
-        <div className="flex gap-2">
-          <a href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html">
+      <main className="flex-grow p-4 space-y-6">
+        <section className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-5">
+          <img
+            className="h-20 w-20 rounded-full object-cover ring-4 ring-white"
+            src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
+            alt="Profile Avatar"
+          />
+          <div>
+            <h2 className="text-xl font-bold text-gray-800">
+              {myProfile.full_name}
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              지금까지 총 {userTotalPrayCount}번의 기도를 받았어요!
+            </p>
+          </div>
+        </section>
+
+        <Tabs defaultValue="history" className="w-full">
+          <TabsList className="grid h-12 w-full grid-cols-2 rounded-xl border border-gray-100 bg-white p-1 shadow-sm">
+            <TabsTrigger
+              value="history"
+              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
+            >
+              기도카드 보관함
+            </TabsTrigger>
+            <TabsTrigger
+              value="calendar"
+              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
+            >
+              기도 달력
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="history" className="mt-4">
+            <PrayCardHistoryList />
+          </TabsContent>
+          <TabsContent value="calendar" className="mt-4">
+            <PrayCalendar />
+          </TabsContent>
+        </Tabs>
+      </main>
+
+      <footer className="w-full bg-mainBg px-6 py-4 text-center text-xs text-gray-500">
+        <div className="mb-2">© 2025 PrayU. All rights reserved.</div>
+        <div className="flex gap-2 justify-center">
+          <a
+            href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html"
+            className="hover:underline"
+          >
             개인정보 처리방침
           </a>
           <span>|</span>
-          <a href="https://mmyeong.notion.site/PrayU-ee61275fa48842cda5a5f2ed5b608ec0?pvs=4">
+          <a href="/term/240909" className="hover:underline">
             이용약관
           </a>
         </div>
       </footer>
+
       <SettingDialog />
       <PrayCardHistoryDrawer />
       <PrayListDrawer />

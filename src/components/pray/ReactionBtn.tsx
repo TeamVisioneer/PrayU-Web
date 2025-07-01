@@ -53,6 +53,12 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({ prayCard, eventOption }) => {
   const hasPrayed = Boolean(todayPrayTypeHash[prayCard.id]);
 
   const handleClick = async (prayType: PrayType) => {
+    if (window.flutter_inappwebview) {
+      window.flutter_inappwebview.callHandler(
+        "triggerHapticFeedback",
+        "mediumImpact"
+      );
+    }
     if (!isPrayToday) setIsPrayToday(true);
     if (!isPrayTodayForMember && prayCard.user_id !== user?.id) {
       setIsPrayTodayForMember(true);

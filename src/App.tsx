@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { useEffect } from "react";
 import { AuthProvider } from "./components/auth/AuthProvider";
+import SlideInPage from "./components/common/SlideInPage";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import MainPage from "./pages/MainPage";
 import GroupPage from "./pages/GroupPage";
@@ -129,7 +130,9 @@ const App = () => {
                 path="/praycard/new"
                 element={
                   <PrivateRoute>
-                    <PrayCardCreatePage />
+                    <SlideInPage>
+                      <PrayCardCreatePage />
+                    </SlideInPage>
                   </PrivateRoute>
                 }
               />
@@ -145,7 +148,9 @@ const App = () => {
                 path="/group/new"
                 element={
                   <PrivateRoute>
-                    <GroupCreatePage />
+                    <SlideInPage>
+                      <GroupCreatePage />
+                    </SlideInPage>
                   </PrivateRoute>
                 }
               />
@@ -162,13 +167,19 @@ const App = () => {
                 path="/group/:groupId/praycard/new"
                 element={
                   <PrivateRoute>
-                    <PrayCardCreatePage />
+                    <SlideInPage>
+                      <PrayCardCreatePage />
+                    </SlideInPage>
                   </PrivateRoute>
                 }
               />
               <Route
                 path="/group/:groupId/praycard/:praycardId/edit"
-                element={<PrayCardEditPage />}
+                element={
+                  <SlideInPage>
+                    <PrayCardEditPage />
+                  </SlideInPage>
+                }
               />
               <Route
                 path="/group/open/1027-union"
@@ -181,7 +192,9 @@ const App = () => {
                 path="/profile/me"
                 element={
                   <PrivateRoute>
-                    <MyProfilePage />
+                    <SlideInPage>
+                      <MyProfilePage />
+                    </SlideInPage>
                   </PrivateRoute>
                 }
               />
@@ -192,7 +205,9 @@ const App = () => {
                 path="/notifications"
                 element={
                   <PrivateRoute>
-                    <NotificationPage />
+                    <SlideInPage>
+                      <NotificationPage />
+                    </SlideInPage>
                   </PrivateRoute>
                 }
               />

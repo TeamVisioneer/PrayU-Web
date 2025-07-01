@@ -105,8 +105,8 @@ const NotificationPage = () => {
       {/* 상단 헤더 영역 - PrayU 스타일로 개선 */}
       <header className="sticky top-0 z-50 bg-mainBg border-b border-gray-100 shadow-sm">
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-center justify-between py-4 px-4">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between p-5">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => navigate(-1)}
                 className="p-1 hover:bg-white/50 rounded-lg transition-colors"
