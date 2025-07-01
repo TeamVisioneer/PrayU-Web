@@ -159,7 +159,7 @@ const SettingDialog = () => {
     >
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
-        className="w-11/12 h-fit overflow-auto rounded-2xl bg-mainBg"
+        className="w-11/12 h-auto overflow-auto rounded-2xl bg-mainBg"
       >
         <DialogHeader>
           <DialogTitle className="text-xl text-left pb-4">설정</DialogTitle>

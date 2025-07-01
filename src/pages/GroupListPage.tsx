@@ -210,7 +210,7 @@ const GroupListPage: React.FC = () => {
 
                         <div className="flex items-center gap-1 text-sm text-gray-500 shrink-0">
                           <Users className="w-4 h-4" />
-                          <span>{(group.member?.length || 0) + 1}명</span>
+                          <span>{group.member?.length || 0}명</span>
                         </div>
                       </div>
 
