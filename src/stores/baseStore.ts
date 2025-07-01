@@ -3,6 +3,7 @@ import {
   fetchPrayByDateRange,
   fetchTodayUserPrayByGroupId,
   fetchTotalPrayCount,
+  fetchUserTotalPrayCount,
   updatePray,
 } from "./../apis/pray";
 import { create } from "zustand";
@@ -112,8 +113,8 @@ export interface BaseStore {
   setUserPlan: (userId: string) => void;
 
   // profiles
-  myProfile: Profiles | null;
   profileList: Profiles[] | null;
+  myProfile: Profiles | null;
   profileCount: number;
   newUserCount: number;
   getProfile: (userId: string) => Promise<Profiles | null>;
@@ -295,6 +296,8 @@ export interface BaseStore {
   isPrayToday: boolean | null;
   isPrayTodayForMember: boolean | null;
   totalPrayCount: number;
+  userTotalPrayCount: number;
+  fetchUserTotalPrayCount: (currentUserId: string) => Promise<number>;
   setIsPrayToday: (isPrayToday: boolean) => void;
   setIsPrayTodayForMember: (isPrayTodayForMember: boolean) => void;
   fetchTodayUserPrayByGroupId: (
@@ -1052,6 +1055,14 @@ const useBaseStore = create<BaseStore>()(
     isPrayToday: null,
     isPrayTodayForMember: null,
     totalPrayCount: 0,
+    userTotalPrayCount: 0,
+    fetchUserTotalPrayCount: async (currentUserId: string) => {
+      const userTotalPrayCount = await fetchUserTotalPrayCount(currentUserId);
+      set((state) => {
+        state.userTotalPrayCount = userTotalPrayCount;
+      });
+      return userTotalPrayCount;
+    },
     fetchTotalPrayCount: async () => {
       const totalPrayCount = await fetchTotalPrayCount();
       set((state) => {

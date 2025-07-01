@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/react";
 
 export const fetchTodayUserPrayByGroupId = async (
   userId: string,
-  groupId: string
+  groupId: string,
 ): Promise<PrayWithPrayCard[]> => {
   try {
     const today = getISOTodayDate();
@@ -49,7 +49,7 @@ export const fetchTotalPrayCount = async (): Promise<number> => {
 export const createPray = async (
   prayCardId: string,
   userId: string,
-  prayType: PrayType
+  prayType: PrayType,
 ): Promise<Pray | null> => {
   try {
     const { error, data } = await supabase
@@ -72,7 +72,7 @@ export const createPray = async (
 export const updatePray = async (
   prayCardId: string | undefined,
   userId: string | undefined,
-  prayType: PrayType
+  prayType: PrayType,
 ): Promise<Pray | null> => {
   try {
     if (!prayCardId || !userId) return null;
@@ -96,7 +96,7 @@ export const updatePray = async (
 export const fetchPrayByDateRange = async (
   userId: string | undefined,
   startDt: string,
-  endDt: string
+  endDt: string,
 ): Promise<Pray[] | null> => {
   try {
     if (!userId) return null;
@@ -117,5 +117,24 @@ export const fetchPrayByDateRange = async (
   } catch (error) {
     Sentry.captureException(error);
     return null;
+  }
+};
+
+export const fetchUserTotalPrayCount = async (
+  userId: string,
+): Promise<number> => {
+  try {
+    const { count, error } = await supabase
+      .from("pray")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", userId);
+    if (error) {
+      Sentry.captureException(error.message);
+      return 0;
+    }
+    return count || 0;
+  } catch (error) {
+    Sentry.captureException(error);
+    return 0;
   }
 };

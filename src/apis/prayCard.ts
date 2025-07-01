@@ -160,7 +160,7 @@ export const fetchUserPrayCardList = async (
 
 export const fetchUserPrayCardCount = async (
   currentUserId: string,
-): Promise<number | null> => {
+): Promise<number> => {
   try {
     const { count, error } = await supabase
       .from("pray_card")
@@ -170,12 +170,12 @@ export const fetchUserPrayCardCount = async (
 
     if (error) {
       Sentry.captureException(error.message);
-      return null;
+      return 0;
     }
-    return count;
+    return count || 0;
   } catch (error) {
     Sentry.captureException(error);
-    return null;
+    return 0;
   }
 };
 
