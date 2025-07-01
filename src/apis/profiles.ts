@@ -1,6 +1,7 @@
 import { Profiles } from "supabase/types/tables";
 import { supabase } from "../../supabase/client";
 import * as Sentry from "@sentry/react";
+import { Json } from "supabase/types/database";
 
 export interface updateProfilesParams {
   avatar_url?: string;
@@ -14,6 +15,7 @@ export interface updateProfilesParams {
   push_notification?: boolean;
   terms_agreed_at?: string;
   fcm_token?: string;
+  app_settings?: Json;
 }
 
 export const updateProfile = async (

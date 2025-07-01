@@ -6,6 +6,7 @@ import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
 import { useNavigate } from "react-router-dom";
 import { getDateDistance } from "@toss/date";
 import { getISOOnlyDate, getISOTodayDate } from "@/lib/utils";
+import { AppSettings } from "../../../supabase/types/tables.ts";
 interface PrayCardProps {
   prayCard: PrayCardWithProfiles | undefined;
   isMoreBtn?: boolean;
@@ -32,6 +33,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
   editable = false,
 }) => {
   const user = useBaseStore((state) => state.user);
+  const myProfile = useBaseStore((state) => state.myProfile);
   const setIsOpenMyMemberDrawer = useBaseStore(
     (state) => state.setIsOpenMyMemberDrawer
   );
@@ -45,6 +47,15 @@ export const PrayCard: React.FC<PrayCardProps> = ({
         replace: true,
       });
     }
+  };
+
+  const getFontSize = () => {
+    const appSettings = myProfile?.app_settings as AppSettings;
+    if (!appSettings) return "text-sm";
+    if (appSettings.fontSize === "small") return "text-sm";
+    else if (appSettings.fontSize === "medium") return "text-md";
+    else if (appSettings.fontSize === "large") return "text-lg";
+    else return "text-sm";
   };
 
   if (!prayCard) {
@@ -163,7 +174,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
             <div className="min-w-5 self-stretch flex justify-center">
               <div className="w-0.5 self-stretch bg-blue-100 flex-shrink-0"></div>
             </div>
-            <p className="text-sm text-gray-600 whitespace-pre-line">
+            <p className={`text-gray-600 whitespace-pre-line ${getFontSize()}`}>
               {prayCard.life}
             </p>
           </div>
@@ -188,7 +199,9 @@ export const PrayCard: React.FC<PrayCardProps> = ({
                     />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-700">{request.content}</p>
+                <p className={`text-gray-700 ${getFontSize()}`}>
+                  {request.content}
+                </p>
               </li>
             ))}
           </ul>

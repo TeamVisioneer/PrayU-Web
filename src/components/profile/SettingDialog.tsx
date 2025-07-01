@@ -5,7 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { analyticsTrack } from "@/analytics/analytics.ts";
 import useBaseStore from "@/stores/baseStore";
@@ -22,6 +22,11 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { UserProfile } from "@/components/profile/UserProfile.tsx";
 import InfoBtn from "@/components/alert/infoBtn.tsx";
+import { Json } from "supabase/types/database";
+import {
+  AppSettings,
+  DEFAULT_APP_SETTINGS,
+} from "../../../supabase/types/tables.ts";
 
 const SettingDialog = () => {
   const isOpenSettingDialog = useBaseStore(
@@ -44,13 +49,31 @@ const SettingDialog = () => {
   const getProfile = useBaseStore((state) => state.getProfile);
   const signOut = useBaseStore((state) => state.signOut);
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(myProfile?.full_name || "");
 
-  useEffect(() => {
-    if (myProfile) {
-      setName(myProfile.full_name!);
-    }
-  }, [myProfile]);
+  // appSettings 상태를 AppSettings 타입으로 관리
+  const [appSettings, setAppSettings] = useState<AppSettings>(() => {
+    const currentSettings = myProfile?.app_settings as AppSettings;
+    return {
+      ...DEFAULT_APP_SETTINGS,
+      ...currentSettings,
+    };
+  });
+
+  // fontSize 설정을 위한 헬퍼 함수
+  const setFontSize = async (fontSize: "small" | "medium" | "large") => {
+    const updatedSettings = {
+      ...appSettings,
+      fontSize,
+    };
+    setAppSettings(updatedSettings);
+
+    // 즉시 프로필 업데이트
+    await updateProfile(user!.id, {
+      app_settings: updatedSettings as Json,
+    });
+    await getProfile(user!.id);
+  };
 
   if (!myProfile || !profileList) return null;
 
@@ -63,7 +86,9 @@ const SettingDialog = () => {
   const onBlurUpdateName = async () => {
     if (name.trim() === "") setName(myProfile?.full_name || "");
     else {
-      await updateProfile(user!.id, { full_name: name });
+      await updateProfile(user!.id, {
+        full_name: name,
+      });
       await getProfile(user!.id);
     }
   };
@@ -118,6 +143,12 @@ const SettingDialog = () => {
 
   const kakaoMessageEnabled = false;
 
+  const fontSizeOptions = [
+    { value: "small" as const, label: "작게" },
+    { value: "medium" as const, label: "보통" },
+    { value: "large" as const, label: "크게" },
+  ];
+
   return (
     <Dialog
       open={isOpenSettingDialog}
@@ -126,7 +157,7 @@ const SettingDialog = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DialogContent className="w-11/12 h-[400px] overflow-auto rounded-2xl bg-mainBg">
+      <DialogContent className="w-11/12 h-fit overflow-auto rounded-2xl bg-mainBg">
         <DialogHeader>
           <DialogTitle className="text-xl text-left pb-4">설정</DialogTitle>
           <DialogDescription></DialogDescription>
@@ -196,6 +227,56 @@ const SettingDialog = () => {
                             }
                           />
                         </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+
+              <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger
+                      onClick={() =>
+                        analyticsTrack("클릭_프로필_글씨크기설정", {})
+                      }
+                    >
+                      <div className="w-full h-10 flex flex-grow justify-between items-center">
+                        <span className="font-semibold">글씨 크기</span>
+                        <span className="p-2 text-sm text-gray-500">
+                          {
+                            fontSizeOptions.find(
+                              (option) => option.value === appSettings.fontSize
+                            )?.label
+                          }
+                        </span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="w-full flex flex-col p-2 gap-3 text-sm">
+                        <div className="bg-gray-100 p-2 rounded-md text-xs text-gray-600 text-center">
+                          글씨 크기 설정은 현재 기도카드 본문에만 적용됩니다.
+                        </div>
+                        {fontSizeOptions.map((option) => (
+                          <div
+                            key={option.value}
+                            className="w-full flex justify-between items-center gap-2 bg-white rounded-xl cursor-pointer"
+                            onClick={() => setFontSize(option.value)}
+                          >
+                            <span className="font-medium">{option.label}</span>
+                            <div
+                              className={`w-4 h-4 rounded-full border-2 ${
+                                appSettings.fontSize === option.value
+                                  ? "bg-blue-500 border-blue-500"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {appSettings.fontSize === option.value && (
+                                <div className="w-full h-full rounded-full bg-white scale-50"></div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </AccordionContent>
                   </AccordionItem>
