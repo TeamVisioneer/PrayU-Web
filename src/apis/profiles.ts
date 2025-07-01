@@ -50,7 +50,7 @@ export const getProfile = async (userId: string): Promise<Profiles | null> => {
       Sentry.captureException(error.message);
       return null;
     }
-    return data;
+    return data as Profiles;
   } catch (error) {
     Sentry.captureException(error);
     return null;
