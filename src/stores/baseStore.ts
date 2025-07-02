@@ -21,7 +21,6 @@ import {
   Pray,
   PrayCard,
   PrayCardWithProfiles,
-  PrayWithProfiles,
   Profiles,
   QtData,
   TodayPrayTypeHash,
