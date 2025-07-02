@@ -14,7 +14,6 @@ import { IoRemoveCircleOutline } from "react-icons/io5";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoPersonCircleOutline } from "react-icons/io5";
-import newIcon from "@/assets/newIcon.svg";
 import GroupMemberProfileList from "./GroupMemberProfileList";
 import { ChevronsUpDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
