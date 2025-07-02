@@ -21,7 +21,6 @@ import {
   Pray,
   PrayCard,
   PrayCardWithProfiles,
-  PrayWithProfiles,
   Profiles,
   QtData,
   TodayPrayTypeHash,
@@ -315,12 +314,6 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType,
   ) => Promise<Pray | null>;
-  groupAndSortByUserId: (
-    currentUserId: string,
-    data: PrayWithProfiles[],
-  ) => {
-    [key: string]: PrayWithProfiles[];
-  };
   prayListByDate: Pray[] | null;
   fetchPrayListByDate: (
     userId: string,
@@ -1087,32 +1080,6 @@ const useBaseStore = create<BaseStore>()(
           (pray) => pray.pray_card.user_id !== userId,
         );
       });
-    },
-    groupAndSortByUserId: (currentUserId: string, data: PrayWithProfiles[]) => {
-      const hash: { [key: string]: PrayWithProfiles[] } = {};
-
-      data.forEach((item) => {
-        if (!hash[item.user_id!]) {
-          hash[item.user_id!] = [];
-        }
-        hash[item.user_id!].push(item);
-      });
-
-      const sortedEntries = Object.entries(hash).sort(
-        ([keyA, valueA], [keyB, valueB]) => {
-          // 내 기도를 우선 정렬
-          if (keyA === currentUserId) return -1;
-          if (keyB === currentUserId) return 1;
-          return valueB.length - valueA.length;
-        },
-      );
-
-      const sortedHash = sortedEntries.reduce((acc, [key, value]) => {
-        acc[key] = value;
-        return acc;
-      }, {} as { [key: string]: PrayWithProfiles[] });
-
-      return sortedHash;
     },
 
     createPray: async (

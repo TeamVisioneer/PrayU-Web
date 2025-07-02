@@ -58,7 +58,9 @@ const Term: React.FC = () => {
         // Otherwise, dynamically import the version-specific file
         try {
           // Dynamic import using the version parameter
-          const termsModule = await import(`./${version}.json`);
+          const termsModule = await import(
+            /* @vite-ignore */ `./${version}.json`
+          );
           setData(termsModule.default as unknown as TermsData);
         } catch (importError) {
           console.error("Failed to load terms version:", importError);

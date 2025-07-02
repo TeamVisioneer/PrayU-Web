@@ -66,9 +66,8 @@ export const getISODateYMD = (dateString: string) => {
 };
 
 export const isToday = (dateString: string) => {
-  const today = getISOTodayDate();
-  const [todayDt] = today.split("T");
-  const [targetDt] = dateString.split("T");
+  const [todayDt] = getISOTodayDate().split("T");
+  const [targetDt] = getISOOnlyDate(dateString).split("T");
   return todayDt === targetDt;
 };
 

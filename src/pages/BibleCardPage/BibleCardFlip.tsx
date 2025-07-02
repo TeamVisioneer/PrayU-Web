@@ -9,7 +9,12 @@ import { getPublicUrl, uploadImage } from "@/apis/file";
 import { UserBibleCardLink } from "@/components/share/KakaoShareBtn";
 import { analyticsTrack } from "@/analytics/analytics";
 import kakaoShareIcon from "@/assets/kakaoShareIcon.png";
-import { CiSaveUp2, CiLink } from "react-icons/ci";
+import instagramIcon from "@/assets/instagramIcon.png";
+import {
+  MdOutlineFileDownload,
+  MdOutlineShare,
+  MdOutlineLink,
+} from "react-icons/md";
 import { toast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import BibleCardUI from "./BibleCardUI";
@@ -35,7 +40,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
   const [keywords, setKeywords] = useState<string[]>([]);
 
   const [publicUrl, setPublicUrl] = useState("");
-  const [isEnded, setIsEnded] = useState(false);
+  const [isEnded, setIsEnded] = useState(true);
   const [loading, setLoading] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -127,6 +132,37 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
     } catch (error) {
       console.error(error);
       return null;
+    }
+  };
+
+  const onClickInstagramShare = async () => {
+    analyticsTrack("클릭_인스타그램_공유", { where: "BibleCardPage" });
+    if (
+      window.flutter_inappwebview &&
+      window.flutter_inappwebview.callHandler
+    ) {
+      await window.flutter_inappwebview.callHandler(
+        "shareInstagramStory",
+        publicUrl
+      );
+    }
+  };
+
+  const onClickDownload = async () => {
+    analyticsTrack("클릭_다운로드", { where: "BibleCardPage" });
+    if (
+      window.flutter_inappwebview &&
+      window.flutter_inappwebview.callHandler
+    ) {
+      const result: unknown = await window.flutter_inappwebview.callHandler(
+        "downloadImages",
+        [publicUrl]
+      );
+      if (result === "success") {
+        toast({ description: "다운로드 완료" });
+      } else {
+        toast({ description: "다운로드 실패" });
+      }
     }
   };
 
@@ -233,13 +269,29 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
                 <hr className="flex-grow bg-gray-400" />
               </div>
               <div className="flex justify-center items-center gap-4">
-                <CiLink size={30} onClick={() => onClickCopyLink()} />
-                <CiSaveUp2 size={30} onClick={() => onClickSocialShare()} />
+                {isApp && (
+                  <MdOutlineFileDownload
+                    size={30}
+                    onClick={() => onClickDownload()}
+                  />
+                )}
+                <MdOutlineLink size={30} onClick={() => onClickCopyLink()} />
+                <MdOutlineShare
+                  size={30}
+                  onClick={() => onClickSocialShare()}
+                />
                 <img
                   src={kakaoShareIcon}
                   className="w-8 aspect-square"
                   onClick={() => onClickKakaoShare()}
                 />
+                {isApp && (
+                  <img
+                    src={instagramIcon}
+                    className="w-8 aspect-square"
+                    onClick={() => onClickInstagramShare()}
+                  />
+                )}
               </div>
             </section>
           </div>

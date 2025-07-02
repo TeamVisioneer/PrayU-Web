@@ -10,6 +10,7 @@ import TodayPrayBtn from "../todayPray/TodayPrayBtn";
 import { KakaoShareButton, TodayPrayLink } from "../share/KakaoShareBtn";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import { isCurrentWeek, isToday } from "@/lib/utils";
+import { useMemo } from "react";
 
 const PrayListDrawer: React.FC = () => {
   const isOpenMyPrayDrawer = useBaseStore((state) => state.isOpenMyPrayDrawer);
@@ -18,18 +19,45 @@ const PrayListDrawer: React.FC = () => {
   );
   const user = useBaseStore((state) => state.user);
 
-  const groupAndSortByUserId = useBaseStore(
-    (state) => state.groupAndSortByUserId
-  );
   const isPrayTodayForMember = useBaseStore(
     (state) => state.isPrayTodayForMember
   );
   const targetPrayCard = useBaseStore((state) => state.targetPrayCard);
 
-  const prayerList = groupAndSortByUserId(user!.id, targetPrayCard?.pray || []);
-  const lenPrayerList = Object.keys(prayerList).length;
+  const prayerList = useMemo(() => {
+    const prayerListSource = targetPrayCard?.pray || [];
+    const grouped = prayerListSource.reduce<
+      Record<string, (typeof prayerListSource)[number][]>
+    >((acc, pray) => {
+      const userId = pray.user_id;
+      if (!userId) {
+        return acc;
+      }
+      if (!acc[userId]) {
+        acc[userId] = [];
+      }
+      acc[userId].push(pray);
+      return acc;
+    }, {});
+
+    const sortedUserIds = Object.keys(grouped).sort((a, b) => {
+      if (a === user!.id) return -1;
+      if (b === user!.id) return 1;
+      // You can add more sorting logic here if needed, e.g., by name
+      const nameA = grouped[a][0].profiles?.full_name || "";
+      const nameB = grouped[b][0].profiles?.full_name || "";
+      return nameB.localeCompare(nameA);
+    });
+
+    return sortedUserIds.map((userId) => ({
+      userId,
+      prays: grouped[userId],
+    }));
+  }, [targetPrayCard?.pray, user]);
+
+  const lenPrayerList = prayerList.length;
   const isOnlyMyPrayInPrayerList =
-    lenPrayerList == 1 && Object.keys(prayerList).includes(user!.id);
+    lenPrayerList === 1 && prayerList[0].userId === user!.id;
 
   const isExpired = !isCurrentWeek(targetPrayCard?.created_at);
 
@@ -90,49 +118,69 @@ const PrayListDrawer: React.FC = () => {
               />
             </div>
           ) : (
-            Object.keys(prayerList).map((user_id) => (
-              <div
-                key={user_id}
-                className={`flex items-center justify-between p-3 px-4 ${
-                  blurCondition && "blur"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <img
-                    className="w-8 h-8 rounded-full border object-cover"
-                    src={
-                      prayerList[user_id][0].profiles.avatar_url ||
-                      "/images/defaultProfileImage.png"
-                    }
-                    onError={(
-                      e: React.SyntheticEvent<HTMLImageElement, Event>
-                    ) => {
-                      e.currentTarget.src = "/images/defaultProfileImage.png";
-                    }}
-                  />
-                  {user_id == user!.id ? (
-                    <p className="font-medium">내가 한 기도</p>
-                  ) : (
-                    <p className="font-medium">
-                      {prayerList[user_id][0].profiles.full_name}
-                    </p>
-                  )}
-                </div>
-                <div className="flex items-center gap-1">
-                  {prayerList[user_id].map((pray) => (
+            prayerList.map(({ userId, prays }) => {
+              const displayLimit = 5;
+              const sortedPrays = [...prays].sort((a, b) => {
+                const aIsToday = isToday(a.created_at);
+                const bIsToday = isToday(b.created_at);
+                if (aIsToday === bIsToday) return 0;
+                return aIsToday ? -1 : 1;
+              });
+              const visiblePrays = sortedPrays.slice(0, displayLimit);
+              const hiddenPraysCount = sortedPrays.length - visiblePrays.length;
+
+              return (
+                <div
+                  key={userId}
+                  className={`flex items-center justify-between p-3 px-4 ${
+                    blurCondition && "blur"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
                     <img
-                      key={pray.id}
-                      src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
-                      className={`rounded-full  border-2 ${
-                        isToday(pray.created_at)
-                          ? "border-yellow-300"
-                          : "border-transparent"
-                      }`}
+                      className="w-8 h-8 rounded-full border object-cover"
+                      src={
+                        prays[0].profiles.avatar_url ||
+                        "/images/defaultProfileImage.png"
+                      }
+                      onError={(
+                        e: React.SyntheticEvent<HTMLImageElement, Event>
+                      ) => {
+                        e.currentTarget.src = "/images/defaultProfileImage.png";
+                      }}
                     />
-                  ))}
+                    {userId == user!.id ? (
+                      <p className="font-medium">내가 한 기도</p>
+                    ) : (
+                      <p className="font-medium">
+                        {prays[0].profiles.full_name}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="flex -space-x-2">
+                      {visiblePrays.map((pray, index) => (
+                        <img
+                          key={pray.id}
+                          src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
+                          className={`relative h-6 w-6 rounded-full border-2 object-cover ${
+                            isToday(pray.created_at)
+                              ? "border-yellow-300"
+                              : "border-white"
+                          }`}
+                          style={{ zIndex: visiblePrays.length - index }}
+                        />
+                      ))}
+                    </div>
+                    {hiddenPraysCount > 0 && (
+                      <span className="text-xs text-gray-500">
+                        +{hiddenPraysCount}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </DrawerContent>

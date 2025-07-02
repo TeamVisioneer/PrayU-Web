@@ -3,6 +3,7 @@ import { getISOTodayDate, getISODate, getWeekInfo } from "@/lib/utils";
 import { PrayType } from "@/Enums/prayType";
 import { PrayTypeDatas } from "@/Enums/prayType";
 import useBaseStore from "@/stores/baseStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface WeeklyCalendarProps {
   prayCard: PrayCardWithProfiles | undefined;
@@ -30,7 +31,18 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ prayCard }) => {
     );
   };
 
-  if (!prayCard) return null;
+  if (!prayCard) {
+    return (
+      <div className="w-fuil flex justify-around">
+        {Array.from({ length: 7 }).map((_, index) => (
+          <div key={index} className="w-[10%] flex flex-col items-center gap-1">
+            <Skeleton className="h-5 w-3 " />
+            <Skeleton className="w-full aspect-square rounded-sm bg-gray-200" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="w-fuil flex justify-around ">
