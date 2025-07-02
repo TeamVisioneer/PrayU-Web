@@ -101,7 +101,7 @@ const BibleCardGenerator: React.FC = () => {
               <div className="flex justify-center">
                 <div
                   ref={bibleCardRef}
-                  className="relative w-[380px] h-[550px] flex flex-col rounded-[16px] px-[30px] py-[20px] bg-[#FEFDFC] border-[1px] border-gray-200 shadow-xl"
+                  className="relative w-[380px] aspect-[3/4] flex flex-col px-[30px] py-[20px] bg-[#FEFDFC] border-[1px] border-gray-200 shadow-xl"
                 >
                   <div
                     className="w-full aspect-square flex flex-col justify-center items-center"

@@ -71,7 +71,7 @@ const BibleCardUI: React.FC<BibleCardUIProps> = ({ name, keywords }) => {
     Colors[Math.floor(Math.random() * Colors.length)];
 
   return (
-    <div className="relative w-[380px] h-[550px] flex flex-col px-[30px] py-[20px] bg-[#FEFDFC] border-[1px] border-gray-200">
+    <div className="relative w-[380px] aspect-[3/4] flex flex-col px-[30px] py-[20px] bg-[#FEFDFC] border-[1px] border-gray-200">
       <div
         className="w-full aspect-square flex flex-col justify-center items-center"
         style={{
