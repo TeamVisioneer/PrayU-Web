@@ -191,10 +191,10 @@ const GroupMenuBtn: React.FC = () => {
       window.flutter_inappwebview &&
       window.flutter_inappwebview.callHandler
     ) {
-      const result: unknown = await window.flutter_inappwebview.callHandler(
+      const result = (await window.flutter_inappwebview.callHandler(
         "requestAppReview"
-      );
-      if (result !== "success") requestStorePage();
+      )) as { status: string };
+      if (result.status !== "success") requestStorePage();
     } else {
       requestStorePage();
     }

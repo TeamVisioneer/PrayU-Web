@@ -154,11 +154,11 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
       window.flutter_inappwebview &&
       window.flutter_inappwebview.callHandler
     ) {
-      const result: unknown = await window.flutter_inappwebview.callHandler(
+      const result = (await window.flutter_inappwebview.callHandler(
         "downloadImages",
         [publicUrl]
-      );
-      if (result === "success") {
+      )) as { status: string };
+      if (result.status === "success") {
         toast({ description: "다운로드 완료" });
       } else {
         toast({ description: "다운로드 실패" });
