@@ -5,4 +5,14 @@ interface Window {
       ...args: Array<string | number | boolean | object | null>
     ) => Promise<unknown>;
   };
+  webkit?: {
+    messageHandlers?: {
+      openAppSettings?: {
+        postMessage: (message: object) => void;
+      };
+    };
+  };
+  Android?: {
+    openAppSettings?: () => void;
+  };
 }

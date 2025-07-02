@@ -18,10 +18,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Switch } from "@/components/ui/switch";
+// import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { UserProfile } from "@/components/profile/UserProfile.tsx";
-import InfoBtn from "@/components/alert/infoBtn.tsx";
+// import InfoBtn from "@/components/alert/infoBtn.tsx";
 import { Json } from "supabase/types/database";
 import {
   AppSettings,
@@ -126,22 +126,32 @@ const SettingDialog = () => {
     fetchProfileList(updatedBlockingUsers);
   };
 
-  const onChangeKakaoNotificationToggle = async () => {
-    analyticsTrack("클릭_프로필_카카오메세지토글", {});
-    if (!myProfile) return;
-    await updateProfile(myProfile.id, {
-      kakao_notification: !myProfile.kakao_notification,
-    });
+  const onClickOpenAppSettings = () => {
+    analyticsTrack("클릭_프로필_앱설정", {});
+    if (
+      window.flutter_inappwebview &&
+      window.flutter_inappwebview.callHandler
+    ) {
+      window.flutter_inappwebview.callHandler("openAppSettings");
+    }
   };
 
-  const onChangePushNotificationToggle = async () => {
-    analyticsTrack("클릭_프로필_푸쉬알림토글", {});
-    await updateProfile(myProfile.id, {
-      push_notification: !myProfile.push_notification,
-    });
-  };
+  // const onChangeKakaoNotificationToggle = async () => {
+  //   analyticsTrack("클릭_프로필_카카오메세지토글", {});
+  //   if (!myProfile) return;
+  //   await updateProfile(myProfile.id, {
+  //     kakao_notification: !myProfile.kakao_notification,
+  //   });
+  // };
 
-  const kakaoMessageEnabled = false;
+  // const onChangePushNotificationToggle = async () => {
+  //   analyticsTrack("클릭_프로필_푸쉬알림토글", {});
+  //   await updateProfile(myProfile.id, {
+  //     push_notification: !myProfile.push_notification,
+  //   });
+  // };
+
+  // const kakaoMessageEnabled = false;
 
   const fontSizeOptions = [
     { value: "small" as const, label: "작게" },
@@ -181,7 +191,7 @@ const SettingDialog = () => {
                 </div>
               </div>
 
-              <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+              {/* <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="item-1">
                     <AccordionTrigger
@@ -234,6 +244,18 @@ const SettingDialog = () => {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
+              </div> */}
+
+              <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
+                <div className="w-full h-10 flex flex-grow justify-between items-center">
+                  <span className="font-semibold">알림 설정</span>
+                  <button
+                    onClick={() => onClickOpenAppSettings()}
+                    className="text-blue-500 hover:text-blue-700 text-sm"
+                  >
+                    열기
+                  </button>
+                </div>
               </div>
 
               <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
