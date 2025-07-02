@@ -125,7 +125,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           </div>
         </div>
         {/* 시간 및 읽음 처리 버튼 */}
-        <div className="flex flex-col items-end gap-2">
+        <div className="flex flex-col items-end gap-2 flex-shrink-0">
           <div className="flex items-center flex-shrink-0 gap-3">
             {/* 시간 */}
             <div className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full">
