@@ -173,6 +173,18 @@ const GroupMenuBtn: React.FC = () => {
     navigate("/profile/me", { replace: true });
   };
 
+  const requestStorePage = () => {
+    if (navigator.userAgent.match(/Android/i)) {
+      window.location.href =
+        "https://play.google.com/store/apps/details?id=com.team.visioneer.prayu";
+    } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+      window.location.href =
+        "https://itunes.apple.com/kr/app/apple-store/id6711345171";
+    } else {
+      window.location.href = "https://linktr.ee/prayu.site";
+    }
+  };
+
   const onClickAppReview = async () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_앱_리뷰", {});
@@ -180,17 +192,12 @@ const GroupMenuBtn: React.FC = () => {
       window.flutter_inappwebview &&
       window.flutter_inappwebview.callHandler
     ) {
-      await window.flutter_inappwebview.callHandler("requestAppReview");
+      const result: unknown = await window.flutter_inappwebview.callHandler(
+        "requestAppReview"
+      );
+      if (result !== "success") requestStorePage();
     } else {
-      if (navigator.userAgent.match(/Android/i)) {
-        window.location.href =
-          "https://play.google.com/store/apps/details?id=com.team.visioneer.prayu";
-      } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-        window.location.href =
-          "https://itunes.apple.com/kr/app/apple-store/id6711345171";
-      } else {
-        window.location.href = "https://linktr.ee/prayu.site";
-      }
+      requestStorePage();
     }
   };
 
@@ -254,7 +261,6 @@ const GroupMenuBtn: React.FC = () => {
                   >
                     그룹 홈
                   </a>
-                  <img src={newIcon} />
                 </div>
 
                 {targetGroup && !isGroupListPage && (

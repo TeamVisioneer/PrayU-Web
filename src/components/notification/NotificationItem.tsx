@@ -94,7 +94,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         {/* 컨텐츠 */}
         <div className="flex-grow min-w-0 space-y-2">
           {/* 헤더 */}
-          <div className="flex items-start justify-between gap-2">
+          <div className="flex flex-col items-start justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
               <h3
                 className={`font-semibold text-gray-800 truncate ${
@@ -110,24 +110,6 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
               )}
             </div>
 
-            <div className="flex items-center flex-shrink-0 gap-3">
-              {/* 시간 */}
-              <div className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full">
-                {dateDistance.days > 365
-                  ? `${Math.floor(dateDistance.days / 365)}년 전`
-                  : dateDistance.days > 30
-                  ? `${Math.floor(dateDistance.days / 30)}달 전`
-                  : dateDistance.days > 0
-                  ? `${dateDistance.days}일 전`
-                  : dateDistance.hours > 0
-                  ? `${dateDistance.hours}시간 전`
-                  : `${dateDistance.minutes}분 전`}
-              </div>
-            </div>
-          </div>
-
-          {/* 본문 및 읽음 처리 버튼 */}
-          <div className="flex items-end justify-between gap-4">
             <div className="flex-grow space-y-1">
               {notification.body.split("\n").map((line, index) => (
                 <p
@@ -140,17 +122,35 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
                 </p>
               ))}
             </div>
-            {/* 읽음 처리 버튼 */}
-            {unread && (
-              <button
-                onClick={handleClickMarkAsRead}
-                className="flex-shrink-0 flex items-center gap-1.5 rounded-lg border border-violet-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-violet-600 shadow-sm transition-colors hover:bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-300 focus:ring-offset-2"
-              >
-                <RiCheckLine className="h-4 w-4" />
-                <span>읽음 처리</span>
-              </button>
-            )}
           </div>
+        </div>
+        {/* 시간 및 읽음 처리 버튼 */}
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center flex-shrink-0 gap-3">
+            {/* 시간 */}
+            <div className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full">
+              {dateDistance.days > 365
+                ? `${Math.floor(dateDistance.days / 365)}년 전`
+                : dateDistance.days > 30
+                ? `${Math.floor(dateDistance.days / 30)}달 전`
+                : dateDistance.days > 0
+                ? `${dateDistance.days}일 전`
+                : dateDistance.hours > 0
+                ? `${dateDistance.hours}시간 전`
+                : `${dateDistance.minutes}분 전`}
+            </div>
+          </div>
+
+          {/* 읽음 처리 버튼 */}
+          {unread && (
+            <button
+              onClick={handleClickMarkAsRead}
+              className="flex-shrink-0 flex items-center gap-1.5 rounded-lg border border-violet-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-violet-600 shadow-sm transition-colors hover:bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-300 focus:ring-offset-2"
+            >
+              <RiCheckLine className="h-4 w-4" />
+              <span>읽음</span>
+            </button>
+          )}
         </div>
       </div>
 

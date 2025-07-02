@@ -165,7 +165,8 @@ const MyProfilePage = () => {
               {myProfile.full_name}
             </h2>
             <p className="text-sm text-gray-500 mt-1">
-              지금까지 총 {userTotalPrayCount}번의 기도를 받았어요!
+              지금까지 총 {userTotalPrayCount.toLocaleString()}번의 기도를
+              받았어요!
             </p>
           </div>
         </section>

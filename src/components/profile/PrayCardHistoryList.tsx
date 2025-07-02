@@ -89,7 +89,7 @@ const PrayCardHistoryList = () => {
               <p className="truncate text-xs font-bold text-indigo-600">
                 {prayCard.group?.name || "말씀 카드"}
               </p>
-              <p className="line-clamp-2 text-xs leading-relaxed text-gray-700">
+              <p className="line-clamp-3 text-xs leading-relaxed text-gray-700">
                 {prayCard.content}
               </p>
               <div className="flex items-center space-x-1 pt-1">
