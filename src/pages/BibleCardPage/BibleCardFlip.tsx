@@ -40,7 +40,7 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
   const [keywords, setKeywords] = useState<string[]>([]);
 
   const [publicUrl, setPublicUrl] = useState("");
-  const [isEnded, setIsEnded] = useState(true);
+  const [isEnded, setIsEnded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
