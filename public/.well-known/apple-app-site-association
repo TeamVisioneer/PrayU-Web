@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "63B3RKAA2H.com.team.visioneer.prayu",
+        "paths": ["/group/*", "*"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,122 @@
+# PrayU-web - React Frontend Rules
+
+## Project Overview
+PrayU-web은 기도 중심의 종교 서비스 웹 애플리케이션으로, React + TypeScript 기반으로 구축되었습니다.
+Flutter 앱 내 웹뷰를 통해 서빙되는 하이브리드 앱 아키텍처의 핵심 컴포넌트입니다.
+
+## Technology Stack
+- **Framework**: React 18.3.1 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS + shadcn/ui
+- **State Management**: Zustand
+- **Routing**: React Router Dom
+- **Database**: Supabase Client
+- **UI Components**: Radix UI
+- **Analytics**: Amplitude, Google Analytics, Mixpanel
+- **Animation**: Framer Motion
+- **Error Tracking**: Sentry
+
+## Development Guidelines
+
+### General Rules
+1. **Language**: 모든 UI 텍스트와 주석은 한국어를 우선 사용
+2. **Type Safety**: TypeScript strict mode 활용
+3. **Code Quality**: ESLint 규칙 준수
+4. **Mobile-First**: 웹뷰 환경에 최적화된 모바일 우선 개발
+
+### Component Structure
+- `components/`에 재사용 가능한 컴포넌트
+- `pages/`에 라우트별 페이지 컴포넌트
+- `hooks/`에 커스텀 훅
+- `stores/`에 Zustand 스토어
+- `apis/`에 API 호출 함수
+- `types/`에 TypeScript 타입 정의
+- `lib/`에 유틸리티 함수
+
+### Styling Guidelines
+- **Primary**: Tailwind CSS 클래스 우선 사용
+- **Components**: shadcn/ui 컴포넌트 적극 활용
+- **Utilities**: `clsx`와 `tailwind-merge` 조합 사용
+- **Responsive**: 모바일 웹뷰 환경 고려한 반응형 디자인
+
+### State Management
+- **Store Location**: Zustand store는 `stores/` 디렉토리
+- **Immutability**: 불변성을 위해 immer 사용
+- **Server State**: React Query로 서버 상태 관리
+- **Local State**: useState, useReducer 적절히 활용
+
+### API Integration
+- **Database**: Supabase client를 통한 데이터베이스 접근
+- **Authentication**: Supabase Auth 활용
+- **Real-time**: Supabase Realtime 구독 기능 활용
+- **Type Safety**: Supabase 타입 자동 생성 활용
+
+## File Naming Conventions
+- **Components**: PascalCase (e.g., `PrayCard.tsx`, `GroupList.tsx`)
+- **Hooks**: camelCase with 'use' prefix (e.g., `useAuth.ts`, `usePrayCard.ts`)
+- **Utils**: camelCase (e.g., `dateUtils.ts`, `formatUtils.ts`)
+- **Types**: PascalCase (e.g., `UserEntity.ts`, `PrayCardType.ts`)
+- **Stores**: camelCase with 'Store' suffix (e.g., `userStore.ts`, `prayStore.ts`)
+
+## Environment Configuration
+### Environment Files
+- **Development**: `.env.local`
+- **Staging**: `.env.staging`
+- **Production**: `.env.prod`
+
+### Required Environment Variables
+```
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+VITE_ENV=
+VITE_SENTRY_DSN=
+VITE_AMPLITUDE_API_KEY=
+VITE_GA_MEASUREMENT_ID=
+VITE_MIXPANEL_TOKEN=
+```
+
+## Performance Optimization
+- **React Optimization**: React.memo, useMemo, useCallback 적극 활용
+- **Bundle Optimization**: 코드 스플리팅 및 lazy loading
+- **Image Optimization**: WebP 포맷 사용 및 lazy loading
+- **Caching**: React Query 캐싱 전략 최적화
+
+## WebView Specific Considerations
+- **Touch Events**: 모바일 터치 제스처 최적화
+- **Viewport**: 웹뷰 viewport 설정 고려
+- **Bridge Communication**: Flutter와의 JavaScript 브릿지 통신
+- **Deep Linking**: 딥링크 처리를 위한 라우팅 설계
+
+## Security Best Practices
+- **Environment Variables**: 민감 정보는 환경 변수로 관리
+- **Supabase RLS**: Row Level Security 정책 활용
+- **Input Validation**: 클라이언트 + 서버 사이드 검증
+- **XSS Prevention**: 사용자 입력 데이터 sanitization
+
+## Accessibility (a11y)
+- **Semantic HTML**: 의미 있는 HTML 태그 사용
+- **ARIA Labels**: 스크린 리더 지원
+- **Keyboard Navigation**: 키보드 접근성 고려
+- **Color Contrast**: 충분한 색상 대비 확보
+
+## Key Features Context
+- **기도 카드**: 개인/그룹 기도 카드 생성 및 관리
+- **그룹 관리**: 기도 그룹 생성, 참여, 관리
+- **성경 구절**: AI 기반 성경 구절 추천
+- **소셜 기능**: 기도 공유 및 소셜 로그인
+- **알림 시스템**: 실시간 알림 및 푸시 알림
+
+## Code Style
+- **Indentation**: 2 spaces
+- **Quotes**: Single quotes for JavaScript/TypeScript
+- **Semicolons**: Required
+- **Trailing Commas**: Preferred
+- **Import Order**: React imports → Third-party → Local imports
+
+## Testing Strategy
+- **Unit Tests**: React Testing Library + Jest
+- **Component Tests**: Storybook 활용
+- **E2E Tests**: Playwright 또는 Cypress
+- **Accessibility Tests**: axe-core 활용
+
+Remember: This is a Korean religious service focused on prayer and community building within a mobile webview environment. Prioritize mobile user experience, spiritual context, and seamless integration with the Flutter app container. 
