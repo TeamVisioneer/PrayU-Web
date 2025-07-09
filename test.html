@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universal Links 테스트</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .test-link {
+        display: block;
+        margin: 10px 0;
+        padding: 15px;
+        background: #007aff;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        text-align: center;
+      }
+      .test-link:hover {
+        background: #0056cc;
+      }
+      .note {
+        background: #f0f0f0;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PrayU Universal Links 테스트</h1>
+
+    <div class="note">
+      <h3>테스트 방법:</h3>
+      <p>1. 이 페이지를 iOS Safari에서 열기</p>
+      <p>2. 아래 링크들을 클릭하여 테스트</p>
+      <p>3. 앱이 자동으로 열리는지 확인</p>
+    </div>
+
+    <a href="https://staging.prayu.site/" class="test-link">
+      메인 페이지 테스트
+    </a>
+
+    <a href="https://staging.prayu.site/group" class="test-link">
+      그룹 페이지 테스트
+    </a>
+
+    <div class="note">
+      <h3>문제 해결:</h3>
+      <p>
+        • 링크가 Safari에서 열린다면: 설정 → Safari → 기본 브라우저 앱에서 열기
+        확인
+      </p>
+      <p>• 앱이 설치되어 있는지 확인</p>
+      <p>• iOS 시뮬레이터가 아닌 실제 기기에서 테스트</p>
+    </div>
+  </body>
+</html>
