@@ -74,7 +74,7 @@ const ReactionBtn: React.FC<ReactionBtnProps> = ({ prayCard, eventOption }) => {
           subtitle: "기도 알림",
           message: "당신을 위해 기도해 준 친구가 있어요!",
           data: {
-            url: `${import.meta.env.VITE_BASE_URL}/group/${targetGroup!.id}`,
+            url: `${window.location.origin}/group/${targetGroup!.id}`,
           },
           userIds: prayCard.user_id ? [prayCard.user_id] : [],
         });

@@ -81,7 +81,7 @@ const GroupJoinPage: React.FC = () => {
       subtitle: title,
       message: description,
       data: {
-        url: `${import.meta.env.VITE_BASE_URL}/group/${targetGroup.id}`,
+        url: `${window.location.origin}/group/${targetGroup.id}`,
       },
       userIds: memberList
         .map((member) => member.user_id!)

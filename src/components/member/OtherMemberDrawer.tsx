@@ -59,10 +59,10 @@ const OtherMemberDrawer: React.FC = () => {
 
     await createOnesignalPush({
       title: "PrayU",
-      subtitle: "기도제목 요청 알림",
+      subtitle: "기도제목 요청",
       message: `누군가가 ${targetGroup.name}에서 기도제목을 기다리고 있어요!`,
       data: {
-        url: `${import.meta.env.VITE_BASE_URL}/group/${targetGroup.id}`,
+        url: `${window.location.origin}/group/${targetGroup.id}`,
       },
       userIds: [otherMember.user_id],
     });
@@ -70,7 +70,7 @@ const OtherMemberDrawer: React.FC = () => {
       userId: [otherMember.user_id],
       senderId: user.id,
       groupId: targetGroup.id,
-      title: "기도제목 요청 알림",
+      title: "기도제목 요청",
       body: `누군가가 ${targetGroup.name}에서 기도제목을 기다리고 있어요!`,
       type: NotificationType.SNS,
       data: {},
