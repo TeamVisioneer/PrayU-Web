@@ -79,7 +79,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
         subtitle: subtitle,
         message: message,
         data: {
-          url: `${import.meta.env.VITE_BASE_URL}/group/${group.id}`,
+          url: `${window.location.origin}/group/${group.id}`,
         },
         userIds: memberIds,
       });
