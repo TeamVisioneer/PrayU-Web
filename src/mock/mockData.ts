@@ -102,6 +102,7 @@ export const mockGroup: Group = {
   updated_at: "2025-06-23T00:00:00.000Z",
   deleted_at: null,
   group_union_id: null,
+  pray_time: "09:00",
 };
 
 // 목업 멤버 데이터
