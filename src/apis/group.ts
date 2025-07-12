@@ -154,6 +154,7 @@ export interface updateGroupParams {
   name?: string;
   intro?: string;
   user_id?: string;
+  pray_time?: string;
 }
 
 export const updateGroup = async (
