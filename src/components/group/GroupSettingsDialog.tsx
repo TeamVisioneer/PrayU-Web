@@ -28,7 +28,14 @@ const GroupSettingsDialog: React.FC = () => {
   const getGroup = useBaseStore((state) => state.getGroup);
 
   // 선택된 시간을 추적하는 상태
-  const [selectedHour, setSelectedHour] = useState(0);
+  const [selectedHour, setSelectedHour] = useState(() => {
+    // targetGroup.pray_time에서 시간 파싱 (예: "01:00" -> 1, "13:00" -> 13)
+    if (targetGroup?.pray_time) {
+      const hour = parseInt(targetGroup.pray_time.split(":")[0], 10);
+      return isNaN(hour) ? 0 : hour;
+    }
+    return 0;
+  });
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const getSelectedTimeText = () => {
@@ -64,7 +71,7 @@ const GroupSettingsDialog: React.FC = () => {
     setSelectedHour(clampedIndex);
   };
 
-  // 초기 스크롤 위치 설정 (오전 12시가 중앙에 오도록)
+  // 초기 스크롤 위치 설정 (선택된 시간이 중앙에 오도록)
   useEffect(() => {
     if (scrollRef.current && isOpenGroupSettingsDialog) {
       setTimeout(() => {
@@ -73,16 +80,23 @@ const GroupSettingsDialog: React.FC = () => {
           const containerHeight = 192;
           const paddingTop = 80;
 
-          // 첫 번째 아이템이 중앙에 오는 스크롤 위치 계산
-          const firstItemCenter = paddingTop + itemHeight / 2; // 104px
-          const initialScrollTop = firstItemCenter - containerHeight / 2; // 104 - 96 = 8px
+          // targetGroup.pray_time에서 초기 시간 파싱
+          let initialHour = 0;
+          if (targetGroup?.pray_time) {
+            const hour = parseInt(targetGroup.pray_time.split(":")[0], 10);
+            initialHour = isNaN(hour) ? 0 : hour;
+          }
 
-          scrollRef.current.scrollTop = Math.max(0, initialScrollTop);
-          setSelectedHour(0);
+          // 초기 시간에 해당하는 아이템이 중앙에 오는 스크롤 위치 계산
+          const selectedItemCenter =
+            paddingTop + itemHeight / 2 + initialHour * itemHeight;
+          const scrollTop = selectedItemCenter - containerHeight / 2;
+
+          scrollRef.current.scrollTop = Math.max(0, scrollTop);
         }
       }, 100);
     }
-  }, [isOpenGroupSettingsDialog]);
+  }, [isOpenGroupSettingsDialog, targetGroup?.pray_time]);
 
   const onClickSaveGroup = async () => {
     if (!targetGroup) return;
@@ -90,7 +104,7 @@ const GroupSettingsDialog: React.FC = () => {
     analyticsTrack("클릭_그룹_이름변경", { group_name: GroupSettingsDialog });
     const group = await updateGroup(targetGroup.id, {
       name: inputGroupName,
-      pray_time: `${selectedHour}:00`,
+      pray_time: `${selectedHour.toString().padStart(2, "0")}:00`,
     });
     if (group) {
       getGroup(targetGroup.id);
@@ -100,6 +114,11 @@ const GroupSettingsDialog: React.FC = () => {
 
   useEffect(() => {
     setGroupName(targetGroup?.name || "");
+    // targetGroup이 변경될 때 selectedHour도 업데이트
+    if (targetGroup?.pray_time) {
+      const hour = parseInt(targetGroup.pray_time.split(":")[0], 10);
+      setSelectedHour(isNaN(hour) ? 0 : hour);
+    }
   }, [setGroupName, targetGroup]);
 
   if (!memberList || !targetGroup) return null;
@@ -109,7 +128,7 @@ const GroupSettingsDialog: React.FC = () => {
       open={isOpenGroupSettingsDialog}
       onOpenChange={setIsOpenGroupSettingsDialog}
     >
-      <DialogContent className="w-11/12 rounded-xl">
+      <DialogContent className="w-11/12 rounded-xl max-h-80vh">
         <DialogHeader>
           <DialogTitle>그룹 설정</DialogTitle>
           <DialogDescription></DialogDescription>
