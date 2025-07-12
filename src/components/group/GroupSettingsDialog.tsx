@@ -7,11 +7,12 @@ import {
 } from "@/components/ui/dialog";
 import useBaseStore from "@/stores/baseStore";
 import { Input } from "../ui/input";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
 import GroupMemberSettingsBtn from "./GroupMemberSettingsBtn";
 import GroupMemberProfileList from "./GroupMemberProfileList";
+import WheelPicker from "../ui/wheel-picker";
 
 const GroupSettingsDialog: React.FC = () => {
   const targetGroup = useBaseStore((state) => state.targetGroup);
@@ -28,75 +29,7 @@ const GroupSettingsDialog: React.FC = () => {
   const getGroup = useBaseStore((state) => state.getGroup);
 
   // 선택된 시간을 추적하는 상태
-  const [selectedHour, setSelectedHour] = useState(() => {
-    // targetGroup.pray_time에서 시간 파싱 (예: "01:00" -> 1, "13:00" -> 13)
-    if (targetGroup?.pray_time) {
-      const hour = parseInt(targetGroup.pray_time.split(":")[0], 10);
-      return isNaN(hour) ? 0 : hour;
-    }
-    return 0;
-  });
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const getSelectedTimeText = () => {
-    const hour12 =
-      selectedHour === 0
-        ? 12
-        : selectedHour > 12
-        ? selectedHour - 12
-        : selectedHour;
-    const ampm = selectedHour < 12 ? "오전" : "오후";
-    return `${ampm} ${hour12}시`;
-  };
-
-  const handleScroll = () => {
-    if (!scrollRef.current) return;
-
-    const scrollTop = scrollRef.current.scrollTop;
-    const itemHeight = 48; // h-12 = 48px
-    const containerHeight = 192; // h-48 = 192px
-    const paddingTop = 80; // py-20 = 80px
-
-    // 현재 뷰포트 중앙의 절대 위치
-    const viewportCenter = scrollTop + containerHeight / 2;
-    // 첫 번째 아이템의 중심 위치
-    const firstItemCenter = paddingTop + itemHeight / 2;
-    // 선택된 아이템 인덱스 계산
-    const selectedIndex = Math.round(
-      (viewportCenter - firstItemCenter) / itemHeight
-    );
-
-    // 0-23 범위로 제한
-    const clampedIndex = Math.max(0, Math.min(23, selectedIndex));
-    setSelectedHour(clampedIndex);
-  };
-
-  // 초기 스크롤 위치 설정 (선택된 시간이 중앙에 오도록)
-  useEffect(() => {
-    if (scrollRef.current && isOpenGroupSettingsDialog) {
-      setTimeout(() => {
-        if (scrollRef.current) {
-          const itemHeight = 48;
-          const containerHeight = 192;
-          const paddingTop = 80;
-
-          // targetGroup.pray_time에서 초기 시간 파싱
-          let initialHour = 0;
-          if (targetGroup?.pray_time) {
-            const hour = parseInt(targetGroup.pray_time.split(":")[0], 10);
-            initialHour = isNaN(hour) ? 0 : hour;
-          }
-
-          // 초기 시간에 해당하는 아이템이 중앙에 오는 스크롤 위치 계산
-          const selectedItemCenter =
-            paddingTop + itemHeight / 2 + initialHour * itemHeight;
-          const scrollTop = selectedItemCenter - containerHeight / 2;
-
-          scrollRef.current.scrollTop = Math.max(0, scrollTop);
-        }
-      }, 100);
-    }
-  }, [isOpenGroupSettingsDialog, targetGroup?.pray_time]);
+  const [selectedHour, setSelectedHour] = useState(0);
 
   const onClickSaveGroup = async () => {
     if (!targetGroup) return;
@@ -114,12 +47,11 @@ const GroupSettingsDialog: React.FC = () => {
 
   useEffect(() => {
     setGroupName(targetGroup?.name || "");
-    // targetGroup이 변경될 때 selectedHour도 업데이트
     if (targetGroup?.pray_time) {
       const hour = parseInt(targetGroup.pray_time.split(":")[0], 10);
       setSelectedHour(isNaN(hour) ? 0 : hour);
     }
-  }, [setGroupName, targetGroup]);
+  }, [setGroupName, targetGroup, setSelectedHour, isOpenGroupSettingsDialog]);
 
   if (!memberList || !targetGroup) return null;
 
@@ -129,8 +61,8 @@ const GroupSettingsDialog: React.FC = () => {
       onOpenChange={setIsOpenGroupSettingsDialog}
     >
       <DialogContent
-        onOpenAutoFocus={(e) => e.preventDefault()}
         className="w-11/12 rounded-xl max-h-90vh overflow-y-auto"
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader>
           <DialogTitle>그룹 설정</DialogTitle>
@@ -156,63 +88,19 @@ const GroupSettingsDialog: React.FC = () => {
                 BETA
               </span>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              베타 기능으로 알림이 정확하지 않을 수 있습니다
-            </p>
-            <div className="relative mx-auto w-full max-w-xs">
-              {/* scroll 없에기 */}
-              <div
-                ref={scrollRef}
-                className="h-48 overflow-y-auto scrollbar-hide rounded-lg bg-white scroll-smooth snap-y snap-mandatory"
-                onScroll={handleScroll}
-                style={{
-                  perspective: "1000px",
-                  maskImage:
-                    "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-                  WebkitMaskImage:
-                    "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-                }}
-              >
-                <div className="py-20">
-                  {Array.from({ length: 24 }, (_, i) => {
-                    const hour12 = i === 0 ? 12 : i > 12 ? i - 12 : i;
-                    const ampm = i < 12 ? "오전" : "오후";
-                    return (
-                      <div
-                        key={i}
-                        className="h-12 flex items-center justify-center text-lg font-medium cursor-pointer snap-center transition-all duration-200 select-none opacity-40 hover:opacity-60"
-                        style={{
-                          transform: "scale(0.9)",
-                          transformOrigin: "center",
-                        }}
-                      >
-                        {ampm} {hour12}시
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              {/* 중앙 선택된 영역 강조 */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="h-full flex items-center justify-center">
-                  <div className="h-12 bg-blue-50/30 border-t-2 border-b-2 border-blue-500/50 rounded-md"></div>
-                </div>
-              </div>
-              {/* 중앙 아이템 강조 오버레이 */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="h-full flex items-center justify-center">
-                  <div
-                    className="text-xl font-bold text-blue-600 bg-white rounded-lg px-4 py-2 shadow-sm border border-blue-200 whitespace-nowrap"
-                    style={{
-                      transform: "scale(1.1)",
-                      minWidth: "120px",
-                    }}
-                  >
-                    {getSelectedTimeText()}
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-xs text-gray-500 mt-1">
+                지정된 시간에 그룹원들에게 기도 알림을 전송해 보아요.
+              </p>
+              <p className="text-xs text-gray-500">
+                베타 기능으로 알림이 정확하지 않을 수 있습니다.
+              </p>
             </div>
+
+            <WheelPicker
+              selectedHour={selectedHour}
+              onChange={setSelectedHour}
+            />
           </section>
 
           <section className="flex flex-col gap-4">
