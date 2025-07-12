@@ -88,7 +88,10 @@ const GroupSettingsDialog: React.FC = () => {
     if (!targetGroup) return;
     if (inputGroupName.trim() === "") return;
     analyticsTrack("클릭_그룹_이름변경", { group_name: GroupSettingsDialog });
-    const group = await updateGroup(targetGroup.id, { name: inputGroupName });
+    const group = await updateGroup(targetGroup.id, {
+      name: inputGroupName,
+      pray_time: `${selectedHour}:00`,
+    });
     if (group) {
       getGroup(targetGroup.id);
       setIsOpenGroupSettingsDialog(false);
