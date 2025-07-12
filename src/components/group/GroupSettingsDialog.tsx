@@ -128,7 +128,10 @@ const GroupSettingsDialog: React.FC = () => {
       open={isOpenGroupSettingsDialog}
       onOpenChange={setIsOpenGroupSettingsDialog}
     >
-      <DialogContent className="w-11/12 rounded-xl max-h-80vh">
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="w-11/12 rounded-xl max-h-90vh overflow-y-auto"
+      >
         <DialogHeader>
           <DialogTitle>그룹 설정</DialogTitle>
           <DialogDescription></DialogDescription>
@@ -199,7 +202,7 @@ const GroupSettingsDialog: React.FC = () => {
               <div className="absolute inset-0 pointer-events-none">
                 <div className="h-full flex items-center justify-center">
                   <div
-                    className="text-xl font-bold text-blue-600 bg-white/90 rounded-lg px-4 py-2 shadow-sm border border-blue-200 whitespace-nowrap"
+                    className="text-xl font-bold text-blue-600 bg-white rounded-lg px-4 py-2 shadow-sm border border-blue-200 whitespace-nowrap"
                     style={{
                       transform: "scale(1.1)",
                       minWidth: "120px",
