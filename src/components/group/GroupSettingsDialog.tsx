@@ -60,7 +60,10 @@ const GroupSettingsDialog: React.FC = () => {
       open={isOpenGroupSettingsDialog}
       onOpenChange={setIsOpenGroupSettingsDialog}
     >
-      <DialogContent className="w-11/12 rounded-xl max-h-90vh overflow-y-auto">
+      <DialogContent
+        className="w-11/12 rounded-xl max-h-90vh overflow-y-auto"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>그룹 설정</DialogTitle>
           <DialogDescription></DialogDescription>
