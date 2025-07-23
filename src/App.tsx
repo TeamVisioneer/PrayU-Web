@@ -55,6 +55,7 @@ import ReportAlert from "./components/alert/ReportAlert";
 import { BottomToaster } from "@/components/ui/bottom-toaster";
 import GroupPageMock from "@/mock/GroupPageMock";
 import ThanksCardPage from "./pages/ThanksCardPage";
+import NewThanksCardPage from "./pages/NewThanksCardPage";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -95,6 +96,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/thanks-card" element={<ThanksCardPage />} />
+              <Route path="/thanks-card/new" element={<NewThanksCardPage />} />
               <Route
                 path="/login-redirect"
                 element={

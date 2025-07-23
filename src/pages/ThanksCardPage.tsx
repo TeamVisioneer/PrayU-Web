@@ -17,7 +17,7 @@ const mockThanksCards: ThanksCard[] = [
     author: "김성도",
     category: "감사",
     image:
-      "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=400&h=400&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center",
     createdAt: "2024-01-15",
   },
   {
@@ -37,7 +37,7 @@ const mockThanksCards: ThanksCard[] = [
     author: "박찬양",
     category: "찬양",
     image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop&crop=center",
     createdAt: "2024-01-13",
   },
   {
@@ -57,8 +57,37 @@ const mockThanksCards: ThanksCard[] = [
     author: "정선교",
     category: "감사",
     image:
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&h=400&fit=crop&crop=center",
     createdAt: "2024-01-11",
+  },
+  {
+    id: "6",
+    title: "하나님의 공급하심에 감사",
+    content:
+      "어려운 경제 상황에서도 하나님께서 필요한 모든 것을 채워주셔서 감사드립니다. 하나님만을 의지합니다.",
+    author: "홍기도",
+    category: "감사",
+    createdAt: "2024-01-10",
+  },
+  {
+    id: "7",
+    title: "아이들의 성장에 감사",
+    content:
+      "하나님께서 세 아이들을 건강하게 키워주시고, 신앙 안에서 자라게 해주셔서 너무 감사합니다.",
+    author: "윤엄마",
+    category: "감사",
+    image:
+      "https://images.unsplash.com/photo-1433838552652-f9a46b332c40?w=400&h=400&fit=crop&crop=center",
+    createdAt: "2024-01-09",
+  },
+  {
+    id: "8",
+    title: "치유의 은혜를 구하며",
+    content:
+      "오랜 병으로 고생하고 있습니다. 하나님의 치유의 손길이 임하기를 간절히 기도합니다.",
+    author: "강소망",
+    category: "기도요청",
+    createdAt: "2024-01-08",
   },
 ];
 

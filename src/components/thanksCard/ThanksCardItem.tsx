@@ -33,6 +33,35 @@ const formatDate = (dateString: string): string => {
 };
 
 /**
+ * 기본 이미지 URL 배열 (Unsplash 자연 이미지)
+ */
+const defaultImages = [
+  "https://images.unsplash.com/photo-1476234251651-f353703a034d?w=400&h=400&fit=crop&crop=center", // 자연 경관
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center", // 산과 호수
+  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop&crop=center", // 숲길
+  "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&h=400&fit=crop&crop=center", // 해변 일몰
+  "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop&crop=center", // 들판
+  "https://images.unsplash.com/photo-1433838552652-f9a46b332c40?w=400&h=400&fit=crop&crop=center", // 바다와 하늘
+  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=400&fit=crop&crop=center", // 안개 낀 산
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center", // 호숫가
+];
+
+/**
+ * 카드 ID에 기반하여 기본 이미지를 선택하는 함수
+ */
+const getDefaultImage = (cardId: string): string => {
+  // 카드 ID의 해시값을 기반으로 이미지 선택
+  let hash = 0;
+  for (let i = 0; i < cardId.length; i++) {
+    const char = cardId.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // 32비트 정수로 변환
+  }
+  const index = Math.abs(hash) % defaultImages.length;
+  return defaultImages[index];
+};
+
+/**
  * 개별 감사 카드를 표시하는 컴포넌트
  * 반응형 디자인으로 모바일, 태블릿, 데스크톱에서 모두 최적화됩니다.
  */
@@ -70,26 +99,11 @@ export const ThanksCardItem = ({ card }: ThanksCardItemProps) => {
                 className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl shadow-md"
               />
             ) : (
-              <div className="w-full h-full aspect-square bg-slate-100 rounded-xl sm:rounded-2xl shadow-md flex items-center justify-center">
-                <div className="text-center text-slate-400">
-                  <svg
-                    className="w-12 h-12 sm:w-14 sm:h-14 lg:w-20 lg:h-20 xl:w-24 xl:h-24 mx-auto mb-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <p className="text-xs sm:text-sm lg:text-lg text-slate-400">
-                    감사 사진
-                  </p>
-                </div>
-              </div>
+              <img
+                src={getDefaultImage(card.id)}
+                alt="감사 기본 이미지"
+                className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl shadow-md"
+              />
             )}
           </div>
 

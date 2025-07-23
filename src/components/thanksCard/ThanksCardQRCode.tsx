@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 /**
  * QR 코드를 표시하는 고정 위치 컴포넌트
@@ -6,8 +7,14 @@ import { useState, useEffect } from "react";
  * 데스크톱에서는 항상 전체 크기로 표시됩니다.
  */
 export const ThanksCardQRCode = () => {
+  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // QR 코드 클릭 시 생성 페이지로 이동
+  const handleQRClick = () => {
+    navigate("/thanks-card/new");
+  };
 
   // 화면 크기 감지
   useEffect(() => {
@@ -24,7 +31,7 @@ export const ThanksCardQRCode = () => {
   if (isMobile && !isExpanded) {
     return (
       <button
-        onClick={() => setIsExpanded(true)}
+        onClick={handleQRClick}
         className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg border-2 border-white p-3 transition-all duration-300 z-10"
       >
         <svg
@@ -46,11 +53,17 @@ export const ThanksCardQRCode = () => {
 
   // 전체 QR 코드 영역 (데스크톱 항상 표시 또는 모바일에서 확장된 상태)
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg border-2 border-slate-200 p-3 sm:p-4 lg:p-6 hover:shadow-xl transition-all duration-500 z-10">
+    <div
+      onClick={handleQRClick}
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg border-2 border-slate-200 p-3 sm:p-4 lg:p-6 hover:shadow-xl transition-all duration-500 z-10 cursor-pointer"
+    >
       {/* 모바일에서 닫기 버튼 */}
       {isMobile && (
         <button
-          onClick={() => setIsExpanded(false)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsExpanded(false);
+          }}
           className="absolute -top-2 -right-2 bg-slate-600 hover:bg-slate-700 text-white rounded-full p-2 shadow-lg transition-all duration-200 z-10"
         >
           <svg
