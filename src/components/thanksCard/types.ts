@@ -1,12 +1,6 @@
-export interface ThanksCard {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  category: "감사" | "기도요청" | "찬양" | "간증";
-  image?: string;
-  createdAt: string;
-}
+// ThanksCard 타입은 supabase/types/tables.ts에서 import하여 사용
+import { ThanksCard as DbThanksCard } from "../../../supabase/types/tables";
+export type ThanksCard = DbThanksCard;
 
 export interface ThanksCardHeaderProps {
   currentTime: Date;

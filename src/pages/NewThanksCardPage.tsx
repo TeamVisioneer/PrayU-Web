@@ -8,6 +8,9 @@ import {
   ThanksCardFormData,
   StepType,
 } from "@/components/thanksCard/NewThanksCardStepper";
+import { thanksCardController } from "@/apis/thanksCard";
+import { uploadImage, getPublicUrl } from "@/apis/file";
+import { getTodayNumber } from "@/lib/utils";
 
 /**
  * 감사 카드 생성 페이지
@@ -33,8 +36,10 @@ const NewThanksCardPage = () => {
   // 현재 단계 상태
   const [currentStep, setCurrentStep] = useState<StepType>("name");
 
-  // 완료된 카드 번호 (실제로는 API에서 받아올 값)
-  const [cardNumber] = useState(() => Math.floor(Math.random() * 1000) + 3000);
+  // 완료된 카드 번호와 생성 상태
+  const [cardNumber, setCardNumber] = useState<number | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
 
   // 단계별 정보
   const steps = [
@@ -51,8 +56,75 @@ const NewThanksCardPage = () => {
     setFormData((prev) => ({ ...prev, ...data }));
   };
 
+  /**
+   * 감사 카드를 실제로 생성하는 함수
+   */
+  const createThanksCard = async (): Promise<boolean> => {
+    try {
+      setIsCreating(true);
+      setCreateError(null);
+
+      // 파일 업로드 처리
+      let imageUrl = "";
+      if (formData.photo) {
+        try {
+          // 파일명 생성: img_${getTodayNumber()}.jpeg
+          const fileName = `img_${getTodayNumber()}.jpeg`;
+          const uploadPath = `ThanksCard/UserImage/${fileName}`;
+
+          // Supabase Storage에 파일 업로드
+          const pathData = await uploadImage(formData.photo, uploadPath);
+
+          if (pathData) {
+            // 업로드된 파일의 public URL 생성
+            const publicUrl = getPublicUrl(pathData.path);
+            imageUrl = publicUrl || "";
+          } else {
+            console.warn("Image upload failed, proceeding without image");
+            imageUrl = "";
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          // 이미지 업로드 실패 시에도 카드 생성은 계속 진행
+          imageUrl = "";
+        }
+      }
+
+      // 감사 카드 생성
+      const newCard = await thanksCardController.createThanksCard({
+        user_name: formData.name,
+        content: formData.prayerContent,
+        image: imageUrl,
+      });
+
+      if (newCard) {
+        setCardNumber(newCard.id);
+        return true;
+      } else {
+        setCreateError("카드 생성에 실패했습니다. 다시 시도해주세요.");
+        return false;
+      }
+    } catch (error) {
+      console.error("Failed to create thanks card:", error);
+      setCreateError("카드 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
+      return false;
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
   // 다음 단계로 이동
-  const handleNext = () => {
+  const handleNext = async () => {
+    // prayer 단계에서 completion 단계로 넘어갈 때 카드 생성
+    if (currentStep === "prayer") {
+      const success = await createThanksCard();
+      if (success) {
+        setCurrentStep("completion");
+      }
+      return;
+    }
+
+    // 일반적인 다음 단계 이동
     const nextIndex = currentStepIndex + 1;
     if (nextIndex < steps.length) {
       setCurrentStep(steps[nextIndex].key);
@@ -79,6 +151,7 @@ const NewThanksCardPage = () => {
       onUpdate: updateFormData,
       onNext: handleNext,
       onPrev: handlePrev,
+      isLoading: isCreating, // 생성 중인지 여부 전달
     };
 
     switch (currentStep) {
@@ -89,6 +162,25 @@ const NewThanksCardPage = () => {
       case "prayer":
         return <PrayerStep {...stepProps} />;
       case "completion":
+        if (cardNumber === null) {
+          return (
+            <div className="max-w-md mx-auto text-center">
+              <div className="text-4xl mb-4">⚠️</div>
+              <h2 className="text-xl font-medium text-slate-800 mb-4">
+                카드 생성 중 문제가 발생했습니다
+              </h2>
+              {createError && (
+                <p className="text-red-600 mb-4">{createError}</p>
+              )}
+              <button
+                onClick={() => setCurrentStep("prayer")}
+                className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-medium transition-colors"
+              >
+                다시 시도하기
+              </button>
+            </div>
+          );
+        }
         return (
           <CompletionStep
             formData={formData}

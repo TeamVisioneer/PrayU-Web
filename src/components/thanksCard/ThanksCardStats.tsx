@@ -1,4 +1,5 @@
 import { ThanksCardStatsProps } from "./types";
+import CountUp from "react-countup";
 
 /**
  * 감사 카드 통계 정보를 표시하는 컴포넌트
@@ -11,7 +12,12 @@ export const ThanksCardStats = ({ totalCount }: ThanksCardStatsProps) => {
         <p className="whitespace-nowrap text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-light text-slate-700 mb-2 lg:mb-3 inline-block">
           오늘까지 총{" "}
           <span className="text-blue-600 font-medium">
-            {totalCount.toLocaleString()}
+            <CountUp
+              start={0}
+              end={totalCount * 100}
+              duration={3}
+              separator=","
+            />
           </span>
           명의 사람들이 감사했습니다
         </p>

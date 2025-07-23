@@ -32,13 +32,13 @@ export const CompletionStep = ({
         <ThanksCardItem
           card={
             {
-              id: "preview",
-              title: `${formData.name} 님의 감사기도`,
+              id: 0, // 임시 ID (미리보기용)
+              user_name: formData.name,
               content: formData.prayerContent,
-              author: formData.name,
-              category: "감사",
-              image: formData.photoPreview,
-              createdAt: new Date().toISOString().split("T")[0],
+              image: formData.photoPreview || "",
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              deleted_at: null,
             } as ThanksCard
           }
         />

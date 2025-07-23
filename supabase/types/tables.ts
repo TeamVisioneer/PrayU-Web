@@ -17,6 +17,8 @@ export type QtData = Database["public"]["Tables"]["qt_data"]["Row"];
 
 export type GroupUnion = Database["public"]["Tables"]["group_union"]["Row"];
 
+export type ThanksCard = Database["public"]["Tables"]["thanks_card"]["Row"];
+
 export type OriginNotification =
   Database["public"]["Tables"]["notification"]["Row"];
 export type Notification = Omit<OriginNotification, "data" | "fcm_result"> & {

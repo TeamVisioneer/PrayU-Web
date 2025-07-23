@@ -1,4 +1,4 @@
-import { ThanksCardItemProps, ThanksCard as ThanksCardType } from "./types";
+import { ThanksCardItemProps } from "./types";
 
 /**
  * 텍스트를 지정된 길이로 자르고 말줄임표를 추가하는 유틸리티 함수
@@ -9,16 +9,10 @@ const truncateText = (text: string, maxLength: number): string => {
 };
 
 /**
- * 카테고리별 색상을 반환하는 함수
+ * 감사 카테고리 색상 (모든 카드가 감사 카테고리)
  */
-const getCategoryColor = (category: ThanksCardType["category"]): string => {
-  const colors = {
-    감사: "bg-blue-200 text-blue-800",
-    기도요청: "bg-green-200 text-green-800",
-    찬양: "bg-purple-200 text-purple-800",
-    간증: "bg-orange-200 text-orange-800",
-  };
-  return colors[category];
+const getCategoryColor = (): string => {
+  return "bg-blue-200 text-blue-800";
 };
 
 /**
@@ -26,10 +20,16 @@ const getCategoryColor = (category: ThanksCardType["category"]): string => {
  */
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-  return date.toLocaleDateString("ko-KR", {
-    month: "long",
-    day: "numeric",
+  const formatted = date.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
   });
+
+  return formatted;
 };
 
 /**
@@ -69,24 +69,22 @@ export const ThanksCardItem = ({ card }: ThanksCardItemProps) => {
   return (
     <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto">
       {/* 타원형 카드 */}
-      <div className="aspect-[2/3] bg-white rounded-[2rem] sm:rounded-[3rem] lg:rounded-[4rem] shadow-lg border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-700 flex flex-col">
+      <div className="aspect-[3/5] bg-white rounded-[2rem] shadow-lg border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-700 flex flex-col">
         {/* 카드 내용 */}
         <div className="flex flex-col h-full px-4 sm:px-5 lg:px-6 py-4 sm:py-5 lg:py-6">
           {/* 상단 카테고리 */}
           <div className="flex justify-center items-center mb-3 sm:mb-4">
             <span
-              className={`px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base lg:text-lg font-medium ${getCategoryColor(
-                card.category
-              )}`}
+              className={`px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base lg:text-lg font-medium ${getCategoryColor()}`}
             >
-              {card.category}
+              감사
             </span>
           </div>
 
           {/* 제목 */}
           <div className="text-center mb-4 sm:mb-5 lg:mb-6">
             <h2 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-medium text-slate-800 leading-tight">
-              {card.author} 님의 감사기도
+              {card.user_name} 님의 감사기도
             </h2>
           </div>
 
@@ -95,12 +93,12 @@ export const ThanksCardItem = ({ card }: ThanksCardItemProps) => {
             {card.image ? (
               <img
                 src={card.image}
-                alt={`${card.author}님의 감사기도`}
+                alt={`${card.user_name}님의 감사기도`}
                 className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl shadow-md"
               />
             ) : (
               <img
-                src={getDefaultImage(card.id)}
+                src={getDefaultImage(card.id.toString())}
                 alt="감사 기본 이미지"
                 className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl shadow-md"
               />
@@ -117,7 +115,7 @@ export const ThanksCardItem = ({ card }: ThanksCardItemProps) => {
           {/* 하단 날짜 정보 */}
           <div className="text-center mt-auto">
             <p className="text-xs sm:text-sm lg:text-base text-slate-500">
-              {formatDate(card.createdAt)}
+              {formatDate(card.created_at)}
             </p>
           </div>
         </div>

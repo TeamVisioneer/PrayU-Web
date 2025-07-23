@@ -22,9 +22,9 @@ export const PhotoStep = ({
         return;
       }
 
-      // 파일 크기 체크 (5MB 제한)
-      if (file.size > 5 * 1024 * 1024) {
-        alert("파일 크기는 5MB 이하여야 합니다.");
+      // 파일 크기 체크 (10MB 제한)
+      if (file.size > 10 * 1024 * 1024) {
+        alert("파일 크기는 10MB 이하여야 합니다.");
         return;
       }
 
@@ -72,17 +72,15 @@ export const PhotoStep = ({
       <div className="mb-8">
         {formData.photoPreview ? (
           /* 업로드된 사진 미리보기 */
-          <div className="relative">
-            <div className="w-64 h-64 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-              <img
-                src={formData.photoPreview}
-                alt="업로드된 사진"
-                className="w-full h-full object-cover"
-              />
-            </div>
+          <div className="relative w-64 h-64 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+            <img
+              src={formData.photoPreview}
+              alt="업로드된 사진"
+              className="w-full h-full object-cover"
+            />
             <button
               onClick={handleRemovePhoto}
-              className="absolute -top-2 -right-8 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg transition-colors"
+              className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg transition-colors"
             >
               <svg
                 className="w-4 h-4"

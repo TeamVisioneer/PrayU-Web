@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   ThanksCardHeader,
   ThanksCardStats,
@@ -6,90 +6,8 @@ import {
   ThanksCardQRCode,
   ThanksCard,
 } from "@/components/thanksCard";
-
-// Mock data for development - 실제로는 API에서 가져올 데이터
-const mockThanksCards: ThanksCard[] = [
-  {
-    id: "1",
-    title: "새로운 직장에 대한 감사",
-    content:
-      "하나님께서 좋은 직장을 주셔서 감사합니다. 새로운 환경에서도 하나님을 증거하는 삶을 살겠습니다.",
-    author: "김성도",
-    category: "감사",
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center",
-    createdAt: "2024-01-15",
-  },
-  {
-    id: "2",
-    title: "가족의 건강을 위한 기도",
-    content:
-      "아버지의 수술이 잘 되도록 기도해주세요. 회복 과정에서 하나님의 치유하심이 있기를 소망합니다.",
-    author: "이은혜",
-    category: "기도요청",
-    createdAt: "2024-01-14",
-  },
-  {
-    id: "3",
-    title: "주님의 사랑에 대한 찬양",
-    content:
-      "십자가의 사랑을 알게 하시고, 매일 새로운 은혜로 채워주시는 하나님을 찬양합니다.",
-    author: "박찬양",
-    category: "찬양",
-    image:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop&crop=center",
-    createdAt: "2024-01-13",
-  },
-  {
-    id: "4",
-    title: "믿음 안에서의 변화",
-    content:
-      "예수님을 만난 후 삶이 완전히 바뀌었습니다. 과거의 습관들을 끊고 새로운 피조물이 되었음을 간증합니다.",
-    author: "최간증",
-    category: "간증",
-    createdAt: "2024-01-12",
-  },
-  {
-    id: "5",
-    title: "선교사역에 대한 감사",
-    content:
-      "올해 단기선교에서 많은 영혼들을 만나게 해주셔서 감사합니다. 계속해서 복음 전파에 힘쓰겠습니다.",
-    author: "정선교",
-    category: "감사",
-    image:
-      "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&h=400&fit=crop&crop=center",
-    createdAt: "2024-01-11",
-  },
-  {
-    id: "6",
-    title: "하나님의 공급하심에 감사",
-    content:
-      "어려운 경제 상황에서도 하나님께서 필요한 모든 것을 채워주셔서 감사드립니다. 하나님만을 의지합니다.",
-    author: "홍기도",
-    category: "감사",
-    createdAt: "2024-01-10",
-  },
-  {
-    id: "7",
-    title: "아이들의 성장에 감사",
-    content:
-      "하나님께서 세 아이들을 건강하게 키워주시고, 신앙 안에서 자라게 해주셔서 너무 감사합니다.",
-    author: "윤엄마",
-    category: "감사",
-    image:
-      "https://images.unsplash.com/photo-1433838552652-f9a46b332c40?w=400&h=400&fit=crop&crop=center",
-    createdAt: "2024-01-09",
-  },
-  {
-    id: "8",
-    title: "치유의 은혜를 구하며",
-    content:
-      "오랜 병으로 고생하고 있습니다. 하나님의 치유의 손길이 임하기를 간절히 기도합니다.",
-    author: "강소망",
-    category: "기도요청",
-    createdAt: "2024-01-08",
-  },
-];
+import { thanksCardController } from "@/apis/thanksCard";
+import useRealtimeThanksCard from "@/components/thanksCard/useRealtimeThanksCard";
 
 /**
  * 감사 카드 메인 페이지 컴포넌트
@@ -104,9 +22,100 @@ const mockThanksCards: ThanksCard[] = [
 const ThanksCardPage = () => {
   // 상태 관리
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [cards] = useState<ThanksCard[]>(mockThanksCards);
+  const [cards, setCards] = useState<ThanksCard[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [totalThanksCount] = useState(3058);
+  const [totalThanksCount, setTotalThanksCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [hasMoreCards, setHasMoreCards] = useState(true);
+
+  // Pagination 상태
+  const CARDS_PER_FETCH = 10; // 한 번에 가져올 카드 수
+
+  /**
+   * 새로운 감사카드가 실시간으로 추가되었을 때 처리하는 함수
+   */
+  const handleThanksCardAdded = useCallback(async (newCard: ThanksCard) => {
+    // 새로운 카드를 배열 맨 앞에 추가 (최신 카드이므로)
+    setCards((prevCards) => [newCard, ...prevCards]);
+
+    // 총 카드 수를 서버에서 다시 fetch
+    try {
+      const totalCount = await thanksCardController.getThanksCardStats();
+      setTotalThanksCount(totalCount);
+    } catch (error) {
+      console.error("Failed to update total count:", error);
+    }
+
+    console.log("새로운 감사카드가 추가되었습니다:", newCard);
+  }, []);
+
+  // 실시간 감사카드 변경사항 구독
+  useRealtimeThanksCard(handleThanksCardAdded);
+
+  /**
+   * 초기 데이터 로드 (총 개수 + 첫 번째 배치)
+   */
+  const loadInitialData = async () => {
+    try {
+      setLoading(true);
+
+      // 1. 총 개수 조회
+      const totalCount = await thanksCardController.getThanksCardStats();
+      setTotalThanksCount(totalCount);
+
+      // 2. 첫 번째 배치 데이터 조회
+      const dbCards = await thanksCardController.fetchAllThanksCards(
+        CARDS_PER_FETCH,
+        0
+      );
+
+      if (dbCards && dbCards.length > 0) {
+        setCards(dbCards);
+        setHasMoreCards(
+          dbCards.length === CARDS_PER_FETCH && dbCards.length < totalCount
+        );
+      } else {
+        // API 실패 시 빈 배열 설정
+        setCards([]);
+        setHasMoreCards(false);
+      }
+    } catch (error) {
+      console.error("Failed to load initial data:", error);
+      // 에러 시 빈 배열 설정
+      setCards([]);
+      setHasMoreCards(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * 추가 데이터 로드 (캐러셀에서 필요할 때)
+   */
+  const loadMoreCards = async () => {
+    if (!hasMoreCards || loading) return;
+
+    try {
+      const offset = cards.length;
+      const dbCards = await thanksCardController.fetchAllThanksCards(
+        CARDS_PER_FETCH,
+        offset
+      );
+
+      if (dbCards && dbCards.length > 0) {
+        setCards((prevCards) => [...prevCards, ...dbCards]);
+        setHasMoreCards(
+          dbCards.length === CARDS_PER_FETCH &&
+            cards.length + dbCards.length < totalThanksCount
+        );
+      } else {
+        setHasMoreCards(false);
+      }
+    } catch (error) {
+      console.error("Failed to load more cards:", error);
+      setHasMoreCards(false);
+    }
+  };
 
   // 실시간 시계 업데이트
   useEffect(() => {
@@ -117,7 +126,30 @@ const ThanksCardPage = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // 자동 슬라이드는 ThanksCardCarousel 컴포넌트에서 처리
+  // 초기 데이터 로드
+  useEffect(() => {
+    loadInitialData();
+  }, []);
+
+  // 캐러셀 인덱스가 끝에 가까워지면 추가 데이터 로드
+  useEffect(() => {
+    const shouldLoadMore = currentCardIndex >= cards.length - 3; // 끝에서 3개 전에 미리 로드
+    if (shouldLoadMore && hasMoreCards && !loading) {
+      loadMoreCards();
+    }
+  }, [currentCardIndex, cards.length, hasMoreCards, loading]);
+
+  // 로딩 중이면 로딩 화면 표시
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 overflow-hidden flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-slate-600">감사 카드를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 overflow-hidden">
@@ -127,12 +159,32 @@ const ThanksCardPage = () => {
       {/* 통계 정보 섹션 */}
       <ThanksCardStats totalCount={totalThanksCount} />
 
-      {/* 메인 카드 캐러셀 */}
-      <ThanksCardCarousel
-        cards={cards}
-        currentIndex={currentCardIndex}
-        onIndexChange={setCurrentCardIndex}
-      />
+      {/* 메인 카드 캐러셀 또는 빈 상태 */}
+      {cards.length > 0 ? (
+        <ThanksCardCarousel
+          cards={cards}
+          currentIndex={currentCardIndex}
+          onIndexChange={setCurrentCardIndex}
+        />
+      ) : !loading ? (
+        /* 로딩 완료 후 카드가 없을 때 보여줄 UI */
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center max-w-md mx-auto px-4">
+            <div className="text-6xl mb-6">🙏</div>
+            <h2 className="text-2xl font-medium text-slate-800 mb-4">
+              아직 감사 카드가 없어요
+            </h2>
+            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+              첫 번째 감사 카드를 작성하여
+              <br />
+              소중한 감사의 마음을 나눠보세요
+            </p>
+            <div className="text-sm text-slate-500">
+              아래 QR 코드를 통해 감사 카드를 만들 수 있어요 👇
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {/* QR 코드 영역 */}
       <ThanksCardQRCode />

@@ -473,6 +473,36 @@ export type Database = {
           },
         ]
       }
+      thanks_card: {
+        Row: {
+          content: string
+          created_at: string
+          deleted_at: string | null
+          id: number
+          image: string
+          updated_at: string
+          user_name: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: number
+          image?: string
+          updated_at?: string
+          user_name?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: number
+          image?: string
+          updated_at?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

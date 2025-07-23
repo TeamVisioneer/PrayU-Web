@@ -10,6 +10,7 @@ export interface StepProps {
   onUpdate: (data: Partial<ThanksCardFormData>) => void;
   onNext: () => void;
   onPrev: () => void;
+  isLoading?: boolean;
 }
 
 export interface CompletionStepProps {
