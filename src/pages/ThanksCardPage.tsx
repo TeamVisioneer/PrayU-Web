@@ -192,7 +192,7 @@ const ThanksCardPage = () => {
   }
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 overflow-hidden">
+    <div className="w-full h-full">
       {/* 헤더 섹션 */}
       <ThanksCardHeader currentTime={currentTime} />
 
