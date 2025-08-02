@@ -19,8 +19,12 @@ export const ThanksCardCarousel = ({
   // 스와이프 상태 관리
   const [isSwipping, setIsSwipping] = useState(false);
   const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
   const [currentX, setCurrentX] = useState(0);
   const [swipeOffset, setSwipeOffset] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState<
+    "horizontal" | "vertical" | "none"
+  >("none");
 
   // 초기 인덱스 설정이 완료되면 자동 슬라이드 활성화
   useEffect(() => {
@@ -75,78 +79,133 @@ export const ThanksCardCarousel = ({
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
     setStartX(touch.clientX);
+    setStartY(touch.clientY);
     setCurrentX(touch.clientX);
     setIsSwipping(true);
     setSwipeOffset(0);
+    setSwipeDirection("none");
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isSwipping) return;
+
     const touch = e.touches[0];
     setCurrentX(touch.clientX);
-    const offset = touch.clientX - startX;
-    setSwipeOffset(offset);
+
+    const deltaX = Math.abs(touch.clientX - startX);
+    const deltaY = Math.abs(touch.clientY - startY);
+
+    // 방향이 아직 결정되지 않았다면 방향을 판단
+    if (swipeDirection === "none" && (deltaX > 10 || deltaY > 10)) {
+      if (deltaX > deltaY) {
+        setSwipeDirection("horizontal");
+      } else {
+        setSwipeDirection("vertical");
+      }
+    }
+
+    // 수평 스와이프로 판단되면 수직 스크롤 방지 및 스와이프 오프셋 계산
+    if (swipeDirection === "horizontal") {
+      e.preventDefault(); // 수직 스크롤 방지
+      const offset = touch.clientX - startX;
+      setSwipeOffset(offset);
+    } else if (swipeDirection === "vertical") {
+      // 수직 스크롤로 판단되면 스와이프 취소
+      setIsSwipping(false);
+      setSwipeOffset(0);
+    }
   };
 
   const handleTouchEnd = () => {
     if (!isSwipping) return;
 
-    const swipeDistance = currentX - startX;
-    const minSwipeDistance = 50; // 최소 50px 스와이프
+    // 수평 스와이프로 판단된 경우만 처리
+    if (swipeDirection === "horizontal") {
+      const swipeDistance = currentX - startX;
+      const minSwipeDistance = 50; // 최소 50px 스와이프
 
-    if (Math.abs(swipeDistance) > minSwipeDistance) {
-      if (swipeDistance > 0) {
-        // 오른쪽으로 스와이프: 왼쪽(오래된) 방향으로 이동 (일반적인 캐러셀 동작)
-        const nextIndex = currentIndex - 1 < 0 ? maxIndex : currentIndex - 1;
-        onIndexChange(nextIndex);
-      } else {
-        // 왼쪽으로 스와이프: 오른쪽(최신) 방향으로 이동 (일반적인 캐러셀 동작)
-        const nextIndex = currentIndex + 1 > maxIndex ? 0 : currentIndex + 1;
-        onIndexChange(nextIndex);
+      if (Math.abs(swipeDistance) > minSwipeDistance) {
+        if (swipeDistance > 0) {
+          // 오른쪽으로 스와이프: 왼쪽(오래된) 방향으로 이동 (일반적인 캐러셀 동작)
+          const nextIndex = currentIndex - 1 < 0 ? maxIndex : currentIndex - 1;
+          onIndexChange(nextIndex);
+        } else {
+          // 왼쪽으로 스와이프: 오른쪽(최신) 방향으로 이동 (일반적인 캐러셀 동작)
+          const nextIndex = currentIndex + 1 > maxIndex ? 0 : currentIndex + 1;
+          onIndexChange(nextIndex);
+        }
       }
     }
 
     // 스와이프 상태 초기화
     setIsSwipping(false);
     setSwipeOffset(0);
+    setSwipeDirection("none");
   };
 
   // 마우스 드래그 지원
   const handleMouseDown = (e: React.MouseEvent) => {
     setStartX(e.clientX);
+    setStartY(e.clientY);
     setCurrentX(e.clientX);
     setIsSwipping(true);
     setSwipeOffset(0);
+    setSwipeDirection("none");
     e.preventDefault();
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isSwipping) return;
+
     setCurrentX(e.clientX);
-    const offset = e.clientX - startX;
-    setSwipeOffset(offset);
+
+    const deltaX = Math.abs(e.clientX - startX);
+    const deltaY = Math.abs(e.clientY - startY);
+
+    // 방향이 아직 결정되지 않았다면 방향을 판단
+    if (swipeDirection === "none" && (deltaX > 10 || deltaY > 10)) {
+      if (deltaX > deltaY) {
+        setSwipeDirection("horizontal");
+      } else {
+        setSwipeDirection("vertical");
+      }
+    }
+
+    // 수평 드래그로 판단되면 오프셋 계산
+    if (swipeDirection === "horizontal") {
+      const offset = e.clientX - startX;
+      setSwipeOffset(offset);
+    } else if (swipeDirection === "vertical") {
+      // 수직 드래그로 판단되면 드래그 취소
+      setIsSwipping(false);
+      setSwipeOffset(0);
+    }
   };
 
   const handleMouseUp = () => {
     if (!isSwipping) return;
 
-    const swipeDistance = currentX - startX;
-    const minSwipeDistance = 50;
+    // 수평 드래그로 판단된 경우만 처리
+    if (swipeDirection === "horizontal") {
+      const swipeDistance = currentX - startX;
+      const minSwipeDistance = 50;
 
-    if (Math.abs(swipeDistance) > minSwipeDistance) {
-      if (swipeDistance > 0) {
-        // 오른쪽으로 드래그: 왼쪽(오래된) 방향으로 이동
-        const nextIndex = currentIndex - 1 < 0 ? maxIndex : currentIndex - 1;
-        onIndexChange(nextIndex);
-      } else {
-        // 왼쪽으로 드래그: 오른쪽(최신) 방향으로 이동
-        const nextIndex = currentIndex + 1 > maxIndex ? 0 : currentIndex + 1;
-        onIndexChange(nextIndex);
+      if (Math.abs(swipeDistance) > minSwipeDistance) {
+        if (swipeDistance > 0) {
+          // 오른쪽으로 드래그: 왼쪽(오래된) 방향으로 이동
+          const nextIndex = currentIndex - 1 < 0 ? maxIndex : currentIndex - 1;
+          onIndexChange(nextIndex);
+        } else {
+          // 왼쪽으로 드래그: 오른쪽(최신) 방향으로 이동
+          const nextIndex = currentIndex + 1 > maxIndex ? 0 : currentIndex + 1;
+          onIndexChange(nextIndex);
+        }
       }
     }
 
     setIsSwipping(false);
     setSwipeOffset(0);
+    setSwipeDirection("none");
   };
 
   // 자동 슬라이드 효과 (오른쪽에서 왼쪽으로: 최신 → 오래된)
@@ -169,9 +228,10 @@ export const ThanksCardCarousel = ({
   // 페이지네이션 방식 계산
   const cardWidth = 100 / visibleCards; // 각 카드가 차지할 너비 (%)
   const baseTranslateX = currentIndex * 100; // 페이지 단위로 이동 (100%씩)
-  const swipeTranslateX = isSwipping
-    ? -(swipeOffset / window.innerWidth) * 100
-    : 0; // 스와이프 중 추가 이동 (방향 반전)
+  const swipeTranslateX =
+    isSwipping && swipeDirection === "horizontal"
+      ? -(swipeOffset / window.innerWidth) * 100
+      : 0; // 수평 스와이프 중 추가 이동 (방향 반전)
   const translateX = baseTranslateX + swipeTranslateX;
 
   return (
@@ -208,19 +268,60 @@ export const ThanksCardCarousel = ({
       </div>
 
       {/* 진행 표시자 - 모바일에서는 더 작게 */}
-      <div className="flex justify-center lg:mt-12 gap-2 sm:gap-3 lg:gap-4">
-        {Array.from({ length: Math.max(1, totalPages) }).map((_, index) => (
-          <button
-            key={index}
-            onClick={() => onIndexChange(index)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 rounded-full transition-all duration-500 ${
-              index === currentIndex
-                ? "bg-blue-400 scale-125"
-                : "bg-slate-300 hover:bg-slate-400"
-            }`}
-            aria-label={`${index + 1}번째 카드 그룹으로 이동`}
-          />
-        ))}
+      <div className="flex justify-center items-center lg:mt-12 gap-2 sm:gap-3 lg:gap-4">
+        {totalPages <= 7 ? (
+          // 7페이지 이하일 때: 모든 점 표시
+          Array.from({ length: Math.max(1, totalPages) }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => onIndexChange(index)}
+              className={`w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 rounded-full transition-all duration-500 ${
+                index === currentIndex
+                  ? "bg-blue-400 scale-125"
+                  : "bg-slate-300 hover:bg-slate-400"
+              }`}
+              aria-label={`${index + 1}번째 카드 그룹으로 이동`}
+            />
+          ))
+        ) : (
+          // 8페이지 이상일 때: 현재 페이지 주변 + 앞뒤 표시 점
+          <>
+            {/* 앞에 더 페이지가 있다는 표시 (더 작은 점) */}
+            {currentIndex > 2 && (
+              <div
+                className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-3 lg:h-3 rounded-full bg-slate-400"
+                aria-hidden="true"
+              />
+            )}
+
+            {/* 현재 페이지 주변 */}
+            {Array.from({ length: 5 }).map((_, i) => {
+              const pageIndex = currentIndex - 2 + i;
+              if (pageIndex < 0 || pageIndex >= totalPages) return null;
+
+              return (
+                <button
+                  key={pageIndex}
+                  onClick={() => onIndexChange(pageIndex)}
+                  className={`w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 rounded-full transition-all duration-500 ${
+                    pageIndex === currentIndex
+                      ? "bg-blue-400 scale-125"
+                      : "bg-slate-300 hover:bg-slate-400"
+                  }`}
+                  aria-label={`${pageIndex + 1}번째 카드 그룹으로 이동`}
+                />
+              );
+            })}
+
+            {/* 뒤에 더 페이지가 있다는 표시 (더 작은 점) */}
+            {currentIndex < totalPages - 3 && (
+              <div
+                className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-3 lg:h-3 rounded-full bg-slate-400"
+                aria-hidden="true"
+              />
+            )}
+          </>
+        )}
       </div>
     </main>
   );

@@ -57,7 +57,7 @@ export const PhotoStep = ({
   return (
     <div className="max-w-md mx-auto text-center">
       {/* 단계 안내 */}
-      <div className="mb-8">
+      <div className="mb-4">
         <div className="text-4xl mb-4">📸</div>
         <h2 className="text-2xl sm:text-3xl font-medium text-slate-800 mb-3">
           감사 사진 추가
@@ -65,7 +65,7 @@ export const PhotoStep = ({
         <p className="text-lg text-slate-600">
           감사하는 순간의 사진을 올려보세요
         </p>
-        <p className="text-sm text-slate-500 mt-2">(선택사항입니다)</p>
+        <p className="text-sm text-slate-500">(선택사항입니다)</p>
       </div>
 
       {/* 사진 업로드 영역 */}
@@ -117,7 +117,7 @@ export const PhotoStep = ({
               />
             </svg>
             <p className="text-slate-500 text-center px-4">
-              사진을 선택해주세요
+              눌러서 사진을 선택해주세요
               <br />
               <span className="text-sm">JPG, PNG (최대 5MB)</span>
             </p>

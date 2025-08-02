@@ -194,13 +194,13 @@ const NewThanksCardPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* 헤더 */}
       <header className="shadow-sm">
         <div className="w-full px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => window.history.back()}
+              onClick={() => navigate("/thanks-card")}
               className="p-2 text-slate-600 hover:text-slate-800 transition-colors"
             >
               <svg
