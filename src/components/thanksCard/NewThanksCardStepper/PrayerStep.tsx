@@ -11,7 +11,7 @@ export const PrayerStep = ({
   onPrev,
   isLoading,
 }: StepProps) => {
-  const maxLength = 50;
+  const maxLength = 70;
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const content = e.target.value;
@@ -43,14 +43,13 @@ export const PrayerStep = ({
           <textarea
             value={formData.prayerContent}
             onChange={handleContentChange}
-            placeholder="감사하는 마음을 자유롭게 적어보세요&#10;&#10;예) 새로운 직장을 주셔서 감사합니다. 어려운 상황에서도 하나님의 은혜를 경험하게 해주셔서 감사드립니다."
+            placeholder="감사하는 마음을 자유롭게 적어보세요&#10;&#10;예) 새로운 직장을 주셔서 감사합니다.&#10;예) 어려운 상황에서도 하나님의 은혜를 경험하게 해주셔서 감사드립니다."
             className="w-full px-4 py-4 text-base border-2 border-slate-200 rounded-2xl focus:border-blue-500 focus:outline-none transition-colors resize-none"
             rows={8}
-            autoFocus
           />
 
           {/* 글자수 카운터 */}
-          <div className="absolute bottom-3 right-3 text-sm text-slate-400">
+          <div className="absolute bottom-4 right-4 text-sm text-slate-400">
             {formData.prayerContent.length}/{maxLength}
           </div>
         </div>

@@ -35,7 +35,7 @@ export const NameStep = ({ formData, onUpdate, onNext }: StepProps) => {
       </div>
 
       {/* 이름 입력 */}
-      <div className="mb-8">
+      <div className="mb-4">
         <input
           type="text"
           value={formData.name}
@@ -44,13 +44,7 @@ export const NameStep = ({ formData, onUpdate, onNext }: StepProps) => {
           placeholder="이름을 입력해주세요"
           className="w-full px-4 py-4 text-lg text-center border-2 border-slate-200 rounded-2xl focus:border-blue-500  transition-colors focus:placeholder:text-transparent"
           maxLength={20}
-          autoFocus
         />
-        {formData.name && (
-          <p className="mt-2 text-sm text-slate-500">
-            "{formData.name} 님의 감사기도"로 표시됩니다
-          </p>
-        )}
       </div>
 
       {/* 다음 버튼 */}
