@@ -54,6 +54,28 @@ import GroupListDrawer from "./components/group/GroupListDrawer";
 import ReportAlert from "./components/alert/ReportAlert";
 import { BottomToaster } from "@/components/ui/bottom-toaster";
 import GroupPageMock from "@/mock/GroupPageMock";
+import ThanksCardPage from "./pages/ThanksCardPage";
+import NewThanksCardPage from "./pages/NewThanksCardPage";
+
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+
+  const fullWidthRoutes: string[] = ["/thanks-card"];
+
+  const isFullWidth = fullWidthRoutes.some((route) =>
+    matchPath(route, location.pathname)
+  );
+
+  return (
+    <div
+      className={`mx-auto h-100vh overflow-x-hidden no-scrollbar bg-mainBg ${
+        isFullWidth ? "w-full" : "max-w-[480px]"
+      }`}
+    >
+      {children}
+    </div>
+  );
+};
 
 const GroupRedirect = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -63,16 +85,18 @@ const GroupRedirect = () => {
 const App = () => {
   return (
     <div className="w-screen h-screen bg-white">
-      <div className="mx-auto max-w-[480px] h-100vh overflow-x-hidden no-scrollbar bg-mainBg">
-        <AppInit />
-        <MetaPixelInit />
-        <KakaoInit />
-        <BrowserRouter>
-          <AuthProvider>
+      <AppInit />
+      <MetaPixelInit />
+      <KakaoInit />
+      <BrowserRouter>
+        <AuthProvider>
+          <AppLayout>
             {(import.meta.env.VITE_ENV === "staging" ||
               import.meta.env.VITE_ENV === "prod") && <AnalyticsTracker />}
             <Routes>
               <Route path="/" element={<MainPage />} />
+              <Route path="/thanks-card" element={<ThanksCardPage />} />
+              <Route path="/thanks-card/new" element={<NewThanksCardPage />} />
               <Route
                 path="/login-redirect"
                 element={
@@ -256,15 +280,15 @@ const App = () => {
                 element={<UnionJoinPage />}
               />
             </Routes>
-          </AuthProvider>
-          <BottomToaster />
-          <Toaster />
-          <ReportAlert />
-          <ConfirmAlert />
-          <ExternalLinkDialog />
-          <GroupListDrawer />
-        </BrowserRouter>
-      </div>
+          </AppLayout>
+        </AuthProvider>
+        <BottomToaster />
+        <Toaster />
+        <ReportAlert />
+        <ConfirmAlert />
+        <ExternalLinkDialog />
+        <GroupListDrawer />
+      </BrowserRouter>
     </div>
   );
 };
