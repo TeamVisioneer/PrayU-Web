@@ -77,7 +77,7 @@ export const ThanksCardItem = ({ card }: ThanksCardItemProps) => {
             <span
               className={`px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base lg:text-lg font-medium ${getCategoryColor()}`}
             >
-              감사
+              {card.id} 번째
             </span>
           </div>
 
@@ -94,13 +94,13 @@ export const ThanksCardItem = ({ card }: ThanksCardItemProps) => {
               <img
                 src={card.image}
                 alt={`${card.user_name}님의 감사기도`}
-                className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl shadow-md"
+                className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl"
               />
             ) : (
               <img
                 src={getDefaultImage(card.id.toString())}
                 alt="감사 기본 이미지"
-                className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl shadow-md"
+                className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl"
               />
             )}
           </div>

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import qrcodeProd from "@/assets/QRcode/qrcode_thanks_card_prod.png";
+import qrcodeStaging from "@/assets/QRcode/qrcode_thanks_card_staging.png";
 
 /**
  * QR 코드를 표시하는 고정 위치 컴포넌트
@@ -10,6 +12,12 @@ export const ThanksCardQRCode = () => {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // 환경에 따른 QR 코드 이미지 선택
+  const getQRCodeImage = () => {
+    // production 환경이면 prod 이미지, 아니면 staging 이미지 사용
+    return import.meta.env.VITE_ENV === "prod" ? qrcodeProd : qrcodeStaging;
+  };
 
   // QR 코드 클릭 시 생성 페이지로 이동
   const handleQRClick = () => {
@@ -84,17 +92,13 @@ export const ThanksCardQRCode = () => {
 
       <div className="text-center">
         {/* QR 코드 영역 */}
-        <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 xl:w-36 xl:h-36 bg-slate-100 rounded-xl sm:rounded-2xl mb-2 sm:mb-3 lg:mb-4 flex items-center justify-center shadow-inner">
-          {/* QR 코드 자리 - 실제로는 QR 라이브러리 사용 */}
-          <div className="text-slate-600 text-center">
-            <svg
-              className="w-12 h-12 sm:w-14 sm:h-14 lg:w-20 lg:h-20 xl:w-24 xl:h-24 mx-auto mb-1 sm:mb-2"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 13h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z" />
-            </svg>
-          </div>
+        <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 xl:w-36 xl:h-36 bg-white rounded-xl sm:rounded-2xl mb-2 sm:mb-3 lg:mb-4 flex items-center justify-center shadow-inner overflow-hidden">
+          {/* 실제 QR 코드 이미지 */}
+          <img
+            src={getQRCodeImage()}
+            alt="감사 카드 QR 코드"
+            className="w-full h-full object-contain p-1"
+          />
         </div>
 
         {/* 안내 텍스트 */}

@@ -4,6 +4,7 @@ export { ThanksCardStats } from "./ThanksCardStats";
 export { ThanksCardItem } from "./ThanksCardItem";
 export { ThanksCardCarousel } from "./ThanksCardCarousel";
 export { ThanksCardQRCode } from "./ThanksCardQRCode";
+export { default as ThanksCardAnimationOverlay } from "./ThanksCardAnimationOverlay";
 
 // 타입들도 export
 export type * from "./types";

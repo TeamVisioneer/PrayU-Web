@@ -42,7 +42,7 @@ export const NameStep = ({ formData, onUpdate, onNext }: StepProps) => {
           onChange={handleNameChange}
           onKeyPress={handleKeyPress}
           placeholder="이름을 입력해주세요"
-          className="w-full px-4 py-4 text-lg text-center border-2 border-slate-200 rounded-2xl focus:border-blue-500 focus:outline-none transition-colors"
+          className="w-full px-4 py-4 text-lg text-center border-2 border-slate-200 rounded-2xl focus:border-blue-500  transition-colors focus:placeholder:text-transparent"
           maxLength={20}
           autoFocus
         />

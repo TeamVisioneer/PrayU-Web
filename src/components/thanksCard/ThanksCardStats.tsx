@@ -13,9 +13,10 @@ export const ThanksCardStats = ({ totalCount }: ThanksCardStatsProps) => {
           오늘까지 총{" "}
           <span className="text-blue-600 font-medium">
             <CountUp
+              key={totalCount}
               start={0}
-              end={totalCount * 100}
-              duration={3}
+              end={totalCount}
+              duration={4}
               separator=","
             />
           </span>

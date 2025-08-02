@@ -32,7 +32,7 @@ export const CompletionStep = ({
         <ThanksCardItem
           card={
             {
-              id: 0, // 임시 ID (미리보기용)
+              id: cardNumber, // 임시 ID (미리보기용)
               user_name: formData.name,
               content: formData.prayerContent,
               image: formData.photoPreview || "",

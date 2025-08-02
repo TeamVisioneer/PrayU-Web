@@ -5,6 +5,7 @@ import {
   ThanksCardCarousel,
   ThanksCardQRCode,
   ThanksCard,
+  ThanksCardAnimationOverlay,
 } from "@/components/thanksCard";
 import { thanksCardController } from "@/apis/thanksCard";
 import useRealtimeThanksCard from "@/components/thanksCard/useRealtimeThanksCard";
@@ -27,6 +28,9 @@ const ThanksCardPage = () => {
   const [totalThanksCount, setTotalThanksCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [hasMoreCards, setHasMoreCards] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [newCardForAnimation, setNewCardForAnimation] =
+    useState<ThanksCard | null>(null);
 
   // Pagination 상태
   const CARDS_PER_FETCH = 10; // 한 번에 가져올 카드 수
@@ -35,8 +39,14 @@ const ThanksCardPage = () => {
    * 새로운 감사카드가 실시간으로 추가되었을 때 처리하는 함수
    */
   const handleThanksCardAdded = useCallback(async (newCard: ThanksCard) => {
-    // 새로운 카드를 배열 맨 앞에 추가 (최신 카드이므로)
+    // 애니메이션을 위해 새 카드 설정
+    setNewCardForAnimation(newCard);
+
+    // 새로운 카드를 원본 배열 맨 앞에 추가 (reverse 후 오른쪽 끝에 표시됨)
     setCards((prevCards) => [newCard, ...prevCards]);
+
+    // 새 카드가 원본 배열 맨 앞에 추가되므로 현재 인덱스는 그대로 유지
+    // (reverse 후에는 맨 뒤(오른쪽)에 위치하게 됨)
 
     // 총 카드 수를 서버에서 다시 fetch
     try {
@@ -46,7 +56,7 @@ const ThanksCardPage = () => {
       console.error("Failed to update total count:", error);
     }
 
-    console.log("새로운 감사카드가 추가되었습니다:", newCard);
+    console.log("새로운 감사카드가 오른쪽 끝에 추가되었습니다:", newCard);
   }, []);
 
   // 실시간 감사카드 변경사항 구독
@@ -74,10 +84,13 @@ const ThanksCardPage = () => {
         setHasMoreCards(
           dbCards.length === CARDS_PER_FETCH && dbCards.length < totalCount
         );
+        // 초기 로드 시 마지막 페이지로 인덱스 설정
+        setIsInitialLoad(false);
       } else {
         // API 실패 시 빈 배열 설정
         setCards([]);
         setHasMoreCards(false);
+        setIsInitialLoad(false);
       }
     } catch (error) {
       console.error("Failed to load initial data:", error);
@@ -103,7 +116,12 @@ const ThanksCardPage = () => {
       );
 
       if (dbCards && dbCards.length > 0) {
+        // 더 오래된 카드들을 뒤에 추가 (reverse 후 앞쪽에 위치하게 됨)
         setCards((prevCards) => [...prevCards, ...dbCards]);
+
+        // 페이지네이션 방식에서는 기존 인덱스 유지 (같은 페이지의 카드들 계속 표시)
+        // 카드가 뒤에 추가되므로 사용자가 보던 카드들의 위치는 변경되지 않음
+
         setHasMoreCards(
           dbCards.length === CARDS_PER_FETCH &&
             cards.length + dbCards.length < totalThanksCount
@@ -131,13 +149,35 @@ const ThanksCardPage = () => {
     loadInitialData();
   }, []);
 
-  // 캐러셀 인덱스가 끝에 가까워지면 추가 데이터 로드
+  // 초기 로드 완료 후 오른쪽(최신 카드)에서 시작하도록 인덱스 설정
   useEffect(() => {
-    const shouldLoadMore = currentCardIndex >= cards.length - 3; // 끝에서 3개 전에 미리 로드
-    if (shouldLoadMore && hasMoreCards && !loading) {
+    if (!isInitialLoad && cards.length > 0) {
+      // 오른쪽(최신)에서 시작하므로 마지막 페이지 인덱스로 설정
+      const getVisibleCards = () => {
+        if (typeof window === "undefined") return 3;
+        const width = window.innerWidth;
+        if (width < 640) return 1;
+        if (width < 1024) return 2;
+        if (width < 1440) return 3;
+        if (width < 1920) return 4;
+        return 5;
+      };
+
+      const visibleCards = getVisibleCards();
+      // 페이지네이션 방식으로 maxIndex 계산 (캐러셀과 동일)
+      const totalPages = Math.ceil(cards.length / visibleCards);
+      const maxIndex = Math.max(0, totalPages - 1);
+      setCurrentCardIndex(maxIndex);
+    }
+  }, [isInitialLoad, cards.length]);
+
+  // 캐러셀 인덱스가 왼쪽(오래된 카드)에 가까워지면 추가 데이터 로드
+  useEffect(() => {
+    const shouldLoadMore = currentCardIndex <= 1; // 페이지 인덱스 1 이하일 때 미리 로드
+    if (shouldLoadMore && hasMoreCards && !loading && !isInitialLoad) {
       loadMoreCards();
     }
-  }, [currentCardIndex, cards.length, hasMoreCards, loading]);
+  }, [currentCardIndex, hasMoreCards, loading, isInitialLoad]);
 
   // 로딩 중이면 로딩 화면 표시
   if (loading) {
@@ -162,7 +202,7 @@ const ThanksCardPage = () => {
       {/* 메인 카드 캐러셀 또는 빈 상태 */}
       {cards.length > 0 ? (
         <ThanksCardCarousel
-          cards={cards}
+          cards={[...cards].reverse()}
           currentIndex={currentCardIndex}
           onIndexChange={setCurrentCardIndex}
         />
@@ -188,6 +228,12 @@ const ThanksCardPage = () => {
 
       {/* QR 코드 영역 */}
       <ThanksCardQRCode />
+
+      {/* 새 카드 생성 애니메이션 오버레이 */}
+      <ThanksCardAnimationOverlay
+        newCard={newCardForAnimation}
+        onAnimationComplete={() => setNewCardForAnimation(null)}
+      />
     </div>
   );
 };
