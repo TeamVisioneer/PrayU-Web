@@ -194,9 +194,9 @@ const NewThanksCardPage = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="w-full h-full overflow-y-auto flex flex-col bg-mainBg">
       {/* 헤더 */}
-      <header className="shadow-sm flex-shrink-0">
+      <header className="shadow-sm">
         <div className="w-full px-4 py-4">
           <div className="flex items-center justify-between">
             <button
@@ -227,7 +227,7 @@ const NewThanksCardPage = () => {
 
       {/* 진행률 표시기 */}
       {currentStep !== "completion" && (
-        <div className="w-full p-6 flex-shrink-0">
+        <div className="w-full p-6">
           {/* 진행률 바 */}
           <div className="mb-4">
             <div className="w-full bg-slate-200 rounded-full h-2">
@@ -289,7 +289,7 @@ const NewThanksCardPage = () => {
       )}
 
       {/* 메인 콘텐츠 */}
-      <div className="flex-1 overflow-y-auto px-4 py-8">{renderStep()}</div>
+      <main className="px-4 py-8">{renderStep()}</main>
     </div>
   );
 };
