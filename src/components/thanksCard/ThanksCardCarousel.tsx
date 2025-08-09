@@ -3,6 +3,14 @@ import { ThanksCardCarouselProps } from "./types";
 import { ThanksCardItem } from "./ThanksCardItem";
 
 /**
+ * 캐러셀에 사용될 각 카드의 이상적인 너비 (px 단위).
+ * 이 값을 기준으로 화면 너비에 몇 개의 카드가 들어갈지 계산합니다.
+ * 카드의 최대 너비(lg:max-w-lg -> 32rem -> 512px)와 좌우 여백(lg:px-4 -> 1rem*2 -> 32px)을 고려하여
+ * 약 400px 정도의 값을 설정하면 다양한 화면에서 유연하게 대응할 수 있습니다.
+ */
+const IDEAL_CARD_WIDTH_PX = 400;
+
+/**
  * 감사 카드들을 캐러셀 형태로 표시하는 반응형 컴포넌트
  * - 모바일: 1개씩 표시
  * - 태블릿: 2개씩 표시
@@ -35,15 +43,24 @@ export const ThanksCardCarousel = ({
     }
   }, [cards.length, visibleCards, currentIndex]);
 
-  // 반응형 카드 개수 계산 (화면이 넓어질수록 더 많은 카드 표시)
+  // 반응형 카드 개수 계산 (화면 너비에 따라 동적으로 계산)
   const getVisibleCards = () => {
     if (typeof window === "undefined") return 3; // SSR 대응
-    const width = window.innerWidth;
-    if (width < 640) return 1; // 모바일
-    if (width < 1024) return 2; // 태블릿
-    if (width < 1440) return 3; // 일반 데스크톱
-    if (width < 1920) return 4; // 대형 데스크톱
-    return 5; // 초대형 화면 (4K 등)
+
+    const screenWidth = window.innerWidth;
+
+    // 모바일에서는 항상 1개만 표시
+    if (screenWidth < 640) {
+      return 1;
+    }
+
+    // 화면 너비를 기준으로 표시할 카드 개수 계산
+    const calculatedVisibleCards = Math.floor(
+      screenWidth / IDEAL_CARD_WIDTH_PX
+    );
+
+    // 최소 1개의 카드는 항상 표시되도록 보장
+    return Math.max(1, calculatedVisibleCards);
   };
 
   // 화면 크기 변경 감지
