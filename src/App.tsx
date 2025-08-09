@@ -96,7 +96,14 @@ const App = () => {
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/thanks-card" element={<ThanksCardPage />} />
-              <Route path="/thanks-card/new" element={<NewThanksCardPage />} />
+              <Route
+                path="/thanks-card/new"
+                element={
+                  <SlideInPage>
+                    <NewThanksCardPage />
+                  </SlideInPage>
+                }
+              />
               <Route
                 path="/login-redirect"
                 element={
