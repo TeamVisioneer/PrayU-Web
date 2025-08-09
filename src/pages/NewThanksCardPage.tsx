@@ -194,7 +194,7 @@ const NewThanksCardPage = () => {
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto flex flex-col bg-mainBg">
+    <div className="flex flex-col h-full bg-mainBg">
       {/* 헤더 */}
       <header className="shadow-sm">
         <div className="w-full px-4 py-4">
@@ -289,7 +289,7 @@ const NewThanksCardPage = () => {
       )}
 
       {/* 메인 콘텐츠 */}
-      <main className="px-4 py-8">{renderStep()}</main>
+      <div className="flex-grow overflow-y-auto px-4 py-8">{renderStep()}</div>
     </div>
   );
 };
