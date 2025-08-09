@@ -194,7 +194,7 @@ const NewThanksCardPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-mainBg">
+    <div className="flex flex-col h-full bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* 헤더 */}
       <header className="shadow-sm">
         <div className="w-full px-4 py-4">
