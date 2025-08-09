@@ -39,11 +39,23 @@ const ThanksCardPage = () => {
    * 새로운 감사카드가 실시간으로 추가되었을 때 처리하는 함수
    */
   const handleThanksCardAdded = useCallback(async (newCard: ThanksCard) => {
-    // 애니메이션을 위해 새 카드 설정
-    setNewCardForAnimation(newCard);
+    // 중복 체크: 이미 존재하는 카드인지 확인
+    setCards((prevCards) => {
+      const cardExists = prevCards.some((card) => card.id === newCard.id);
 
-    // 새로운 카드를 원본 배열 맨 앞에 추가 (reverse 후 오른쪽 끝에 표시됨)
-    setCards((prevCards) => [newCard, ...prevCards]);
+      if (cardExists) {
+        console.log("중복된 카드 감지, 추가하지 않음:", newCard.id);
+        return prevCards;
+      }
+
+      // 애니메이션을 위해 새 카드 설정 (중복이 아닌 경우에만)
+      setNewCardForAnimation(newCard);
+
+      console.log("새로운 감사카드가 오른쪽 끝에 추가되었습니다:", newCard);
+
+      // 새로운 카드를 원본 배열 맨 앞에 추가 (reverse 후 오른쪽 끝에 표시됨)
+      return [newCard, ...prevCards];
+    });
 
     // 새 카드가 원본 배열 맨 앞에 추가되므로 현재 인덱스는 그대로 유지
     // (reverse 후에는 맨 뒤(오른쪽)에 위치하게 됨)
@@ -55,8 +67,6 @@ const ThanksCardPage = () => {
     } catch (error) {
       console.error("Failed to update total count:", error);
     }
-
-    console.log("새로운 감사카드가 오른쪽 끝에 추가되었습니다:", newCard);
   }, []);
 
   // 실시간 감사카드 변경사항 구독
@@ -117,7 +127,23 @@ const ThanksCardPage = () => {
 
       if (dbCards && dbCards.length > 0) {
         // 더 오래된 카드들을 뒤에 추가 (reverse 후 앞쪽에 위치하게 됨)
-        setCards((prevCards) => [...prevCards, ...dbCards]);
+        setCards((prevCards) => {
+          // 중복 제거: 이미 존재하는 카드는 제외
+          const existingIds = new Set(prevCards.map((card) => card.id));
+          const newCards = dbCards.filter((card) => !existingIds.has(card.id));
+
+          if (newCards.length === 0) {
+            console.log("모든 카드가 이미 존재함, 추가하지 않음");
+            return prevCards;
+          }
+
+          console.log(
+            `${newCards.length}개의 새로운 카드 추가 (${
+              dbCards.length - newCards.length
+            }개 중복 제외)`
+          );
+          return [...prevCards, ...newCards];
+        });
 
         // 페이지네이션 방식에서는 기존 인덱스 유지 (같은 페이지의 카드들 계속 표시)
         // 카드가 뒤에 추가되므로 사용자가 보던 카드들의 위치는 변경되지 않음
