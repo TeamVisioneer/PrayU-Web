@@ -13,6 +13,8 @@ import { useToast } from "../ui/use-toast";
 import { Button } from "../ui/button";
 import { PlusCircle } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { UserPlanType } from "@/Enums/userPlanType";
+
 export default function GroupListDrawer() {
   const user = useBaseStore((state) => state.user);
   const groupList = useBaseStore((state) => state.groupList);
@@ -38,7 +40,7 @@ export default function GroupListDrawer() {
   const handleClickCreateGroup = () => {
     if (
       (groupList?.length && groupList?.length < maxGroupCount) ||
-      userPlan === "Premium"
+      userPlan === UserPlanType.Premium
     ) {
       window.location.href = "/group/new";
       analyticsTrack("클릭_그룹_추가", { group_length: groupList?.length });
