@@ -15,6 +15,7 @@ export interface updateProfilesParams {
   push_notification?: boolean;
   terms_agreed_at?: string;
   fcm_token?: string;
+  premium_expired_at?: string | null;
   app_settings?: Json;
 }
 
@@ -65,6 +66,27 @@ export const fetchProfileList = async (
       .from("profiles")
       .select(`*`)
       .in("id", userIds);
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const fetchProfileListByUserName = async (
+  userName: string,
+  limit: number,
+): Promise<Profiles[] | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .like("full_name", `%${userName}%`)
+      .limit(limit);
     if (error) {
       Sentry.captureException(error.message);
       return null;

@@ -69,6 +69,7 @@ import {
   fetchProfileCount,
   fetchProfileList,
   fetchProfileListByStartId,
+  fetchProfileListByUserName,
   updateProfile,
   updateProfilesParams,
 } from "@/apis/profiles";
@@ -119,6 +120,10 @@ export interface BaseStore {
   newUserCount: number;
   getProfile: (userId: string) => Promise<Profiles | null>;
   fetchProfileList: (userIds: string[]) => Promise<Profiles[] | null>;
+  fetchProfileListByUserName: (
+    userName: string,
+    limit: number,
+  ) => Promise<Profiles[] | null>;
   fetchProfileListByStartId: (
     startId: string,
     limit: number,
@@ -568,6 +573,13 @@ const useBaseStore = create<BaseStore>()(
     },
     fetchProfileList: async (userIds: string[]) => {
       const data = await fetchProfileList(userIds);
+      set((state) => {
+        state.profileList = data;
+      });
+      return data;
+    },
+    fetchProfileListByUserName: async (userName: string, limit: number) => {
+      const data = await fetchProfileListByUserName(userName, limit);
       set((state) => {
         state.profileList = data;
       });
