@@ -169,7 +169,7 @@ const MyProfilePage = () => {
               <h2 className="text-xl font-bold text-gray-800">
                 {myProfile.full_name}
               </h2>
-              {userPlan !== UserPlanType.Premium && (
+              {userPlan == UserPlanType.Premium && (
                 <Badge
                   variant="outline"
                   className="gap-1.5 border-0 bg-gradient-to-r from-mainBtn via-blue-500 to-blue-600 text-white shadow-md ring-1 ring-blue-300/60 px-3 py-1 rounded-full whitespace-nowrap"
