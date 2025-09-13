@@ -13,6 +13,9 @@ import useAuth from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { UserPlanType } from "@/Enums/userPlanType";
+import { Crown } from "lucide-react";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
@@ -41,6 +44,7 @@ const MyProfilePage = () => {
   const fetchUserTotalPrayCount = useBaseStore(
     (state) => state.fetchUserTotalPrayCount
   );
+  const userPlan = useBaseStore((state) => state.userPlan);
 
   const setHistoryPrayCardListView = useBaseStore(
     (state) => state.setHistoryPrayCardListView
@@ -161,9 +165,23 @@ const MyProfilePage = () => {
             alt="Profile Avatar"
           />
           <div>
-            <h2 className="text-xl font-bold text-gray-800">
-              {myProfile.full_name}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold text-gray-800">
+                {myProfile.full_name}
+              </h2>
+              {userPlan == UserPlanType.Premium && (
+                <Badge
+                  variant="outline"
+                  className="gap-1.5 border-0 bg-gradient-to-r from-mainBtn via-blue-500 to-blue-600 text-white shadow-md ring-1 ring-blue-300/60 px-3 py-1 rounded-full whitespace-nowrap"
+                >
+                  <Crown
+                    size={12}
+                    className="text-white opacity-90 animate-pulse"
+                  />
+                  {UserPlanType.Premium}
+                </Badge>
+              )}
+            </div>
             <p className="text-sm text-gray-500 mt-1">
               지금까지 총 {userTotalPrayCount.toLocaleString()}번의 기도를
               받았어요!

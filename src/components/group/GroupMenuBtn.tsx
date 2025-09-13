@@ -19,6 +19,7 @@ import { ChevronsUpDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PiHandsPrayingFill } from "react-icons/pi";
 import kakaoIcon from "@/assets/kakaoIcon.svg";
+import { UserPlanType } from "@/Enums/userPlanType";
 
 const GroupMenuBtn: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -64,7 +65,7 @@ const GroupMenuBtn: React.FC = () => {
 
   const handleClickCreateGroup = () => {
     if (!groupList) return;
-    if (groupList.length < maxGroupCount || userPlan === "Premium") {
+    if (groupList.length < maxGroupCount || userPlan === UserPlanType.Premium) {
       window.location.href = "/group/new";
       analyticsTrack("클릭_그룹_추가", { group_length: groupList.length });
     } else {

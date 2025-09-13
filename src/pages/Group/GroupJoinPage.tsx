@@ -12,6 +12,7 @@ import LogInDrawer from "@/components/auth/LogInDrawer";
 import check from "@/assets/lottie/check2.json";
 import Lottie from "react-lottie";
 import { NotificationType } from "@/components/notification/NotificationType";
+import { UserPlanType } from "@/Enums/userPlanType";
 
 const GroupJoinPage: React.FC = () => {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ const GroupJoinPage: React.FC = () => {
       myMemberList &&
       myMemberList.length >= maxGroupCount &&
       myMemberList.every((member) => member.group_id !== groupId) &&
-      userPlan != "Premium"
+      userPlan != UserPlanType.Premium
     ) {
       navigate("/group/limit", { replace: true });
       return;

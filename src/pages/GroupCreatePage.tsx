@@ -10,6 +10,7 @@ import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 import PrayUSquareImage from "@/assets/prayu_square.png";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
 import { PulseLoader } from "react-spinners";
+import { UserPlanType } from "@/Enums/userPlanType";
 
 const GroupCreatePage: React.FC = () => {
   const { user } = useAuth();
@@ -39,7 +40,7 @@ const GroupCreatePage: React.FC = () => {
   const handleCreateGroup = async (userId: string, inputGroupName: string) => {
     const groupList = await fetchGroupListByUserId(userId);
     if (!groupList) return;
-    if (groupList.length >= maxGroupCount && userPlan != "Premium") {
+    if (groupList.length >= maxGroupCount && userPlan != UserPlanType.Premium) {
       toast({
         description: `최대 ${maxGroupCount}개의 그룹만 참여할 수 있어요`,
       });

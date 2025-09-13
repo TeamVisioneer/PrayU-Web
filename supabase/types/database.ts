@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -22,10 +22,10 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
+          extensions?: Json
           operationName?: string
           query?: string
           variables?: Json
-          extensions?: Json
         }
         Returns: Json
       }
@@ -389,6 +389,7 @@ export type Database = {
           id: string
           kakao_id: string | null
           kakao_notification: boolean
+          premium_expired_at: string | null
           push_notification: boolean
           terms_agreed_at: string | null
           updated_at: string | null
@@ -405,6 +406,7 @@ export type Database = {
           id: string
           kakao_id?: string | null
           kakao_notification?: boolean
+          premium_expired_at?: string | null
           push_notification?: boolean
           terms_agreed_at?: string | null
           updated_at?: string | null
@@ -421,6 +423,7 @@ export type Database = {
           id?: string
           kakao_id?: string | null
           kakao_notification?: boolean
+          premium_expired_at?: string | null
           push_notification?: boolean
           terms_agreed_at?: string | null
           updated_at?: string | null
@@ -567,16 +570,16 @@ export type Database = {
       search_bible: {
         Args: { embedding_content: string }
         Returns: {
-          id: number
-          cate: number
           book: number
+          cate: number
           chapter: number
+          id: number
+          long_label: string
           paragraph: number
           sentence: string
-          testament: string
-          long_label: string
           short_label: string
           similarity: number
+          testament: string
         }[]
       }
       sparsevec_out: {

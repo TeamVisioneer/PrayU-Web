@@ -69,6 +69,7 @@ import {
   fetchProfileCount,
   fetchProfileList,
   fetchProfileListByStartId,
+  fetchProfileListByUserName,
   updateProfile,
   updateProfilesParams,
 } from "@/apis/profiles";
@@ -91,6 +92,7 @@ import {
   CreateOnesignalPushParams,
   OnesignalPushResponse,
 } from "@/apis/onesignal";
+import { UserPlanType } from "@/Enums/userPlanType";
 
 export interface BaseStore {
   // app
@@ -105,11 +107,11 @@ export interface BaseStore {
   session: Session | null;
   user: User | null;
   userLoading: boolean;
-  userPlan: string;
+  userPlan: UserPlanType | null;
   getUser: () => void;
   updateUserMetaData: (params: { [key: string]: string }) => Promise<void>;
   signOut: () => Promise<void>;
-  setUserPlan: (userId: string) => void;
+  setUserPlan: (userPlanType: UserPlanType | null) => void;
 
   // profiles
   profileList: Profiles[] | null;
@@ -118,6 +120,10 @@ export interface BaseStore {
   newUserCount: number;
   getProfile: (userId: string) => Promise<Profiles | null>;
   fetchProfileList: (userIds: string[]) => Promise<Profiles[] | null>;
+  fetchProfileListByUserName: (
+    userName: string,
+    limit: number,
+  ) => Promise<Profiles[] | null>;
   fetchProfileListByStartId: (
     startId: string,
     limit: number,
@@ -488,7 +494,7 @@ const useBaseStore = create<BaseStore>()(
     session: null,
     user: null,
     userLoading: true,
-    userPlan: "",
+    userPlan: null,
     getUser: async () => {
       const {
         data: { session },
@@ -547,24 +553,9 @@ const useBaseStore = create<BaseStore>()(
         state.user = null;
       });
     },
-    // TODO: 나중에 여기에 api를 가져와서 쓰면 될 것 같다.
-    setUserPlan: (userId: string) => {
-      if (!import.meta.env.VITE_PREMIUM_PLAN_USERLIST) {
-        return null;
-      }
-      const userList = import.meta.env.VITE_PREMIUM_PLAN_USERLIST.split(
-        ",",
-      ).reduce((acc: Record<string, string>, item: string) => {
-        const [userId, userName] = item.split(":");
-        acc[userId] = userName;
-        return acc;
-      }, {} as Record<string, string>);
-
+    setUserPlan: (userPlanType: UserPlanType | null) => {
       set((state) => {
-        if (userId in userList) {
-          state.userPlan = "Premium";
-        }
-        return state;
+        state.userPlan = userPlanType;
       });
     },
 
@@ -582,6 +573,13 @@ const useBaseStore = create<BaseStore>()(
     },
     fetchProfileList: async (userIds: string[]) => {
       const data = await fetchProfileList(userIds);
+      set((state) => {
+        state.profileList = data;
+      });
+      return data;
+    },
+    fetchProfileListByUserName: async (userName: string, limit: number) => {
+      const data = await fetchProfileListByUserName(userName, limit);
       set((state) => {
         state.profileList = data;
       });
