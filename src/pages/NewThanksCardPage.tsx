@@ -103,6 +103,7 @@ const NewThanksCardPage = () => {
         return true;
       } else {
         setCreateError("카드 생성에 실패했습니다. 다시 시도해주세요.");
+        console.log(createError);
         return false;
       }
     } catch (error) {
