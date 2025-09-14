@@ -15,7 +15,7 @@ export interface StepProps {
 
 export interface CompletionStepProps {
   formData: ThanksCardFormData;
-  cardNumber: number;
+  cardNumber: number | null;
   onViewAllCards: () => void;
 }
 

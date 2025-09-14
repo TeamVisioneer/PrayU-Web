@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import NotificationSendDialog from "./NotificationDialog";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect, useState } from "react";
-import { getISOToday } from "@/lib/utils";
+import { getISOTodayDate } from "@/lib/utils";
 import { FaLock } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +44,7 @@ const AdminPage = () => {
   );
   const updateProfile = useBaseStore((state) => state.updateProfile);
 
-  const todayDate = getISOToday();
+  const todayDate = getISOTodayDate();
 
   const [prayCardId, setPrayCardId] = useState("");
   const [profileKeyword, setProfileKeyword] = useState("");
@@ -84,7 +84,7 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
-    const todayDate = getISOToday();
+    const todayDate = getISOTodayDate();
     fetchProfileCount();
     fetchNewUserCount(todayDate);
     fetchGroupListByDate(todayDate);

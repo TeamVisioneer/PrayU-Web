@@ -11,6 +11,17 @@ export const CompletionStep = ({
   cardNumber,
   onViewAllCards,
 }: CompletionStepProps) => {
+  if (cardNumber === null) {
+    return (
+      <div className="max-w-md mx-auto text-center">
+        <div className="text-4xl mb-4">⚠️</div>
+        <h2 className="text-xl font-medium text-slate-800 mb-4">
+          카드 생성 중 문제가 발생했습니다
+        </h2>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-md mx-auto text-center">
       {/* 완료 축하 메시지 */}

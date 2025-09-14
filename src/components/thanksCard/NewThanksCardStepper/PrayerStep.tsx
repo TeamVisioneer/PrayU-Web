@@ -27,7 +27,7 @@ export const PrayerStep = ({
   };
 
   return (
-    <div className="max-w-md mx-auto text-center">
+    <div className="h-full max-w-md mx-auto text-center">
       {/* 단계 안내 */}
       <div className="mb-8">
         <div className="text-4xl mb-4">🙏</div>
