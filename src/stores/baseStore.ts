@@ -181,6 +181,9 @@ export interface BaseStore {
   // member
   memberList: MemberWithProfiles[] | null;
   memberListView: MemberWithProfiles[];
+  memberListOffset: number;
+  memberListPageSize: number;
+  setMemberListOffset: (memberListOffset: number) => void;
   myMemberList: MemberWithGroup[] | null;
   memberCount: number | null;
   memberLoading: boolean;
@@ -727,6 +730,8 @@ const useBaseStore = create<BaseStore>()(
     //member
     memberList: null,
     memberListView: [],
+    memberListOffset: 25,
+    memberListPageSize: 25,
     myMemberList: null,
     memberCount: 0,
     memberLoading: true,
@@ -741,6 +746,11 @@ const useBaseStore = create<BaseStore>()(
     setMemberListView: (memberListView: MemberWithProfiles[]) => {
       set((state) => {
         state.memberListView = memberListView;
+      });
+    },
+    setMemberListOffset: (memberListOffset: number) => {
+      set((state) => {
+        state.memberListOffset = memberListOffset;
       });
     },
     setMemberList: (memberList: MemberWithProfiles[] | null) => {

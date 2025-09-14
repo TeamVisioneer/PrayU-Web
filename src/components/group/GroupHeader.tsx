@@ -14,8 +14,7 @@ const GroupHeader: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
-  const myMember = useBaseStore((state) => state.myMember);
-  const memberList = useBaseStore((state) => state.memberList);
+  const memberCount = useBaseStore((state) => state.memberCount);
 
   const handleClickGroupName = async () => {
     setIsOpenGroupListDrawer(true);
@@ -24,14 +23,6 @@ const GroupHeader: React.FC = () => {
       where: "GroupHeader",
     });
   };
-
-  const filteredMemberList = myMember?.profiles.blocking_users
-    ? memberList?.filter(
-        (member) =>
-          member.user_id &&
-          !myMember.profiles.blocking_users.includes(member.user_id)
-      )
-    : memberList;
 
   return (
     <div className="sticky top-0 flex justify-between items-center p-5 bg-mainBg z-50">
@@ -48,9 +39,7 @@ const GroupHeader: React.FC = () => {
           <div className="max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
             {targetGroup.name}
           </div>
-          <span className="text-sm text-gray-500">
-            {filteredMemberList?.length || 0}
-          </span>
+          <span className="text-sm text-gray-500">{memberCount || 0}</span>
         </div>
       ) : (
         <Skeleton className="w-24 h-6 bg-gray-200" />

@@ -25,7 +25,8 @@ const GroupSettingsDialog: React.FC = () => {
   const inputGroupName = useBaseStore((state) => state.inputGroupName);
   const setGroupName = useBaseStore((state) => state.setGroupName);
   const updateGroup = useBaseStore((state) => state.updateGroup);
-  const memberList = useBaseStore((state) => state.memberList);
+  const memberListView = useBaseStore((state) => state.memberListView);
+
   const getGroup = useBaseStore((state) => state.getGroup);
 
   // 선택된 시간을 추적하는 상태
@@ -53,7 +54,7 @@ const GroupSettingsDialog: React.FC = () => {
     }
   }, [setGroupName, targetGroup, setSelectedHour, isOpenGroupSettingsDialog]);
 
-  if (!memberList || !targetGroup) return null;
+  if (!memberListView || !targetGroup) return null;
 
   return (
     <Dialog
@@ -106,12 +107,12 @@ const GroupSettingsDialog: React.FC = () => {
           <section className="flex flex-col gap-4">
             <div className="flex justify-between">
               <label className="text-sm font-medium text-gray-700">
-                그룹원 ({memberList.length})
+                그룹원 ({memberListView.length})
               </label>
               <GroupMemberSettingsBtn />
             </div>
             <GroupMemberProfileList
-              memberList={memberList}
+              memberListView={memberListView}
               targetGroup={targetGroup}
             />
           </section>
