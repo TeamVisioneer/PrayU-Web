@@ -11,6 +11,7 @@ import {
 import { thanksCardController } from "@/apis/thanksCard";
 import { uploadImage, getPublicUrl } from "@/apis/file";
 import { getTodayNumber } from "@/lib/utils";
+import { IoChevronBack } from "react-icons/io5";
 
 /**
  * 감사 카드 생성 페이지
@@ -144,57 +145,16 @@ const NewThanksCardPage = () => {
     navigate("/thanks-card");
   };
 
-  // 현재 단계에 따른 컴포넌트 렌더링
-  const renderStep = () => {
-    const stepProps = {
-      formData,
-      onUpdate: updateFormData,
-      onNext: handleNext,
-      onPrev: handlePrev,
-      isLoading: isCreating, // 생성 중인지 여부 전달
-    };
-
-    switch (currentStep) {
-      case "name":
-        return <NameStep {...stepProps} />;
-      case "photo":
-        return <PhotoStep {...stepProps} />;
-      case "prayer":
-        return <PrayerStep {...stepProps} />;
-      case "completion":
-        if (cardNumber === null) {
-          return (
-            <div className="max-w-md mx-auto text-center">
-              <div className="text-4xl mb-4">⚠️</div>
-              <h2 className="text-xl font-medium text-slate-800 mb-4">
-                카드 생성 중 문제가 발생했습니다
-              </h2>
-              {createError && (
-                <p className="text-red-600 mb-4">{createError}</p>
-              )}
-              <button
-                onClick={() => setCurrentStep("prayer")}
-                className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-medium transition-colors"
-              >
-                다시 시도하기
-              </button>
-            </div>
-          );
-        }
-        return (
-          <CompletionStep
-            formData={formData}
-            cardNumber={cardNumber}
-            onViewAllCards={handleViewAllCards}
-          />
-        );
-      default:
-        return <NameStep {...stepProps} />;
-    }
+  const stepProps = {
+    formData,
+    onUpdate: updateFormData,
+    onNext: handleNext,
+    onPrev: handlePrev,
+    isLoading: isCreating, // 생성 중인지 여부 전달
   };
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="flex flex-col h-full min-h-screen bg-mainBg overflow-auto">
       {/* 헤더 */}
       <header className="shadow-sm">
         <div className="w-full px-4 py-4">
@@ -203,19 +163,7 @@ const NewThanksCardPage = () => {
               onClick={() => navigate("/thanks-card")}
               className="p-2 text-slate-600 hover:text-slate-800 transition-colors"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <IoChevronBack size={20} className="text-gray-700" />
             </button>
             <h1 className="text-lg font-medium text-slate-800">
               감사 카드 만들기
@@ -289,7 +237,21 @@ const NewThanksCardPage = () => {
       )}
 
       {/* 메인 콘텐츠 */}
-      <div className="flex-grow overflow-y-auto px-4 py-8">{renderStep()}</div>
+      <div className="flex-grow overflow-y-auto px-4 py-8">
+        {currentStep == "name" ? (
+          <NameStep {...stepProps} />
+        ) : currentStep == "photo" ? (
+          <PhotoStep {...stepProps} />
+        ) : currentStep == "prayer" ? (
+          <PrayerStep {...stepProps} />
+        ) : (
+          <CompletionStep
+            formData={formData}
+            cardNumber={cardNumber}
+            onViewAllCards={handleViewAllCards}
+          />
+        )}
+      </div>
     </div>
   );
 };
