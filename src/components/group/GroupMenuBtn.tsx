@@ -52,7 +52,8 @@ const GroupMenuBtn: React.FC = () => {
     (state) => state.setActiveGroupMemberOption
   );
   const isGroupLeader = useBaseStore((state) => state.isGroupLeader);
-  const memberList = useBaseStore((state) => state.memberList);
+  const memberListView = useBaseStore((state) => state.memberListView);
+
   const setIsOpenGroupListDrawer = useBaseStore(
     (state) => state.setIsOpenGroupListDrawer
   );
@@ -76,8 +77,8 @@ const GroupMenuBtn: React.FC = () => {
   };
 
   const handleClickExitGroup = () => {
-    if (!targetGroup || !user || !memberList) return;
-    if (isGroupLeader && memberList.length !== 1) {
+    if (!targetGroup || !user || !memberListView) return;
+    if (isGroupLeader && memberListView.length !== 1) {
       setAlertData({
         color: "bg-blue-400",
         title: "그룹장 양도 필요",
@@ -234,10 +235,10 @@ const GroupMenuBtn: React.FC = () => {
             </div>
 
             <div className="flex flex-col items-start text-gray-500 w-full">
-              {memberList && targetGroup && !isGroupListPage && (
+              {memberListView && targetGroup && !isGroupListPage && (
                 <section className="w-full pt-5 border-t border-gray-200">
                   <GroupMemberProfileList
-                    memberList={memberList}
+                    memberListView={memberListView}
                     targetGroup={targetGroup}
                   />
                 </section>

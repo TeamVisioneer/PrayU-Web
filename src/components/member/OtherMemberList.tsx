@@ -3,12 +3,12 @@ import DummyOtherMember from "./DummyOtherMember";
 import InviteBanner from "../notice/InviteBanner";
 import RewardBanner from "../notice/RewardBanner";
 import useBaseStore from "@/stores/baseStore";
-import { useEffect, useState } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
+import { useEffect } from "react";
 import { MemberWithProfiles } from "supabase/types/tables";
 import useRealtimeMember from "./useRealtimeMember";
 import InviteOtherMember from "./InviteOtherMember";
 import { Skeleton } from "../ui/skeleton";
+import ShowMoreBtn from "../common/ShowMoreBtn";
 
 const OtherMemberList: React.FC = () => {
   const myMember = useBaseStore((state) => state.myMember);
@@ -25,8 +25,12 @@ const OtherMemberList: React.FC = () => {
   const setMemberList = useBaseStore((state) => state.setMemberList);
   const setMemberListView = useBaseStore((state) => state.setMemberListView);
   const memberCount = useBaseStore((state) => state.memberCount);
-  const pageSize = 25;
-  const [offset, setOffset] = useState(pageSize);
+
+  const memberListPageSize = useBaseStore((state) => state.memberListPageSize);
+  const memberListOffset = useBaseStore((state) => state.memberListOffset);
+  const setMemberListOffset = useBaseStore(
+    (state) => state.setMemberListOffset
+  );
 
   useEffect(() => {
     if (targetGroup) {
@@ -43,25 +47,43 @@ const OtherMemberList: React.FC = () => {
   });
 
   useEffect(() => {
-    if (memberList && memberListView.length == 0)
-      setMemberListView([...memberList]);
-  }, [memberList, memberListView, setMemberListView]);
+    const filteredMemberList = myMember?.profiles.blocking_users
+      ? memberList?.filter(
+          (member) =>
+            member.user_id &&
+            !myMember.profiles.blocking_users.includes(member.user_id)
+        )
+      : memberList;
+    if (filteredMemberList && memberListView.length == 0) {
+      setMemberListView([...filteredMemberList]);
+    }
+  }, [memberList, memberListView, setMemberListView, myMember]);
 
   const onClickMoreMemberList = async () => {
     if (!targetGroup || !memberCount) return;
-    if (offset >= memberCount) return;
+    if (memberListOffset >= memberCount) return;
 
     setMemberList(null);
-    const limit = offset > memberCount ? memberCount - offset : pageSize;
+    const limit =
+      memberListOffset > memberCount
+        ? memberCount - memberListOffset
+        : memberListPageSize;
     const newMemberList = await fetchMemberListByGroupId(
       targetGroup.id,
       limit,
-      offset
+      memberListOffset
     );
-    if (!memberList || !newMemberList) return;
+    if (!newMemberList) return;
+    const filteredMemberList = myMember?.profiles.blocking_users
+      ? newMemberList?.filter(
+          (member) =>
+            member.user_id &&
+            !myMember.profiles.blocking_users.includes(member.user_id)
+        )
+      : newMemberList;
 
-    setMemberListView([...memberListView, ...newMemberList]);
-    setOffset(offset + pageSize);
+    setMemberListView([...memberListView, ...filteredMemberList]);
+    setMemberListOffset(memberListOffset + memberListPageSize);
   };
 
   const isOtherMember = (member: MemberWithProfiles) => {
@@ -112,16 +134,12 @@ const OtherMemberList: React.FC = () => {
             )
         )}
 
-        {offset < memberCount && (
-          <div
-            onClick={() => onClickMoreMemberList()}
-            className="w-full flex justify-center items-center"
-          >
-            {memberList ? (
-              <span className="text-gray-500 underline ">더보기</span>
-            ) : (
-              <ClipLoader color="#70AAFF" size={10} />
-            )}
+        {memberCount && memberListOffset < memberCount && (
+          <div className="flex justify-center">
+            <ShowMoreBtn
+              onClick={onClickMoreMemberList}
+              isLoading={!memberList}
+            />
           </div>
         )}
       </div>
