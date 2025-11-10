@@ -1,8 +1,8 @@
 import React, { useRef, useCallback, useLayoutEffect } from "react";
 
 interface WheelPickerProps {
-  selectedHour: number;
-  onChange: (hour: number) => void;
+  selectedHour: number | null;
+  onChange: (hour: number | null) => void;
   className?: string;
 }
 
@@ -11,20 +11,24 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
   onChange,
   className = "",
 }) => {
-  // 초기값 파싱 (한 번만 실행)
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const isInitialized = useRef(false);
 
   const getSelectedTimeText = () => {
+    if (selectedHour === null) {
+      return "알림 없음";
+    }
     const hour12 =
       selectedHour === 0
-        ? 12
+        ? 0
         : selectedHour > 12
         ? selectedHour - 12
         : selectedHour;
     const ampm = selectedHour < 12 ? "오전" : "오후";
-    return `${ampm} ${hour12}시`;
+    // 오전은 00, 01 형식, 오후는 1, 2 형식
+    const hourDisplay =
+      ampm === "오전" ? hour12.toString().padStart(2, "0") : hour12.toString();
+    return `${ampm} ${hourDisplay}시`;
   };
 
   const handleScroll = useCallback(() => {
@@ -39,16 +43,18 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
     const viewportCenter = scrollTop + containerHeight / 2;
     // 첫 번째 아이템의 중심 위치
     const firstItemCenter = paddingTop + itemHeight / 2;
-    // 선택된 아이템 인덱스 계산
+    // 선택된 아이템 인덱스 계산 (0은 "알림 없음", 1~24는 시간)
     const selectedIndex = Math.round(
       (viewportCenter - firstItemCenter) / itemHeight
     );
 
-    // 0-23 범위로 제한
-    const clampedIndex = Math.max(0, Math.min(23, selectedIndex));
+    // 0 ~ 24 범위로 제한 (0은 "알림 없음", 1~24는 0~23시)
+    const clampedIndex = Math.max(0, Math.min(24, selectedIndex));
+    // 인덱스 0은 null(알림 없음), 1~24는 0~23시
+    const newValue = clampedIndex === 0 ? null : clampedIndex - 1;
 
-    if (clampedIndex !== selectedHour) {
-      onChange(clampedIndex);
+    if (newValue !== selectedHour) {
+      onChange(newValue);
     }
   }, [selectedHour, onChange]);
 
@@ -60,9 +66,12 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
     const containerHeight = 192;
     const paddingTop = 80;
 
+    // selectedHour가 null이면 인덱스 0(알림 없음), 아니면 인덱스 selectedHour + 1
+    const targetIndex = selectedHour === null ? 0 : selectedHour + 1;
+
     // 초기 시간에 해당하는 아이템이 중앙에 오는 스크롤 위치 계산
     const selectedItemCenter =
-      paddingTop + itemHeight / 2 + selectedHour * itemHeight;
+      paddingTop + itemHeight / 2 + targetIndex * itemHeight;
     const scrollTop = selectedItemCenter - containerHeight / 2;
 
     scrollRef.current.scrollTop = Math.max(0, scrollTop);
@@ -74,7 +83,7 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
       {/* 스크롤 컨테이너 */}
       <div
         ref={scrollRef}
-        className="h-48 overflow-y-auto scrollbar-hide rounded-lg bg-white scroll-smooth snap-y snap-mandatory"
+        className="wheel-picker-scroll h-48 overflow-y-scroll rounded-lg bg-white scroll-smooth snap-y snap-mandatory"
         onScroll={handleScroll}
         style={{
           perspective: "1000px",
@@ -82,12 +91,37 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
             "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
           WebkitMaskImage:
             "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
         }}
       >
+        <style>
+          {`
+            .wheel-picker-scroll::-webkit-scrollbar {
+              display: none;
+            }
+          `}
+        </style>
         <div className="py-20">
+          {/* 알림 없음 옵션 */}
+          <div
+            className="h-12 flex items-center justify-center text-lg font-medium cursor-pointer snap-center transition-all duration-200 select-none opacity-40 hover:opacity-60"
+            style={{
+              transform: "scale(0.9)",
+              transformOrigin: "center",
+            }}
+          >
+            알림 없음
+          </div>
+          {/* 시간 옵션 (0~23시) */}
           {Array.from({ length: 24 }, (_, i) => {
-            const hour12 = i === 0 ? 12 : i > 12 ? i - 12 : i;
+            const hour12 = i === 0 ? 0 : i > 12 ? i - 12 : i;
             const ampm = i < 12 ? "오전" : "오후";
+            // 오전은 00, 01 형식, 오후는 1, 2 형식
+            const hourDisplay =
+              ampm === "오전"
+                ? hour12.toString().padStart(2, "0")
+                : hour12.toString();
             return (
               <div
                 key={i}
@@ -97,7 +131,7 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
                   transformOrigin: "center",
                 }}
               >
-                {ampm} {hour12}시
+                {ampm} {hourDisplay}시
               </div>
             );
           })}
