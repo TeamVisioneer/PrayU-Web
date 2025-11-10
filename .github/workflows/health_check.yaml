@@ -1,0 +1,61 @@
+name: Weekly HTTP Request Scheduler
+
+on:
+    schedule:
+        # 매주 월요일 오전 9시(UTC 기준 0시)에 실행
+        - cron: "0 0 * * 1"
+    # 수동 실행을 위한 워크플로우 디스패치
+    workflow_dispatch:
+
+jobs:
+    weekly-http-request:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Send HTTP Request to Production
+              run: |
+                  echo "Sending request to Production (app.prayu.site)..."
+                  URL="https://app.prayu.site"
+
+                  RESPONSE=$(curl -s -w "\n%{http_code}" -X GET "$URL" \
+                    -H "Content-Type: application/json")
+
+                  HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+                  BODY=$(echo "$RESPONSE" | sed '$d')
+
+                  echo "HTTP Status Code: $HTTP_CODE"
+                  echo "Response Body: $BODY"
+
+                  if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+                    echo "Production request failed with status code: $HTTP_CODE"
+                    exit 1
+                  fi
+
+                  echo "Production request completed successfully!"
+
+            - name: Send HTTP Request to Staging
+              run: |
+                  echo "Sending request to Staging (staging.prayu.site)..."
+                  URL="https://staging.prayu.site"
+
+                  RESPONSE=$(curl -s -w "\n%{http_code}" -X GET "$URL" \
+                    -H "Content-Type: application/json")
+
+                  HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+                  BODY=$(echo "$RESPONSE" | sed '$d')
+
+                  echo "HTTP Status Code: $HTTP_CODE"
+                  echo "Response Body: $BODY"
+
+                  if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+                    echo "Staging request failed with status code: $HTTP_CODE"
+                    exit 1
+                  fi
+
+                  echo "Staging request completed successfully!"
+
+            - name: Notify on Failure
+              if: failure()
+              run: |
+                  echo "Weekly HTTP request failed. Please check the logs."
+                  # 여기에 Slack, Discord 등의 알림 설정을 추가할 수 있습니다

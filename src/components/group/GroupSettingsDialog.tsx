@@ -29,8 +29,8 @@ const GroupSettingsDialog: React.FC = () => {
 
   const getGroup = useBaseStore((state) => state.getGroup);
 
-  // 선택된 시간을 추적하는 상태
-  const [selectedHour, setSelectedHour] = useState(0);
+  // 선택된 시간을 추적하는 상태 (null은 알림 없음)
+  const [selectedHour, setSelectedHour] = useState<number | null>(null);
 
   const onClickSaveGroup = async () => {
     if (!targetGroup) return;
@@ -38,7 +38,10 @@ const GroupSettingsDialog: React.FC = () => {
     analyticsTrack("클릭_그룹_이름변경", { group_name: GroupSettingsDialog });
     const group = await updateGroup(targetGroup.id, {
       name: inputGroupName,
-      pray_time: `${selectedHour.toString().padStart(2, "0")}:00`,
+      pray_time:
+        selectedHour !== null
+          ? `${selectedHour.toString().padStart(2, "0")}:00`
+          : null,
     });
     if (group) {
       getGroup(targetGroup.id);
@@ -50,7 +53,9 @@ const GroupSettingsDialog: React.FC = () => {
     setGroupName(targetGroup?.name || "");
     if (targetGroup?.pray_time) {
       const hour = parseInt(targetGroup.pray_time.split(":")[0], 10);
-      setSelectedHour(isNaN(hour) ? 0 : hour);
+      setSelectedHour(isNaN(hour) ? null : hour);
+    } else {
+      setSelectedHour(null);
     }
   }, [setGroupName, targetGroup, setSelectedHour, isOpenGroupSettingsDialog]);
 
@@ -100,7 +105,7 @@ const GroupSettingsDialog: React.FC = () => {
 
             <WheelPicker
               selectedHour={selectedHour}
-              onChange={setSelectedHour}
+              onChange={(hour) => setSelectedHour(hour)}
             />
           </section>
 
