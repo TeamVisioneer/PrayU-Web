@@ -315,39 +315,20 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
               layoutScroll
               className="space-y-2"
             >
-              <ExamplePrayRequestItem
-                key={randomPrayerSuggestions[0]}
-                request={randomPrayerSuggestions[0]}
-                onClick={() => {
-                  setCurrentInput(randomPrayerSuggestions[0]);
-                  setShowAddForm(true);
-                  analyticsTrack("클릭_기도카드생성_예시기도제목", {
-                    text: randomPrayerSuggestions[0],
-                  });
-                }}
-              />
-              <ExamplePrayRequestItem
-                key={randomPrayerSuggestions[1]}
-                request={randomPrayerSuggestions[1]}
-                onClick={() => {
-                  setCurrentInput(randomPrayerSuggestions[1]);
-                  setShowAddForm(true);
-                  analyticsTrack("클릭_기도카드생성_예시기도제목", {
-                    text: randomPrayerSuggestions[1],
-                  });
-                }}
-              />
-              <ExamplePrayRequestItem
-                key={randomPrayerSuggestions[2]}
-                request={randomPrayerSuggestions[2]}
-                onClick={() => {
-                  setCurrentInput(randomPrayerSuggestions[2]);
-                  setShowAddForm(true);
-                  analyticsTrack("클릭_기도카드생성_예시기도제목", {
-                    text: randomPrayerSuggestions[2],
-                  });
-                }}
-              />
+              {randomPrayerSuggestions.map((suggestion) => (
+                <ExamplePrayRequestItem
+                  key={suggestion}
+                  request={suggestion}
+                  onClick={() => {
+                    analyticsTrack("클릭_기도카드생성_예시기도제목", {
+                      text: suggestion,
+                    });
+                    setPrayRequests([...prayRequests, suggestion]);
+                    localStorage.setItem("prayCardContent", [...prayRequests, suggestion].join("\n\n"));
+                  }}
+                />
+              ))}
+             
             </Reorder.Group>
           )}
         </motion.div>

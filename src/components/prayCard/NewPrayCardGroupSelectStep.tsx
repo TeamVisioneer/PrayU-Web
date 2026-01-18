@@ -56,10 +56,10 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   const bibleCardRef = useRef<HTMLDivElement>(null);
   const [bible, setBible] = useState<Bible | null>(null);
   const [keywords, setKeywords] = useState<string[]>([]);
-
+  const [colors, setColors] = useState<string[]>([]);
+  const [radius, setRadius] = useState<string[]>([]);
   const { getRandomColors, getRandomRadiusStyle } = useBibleCard();
-  const { primary, secondary } = getRandomColors();
-  const { borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius } = getRandomRadiusStyle();
+  
 
   // useSaveImage hook
   const { saveImage } = useSaveImage();
@@ -118,12 +118,24 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       const {bible, keywords} = await searchBible(
         `#일상: ${prayCardLife} #기도제목: ${prayCardContent}`
       );
+      const { primary, secondary } = getRandomColors();
+      const { borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius } = getRandomRadiusStyle();
+
       if (!bible || !keywords) {
         return;
       }
       const targetBible = bible[0];
       setBible(targetBible);
       setKeywords(keywords);
+      setColors([primary, secondary]);
+      setRadius([borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius]);
+      
+      // 상태 업데이트 후 DOM이 렌더링될 때까지 대기
+      await new Promise(resolve => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(resolve);
+        });
+      });
       
       const url = await saveImage(bibleCardRef, {
         storagePath: `BibleCard/`,
@@ -199,6 +211,8 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   };
 
   const handleGroupToggle = (group: Group) => {
+    if (isCreating) return;
+
     analyticsTrack("클릭_기도카드생성_그룹선택", {
       where: "그룹선택",
       group_name: group.name,
@@ -215,6 +229,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   };
 
   const handlePrevClick = () => {
+    if (isCreating) return;
     analyticsTrack("클릭_기도카드생성_이전", { where: "그룹선택" });
     onPrev();
   };
@@ -313,13 +328,13 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
       {/* 숨겨진 캡처 전용 BibleCardFixed - 화면 밖에 배치 */}
       <div className="fixed -top-[100vh] -z-40 pointer-events-none">
-        <div ref={bibleCardRef} className="w-[384px] aspect-[3/4]">
+        <div ref={bibleCardRef} className="w-[380px] aspect-[3/4]">
             {bible && keywords && <BibleCardFixed
               name={user?.user_metadata.full_name || ""}
               keywords={keywords}
               bible={bible}
-              colors={[primary, secondary]}
-              radius={[borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius]}
+              colors={colors}
+              radius={radius}
               createdAt={getISOToday()}
             />
             }
