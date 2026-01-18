@@ -52,3 +52,39 @@ export const fetchBibleList = async (
     return null;
   }
 };
+
+export const searchBible = async (
+  query: string,
+): Promise<{ bible: Bible[] | null; keywords: string[] | null }> => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_SUPA_PROJECT_URL}/functions/v1/bible`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${import.meta.env.VITE_SUPA_ANON_KEY}`,
+        },
+        body: JSON.stringify({ query }),
+      },
+    );
+    const { data, error } = await response.json();
+    if (error) {
+      Sentry.captureException(error);
+      return {
+        bible: null,
+        keywords: null,
+      };
+    }
+    return {
+      bible: data.bible as Bible[],
+      keywords: data.keywords as string[],
+    };
+  } catch (error) {
+    Sentry.captureException(error);
+    return {
+      bible: null,
+      keywords: null,
+    };
+  }
+};

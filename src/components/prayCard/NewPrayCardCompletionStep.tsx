@@ -4,8 +4,9 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import { Group } from "supabase/types/tables";
-import PrayCard from "./PrayCard";
 import { analyticsTrack } from "@/analytics/analytics";
+import PrayCardWithBibleCard from "./PrayCardWithBibleCard";
+import ShareButtonGroup from "../share/ShareButtonGroup";
 
 interface NewPrayCardCompletionStepProps {
   selectedGroups: Group[];
@@ -36,7 +37,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   const navigate = useNavigate();
 
   const user = useBaseStore((state) => state.user);
-  const targetGroup = useBaseStore((state) => state.targetGroup);
+  // const targetGroup = useBaseStore((state) => state.targetGroup);
   const fetchUserPrayCardList = useBaseStore(
     (state) => state.fetchUserPrayCardList
   );
@@ -46,14 +47,11 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   );
 
   const handleComplete = async () => {
-    analyticsTrack("클릭_기도카드생성_그룹이동", { where: "완료페이지" });
+    // analyticsTrack("클릭_기도카드생성_그룹이동", { where: "완료페이지" });
+    analyticsTrack("클릭_기도카드생성_내프로필", { where: "완료페이지" });
     if (!user) return;
 
-    if (selectedGroups.some((g) => g.id == targetGroup?.id))
-      window.location.replace(`/group/${targetGroup?.id}`);
-    else if (selectedGroups.length > 0)
-      window.location.replace(`/group/${selectedGroups[0].id}`);
-    else navigate("/group");
+    navigate("/profile/me");
   };
 
   useEffect(() => {
@@ -61,6 +59,9 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   }, [user, fetchUserPrayCardList]);
 
   const prayCard = historyPrayCardList?.[0];
+  
+  const userBibleCard = localStorage.getItem("userBibleCard");
+  const userBibleCardData = userBibleCard ? JSON.parse(userBibleCard) : undefined;
 
   return (
     <div className="flex flex-col items-center h-full relative">
@@ -69,7 +70,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
       {/* Card container with spotlight effect */}
       <motion.div
-        className="w-5/6 mx-auto relative z-20 mt-5 mb-10"
+        className="w-5/6 mx-auto relative z-20 my-5"
         variants={cardVariants}
       >
         {/* Glow effect */}
@@ -77,12 +78,12 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
         {/* Card */}
         <div className="relative">
-          <PrayCard prayCard={prayCard} isMoreBtn={false} />
+          <PrayCardWithBibleCard prayCard={prayCard} bibleCard={userBibleCardData} />
         </div>
       </motion.div>
 
       <motion.div
-        className="text-center relative z-20 mb-3"
+        className="text-center relative z-20"
         variants={itemVariants}
       >
         <motion.h1 className="text-2xl font-bold mb-1" variants={itemVariants}>
@@ -118,12 +119,17 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
         )}
       </motion.div>
 
-      <motion.div className="relative z-20 w-3/4" variants={itemVariants}>
+      <motion.div
+        className="relative z-20 w-3/4 flex flex-col gap-2"
+        variants={itemVariants}
+      >
+        {/* 공유 버튼 그룹 */}
+        <ShareButtonGroup where="NewPrayCardCompletionStep" />
         <Button
           onClick={handleComplete}
           className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600 mb-10"
         >
-          그룹 바로가기
+          내 프로필에서 확인
         </Button>
       </motion.div>
     </div>

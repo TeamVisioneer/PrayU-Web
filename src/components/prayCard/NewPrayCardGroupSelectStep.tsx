@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import useBaseStore from "@/stores/baseStore";
-import { Group } from "supabase/types/tables";
+import { Bible, Group } from "supabase/types/tables";
 import GroupTagList from "../group/GroupTagList";
 import { motion } from "framer-motion";
 import { bulkCreatePrayCard } from "@/apis/prayCard";
@@ -9,6 +9,11 @@ import { PulseLoader } from "react-spinners";
 import { analyticsTrack } from "@/analytics/analytics";
 import { NotificationType } from "@/components/notification/NotificationType";
 import { updateOnesignalUser } from "@/apis/onesignal";
+import BibleCardFixed from "./BibleCardFixed";
+import { useSaveImage } from "@/hooks/useSaveImage";
+import { searchBible } from "@/apis/bible";
+import { getISOToday } from "@/lib/utils";
+import useBibleCard from "@/hooks/useBibleCard";
 
 interface NewPrayCardGroupSelectStepProps {
   selectedGroups: Group[];
@@ -46,6 +51,18 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   );
 
   const [isCreating, setIsCreating] = useState(false);
+
+  // BibleCardFixed 캡처용 ref
+  const bibleCardRef = useRef<HTMLDivElement>(null);
+  const [bible, setBible] = useState<Bible | null>(null);
+  const [keywords, setKeywords] = useState<string[]>([]);
+
+  const { getRandomColors, getRandomRadiusStyle } = useBibleCard();
+  const { primary, secondary } = getRandomColors();
+  const { borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius } = getRandomRadiusStyle();
+
+  // useSaveImage hook
+  const { saveImage } = useSaveImage();
 
   const sendNotification = async (groups: Group[], prayCardContent: string) => {
     if (!user) return;
@@ -95,6 +112,45 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       });
     }
   };
+  
+  const handleSaveBibleCard = async (prayCardContent: string, prayCardLife: string) => {
+    try {
+      const {bible, keywords} = await searchBible(
+        `#일상: ${prayCardLife} #기도제목: ${prayCardContent}`
+      );
+      if (!bible || !keywords) {
+        return;
+      }
+      const targetBible = bible[0];
+      setBible(targetBible);
+      setKeywords(keywords);
+      
+      const url = await saveImage(bibleCardRef, {
+        storagePath: `BibleCard/`,
+        fileName: `BibleCard_${Date.now()}.jpeg`,
+        imageFormat: "jpeg",
+        quality: 0.95,
+        scale: 2,
+      });
+      
+      // localStorage 저장
+      if (url) {
+        localStorage.setItem("userBibleCard", JSON.stringify({
+          name: user?.user_metadata.full_name || "",
+          keywords: keywords,
+          bible: targetBible,
+          colors: [primary, secondary],
+          radius: [borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius],
+          createdAt: getISOToday(),
+        }));
+        return url;
+      }
+      return;
+    } catch (error) {
+      console.error("이미지 저장 중 오류:", error);
+      return null;
+    }
+  };
 
   const handleCreatePrayCard = async () => {
     analyticsTrack("클릭_기도카드생성_만들기", { where: "그룹선택" });
@@ -103,14 +159,26 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       setIsCreating(false);
       return;
     }
+
     const prayCardContent = localStorage.getItem("prayCardContent") || "";
     const prayCardLife = localStorage.getItem("prayCardLife") || "";
+
+    const bibleCardUrl = await handleSaveBibleCard(prayCardContent, prayCardLife);
+    if (!bibleCardUrl) {
+      setIsCreating(false);
+      return;
+    }
+  
     const prayCardList = await bulkCreatePrayCard(
-      selectedGroups.map((group) => group.id),
-      user.id,
-      prayCardContent,
-      prayCardLife
+      selectedGroups.map((group, index) => ({
+        group_id: group.id,
+        user_id: user.id,
+        content: prayCardContent,
+        life: prayCardLife,
+        bible_card_url: index === selectedGroups.length - 1 ? bibleCardUrl : null,
+      }))
     );
+
 
     // 멤버 정보를 bulk로 업데이트
     const selectedGroupIds = selectedGroups.map((g) => g.id);
@@ -151,11 +219,14 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
     onPrev();
   };
 
+  
+
   const handleNewGroupClick = () => {
     analyticsTrack("클릭_기도카드생성_새그룹생성", { where: "그룹선택" });
     window.location.href = "/group/new";
   };
 
+ 
   return (
     <div className="flex flex-col h-full">
       <motion.h1 className="text-xl font-bold mb-4" variants={itemVariants}>
@@ -239,6 +310,22 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
           이전
         </Button>
       </motion.div>
+
+      {/* 숨겨진 캡처 전용 BibleCardFixed - 화면 밖에 배치 */}
+      <div className="fixed -top-[100vh] -z-40 pointer-events-none">
+        <div ref={bibleCardRef} className="w-[384px] aspect-[3/4]">
+            {bible && keywords && <BibleCardFixed
+              name={user?.user_metadata.full_name || ""}
+              keywords={keywords}
+              bible={bible}
+              colors={[primary, secondary]}
+              radius={[borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius]}
+              createdAt={getISOToday()}
+            />
+            }
+        </div>
+      </div>
+
     </div>
   );
 };
