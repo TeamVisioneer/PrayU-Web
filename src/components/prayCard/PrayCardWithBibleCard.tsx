@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Bible, PrayCardWithProfiles } from "supabase/types/tables";
+import { BibleCard as BibleCardType, PrayCardWithProfiles } from "supabase/types/tables";
 import PrayCard from "./PrayCard";
 import BibleCard from "./BibleCard";
 import { RefreshCw } from "lucide-react";
@@ -30,14 +30,7 @@ import { analyticsTrack } from "@/analytics/analytics";
  */
 interface PrayCardWithBibleCardProps {
   prayCard?: PrayCardWithProfiles;
-  bibleCard?: {
-    name: string;
-    keywords: string[];
-    bible: Bible;
-    colors: string[];
-    radius: string[];
-    createdAt: string;
-  };
+  bibleCard?: BibleCardType;      
 }
 
 const PrayCardWithBibleCard: React.FC<PrayCardWithBibleCardProps> = ({
@@ -70,7 +63,7 @@ const PrayCardWithBibleCard: React.FC<PrayCardWithBibleCardProps> = ({
 
           {/* 뒷면: BibleCard */}
           <div className="absolute w-full h-full rotate-y-180 backface-hidden">
-            <PrayCard prayCard={prayCard} />
+            <PrayCard prayCard={prayCard} isMoreBtn={false} editable={false} />
           </div>
         </div>
       </div>

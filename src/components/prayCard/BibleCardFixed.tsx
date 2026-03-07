@@ -1,24 +1,23 @@
-import { getISODateYMD } from "@/lib/utils";
-import { Bible } from "../../../supabase/types/tables";
 
 interface BibleCardProps {
   name: string;
   keywords: string[];
-  bible: Bible;
   colors: string[];
   radius: string[];
+  bibleReference: string;
+  bibleSentence: string;
   createdAt: string;
 }
 
 const BibleCardFixed: React.FC<BibleCardProps> = ({
   name,
   keywords,
-  bible,
+  bibleReference,
+  bibleSentence,
   colors,
   radius,
   createdAt,
 }) => {
-  const { year, month, day } = getISODateYMD(createdAt);
 
   const primary = colors[0];
   const secondary = colors[1];
@@ -43,13 +42,10 @@ const BibleCardFixed: React.FC<BibleCardProps> = ({
         >
           <div className="handwrittenV2 flex flex-col w-full h-full justify-center items-center py-[20px] px-[50px] gap-[10px] text-white text-center whitespace-pre-wrap">
             <div className="leading-[35px] tracking-[1px] text-[30px]">
-                {bible?.sentence.replace(/<[^>]*>/g, "").replace(/○/g, " ").trim()}
+                {bibleSentence.replace(/<[^>]*>/g, "").replace(/○/g, " ").trim()}
             </div>
             <div className="leading-tight text-[24px] tracking-[1px]">
-                {bible &&
-                  `${bible.long_label} ${bible.chapter}${
-                    bible.long_label == "시편" ? "편" : "장"
-                } ${bible.paragraph}절`}
+                {bibleReference}
             </div>
           </div>
         </div>
@@ -65,7 +61,7 @@ const BibleCardFixed: React.FC<BibleCardProps> = ({
       </section>
 
       <section className="flex justify-between w-full text-[#666666]">
-        <span className="tracking-[1px]">{`${year}.${month}.${day}`}</span>
+        <span className="tracking-[1px]">{createdAt}</span>
         <div>@prayu.official</div>
       </section>
     </div>

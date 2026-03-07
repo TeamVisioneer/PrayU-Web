@@ -1,15 +1,8 @@
 import { getISODateYMD } from "@/lib/utils";
-import { Bible } from "../../../supabase/types/tables";
+import { BibleCard as BibleCardType } from "../../../supabase/types/tables";
 
 interface BibleCardProps {
-  bibleCard?: {
-    name: string;
-    keywords: string[];
-    bible: Bible;
-    colors: string[];
-    radius: string[];
-    createdAt: string;
-  };
+  bibleCard?: BibleCardType
 }
 
 const BibleCard: React.FC<BibleCardProps> = ({ bibleCard }) => {
@@ -38,7 +31,8 @@ const BibleCard: React.FC<BibleCardProps> = ({ bibleCard }) => {
     );
   }
 
-  const { year, month, day } = getISODateYMD(bibleCard.createdAt);
+  const { year, month, day } = getISODateYMD(bibleCard.created_at);
+  
 
   const primary = bibleCard.colors[0];
   const secondary = bibleCard.colors[1];
@@ -63,13 +57,10 @@ const BibleCard: React.FC<BibleCardProps> = ({ bibleCard }) => {
         >
           <div className="handwrittenV2 flex flex-col w-full h-full justify-center items-center py-4 sm:py-5 px-8 sm:px-10 md:px-12 gap-4 sm:gap-5 text-white text-center whitespace-pre-wrap">
             <div className="leading-relaxed sm:leading-[35px] tracking-wide text-2xl sm:text-3xl md:text-[30px]">
-              {bibleCard.bible?.sentence.replace(/<[^>]*>/g, "").trim()}
+              {bibleCard.bible_sentence}
             </div>
             <div className="leading-tight text-xl sm:text-2xl md:text-[24px] tracking-wide">
-              {bibleCard.bible &&
-                `${bibleCard.bible.long_label} ${bibleCard.bible.chapter}${
-                  bibleCard.bible.long_label == "시편" ? "편" : "장"
-                } ${bibleCard.bible.paragraph}절`}
+              {bibleCard.bible_reference}
             </div>
           </div>
         </div>

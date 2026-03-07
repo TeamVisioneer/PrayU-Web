@@ -1,12 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
-import { Group } from "supabase/types/tables";
+import { BibleCard, Group, PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
 import PrayCardWithBibleCard from "./PrayCardWithBibleCard";
 import ShareButtonGroup from "../share/ShareButtonGroup";
+import { searchBible } from "@/apis/bible";
+import useBibleCard from "@/hooks/useBibleCard";
+import { useSaveImage } from "@/hooks/useSaveImage";
+import { createBibleCard } from "@/apis/bibleCard";
+import BibleCardFixed from "./BibleCardFixed";
+import { getISOTodayDateYMD } from "@/lib/utils";
+import { PulseLoader } from "react-spinners";
+import PrayCard from "./PrayCard";
+
+
 
 interface NewPrayCardCompletionStepProps {
   selectedGroups: Group[];
@@ -46,6 +63,20 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
     (state) => state.historyPrayCardList
   );
 
+  const { saveImage } = useSaveImage();
+  const { getRandomColors, getRandomRadiusStyle } = useBibleCard();
+  
+  const [DrawerOpen, setDrawerOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [bibleCard, setBibleCard] = useState<BibleCard | null>(null);
+  const [keywords, setKeywords] = useState<string[]>([]);
+  const [colors, setColors] = useState<string[]>([]);
+  const [radius, setRadius] = useState<string[]>([]);
+  const [bibleReference, setBibleReference] = useState<string>("");
+  const [bibleSentence, setBibleSentence] = useState<string>("");
+  const bibleCardRef = useRef<HTMLDivElement>(null);
+  const { year, month, day } = getISOTodayDateYMD();
+
   const handleComplete = async () => {
     // analyticsTrack("클릭_기도카드생성_그룹이동", { where: "완료페이지" });
     analyticsTrack("클릭_기도카드생성_내프로필", { where: "완료페이지" });
@@ -54,15 +85,85 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
     navigate("/profile/me");
   };
 
+  const handleCreateBibleCard = async (prayCard: PrayCardWithProfiles | undefined) => {
+      try {
+        if (!prayCard || isCreating) return
+
+        setIsCreating(true);
+        const {bible, keywords} = await searchBible(
+          `#일상: ${prayCard.life} #기도제목: ${prayCard.content}`
+        );
+        const { primary, secondary } = getRandomColors();
+        const { borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius } = getRandomRadiusStyle();
+  
+        if (!bible || !keywords) {
+          setIsCreating(false);
+          return;
+        }
+        const targetBible = bible[0];
+        const bibleSentence = targetBible.sentence;
+        const bibleReference = targetBible.long_label === "시편" ? 
+          `${targetBible.long_label} ${targetBible.chapter}편 ${targetBible.paragraph}절` : 
+          `${targetBible.long_label} ${targetBible.chapter}장 ${targetBible.paragraph}절`;
+
+        setKeywords(keywords);
+        setColors([primary, secondary]);
+        setRadius([borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius]);
+        setBibleReference(bibleReference);
+        setBibleSentence(bibleSentence);
+        
+
+        await new Promise(resolve => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(resolve);
+          });
+        });
+        
+        const image_url = await saveImage(bibleCardRef, {
+          storagePath: `BibleCard/`,
+          fileName: `BibleCard_${Date.now()}.jpeg`,
+          imageFormat: "jpeg",
+          quality: 0.95,
+          scale: 2,
+        });
+
+        const bibleCard = await createBibleCard({
+          user_id: user?.id || null,
+          name: user?.user_metadata.full_name || "",
+          keywords: keywords,
+          bible_reference: bibleReference,
+          bible_sentence: bibleSentence,
+          colors: [primary, secondary],
+          radius: [borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius],
+          image_url: image_url,
+        });
+
+        localStorage.setItem("bibleCard", JSON.stringify(bibleCard))
+        setBibleCard(bibleCard);
+        setIsCreating(false);
+        return bibleCard
+      } catch (error) {
+        console.error("이미지 저장 중 오류:", error);
+        setIsCreating(false);
+        return null;
+      }
+    };
+
+
   useEffect(() => {
     if (user) fetchUserPrayCardList(user.id);
   }, [user, fetchUserPrayCardList]);
 
+  useEffect(() => {
+    const bibleCard = localStorage.getItem("bibleCard");
+    if (bibleCard) {
+      setBibleCard(JSON.parse(bibleCard));
+    }
+  }, [])
+
+
   const prayCard = historyPrayCardList?.[0];
   
-  const userBibleCard = localStorage.getItem("userBibleCard");
-  const userBibleCardData = userBibleCard ? JSON.parse(userBibleCard) : undefined;
-
   return (
     <div className="flex flex-col items-center h-full relative">
       {/* Dimmed overlay */}
@@ -78,60 +179,86 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
         {/* Card */}
         <div className="relative">
-          <PrayCardWithBibleCard prayCard={prayCard} bibleCard={userBibleCardData} />
+          {bibleCard 
+            ? <PrayCardWithBibleCard prayCard={prayCard} bibleCard={bibleCard || undefined} />
+            : <PrayCard prayCard={prayCard} isMoreBtn={false} editable={false} />
+          }
         </div>
+        
       </motion.div>
 
       <motion.div
-        className="text-center relative z-20"
+        className="text-center relative z-20 mb-4"
         variants={itemVariants}
       >
         <motion.h1 className="text-2xl font-bold mb-1" variants={itemVariants}>
-          기도카드가 생성 완료!
+          기도카드 생성 완료!
         </motion.h1>
         <motion.p className="text-gray-500" variants={itemVariants}>
-          총 {selectedGroups.length}개의 그룹에 기도카드가 생성 되었어요!
+          {
+          selectedGroups.length === 0 ? "" : 
+          selectedGroups.length < 2
+            ? `${selectedGroups[0]?.name} ` 
+            : `${selectedGroups[0]?.name} 외 ${selectedGroups.length - 1}개의 `}
+          그룹에 기도카드가 생성되었습니다.
         </motion.p>
-
-        {selectedGroups.length > 0 && (
-          <motion.div
-            className="bg-blue-50/90 rounded-lg my-4 relative z-20 flex flex-col items-center w-full"
-            variants={itemVariants}
-          >
-            <div className="flex flex-wrap gap-2 w-full items-center justify-center">
-              {selectedGroups.map((group) => {
-                return (
-                  <div
-                    key={group.id}
-                    className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full"
-                  >
-                    <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-xs">
-                      {group?.name ? [...group.name][0] : ""}
-                    </div>
-                    <p className="text-sm font-medium text-gray-800">
-                      {group?.name}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
       </motion.div>
+
+    
 
       <motion.div
-        className="relative z-20 w-3/4 flex flex-col gap-2"
+        className="relative z-20 w-3/4 flex flex-col gap-3"
         variants={itemVariants}
-      >
-        {/* 공유 버튼 그룹 */}
-        <ShareButtonGroup where="NewPrayCardCompletionStep" />
+      > 
+        <Button
+          onClick={() => handleCreateBibleCard(prayCard)}
+          disabled={isCreating}
+          className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600 disabled:opacity-70"
+        >
+          {isCreating ? <PulseLoader size={10} color="#f3f4f6" /> :"말씀카드 만들기"}
+        </Button>
         <Button
           onClick={handleComplete}
-          className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600 mb-10"
+          variant="ghost"
+          className="w-full py-6 text-base"
         >
-          내 프로필에서 확인
+          나중에 하기
         </Button>
       </motion.div>
+      <Drawer open={DrawerOpen} onOpenChange={setDrawerOpen}>
+        <DrawerContent className="bg-mainBg pb-7">
+          <DrawerHeader className="px-6 pt-5 pb-4 text-center gap-2">
+            <DrawerTitle className="text-[18px] font-bold text-[#222222]">
+              말씀카드 공유하기
+            </DrawerTitle>
+            <DrawerDescription className="text-sm leading-relaxed text-[#919191]">
+              말씀카드 이미지를 친구에게 공유하고 함께 기도해요
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="flex flex-col gap-5 px-5">
+            <div className="rounded-2xl border border-[#EEF1F4] bg-white shadow-sm">
+              {/* 공유 버튼 그룹 */}
+              <ShareButtonGroup where="NewPrayCardCompletionStep" />
+            </div>
+          </div>
+        </DrawerContent>
+      </Drawer>
+
+       {/* 숨겨진 캡처 전용 BibleCardFixed - 화면 밖에 배치 */}
+      <div className="fixed -top-[100vh] -z-40 pointer-events-none">
+        <div ref={bibleCardRef} className="w-[380px] aspect-[3/4]">
+            <BibleCardFixed
+              name={user?.user_metadata.full_name || ""}
+              keywords={keywords}
+              colors={colors}
+              radius={radius}
+              bibleReference={bibleReference}
+              bibleSentence={bibleSentence}
+              createdAt={`${year}.${month}.${day}`}
+            />
+        </div>
+      </div>
+
     </div>
   );
 };
