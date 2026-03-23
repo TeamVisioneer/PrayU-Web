@@ -40,18 +40,18 @@ export const fetchNotificationCount = async (
   try {
     let query = supabase
       .from("notification")
-      .select("*")
+      .select("id", { count: "exact", head: true })
       .eq("user_id", userId)
       .is("deleted_at", null);
 
     if (unreadOnly) query = query.is("checked_at", null);
-    const { data, error } = await query;
+    const { count, error } = await query;
 
     if (error) {
       Sentry.captureException(error.message);
       return 0;
     }
-    return data?.length || 0;
+    return count || 0;
   } catch (error) {
     Sentry.captureException(error);
     return 0;
