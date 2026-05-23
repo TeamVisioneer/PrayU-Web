@@ -67,6 +67,7 @@ const PrayCardEditPage = () => {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     deleted_at: null,
+    bible_card_id: null,
     bible_card_url: null,
     profiles: myMember?.profiles,
     pray: [],

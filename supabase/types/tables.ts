@@ -81,6 +81,7 @@ export interface PrayCardWithProfiles extends PrayCard {
   profiles: Profiles;
   pray: PrayWithProfiles[];
   group?: Group;
+  bible_card?: BibleCard | null;
 }
 
 export interface PrayWithProfiles extends Pray {

@@ -18,7 +18,7 @@ interface UseShareActionsReturn {
 
 /**
  * 공유 기능을 위한 커스텀 훅
- * 
+ *
  * @param where - Analytics 추적을 위한 위치 정보
  * @param publicUrl - 공유할 이미지 URL (다운로드, 인스타그램 공유에 사용)
  * @param kakaoLinkObject - 카카오톡 공유를 위한 링크 객체
@@ -31,7 +31,7 @@ export const useShareActions = ({
 }: UseShareActionsProps): UseShareActionsReturn => {
   const handleDownload = async () => {
     analyticsTrack("클릭_다운로드", { where });
-    
+
     if (
       window.flutter_inappwebview &&
       window.flutter_inappwebview.callHandler
@@ -43,9 +43,9 @@ export const useShareActions = ({
 
       const result = (await window.flutter_inappwebview.callHandler(
         "downloadImages",
-        [publicUrl]
+        [publicUrl],
       )) as { status: string };
-      
+
       if (result.status === "success") {
         toast({ description: "다운로드 완료" });
       } else {
@@ -58,10 +58,10 @@ export const useShareActions = ({
 
   const handleCopyLink = async () => {
     analyticsTrack("클릭_공유_링크복사", { where });
-    const currentUrl = window.location.href;
-    
+    const copyUrl = publicUrl || window.location.href;
+
     try {
-      await navigator.clipboard.writeText(currentUrl);
+      await navigator.clipboard.writeText(copyUrl);
       toast({ description: "링크가 복사되었어요" });
     } catch (error) {
       console.error("링크 복사 실패:", error);
@@ -72,7 +72,7 @@ export const useShareActions = ({
   const handleSocialShare = async () => {
     analyticsTrack("클릭_공유_소셜공유", { where });
     const currentUrl = window.location.href;
-    
+
     try {
       if (navigator.share) {
         await navigator.share({
@@ -91,7 +91,7 @@ export const useShareActions = ({
 
   const handleKakaoShare = async () => {
     analyticsTrack("클릭_카카오_공유", { where });
-    
+
     try {
       if (!window.Kakao) {
         toast({ description: "카카오톡 공유 기능을 불러오는 중입니다" });
@@ -115,7 +115,7 @@ export const useShareActions = ({
 
   const handleInstagramShare = async () => {
     analyticsTrack("클릭_인스타그램_공유", { where });
-    
+
     if (
       window.flutter_inappwebview &&
       window.flutter_inappwebview.callHandler
@@ -128,7 +128,7 @@ export const useShareActions = ({
       try {
         await window.flutter_inappwebview.callHandler(
           "shareInstagramStory",
-          publicUrl
+          publicUrl,
         );
       } catch (error) {
         console.error("인스타그램 공유 실패:", error);
@@ -147,4 +147,3 @@ export const useShareActions = ({
     handleInstagramShare,
   };
 };
-

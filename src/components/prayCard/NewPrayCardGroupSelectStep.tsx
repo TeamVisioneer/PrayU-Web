@@ -109,12 +109,6 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
     const prayCardContent = localStorage.getItem("prayCardContent") || "";
     const prayCardLife = localStorage.getItem("prayCardLife") || "";
-
-    // const bibleCardUrl = await handleSaveBibleCard(prayCardContent, prayCardLife);
-    // if (!bibleCardUrl) {
-    //   setIsCreating(false);
-    //   return;
-    // }
   
     const prayCardList = await bulkCreatePrayCard(
       selectedGroups.map((group) => ({
@@ -139,6 +133,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
     await bulkUpdateMembers(selectedMemberIds, prayCardContent, true);
     await sendNotification(selectedGroups, prayCardContent);
+    localStorage.setItem("lastCreatedPrayCardId", prayCardList[0].id);
     localStorage.removeItem("prayCardContent");
     localStorage.removeItem("prayCardLife");
     onNext();

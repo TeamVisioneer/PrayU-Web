@@ -36,6 +36,7 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import NewAdminPage from "./pages/AdminPage/NewAdminPage";
 import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
+import BibleCardNewPage from "./pages/BibleCardPage/BibleCardNewPage";
 import QuietTimePage from "./pages/QuietTimePage";
 import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage";
 import PrayCardEditPage from "./pages/PrayCard/PrayCardEditPage";
@@ -130,6 +131,7 @@ const App = () => {
               />
               <Route path="/tutorial" element={<TutorialPage />} />
               <Route path="/bible-card" element={<BibleCardPage />} />
+              <Route path="/bible-card/new" element={<BibleCardNewPage />} />
               <Route
                 path="/bible-card/generator"
                 element={<BibleCardGeneratorPage />}

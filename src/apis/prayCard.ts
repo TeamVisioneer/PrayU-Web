@@ -15,6 +15,7 @@ export const fetchGroupPrayCardList = async (
       .select(
         `*,
       profiles (id, full_name, avatar_url, kakao_id),
+      bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
       )`,
@@ -52,6 +53,7 @@ export const fetchOtherPrayCardListByGroupId = async (
       .select(
         `*,
         profiles (id, full_name, avatar_url, kakao_id),
+        bible_card:bible_card!pray_card_bible_card_id_fkey (*),
         pray (*, 
           profiles (id, full_name, avatar_url, kakao_id)
         )`,
@@ -87,6 +89,7 @@ export const fetchUserPrayCardListByGroupId = async (
       .select(
         `*,
       profiles (id, full_name, avatar_url, kakao_id),
+      bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
       )`,
@@ -128,6 +131,7 @@ export const fetchUserPrayCardList = async (
       .select(
         `*,
       profiles (id, full_name, avatar_url, kakao_id),
+      bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
       ),
@@ -223,6 +227,7 @@ export interface createPrayCardParams {
   group_id?: string;
   user_id?: string | null;
   content: string;
+  bible_card_id?: string | null;
   bible_card_url?: string | null;
   life?: string;
 }
@@ -249,6 +254,7 @@ export const createPrayCardWithParams = async (
 export interface updatePrayCardParams {
   group_id?: string;
   user_id?: string;
+  bible_card_id?: string | null;
   bible_card_url?: string;
   life?: string;
   content?: string;
@@ -262,7 +268,8 @@ export async function updatePrayCard(
     const { data, error } = await supabase
       .from("pray_card")
       .update(params)
-      .eq("id", prayCardId);
+      .eq("id", prayCardId)
+      .select();
 
     if (error) {
       Sentry.captureException(error.message);

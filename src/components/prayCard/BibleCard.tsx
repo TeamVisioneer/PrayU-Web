@@ -1,86 +1,61 @@
+import { BibleCard as BibleCardType } from "supabase/types/tables";
 import { getISODateYMD } from "@/lib/utils";
-import { BibleCard as BibleCardType } from "../../../supabase/types/tables";
 
 interface BibleCardProps {
-  bibleCard?: BibleCardType
+  bibleCard: BibleCardType | null | undefined;
 }
 
 const BibleCard: React.FC<BibleCardProps> = ({ bibleCard }) => {
-  // 스켈레톤 처리
   if (!bibleCard) {
     return (
-      <div className="rounded-xl overflow-hidden aspect-[3/4] flex flex-col justify-between px-5 sm:px-6 md:px-8 py-4 sm:py-5 bg-[#FEFDFC] border border-gray-200">
-        <section>
-          {/* 성경 구절 카드 영역 */}
-          <div className="w-full aspect-square bg-gray-200 rounded-3xl animate-pulse"></div>
-          {/* 제목 및 키워드 영역 */}
-          <div className="flex flex-col mt-2 sm:mt-3 gap-2">
-            {/* 제목 */}
-            <div className="h-6 sm:h-7  bg-gray-200 rounded w-2/3 animate-pulse"></div>
-            {/* 키워드 */}
-            <div className="h-6 sm:h-7 bg-gray-200 rounded w-full animate-pulse"></div>
-          </div>
-        </section>
-
-        {/* 하단 날짜 및 계정 정보 */}
-        <section className="flex justify-between w-full text-xs sm:text-sm">
-          <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
-          <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
-        </section>
+      <div className="flex aspect-[3/4] w-full items-center justify-center rounded-xl border border-gray-100 bg-white text-sm text-gray-400 shadow-prayCard">
+        말씀카드가 아직 없어요
       </div>
     );
   }
 
   const { year, month, day } = getISODateYMD(bibleCard.created_at);
-  
-
-  const primary = bibleCard.colors[0];
-  const secondary = bibleCard.colors[1];
-
-  const topLeftRadius = bibleCard.radius[0];
-  const topRightRadius = bibleCard.radius[1];
-  const bottomRightRadius = bibleCard.radius[2];
-  const bottomLeftRadius = bibleCard.radius[3];
+  const [primary = "#608CFF", secondary = "#AAC7FF"] = bibleCard.colors;
+  const [
+    topLeftRadius = "80px",
+    topRightRadius = "120px",
+    bottomRightRadius = "80px",
+    bottomLeftRadius = "120px",
+  ] = bibleCard.radius;
 
   return (
-    <div className="rounded-xl overflow-hidden aspect-[3/4] flex flex-col justify-between px-5 sm:px-6 md:px-8 py-4 sm:py-5 bg-[#FEFDFC] border border-gray-200">
-      <section>
-        <div
-          className="w-full aspect-square flex flex-col justify-center items-center"
-          style={{
-            background: `linear-gradient(159deg, ${primary}, ${secondary})`,
-            borderTopLeftRadius: topLeftRadius,
-            borderTopRightRadius: topRightRadius,
-            borderBottomRightRadius: bottomRightRadius,
-            borderBottomLeftRadius: bottomLeftRadius,
-          }}
-        >
-          <div className="handwrittenV2 flex flex-col w-full h-full justify-center items-center py-4 sm:py-5 px-8 sm:px-10 md:px-12 gap-4 sm:gap-5 text-white text-center whitespace-pre-wrap">
-            <div className="leading-relaxed sm:leading-[35px] tracking-wide text-2xl sm:text-3xl md:text-[30px]">
-              {bibleCard.bible_sentence}
-            </div>
-            <div className="leading-tight text-xl sm:text-2xl md:text-[24px] tracking-wide">
-              {bibleCard.bible_reference}
-            </div>
-          </div>
-        </div>
+    <div className="relative flex aspect-[3/4] w-full flex-col rounded-xl border border-gray-100 bg-[#FEFDFC] px-5 py-4 text-left shadow-prayCard">
+      <div
+        className="flex aspect-square w-full flex-col items-center justify-center px-7 py-5 text-center text-white"
+        style={{
+          background: `linear-gradient(159deg, ${primary}, ${secondary})`,
+          borderTopLeftRadius: topLeftRadius,
+          borderTopRightRadius: topRightRadius,
+          borderBottomRightRadius: bottomRightRadius,
+          borderBottomLeftRadius: bottomLeftRadius,
+        }}
+      >
+        <p className="handwrittenV2 whitespace-pre-wrap text-[26px] leading-[34px]">
+          {bibleCard.bible_sentence.replace(/<[^>]*>/g, "").trim()}
+        </p>
+        <p className="handwrittenV2 mt-5 text-[20px] leading-tight">
+          {bibleCard.bible_reference}
+        </p>
+      </div>
 
-        <div style={{ color: primary }} className="flex flex-col mt-2 sm:mt-3">
-          <div className="text-3xl sm:text-4xl md:text-[40px] font-bold">
-            {bibleCard.name}
-          </div>
-          <div className="text-lg sm:text-xl md:text-[20px] flex flex-wrap gap-2 text-black-500">
-            {bibleCard.keywords.map((keyword, index) => (
-              <span key={index}>#{keyword}</span>
-            ))}
-          </div>
+      <div className="mt-3 text-left" style={{ color: primary }}>
+        <p className="truncate text-[34px] font-bold">{bibleCard.name}</p>
+        <div className="flex flex-wrap gap-x-2 text-base text-gray-700">
+          {bibleCard.keywords.map((keyword) => (
+            <span key={keyword}>#{keyword}</span>
+          ))}
         </div>
-      </section>
+      </div>
 
-      <section className="flex justify-between w-full text-gray-600 text-xs sm:text-sm">
-        <span className="tracking-wide">{`${year}.${month}.${day}.`}</span>
-        <div>@prayu.official</div>
-      </section>
+      <div className="absolute bottom-4 left-5 right-5 flex justify-between text-xs text-[#666666]">
+        <span>{`${year}.${month}.${day}.`}</span>
+        <span>@prayu.official</span>
+      </div>
     </div>
   );
 };

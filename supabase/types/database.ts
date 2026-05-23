@@ -376,6 +376,7 @@ export type Database = {
       }
       pray_card: {
         Row: {
+          bible_card_id: string | null
           bible_card_url: string | null
           content: string | null
           created_at: string
@@ -387,6 +388,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          bible_card_id?: string | null
           bible_card_url?: string | null
           content?: string | null
           created_at?: string
@@ -398,6 +400,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          bible_card_id?: string | null
           bible_card_url?: string | null
           content?: string | null
           created_at?: string
@@ -409,6 +412,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "pray_card_bible_card_id_fkey"
+            columns: ["bible_card_id"]
+            isOneToOne: false
+            referencedRelation: "bible_card"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "pray_card_group_id_fkey"
             columns: ["group_id"]
