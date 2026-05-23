@@ -162,6 +162,44 @@ export const fetchUserPrayCardList = async (
   }
 };
 
+export const fetchPrayCardByBibleCardId = async (
+  bibleCardId: string,
+): Promise<PrayCardWithProfiles | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("pray_card")
+      .select(
+        `*,
+      profiles (id, full_name, avatar_url, kakao_id),
+      bible_card:bible_card!pray_card_bible_card_id_fkey (*),
+      pray (*, 
+        profiles (id, full_name, avatar_url, kakao_id)
+      ),
+      group(name)`,
+      )
+      .eq("bible_card_id", bibleCardId)
+      .is("deleted_at", null)
+      .is("pray.deleted_at", null)
+      .single();
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+
+    return {
+      ...data,
+      pray: data.pray.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      ),
+    } as PrayCardWithProfiles;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 export const fetchUserPrayCardCount = async (
   currentUserId: string,
 ): Promise<number> => {

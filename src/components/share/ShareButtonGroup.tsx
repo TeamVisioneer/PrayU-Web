@@ -6,6 +6,7 @@ import { useShareActions } from "@/hooks/useShareActions";
 interface ShareButtonGroupProps {
   where: string;
   publicUrl?: string;
+  shareUrl?: string;
   showDownload?: boolean;
   showInstagram?: boolean;
 }
@@ -15,22 +16,23 @@ interface ShareButtonGroupProps {
  *
  * @param where - Analytics 추적을 위한 위치 정보
  * @param publicUrl - 공유할 이미지 URL (다운로드, 인스타그램 공유에 사용)
+ * @param shareUrl - 링크 복사/카카오톡 공유에 사용할 공개 페이지 URL
  * @param showDownload - 다운로드 버튼 표시 여부 (기본: true)
  * @param showInstagram - 인스타그램 공유 버튼 표시 여부 (기본: true)
  */
 const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({
   where,
   publicUrl,
+  shareUrl,
   showDownload = true,
   showInstagram = true,
 }) => {
-
   const {
     handleDownload,
     handleCopyLink,
     handleKakaoShare,
     handleInstagramShare,
-  } = useShareActions({ where, publicUrl });
+  } = useShareActions({ where, publicUrl, shareUrl });
 
   return (
     <section className="w-full py-3 sm:py-4">
@@ -42,19 +44,25 @@ const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({
               className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50 transition-all duration-200 hover:scale-105 hover:bg-gray-100 active:scale-95 sm:h-16 sm:w-16"
               aria-label="저장"
             >
-              <Download className="h-6 w-6 text-gray-700 sm:h-7 sm:w-7" strokeWidth={2} />
+              <Download
+                className="h-6 w-6 text-gray-700 sm:h-7 sm:w-7"
+                strokeWidth={2}
+              />
             </button>
             <span className="text-xs font-medium text-gray-500">저장</span>
           </div>
         )}
-        
+
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={handleCopyLink}
             className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50 transition-all duration-200 hover:scale-105 hover:bg-gray-100 active:scale-95 sm:h-16 sm:w-16"
             aria-label="링크 복사"
           >
-            <Link2 className="h-6 w-6 text-gray-700 sm:h-7 sm:w-7" strokeWidth={2} />
+            <Link2
+              className="h-6 w-6 text-gray-700 sm:h-7 sm:w-7"
+              strokeWidth={2}
+            />
           </button>
           <span className="text-xs font-medium text-gray-500">링크 복사</span>
         </div>
@@ -89,7 +97,9 @@ const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({
                 />
               </div>
             </button>
-            <span className="text-xs font-medium text-gray-500">인스타그램</span>
+            <span className="text-xs font-medium text-gray-500">
+              인스타그램
+            </span>
           </div>
         )}
       </div>

@@ -209,9 +209,9 @@ export const PlayListShareLink = () => {
   } as KakaoLinkObject;
 };
 
-export const UserBibleCardLink = (publicUrl: string) => {
+export const UserBibleCardLink = (publicUrl: string, shareUrl?: string) => {
   const domainUrl = getDomainUrl();
-  const bibleCardPage = `${domainUrl}/bible-card`;
+  const bibleCardPage = shareUrl || `${domainUrl}/bible-card`;
   return {
     objectType: "feed",
 

@@ -5,6 +5,7 @@ import { UserBibleCardLink } from "@/components/share/KakaoShareBtn";
 interface UseShareActionsProps {
   where: string;
   publicUrl?: string;
+  shareUrl?: string;
   kakaoLinkObject?: ReturnType<typeof UserBibleCardLink>;
 }
 
@@ -15,6 +16,40 @@ interface UseShareActionsReturn {
   handleKakaoShare: () => Promise<void>;
   handleInstagramShare: () => Promise<void>;
 }
+
+const getAbsoluteUrl = (url: string) => {
+  try {
+    return new URL(url, window.location.origin).toString();
+  } catch {
+    return url;
+  }
+};
+
+const copyText = async (text: string) => {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch (error) {
+      console.warn("Clipboard API 복사 실패, fallback을 시도합니다:", error);
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.top = "-9999px";
+  textarea.style.left = "-9999px";
+  document.body.appendChild(textarea);
+  textarea.select();
+  const isCopied = document.execCommand("copy");
+  document.body.removeChild(textarea);
+
+  if (!isCopied) {
+    throw new Error("document.execCommand copy failed");
+  }
+};
 
 /**
  * 공유 기능을 위한 커스텀 훅
@@ -27,6 +62,7 @@ interface UseShareActionsReturn {
 export const useShareActions = ({
   where,
   publicUrl,
+  shareUrl,
   kakaoLinkObject,
 }: UseShareActionsProps): UseShareActionsReturn => {
   const handleDownload = async () => {
@@ -58,10 +94,12 @@ export const useShareActions = ({
 
   const handleCopyLink = async () => {
     analyticsTrack("클릭_공유_링크복사", { where });
-    const copyUrl = publicUrl || window.location.href;
+    const copyUrl = getAbsoluteUrl(
+      shareUrl || publicUrl || window.location.href,
+    );
 
     try {
-      await navigator.clipboard.writeText(copyUrl);
+      await copyText(copyUrl);
       toast({ description: "링크가 복사되었어요" });
     } catch (error) {
       console.error("링크 복사 실패:", error);
@@ -102,7 +140,7 @@ export const useShareActions = ({
         window.Kakao.Share.sendDefault(kakaoLinkObject);
       } else if (publicUrl) {
         // publicUrl이 있으면 기본 링크 객체 생성
-        const defaultLinkObject = UserBibleCardLink(publicUrl);
+        const defaultLinkObject = UserBibleCardLink(publicUrl, shareUrl);
         window.Kakao.Share.sendDefault(defaultLinkObject);
       } else {
         toast({ description: "공유할 내용이 없습니다" });

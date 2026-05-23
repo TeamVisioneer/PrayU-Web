@@ -23,7 +23,7 @@ import ShareButtonGroup from "@/components/share/ShareButtonGroup";
 import useBaseStore from "@/stores/baseStore";
 import { useSaveImage } from "@/hooks/useSaveImage";
 import { analyticsTrack } from "@/analytics/analytics";
-import { getISOTodayDateYMD, getTodayNumber } from "@/lib/utils";
+import { getDomainUrl, getISOTodayDateYMD, getTodayNumber } from "@/lib/utils";
 import { BIBLE_CARD_COLOR_PRESETS } from "@/constants/bibleCard";
 import {
   BibleCard as BibleCardType,
@@ -316,6 +316,9 @@ const BibleCardNewPage = () => {
       ? historyPrayCardListView
       : historyPrayCardList || [];
   const selectedBibleCard = selectedPrayCard?.bible_card;
+  const selectedBibleCardShareUrl = selectedBibleCard
+    ? `${getDomainUrl()}/bible-card/share/${selectedBibleCard.id}`
+    : undefined;
   const displayName =
     myProfile?.full_name || user?.user_metadata.full_name || "PrayU";
 
@@ -706,6 +709,7 @@ const BibleCardNewPage = () => {
                 <ShareButtonGroup
                   where="BibleCardNewPage"
                   publicUrl={selectedBibleCard.image_url}
+                  shareUrl={selectedBibleCardShareUrl}
                 />
               </motion.div>
               <motion.div
