@@ -17,6 +17,7 @@ import { createBibleCard } from "@/apis/bibleCard";
 import { updatePrayCard } from "@/apis/prayCard";
 import PrayCard from "@/components/prayCard/PrayCard";
 import BibleCardView from "@/components/prayCard/BibleCard";
+import { BibleCardBase } from "@/components/prayCard/BibleCardBase";
 import BibleCardThumbnail from "@/components/prayCard/BibleCardThumbnail";
 import ShowMoreBtn from "@/components/common/ShowMoreBtn";
 import ShareButtonGroup from "@/components/share/ShareButtonGroup";
@@ -24,10 +25,7 @@ import useBaseStore from "@/stores/baseStore";
 import { useSaveImage } from "@/hooks/useSaveImage";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getDomainUrl, getISOTodayDateYMD, getTodayNumber } from "@/lib/utils";
-import {
-  BIBLE_CARD_COLOR_PRESETS,
-  getBibleVerseStyle,
-} from "@/constants/bibleCard";
+import { BIBLE_CARD_COLOR_PRESETS } from "@/constants/bibleCard";
 import {
   BibleCard as BibleCardType,
   PrayCardWithProfiles,
@@ -226,75 +224,6 @@ const PrayCardBibleBackPreview = ({
     </button>
   </div>
 );
-
-const CaptureBibleCard = ({
-  name,
-  draft,
-}: {
-  name: string;
-  draft: BibleCardDraft;
-}) => {
-  const { year, month, day } = getISOTodayDateYMD();
-  const [primary = "#608CFF", secondary = "#AAC7FF"] = draft.colors;
-  const [
-    borderTopLeftRadius = "80px",
-    borderTopRightRadius = "120px",
-    borderBottomRightRadius = "80px",
-    borderBottomLeftRadius = "120px",
-  ] = draft.radius;
-  const bibleSentence = draft.bibleSentence.replace(/<[^>]*>/g, "").trim();
-  const verseStyle = getBibleVerseStyle(bibleSentence.length);
-
-  return (
-    <div className="relative flex aspect-[3/4] w-[380px] flex-col border border-gray-200 bg-[#FEFDFC] px-[30px] py-[20px]">
-      <div
-        className="flex aspect-square w-full flex-col items-center justify-center"
-        style={{
-          background: `linear-gradient(159deg, ${primary}, ${secondary})`,
-          borderTopLeftRadius,
-          borderTopRightRadius,
-          borderBottomRightRadius,
-          borderBottomLeftRadius,
-        }}
-      >
-        <div
-          className="handwrittenV2 flex h-full w-full flex-col items-center justify-center gap-[20px] whitespace-pre-wrap py-[20px] text-center text-white"
-          style={{
-            paddingLeft: verseStyle.paddingX,
-            paddingRight: verseStyle.paddingX,
-          }}
-        >
-          <div
-            className="tracking-[1px]"
-            style={{
-              fontSize: verseStyle.fontSize,
-              lineHeight: `${verseStyle.lineHeight}px`,
-            }}
-          >
-            {bibleSentence}
-          </div>
-          <div className="text-[24px] leading-tight tracking-[1px]">
-            {draft.bibleReference}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ color: primary }} className="mt-0 flex min-w-0 flex-col">
-        <div className="truncate text-[40px] font-bold">{name}</div>
-        <div className="flex flex-wrap gap-x-[8px] text-[20px] text-black-500">
-          {draft.keywords.map((keyword) => (
-            <span key={keyword}>#{keyword}</span>
-          ))}
-        </div>
-      </div>
-
-      <div className="absolute bottom-[25px] left-[30px] right-[30px] flex justify-between text-[#666666]">
-        <span className="tracking-[1px]">{`${year}.${month}.${day}.`}</span>
-        <div>@prayu.official</div>
-      </div>
-    </div>
-  );
-};
 
 const BibleCardNewPage = () => {
   const navigate = useNavigate();
@@ -525,6 +454,7 @@ const BibleCardNewPage = () => {
 
       if (!targetBible || !keywords) {
         toast({ description: "말씀을 가져오지 못했어요. 다시 시도해 주세요" });
+        setIsFlipped(false);
         return;
       }
 
@@ -562,6 +492,7 @@ const BibleCardNewPage = () => {
 
       if (!imageUrl) {
         toast({ description: "말씀카드 이미지를 저장하지 못했어요" });
+        setIsFlipped(false);
         return;
       }
 
@@ -578,6 +509,7 @@ const BibleCardNewPage = () => {
 
       if (!bibleCard) {
         toast({ description: "말씀카드를 저장하지 못했어요" });
+        setIsFlipped(false);
         return;
       }
 
@@ -827,8 +759,18 @@ const BibleCardNewPage = () => {
 
       {draft && (
         <div className="fixed -top-[100vh] -z-40 pointer-events-none">
-          <div ref={bibleCardRef} className="w-[380px] aspect-[3/4]">
-            <CaptureBibleCard name={displayName} draft={draft} />
+          <div ref={bibleCardRef}>
+            <BibleCardBase
+              content={{
+                name: displayName,
+                bibleSentence: draft.bibleSentence,
+                bibleReference: draft.bibleReference,
+                colors: draft.colors,
+                radius: draft.radius,
+                keywords: draft.keywords,
+                date: getISOTodayDateYMD(),
+              }}
+            />
           </div>
         </div>
       )}
