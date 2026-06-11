@@ -15,6 +15,7 @@ export const fetchGroupPrayCardList = async (
       .select(
         `*,
       profiles (id, full_name, avatar_url, kakao_id),
+      bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
       )`,
@@ -52,6 +53,7 @@ export const fetchOtherPrayCardListByGroupId = async (
       .select(
         `*,
         profiles (id, full_name, avatar_url, kakao_id),
+        bible_card:bible_card!pray_card_bible_card_id_fkey (*),
         pray (*, 
           profiles (id, full_name, avatar_url, kakao_id)
         )`,
@@ -87,6 +89,7 @@ export const fetchUserPrayCardListByGroupId = async (
       .select(
         `*,
       profiles (id, full_name, avatar_url, kakao_id),
+      bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
       )`,
@@ -128,6 +131,7 @@ export const fetchUserPrayCardList = async (
       .select(
         `*,
       profiles (id, full_name, avatar_url, kakao_id),
+      bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
         profiles (id, full_name, avatar_url, kakao_id)
       ),
@@ -152,6 +156,44 @@ export const fetchUserPrayCardList = async (
       ),
     }));
     return sortedData as PrayCardWithProfiles[];
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
+export const fetchPrayCardByBibleCardId = async (
+  bibleCardId: string,
+): Promise<PrayCardWithProfiles | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("pray_card")
+      .select(
+        `*,
+      profiles (id, full_name, avatar_url, kakao_id),
+      bible_card:bible_card!pray_card_bible_card_id_fkey (*),
+      pray (*, 
+        profiles (id, full_name, avatar_url, kakao_id)
+      ),
+      group(name)`,
+      )
+      .eq("bible_card_id", bibleCardId)
+      .is("deleted_at", null)
+      .is("pray.deleted_at", null)
+      .single();
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+
+    return {
+      ...data,
+      pray: data.pray.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      ),
+    } as PrayCardWithProfiles;
   } catch (error) {
     Sentry.captureException(error);
     return null;
@@ -201,22 +243,12 @@ export const createPrayCard = async (
 };
 
 export const bulkCreatePrayCard = async (
-  groupIds: string[],
-  userId: string | null,
-  content: string,
-  life: string,
+  paramsList: createPrayCardParams[],
 ): Promise<PrayCard[] | null> => {
   try {
     const { error, data } = await supabase
       .from("pray_card")
-      .insert(
-        groupIds.map((groupId) => ({
-          group_id: groupId,
-          user_id: userId,
-          content,
-          life,
-        })),
-      )
+      .insert(paramsList)
       .select();
     if (error) {
       Sentry.captureException(error.message);
@@ -233,6 +265,7 @@ export interface createPrayCardParams {
   group_id?: string;
   user_id?: string | null;
   content: string;
+  bible_card_id?: string | null;
   bible_card_url?: string | null;
   life?: string;
 }
@@ -259,6 +292,7 @@ export const createPrayCardWithParams = async (
 export interface updatePrayCardParams {
   group_id?: string;
   user_id?: string;
+  bible_card_id?: string | null;
   bible_card_url?: string;
   life?: string;
   content?: string;
@@ -272,7 +306,8 @@ export async function updatePrayCard(
     const { data, error } = await supabase
       .from("pray_card")
       .update(params)
-      .eq("id", prayCardId);
+      .eq("id", prayCardId)
+      .select();
 
     if (error) {
       Sentry.captureException(error.message);

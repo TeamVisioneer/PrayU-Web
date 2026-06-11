@@ -65,7 +65,10 @@ const PrayCardHistoryList = () => {
     <div className="flex w-full flex-col items-center gap-4">
       <div className="grid w-full grid-cols-3 gap-3">
         {historyPrayCardListView.map((prayCard, index) => {
-          if (prayCard.bible_card_url) {
+          const bibleCardImageUrl =
+            prayCard.bible_card?.image_url || prayCard.bible_card_url;
+
+          if (bibleCardImageUrl) {
             return (
               <div
                 key={index}
@@ -73,7 +76,7 @@ const PrayCardHistoryList = () => {
                 onClick={() => onClickStory(prayCard)}
               >
                 <img
-                  src={prayCard.bible_card_url}
+                  src={bibleCardImageUrl}
                   alt="Bible Card"
                   className="h-full w-full object-cover"
                 />

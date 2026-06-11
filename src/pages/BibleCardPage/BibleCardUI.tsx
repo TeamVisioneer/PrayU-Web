@@ -8,7 +8,7 @@ interface BibleCardUIProps {
 
 const BibleCardUI: React.FC<BibleCardUIProps> = ({ name, keywords }) => {
   const Colors = [
-    { primary: "#FFD194", secondary: "#D1913C" }, // 따뜻한 노을과 바다 색
+    { primary: "#FFD194", secondary: "#D1913C" },
     { primary: "#a8c0ff", secondary: "#3f2b96" },
     { primary: "#89f7fe", secondary: "#66a6ff" },
     { primary: "#ff9966", secondary: "#ff5e62" },

@@ -47,6 +47,8 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
   const [isCreating, setIsCreating] = useState(false);
 
+  // useSaveImage hook
+
   const sendNotification = async (groups: Group[], prayCardContent: string) => {
     if (!user) return;
 
@@ -95,7 +97,8 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       });
     }
   };
-
+  
+  
   const handleCreatePrayCard = async () => {
     analyticsTrack("클릭_기도카드생성_만들기", { where: "그룹선택" });
     setIsCreating(true);
@@ -103,14 +106,19 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       setIsCreating(false);
       return;
     }
+
     const prayCardContent = localStorage.getItem("prayCardContent") || "";
     const prayCardLife = localStorage.getItem("prayCardLife") || "";
+  
     const prayCardList = await bulkCreatePrayCard(
-      selectedGroups.map((group) => group.id),
-      user.id,
-      prayCardContent,
-      prayCardLife
+      selectedGroups.map((group) => ({
+        group_id: group.id,
+        user_id: user.id,
+        content: prayCardContent,
+        life: prayCardLife,
+      }))
     );
+
 
     // 멤버 정보를 bulk로 업데이트
     const selectedGroupIds = selectedGroups.map((g) => g.id);
@@ -125,12 +133,15 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
 
     await bulkUpdateMembers(selectedMemberIds, prayCardContent, true);
     await sendNotification(selectedGroups, prayCardContent);
+    localStorage.setItem("lastCreatedPrayCardId", prayCardList[0].id);
     localStorage.removeItem("prayCardContent");
     localStorage.removeItem("prayCardLife");
     onNext();
   };
 
   const handleGroupToggle = (group: Group) => {
+    if (isCreating) return;
+
     analyticsTrack("클릭_기도카드생성_그룹선택", {
       where: "그룹선택",
       group_name: group.name,
@@ -147,15 +158,19 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   };
 
   const handlePrevClick = () => {
+    if (isCreating) return;
     analyticsTrack("클릭_기도카드생성_이전", { where: "그룹선택" });
     onPrev();
   };
+
+  
 
   const handleNewGroupClick = () => {
     analyticsTrack("클릭_기도카드생성_새그룹생성", { where: "그룹선택" });
     window.location.href = "/group/new";
   };
 
+ 
   return (
     <div className="flex flex-col h-full">
       <motion.h1 className="text-xl font-bold mb-4" variants={itemVariants}>
@@ -239,6 +254,8 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
           이전
         </Button>
       </motion.div>
+
+     
     </div>
   );
 };

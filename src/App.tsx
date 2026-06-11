@@ -36,6 +36,8 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import NewAdminPage from "./pages/AdminPage/NewAdminPage";
 import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
+import BibleCardNewPage from "./pages/BibleCardPage/BibleCardNewPage";
+import BibleCardSharePage from "./pages/BibleCardPage/BibleCardSharePage";
 import QuietTimePage from "./pages/QuietTimePage";
 import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage";
 import PrayCardEditPage from "./pages/PrayCard/PrayCardEditPage";
@@ -63,7 +65,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const fullWidthRoutes: string[] = ["/thanks-card"];
 
   const isFullWidth = fullWidthRoutes.some((route) =>
-    matchPath(route, location.pathname)
+    matchPath(route, location.pathname),
   );
 
   return (
@@ -130,6 +132,11 @@ const App = () => {
               />
               <Route path="/tutorial" element={<TutorialPage />} />
               <Route path="/bible-card" element={<BibleCardPage />} />
+              <Route path="/bible-card/new" element={<BibleCardNewPage />} />
+              <Route
+                path="/bible-card/share/:bibleCardId"
+                element={<BibleCardSharePage />}
+              />
               <Route
                 path="/bible-card/generator"
                 element={<BibleCardGeneratorPage />}
@@ -305,15 +312,15 @@ const AnalyticsTracker = () => {
   const from = location.state?.from?.pathname;
   const matchPraycardNew = matchPath(
     "/group/:groupId/praycard/new",
-    location.pathname
+    location.pathname,
   );
   const matchTodayPray = matchPath(
     "/group/:groupId/todaypray",
-    location.pathname
+    location.pathname,
   );
   const matchPraycardEdit = matchPath(
     "/group/:groupId/praycard/:praycardId/edit",
-    location.pathname
+    location.pathname,
   );
   const matchGroupJoin = matchPath("/group/:groupId/join", location.pathname);
   const matchGroup = matchPath("/group/:groupId", location.pathname);

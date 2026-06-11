@@ -187,7 +187,6 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
             isFlipped ? "rotate-y-180" : ""
           }`}
         >
-          {/* 앞면 */}
           <section
             onClick={() => onClickCard()}
             className="absolute w-full h-full bg-white shadow-lg rounded-lg backface-hidden flex flex-col items-center justify-center gap-5 p-5"
@@ -223,7 +222,6 @@ const BibleCardFlip: React.FC<BibleCardFlipProps> = ({ className }) => {
             </div>
           </section>
 
-          {/* 뒷면 */}
           <section
             onClick={() => onClickCard()}
             className="absolute bottom-0 w-full  shadow-lg rounded-[16px] rotate-y-180 backface-hidden flex flex-col items-center justify-center"

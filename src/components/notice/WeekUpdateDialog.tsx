@@ -27,16 +27,13 @@ const WeekUpdateDialog = () => {
 
   const slides = [
     {
-      image: "/images/notice/NewPrayCardFlow.gif",
-      tip: "TIP 1",
-      description:
-        "기도카드 생성 과정을 업데이트 했어요! 한번에 여러그룹에 기도카드를 올려보아요.",
-    },
-    {
-      image: "/images/notice/GroupJoinFlow.gif",
-      tip: "TIP 2",
-      description:
-        "그룹원 초대 과정을 업데이트 했어요! 링크를 통해 참여 완료 후 앱에서 그룹을 확인해보아요.",
+      image: "/images/notice/prayu_premium.png",
+      tip: "앱 리뷰 이벤트 참여 방법",
+      description: [
+        "1. PlayStore 와 AppStore 에서 앱 리뷰를 남기기",
+        "2. 우측 메뉴탭 > 카카오톡 문의하기에서 리뷰 확인 요청하기",
+        "3. Premium Plan 받고 그룹 무제한 생성하기",
+      ],
     },
   ];
 
@@ -73,7 +70,7 @@ const WeekUpdateDialog = () => {
     </div>
   );
 
-  const currentUpdateDate = "2025-04-10";
+  const currentUpdateDate = "2025-09-13";
 
   // useEffect(() => {
   //   const lastSeenDate = localStorage.getItem("WeekUpdateDialog");
@@ -99,11 +96,9 @@ const WeekUpdateDialog = () => {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DialogContent className="p-0 w-11/12 rounded-2xl focus:outline-none">
+      <DialogContent className="p-0 w-11/12 rounded-2xl focus:outline-none border-none">
         <DialogHeader className="text-left p-5 pb-0">
-          <DialogTitle className="text-lg">
-            📢 기도카드 업데이트 안내
-          </DialogTitle>
+          <DialogTitle className="text-lg">📢 PrayU 리뷰 이벤트</DialogTitle>
           <DialogDescription />
         </DialogHeader>
 
@@ -113,36 +108,44 @@ const WeekUpdateDialog = () => {
             <CarouselContent>
               {slides.map((slide, index) => (
                 <CarouselItem key={index}>
-                  <div className="flex items-center h-full gap-4">
-                    <div className="w-1/2">
+                  <div className="flex flex-col items-center h-full gap-4">
+                    <div className="w-full">
                       <img
                         src={slide.image}
                         className="w-full rounded-lg border-gray-400 shadow-md"
                       />
                     </div>
-                    <div className="w-1/2 space-y-2 text-left">
+                    <div className="w-full space-y-2 text-left">
                       <span className="text-sm font-bold">{slide.tip}</span>
-                      <p className="text-sm">{slide.description}</p>
+                      {slide.description.map((description, index) => (
+                        <p key={index} className="text-sm">
+                          {description}
+                        </p>
+                      ))}
                     </div>
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselDots />
-            <CarouselPrevious className="h-6 w-6 -left-4" />
-            <CarouselNext className="h-6 w-6 -right-4" />
+            {slides.length > 1 && <CarouselDots />}
+            {slides.length > 1 && (
+              <>
+                <CarouselPrevious className="h-6 w-6 -left-4" />
+                <CarouselNext className="h-6 w-6 -right-4" />
+              </>
+            )}
           </Carousel>
         </div>
-        <div className="grid grid-cols-2 w-full mt-6 border-t border-gray-200 ">
+        <div className="grid grid-cols-2 w-full mt-6 border-t border-gray-200  overflow-hidden">
           <button
             onClick={onClickHideWeekUpdateDialog}
-            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 font-medium"
+            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 p-4 font-medium rounded-bl-lg"
           >
             더 이상 보지 않기
           </button>
           <button
             onClick={onClickClose}
-            className="bg-[#608CFF] hover:bg-[#4a70e2] text-white p-4 font-medium rounded-br-2xl"
+            className="bg-[#608CFF] hover:bg-[#4a70e2] text-white p-4 font-medium rounded-br-lg"
           >
             확인
           </button>

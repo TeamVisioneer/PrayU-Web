@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import useBaseStore from "@/stores/baseStore";
 import { Group } from "supabase/types/tables";
-import PrayCard from "./PrayCard";
 import { analyticsTrack } from "@/analytics/analytics";
+import PrayCard from "./PrayCard";
 
 interface NewPrayCardCompletionStepProps {
   selectedGroups: Group[];
@@ -36,24 +36,33 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
   const navigate = useNavigate();
 
   const user = useBaseStore((state) => state.user);
-  const targetGroup = useBaseStore((state) => state.targetGroup);
   const fetchUserPrayCardList = useBaseStore(
-    (state) => state.fetchUserPrayCardList
+    (state) => state.fetchUserPrayCardList,
   );
 
   const historyPrayCardList = useBaseStore(
-    (state) => state.historyPrayCardList
+    (state) => state.historyPrayCardList,
   );
 
   const handleComplete = async () => {
-    analyticsTrack("클릭_기도카드생성_그룹이동", { where: "완료페이지" });
+    // analyticsTrack("클릭_기도카드생성_그룹이동", { where: "완료페이지" });
+    analyticsTrack("클릭_기도카드생성_내프로필", { where: "완료페이지" });
     if (!user) return;
 
-    if (selectedGroups.some((g) => g.id == targetGroup?.id))
-      window.location.replace(`/group/${targetGroup?.id}`);
-    else if (selectedGroups.length > 0)
-      window.location.replace(`/group/${selectedGroups[0].id}`);
-    else navigate("/group");
+    navigate("/profile/me");
+  };
+
+  const handleMoveToBibleCards = () => {
+    analyticsTrack("클릭_말씀카드_페이지", {
+      where: "기도카드생성_완료페이지",
+    });
+    const prayCardId =
+      prayCard?.id || localStorage.getItem("lastCreatedPrayCardId");
+    navigate(
+      prayCardId
+        ? `/bible-card/new?praycard_id=${prayCardId}`
+        : "/bible-card/new",
+    );
   };
 
   useEffect(() => {
@@ -64,66 +73,50 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
 
   return (
     <div className="flex flex-col items-center h-full relative">
-      {/* Dimmed overlay */}
-      {/* <div className="fixed inset-0 bg-black/85 z-10" /> */}
-
-      {/* Card container with spotlight effect */}
       <motion.div
-        className="w-5/6 mx-auto relative z-20 mt-5 mb-10"
+        className="w-5/6 mx-auto relative z-20 my-5"
         variants={cardVariants}
       >
-        {/* Glow effect */}
         <div className="absolute inset-0 -m-6 bg-blue-400/20 rounded-3xl blur-xl"></div>
 
-        {/* Card */}
         <div className="relative">
-          <PrayCard prayCard={prayCard} isMoreBtn={false} />
+          <PrayCard prayCard={prayCard} isMoreBtn={false} editable={false} />
         </div>
       </motion.div>
 
       <motion.div
-        className="text-center relative z-20 mb-3"
+        className="text-center relative z-20 mb-4"
         variants={itemVariants}
       >
         <motion.h1 className="text-2xl font-bold mb-1" variants={itemVariants}>
-          기도카드가 생성 완료!
+          기도카드 생성 완료!
         </motion.h1>
         <motion.p className="text-gray-500" variants={itemVariants}>
-          총 {selectedGroups.length}개의 그룹에 기도카드가 생성 되었어요!
+          {selectedGroups.length === 0
+            ? ""
+            : selectedGroups.length < 2
+              ? `${selectedGroups[0]?.name} `
+              : `${selectedGroups[0]?.name} 외 ${selectedGroups.length - 1}개의 `}
+          그룹에 기도카드가 생성되었습니다.
         </motion.p>
-
-        {selectedGroups.length > 0 && (
-          <motion.div
-            className="bg-blue-50/90 rounded-lg my-4 relative z-20 flex flex-col items-center w-full"
-            variants={itemVariants}
-          >
-            <div className="flex flex-wrap gap-2 w-full items-center justify-center">
-              {selectedGroups.map((group) => {
-                return (
-                  <div
-                    key={group.id}
-                    className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full"
-                  >
-                    <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-xs">
-                      {group?.name ? [...group.name][0] : ""}
-                    </div>
-                    <p className="text-sm font-medium text-gray-800">
-                      {group?.name}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
       </motion.div>
 
-      <motion.div className="relative z-20 w-3/4" variants={itemVariants}>
+      <motion.div
+        className="relative z-20 w-3/4 flex flex-col gap-3"
+        variants={itemVariants}
+      >
+        <Button
+          onClick={handleMoveToBibleCards}
+          className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600"
+        >
+          말씀카드 만들기
+        </Button>
         <Button
           onClick={handleComplete}
-          className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600 mb-10"
+          variant="ghost"
+          className="w-full py-6 text-base"
         >
-          그룹 바로가기
+          나중에 하기
         </Button>
       </motion.div>
     </div>

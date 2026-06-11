@@ -8,6 +8,7 @@ import {
 import useBaseStore from "@/stores/baseStore";
 import { PrayCard } from "../prayCard/PrayCard";
 import ReactionResultBox from "../pray/ReactionResultBox";
+import PrayCardWithBibleCard from "../prayCard/PrayCardWithBibleCard";
 
 const PrayCardHistoryDrawer: React.FC = () => {
   const isOpenHistoryDrawer = useBaseStore(
@@ -17,6 +18,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
     (state) => state.setIsOpenHistoryDrawer
   );
   const historyCard = useBaseStore((state) => state.historyCard);
+  const legacyBibleCardUrl = historyCard?.bible_card_url;
   return (
     <Drawer
       open={isOpenHistoryDrawer}
@@ -30,11 +32,20 @@ const PrayCardHistoryDrawer: React.FC = () => {
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
-        {historyCard?.bible_card_url ? (
+        {historyCard?.bible_card ? (
+          <div className="flex flex-col gap-4 px-10 pt-5 pb-10 overflow-y-auto">
+            <PrayCardWithBibleCard prayCard={historyCard} />
+            <ReactionResultBox
+              prayCard={historyCard || undefined}
+              variant="separated"
+              eventOption={{ where: "HistoryCard" }}
+            />
+          </div>
+        ) : legacyBibleCardUrl ? (
           <div className="flex flex-col gap-2 px-10 pt-5 pb-10 overflow-y-auto">
             <div className="flex-shrink-0 w-11/12 mx-auto rounded-xl overflow-hidden shadow-md">
               <img
-                src={historyCard.bible_card_url}
+                src={legacyBibleCardUrl}
                 className="w-full object-cover rounded-xl"
                 alt="기도카드 이미지"
               />
