@@ -24,7 +24,10 @@ import useBaseStore from "@/stores/baseStore";
 import { useSaveImage } from "@/hooks/useSaveImage";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getDomainUrl, getISOTodayDateYMD, getTodayNumber } from "@/lib/utils";
-import { BIBLE_CARD_COLOR_PRESETS } from "@/constants/bibleCard";
+import {
+  BIBLE_CARD_COLOR_PRESETS,
+  getBibleVerseStyle,
+} from "@/constants/bibleCard";
 import {
   BibleCard as BibleCardType,
   PrayCardWithProfiles,
@@ -239,6 +242,8 @@ const CaptureBibleCard = ({
     borderBottomRightRadius = "80px",
     borderBottomLeftRadius = "120px",
   ] = draft.radius;
+  const bibleSentence = draft.bibleSentence.replace(/<[^>]*>/g, "").trim();
+  const verseStyle = getBibleVerseStyle(bibleSentence.length);
 
   return (
     <div className="relative flex aspect-[3/4] w-[380px] flex-col border border-gray-200 bg-[#FEFDFC] px-[30px] py-[20px]">
@@ -252,9 +257,21 @@ const CaptureBibleCard = ({
           borderBottomLeftRadius,
         }}
       >
-        <div className="handwrittenV2 flex h-full w-full flex-col items-center justify-center gap-[20px] whitespace-pre-wrap px-[50px] py-[20px] text-center text-white">
-          <div className="text-[30px] leading-[35px] tracking-[1px]">
-            {draft.bibleSentence.replace(/<[^>]*>/g, "").trim()}
+        <div
+          className="handwrittenV2 flex h-full w-full flex-col items-center justify-center gap-[20px] whitespace-pre-wrap py-[20px] text-center text-white"
+          style={{
+            paddingLeft: verseStyle.paddingX,
+            paddingRight: verseStyle.paddingX,
+          }}
+        >
+          <div
+            className="tracking-[1px]"
+            style={{
+              fontSize: verseStyle.fontSize,
+              lineHeight: `${verseStyle.lineHeight}px`,
+            }}
+          >
+            {bibleSentence}
           </div>
           <div className="text-[24px] leading-tight tracking-[1px]">
             {draft.bibleReference}
@@ -262,16 +279,16 @@ const CaptureBibleCard = ({
         </div>
       </div>
 
-      <div style={{ color: primary }} className="mt-0 flex flex-col">
-        <div className="text-[40px] font-bold">{name}</div>
-        <div className="flex gap-[8px] text-[20px] text-black-500">
+      <div style={{ color: primary }} className="mt-0 flex min-w-0 flex-col">
+        <div className="truncate text-[40px] font-bold">{name}</div>
+        <div className="flex flex-wrap gap-x-[8px] text-[20px] text-black-500">
           {draft.keywords.map((keyword) => (
             <span key={keyword}>#{keyword}</span>
           ))}
         </div>
       </div>
 
-      <div className="absolute bottom-[25px] flex gap-[130px] text-[#666666]">
+      <div className="absolute bottom-[25px] left-[30px] right-[30px] flex justify-between text-[#666666]">
         <span className="tracking-[1px]">{`${year}.${month}.${day}.`}</span>
         <div>@prayu.official</div>
       </div>

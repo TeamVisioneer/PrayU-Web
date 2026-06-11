@@ -58,7 +58,11 @@ export function useSaveImage() {
       }
 
       try {
-        // Step 2: DOM 캡처 (modern-screenshot 사용)
+        // Step 2: 커스텀 폰트(handwrittenV2 등)가 로드되기 전에 캡처하면
+        // 폴백 폰트로 찍힌 이미지가 저장되므로 폰트 로드를 먼저 기다린다
+        await document.fonts.ready;
+
+        // Step 3: DOM 캡처 (modern-screenshot 사용)
         const blob = await domToBlob(elementRef.current, {
           scale,
           quality,
@@ -70,12 +74,12 @@ export function useSaveImage() {
           return null;
         }
 
-        // Step 3: Blob을 File 객체로 변환
+        // Step 4: Blob을 File 객체로 변환
         const file = new File([blob], fileName, {
           type: `image/${imageFormat}`,
         });
 
-        // Step 4: Supabase 업로드
+        // Step 5: Supabase 업로드
         const pathData = await uploadImage(file, `${storagePath}/${fileName}`);
 
         if (!pathData) {
@@ -83,7 +87,7 @@ export function useSaveImage() {
           return null;
         }
 
-        // Step 5: Public URL 생성 및 반환
+        // Step 6: Public URL 생성 및 반환
         const publicUrl = getPublicUrl(pathData.path);
 
         if (!publicUrl) {
