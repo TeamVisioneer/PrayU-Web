@@ -1,3 +1,33 @@
+import { BibleCard as BibleCardType } from "supabase/types/tables";
+import { getISODateYMD } from "@/lib/utils";
+
+// 말씀카드 디자인 원본(BibleCardBase)의 기준 크기.
+// 화면 표시는 이 크기를 scale 로 축소하고, 캡처는 원본 크기로 찍는다.
+export const BIBLE_CARD_WIDTH = 380;
+export const BIBLE_CARD_HEIGHT = (BIBLE_CARD_WIDTH * 4) / 3;
+
+export interface BibleCardContent {
+  name: string;
+  bibleSentence: string;
+  bibleReference: string;
+  colors: string[];
+  radius: string[];
+  keywords: string[];
+  date: { year: string; month: string; day: string };
+}
+
+export const toBibleCardContent = (
+  bibleCard: BibleCardType,
+): BibleCardContent => ({
+  name: bibleCard.name,
+  bibleSentence: bibleCard.bible_sentence,
+  bibleReference: bibleCard.bible_reference,
+  colors: bibleCard.colors,
+  radius: bibleCard.radius,
+  keywords: bibleCard.keywords,
+  date: getISODateYMD(bibleCard.created_at),
+});
+
 // 380px 기준 카드에서 구절 길이에 따라 폰트 크기를 단계적으로 줄인다.
 // 같은 길이는 항상 같은 스타일을 반환하므로 화면 렌더링과 이미지 캡처 결과가 일치한다.
 export interface BibleVerseStyle {
