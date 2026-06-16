@@ -45,7 +45,7 @@ export const BibleCardBase = ({ content }: { content: BibleCardContent }) => {
           }}
         >
           <div
-            className="tracking-[1px]"
+            className="whitespace-normal text-balance break-keep tracking-[1px]"
             style={{
               fontSize: verseStyle.fontSize,
               lineHeight: `${verseStyle.lineHeight}px`,
