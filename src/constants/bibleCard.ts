@@ -1,6 +1,9 @@
 import { BibleCard as BibleCardType } from "supabase/types/tables";
 import { getISODateYMD } from "@/lib/utils";
 
+// 말씀카드에 표시할 키워드 최대 개수
+export const MAX_BIBLE_CARD_KEYWORDS = 3;
+
 // 말씀카드 디자인 원본(BibleCardBase)의 기준 크기.
 // 화면 표시는 이 크기를 scale 로 축소하고, 캡처는 원본 크기로 찍는다.
 export const BIBLE_CARD_WIDTH = 380;
