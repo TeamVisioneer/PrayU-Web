@@ -4,6 +4,7 @@ import {
   BIBLE_CARD_HEIGHT,
   BIBLE_CARD_WIDTH,
   BibleCardContent,
+  MAX_BIBLE_CARD_KEYWORDS,
   getBibleVerseStyle,
 } from "@/constants/bibleCard";
 
@@ -61,7 +62,7 @@ export const BibleCardBase = ({ content }: { content: BibleCardContent }) => {
       <div style={{ color: primary }} className="flex min-w-0 flex-col">
         <div className="truncate text-[40px] font-bold">{content.name}</div>
         <div className="flex flex-wrap gap-x-[8px] text-[20px] text-black-500">
-          {content.keywords.map((keyword) => (
+          {content.keywords.slice(0, MAX_BIBLE_CARD_KEYWORDS).map((keyword) => (
             <span key={keyword}>#{keyword}</span>
           ))}
         </div>

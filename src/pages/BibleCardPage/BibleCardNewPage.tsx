@@ -25,7 +25,10 @@ import useBaseStore from "@/stores/baseStore";
 import { useSaveImage } from "@/hooks/useSaveImage";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getDomainUrl, getISOTodayDateYMD, getTodayNumber } from "@/lib/utils";
-import { BIBLE_CARD_COLOR_PRESETS } from "@/constants/bibleCard";
+import {
+  BIBLE_CARD_COLOR_PRESETS,
+  MAX_BIBLE_CARD_KEYWORDS,
+} from "@/constants/bibleCard";
 import {
   BibleCard as BibleCardType,
   PrayCardWithProfiles,
@@ -458,6 +461,8 @@ const BibleCardNewPage = () => {
         return;
       }
 
+      const limitedKeywords = keywords.slice(0, MAX_BIBLE_CARD_KEYWORDS);
+
       const colors = [
         ...BIBLE_CARD_COLOR_PRESETS[
           Math.floor(Math.random() * BIBLE_CARD_COLOR_PRESETS.length)
@@ -474,7 +479,7 @@ const BibleCardNewPage = () => {
         bibleSentence: targetBible.sentence,
         colors,
         radius,
-        keywords,
+        keywords: limitedKeywords,
       };
       setDraft(nextDraft);
 
@@ -499,7 +504,7 @@ const BibleCardNewPage = () => {
       const bibleCard = await createBibleCard({
         user_id: user.id,
         name: displayName,
-        keywords,
+        keywords: limitedKeywords,
         bible_reference: nextDraft.bibleReference,
         bible_sentence: nextDraft.bibleSentence,
         colors,
