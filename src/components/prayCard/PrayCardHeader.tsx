@@ -1,10 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 
-const PrayCardHeader = () => {
+interface PrayCardHeaderProps {
+  // 상단 뒤로가기 동작 커스터마이즈. 미지정 시 history 한 칸 뒤로 이동.
+  onBack?: () => void;
+}
+
+const PrayCardHeader = ({ onBack }: PrayCardHeaderProps) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
+    if (onBack) {
+      onBack();
+      return;
+    }
     navigate(-1);
   };
 
