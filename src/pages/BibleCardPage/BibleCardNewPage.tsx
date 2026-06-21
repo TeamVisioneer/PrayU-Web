@@ -42,18 +42,12 @@ interface BibleCardDraft {
   keywords: string[];
 }
 
-const getRandomRadius = () => `${Math.floor(Math.random() * 160) + 40}px`;
+// 네 모서리를 독립 랜덤으로 크게 흔들어(40~200px) 의도적으로 찌그러진 비대칭 블롭 연출
+const getRandomRadius = (): string[] =>
+  Array.from({ length: 4 }, () => `${Math.floor(Math.random() * 160) + 40}px`);
 const STATIC_SKELETON_RADIUS = "42% 58% 48% 52% / 46% 44% 56% 54%";
 const INITIAL_PRAY_CARD_PAGE_SIZE = 18;
 const MORE_PRAY_CARD_PAGE_SIZE = 18;
-const getRandomSkeletonRadius = () => {
-  const values = Array.from(
-    { length: 8 },
-    () => `${Math.floor(Math.random() * 24) + 38}%`,
-  );
-
-  return `${values.slice(0, 4).join(" ")} / ${values.slice(4).join(" ")}`;
-};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -116,34 +110,19 @@ const createBibleReference = (bible: {
     : `${bible.long_label} ${bible.chapter}장 ${bible.paragraph}절`;
 
 const EmptyBibleCardBackSlot = ({ isCreating }: { isCreating: boolean }) => {
-  const [skeletonRadius, setSkeletonRadius] = useState(STATIC_SKELETON_RADIUS);
-
-  useEffect(() => {
-    if (!isCreating) {
-      setSkeletonRadius(STATIC_SKELETON_RADIUS);
-      return;
-    }
-
-    setSkeletonRadius(getRandomSkeletonRadius());
-    const intervalId = window.setInterval(() => {
-      setSkeletonRadius(getRandomSkeletonRadius());
-    }, 280);
-
-    return () => window.clearInterval(intervalId);
-  }, [isCreating]);
-
   return (
     <div className="relative flex aspect-[3/4] w-full flex-col overflow-hidden rounded-xl border border-dashed border-blue-200 bg-[#FEFDFC] px-5 py-4 text-center shadow-prayCard">
       <div className={isCreating ? "animate-pulse" : ""}>
-        <motion.div
-          className="flex aspect-square w-full flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-sky-100 to-emerald-50 px-7 py-8"
-          animate={{ borderRadius: skeletonRadius }}
-          transition={{ duration: isCreating ? 0.08 : 0 }}
+        <div
+          className={`flex aspect-square w-full flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-sky-100 to-emerald-50 px-7 py-8 ${
+            isCreating ? "animate-blob" : ""
+          }`}
+          style={isCreating ? undefined : { borderRadius: STATIC_SKELETON_RADIUS }}
         >
           <div className="h-3 w-10/12 rounded-full bg-white/80" />
           <div className="mt-3 h-3 w-8/12 rounded-full bg-white/70" />
           <div className="mt-7 h-2 w-5/12 rounded-full bg-white/70" />
-        </motion.div>
+        </div>
 
         <div className="mt-4 space-y-2 text-left">
           <div className="h-8 w-28 rounded-lg bg-blue-100" />
@@ -158,17 +137,6 @@ const EmptyBibleCardBackSlot = ({ isCreating }: { isCreating: boolean }) => {
           <div className="h-3 w-20 rounded-full bg-gray-100" />
         </div>
       </div>
-
-      {!isCreating && (
-        <div className="absolute inset-x-6 top-[42%] rounded-2xl bg-white/80 px-4 py-4 shadow-sm backdrop-blur-sm">
-          <p className="text-sm font-bold leading-snug text-gray-950">
-            아직 뒷면이 비어 있어요
-          </p>
-          <p className="mt-1 text-xs leading-relaxed text-gray-500">
-            말씀카드를 만들어 붙일 수 있어요.
-          </p>
-        </div>
-      )}
     </div>
   );
 };
@@ -468,12 +436,7 @@ const BibleCardNewPage = () => {
           Math.floor(Math.random() * BIBLE_CARD_COLOR_PRESETS.length)
         ],
       ];
-      const radius = [
-        getRandomRadius(),
-        getRandomRadius(),
-        getRandomRadius(),
-        getRandomRadius(),
-      ];
+      const radius = getRandomRadius();
       const nextDraft = {
         bibleReference: createBibleReference(targetBible),
         bibleSentence: targetBible.sentence,

@@ -92,6 +92,23 @@
   font-family: "JNE-Yuna-TTF-Regular", cursive;
 }
 
+/* 말씀카드 생성 대기 스켈레톤: border-radius 를 부드럽게 연속 모핑 */
+@keyframes blobMorph {
+  0%,
+  100% {
+    border-radius: 42% 58% 48% 52% / 46% 44% 56% 54%;
+  }
+  33% {
+    border-radius: 62% 38% 56% 44% / 52% 60% 40% 48%;
+  }
+  66% {
+    border-radius: 46% 54% 38% 62% / 60% 42% 58% 40%;
+  }
+}
+.animate-blob {
+  animation: blobMorph 5s ease-in-out infinite;
+}
+
 .no-scrollbar {
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */

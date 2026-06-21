@@ -2,10 +2,13 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   BIBLE_CARD_HEIGHT,
+  BIBLE_CARD_TEXT_DARK,
+  BIBLE_CARD_TEXT_MUTED,
   BIBLE_CARD_WIDTH,
   BibleCardContent,
   MAX_BIBLE_CARD_KEYWORDS,
   getBibleVerseStyle,
+  getCardTextColorOnGradient,
 } from "@/constants/bibleCard";
 
 // 말씀카드의 단일 디자인 원본. 화면 표시/썸네일은 ScaledBibleCard 로 축소 렌더링하고,
@@ -21,6 +24,8 @@ export const BibleCardBase = ({ content }: { content: BibleCardContent }) => {
   ] = content.radius;
   const bibleSentence = content.bibleSentence.replace(/<[^>]*>/g, "").trim();
   const verseStyle = getBibleVerseStyle(bibleSentence.length);
+  // 글씨는 중립 모노크롬: 구절은 배경 밝기 기반(다크/흰색), 이름은 다크, 키워드는 옅은 그레이
+  const verseColor = getCardTextColorOnGradient(content.colors);
 
   return (
     <div
@@ -38,10 +43,11 @@ export const BibleCardBase = ({ content }: { content: BibleCardContent }) => {
         }}
       >
         <div
-          className="handwrittenV2 flex h-full w-full flex-col items-center justify-center gap-[20px] whitespace-pre-wrap py-[20px] text-center text-white"
+          className="handwrittenV2 flex h-full w-full flex-col items-center justify-center gap-[20px] whitespace-pre-wrap py-[20px] text-center"
           style={{
             paddingLeft: verseStyle.paddingX,
             paddingRight: verseStyle.paddingX,
+            color: verseColor,
           }}
         >
           <div
@@ -59,9 +65,17 @@ export const BibleCardBase = ({ content }: { content: BibleCardContent }) => {
         </div>
       </div>
 
-      <div style={{ color: primary }} className="flex min-w-0 flex-col">
-        <div className="truncate text-[40px] font-bold">{content.name}</div>
-        <div className="flex flex-wrap gap-x-[8px] text-[20px] text-black-500">
+      <div className="flex min-w-0 flex-col">
+        <div
+          className="truncate text-[40px] font-bold"
+          style={{ color: BIBLE_CARD_TEXT_DARK }}
+        >
+          {content.name}
+        </div>
+        <div
+          className="flex flex-wrap gap-x-[8px] text-[20px]"
+          style={{ color: BIBLE_CARD_TEXT_MUTED }}
+        >
           {content.keywords.slice(0, MAX_BIBLE_CARD_KEYWORDS).map((keyword) => (
             <span key={keyword}>#{keyword}</span>
           ))}
