@@ -15,6 +15,10 @@ interface NewPrayCardGroupSelectStepProps {
   onGroupSelect: (groups: Group[]) => void;
   onNext: () => void;
   onPrev: () => void;
+  // 이미 생성된 플로우인지 (뒤로가기 재진입 시 재생성 방지)
+  hasCreated: boolean;
+  // 생성 성공 시 부모에 알림
+  onCreated: () => void;
 }
 
 // Animation variants for staggered child elements
@@ -32,6 +36,8 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   onGroupSelect,
   onNext,
   onPrev,
+  hasCreated,
+  onCreated,
 }) => {
   const user = useBaseStore((state) => state.user);
   const bulkUpdateMembers = useBaseStore((state) => state.bulkUpdateMembers);
@@ -100,6 +106,12 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
   
   
   const handleCreatePrayCard = async () => {
+    // 이미 생성된 플로우(완료 후 뒤로가기 재진입)면 재생성하지 않고 완료 화면으로만 이동
+    if (hasCreated) {
+      onNext();
+      return;
+    }
+
     analyticsTrack("클릭_기도카드생성_만들기", { where: "그룹선택" });
     setIsCreating(true);
     if (!user) {
@@ -136,6 +148,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
     localStorage.setItem("lastCreatedPrayCardId", prayCardList[0].id);
     localStorage.removeItem("prayCardContent");
     localStorage.removeItem("prayCardLife");
+    onCreated();
     onNext();
   };
 
