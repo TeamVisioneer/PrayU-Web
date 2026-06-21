@@ -47,35 +47,70 @@ export const getBibleVerseStyle = (verseLength: number): BibleVerseStyle => {
   return { fontSize: 14, lineHeight: 19, paddingX: 28 };
 };
 
+// 파스텔 그라데이션 프리셋. 글씨색은 배경 밝기에 따라 자동 보정하므로(getCardTextColorOnGradient)
+// 밝은 파스텔만 모아도 가독성이 유지된다.
 export const BIBLE_CARD_COLOR_PRESETS: string[][] = [
-  ["#FFD194", "#D1913C"],
-  ["#a8c0ff", "#3f2b96"],
-  ["#89f7fe", "#66a6ff"],
-  ["#ff9966", "#ff5e62"],
   ["#84fab0", "#8fd3f4"],
   ["#ff9a9e", "#fecfef"],
   ["#a1c4fd", "#c2e9fb"],
-  ["#2ebf91", "#FFDAD7"],
-  ["#005AA7", "#FFFDE4"],
-  ["#1f4037", "#99f2c8"],
-  ["#FDEB71", "#F8D800"],
-  ["#F6D365", "#FDA085"],
-  ["#FBC2EB", "#A6C1EE"],
-  ["#D4FC79", "#96E6A1"],
-  ["#E0C3FC", "#8EC5FC"],
-  ["#F093FB", "#F5576C"],
-  ["#4FACFE", "#00F2FE"],
-  ["#43E97B", "#38F9D7"],
-  ["#FA709A", "#FEE140"],
-  ["#30CFD0", "#330867"],
-  ["#667EEA", "#764BA2"],
-  ["#13547A", "#80D0C7"],
-  ["#FFDEE9", "#B5FFFC"],
-  ["#FAD0C4", "#FFD1FF"],
-  ["#C1DFE6", "#FEEBC8"],
-  ["#FFECD2", "#FCB69F"],
-  ["#B7F8DB", "#50A7C2"],
-  ["#FBD3E9", "#BB377D"],
-  ["#F0C27B", "#4B1248"],
-  ["#C9FFBF", "#FFAFBD"],
+  ["#fbc2eb", "#a6c1ee"],
+  ["#d4fc79", "#96e6a1"],
+  ["#e0c3fc", "#8ec5fc"],
+  ["#ffdee9", "#b5fffc"],
+  ["#fad0c4", "#ffd1ff"],
+  ["#c1dfe6", "#feebc8"],
+  ["#ffecd2", "#fcb69f"],
+  ["#c9ffbf", "#ffafbd"],
+  ["#89f7fe", "#66a6ff"],
+  ["#f6d365", "#fda085"],
+  ["#a8edea", "#fed6e3"],
+  ["#fff1eb", "#ace0f9"],
+  ["#fddb92", "#d1fdff"],
+  ["#f5f7fa", "#c3cfe2"],
+  ["#fdcbf1", "#e6dee9"],
+  ["#d9afd9", "#97d9e1"],
+  ["#cfd9df", "#e2ebf0"],
+  ["#accbee", "#e7f0fd"],
+  ["#e9defa", "#fbfcdb"],
+  ["#f3e7e9", "#e3eeff"],
+  ["#fbc2eb", "#bdb2ff"],
+  ["#b5ead7", "#c7ceea"],
+  ["#ffdac1", "#e2f0cb"],
 ];
+
+// ---- 색상 유틸: 배경 밝기에 따른 가독성 좋은 글씨색 산출 ----
+
+const hexToRgb = (hex: string): { r: number; g: number; b: number } => {
+  const normalized = hex.replace("#", "");
+  const full =
+    normalized.length === 3
+      ? normalized
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : normalized;
+  const value = parseInt(full, 16);
+  return { r: (value >> 16) & 255, g: (value >> 8) & 255, b: value & 255 };
+};
+
+const relativeLuminance = (hex: string): number => {
+  const { r, g, b } = hexToRgb(hex);
+  const channel = (c: number) => {
+    const v = c / 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+};
+
+// 카드 색 정체성은 그라데이션 블롭이 담당하고, 글씨는 중립 모노크롬으로 위계를 만든다.
+// (색을 글씨에 분산하지 않아야 블롭이 색 주인공으로 정돈된다)
+export const BIBLE_CARD_TEXT_DARK = "#2B2B2B"; // 구절·이름 (주요 텍스트)
+export const BIBLE_CARD_TEXT_MUTED = "#6B7280"; // 키워드 (메타 텍스트)
+
+// 구절 본문 글씨색: 밝은 파스텔이면 중립 다크, 어두운 배경(기존 진한 프리셋 카드)이면 흰색.
+export const getCardTextColorOnGradient = (colors: string[]): string => {
+  const avgLuminance =
+    colors.reduce((sum, c) => sum + relativeLuminance(c), 0) /
+    (colors.length || 1);
+  return avgLuminance < 0.5 ? "#FFFFFF" : BIBLE_CARD_TEXT_DARK;
+};
