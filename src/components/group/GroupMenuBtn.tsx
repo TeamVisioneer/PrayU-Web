@@ -165,7 +165,7 @@ const GroupMenuBtn: React.FC = () => {
   const onClickBibleCard = () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_말씀카드_페이지", { where: "GroupMenuBtn" });
-    navigate("/bible-card");
+    navigate("/bible-card/new");
   };
 
   const onClickMyProfile = () => {

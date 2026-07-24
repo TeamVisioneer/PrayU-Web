@@ -9,7 +9,8 @@
 - [x] Phase D — staging in-place 리셋 완료 (2026-07-19): 백업 3종(스키마/전체데이터/bible 별도) → `db reset --linked` → 마이그레이션 2개 히스토리 기록, bible 31,138행 시드, Kakao 설정·버킷·RLS 보존/재생성 확인. **prod bible 기반 `supabase/seed.sql`(6MB) 신설 — 커밋 필요**
 - [x] Phase D(앱 QA) — 리셋 산출물(로컬 스택, staging과 동일 마이그레이션) 대상 E2E 통과 (2026-07-19): 가입→profiles 트리거, 보호 라우트, 그룹 생성, 기도카드 4단계 생성, 말씀카드 생성(bible 시드 조회+openai 함수+storage 업로드+FK 연결), 콘솔 에러 0. 비차단 관찰: onesignal/users 400(테스트 유저 푸시 미등록 — 예상), 헤드리스 브라우저 한정 framer-motion 스텝 전환 지연(앱 이슈 아님)
 - [x] Phase E — **완료 (2026-07-20)**: prod 전체 백업(스키마 25KB + 데이터 380MB, 핵심 테이블 행수 검증) → 히스토리 repair(20240727 reverted, baseline applied — SQL 무실행) → `db diff` 예상 차이 1건(레거시 webhook)만 확인 → `db push`로 drop_legacy 적용 → **최종 diff 空** = 세 환경(로컬/staging/prod) 마이그레이션 히스토리·스키마 완전 일치. 링크는 staging으로 복구. 리허설(로컬→staging→prod 파이프라인 1회 완주)도 이것으로 겸함
-- [ ] 후속 이슈 레이징 — 드리프트 fix (bible_card.user_id default, `''''''` 디폴트 4건, qt_data.long_label), bible FOR UPDATE 정책(RLS 작업), bible_id_seq=1 quirk, **레거시 `/bible-card` 플립 페이지 정리**(GroupMenuBtn 진입점 존재. `openai/bible-verse`→`search_bible` RPC 의존인데 prod엔 search_bible이 원래 없어 **prod에선 처음부터 깨져 있던 기능** — 제거 또는 `functions/bible`로 교체)
+- [x] **레거시 `/bible-card` 플립 페이지 정리 완료 (2026-07-20)**: web — 플립 페이지 클러스터 5개 파일 + dead export(createBibleVerse/fetchBgImage) 제거, 그룹 메뉴는 현행 `/bible-card/new`로 리다이렉트(옛 URL도 Navigate 처리, analytics 이벤트 유지). Api — openai 함수의 vector 레거시 라우트 4종(bible-verse/bible-image/text-embedding/search-bible) + BibleCardService/BibleRepository/pixelsClient/type.ts 제거, `/qt`만 유지. 스모크: 제거 라우트 404, `/bible`·`/qt` 정상
+- [ ] 후속 이슈 레이징 — 드리프트 fix (bible_card.user_id default, `''''''` 디폴트 4건, qt_data.long_label), bible FOR UPDATE 정책(RLS 작업), bible_id_seq=1 quirk
 
 ### 타입 sync 정책 (2026-07-20 확정)
 일상 개발은 원격을 읽지도 않는다. 세 환경이 같은 마이그레이션을 공유하므로 로컬 타입 = 배포 후 staging 타입 (검증 완료 — 메타 주석 제외 완전 일치).

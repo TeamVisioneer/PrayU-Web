@@ -35,7 +35,6 @@ import MetaPixelInit from "./analytics/metaPixelInit";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import NewAdminPage from "./pages/AdminPage/NewAdminPage";
 import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
-import BibleCardPage from "./pages/BibleCardPage/BibleCardPage";
 import BibleCardNewPage from "./pages/BibleCardPage/BibleCardNewPage";
 import BibleCardSharePage from "./pages/BibleCardPage/BibleCardSharePage";
 import QuietTimePage from "./pages/QuietTimePage";
@@ -131,7 +130,11 @@ const App = () => {
                 }
               />
               <Route path="/tutorial" element={<TutorialPage />} />
-              <Route path="/bible-card" element={<BibleCardPage />} />
+              {/* 구 말씀카드 플립 페이지 제거 — 옛 링크는 현행 플로우로 안내 */}
+              <Route
+                path="/bible-card"
+                element={<Navigate to="/bible-card/new" replace />}
+              />
               <Route path="/bible-card/new" element={<BibleCardNewPage />} />
               <Route
                 path="/bible-card/share/:bibleCardId"
