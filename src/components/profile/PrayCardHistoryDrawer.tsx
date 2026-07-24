@@ -38,7 +38,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
     <Button
       variant="primary"
       onClick={onClickCreateBibleCard}
-      className="h-[48px] w-full rounded-xl text-base"
+      className="mt-3 h-[48px] w-full rounded-xl text-base"
     >
       말씀카드 만들기
     </Button>
@@ -58,7 +58,13 @@ const PrayCardHistoryDrawer: React.FC = () => {
         </DrawerHeader>
         {historyCard?.bible_card ? (
           <div className="flex flex-col gap-4 px-10 pt-5 pb-10 overflow-y-auto">
-            <PrayCardWithBibleCard prayCard={historyCard} />
+            {/* 목록에서 말씀카드 썸네일을 눌러 진입하므로 말씀카드 면부터 보여준다.
+                key: 다른 카드로 전환 시 플립 상태 리셋 */}
+            <PrayCardWithBibleCard
+              key={historyCard.id}
+              prayCard={historyCard}
+              initialFlipped
+            />
             <ReactionResultBox
               prayCard={historyCard || undefined}
               variant="separated"
