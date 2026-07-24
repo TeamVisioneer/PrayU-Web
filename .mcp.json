@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "prayu-local-db": {
+      "command": "uvx",
+      "args": [
+        "postgres-mcp",
+        "--access-mode=unrestricted",
+        "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+      ]
+    }
+  }
+}
