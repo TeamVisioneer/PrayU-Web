@@ -12,6 +12,12 @@
 - [x] **레거시 `/bible-card` 플립 페이지 정리 완료 (2026-07-20)**: web — 플립 페이지 클러스터 5개 파일 + dead export(createBibleVerse/fetchBgImage) 제거, 그룹 메뉴는 현행 `/bible-card/new`로 리다이렉트(옛 URL도 Navigate 처리, analytics 이벤트 유지). Api — openai 함수의 vector 레거시 라우트 4종(bible-verse/bible-image/text-embedding/search-bible) + BibleCardService/BibleRepository/pixelsClient/type.ts 제거, `/qt`만 유지. 스모크: 제거 라우트 404, `/bible`·`/qt` 정상
 - [ ] 후속 이슈 레이징 — 드리프트 fix (bible_card.user_id default, `''''''` 디폴트 4건, qt_data.long_label), bible FOR UPDATE 정책(RLS 작업), bible_id_seq=1 quirk
 
+### 로컬 DB MCP (2026-07-24 등록)
+- 두 레포 `.mcp.json`에 `prayu-local-db` 등록: `uvx postgres-mcp --access-mode=unrestricted` → 로컬 스택 DB(127.0.0.1:54322) 직결. **uv 설치 필요** (`brew install uv`)
+- CLI 내장 `http://127.0.0.1:54321/mcp` 는 Kong의 OAuth 디스커버리 라우트 부재로 표준 클라이언트 연결 불가(supabase/mcp#257) → stdio 직결 방식 채택
+- 용도: 로컬 스키마/데이터 실험·조회. **원격 접속 불가 구조**(주소 하드코딩). 확정 스키마 변경은 반드시 `db diff` → 마이그레이션 파일로
+- 스택이 내려가 있으면 MCP 연결 실패(무해) — `./scripts/dev.sh` 로 올린 뒤 사용
+
 ### 타입 sync 정책 (2026-07-20 확정)
 일상 개발은 원격을 읽지도 않는다. 세 환경이 같은 마이그레이션을 공유하므로 로컬 타입 = 배포 후 staging 타입 (검증 완료 — 메타 주석 제외 완전 일치).
 - **web `npm run supabase-sync`**: 로컬 DB(`--db-url` 127.0.0.1:54322) 기준 — 개발 중 수시 실행
