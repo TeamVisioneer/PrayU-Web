@@ -7,11 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
-  }
   graphql_public: {
     Tables: {
       [_ in never]: never
@@ -251,7 +246,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "member_user_id_fkey"
+            foreignKeyName: "member_user_id_fkey1"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -507,7 +502,7 @@ export type Database = {
           end_paragraph: number
           full_sentence: string
           id?: string
-          long_label?: string
+          long_label: string
           result?: Json
           start_paragraph: number
           user_id?: string | null
@@ -568,21 +563,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      search_bible: {
-        Args: { embedding_content: string }
-        Returns: {
-          book: number
-          cate: number
-          chapter: number
-          id: number
-          long_label: string
-          paragraph: number
-          sentence: string
-          short_label: string
-          similarity: number
-          testament: string
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
@@ -718,3 +699,4 @@ export const Constants = {
     Enums: {},
   },
 } as const
+

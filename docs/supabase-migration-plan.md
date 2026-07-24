@@ -5,10 +5,18 @@
 - [x] Phase A — prod 덤프 + 수동 캡처 완료 (`PrayU-Api/supabase/_baseline/`, gitignore 처리)
 - [x] Phase B — baseline 작성: `PrayU-Api/supabase/migrations/20260718075321_initial_baseline.sql`. web stale 마이그레이션·seed·빈 stub 삭제
 - [x] Phase C(로컬) — 로컬 스택에서 `db reset` 무오류 재생, 스키마 검증 전 항목 prod 일치, 함수 5종 로컬 서빙 확인. web `.env.local.example` 추가
-- [ ] Phase C(앱 검증) — web `.env.local` 로 전환 후 `npm run dev` 수동 QA
-- [ ] Phase D — staging in-place 리셋 (실행 전 사용자 확인)
-- [ ] Phase E — prod baseline 마킹 (실행 전 사용자 확인)
-- [ ] Phase F — 워크플로우 리허설 1회
+- [x] Phase C(앱 검증) — 로컬 카카오 로그인 E2E 통과 (config.toml kakao provider + .env 주입, 2026-07-18)
+- [x] Phase D — staging in-place 리셋 완료 (2026-07-19): 백업 3종(스키마/전체데이터/bible 별도) → `db reset --linked` → 마이그레이션 2개 히스토리 기록, bible 31,138행 시드, Kakao 설정·버킷·RLS 보존/재생성 확인. **prod bible 기반 `supabase/seed.sql`(6MB) 신설 — 커밋 필요**
+- [x] Phase D(앱 QA) — 리셋 산출물(로컬 스택, staging과 동일 마이그레이션) 대상 E2E 통과 (2026-07-19): 가입→profiles 트리거, 보호 라우트, 그룹 생성, 기도카드 4단계 생성, 말씀카드 생성(bible 시드 조회+openai 함수+storage 업로드+FK 연결), 콘솔 에러 0. 비차단 관찰: onesignal/users 400(테스트 유저 푸시 미등록 — 예상), 헤드리스 브라우저 한정 framer-motion 스텝 전환 지연(앱 이슈 아님)
+- [x] Phase E — **완료 (2026-07-20)**: prod 전체 백업(스키마 25KB + 데이터 380MB, 핵심 테이블 행수 검증) → 히스토리 repair(20240727 reverted, baseline applied — SQL 무실행) → `db diff` 예상 차이 1건(레거시 webhook)만 확인 → `db push`로 drop_legacy 적용 → **최종 diff 空** = 세 환경(로컬/staging/prod) 마이그레이션 히스토리·스키마 완전 일치. 링크는 staging으로 복구. 리허설(로컬→staging→prod 파이프라인 1회 완주)도 이것으로 겸함
+- [ ] 후속 이슈 레이징 — 드리프트 fix (bible_card.user_id default, `''''''` 디폴트 4건, qt_data.long_label), bible FOR UPDATE 정책(RLS 작업), bible_id_seq=1 quirk, **레거시 `/bible-card` 플립 페이지 정리**(GroupMenuBtn 진입점 존재. `openai/bible-verse`→`search_bible` RPC 의존인데 prod엔 search_bible이 원래 없어 **prod에선 처음부터 깨져 있던 기능** — 제거 또는 `functions/bible`로 교체)
+
+### 타입 sync 정책 (2026-07-20 확정)
+일상 개발은 원격을 읽지도 않는다. 세 환경이 같은 마이그레이션을 공유하므로 로컬 타입 = 배포 후 staging 타입 (검증 완료 — 메타 주석 제외 완전 일치).
+- **web `npm run supabase-sync`**: 로컬 DB(`--db-url` 127.0.0.1:54322) 기준 — 개발 중 수시 실행
+- **web `npm run supabase-sync-staging`**: staging(`--project-id`, 링크 불필요·읽기 전용) 기준 — 배포 시점 검증 앵커
+- **Api `npm run supabase-sync`**: `--local` — 함수 개발 중 수시 실행
+- 원격 링크(`supabase link`)는 일상 작업에서 사용하지 않는다. 원격 반영은 CI 전용
 
 ### Phase A 실측 기록 (덤프에서 확인된 것)
 - 테이블 11개 (stale 파일의 `test` 테이블은 prod에 없음 — baseline 미포함)
