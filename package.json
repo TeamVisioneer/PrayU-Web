@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "supabase-sync": "supabase gen types --lang=typescript --linked > supabase/types/database.ts"
+    "supabase-sync": "supabase gen types --lang=typescript --db-url postgresql://postgres:postgres@127.0.0.1:54322/postgres > supabase/types/database.ts",
+    "supabase-sync-staging": "supabase gen types --lang=typescript --project-id cguxpeghdqcqfdhvkmyv > supabase/types/database.ts"
   },
   "dependencies": {
     "@analytics/amplitude": "^0.1.3",
