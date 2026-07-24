@@ -30,3 +30,6 @@ dist-ssr
 .branches
 .temp
 .vercel
+
+# local AI tooling
+.claude/
