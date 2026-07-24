@@ -10,7 +10,10 @@
 - [x] Phase D(앱 QA) — 리셋 산출물(로컬 스택, staging과 동일 마이그레이션) 대상 E2E 통과 (2026-07-19): 가입→profiles 트리거, 보호 라우트, 그룹 생성, 기도카드 4단계 생성, 말씀카드 생성(bible 시드 조회+openai 함수+storage 업로드+FK 연결), 콘솔 에러 0. 비차단 관찰: onesignal/users 400(테스트 유저 푸시 미등록 — 예상), 헤드리스 브라우저 한정 framer-motion 스텝 전환 지연(앱 이슈 아님)
 - [x] Phase E — **완료 (2026-07-20)**: prod 전체 백업(스키마 25KB + 데이터 380MB, 핵심 테이블 행수 검증) → 히스토리 repair(20240727 reverted, baseline applied — SQL 무실행) → `db diff` 예상 차이 1건(레거시 webhook)만 확인 → `db push`로 drop_legacy 적용 → **최종 diff 空** = 세 환경(로컬/staging/prod) 마이그레이션 히스토리·스키마 완전 일치. 링크는 staging으로 복구. 리허설(로컬→staging→prod 파이프라인 1회 완주)도 이것으로 겸함
 - [x] **레거시 `/bible-card` 플립 페이지 정리 완료 (2026-07-20)**: web — 플립 페이지 클러스터 5개 파일 + dead export(createBibleVerse/fetchBgImage) 제거, 그룹 메뉴는 현행 `/bible-card/new`로 리다이렉트(옛 URL도 Navigate 처리, analytics 이벤트 유지). Api — openai 함수의 vector 레거시 라우트 4종(bible-verse/bible-image/text-embedding/search-bible) + BibleCardService/BibleRepository/pixelsClient/type.ts 제거, `/qt`만 유지. 스모크: 제거 라우트 404, `/bible`·`/qt` 정상
-- [ ] 후속 이슈 레이징 — 드리프트 fix (bible_card.user_id default, `''''''` 디폴트 4건, qt_data.long_label), bible FOR UPDATE 정책(RLS 작업), bible_id_seq=1 quirk
+- [x] 후속 이슈 처리 완료 (2026-07-24, 사용자 결정):
+  - **드리프트 fix 보류(의도적)**: `bible_card.user_id` default — 비즈니스 로직은 DB 가 아닌 앱에서 명시하는 현행 방식이 의도된 설계라 미적용. `profiles.fcm_token` — OneSignal 전환으로 레거시 컬럼(추후 컬럼 정리 후보). `''''''` 디폴트·`qt_data.long_label`·`bible_id_seq=1` — 실피해 없는 화석, 미조치. **재발굴 방지용 기록**
+  - **bible 무제한 쓰기 정책 제거**: Api#32 (`drop_bible_write_policies` — update + 조사 중 발견된 insert 까지)
+  - **보안 백로그 분리**: [security-backlog.md](security-backlog.md) — RLS 전면 정비/Kakao secret/키 로테이션·cron 결합/어드민 권한
 
 ### 로컬 DB MCP (2026-07-24 등록)
 - 두 레포 `.mcp.json`에 `prayu-local-db` 등록: `uvx postgres-mcp --access-mode=unrestricted` → 로컬 스택 DB(127.0.0.1:54322) 직결. **uv 설치 필요** (`brew install uv`)
