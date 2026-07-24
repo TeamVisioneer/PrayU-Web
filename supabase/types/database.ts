@@ -209,6 +209,47 @@ export type Database = {
           },
         ]
       }
+      llm_usage_log: {
+        Row: {
+          completion_tokens: number | null
+          created_at: string
+          feature: string
+          id: string
+          metadata: Json | null
+          model: string | null
+          prompt_tokens: number | null
+          user_id: string
+        }
+        Insert: {
+          completion_tokens?: number | null
+          created_at?: string
+          feature: string
+          id?: string
+          metadata?: Json | null
+          model?: string | null
+          prompt_tokens?: number | null
+          user_id: string
+        }
+        Update: {
+          completion_tokens?: number | null
+          created_at?: string
+          feature?: string
+          id?: string
+          metadata?: Json | null
+          model?: string | null
+          prompt_tokens?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "llm_usage_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       member: {
         Row: {
           created_at: string

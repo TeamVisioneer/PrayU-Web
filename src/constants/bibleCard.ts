@@ -4,6 +4,9 @@ import { getISODateYMD } from "@/lib/utils";
 // 말씀카드에 표시할 키워드 최대 개수
 export const MAX_BIBLE_CARD_KEYWORDS = 3;
 
+// 일일 생성 한도 (표시용). 실제 강제는 functions/bible(BIBLE_CARD_DAILY_LIMIT env)이 담당 — 서버가 진실
+export const BIBLE_CARD_DAILY_LIMIT = 3;
+
 // 말씀카드 디자인 원본(BibleCardBase)의 기준 크기.
 // 화면 표시는 이 크기를 scale 로 축소하고, 캡처는 원본 크기로 찍는다.
 export const BIBLE_CARD_WIDTH = 380;

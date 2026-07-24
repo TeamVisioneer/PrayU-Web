@@ -1,5 +1,6 @@
 import { supabase } from "./../../supabase/client";
 import { Bible } from "../../supabase/types/tables";
+import { getISOTodayDateYMD } from "@/lib/utils";
 import * as Sentry from "@sentry/react";
 
 export const getBible = async (
@@ -53,21 +54,42 @@ export const fetchBibleList = async (
   }
 };
 
+export type SearchBibleResult = {
+  bible: Bible[] | null;
+  keywords: string[] | null;
+  errorCode?: "DAILY_LIMIT_EXCEEDED" | "LOGIN_REQUIRED";
+};
+
 export const searchBible = async (
   query: string,
-): Promise<{ bible: Bible[] | null; keywords: string[] | null }> => {
+  prayCardId?: string,
+): Promise<SearchBibleResult> => {
   try {
+    // 개인별 일일 한도가 걸린 엔드포인트 — 세션 토큰 필수 (anon key는 서버가 401로 거부)
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) {
+      return { bible: null, keywords: null, errorCode: "LOGIN_REQUIRED" };
+    }
+
     const response = await fetch(
       `${import.meta.env.VITE_SUPA_PROJECT_URL}/functions/v1/bible`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${import.meta.env.VITE_SUPA_ANON_KEY}`,
+          authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query, prayCardId }),
       },
     );
+    if (response.status === 429) {
+      return { bible: null, keywords: null, errorCode: "DAILY_LIMIT_EXCEEDED" };
+    }
+    if (response.status === 401) {
+      return { bible: null, keywords: null, errorCode: "LOGIN_REQUIRED" };
+    }
     const { data, error } = await response.json();
     if (error) {
       Sentry.captureException(error);
@@ -86,5 +108,27 @@ export const searchBible = async (
       bible: null,
       keywords: null,
     };
+  }
+};
+
+// KST 기준 오늘 말씀카드 생성(LLM 호출) 횟수 — RLS로 본인 로그만 조회됨.
+// 표시용이며 실제 한도 강제는 functions/bible 이 담당 (실패 시 null → 표시 생략)
+export const fetchTodayBibleCardUsage = async (): Promise<number | null> => {
+  try {
+    const { year, month, day } = getISOTodayDateYMD();
+    const kstDayStartISO = `${year}-${month}-${day}T00:00:00+09:00`;
+    const { count, error } = await supabase
+      .from("llm_usage_log")
+      .select("id", { count: "exact", head: true })
+      .eq("feature", "bible_card")
+      .gte("created_at", kstDayStartISO);
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return count ?? 0;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
   }
 };

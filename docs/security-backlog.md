@@ -38,6 +38,21 @@
 - `profiles` 의 `admin can update profiles` 정책도 이메일 배열 하드코딩
 - 방향: DB 롤 또는 custom claim 기반 권한으로 통일 (1번 RLS 정비와 함께 설계)
 
+## 5. QT 엔드포인트 무제한 공개 LLM 프록시 — 🔴 시급
+
+`POST /openai/qt`가 공개 anon key만으로 무제한 OpenAI 호출 가능. bible(#33)과 동일 유형이며 인프라(`llm_usage_log`)는 준비됨.
+계획: `PrayU-Api/docs/qt-llm-usage-limit-plan.md`
+
+## 6. authMiddleware JWT 서명 미검증 — ⚠️
+
+미들웨어가 decode만 수행, 게이트웨이 verify_jwt(암묵 기본값)에 전적 의존. 함수 하나가 verify_jwt=false로 배포되면 위조 JWT 통과.
+계획: `PrayU-Api/docs/auth-jwt-verification-plan.md`
+
+## 7. POST /api/users가 anon으로 auth.admin.createUser 실행 — ⚠️
+
+공개 anon key로 임의 이메일 계정 생성 가능. 웹 사용처 0건(DELETE만 사용)이라 제거가 기본안.
+계획: `PrayU-Api/docs/api-users-hardening-plan.md`
+
 ## 완료된 항목
 
 - ✅ fcm_notification_webhook 제거 — service_role 키 하드코딩 지점 1곳 소멸 (2026-07-20, Api#28 파이프라인)
@@ -45,4 +60,4 @@
 
 ## 권장 진행 순서
 
-2(Kakao secret — 노출 면적이 가장 공개적) → 1(RLS — 파급 크므로 테이블별 분할) → 4(어드민, 1과 함께) → 3(키 로테이션 — 1·2 마무리 후 일괄)
+5(QT — 비용 노출이 즉각적, 인프라 준비됨) → 2(Kakao secret — 노출 면적이 가장 공개적) → 6·7(Api 인증 보강 — 소규모) → 1(RLS — 파급 크므로 테이블별 분할) → 4(어드민, 1과 함께) → 3(키 로테이션 — 1·2 마무리 후 일괄)
