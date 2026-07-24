@@ -8,6 +8,7 @@ import {
 } from "./../apis/pray";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { toast } from "@/components/ui/use-toast";
 import { supabase } from "../../supabase/client";
 import { Session, User } from "@supabase/supabase-js";
 import {
@@ -1244,7 +1245,17 @@ const useBaseStore = create<BaseStore>()(
     ) => {
       const content =
         `${longLabel} ${chapter}:${startParagraph}~${endParagraph}`;
-      const qtGenerated = await createQT(content);
+      const { data: qtGenerated, errorCode } = await createQT(content);
+      if (!qtGenerated) {
+        if (errorCode === "DAILY_LIMIT_EXCEEDED") {
+          toast({
+            description: "오늘 QT 생성 횟수를 모두 사용했어요. 내일 다시 만들 수 있어요",
+          });
+        } else if (errorCode === "LOGIN_REQUIRED") {
+          toast({ description: "로그인 후 이용할 수 있어요" });
+        }
+        return null;
+      }
       const result = JSON.stringify(qtGenerated);
       const qtData = await createQtData(
         userId,
