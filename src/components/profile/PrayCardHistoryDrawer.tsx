@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   Drawer,
   DrawerContent,
@@ -5,12 +6,15 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
 import useBaseStore from "@/stores/baseStore";
 import { PrayCard } from "../prayCard/PrayCard";
 import ReactionResultBox from "../pray/ReactionResultBox";
 import PrayCardWithBibleCard from "../prayCard/PrayCardWithBibleCard";
+import { analyticsTrack } from "@/analytics/analytics";
 
 const PrayCardHistoryDrawer: React.FC = () => {
+  const navigate = useNavigate();
   const isOpenHistoryDrawer = useBaseStore(
     (state) => state.isOpenHistoryDrawer
   );
@@ -19,6 +23,26 @@ const PrayCardHistoryDrawer: React.FC = () => {
   );
   const historyCard = useBaseStore((state) => state.historyCard);
   const legacyBibleCardUrl = historyCard?.bible_card_url;
+
+  // 말씀카드 미연결 카드에만 노출 (레거시 bible_card_url 카드도 새 체계로 만들도록 유도)
+  const onClickCreateBibleCard = () => {
+    if (!historyCard) return;
+    analyticsTrack("클릭_말씀카드_페이지", {
+      where: "PrayCardHistoryDrawer",
+    });
+    setIsOpenHistoryDrawer(false);
+    navigate(`/bible-card/new?praycard_id=${historyCard.id}`);
+  };
+
+  const createBibleCardButton = (
+    <Button
+      variant="primary"
+      onClick={onClickCreateBibleCard}
+      className="h-[48px] w-full rounded-xl text-base"
+    >
+      말씀카드 만들기
+    </Button>
+  );
   return (
     <Drawer
       open={isOpenHistoryDrawer}
@@ -58,6 +82,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
                 {historyCard.content}
               </p>
             </div>
+            {createBibleCardButton}
           </div>
         ) : (
           <div className="flex flex-col gap-2 px-10 pt-5 pb-10">
@@ -67,6 +92,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
               variant="separated"
               eventOption={{ where: "HistoryCard" }}
             />
+            {historyCard && createBibleCardButton}
           </div>
         )}
       </DrawerContent>

@@ -407,7 +407,7 @@ const AnalyticsTracker = () => {
           where: from,
         });
         break;
-      case "/bible-card":
+      case "/bible-card/new":
         analyticsTrack("페이지_말씀카드", {
           title: "Bible Card Page",
           where: from,

@@ -11,8 +11,18 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "@/components/ui/use-toast";
-import { searchBible } from "@/apis/bible";
+import { fetchTodayBibleCardUsage, searchBible } from "@/apis/bible";
 import { createBibleCard } from "@/apis/bibleCard";
 import { updatePrayCard } from "@/apis/prayCard";
 import PrayCard from "@/components/prayCard/PrayCard";
@@ -27,6 +37,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { getDomainUrl, getISOTodayDateYMD, getTodayNumber } from "@/lib/utils";
 import {
   BIBLE_CARD_COLOR_PRESETS,
+  BIBLE_CARD_DAILY_LIMIT,
   MAX_BIBLE_CARD_KEYWORDS,
 } from "@/constants/bibleCard";
 import {
@@ -224,6 +235,8 @@ const BibleCardNewPage = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [hasMorePrayCards, setHasMorePrayCards] = useState(false);
   const [isLoadingMorePrayCards, setIsLoadingMorePrayCards] = useState(false);
+  const [todayUsedCount, setTodayUsedCount] = useState<number | null>(null);
+  const [isReplaceDialogOpen, setIsReplaceDialogOpen] = useState(false);
 
   const praycardIdParam = searchParams.get("praycard_id");
   const legacyPrayCardIdParam = searchParams.get("prayCardId");
@@ -238,6 +251,16 @@ const BibleCardNewPage = () => {
     : undefined;
   const displayName =
     myProfile?.full_name || user?.user_metadata.full_name || "PrayU";
+  // 표시용 남은 횟수. 조회 실패(null)면 표시만 생략 — 실제 한도는 서버가 강제
+  const remainingCount =
+    todayUsedCount === null
+      ? null
+      : Math.max(0, BIBLE_CARD_DAILY_LIMIT - todayUsedCount);
+
+  useEffect(() => {
+    if (!user) return;
+    fetchTodayBibleCardUsage().then(setTodayUsedCount);
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -318,7 +341,6 @@ const BibleCardNewPage = () => {
 
   const handleSelectPrayCard = (prayCard: PrayCardWithProfiles) => {
     if (isCreating) return;
-    if (prayCard.bible_card) return;
     if (selectedPrayCard?.id === prayCard.id) {
       analyticsTrack("클릭_말씀카드_기도카드선택해제", {
         where: "BibleCardNewPage",
@@ -345,7 +367,8 @@ const BibleCardNewPage = () => {
     });
     setDraft(null);
     setSelectedPrayCard(prayCard);
-    setIsFlipped(false);
+    // 이미 말씀카드가 연결된 카드는 뒷면(말씀카드)부터 보여준다
+    setIsFlipped(Boolean(prayCard.bible_card));
     setSearchParams(
       (prev) => {
         const nextParams = new URLSearchParams(prev);
@@ -402,16 +425,22 @@ const BibleCardNewPage = () => {
     navigate("/profile/me");
   };
 
+  // 신규 생성과 재생성(교체)이 공유하는 생성 플로우.
+  // "이미 연결된 카드" 차단은 하지 않는다 — 교체는 확인 다이얼로그가 게이트
   const handleCreateBibleCard = async () => {
     if (!user || !selectedPrayCard || isCreating) return;
-    if (selectedPrayCard.bible_card) {
-      toast({ description: "이미 연결된 말씀카드가 있어요" });
+    if (remainingCount === 0) {
+      toast({
+        description: "오늘 생성 가능 횟수를 모두 사용했어요. 내일 다시 만들 수 있어요",
+      });
       return;
     }
+    const isReplacing = Boolean(selectedPrayCard.bible_card);
 
     analyticsTrack("클릭_말씀카드_생성", {
       where: "BibleCardNewPage",
       prayCardId: selectedPrayCard.id,
+      isReplacing,
     });
 
     setIsCreating(true);
@@ -420,12 +449,29 @@ const BibleCardNewPage = () => {
       await new Promise((resolve) => setTimeout(resolve, 650));
 
       const query = `#일상: ${selectedPrayCard.life} #기도제목: ${selectedPrayCard.content}`;
-      const { bible, keywords } = await searchBible(query);
-      const targetBible = bible?.[0];
+      const { bible, keywords, errorCode } = await searchBible(
+        query,
+        selectedPrayCard.id,
+      );
 
+      if (errorCode === "DAILY_LIMIT_EXCEEDED") {
+        toast({
+          description:
+            "오늘 생성 가능 횟수를 모두 사용했어요. 내일 다시 만들 수 있어요",
+        });
+        setIsFlipped(isReplacing);
+        return;
+      }
+      if (errorCode === "LOGIN_REQUIRED") {
+        toast({ description: "로그인 후 이용할 수 있어요" });
+        setIsFlipped(isReplacing);
+        return;
+      }
+
+      const targetBible = bible?.[0];
       if (!targetBible || !keywords) {
         toast({ description: "말씀을 가져오지 못했어요. 다시 시도해 주세요" });
-        setIsFlipped(false);
+        setIsFlipped(isReplacing);
         return;
       }
 
@@ -460,7 +506,7 @@ const BibleCardNewPage = () => {
 
       if (!imageUrl) {
         toast({ description: "말씀카드 이미지를 저장하지 못했어요" });
-        setIsFlipped(false);
+        setIsFlipped(isReplacing);
         return;
       }
 
@@ -477,19 +523,40 @@ const BibleCardNewPage = () => {
 
       if (!bibleCard) {
         toast({ description: "말씀카드를 저장하지 못했어요" });
-        setIsFlipped(false);
+        setIsFlipped(isReplacing);
         return;
       }
 
+      // 교체 시에도 기존 row는 남기고 연결만 새 id로 갱신 (히스토리 확장 여지)
       await updatePrayCard(selectedPrayCard.id, {
         bible_card_id: bibleCard.id,
       });
       updateSelectedPrayCard(selectedPrayCard, bibleCard);
-      toast({ description: "기도카드 뒷면에 말씀카드를 붙였어요" });
+      toast({
+        description: isReplacing
+          ? "새 말씀카드로 교체했어요"
+          : "기도카드 뒷면에 말씀카드를 붙였어요",
+      });
       localStorage.removeItem("lastCreatedPrayCardId");
     } finally {
       setIsCreating(false);
+      // LLM 호출이 발생했으면 성공/실패와 무관하게 차감되므로 서버 기준으로 재동기화
+      fetchTodayBibleCardUsage().then(setTodayUsedCount);
     }
+  };
+
+  const handleClickReplace = () => {
+    if (remainingCount === 0) {
+      toast({
+        description: "오늘 생성 가능 횟수를 모두 사용했어요. 내일 다시 만들 수 있어요",
+      });
+      return;
+    }
+    analyticsTrack("클릭_말씀카드_재생성", {
+      where: "BibleCardNewPage",
+      prayCardId: selectedPrayCard?.id,
+    });
+    setIsReplaceDialogOpen(true);
   };
 
   if (!user) {
@@ -567,7 +634,7 @@ const BibleCardNewPage = () => {
                   ) : (
                     <PrayCardBibleBackPreview
                       prayCard={selectedPrayCard}
-                      bibleCard={selectedBibleCard}
+                      bibleCard={isCreating ? null : selectedBibleCard}
                       isFlipped={isFlipped}
                       isCreating={isCreating}
                       onFlip={() => setIsFlipped((prev) => !prev)}
@@ -590,17 +657,30 @@ const BibleCardNewPage = () => {
                         ? handleCreateBibleCard
                         : () => setIsDrawerOpen(true)
                     }
-                    disabled={isCreating}
+                    disabled={
+                      isCreating ||
+                      Boolean(selectedPrayCard && remainingCount === 0)
+                    }
                     className="mt-5 h-[52px] w-full rounded-xl text-base disabled:opacity-70"
                   >
                     {isCreating ? (
                       <PulseLoader size={10} color="#f3f4f6" />
-                    ) : selectedPrayCard ? (
-                      "뒷면에 말씀카드 만들기"
-                    ) : (
+                    ) : !selectedPrayCard ? (
                       "기도카드 선택하기"
+                    ) : remainingCount === 0 ? (
+                      "오늘 생성 횟수를 모두 사용했어요"
+                    ) : (
+                      "뒷면에 말씀카드 만들기"
                     )}
                   </Button>
+                  {selectedPrayCard &&
+                    !isCreating &&
+                    remainingCount !== null &&
+                    remainingCount > 0 && (
+                      <p className="mt-2 text-center text-xs text-gray-400">
+                        오늘 남은 생성 {remainingCount}회
+                      </p>
+                    )}
                   {selectedPrayCard && !isCreating && (
                     <button
                       type="button"
@@ -615,7 +695,7 @@ const BibleCardNewPage = () => {
             </div>
           </section>
 
-          {selectedBibleCard?.image_url && (
+          {selectedBibleCard?.image_url && !isCreating && (
             <section className="mx-auto mt-1 w-full max-w-[320px] space-y-3">
               <motion.div
                 className="rounded-2xl bg-white shadow-sm"
@@ -641,6 +721,13 @@ const BibleCardNewPage = () => {
                 >
                   내 프로필에서 확인하기
                 </Button>
+                <button
+                  type="button"
+                  onClick={handleClickReplace}
+                  className="mx-auto mt-3 block px-3 py-2 text-sm font-medium text-gray-400 transition hover:text-gray-500"
+                >
+                  새 말씀카드로 만들기
+                </button>
               </motion.div>
             </section>
           )}
@@ -668,19 +755,18 @@ const BibleCardNewPage = () => {
                     type="button"
                     key={prayCard.id}
                     onClick={() => handleSelectPrayCard(prayCard)}
-                    disabled={hasBibleCard}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{
                       opacity: 1,
                       y: 0,
                       transition: { duration: 0.25, delay: index * 0.025 },
                     }}
-                    whileTap={hasBibleCard ? undefined : { scale: 0.97 }}
-                    className={`relative flex aspect-[3/4] flex-col items-stretch justify-start overflow-hidden rounded-xl border bg-white p-2 text-left shadow-sm transition disabled:pointer-events-auto ${
+                    whileTap={{ scale: 0.97 }}
+                    className={`relative flex aspect-[3/4] flex-col items-stretch justify-start overflow-hidden rounded-xl border bg-white p-2 text-left shadow-sm transition ${
                       selectedPrayCard?.id === prayCard.id
                         ? "border-blue-500 ring-2 ring-blue-100"
                         : "border-gray-100"
-                    } ${hasBibleCard ? "cursor-not-allowed bg-gray-50 opacity-65" : ""}`}
+                    }`}
                   >
                     {hasBibleCard ? (
                       <BibleCardThumbnail
@@ -724,6 +810,32 @@ const BibleCardNewPage = () => {
           </div>
         </DrawerContent>
       </Drawer>
+
+      <AlertDialog
+        open={isReplaceDialogOpen}
+        onOpenChange={setIsReplaceDialogOpen}
+      >
+        <AlertDialogContent className="w-5/6 rounded-xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>새 말씀카드로 교체할까요?</AlertDialogTitle>
+            <AlertDialogDescription>
+              기존 말씀카드 대신 새로운 말씀카드가 뒷면에 붙어요.
+              {remainingCount !== null && ` 오늘 남은 생성 ${remainingCount}회`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-row justify-end gap-2">
+            <AlertDialogCancel className="mt-0">취소</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setIsReplaceDialogOpen(false);
+                handleCreateBibleCard();
+              }}
+            >
+              새로 만들기
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {draft && (
         <div className="fixed -top-[100vh] -z-40 pointer-events-none">

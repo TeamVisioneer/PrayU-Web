@@ -31,6 +31,10 @@ React 18 + TypeScript + Vite 5 / Tailwind + Radix(shadcn/ui) + Vaul / Zustand + 
 - `src/lib/utils.ts`: KST 날짜 유틸 등 공통 유틸
 - `supabase/types/*`: 생성 산출물 — 수동 수정 시 반드시 이유를 남긴다
 
+## 작업 착수 규칙
+
+- **docs 먼저, 코드는 그 다음.** 피처/개선 작업 시작 시 코드부터 수정하지 않는다. `docs/`에 설계·계획 문서를 먼저 작성(또는 기존 문서 갱신)하고 방향 확인 후 구현한다. (예: `docs/bible-card-backside-flow-plan.md`)
+
 ## 의사결정 우선순위
 
 1. 기존 사용자 흐름을 깨지 않는가
