@@ -161,44 +161,52 @@ const PrayCardBibleBackPreview = ({
   isFlipped,
   isCreating,
   onFlip,
+  cardOverlay,
 }: {
   prayCard: PrayCardWithProfiles;
   bibleCard: BibleCardType | null | undefined;
   isFlipped: boolean;
   isCreating: boolean;
   onFlip: () => void;
+  // 카드 위에 겹쳐 띄우는 액션 — 회전 컨테이너 밖이라 플립에 함께 돌지 않는다
+  cardOverlay?: React.ReactNode;
 }) => (
   <div className="flex w-full flex-col items-center gap-3">
-    <button
-      type="button"
-      onClick={onFlip}
-      disabled={isCreating}
-      className="w-full perspective-1000 text-left disabled:cursor-default"
-    >
-      <div
-        className={`relative aspect-[3/4] w-full transition-transform duration-700 transform-style-preserve-3d ${
-          isFlipped ? "rotate-y-180" : ""
-        }`}
+    <div className="relative w-full">
+      <button
+        type="button"
+        onClick={onFlip}
+        disabled={isCreating}
+        className="w-full perspective-1000 text-left disabled:cursor-default"
       >
-        <div className="absolute inset-0 backface-hidden">
-          <PrayCard prayCard={prayCard} isMoreBtn={false} editable={false} />
+        <div
+          className={`relative aspect-[3/4] w-full transition-transform duration-700 transform-style-preserve-3d ${
+            isFlipped ? "rotate-y-180" : ""
+          }`}
+        >
+          <div className="absolute inset-0 backface-hidden">
+            <PrayCard prayCard={prayCard} isMoreBtn={false} editable={false} />
+          </div>
+          <div className="absolute inset-0 rotate-y-180 backface-hidden">
+            {bibleCard ? (
+              <motion.div
+                className="h-full w-full"
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+              >
+                <BibleCardView bibleCard={bibleCard} />
+              </motion.div>
+            ) : (
+              <EmptyBibleCardBackSlot isCreating={isCreating} />
+            )}
+          </div>
         </div>
-        <div className="absolute inset-0 rotate-y-180 backface-hidden">
-          {bibleCard ? (
-            <motion.div
-              className="h-full w-full"
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.45, ease: "easeOut" }}
-            >
-              <BibleCardView bibleCard={bibleCard} />
-            </motion.div>
-          ) : (
-            <EmptyBibleCardBackSlot isCreating={isCreating} />
-          )}
-        </div>
-      </div>
-    </button>
+      </button>
+      {cardOverlay && (
+        <div className="absolute bottom-3 right-3 z-20">{cardOverlay}</div>
+      )}
+    </div>
     <button
       type="button"
       onClick={onFlip}
@@ -634,19 +642,6 @@ const BibleCardNewPage = () => {
 
           <section className="flex flex-col items-center pb-3">
             <div className="w-full max-w-[320px]">
-              {/* 카드 교체는 선택 대상(카드)에 붙인다 — 생성 전에만 노출 */}
-              {selectedPrayCard && !selectedBibleCard && !isCreating && (
-                <div className="mb-2 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setIsDrawerOpen(true)}
-                    className="flex items-center gap-1 rounded-full bg-white/80 px-3 py-1.5 text-xs font-medium text-blue-500 shadow-sm transition hover:text-blue-600"
-                  >
-                    <Repeat className="h-3 w-3" strokeWidth={2.5} />
-                    다른 카드 선택
-                  </button>
-                </div>
-              )}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedPrayCard ? selectedPrayCard.id : "empty"}
@@ -681,6 +676,19 @@ const BibleCardNewPage = () => {
                       isFlipped={isFlipped}
                       isCreating={isCreating}
                       onFlip={() => setIsFlipped((prev) => !prev)}
+                      cardOverlay={
+                        // 카드 교체는 대상인 카드 위에 — 생성 전에만
+                        !selectedBibleCard && !isCreating ? (
+                          <button
+                            type="button"
+                            onClick={() => setIsDrawerOpen(true)}
+                            className="flex items-center gap-1 rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-blue-500 shadow-md backdrop-blur-sm transition active:scale-95"
+                          >
+                            <Repeat className="h-3 w-3" strokeWidth={2.5} />
+                            다른 카드 선택
+                          </button>
+                        ) : null
+                      }
                     />
                   )}
                 </motion.div>
