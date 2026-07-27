@@ -250,10 +250,10 @@ const NoticeManager = () => {
       </div>
 
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="max-h-[85vh] w-11/12 overflow-y-auto rounded-xl">
-          <DialogHeader>
-            {/* pr-8: 우상단 닫기(X) 버튼과 겹치지 않게 */}
-            <div className="flex items-center justify-between gap-2 pr-8">
+        <DialogContent className="flex max-h-[85vh] w-11/12 flex-col gap-0 overflow-hidden rounded-xl p-0">
+          <DialogHeader className="space-y-1 border-b px-5 py-4 text-left">
+            {/* pr-10: 우상단 닫기(X) 버튼과 겹치지 않게 */}
+            <div className="flex items-center justify-between gap-2 pr-10">
               <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
               <button
                 type="button"
@@ -280,6 +280,7 @@ const NoticeManager = () => {
             </DialogDescription>
           </DialogHeader>
 
+          <div className="flex-1 overflow-y-auto px-5 py-4">
           {isPreview ? (
             // 실제 공지 모달과 같은 구성(어두운 배경 · 카드 · 카드 밖 보조 액션)으로 그린다
             <div className="rounded-xl bg-gray-800 p-4">
@@ -300,9 +301,9 @@ const NoticeManager = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
-              <label className="flex flex-col gap-1">
-                <span className="text-xs font-medium text-gray-600">제목</span>
+            <div className="flex flex-col gap-5">
+              <label className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">제목</span>
                 <Input
                   value={form.title}
                   onChange={(e) =>
@@ -312,9 +313,9 @@ const NoticeManager = () => {
                 />
               </label>
 
-              <div className="flex flex-col gap-2">
-                <span className="text-xs font-medium text-gray-600">
-                  이미지 {form.images.length > 0 && `(${form.images.length}장)`}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">
+                  이미지{form.images.length > 0 && ` (${form.images.length}장)`}
                 </span>
                 {form.images.length > 0 && (
                   <div className="flex gap-2 overflow-x-auto pb-1">
@@ -372,25 +373,29 @@ const NoticeManager = () => {
                 </label>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-medium text-gray-600">본문</span>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">본문</span>
                 <textarea
                   value={form.body}
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, body: e.target.value }))
                   }
-                  placeholder={
-                    "본문 (마크다운)\n\n**굵게**\n- 항목\n- 항목\n\n빈 줄로 문단을 나눕니다"
-                  }
-                  className="min-h-40 rounded-md border border-input bg-background p-3 font-mono text-xs leading-relaxed"
+                  placeholder={"공지 내용을 적어주세요.\n\n**굵게**\n- 항목"}
+                  className="min-h-32 rounded-md border border-input bg-background p-3 font-mono text-xs leading-relaxed"
                 />
-                <span className="text-[11px] text-gray-400">
-                  <code>**굵게**</code> · <code>- 항목</code> · 빈 줄로 문단 구분
+                <span className="flex flex-wrap items-center gap-1 text-[11px] text-gray-400">
+                  <code className="rounded bg-gray-100 px-1 py-0.5 text-gray-600">
+                    **굵게**
+                  </code>
+                  <code className="rounded bg-gray-100 px-1 py-0.5 text-gray-600">
+                    - 항목
+                  </code>
+                  <span>· 빈 줄로 문단 구분</span>
                 </span>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-medium text-gray-600">
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">
                   버튼 (선택)
                 </span>
                 <Input
@@ -413,9 +418,9 @@ const NoticeManager = () => {
                 </span>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-medium text-gray-600">
-                  노출 대상 · 종료일시
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">
+                  노출 대상
                 </span>
                 <Select
                   value={form.target}
@@ -436,6 +441,12 @@ const NoticeManager = () => {
                     </SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">
+                  종료일시
+                </span>
                 <Input
                   type="datetime-local"
                   value={form.endsAt}
@@ -449,8 +460,9 @@ const NoticeManager = () => {
               </div>
             </div>
           )}
+          </div>
 
-          <DialogFooter className="flex-row justify-end gap-2">
+          <DialogFooter className="flex-row justify-end gap-2 border-t px-5 py-3">
             <Button
               variant="secondary"
               onClick={() => setIsEditorOpen(false)}
