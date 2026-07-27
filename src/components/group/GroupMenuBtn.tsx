@@ -60,7 +60,6 @@ const GroupMenuBtn: React.FC = () => {
   const fetchGroupListByUserId = useBaseStore(
     (state) => state.fetchGroupListByUserId
   );
-  const setExternalUrl = useBaseStore((state) => state.setExternalUrl);
 
   const isGroupListPage = window.location.pathname === "/group";
 
@@ -129,8 +128,8 @@ const GroupMenuBtn: React.FC = () => {
 
   const onClickOpenNotice = () => {
     setIsOpenGroupMenuSheet(false);
-    analyticsTrack("클릭_카카오_소식", {});
-    setExternalUrl("https://pf.kakao.com/_XaHDG/posts");
+    analyticsTrack("클릭_공지사항", {});
+    navigate("/notice");
   };
   const onClickOpenTutorial = () => {
     setIsOpenGroupMenuSheet(false);

@@ -40,6 +40,30 @@ export const fetchActiveNotice = async (): Promise<Notice | null> => {
   }
 };
 
+/**
+ * 사용자 공지사항 목록.
+ * 게시판이므로 종료된 공지도 보여주고, 예약(시작 전)·중지 공지만 제외한다.
+ */
+export const fetchPublicNoticeList = async (): Promise<Notice[] | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("notice")
+      .select("*")
+      .eq("is_active", true)
+      .lte("starts_at", new Date().toISOString())
+      .order("starts_at", { ascending: false });
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
+  }
+};
+
 /** 알림함에서 공지 알림을 눌렀을 때 — 기간이 지난 공지는 RLS에 막혀 null */
 export const fetchNoticeById = async (
   noticeId: string,

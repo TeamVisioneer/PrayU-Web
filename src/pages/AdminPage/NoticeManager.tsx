@@ -290,9 +290,8 @@ const NoticeManager = () => {
                   ctaUrl={form.ctaUrl || null}
                 />
               </div>
-              <div className="flex items-center justify-between px-1 pt-1 text-sm text-white/70">
-                <span className="px-3 py-2">다음에 보지 않기</span>
-                <span className="px-3 py-2">닫기</span>
+              <div className="mx-auto mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md">
+                <X className="h-5 w-5 text-gray-700" />
               </div>
             </div>
           ) : (
