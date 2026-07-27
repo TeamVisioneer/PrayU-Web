@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
@@ -48,14 +48,15 @@ const QuietTimePage = () => {
       ? null
       : Math.max(0, QT_DAILY_LIMIT - todayUsedCount);
 
-  const refreshUsage = () => {
-    fetchTodayLlmUsage("qt").then(setTodayUsedCount);
-  };
+  const refreshUsage = useCallback(() => {
+    if (!user) return;
+    fetchTodayLlmUsage(user.id, "qt").then(setTodayUsedCount);
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
     refreshUsage();
-  }, [user]);
+  }, [user, refreshUsage]);
 
   useEffect(() => {
     if (!user) return;
