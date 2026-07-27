@@ -251,28 +251,8 @@ const NoticeManager = () => {
 
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
         <DialogContent className="flex max-h-[85vh] w-11/12 flex-col gap-0 overflow-hidden rounded-xl p-0">
-          <DialogHeader className="space-y-1 border-b px-5 py-4 text-left">
-            {/* pr-10: 우상단 닫기(X) 버튼과 겹치지 않게 */}
-            <div className="flex items-center justify-between gap-2 pr-10">
-              <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
-              <button
-                type="button"
-                onClick={() => setIsPreview((prev) => !prev)}
-                className="flex shrink-0 items-center gap-1 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-200"
-              >
-                {isPreview ? (
-                  <>
-                    <Pencil className="h-3.5 w-3.5" />
-                    편집
-                  </>
-                ) : (
-                  <>
-                    <Eye className="h-3.5 w-3.5" />
-                    미리보기
-                  </>
-                )}
-              </button>
-            </div>
+          <DialogHeader className="space-y-1 border-b px-5 py-4 pr-12 text-left">
+            <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
             <DialogDescription className="text-xs">
               {isPreview
                 ? "사용자에게 보이는 그대로입니다."
@@ -383,39 +363,38 @@ const NoticeManager = () => {
                   placeholder={"공지 내용을 적어주세요.\n\n**굵게**\n- 항목"}
                   className="min-h-32 rounded-md border border-input bg-background p-3 font-mono text-xs leading-relaxed"
                 />
-                <span className="flex flex-wrap items-center gap-1 text-[11px] text-gray-400">
-                  <code className="rounded bg-gray-100 px-1 py-0.5 text-gray-600">
-                    **굵게**
-                  </code>
-                  <code className="rounded bg-gray-100 px-1 py-0.5 text-gray-600">
-                    - 항목
-                  </code>
-                  <span>· 빈 줄로 문단 구분</span>
-                </span>
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs font-medium text-gray-700">
-                  버튼 (선택)
-                </span>
-                <Input
-                  value={form.ctaLabel}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, ctaLabel: e.target.value }))
-                  }
-                  placeholder="버튼 문구 — 예: 말씀카드 만들러 가기"
-                />
-                <Input
-                  value={form.ctaUrl}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, ctaUrl: e.target.value }))
-                  }
-                  placeholder="이동 링크 — 예: /bible-card/new"
-                />
-                <span className="text-[11px] text-gray-400">
-                  둘 다 입력해야 버튼이 노출됩니다. 앱 내 이동은 /로 시작하는
-                  경로, 외부는 https:// 주소를 넣으세요.
-                </span>
+              <div className="flex flex-col gap-3 rounded-lg border border-gray-200 p-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-gray-700">
+                    버튼
+                  </span>
+                  <span className="text-[11px] text-gray-400">선택</span>
+                </div>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">문구</span>
+                  <Input
+                    value={form.ctaLabel}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, ctaLabel: e.target.value }))
+                    }
+                    placeholder="예: 말씀카드 만들러 가기"
+                  />
+                </label>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">이동 링크</span>
+                  <Input
+                    value={form.ctaUrl}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, ctaUrl: e.target.value }))
+                    }
+                    placeholder="예: /bible-card/new"
+                  />
+                  <span className="text-[11px] text-gray-400">
+                    앱 내 이동은 /로 시작하는 경로, 외부는 https:// 주소
+                  </span>
+                </label>
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -462,7 +441,25 @@ const NoticeManager = () => {
           )}
           </div>
 
-          <DialogFooter className="flex-row justify-end gap-2 border-t px-5 py-3">
+          <DialogFooter className="flex-row items-center justify-between gap-2 border-t px-5 py-3 sm:justify-between">
+            <button
+              type="button"
+              onClick={() => setIsPreview((prev) => !prev)}
+              className="flex shrink-0 items-center gap-1 rounded-full bg-gray-100 px-3 py-2 text-xs font-medium text-gray-600 transition hover:bg-gray-200"
+            >
+              {isPreview ? (
+                <>
+                  <Pencil className="h-3.5 w-3.5" />
+                  편집
+                </>
+              ) : (
+                <>
+                  <Eye className="h-3.5 w-3.5" />
+                  미리보기
+                </>
+              )}
+            </button>
+            <div className="flex items-center gap-2">
             <Button
               variant="secondary"
               onClick={() => setIsEditorOpen(false)}
@@ -473,6 +470,7 @@ const NoticeManager = () => {
             <Button variant="primary" onClick={handleSave} disabled={isSaving}>
               {isSaving ? "저장 중..." : editingId ? "수정 저장" : "만들기"}
             </Button>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
