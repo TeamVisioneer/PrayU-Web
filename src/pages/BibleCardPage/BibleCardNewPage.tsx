@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { Info, Repeat } from "lucide-react";
@@ -281,9 +281,10 @@ const BibleCardNewPage = () => {
           BIBLE_CARD_DAILY_LIMIT + (todayRewardCount ?? 0) - todayUsedCount,
         );
 
-  const refreshQuota = () => {
-    fetchTodayBibleCardUsage().then(setTodayUsedCount);
-    fetchTodayShareReward("bible_card").then((rewards) => {
+  const refreshQuota = useCallback(() => {
+    if (!user) return;
+    fetchTodayBibleCardUsage(user.id).then(setTodayUsedCount);
+    fetchTodayShareReward(user.id, "bible_card").then((rewards) => {
       if (rewards === null) return;
       // 공유 보상(웹훅)은 비동기 도착 — 복귀 시 증가를 감지해 안내
       if (prevRewardRef.current !== null && rewards > prevRewardRef.current) {
@@ -292,7 +293,7 @@ const BibleCardNewPage = () => {
       prevRewardRef.current = rewards;
       setTodayRewardCount(rewards);
     });
-  };
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -303,7 +304,7 @@ const BibleCardNewPage = () => {
     };
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);
-  }, [user]);
+  }, [user, refreshQuota]);
 
   useEffect(() => {
     if (!user) return;

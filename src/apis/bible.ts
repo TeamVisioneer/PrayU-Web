@@ -112,5 +112,6 @@ export const searchBible = async (
 };
 
 // KST 기준 오늘 말씀카드 생성(LLM 호출) 횟수 — 공용 조회로 위임
-export const fetchTodayBibleCardUsage = (): Promise<number | null> =>
-  fetchTodayLlmUsage("bible_card");
+export const fetchTodayBibleCardUsage = (
+  userId: string,
+): Promise<number | null> => fetchTodayLlmUsage(userId, "bible_card");
