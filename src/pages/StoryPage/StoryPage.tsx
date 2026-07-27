@@ -23,7 +23,7 @@ const StoryPage = () => {
 
       <img
         src="/images/story/prayu_1000_600.png"
-        className="w-full max-w-[480px] h-auto"
+        className="w-full max-w-app h-auto"
         onClick={() => onClickStartPrayU()}
       />
       <div className="font-sans text-center">

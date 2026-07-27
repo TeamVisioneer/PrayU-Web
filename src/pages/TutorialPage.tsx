@@ -268,7 +268,7 @@ const TutorialPage: React.FC = () => {
 
   const DimUI = (
     <div
-      className="fixed inset-x-0 z-30 top-0 mx-auto w-full h-full max-w-[480px] bg-black/80 flex flex-col items-center p-5 text-white gap-10"
+      className="fixed inset-x-0 z-30 top-0 mx-auto w-full h-full max-w-app bg-black/80 flex flex-col items-center p-5 text-white gap-10"
       onClick={(e) => {
         const clickedX = e.clientX;
         const windowWidth = window.innerWidth;
