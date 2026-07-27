@@ -616,12 +616,12 @@ const BibleCardNewPage = () => {
           >
             <p className="text-[22px] font-bold leading-snug text-gray-950">
               {!selectedPrayCard
-                ? "말씀을 붙일 기도카드를 골라주세요"
+                ? "기도카드를 골라주세요"
                 : selectedBibleCard
                   ? "말씀카드가 연결되었어요"
                   : isCreating
-                    ? "이 기도에 어울리는 말씀을 찾고 있어요"
-                    : "이 기도에 어울리는 말씀을 찾아드릴게요"}
+                    ? "어울리는 말씀을 찾고 있어요"
+                    : "어울리는 말씀을 찾아드릴게요"}
             </p>
             <p className="mt-2 text-sm leading-relaxed text-gray-500">
               {!selectedPrayCard
@@ -703,33 +703,38 @@ const BibleCardNewPage = () => {
                       "뒷면에 말씀카드 만들기"
                     )}
                   </Button>
-                  {selectedPrayCard && !isCreating && remainingCount !== null && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        analyticsTrack("클릭_말씀카드_안내", {
-                          where: "BibleCardNewPage",
-                        });
-                        setIsGuideOpen(true);
-                      }}
-                      className="mx-auto mt-2 flex items-center gap-1 text-xs text-gray-400 transition hover:text-gray-500"
-                    >
-                      <span>
-                        {remainingCount > 0
-                          ? `오늘 남은 생성 ${remainingCount}회`
-                          : "카카오톡으로 공유하면 1회 더 만들 수 있어요"}
-                      </span>
-                      <Info className="h-3.5 w-3.5" strokeWidth={2} />
-                    </button>
-                  )}
+                  {/* 보조 액션 한 줄: 좌 = 횟수 안내(시트), 우 = 카드 변경 */}
                   {selectedPrayCard && !isCreating && (
-                    <button
-                      type="button"
-                      onClick={() => setIsDrawerOpen(true)}
-                      className="mx-auto mt-3 block px-3 py-2 text-sm font-medium text-gray-400 transition hover:text-gray-500"
-                    >
-                      다른 기도카드 선택
-                    </button>
+                    <div className="mt-3 flex items-center justify-between">
+                      {remainingCount !== null ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            analyticsTrack("클릭_말씀카드_안내", {
+                              where: "BibleCardNewPage",
+                            });
+                            setIsGuideOpen(true);
+                          }}
+                          className="flex items-center gap-1 py-2 text-xs text-gray-400 transition hover:text-gray-500"
+                        >
+                          <span>
+                            {remainingCount > 0
+                              ? `오늘 남은 생성 ${remainingCount}회`
+                              : "공유하면 1회 더 만들 수 있어요"}
+                          </span>
+                          <Info className="h-3.5 w-3.5" strokeWidth={2} />
+                        </button>
+                      ) : (
+                        <span />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setIsDrawerOpen(true)}
+                        className="py-2 text-xs font-medium text-blue-500 transition hover:text-blue-600"
+                      >
+                        다른 카드 선택
+                      </button>
+                    </div>
                   )}
                 </motion.div>
               )}
