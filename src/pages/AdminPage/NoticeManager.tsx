@@ -1,35 +1,90 @@
 import { useCallback, useEffect, useState } from "react";
+import { Eye, ImagePlus, Loader2, Pencil, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
+import NoticeContent from "@/components/notice/NoticeContent";
+import { getPublicUrl, uploadImage } from "@/apis/file";
 import {
   createNotice,
   fetchNoticeList,
-  parseNoticeSlides,
+  parseNoticeImages,
   updateNotice,
 } from "@/apis/notice";
-import { Notice, NoticeSlide } from "../../../supabase/types/tables";
+import { Notice } from "../../../supabase/types/tables";
 import { TablesInsert } from "../../../supabase/types/database";
 
-const emptySlide: NoticeSlide = { image_url: "", tip: "", description: [] };
+interface NoticeForm {
+  title: string;
+  body: string;
+  images: string[];
+  ctaLabel: string;
+  ctaUrl: string;
+  target: "all" | "existing";
+  startsAt: string;
+  endsAt: string;
+}
+
+const emptyForm = (): NoticeForm => ({
+  title: "",
+  body: "",
+  images: [],
+  ctaLabel: "",
+  ctaUrl: "",
+  target: "all",
+  startsAt: "",
+  endsAt: "",
+});
+
+/** ISO → datetime-local 입력값(YYYY-MM-DDTHH:mm). 로컬 시간 기준으로 맞춘다 */
+const toLocalInputValue = (iso: string | null): string => {
+  if (!iso) return "";
+  const date = new Date(iso);
+  const offsetMs = date.getTimezoneOffset() * 60 * 1000;
+  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
+};
+
+const noticeStatus = (notice: Notice) => {
+  if (!notice.is_active) return { label: "중지", className: "bg-gray-400" };
+  const now = Date.now();
+  if (new Date(notice.starts_at).getTime() > now) {
+    return { label: "예약", className: "bg-amber-500" };
+  }
+  if (notice.ends_at && new Date(notice.ends_at).getTime() <= now) {
+    return { label: "종료", className: "bg-gray-400" };
+  }
+  return { label: "노출중", className: "bg-blue-500" };
+};
 
 /**
- * 어드민 공지 관리 — 목록 / 작성 / 수정 / 활성 토글.
+ * 어드민 공지 관리 — 목록이 기본 화면이고, 작성·수정은 모달에서 한다.
  * 쓰기 권한은 notice 테이블 RLS(is_admin)가 강제한다.
  */
 const NoticeManager = () => {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-
-  const [title, setTitle] = useState("");
-  const [ctaLabel, setCtaLabel] = useState("");
-  const [ctaUrl, setCtaUrl] = useState("");
-  const [target, setTarget] = useState<"all" | "existing">("all");
-  const [endsAt, setEndsAt] = useState("");
-  const [slides, setSlides] = useState<NoticeSlide[]>([{ ...emptySlide }]);
+  const [form, setForm] = useState<NoticeForm>(emptyForm());
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const loadNotices = useCallback(async () => {
     setIsLoading(true);
@@ -46,66 +101,86 @@ const NoticeManager = () => {
     loadNotices();
   }, [loadNotices]);
 
-  const resetForm = () => {
+  const openCreate = () => {
     setEditingId(null);
-    setTitle("");
-    setCtaLabel("");
-    setCtaUrl("");
-    setTarget("all");
-    setEndsAt("");
-    setSlides([{ ...emptySlide }]);
+    setForm(emptyForm());
+    setIsPreview(false);
+    setIsEditorOpen(true);
   };
 
-  const startEdit = (notice: Notice) => {
+  const openEdit = (notice: Notice) => {
     setEditingId(notice.id);
-    setTitle(notice.title);
-    setCtaLabel(notice.cta_label || "");
-    setCtaUrl(notice.cta_url || "");
-    setTarget(notice.target === "existing" ? "existing" : "all");
-    setEndsAt(notice.ends_at ? notice.ends_at.slice(0, 16) : "");
-    const parsed = parseNoticeSlides(notice.slides);
-    setSlides(parsed.length > 0 ? parsed : [{ ...emptySlide }]);
+    setForm({
+      title: notice.title,
+      body: notice.body || "",
+      images: parseNoticeImages(notice.images),
+      ctaLabel: notice.cta_label || "",
+      ctaUrl: notice.cta_url || "",
+      target: notice.target === "existing" ? "existing" : "all",
+      startsAt: toLocalInputValue(notice.starts_at),
+      endsAt: toLocalInputValue(notice.ends_at),
+    });
+    setIsPreview(false);
+    setIsEditorOpen(true);
   };
 
-  const updateSlide = (index: number, patch: Partial<NoticeSlide>) => {
-    setSlides((prev) =>
-      prev.map((slide, i) => (i === index ? { ...slide, ...patch } : slide)),
-    );
+  /** 공지 이미지 업로드 — 기존 prayu 버킷의 notice/ 경로를 쓴다 */
+  const handleUploadImages = async (files: FileList) => {
+    setIsUploading(true);
+    const uploadedUrls: string[] = [];
+    for (const file of Array.from(files)) {
+      const safeName = file.name.replace(/[^\w.-]/g, "_");
+      const uploaded = await uploadImage(
+        file,
+        `notice/${Date.now()}-${safeName}`,
+      );
+      if (!uploaded) continue;
+      const publicUrl = getPublicUrl(uploaded.path);
+      if (publicUrl) uploadedUrls.push(publicUrl);
+    }
+    setIsUploading(false);
+
+    if (uploadedUrls.length === 0) {
+      toast({ description: "이미지 업로드에 실패했어요" });
+      return;
+    }
+    setForm((prev) => ({ ...prev, images: [...prev.images, ...uploadedUrls] }));
   };
 
-  const handleSubmit = async () => {
-    if (!title.trim()) {
+  const handleSave = async () => {
+    if (!form.title.trim()) {
       toast({ description: "제목을 입력해 주세요" });
       return;
     }
-    // 빈 슬라이드는 저장하지 않는다
-    const cleanedSlides = slides.filter(
-      (slide) =>
-        slide.image_url?.trim() ||
-        slide.tip?.trim() ||
-        (slide.description || []).length > 0,
-    );
 
+    setIsSaving(true);
     const payload = {
-      title: title.trim(),
-      // NoticeSlide는 앱에서 정의한 형태 — 컬럼은 jsonb라 Json으로 넘긴다
-      slides: cleanedSlides as unknown as TablesInsert<"notice">["slides"],
-      cta_label: ctaLabel.trim() || null,
-      cta_url: ctaUrl.trim() || null,
-      target,
-      ends_at: endsAt ? new Date(endsAt).toISOString() : null,
+      title: form.title.trim(),
+      body: form.body.trim() || null,
+      // 컬럼은 jsonb라 URL 배열을 Json으로 넘긴다
+      images: form.images as unknown as TablesInsert<"notice">["images"],
+      cta_label: form.ctaLabel.trim() || null,
+      cta_url: form.ctaUrl.trim() || null,
+      target: form.target,
+      ends_at: form.endsAt ? new Date(form.endsAt).toISOString() : null,
+      // 시작일시를 비우면: 새 공지는 지금부터(DB default), 수정은 기존 값 유지
+      ...(form.startsAt
+        ? { starts_at: new Date(form.startsAt).toISOString() }
+        : {}),
     };
-
     const saved = editingId
       ? await updateNotice(editingId, payload)
       : await createNotice(payload);
+    setIsSaving(false);
 
     if (!saved) {
       toast({ description: "저장에 실패했어요" });
       return;
     }
-    toast({ description: editingId ? "공지를 수정했어요" : "공지를 만들었어요" });
-    resetForm();
+    toast({
+      description: editingId ? "공지를 수정했어요" : "공지를 만들었어요",
+    });
+    setIsEditorOpen(false);
     loadNotices();
   };
 
@@ -121,170 +196,312 @@ const NoticeManager = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Card className="w-full">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">
-            {editingId ? "공지 수정" : "새 공지 작성"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목 (예: 새로워진 말씀카드)"
-          />
-          <div className="flex flex-col gap-3 md:flex-row">
-            <Input
-              value={ctaLabel}
-              onChange={(e) => setCtaLabel(e.target.value)}
-              placeholder="CTA 문구 (예: 말씀카드 만들러 가기)"
-            />
-            <Input
-              value={ctaUrl}
-              onChange={(e) => setCtaUrl(e.target.value)}
-              placeholder="CTA 이동 경로 (예: /bible-card/new)"
-            />
-          </div>
-          <div className="flex flex-col gap-3 md:flex-row">
-            <select
-              value={target}
-              onChange={(e) =>
-                setTarget(e.target.value === "existing" ? "existing" : "all")
-              }
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-            >
-              <option value="all">전체 사용자</option>
-              <option value="existing">기존 사용자만 (신규 가입자 제외)</option>
-            </select>
-            <div className="flex flex-1 items-center gap-2">
-              <span className="shrink-0 text-sm text-gray-500">종료일시</span>
-              <Input
-                type="datetime-local"
-                value={endsAt}
-                onChange={(e) => setEndsAt(e.target.value)}
-              />
-            </div>
-          </div>
+    <div className="flex w-full flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-gray-500">
+          {isLoading ? "불러오는 중..." : `공지 ${notices.length}개`}
+        </span>
+        <Button
+          variant="primary"
+          onClick={openCreate}
+          className="flex h-9 items-center gap-1 px-3 text-sm"
+        >
+          <Plus className="h-4 w-4" />새 공지
+        </Button>
+      </div>
 
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className="flex flex-col gap-2 rounded-md border p-3"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-gray-500">
-                  슬라이드 {index + 1}
-                </span>
-                {slides.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSlides((prev) => prev.filter((_, i) => i !== index))
-                    }
-                    className="text-xs text-gray-400 hover:text-gray-600"
-                  >
-                    삭제
-                  </button>
-                )}
-              </div>
-              <Input
-                value={slide.image_url || ""}
-                onChange={(e) => updateSlide(index, { image_url: e.target.value })}
-                placeholder="이미지 경로 (예: /images/notice/bible_card.png)"
-              />
-              <Input
-                value={slide.tip || ""}
-                onChange={(e) => updateSlide(index, { tip: e.target.value })}
-                placeholder="소제목 (예: 이렇게 달라졌어요)"
-              />
-              <textarea
-                value={(slide.description || []).join("\n")}
-                onChange={(e) =>
-                  updateSlide(index, {
-                    description: e.target.value
-                      .split("\n")
-                      .filter((line) => line.trim().length > 0),
-                  })
-                }
-                placeholder="본문 — 줄바꿈으로 구분"
-                className="min-h-20 rounded-md border border-input bg-background p-3 text-sm"
-              />
-            </div>
-          ))}
-
-          <div className="flex gap-2">
-            <Button
-              variant="primaryLight"
-              onClick={() => setSlides((prev) => [...prev, { ...emptySlide }])}
-            >
-              슬라이드 추가
-            </Button>
-            <Button variant="primary" onClick={handleSubmit}>
-              {editingId ? "수정 저장" : "공지 만들기"}
-            </Button>
-            {editingId && (
-              <Button variant="secondary" onClick={resetForm}>
-                취소
-              </Button>
-            )}
+      <div className="flex flex-col gap-2">
+        {!isLoading && notices.length === 0 && (
+          <div className="rounded-xl bg-white py-10 text-center text-sm text-gray-500">
+            등록된 공지가 없어요. 새 공지를 만들어 보세요.
           </div>
-        </CardContent>
-      </Card>
-
-      <Card className="w-full">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">
-            공지 목록 {isLoading && "(불러오는 중...)"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="divide-y">
-          {notices.length === 0 && !isLoading && (
-            <div className="py-6 text-center text-sm text-gray-500">
-              등록된 공지가 없습니다.
-            </div>
-          )}
-          {notices.map((notice) => (
+        )}
+        {notices.map((notice) => {
+          const status = noticeStatus(notice);
+          const imageCount = parseNoticeImages(notice.images).length;
+          return (
             <div
               key={notice.id}
-              className="flex items-center justify-between gap-3 py-3"
+              className="flex flex-col gap-2 rounded-xl bg-white p-4"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="truncate text-sm font-medium">
-                    {notice.title}
-                  </span>
-                  <Badge
-                    className={
-                      notice.is_active ? "bg-blue-500" : "bg-gray-400"
-                    }
-                  >
-                    {notice.is_active ? "노출중" : "중지"}
-                  </Badge>
+                  <Badge className={status.className}>{status.label}</Badge>
                   {notice.target === "existing" && (
                     <Badge className="bg-gray-500">기존 사용자</Badge>
                   )}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="mt-1.5 truncate text-sm font-semibold">
+                  {notice.title}
+                </div>
+                <div className="mt-0.5 text-xs text-gray-400">
                   {notice.starts_at.slice(0, 10)}
-                  {notice.ends_at ? ` ~ ${notice.ends_at.slice(0, 10)}` : " ~"}
+                  {notice.ends_at
+                    ? ` ~ ${notice.ends_at.slice(0, 10)}`
+                    : " ~ 무기한"}
+                  {` · 이미지 ${imageCount}장`}
+                  {notice.cta_label ? ` · CTA "${notice.cta_label}"` : ""}
                 </div>
               </div>
-              <div className="flex shrink-0 gap-2">
-                <Button variant="secondary" onClick={() => startEdit(notice)}>
+              <div className="flex gap-2">
+                <Button
+                  variant="secondary"
+                  className="h-8 flex-1 text-sm"
+                  onClick={() => openEdit(notice)}
+                >
                   수정
                 </Button>
                 <Button
                   variant="primaryLight"
+                  className="h-8 flex-1 text-sm"
                   onClick={() => handleToggleActive(notice)}
                 >
                   {notice.is_active ? "중지" : "노출"}
                 </Button>
               </div>
             </div>
-          ))}
-        </CardContent>
-      </Card>
+          );
+        })}
+      </div>
+
+      <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
+        <DialogContent className="flex max-h-[85vh] w-11/12 flex-col gap-0 overflow-hidden rounded-xl p-0">
+          <DialogHeader className="space-y-1 border-b px-5 py-4 pr-12 text-left">
+            <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
+            <DialogDescription className="text-xs">
+              {isPreview
+                ? "사용자에게 보이는 그대로입니다."
+                : "이미지는 넘겨 보고, 본문은 이미지 아래에 표시됩니다."}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex-1 overflow-y-auto px-5 py-4">
+          {isPreview ? (
+            // 실제 공지 모달과 같은 구성(어두운 배경 · 카드 · 카드 밖 보조 액션)으로 그린다
+            <div className="rounded-xl bg-gray-800 p-4">
+              <div className="w-full rounded-2xl bg-white pb-5">
+                <div className="px-5 pt-5 text-lg font-semibold">
+                  📢 {form.title || "(제목 없음)"}
+                </div>
+                <NoticeContent
+                  images={form.images}
+                  body={form.body}
+                  ctaLabel={form.ctaLabel || null}
+                  ctaUrl={form.ctaUrl || null}
+                />
+              </div>
+              <div className="flex items-center justify-between px-1 pt-1 text-sm text-white/70">
+                <span className="px-3 py-2">다음에 보지 않기</span>
+                <span className="px-3 py-2">닫기</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-5">
+              <label className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">제목</span>
+                <Input
+                  value={form.title}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  placeholder="예: 새로워진 말씀카드"
+                />
+              </label>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">
+                  이미지{form.images.length > 0 && ` (${form.images.length}장)`}
+                </span>
+                {form.images.length > 0 && (
+                  <div className="flex gap-2 overflow-x-auto pb-1">
+                    {form.images.map((url, index) => (
+                      <div key={index} className="relative shrink-0">
+                        <img
+                          src={url}
+                          alt={`이미지 ${index + 1}`}
+                          className="h-24 w-24 rounded-md object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setForm((prev) => ({
+                              ...prev,
+                              images: prev.images.filter((_, i) => i !== index),
+                            }))
+                          }
+                          className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-white"
+                          aria-label="이미지 제거"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                        <span className="absolute bottom-1 left-1 rounded bg-black/60 px-1 text-[10px] text-white">
+                          {index + 1}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <label className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed border-gray-300 py-5 text-xs text-gray-500 hover:bg-gray-50">
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      업로드 중...
+                    </>
+                  ) : (
+                    <>
+                      <ImagePlus className="h-5 w-5" />
+                      이미지 올리기 (여러 장 선택 가능)
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    disabled={isUploading}
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (files && files.length > 0) handleUploadImages(files);
+                      e.target.value = "";
+                    }}
+                  />
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-gray-700">본문</span>
+                <textarea
+                  value={form.body}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, body: e.target.value }))
+                  }
+                  placeholder={"공지 내용을 적어주세요.\n\n**굵게**\n- 항목"}
+                  className="min-h-32 rounded-md border border-input bg-background p-3 font-mono text-xs leading-relaxed"
+                />
+              </div>
+
+              <div className="flex flex-col gap-3 rounded-lg border border-gray-200 p-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-gray-700">
+                    버튼
+                  </span>
+                  <span className="text-[11px] text-gray-400">선택</span>
+                </div>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">문구</span>
+                  <Input
+                    value={form.ctaLabel}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, ctaLabel: e.target.value }))
+                    }
+                    placeholder="예: 말씀카드 만들러 가기"
+                  />
+                </label>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">이동 링크</span>
+                  <Input
+                    value={form.ctaUrl}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, ctaUrl: e.target.value }))
+                    }
+                    placeholder="예: /bible-card/new"
+                  />
+                  <span className="text-[11px] text-gray-400">
+                    앱 내 이동은 /로 시작하는 경로, 외부는 https:// 주소
+                  </span>
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-3 rounded-lg border border-gray-200 p-3">
+                <span className="text-xs font-medium text-gray-700">
+                  노출 설정
+                </span>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">대상</span>
+                  <Select
+                    value={form.target}
+                    onValueChange={(value) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        target: value === "existing" ? "existing" : "all",
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">전체 사용자</SelectItem>
+                      <SelectItem value="existing">
+                        기존 사용자만 (신규 가입자 제외)
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">시작</span>
+                  <Input
+                    type="datetime-local"
+                    value={form.startsAt}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, startsAt: e.target.value }))
+                    }
+                  />
+                  <span className="text-[11px] text-gray-400">
+                    비워두면 저장 즉시 시작됩니다.
+                  </span>
+                </label>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">종료</span>
+                  <Input
+                    type="datetime-local"
+                    value={form.endsAt}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, endsAt: e.target.value }))
+                    }
+                  />
+                  <span className="text-[11px] text-gray-400">
+                    비워두면 중지할 때까지 계속 노출됩니다.
+                  </span>
+                </label>
+              </div>
+            </div>
+          )}
+          </div>
+
+          <DialogFooter className="flex-row items-center justify-between gap-2 border-t px-5 py-3 sm:justify-between">
+            <button
+              type="button"
+              onClick={() => setIsPreview((prev) => !prev)}
+              className="flex shrink-0 items-center gap-1 rounded-full bg-gray-100 px-3 py-2 text-xs font-medium text-gray-600 transition hover:bg-gray-200"
+            >
+              {isPreview ? (
+                <>
+                  <Pencil className="h-3.5 w-3.5" />
+                  편집
+                </>
+              ) : (
+                <>
+                  <Eye className="h-3.5 w-3.5" />
+                  미리보기
+                </>
+              )}
+            </button>
+            <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              onClick={() => setIsEditorOpen(false)}
+              disabled={isSaving}
+            >
+              취소
+            </Button>
+            <Button variant="primary" onClick={handleSave} disabled={isSaving}>
+              {isSaving ? "저장 중..." : editingId ? "수정 저장" : "만들기"}
+            </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

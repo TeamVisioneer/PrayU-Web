@@ -22,8 +22,19 @@
 
 - [ ] **`NewAdminPage.tsx` 삭제** — 533줄 전부 mock 데이터이며 실데이터에 연결된 적 없음. `/admin/new` 라우트도 함께 제거
 - [ ] **어드민 접근 제어를 `is_admin` 기반으로 교체** — 현재 컴포넌트 내 이메일 하드코딩 allowlist
-- [ ] **공지 알림에 `notice_id` 연결** — `NotificationDialog`(어드민 발송 폼)가 `notification.data`에 `notice_id`를 넣지 않아, 알림함에서 공지를 눌러도 모달이 열리지 않고 읽음 처리만 된다. 발송 시 공지를 선택해 연결하도록 보완
+- [x] ~~공지 알림에 `notice_id` 연결~~ — **불필요해짐**. 어드민 공지 알림 발송(`NotificationDialog`)이 레거시로 판단되어 제거됐다(#471). 알림함의 기존 공지 알림은 본문이 목록에 그대로 보이므로 읽음 처리만 한다. 공지 알림 발송이 다시 필요해지면 그때 `notice_id` 연결과 함께 설계
 - [ ] **신고 payload에 `pray_card_id` 추가** — `ReportAlert`가 Discord로 보내는 내용에 대상 카드 ID가 없어 어드민이 삭제할 카드를 특정할 수 없다
+
+## RLS 감사 결과 (2026-07-27)
+
+앱 쿼리가 RLS에 암묵적으로 기대는 곳이 더 있는지 전수 확인했다. 결론: **사용 로그 2건 외에는 없다**(#470에서 해결).
+
+확인된 사실과 후속거리:
+
+- **모든 테이블의 SELECT 정책이 `using(true)`** — RLS가 제공하는 읽기 격리는 현재 0이다. "내 데이터" 쿼리는 전부 코드에서 필터해야 하며, 실제로 `notification`·`bible_card`·`pray`·`pray_card`·`member`·`profiles` 조회는 모두 명시 필터를 갖고 있다
+- ⚠️ **`notification` 정책 이름이 사실과 다르다** — `Enable users to view their own data only`인데 조건은 `true`다. 정책 목록만 보면 본인 것만 보인다고 오해하게 되며, 실제로는 **누구나 전체 알림 제목·본문을 조회할 수 있다**. 이름을 고치거나 정책을 실제로 좁혀야 한다 (security-backlog 1번과 함께)
+- **`fetchQtData`는 user_id 없이 본문(장·절)으로만 조회** — 다른 사용자가 만든 QT를 재사용한다. LLM 비용 절감 관점에서 의도된 캐시로 보이지만 코드에 근거가 없다. 의도라면 주석으로 명시할 것
+- `fetchTotalPrayCount`(전체 기도 수)와 어드민 프로필 검색은 의도된 전역 조회다
 
 ## 개선 아이디어 (급하지 않음)
 

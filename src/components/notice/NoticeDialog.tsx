@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -7,16 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import useBaseStore from "@/stores/baseStore";
-import { fetchActiveNotice, fetchNoticeById, parseNoticeSlides } from "@/apis/notice";
+import { fetchActiveNotice, fetchNoticeById, parseNoticeImages } from "@/apis/notice";
+import NoticeContent from "./NoticeContent";
 import { analyticsTrack } from "@/analytics/analytics";
 import { Notice } from "../../../supabase/types/tables";
 
@@ -61,8 +55,6 @@ const NoticeDialog = () => {
 
   const [notice, setNotice] = useState<Notice | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [api, setApi] = useState<CarouselApi>();
 
   // 자동 노출: 활성 공지 조회 → 이미 본 공지·대상 조건 확인
   useEffect(() => {
@@ -115,12 +107,6 @@ const NoticeDialog = () => {
     };
   }, [openNoticeId, setOpenNoticeId]);
 
-  useEffect(() => {
-    if (!api) return;
-    setCurrentIndex(api.selectedScrollSnap());
-    api.on("select", () => setCurrentIndex(api.selectedScrollSnap()));
-  }, [api]);
-
   const handleClose = useCallback(() => {
     setIsOpen(false);
     if (notice) analyticsTrack("클릭_공지_닫기", { notice_id: notice.id });
@@ -152,7 +138,7 @@ const NoticeDialog = () => {
 
   if (!notice) return null;
 
-  const slides = parseNoticeSlides(notice.slides);
+  const images = parseNoticeImages(notice.images);
 
   return (
     <Dialog
@@ -161,85 +147,46 @@ const NoticeDialog = () => {
         if (!open) handleClose();
       }}
     >
-      <DialogContent className="w-11/12 rounded-2xl border-none p-0 focus:outline-none">
-        <DialogHeader className="p-5 pb-0 text-left">
-          <DialogTitle className="text-lg">📢 {notice.title}</DialogTitle>
-          <DialogDescription className="sr-only">공지 안내</DialogDescription>
-        </DialogHeader>
+      {/* 카드 자체는 아래 div가 그린다 — DialogContent는 투명 래퍼.
+          보조 액션은 카드 밖(dim)으로 빼서 CTA만 카드 안 주 액션으로 남긴다 */}
+      <DialogContent
+        showCloseButton={false}
+        className="w-11/12 border-none bg-transparent p-0 shadow-none focus:outline-none"
+      >
+        <div className="relative w-full rounded-2xl bg-background pb-5">
+          <DialogHeader className="p-5 pb-0 pr-12 text-left">
+            <DialogTitle className="text-lg">📢 {notice.title}</DialogTitle>
+            <DialogDescription className="sr-only">공지 안내</DialogDescription>
+          </DialogHeader>
+          {/* 카드 안 닫기 — DialogContent가 투명해져 기본 X를 끄고 카드에 직접 붙인다 */}
+          <button
+            onClick={handleClose}
+            className="absolute right-4 top-5 text-gray-400 transition hover:text-gray-600"
+            aria-label="닫기"
+          >
+            <X className="h-5 w-5" />
+          </button>
 
-        {slides.length > 0 && (
-          <div className="w-full px-5">
-            <hr className="my-3" />
-            <Carousel setApi={setApi}>
-              <CarouselContent>
-                {slides.map((slide, index) => (
-                  <CarouselItem key={index}>
-                    <div className="flex h-full flex-col items-center gap-4">
-                      {slide.image_url && (
-                        <img
-                          src={slide.image_url}
-                          className="w-full rounded-lg shadow-md"
-                          alt={slide.tip || notice.title}
-                        />
-                      )}
-                      <div className="w-full space-y-2 text-left">
-                        {slide.tip && (
-                          <span className="text-sm font-bold">{slide.tip}</span>
-                        )}
-                        {(slide.description || []).map((line, lineIndex) => (
-                          <p key={lineIndex} className="text-sm text-gray-600">
-                            {line}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {slides.length > 1 && (
-                <>
-                  <div className="mt-2 flex items-center justify-center p-4">
-                    {slides.map((_, index) => (
-                      <span
-                        key={index}
-                        onClick={() => api?.scrollTo(index)}
-                        className={`mx-1 cursor-pointer rounded-full transition-colors duration-300 ${
-                          currentIndex === index
-                            ? "h-[8px] w-[8px] bg-[#608CFF]"
-                            : "h-[6px] w-[6px] bg-gray-400"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <CarouselPrevious className="-left-4 h-6 w-6" />
-                  <CarouselNext className="-right-4 h-6 w-6" />
-                </>
-              )}
-            </Carousel>
-          </div>
-        )}
+          <NoticeContent
+            images={images}
+            body={notice.body}
+            ctaLabel={notice.cta_label}
+            ctaUrl={notice.cta_url}
+            onClickCta={handleClickCta}
+          />
+        </div>
 
-        {notice.cta_label && notice.cta_url && (
-          <div className="px-5 pt-4">
-            <button
-              onClick={handleClickCta}
-              className="h-[48px] w-full rounded-xl bg-[#608CFF] text-base font-medium text-white transition hover:bg-[#4a70e2]"
-            >
-              {notice.cta_label}
-            </button>
-          </div>
-        )}
-
-        <div className="mt-4 grid w-full grid-cols-2 overflow-hidden border-t border-gray-200">
+        {/* dim 위 보조 액션 — 카드 안에는 CTA만 남기고 둘 다 여기에 둔다 */}
+        <div className="flex w-full items-center justify-center gap-2 pt-3">
           <button
             onClick={handleHideNextTime}
-            className="rounded-bl-lg p-4 font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="rounded-full border border-white/30 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
           >
             다음에 보지 않기
           </button>
           <button
             onClick={handleClose}
-            className="rounded-br-lg p-4 font-medium text-gray-700 hover:bg-gray-100"
+            className="rounded-full border border-white/30 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
           >
             닫기
           </button>

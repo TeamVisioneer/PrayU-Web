@@ -431,11 +431,13 @@ export interface BaseStore {
     currentUserId: string;
     targetUserId: string;
     content: string;
+    prayCardId: string;
   };
   setReportData: (reportData: {
     currentUserId: string;
     targetUserId: string;
     content: string;
+    prayCardId: string;
   }) => void;
 
   alertData: {
@@ -1329,6 +1331,7 @@ const useBaseStore = create<BaseStore>()(
       currentUserId: "",
       targetUserId: "",
       content: "",
+      prayCardId: "",
     },
     setReportData: (reportData) => {
       set((state) => {

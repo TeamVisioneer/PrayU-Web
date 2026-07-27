@@ -22,12 +22,7 @@ export type ThanksCard = Database["public"]["Tables"]["thanks_card"]["Row"];
 
 export type Notice = Database["public"]["Tables"]["notice"]["Row"];
 
-// notice.slides(jsonb) 구조 — DB는 jsonb라 타입이 없어 앱에서 정의한다
-export interface NoticeSlide {
-  image_url?: string;
-  tip?: string;
-  description?: string[];
-}
+// notice.images(jsonb)는 이미지 URL 배열 — DB는 jsonb라 앱에서 형태를 좁힌다
 
 export type OriginNotification =
   Database["public"]["Tables"]["notification"]["Row"];

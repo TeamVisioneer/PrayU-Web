@@ -72,6 +72,11 @@ const ReportAlert: React.FC = () => {
             { name: "제보 유저 ID", value: reportData.currentUserId },
             { name: "신고 유저 ID", value: reportData.targetUserId },
             { name: "신고 내용", value: reportData.content },
+            // 어드민이 대상 카드를 바로 특정할 수 있도록 (운영 탭에서 ID로 삭제)
+            {
+              name: "기도카드 ID",
+              value: reportData.prayCardId || "(없음)",
+            },
             { name: "신고 사유", value: reportContent },
           ],
         },
