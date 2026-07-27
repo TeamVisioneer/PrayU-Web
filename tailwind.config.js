@@ -128,6 +128,10 @@ module.exports = {
         500: "500ms",
         600: "600ms",
       },
+      maxWidth: {
+        // 앱 셸 컬럼 폭 — 셸·오버레이·하단 고정 요소가 함께 참조 (max-w-app)
+        app: "480px",
+      },
       spacing: {
         // viewport-fit=cover 환경의 노치/홈 인디케이터 영역 (예: pb-safe-bottom)
         "safe-top": "env(safe-area-inset-top)",

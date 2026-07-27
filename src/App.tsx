@@ -70,7 +70,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className={`mx-auto h-100vh overflow-x-hidden no-scrollbar bg-mainBg ${
-        isFullWidth ? "w-full" : "max-w-[480px]"
+        isFullWidth ? "w-full" : "max-w-app"
       }`}
     >
       {children}

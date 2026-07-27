@@ -23,7 +23,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ className }) => {
   return (
     <header
       className={cn(
-        "fixed top-0 max-w-[480px] mx-auto w-full bg-mainBg z-50 border-y border-l-gray-500",
+        "fixed top-0 max-w-app mx-auto w-full bg-mainBg z-50 border-y border-l-gray-500",
         className
       )}
     >
