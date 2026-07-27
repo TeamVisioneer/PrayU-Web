@@ -172,40 +172,47 @@ const PrayCardBibleBackPreview = ({
   cardOverlay?: React.ReactNode;
 }) => (
   <div className="flex w-full flex-col items-center gap-3">
-    <div className="relative w-full">
-      <button
-        type="button"
-        onClick={onFlip}
-        disabled={isCreating}
-        className="w-full perspective-1000 text-left disabled:cursor-default"
+    {/* 카드 전체가 플립 트리거 — 앞면 오버레이(버튼)를 품어야 해서 div로 둔다 */}
+    <div
+      role="button"
+      tabIndex={isCreating ? -1 : 0}
+      onClick={isCreating ? undefined : onFlip}
+      onKeyDown={(e) => {
+        if (isCreating) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onFlip();
+        }
+      }}
+      className="w-full perspective-1000 text-left"
+    >
+      <div
+        className={`relative aspect-[3/4] w-full transition-transform duration-700 transform-style-preserve-3d ${
+          isFlipped ? "rotate-y-180" : ""
+        }`}
       >
-        <div
-          className={`relative aspect-[3/4] w-full transition-transform duration-700 transform-style-preserve-3d ${
-            isFlipped ? "rotate-y-180" : ""
-          }`}
-        >
-          <div className="absolute inset-0 backface-hidden">
-            <PrayCard prayCard={prayCard} isMoreBtn={false} editable={false} />
-          </div>
-          <div className="absolute inset-0 rotate-y-180 backface-hidden">
-            {bibleCard ? (
-              <motion.div
-                className="h-full w-full"
-                initial={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
-              >
-                <BibleCardView bibleCard={bibleCard} />
-              </motion.div>
-            ) : (
-              <EmptyBibleCardBackSlot isCreating={isCreating} />
-            )}
-          </div>
+        <div className="absolute inset-0 backface-hidden">
+          <PrayCard prayCard={prayCard} isMoreBtn={false} editable={false} />
+          {/* 앞면 안에 있어 카드와 함께 뒤집히고, 뒷면에서는 보이지 않는다 */}
+          {cardOverlay && (
+            <div className="absolute right-3 top-3 z-20">{cardOverlay}</div>
+          )}
         </div>
-      </button>
-      {cardOverlay && (
-        <div className="absolute bottom-3 right-3 z-20">{cardOverlay}</div>
-      )}
+        <div className="absolute inset-0 rotate-y-180 backface-hidden">
+          {bibleCard ? (
+            <motion.div
+              className="h-full w-full"
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+            >
+              <BibleCardView bibleCard={bibleCard} />
+            </motion.div>
+          ) : (
+            <EmptyBibleCardBackSlot isCreating={isCreating} />
+          )}
+        </div>
+      </div>
     </div>
     <button
       type="button"
@@ -681,11 +688,14 @@ const BibleCardNewPage = () => {
                         !selectedBibleCard && !isCreating ? (
                           <button
                             type="button"
-                            onClick={() => setIsDrawerOpen(true)}
-                            className="flex items-center gap-1 rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-blue-500 shadow-md backdrop-blur-sm transition active:scale-95"
+                            onClick={(e) => {
+                              e.stopPropagation(); // 카드 플립으로 전파 방지
+                              setIsDrawerOpen(true);
+                            }}
+                            className="flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-500 transition active:scale-95"
                           >
                             <Repeat className="h-3 w-3" strokeWidth={2.5} />
-                            다른 카드 선택
+                            카드 변경
                           </button>
                         ) : null
                       }
