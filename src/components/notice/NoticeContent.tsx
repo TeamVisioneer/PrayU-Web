@@ -6,24 +6,23 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { NoticeMarkdown } from "./noticeMarkdown";
-import { NoticeSlide } from "../../../supabase/types/tables";
 
 /**
- * 공지 본문(슬라이드 + CTA) 표시부.
+ * 공지 본문 표시부 — 이미지 여러 장(넘겨 봄) + 본문 하나(그 아래) + CTA.
  * 실제 공지 모달과 어드민 미리보기가 **같은 컴포넌트**를 쓴다 —
  * 그래야 미리보기가 실제 노출 모습과 어긋나지 않는다.
  */
 interface NoticeContentProps {
-  title: string;
-  slides: NoticeSlide[];
+  images: string[];
+  body?: string | null;
   ctaLabel?: string | null;
   ctaUrl?: string | null;
   onClickCta?: () => void;
 }
 
 const NoticeContent = ({
-  title,
-  slides,
+  images,
+  body,
   ctaLabel,
   ctaUrl,
   onClickCta,
@@ -39,58 +38,44 @@ const NoticeContent = ({
 
   return (
     <>
-      {slides.length > 0 && (
-        <div className="w-full px-5">
-          <hr className="my-3" />
+      {images.length > 0 && (
+        <div className="w-full px-5 pt-3">
           <Carousel setApi={setApi}>
             <CarouselContent>
-              {slides.map((slide, index) => (
+              {images.map((url, index) => (
                 <CarouselItem key={index}>
-                  <div className="flex h-full flex-col items-center gap-4">
-                    {slide.image_url && (
-                      <img
-                        src={slide.image_url}
-                        className="w-full rounded-lg shadow-md"
-                        alt={slide.tip || title}
-                      />
-                    )}
-                    <div className="w-full space-y-2 text-left">
-                      {slide.tip && (
-                        <span className="text-sm font-bold">{slide.tip}</span>
-                      )}
-                      {/* body(마크다운)가 우선. description은 이전 형식 호환 */}
-                      {slide.body ? (
-                        <NoticeMarkdown source={slide.body} />
-                      ) : (
-                        (slide.description || []).map((line, lineIndex) => (
-                          <p key={lineIndex} className="text-sm text-gray-600">
-                            {line}
-                          </p>
-                        ))
-                      )}
-                    </div>
-                  </div>
+                  <img
+                    src={url}
+                    className="w-full rounded-lg shadow-md"
+                    alt={`공지 이미지 ${index + 1}`}
+                  />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            {/* 좌우 화살표는 두지 않는다 — 모바일 모달에서 이미지 위에 겹쳐 지저분하고,
-                스와이프와 점 인디케이터로 충분하다 */}
-            {slides.length > 1 && (
-              <div className="mt-2 flex items-center justify-center p-4">
-                  {slides.map((_, index) => (
-                    <span
-                      key={index}
-                      onClick={() => api?.scrollTo(index)}
-                      className={`mx-1 cursor-pointer rounded-full transition-colors duration-300 ${
-                        currentIndex === index
-                          ? "h-[8px] w-[8px] bg-[#608CFF]"
-                          : "h-[6px] w-[6px] bg-gray-400"
-                      }`}
-                    />
-                ))}
-              </div>
-            )}
           </Carousel>
+          {/* 좌우 화살표는 두지 않는다 — 모바일 모달에서 이미지 위에 겹친다.
+              스와이프와 점 인디케이터로 충분하다 */}
+          {images.length > 1 && (
+            <div className="flex items-center justify-center pt-3">
+              {images.map((_, index) => (
+                <span
+                  key={index}
+                  onClick={() => api?.scrollTo(index)}
+                  className={`mx-1 cursor-pointer rounded-full transition-colors duration-300 ${
+                    currentIndex === index
+                      ? "h-[8px] w-[8px] bg-[#608CFF]"
+                      : "h-[6px] w-[6px] bg-gray-400"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {body && (
+        <div className="w-full px-5 pt-4 text-left">
+          <NoticeMarkdown source={body} />
         </div>
       )}
 

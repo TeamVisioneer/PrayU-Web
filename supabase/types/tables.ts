@@ -22,15 +22,7 @@ export type ThanksCard = Database["public"]["Tables"]["thanks_card"]["Row"];
 
 export type Notice = Database["public"]["Tables"]["notice"]["Row"];
 
-// notice.slides(jsonb) 구조 — DB는 jsonb라 타입이 없어 앱에서 정의한다
-export interface NoticeSlide {
-  image_url?: string;
-  tip?: string;
-  /** 본문 (간이 마크다운). 어드민 에디터가 쓰는 현재 형식 */
-  body?: string;
-  /** @deprecated 줄 배열로 저장하던 이전 형식 — 읽기 호환용 */
-  description?: string[];
-}
+// notice.images(jsonb)는 이미지 URL 배열 — DB는 jsonb라 앱에서 형태를 좁힌다
 
 export type OriginNotification =
   Database["public"]["Tables"]["notification"]["Row"];

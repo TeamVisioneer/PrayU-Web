@@ -297,39 +297,42 @@ export type Database = {
       }
       notice: {
         Row: {
+          body: string | null
           created_at: string
           cta_label: string | null
           cta_url: string | null
           ends_at: string | null
           id: string
+          images: Json
           is_active: boolean
-          slides: Json
           starts_at: string
           target: string
           title: string
           updated_at: string
         }
         Insert: {
+          body?: string | null
           created_at?: string
           cta_label?: string | null
           cta_url?: string | null
           ends_at?: string | null
           id?: string
+          images?: Json
           is_active?: boolean
-          slides?: Json
           starts_at?: string
           target?: string
           title: string
           updated_at?: string
         }
         Update: {
+          body?: string | null
           created_at?: string
           cta_label?: string | null
           cta_url?: string | null
           ends_at?: string | null
           id?: string
+          images?: Json
           is_active?: boolean
-          slides?: Json
           starts_at?: string
           target?: string
           title?: string

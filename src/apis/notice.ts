@@ -1,15 +1,14 @@
 import { supabase } from "./../../supabase/client";
-import { Notice, NoticeSlide } from "../../supabase/types/tables";
+import { Notice } from "../../supabase/types/tables";
 import { TablesInsert, TablesUpdate } from "../../supabase/types/database";
 import * as Sentry from "@sentry/react";
 
-// slides(jsonb)를 앱 타입으로 좁힌다 — 잘못된 형태가 저장돼 있어도 렌더가 깨지지 않도록 방어
-export const parseNoticeSlides = (slides: Notice["slides"]): NoticeSlide[] => {
-  if (!Array.isArray(slides)) return [];
-  return slides.filter(
-    (slide) =>
-      typeof slide === "object" && slide !== null && !Array.isArray(slide),
-  ) as NoticeSlide[];
+// images(jsonb)를 URL 배열로 좁힌다 — 잘못된 값이 섞여 있어도 렌더가 깨지지 않도록 방어
+export const parseNoticeImages = (images: Notice["images"]): string[] => {
+  if (!Array.isArray(images)) return [];
+  return images.filter(
+    (url): url is string => typeof url === "string" && url.length > 0,
+  );
 };
 
 /**

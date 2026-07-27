@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import useBaseStore from "@/stores/baseStore";
-import { fetchActiveNotice, fetchNoticeById, parseNoticeSlides } from "@/apis/notice";
+import { fetchActiveNotice, fetchNoticeById, parseNoticeImages } from "@/apis/notice";
 import NoticeContent from "./NoticeContent";
 import { analyticsTrack } from "@/analytics/analytics";
 import { Notice } from "../../../supabase/types/tables";
@@ -137,7 +137,7 @@ const NoticeDialog = () => {
 
   if (!notice) return null;
 
-  const slides = parseNoticeSlides(notice.slides);
+  const images = parseNoticeImages(notice.images);
 
   return (
     <Dialog
@@ -159,8 +159,8 @@ const NoticeDialog = () => {
           </DialogHeader>
 
           <NoticeContent
-            title={notice.title}
-            slides={slides}
+            images={images}
+            body={notice.body}
             ctaLabel={notice.cta_label}
             ctaUrl={notice.cta_url}
             onClickCta={handleClickCta}

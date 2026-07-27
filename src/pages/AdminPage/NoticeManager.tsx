@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Eye, ImagePlus, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Eye, ImagePlus, Loader2, Pencil, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -24,34 +24,30 @@ import { getPublicUrl, uploadImage } from "@/apis/file";
 import {
   createNotice,
   fetchNoticeList,
-  parseNoticeSlides,
+  parseNoticeImages,
   updateNotice,
 } from "@/apis/notice";
-import { Notice, NoticeSlide } from "../../../supabase/types/tables";
+import { Notice } from "../../../supabase/types/tables";
 import { TablesInsert } from "../../../supabase/types/database";
-
-const emptySlide = (): NoticeSlide => ({
-  image_url: "",
-  tip: "",
-  body: "",
-});
 
 interface NoticeForm {
   title: string;
+  body: string;
+  images: string[];
   ctaLabel: string;
   ctaUrl: string;
   target: "all" | "existing";
   endsAt: string;
-  slides: NoticeSlide[];
 }
 
 const emptyForm = (): NoticeForm => ({
   title: "",
+  body: "",
+  images: [],
   ctaLabel: "",
   ctaUrl: "",
   target: "all",
   endsAt: "",
-  slides: [emptySlide()],
 });
 
 const noticeStatus = (notice: Notice) => {
@@ -78,7 +74,7 @@ const NoticeManager = () => {
   const [form, setForm] = useState<NoticeForm>(emptyForm());
   const [isSaving, setIsSaving] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const loadNotices = useCallback(async () => {
     setIsLoading(true);
@@ -103,52 +99,41 @@ const NoticeManager = () => {
   };
 
   const openEdit = (notice: Notice) => {
-    // 이전 형식(description 줄 배열)로 저장된 공지는 마크다운 본문으로 옮겨 편집한다
-    const slides = parseNoticeSlides(notice.slides).map((slide) =>
-      slide.body === undefined && slide.description
-        ? { ...slide, body: slide.description.join("\n") }
-        : slide,
-    );
     setEditingId(notice.id);
     setForm({
       title: notice.title,
+      body: notice.body || "",
+      images: parseNoticeImages(notice.images),
       ctaLabel: notice.cta_label || "",
       ctaUrl: notice.cta_url || "",
       target: notice.target === "existing" ? "existing" : "all",
       endsAt: notice.ends_at ? notice.ends_at.slice(0, 16) : "",
-      slides: slides.length > 0 ? slides : [emptySlide()],
     });
     setIsPreview(false);
     setIsEditorOpen(true);
   };
 
-  const patchSlide = (index: number, patch: Partial<NoticeSlide>) => {
-    setForm((prev) => ({
-      ...prev,
-      slides: prev.slides.map((slide, i) =>
-        i === index ? { ...slide, ...patch } : slide,
-      ),
-    }));
-  };
-
   /** 공지 이미지 업로드 — 기존 prayu 버킷의 notice/ 경로를 쓴다 */
-  const handleUploadImage = async (index: number, file: File) => {
-    setUploadingIndex(index);
-    const safeName = file.name.replace(/[^\w.-]/g, "_");
-    const path = `notice/${Date.now()}-${safeName}`;
-    const uploaded = await uploadImage(file, path);
-    if (!uploaded) {
-      setUploadingIndex(null);
+  const handleUploadImages = async (files: FileList) => {
+    setIsUploading(true);
+    const uploadedUrls: string[] = [];
+    for (const file of Array.from(files)) {
+      const safeName = file.name.replace(/[^\w.-]/g, "_");
+      const uploaded = await uploadImage(
+        file,
+        `notice/${Date.now()}-${safeName}`,
+      );
+      if (!uploaded) continue;
+      const publicUrl = getPublicUrl(uploaded.path);
+      if (publicUrl) uploadedUrls.push(publicUrl);
+    }
+    setIsUploading(false);
+
+    if (uploadedUrls.length === 0) {
       toast({ description: "이미지 업로드에 실패했어요" });
       return;
     }
-    const publicUrl = getPublicUrl(uploaded.path);
-    setUploadingIndex(null);
-    if (!publicUrl) {
-      toast({ description: "이미지 주소를 가져오지 못했어요" });
-      return;
-    }
-    patchSlide(index, { image_url: publicUrl });
+    setForm((prev) => ({ ...prev, images: [...prev.images, ...uploadedUrls] }));
   };
 
   const handleSave = async () => {
@@ -156,15 +141,13 @@ const NoticeManager = () => {
       toast({ description: "제목을 입력해 주세요" });
       return;
     }
-    const cleanedSlides = form.slides.filter(
-      (slide) => slide.image_url?.trim() || slide.tip?.trim() || slide.body?.trim(),
-    );
 
     setIsSaving(true);
     const payload = {
       title: form.title.trim(),
-      // NoticeSlide는 앱에서 정의한 형태 — 컬럼은 jsonb라 Json으로 넘긴다
-      slides: cleanedSlides as unknown as TablesInsert<"notice">["slides"],
+      body: form.body.trim() || null,
+      // 컬럼은 jsonb라 URL 배열을 Json으로 넘긴다
+      images: form.images as unknown as TablesInsert<"notice">["images"],
       cta_label: form.ctaLabel.trim() || null,
       cta_url: form.ctaUrl.trim() || null,
       target: form.target,
@@ -220,31 +203,29 @@ const NoticeManager = () => {
         )}
         {notices.map((notice) => {
           const status = noticeStatus(notice);
-          const slideCount = parseNoticeSlides(notice.slides).length;
+          const imageCount = parseNoticeImages(notice.images).length;
           return (
             <div
               key={notice.id}
               className="flex flex-col gap-2 rounded-xl bg-white p-4"
             >
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <Badge className={status.className}>{status.label}</Badge>
-                    {notice.target === "existing" && (
-                      <Badge className="bg-gray-500">기존 사용자</Badge>
-                    )}
-                  </div>
-                  <div className="mt-1.5 truncate text-sm font-semibold">
-                    {notice.title}
-                  </div>
-                  <div className="mt-0.5 text-xs text-gray-400">
-                    {notice.starts_at.slice(0, 10)}
-                    {notice.ends_at
-                      ? ` ~ ${notice.ends_at.slice(0, 10)}`
-                      : " ~ 무기한"}
-                    {` · 슬라이드 ${slideCount}장`}
-                    {notice.cta_label ? ` · CTA "${notice.cta_label}"` : ""}
-                  </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <Badge className={status.className}>{status.label}</Badge>
+                  {notice.target === "existing" && (
+                    <Badge className="bg-gray-500">기존 사용자</Badge>
+                  )}
+                </div>
+                <div className="mt-1.5 truncate text-sm font-semibold">
+                  {notice.title}
+                </div>
+                <div className="mt-0.5 text-xs text-gray-400">
+                  {notice.starts_at.slice(0, 10)}
+                  {notice.ends_at
+                    ? ` ~ ${notice.ends_at.slice(0, 10)}`
+                    : " ~ 무기한"}
+                  {` · 이미지 ${imageCount}장`}
+                  {notice.cta_label ? ` · CTA "${notice.cta_label}"` : ""}
                 </div>
               </div>
               <div className="flex gap-2">
@@ -295,7 +276,7 @@ const NoticeManager = () => {
             <DialogDescription className="text-xs">
               {isPreview
                 ? "사용자에게 보이는 그대로입니다."
-                : "슬라이드는 앱 공지 모달에 순서대로 노출됩니다."}
+                : "이미지는 넘겨 보고, 본문은 이미지 아래에 표시됩니다."}
             </DialogDescription>
           </DialogHeader>
 
@@ -307,13 +288,8 @@ const NoticeManager = () => {
                   📢 {form.title || "(제목 없음)"}
                 </div>
                 <NoticeContent
-                  title={form.title}
-                  slides={form.slides.filter(
-                    (slide) =>
-                      slide.image_url?.trim() ||
-                      slide.tip?.trim() ||
-                      slide.body?.trim(),
-                  )}
+                  images={form.images}
+                  body={form.body}
                   ctaLabel={form.ctaLabel || null}
                   ctaUrl={form.ctaUrl || null}
                 />
@@ -324,179 +300,154 @@ const NoticeManager = () => {
               </div>
             </div>
           ) : (
-          <div className="flex flex-col gap-4">
-            <label className="flex flex-col gap-1">
-              <span className="text-xs font-medium text-gray-600">제목</span>
-              <Input
-                value={form.title}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, title: e.target.value }))
-                }
-                placeholder="예: 새로워진 말씀카드"
-              />
-            </label>
+            <div className="flex flex-col gap-4">
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-medium text-gray-600">제목</span>
+                <Input
+                  value={form.title}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  placeholder="예: 새로워진 말씀카드"
+                />
+              </label>
 
-            <div className="flex flex-col gap-1">
-              <span className="text-xs font-medium text-gray-600">
-                버튼 (선택)
-              </span>
-              <Input
-                value={form.ctaLabel}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, ctaLabel: e.target.value }))
-                }
-                placeholder="버튼 문구 — 예: 말씀카드 만들러 가기"
-              />
-              <Input
-                value={form.ctaUrl}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, ctaUrl: e.target.value }))
-                }
-                placeholder="이동 링크 — 예: /bible-card/new"
-              />
-              <span className="text-[11px] text-gray-400">
-                둘 다 입력해야 버튼이 노출됩니다. 앱 내 이동은 /로 시작하는 경로,
-                외부는 https:// 주소를 넣으세요.
-              </span>
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <span className="text-xs font-medium text-gray-600">
-                노출 대상 · 종료일시
-              </span>
-              <Select
-                value={form.target}
-                onValueChange={(value) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    target: value === "existing" ? "existing" : "all",
-                  }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">전체 사용자</SelectItem>
-                  <SelectItem value="existing">
-                    기존 사용자만 (신규 가입자 제외)
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                type="datetime-local"
-                value={form.endsAt}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, endsAt: e.target.value }))
-                }
-              />
-              <span className="text-[11px] text-gray-400">
-                비워두면 중지할 때까지 계속 노출됩니다.
-              </span>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-medium text-gray-600">슬라이드</span>
-              {form.slides.map((slide, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-2 rounded-lg border p-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-gray-500">
-                      {index + 1}번째
-                    </span>
-                    {form.slides.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setForm((prev) => ({
-                            ...prev,
-                            slides: prev.slides.filter((_, i) => i !== index),
-                          }))
-                        }
-                        className="text-gray-400 hover:text-red-500"
-                        aria-label="슬라이드 삭제"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    )}
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-medium text-gray-600">
+                  이미지 {form.images.length > 0 && `(${form.images.length}장)`}
+                </span>
+                {form.images.length > 0 && (
+                  <div className="flex gap-2 overflow-x-auto pb-1">
+                    {form.images.map((url, index) => (
+                      <div key={index} className="relative shrink-0">
+                        <img
+                          src={url}
+                          alt={`이미지 ${index + 1}`}
+                          className="h-24 w-24 rounded-md object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setForm((prev) => ({
+                              ...prev,
+                              images: prev.images.filter((_, i) => i !== index),
+                            }))
+                          }
+                          className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-white"
+                          aria-label="이미지 제거"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                        <span className="absolute bottom-1 left-1 rounded bg-black/60 px-1 text-[10px] text-white">
+                          {index + 1}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  {slide.image_url ? (
-                    <div className="relative">
-                      <img
-                        src={slide.image_url}
-                        alt="슬라이드 이미지"
-                        className="max-h-40 w-full rounded-md object-contain"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => patchSlide(index, { image_url: "" })}
-                        className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white"
-                        aria-label="이미지 제거"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
+                )}
+                <label className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed border-gray-300 py-5 text-xs text-gray-500 hover:bg-gray-50">
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      업로드 중...
+                    </>
                   ) : (
-                    <label className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed border-gray-300 py-6 text-xs text-gray-500 hover:bg-gray-50">
-                      {uploadingIndex === index ? (
-                        <>
-                          <Loader2 className="h-5 w-5 animate-spin" />
-                          업로드 중...
-                        </>
-                      ) : (
-                        <>
-                          <ImagePlus className="h-5 w-5" />
-                          이미지 올리기
-                        </>
-                      )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        disabled={uploadingIndex !== null}
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleUploadImage(index, file);
-                          e.target.value = "";
-                        }}
-                      />
-                    </label>
+                    <>
+                      <ImagePlus className="h-5 w-5" />
+                      이미지 올리기 (여러 장 선택 가능)
+                    </>
                   )}
-                  <Input
-                    value={slide.tip || ""}
-                    onChange={(e) => patchSlide(index, { tip: e.target.value })}
-                    placeholder="소제목 — 예: 이렇게 달라졌어요"
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    disabled={isUploading}
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (files && files.length > 0) handleUploadImages(files);
+                      e.target.value = "";
+                    }}
                   />
-                  <textarea
-                    value={slide.body || ""}
-                    onChange={(e) => patchSlide(index, { body: e.target.value })}
-                    placeholder={"본문 (마크다운)\n\n**굵게**\n- 항목\n- 항목\n\n빈 줄로 문단을 나눕니다"}
-                    className="min-h-32 rounded-md border border-input bg-background p-3 font-mono text-xs leading-relaxed"
-                  />
-                  <span className="text-[11px] text-gray-400">
-                    <code>**굵게**</code> · <code>- 항목</code> · 빈 줄로 문단 구분
-                  </span>
-                </div>
-              ))}
-              <Button
-                variant="secondary"
-                className="h-9 text-sm"
-                onClick={() =>
-                  setForm((prev) => ({
-                    ...prev,
-                    slides: [...prev.slides, emptySlide()],
-                  }))
-                }
-              >
-                슬라이드 추가
-              </Button>
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-xs font-medium text-gray-600">본문</span>
+                <textarea
+                  value={form.body}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, body: e.target.value }))
+                  }
+                  placeholder={
+                    "본문 (마크다운)\n\n**굵게**\n- 항목\n- 항목\n\n빈 줄로 문단을 나눕니다"
+                  }
+                  className="min-h-40 rounded-md border border-input bg-background p-3 font-mono text-xs leading-relaxed"
+                />
+                <span className="text-[11px] text-gray-400">
+                  <code>**굵게**</code> · <code>- 항목</code> · 빈 줄로 문단 구분
+                </span>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-xs font-medium text-gray-600">
+                  버튼 (선택)
+                </span>
+                <Input
+                  value={form.ctaLabel}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, ctaLabel: e.target.value }))
+                  }
+                  placeholder="버튼 문구 — 예: 말씀카드 만들러 가기"
+                />
+                <Input
+                  value={form.ctaUrl}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, ctaUrl: e.target.value }))
+                  }
+                  placeholder="이동 링크 — 예: /bible-card/new"
+                />
+                <span className="text-[11px] text-gray-400">
+                  둘 다 입력해야 버튼이 노출됩니다. 앱 내 이동은 /로 시작하는
+                  경로, 외부는 https:// 주소를 넣으세요.
+                </span>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-xs font-medium text-gray-600">
+                  노출 대상 · 종료일시
+                </span>
+                <Select
+                  value={form.target}
+                  onValueChange={(value) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      target: value === "existing" ? "existing" : "all",
+                    }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">전체 사용자</SelectItem>
+                    <SelectItem value="existing">
+                      기존 사용자만 (신규 가입자 제외)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input
+                  type="datetime-local"
+                  value={form.endsAt}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, endsAt: e.target.value }))
+                  }
+                />
+                <span className="text-[11px] text-gray-400">
+                  비워두면 중지할 때까지 계속 노출됩니다.
+                </span>
+              </div>
             </div>
-          </div>
           )}
 
           <DialogFooter className="flex-row justify-end gap-2">
