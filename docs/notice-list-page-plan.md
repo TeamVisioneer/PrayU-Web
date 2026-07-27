@@ -32,13 +32,13 @@
 | `src/pages/NoticePage.tsx` **(신규)** | 공지 목록 화면. 공통 sticky 헤더(뒤로가기 + "공지사항") + 목록 카드(제목·날짜). 항목 탭 → `setOpenNoticeId(id)` |
 | `src/App.tsx` | `/notice` 라우트 추가 (`SlideInPage`로 감싸 다른 하위 페이지와 전환 방식 통일) |
 | `src/components/group/GroupMenuBtn.tsx` | `onClickOpenNotice`가 외부 링크 대신 `navigate("/notice")`. analytics `클릭_카카오_소식` → `클릭_공지사항` |
-| `src/components/notice/NoticeDialog.tsx` | 목록·알림함에서 **직접 골라 연 공지**에는 "다음에 보지 않기"를 숨긴다 (자동 노출에만 의미 있는 액션) |
+| `src/components/notice/NoticeDialog.tsx` | **닫기 = 본 것으로 처리**, "다음에 보지 않기" 버튼 제거. 닫기는 dim 영역의 흰 원형 X |
 
 ## 검증
 
 - 메뉴 → 공지사항 → 목록 → 항목 탭 → 모달, 뒤로가기 복귀
 - 예약·중지 공지가 목록에 없는지, 종료된 공지는 보이는지 (로컬 시드 4종)
-- 목록에서 연 모달에는 "다음에 보지 않기"가 없고 "닫기"만 있는지
+- 닫으면 재진입 시 다시 뜨지 않는지, 그래도 목록에서는 다시 열리는지
 - 공지가 하나도 없을 때 빈 상태 문구
 - `npm run lint` + `npm run build`
 
@@ -46,3 +46,4 @@
 
 1. 지난(종료된) 공지도 목록에 **보인다** — 위 표대로
 2. 목록 카드는 **제목·날짜만** — 본문 요약은 넣지 않는다
+3. **닫기 = 본 것으로 처리**하고 "다음에 보지 않기" 버튼은 없앤다 — 목록 페이지가 생겨 언제든 다시 볼 수 있으므로, 두 버튼을 나눌 이유가 사라졌다. 기록은 localStorage(`seenNoticeIds`)에 남기므로 기기·브라우저 단위다
