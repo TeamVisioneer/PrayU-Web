@@ -16,11 +16,13 @@ import useBaseStore from "@/stores/baseStore";
 interface OtherPrayCardMenuBtnProps {
   targetUserId: string;
   prayContent: string;
+  prayCardId: string;
 }
 
 const OtherPrayCardMenuBtn: React.FC<OtherPrayCardMenuBtnProps> = ({
   targetUserId,
   prayContent,
+  prayCardId,
 }) => {
   const myMember = useBaseStore((state) => state.myMember);
   const setReportData = useBaseStore((state) => state.setReportData);
@@ -38,8 +40,9 @@ const OtherPrayCardMenuBtn: React.FC<OtherPrayCardMenuBtnProps> = ({
       currentUserId: myMember?.user_id || "",
       targetUserId: targetUserId,
       content: prayContent,
+      prayCardId: prayCardId,
     });
-  }, [myMember, targetUserId, prayContent, setReportData]);
+  }, [myMember, targetUserId, prayContent, prayCardId, setReportData]);
 
   const onClickReportPrayCard = () => {
     analyticsTrack("클릭_기도카드_신고", {});

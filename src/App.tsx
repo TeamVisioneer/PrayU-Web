@@ -33,7 +33,6 @@ import StoryPage from "./pages/StoryPage/StoryPage";
 import TutorialPage from "./pages/TutorialPage";
 import MetaPixelInit from "./analytics/metaPixelInit";
 import AdminPage from "./pages/AdminPage/AdminPage";
-import NewAdminPage from "./pages/AdminPage/NewAdminPage";
 import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 import BibleCardNewPage from "./pages/BibleCardPage/BibleCardNewPage";
 import BibleCardSharePage from "./pages/BibleCardPage/BibleCardSharePage";
@@ -119,14 +118,6 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <AdminPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/admin/new"
-                element={
-                  <PrivateRoute>
-                    <NewAdminPage />
                   </PrivateRoute>
                 }
               />

@@ -159,6 +159,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
             <OtherPrayCardMenuBtn
               targetUserId={prayCard.user_id || ""}
               prayContent={prayCard.content || ""}
+              prayCardId={prayCard.id}
             />
           ))}
       </div>
