@@ -15,15 +15,7 @@
 
 계획: [admin-revamp-plan.md](admin-revamp-plan.md) (4개 PR, merge는 **Api 먼저 → web**)
 
-- [x] **PR B** 공지 모달 전역화 + 어드민 공지 관리 — [#469](https://github.com/TeamVisioneer/PrayU-Web/pull/469) 리뷰 대기 (짝: [Api#39](https://github.com/TeamVisioneer/PrayU-Api/pull/39))
-- [ ] **PR D** 어드민 대시보드 탭 개편 — 개요(KPI·추이·활성화 퍼널) / 그룹 / 기능 사용·비용 / 운영
-
-## 다음 작업 (PR D에 포함)
-
-- [ ] **`NewAdminPage.tsx` 삭제** — 533줄 전부 mock 데이터이며 실데이터에 연결된 적 없음. `/admin/new` 라우트도 함께 제거
-- [ ] **어드민 접근 제어를 `is_admin` 기반으로 교체** — 현재 컴포넌트 내 이메일 하드코딩 allowlist
-- [x] ~~공지 알림에 `notice_id` 연결~~ — **불필요해짐**. 어드민 공지 알림 발송(`NotificationDialog`)이 레거시로 판단되어 제거됐다(#471). 알림함의 기존 공지 알림은 본문이 목록에 그대로 보이므로 읽음 처리만 한다. 공지 알림 발송이 다시 필요해지면 그때 `notice_id` 연결과 함께 설계
-- [ ] **신고 payload에 `pray_card_id` 추가** — `ReportAlert`가 Discord로 보내는 내용에 대상 카드 ID가 없어 어드민이 삭제할 카드를 특정할 수 없다
+**어드민 개편은 모두 merge 완료** (아래 "완료" 절 참조). 남은 것은 staging 확인과 prod release다.
 
 ## RLS 감사 결과 (2026-07-27)
 
@@ -43,6 +35,11 @@
 - 신고 접수 **테이블화** — 현재 Discord 웹훅만. 신고량이 늘면
 - 브라우저 열람 비중이 높은 공유 랜딩 페이지에 **문서 스크롤 모드** 검토 — 현재 앱 셸 구조라 iOS Safari 툴바가 접히지 않는다. 상세: [viewport-layout-improvement-plan.md](viewport-layout-improvement-plan.md) 3절
 
+## 배포 대기 — 어드민 개편 후속
+
+- [ ] **staging에서 어드민 확인** — `/admin` 진입(관리자 계정에 `is_admin=true` 설정 필요), 지표가 실데이터와 맞는지, 공지 작성→노출까지
+- [ ] **공지 이미지 업로드 확인** — staging `prayu` 버킷의 `notice/` 경로에 실제로 올라가는지
+
 ## 배포 대기
 
 - [ ] staging 인수테스트 후 **prod release(태그) 발행** — 순서는 **Api 먼저 → web**
@@ -52,6 +49,8 @@
 
 | 날짜 | 내용 | PR |
 |---|---|---|
+| 2026-07-27 | 어드민 대시보드 전면 개편 (탭 4개·차트·퍼널), NewAdminPage·공지 알림 발송 제거, is_admin 접근 제어, 공지 에디터(이미지 업로드·마크다운·미리보기)와 공지 모달 UX | #471 |
+| 2026-07-27 | 사용 로그 읽기 개방 + 사용량 집계에 user_id 필터 명시 | #470 |
 | 2026-07-27 | 공지 DB 전환 + 앱 전역 노출, 죽은 공지 컴포넌트 3개 제거 | #469 |
 | 2026-07-27 | 말씀카드 안내 시트 + 소진 문구 정합화, 카드 변경 UX | #468 |
 | 2026-07-27 | 히스토리 드로워: 공유 버튼 그룹, 면별 액션 분기 | #466, #467 |
