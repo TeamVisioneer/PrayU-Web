@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
+import { Info } from "lucide-react";
 import { PulseLoader } from "react-spinners";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ import { BibleCardBase } from "@/components/prayCard/BibleCardBase";
 import BibleCardThumbnail from "@/components/prayCard/BibleCardThumbnail";
 import ShowMoreBtn from "@/components/common/ShowMoreBtn";
 import ShareButtonGroup from "@/components/share/ShareButtonGroup";
+import BibleCardGuideSheet from "./BibleCardGuideSheet";
 import useBaseStore from "@/stores/baseStore";
 import { useSaveImage } from "@/hooks/useSaveImage";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -240,6 +242,7 @@ const BibleCardNewPage = () => {
   const [todayRewardCount, setTodayRewardCount] = useState<number | null>(null);
   const prevRewardRef = useRef<number | null>(null);
   const [isReplaceDialogOpen, setIsReplaceDialogOpen] = useState(false);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   const praycardIdParam = searchParams.get("praycard_id");
   const legacyPrayCardIdParam = searchParams.get("prayCardId");
@@ -456,7 +459,8 @@ const BibleCardNewPage = () => {
     if (!user || !selectedPrayCard || isCreating) return;
     if (remainingCount === 0) {
       toast({
-        description: "오늘 생성 가능 횟수를 모두 사용했어요. 내일 다시 만들 수 있어요",
+        description:
+          "오늘 생성 횟수를 모두 사용했어요. 카카오톡으로 공유하면 1회 더 만들 수 있어요",
       });
       return;
     }
@@ -573,7 +577,8 @@ const BibleCardNewPage = () => {
   const handleClickReplace = () => {
     if (remainingCount === 0) {
       toast({
-        description: "오늘 생성 가능 횟수를 모두 사용했어요. 내일 다시 만들 수 있어요",
+        description:
+          "오늘 생성 횟수를 모두 사용했어요. 카카오톡으로 공유하면 1회 더 만들 수 있어요",
       });
       return;
     }
@@ -699,11 +704,23 @@ const BibleCardNewPage = () => {
                     )}
                   </Button>
                   {selectedPrayCard && !isCreating && remainingCount !== null && (
-                    <p className="mt-2 text-center text-xs text-gray-400">
-                      {remainingCount > 0
-                        ? `오늘 남은 생성 ${remainingCount}회`
-                        : "카카오톡으로 공유하면 1회 더 만들 수 있어요"}
-                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        analyticsTrack("클릭_말씀카드_안내", {
+                          where: "BibleCardNewPage",
+                        });
+                        setIsGuideOpen(true);
+                      }}
+                      className="mx-auto mt-2 flex items-center gap-1 text-xs text-gray-400 transition hover:text-gray-500"
+                    >
+                      <span>
+                        {remainingCount > 0
+                          ? `오늘 남은 생성 ${remainingCount}회`
+                          : "카카오톡으로 공유하면 1회 더 만들 수 있어요"}
+                      </span>
+                      <Info className="h-3.5 w-3.5" strokeWidth={2} />
+                    </button>
                   )}
                   {selectedPrayCard && !isCreating && (
                     <button
@@ -864,6 +881,8 @@ const BibleCardNewPage = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <BibleCardGuideSheet open={isGuideOpen} onOpenChange={setIsGuideOpen} />
 
       {draft && (
         <div className="fixed -top-[100vh] -z-40 pointer-events-none">
