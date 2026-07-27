@@ -34,6 +34,7 @@ React 18 + TypeScript + Vite 5 / Tailwind + Radix(shadcn/ui) + Vaul / Zustand + 
 ## 작업 착수 규칙
 
 - **docs 먼저, 코드는 그 다음.** 피처/개선 작업 시작 시 코드부터 수정하지 않는다. `docs/`에 설계·계획 문서를 먼저 작성(또는 기존 문서 갱신)하고 방향 확인 후 구현한다. (예: `docs/bible-card-backside-flow-plan.md`)
+- **[docs/backlog.md](docs/backlog.md)가 이 레포 작업 목록의 원본이다.** 세션 시작 시 먼저 읽고, 작업 중 발견한 후속 이슈는 그 자리에서 여기에 추가한다 (대화·PR 코멘트로만 남기지 않는다). 백엔드 항목은 `../PrayU-Api/docs/backlog.md`.
 
 ## 의사결정 우선순위
 

@@ -20,9 +20,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     (state) => state.setUserNotificationUnreadTotal
   );
 
-  const setIsOpenEventDialog = useBaseStore(
-    (state) => state.setIsOpenEventDialog
-  );
+  const setOpenNoticeId = useBaseStore((state) => state.setOpenNoticeId);
   const dateDistance = getDateDistance(
     new Date(notification.created_at),
     new Date()
@@ -57,7 +55,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     await markAsRead();
 
     if (notification.type == NotificationType.NOTICE) {
-      setIsOpenEventDialog(true);
+      // 공지 알림에 notice_id가 있으면 해당 공지 모달을 연다.
+      // 없으면(구 알림) 본문이 목록에 이미 보이므로 읽음 처리로 끝낸다.
+      const noticeId = (notification.data as { notice_id?: string } | null)
+        ?.notice_id;
+      if (noticeId) setOpenNoticeId(noticeId);
     } else {
       window.location.href = "/group/" + notification.group_id;
     }

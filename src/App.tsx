@@ -52,6 +52,7 @@ import {
 import GroupJoinPage from "./pages/Group/GroupJoinPage";
 import ExternalLinkDialog from "./components/notice/ExternalLinkDialog";
 import GroupListDrawer from "./components/group/GroupListDrawer";
+import NoticeDialog from "./components/notice/NoticeDialog";
 import ReportAlert from "./components/alert/ReportAlert";
 import { BottomToaster } from "@/components/ui/bottom-toaster";
 import GroupPageMock from "@/mock/GroupPageMock";
@@ -305,6 +306,7 @@ const App = () => {
         <ConfirmAlert />
         <ExternalLinkDialog />
         <GroupListDrawer />
+        <NoticeDialog />
       </BrowserRouter>
     </div>
   );
