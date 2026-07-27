@@ -176,22 +176,21 @@ const NoticeDialog = () => {
           />
         </div>
 
-        {/* dim 위 보조 액션 — 닫기는 앱의 다른 모달(ExternalLinkDialog)과 같은 흰 원형 버튼 */}
-        <div className="flex w-full items-center justify-center gap-3 pt-3">
+        {/* dim 위 보조 액션 — 카드 안에는 CTA만 남기고 둘 다 여기에 둔다 */}
+        <div className="flex w-full items-center justify-center gap-2 pt-3">
           <button
             onClick={handleHideNextTime}
-            className="rounded-full px-3 py-2 text-sm text-white/70 transition hover:text-white"
+            className="rounded-full border border-white/30 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
           >
             다음에 보지 않기
           </button>
+          <button
+            onClick={handleClose}
+            className="rounded-full border border-white/30 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
+          >
+            닫기
+          </button>
         </div>
-        <button
-          onClick={handleClose}
-          className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition hover:bg-gray-100"
-          aria-label="닫기"
-        >
-          <X className="h-5 w-5 text-gray-700" />
-        </button>
       </DialogContent>
     </Dialog>
   );

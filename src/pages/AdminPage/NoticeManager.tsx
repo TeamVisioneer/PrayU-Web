@@ -37,6 +37,7 @@ interface NoticeForm {
   ctaLabel: string;
   ctaUrl: string;
   target: "all" | "existing";
+  startsAt: string;
   endsAt: string;
 }
 
@@ -47,8 +48,17 @@ const emptyForm = (): NoticeForm => ({
   ctaLabel: "",
   ctaUrl: "",
   target: "all",
+  startsAt: "",
   endsAt: "",
 });
+
+/** ISO → datetime-local 입력값(YYYY-MM-DDTHH:mm). 로컬 시간 기준으로 맞춘다 */
+const toLocalInputValue = (iso: string | null): string => {
+  if (!iso) return "";
+  const date = new Date(iso);
+  const offsetMs = date.getTimezoneOffset() * 60 * 1000;
+  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
+};
 
 const noticeStatus = (notice: Notice) => {
   if (!notice.is_active) return { label: "중지", className: "bg-gray-400" };
@@ -107,7 +117,8 @@ const NoticeManager = () => {
       ctaLabel: notice.cta_label || "",
       ctaUrl: notice.cta_url || "",
       target: notice.target === "existing" ? "existing" : "all",
-      endsAt: notice.ends_at ? notice.ends_at.slice(0, 16) : "",
+      startsAt: toLocalInputValue(notice.starts_at),
+      endsAt: toLocalInputValue(notice.ends_at),
     });
     setIsPreview(false);
     setIsEditorOpen(true);
@@ -152,6 +163,10 @@ const NoticeManager = () => {
       cta_url: form.ctaUrl.trim() || null,
       target: form.target,
       ends_at: form.endsAt ? new Date(form.endsAt).toISOString() : null,
+      // 시작일시를 비우면: 새 공지는 지금부터(DB default), 수정은 기존 값 유지
+      ...(form.startsAt
+        ? { starts_at: new Date(form.startsAt).toISOString() }
+        : {}),
     };
     const saved = editingId
       ? await updateNotice(editingId, payload)
@@ -397,45 +412,58 @@ const NoticeManager = () => {
                 </label>
               </div>
 
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-3 rounded-lg border border-gray-200 p-3">
                 <span className="text-xs font-medium text-gray-700">
-                  노출 대상
+                  노출 설정
                 </span>
-                <Select
-                  value={form.target}
-                  onValueChange={(value) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      target: value === "existing" ? "existing" : "all",
-                    }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">전체 사용자</SelectItem>
-                    <SelectItem value="existing">
-                      기존 사용자만 (신규 가입자 제외)
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs font-medium text-gray-700">
-                  종료일시
-                </span>
-                <Input
-                  type="datetime-local"
-                  value={form.endsAt}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, endsAt: e.target.value }))
-                  }
-                />
-                <span className="text-[11px] text-gray-400">
-                  비워두면 중지할 때까지 계속 노출됩니다.
-                </span>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">대상</span>
+                  <Select
+                    value={form.target}
+                    onValueChange={(value) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        target: value === "existing" ? "existing" : "all",
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">전체 사용자</SelectItem>
+                      <SelectItem value="existing">
+                        기존 사용자만 (신규 가입자 제외)
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">시작</span>
+                  <Input
+                    type="datetime-local"
+                    value={form.startsAt}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, startsAt: e.target.value }))
+                    }
+                  />
+                  <span className="text-[11px] text-gray-400">
+                    비워두면 저장 즉시 시작됩니다.
+                  </span>
+                </label>
+                <label className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-gray-500">종료</span>
+                  <Input
+                    type="datetime-local"
+                    value={form.endsAt}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, endsAt: e.target.value }))
+                    }
+                  />
+                  <span className="text-[11px] text-gray-400">
+                    비워두면 중지할 때까지 계속 노출됩니다.
+                  </span>
+                </label>
               </div>
             </div>
           )}
