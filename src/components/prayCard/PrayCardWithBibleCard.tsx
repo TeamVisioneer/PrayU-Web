@@ -7,11 +7,14 @@ import BibleCard from "./BibleCard";
 interface PrayCardWithBibleCardProps {
   prayCard: PrayCardWithProfiles | undefined;
   initialFlipped?: boolean;
+  // 부모가 현재 보이는 면에 따라 하단 액션을 바꿀 수 있도록 플립 상태를 알림
+  onFlipChange?: (isFlipped: boolean) => void;
 }
 
 const PrayCardWithBibleCard: React.FC<PrayCardWithBibleCardProps> = ({
   prayCard,
   initialFlipped = false,
+  onFlipChange,
 }) => {
   const [isFlipped, setIsFlipped] = useState(initialFlipped);
   const bibleCard = prayCard?.bible_card;
@@ -22,7 +25,9 @@ const PrayCardWithBibleCard: React.FC<PrayCardWithBibleCardProps> = ({
       from: isFlipped ? "BibleCard" : "PrayCard",
       to: isFlipped ? "PrayCard" : "BibleCard",
     });
-    setIsFlipped((prev) => !prev);
+    const next = !isFlipped;
+    setIsFlipped(next);
+    onFlipChange?.(next);
   };
 
   return (

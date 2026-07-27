@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Drawer,
@@ -27,7 +28,12 @@ const PrayCardHistoryDrawer: React.FC = () => {
   const user = useBaseStore((state) => state.user);
   const legacyBibleCardUrl = historyCard?.bible_card_url;
 
-  // 말씀카드 미연결 카드에만 노출 (레거시 bible_card_url 카드도 새 체계로 만들도록 유도)
+  // 말씀카드 면(진입 기본)인지 여부 — 보이는 면에 따라 하단 액션을 바꾼다
+  const [isBibleSideVisible, setIsBibleSideVisible] = useState(true);
+  useEffect(() => {
+    setIsBibleSideVisible(true);
+  }, [historyCard?.id]);
+
   const onClickCreateBibleCard = () => {
     if (!historyCard) return;
     analyticsTrack("클릭_말씀카드_페이지", {
@@ -37,13 +43,14 @@ const PrayCardHistoryDrawer: React.FC = () => {
     navigate(`/bible-card/new?praycard_id=${historyCard.id}`);
   };
 
-  const createBibleCardButton = (
+  // 미연결 카드: 만들기 유도 / 연결 카드의 말씀카드 면: 다시 만들기(교체)
+  const createBibleCardButton = (label: string) => (
     <Button
       variant="primary"
       onClick={onClickCreateBibleCard}
       className="mt-3 h-[48px] w-full rounded-xl text-base"
     >
-      말씀카드 만들기
+      {label}
     </Button>
   );
   return (
@@ -67,22 +74,29 @@ const PrayCardHistoryDrawer: React.FC = () => {
               key={historyCard.id}
               prayCard={historyCard}
               initialFlipped
+              onFlipChange={setIsBibleSideVisible}
             />
-            <ShareButtonGroup
-              where="PrayCardHistoryDrawer"
-              publicUrl={historyCard.bible_card.image_url ?? undefined}
-              shareUrl={`${getDomainUrl()}/bible-card/share/${historyCard.bible_card.id}`}
-              kakaoServerCallbackArgs={
-                user
-                  ? { user_id: user.id, feature: "bible_card" }
-                  : undefined
-              }
-            />
-            <ReactionResultBox
-              prayCard={historyCard || undefined}
-              variant="separated"
-              eventOption={{ where: "HistoryCard" }}
-            />
+            {isBibleSideVisible ? (
+              <>
+                <ShareButtonGroup
+                  where="PrayCardHistoryDrawer"
+                  publicUrl={historyCard.bible_card.image_url ?? undefined}
+                  shareUrl={`${getDomainUrl()}/bible-card/share/${historyCard.bible_card.id}`}
+                  kakaoServerCallbackArgs={
+                    user
+                      ? { user_id: user.id, feature: "bible_card" }
+                      : undefined
+                  }
+                />
+                {createBibleCardButton("말씀카드 다시 만들기")}
+              </>
+            ) : (
+              <ReactionResultBox
+                prayCard={historyCard || undefined}
+                variant="separated"
+                eventOption={{ where: "HistoryCard" }}
+              />
+            )}
           </div>
         ) : legacyBibleCardUrl ? (
           <div className="flex flex-col gap-2 px-10 pt-5 pb-10 overflow-y-auto">
@@ -101,7 +115,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
                 {historyCard.content}
               </p>
             </div>
-            {createBibleCardButton}
+            {createBibleCardButton("말씀카드 만들기")}
           </div>
         ) : (
           <div className="flex flex-col gap-2 px-10 pt-5 pb-10">
@@ -111,7 +125,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
               variant="separated"
               eventOption={{ where: "HistoryCard" }}
             />
-            {historyCard && createBibleCardButton}
+            {historyCard && createBibleCardButton("말씀카드 만들기")}
           </div>
         )}
       </DrawerContent>
