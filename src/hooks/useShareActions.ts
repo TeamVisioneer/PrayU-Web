@@ -7,6 +7,8 @@ interface UseShareActionsProps {
   publicUrl?: string;
   shareUrl?: string;
   kakaoLinkObject?: ReturnType<typeof UserBibleCardLink>;
+  // 카카오 공유 성공 웹훅(공유 보상)용 사용자 정의 파라미터 — 있어야 웹훅이 발송된다
+  kakaoServerCallbackArgs?: Record<string, string>;
 }
 
 interface UseShareActionsReturn {
@@ -64,6 +66,7 @@ export const useShareActions = ({
   publicUrl,
   shareUrl,
   kakaoLinkObject,
+  kakaoServerCallbackArgs,
 }: UseShareActionsProps): UseShareActionsReturn => {
   const handleDownload = async () => {
     analyticsTrack("클릭_다운로드", { where });
@@ -136,18 +139,25 @@ export const useShareActions = ({
         return;
       }
 
-      if (kakaoLinkObject) {
-        window.Kakao.Share.sendDefault(kakaoLinkObject);
-      } else if (publicUrl) {
-        // publicUrl이 있으면 기본 링크 객체 생성
-        const defaultLinkObject = UserBibleCardLink(publicUrl, shareUrl);
-        window.Kakao.Share.sendDefault(defaultLinkObject);
-      } else {
+      const linkObject =
+        kakaoLinkObject ||
+        (publicUrl ? UserBibleCardLink(publicUrl, shareUrl) : null);
+      if (!linkObject) {
         toast({ description: "공유할 내용이 없습니다" });
+        return;
       }
+      window.Kakao.Share.sendDefault({
+        ...linkObject,
+        ...(kakaoServerCallbackArgs
+          ? { serverCallbackArgs: kakaoServerCallbackArgs }
+          : {}),
+      });
     } catch (error) {
+      // PC 웹 피커는 카카오계정 인증 실패(4017)가 잦다 — 로그인 확인 안내
       console.error("카카오톡 공유 실패:", error);
-      toast({ description: "카카오톡 공유에 실패했습니다" });
+      toast({
+        description: "공유에 실패했어요. 카카오 로그인 상태를 확인해 주세요",
+      });
     }
   };
 

@@ -9,6 +9,8 @@ interface ShareButtonGroupProps {
   shareUrl?: string;
   showDownload?: boolean;
   showInstagram?: boolean;
+  // 카카오 공유 성공 웹훅(공유 보상)용 — useShareActions로 전달
+  kakaoServerCallbackArgs?: Record<string, string>;
 }
 
 /**
@@ -26,13 +28,14 @@ const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({
   shareUrl,
   showDownload = true,
   showInstagram = true,
+  kakaoServerCallbackArgs,
 }) => {
   const {
     handleDownload,
     handleCopyLink,
     handleKakaoShare,
     handleInstagramShare,
-  } = useShareActions({ where, publicUrl, shareUrl });
+  } = useShareActions({ where, publicUrl, shareUrl, kakaoServerCallbackArgs });
 
   return (
     <section className="w-full py-3 sm:py-4">
