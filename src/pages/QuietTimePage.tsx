@@ -1,26 +1,40 @@
-import { useForm, useFormState } from "react-hook-form";
 import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { AiOutlineLoading } from "react-icons/ai";
-import { useSearchParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
+import BibleVersePicker, {
+  BibleVerseSelection,
+} from "@/components/qt/BibleVersePicker";
+import { BIBLE_BOOKS } from "@/data/bibleStructure";
+import { fetchTodayLlmUsage } from "@/apis/llmUsage";
 import { parseBibleVerse } from "@/lib/utils";
 import * as Sentry from "@sentry/react";
 
-interface FormValues {
-  content: string;
-}
+// 표시용 상수. 실제 강제는 functions/openai(QT_DAILY_LIMIT env)가 담당 — 서버가 진실
+const QT_DAILY_LIMIT = 10;
+// 한 번에 선택 가능한 최대 절 수 (LLM 프롬프트 길이·품질 보호)
+const MAX_VERSE_RANGE = 20;
+
+const DEFAULT_SELECTION: BibleVerseSelection = {
+  book: BIBLE_BOOKS[0], // 창세기
+  chapter: 1,
+  startParagraph: 1,
+  endParagraph: 1,
+};
 
 const QuietTimePage = () => {
+  const navigate = useNavigate();
   const user = useBaseStore((state) => state.user);
-  const [searchParams] = useSearchParams();
-  const { register, handleSubmit, control } = useForm<FormValues>();
-  const { isSubmitting } = useFormState({ control });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selection, setSelection] =
+    useState<BibleVerseSelection>(DEFAULT_SELECTION);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [qtDataId, setQtDataId] = useState<string>("");
+  const [todayUsedCount, setTodayUsedCount] = useState<number | null>(null);
 
   const qtData = useBaseStore((state) => state.qtData);
   const setQtData = useBaseStore((state) => state.setQtData);
@@ -30,23 +44,50 @@ const QuietTimePage = () => {
   const fetchBibleList = useBaseStore((state) => state.fetchBibleList);
 
   const verseParams = searchParams.get("verse");
+  // 표시용 남은 횟수. 조회 실패(null)면 표시만 생략 — 실제 한도는 서버가 강제
+  const remainingCount =
+    todayUsedCount === null
+      ? null
+      : Math.max(0, QT_DAILY_LIMIT - todayUsedCount);
+
+  const refreshUsage = () => {
+    fetchTodayLlmUsage("qt").then(setTodayUsedCount);
+  };
+
+  useEffect(() => {
+    if (!user) return;
+    refreshUsage();
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
 
+    // 외부 링크 호환: /qt?verse=창세기 1:1 진입 시 자동 생성(캐시 우선) + 픽커 동기화
     if (verseParams) {
       const verseData = parseBibleVerse(verseParams);
       if (!verseData) return;
       const { label, chapter, paragraph, endParagraph } = verseData;
+      const book = BIBLE_BOOKS.find(
+        (b) => b.longLabel === label || b.shortLabel === label,
+      );
+      if (book) {
+        setSelection({
+          book,
+          chapter,
+          startParagraph: paragraph,
+          endParagraph: endParagraph || paragraph,
+        });
+      }
       fetchQtDaily(label, chapter, paragraph, endParagraph || paragraph);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const fetchQtByUser = async (
     longLabel: string,
     chapter: number,
     startParagraph: number,
-    endParagraph: number
+    endParagraph: number,
   ) => {
     if (loading) return;
     try {
@@ -55,7 +96,7 @@ const QuietTimePage = () => {
         longLabel,
         chapter,
         startParagraph,
-        endParagraph
+        endParagraph,
       );
       if (targetBibleList) {
         const qtData = await createQtData(
@@ -64,7 +105,7 @@ const QuietTimePage = () => {
           chapter,
           startParagraph,
           endParagraph,
-          targetBibleList[0].sentence
+          targetBibleList[0].sentence,
         );
         if (qtData) {
           setQtData(JSON.parse(qtData.result as string));
@@ -78,6 +119,7 @@ const QuietTimePage = () => {
       console.error(err);
     } finally {
       setLoading(false);
+      refreshUsage();
     }
   };
 
@@ -85,7 +127,7 @@ const QuietTimePage = () => {
     longLabel: string,
     chapter: number,
     startParagraph: number,
-    endParagraph: number
+    endParagraph: number,
   ) => {
     if (loading) return;
     try {
@@ -94,14 +136,14 @@ const QuietTimePage = () => {
         longLabel,
         chapter,
         startParagraph,
-        endParagraph
+        endParagraph,
       );
       if (targetBibleList && targetBibleList.length > 0) {
         const qtData = await fetchQtData(
           longLabel,
           chapter,
           startParagraph,
-          endParagraph
+          endParagraph,
         );
 
         if (
@@ -118,7 +160,7 @@ const QuietTimePage = () => {
             chapter,
             startParagraph,
             endParagraph,
-            targetBibleList[0].sentence
+            targetBibleList[0].sentence,
           );
           if (newQtData && typeof newQtData.result === "string") {
             setQtData(JSON.parse(newQtData.result));
@@ -133,6 +175,7 @@ const QuietTimePage = () => {
       console.error(err);
     } finally {
       setLoading(false);
+      refreshUsage();
     }
   };
 
@@ -173,49 +216,86 @@ const QuietTimePage = () => {
     }
   };
 
-  const onSubmit = async (data: FormValues) => {
+  const onClickCreate = async () => {
     analyticsTrack("클릭_QT_생성", {});
     setError(null);
-    const verseData = parseBibleVerse(data.content);
-    if (!verseData) {
-      setError("올바른 성경 구절을 입력해주세요.");
-      return;
-    }
-    const { label, chapter, paragraph, endParagraph } = verseData;
-    await fetchQtByUser(label, chapter, paragraph, endParagraph || paragraph);
+    const { book, chapter, startParagraph, endParagraph } = selection;
+    await fetchQtByUser(book.longLabel, chapter, startParagraph, endParagraph);
   };
 
-  const inputVerseForm = () => (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <label className="flex flex-col justify-center text-lg font-semibold">
-        <p className="text-center text-2xl">📚 나만의 QT 만들기</p>
-        <p className="text-center text-base font-normal text-gray-500">
-          여러분의 특별한 QT를 만들어봐요!
-        </p>
-      </label>
-      <input
-        type="text"
-        placeholder="성경 구절을 입력하기(창세기 1:1, 시편 23:1-6)"
-        {...register("content", { required: true })}
-        className="border p-2 rounded-md w-full"
-      />
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className={`items-center justify-center text-white p-2 rounded-md w-full ${
-          isSubmitting ? "bg-gray-400" : "bg-blue-500"
-        }`}
-      >
-        {isSubmitting ? (
-          <div className="flex justify-between items-center">
-            <AiOutlineLoading className="animate-spin mr-2" size={20} />
-            QT를 생성중이에요...
-          </div>
-        ) : (
-          "QT 생성하기"
-        )}
+  const onClickReset = () => {
+    // 전체 리로드 없이 상태만 초기화
+    setQtData(null);
+    setQtDataId("");
+    setError(null);
+    if (verseParams) setSearchParams({}, { replace: true });
+  };
+
+  const selectionSummary = `${selection.book.longLabel} ${selection.chapter}:${
+    selection.startParagraph
+  }${
+    selection.endParagraph > selection.startParagraph
+      ? `-${selection.endParagraph}`
+      : ""
+  }`;
+
+  const renderHeader = () => (
+    <header className="sticky top-0 z-50 flex items-center border-b bg-mainBg p-4">
+      <button onClick={() => navigate(-1)} className="absolute left-4">
+        <IoChevronBack size={20} />
       </button>
-    </form>
+      <h1 className="w-full text-center text-lg font-bold">QT 만들기</h1>
+    </header>
+  );
+
+  const versePickerForm = () => (
+    <div className="flex flex-col gap-4">
+      <section className="pt-1 text-center">
+        <p className="text-[22px] font-bold leading-snug text-gray-950">
+          말씀으로 시작하는 묵상
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-gray-500">
+          묵상하고 싶은 성경 구절을 선택하면
+          <br />
+          말씀 묵상과 적용 질문을 만들어드려요.
+        </p>
+      </section>
+
+      <BibleVersePicker
+        value={selection}
+        onChange={setSelection}
+        maxRange={MAX_VERSE_RANGE}
+        disabled={loading}
+      />
+
+      <div>
+        <p className="pb-3 text-center text-base font-semibold text-gray-800">
+          {selectionSummary}
+        </p>
+        <Button
+          variant="primary"
+          onClick={onClickCreate}
+          disabled={loading || remainingCount === 0}
+          className="h-[52px] w-full rounded-xl text-base disabled:opacity-70"
+        >
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <AiOutlineLoading className="mr-2 animate-spin" size={20} />
+              QT를 생성 중이에요...
+            </div>
+          ) : remainingCount === 0 ? (
+            "오늘 생성 횟수를 모두 사용했어요"
+          ) : (
+            "QT 생성하기"
+          )}
+        </Button>
+        {!loading && remainingCount !== null && remainingCount > 0 && (
+          <p className="mt-2 text-center text-xs text-gray-400">
+            오늘 남은 생성 {remainingCount}회
+          </p>
+        )}
+      </div>
+    </div>
   );
 
   const qtContent = () => (
@@ -271,14 +351,7 @@ const QuietTimePage = () => {
           ))}
         </ul>
       </section>
-      <Button
-        className=""
-        variant="primary"
-        onClick={() => {
-          window.history.replaceState(null, "", window.location.pathname);
-          window.location.reload();
-        }}
-      >
+      <Button variant="primary" onClick={onClickReset}>
         나만의 QT 만들기
       </Button>
       <a
@@ -290,27 +363,29 @@ const QuietTimePage = () => {
     </div>
   );
 
+  if (!user) {
+    return (
+      <div className="flex h-full w-full flex-col bg-mainBg">
+        {renderHeader()}
+        <main className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
+          <h1 className="text-xl font-bold">로그인이 필요해요</h1>
+          <p className="text-sm text-gray-500">
+            나만의 QT를 만들려면 먼저 로그인해 주세요.
+          </p>
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-5">
-      <div className="w-full flex justify-between items-center">
-        <div className="w-14">
-          <IoChevronBack size={20} onClick={() => window.history.back()} />
+    <div className="flex h-full w-full flex-col bg-mainBg">
+      {renderHeader()}
+      <main className="flex-1 overflow-y-auto">
+        <div className="flex min-h-full w-full flex-col gap-4 px-5 pb-8 pt-5">
+          {!qtData ? versePickerForm() : qtContent()}
+          {error && <div className="text-red-500">{error}</div>}
         </div>
-        <span className="w-14"></span>
-      </div>
-      <div className="flex flex-col p-4 gap-5">
-        {loading ? (
-          <div className="absolute inset-0 flex justify-center items-center">
-            <AiOutlineLoading className="animate-spin mr-2" size={30} />
-            <p className="text-lg font-bold">QT를 생성 중이에요...</p>
-          </div>
-        ) : !qtData && user ? (
-          inputVerseForm()
-        ) : (
-          qtContent()
-        )}
-        {error && <div className="text-red-500">{error}</div>}
-      </div>
+      </main>
     </div>
   );
 };
