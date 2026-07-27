@@ -22,7 +22,7 @@
 
 - [ ] **`NewAdminPage.tsx` 삭제** — 533줄 전부 mock 데이터이며 실데이터에 연결된 적 없음. `/admin/new` 라우트도 함께 제거
 - [ ] **어드민 접근 제어를 `is_admin` 기반으로 교체** — 현재 컴포넌트 내 이메일 하드코딩 allowlist
-- [ ] **공지 알림에 `notice_id` 연결** — `NotificationDialog`(어드민 발송 폼)가 `notification.data`에 `notice_id`를 넣지 않아, 알림함에서 공지를 눌러도 모달이 열리지 않고 읽음 처리만 된다. 발송 시 공지를 선택해 연결하도록 보완
+- [x] ~~공지 알림에 `notice_id` 연결~~ — **불필요해짐**. 어드민 공지 알림 발송(`NotificationDialog`)이 레거시로 판단되어 제거됐다(#471). 알림함의 기존 공지 알림은 본문이 목록에 그대로 보이므로 읽음 처리만 한다. 공지 알림 발송이 다시 필요해지면 그때 `notice_id` 연결과 함께 설계
 - [ ] **신고 payload에 `pray_card_id` 추가** — `ReportAlert`가 Discord로 보내는 내용에 대상 카드 ID가 없어 어드민이 삭제할 카드를 특정할 수 없다
 
 ## RLS 감사 결과 (2026-07-27)

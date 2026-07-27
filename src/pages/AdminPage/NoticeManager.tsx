@@ -1,8 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
+import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 import {
   createNotice,
@@ -13,23 +21,53 @@ import {
 import { Notice, NoticeSlide } from "../../../supabase/types/tables";
 import { TablesInsert } from "../../../supabase/types/database";
 
-const emptySlide: NoticeSlide = { image_url: "", tip: "", description: [] };
+const emptySlide = (): NoticeSlide => ({
+  image_url: "",
+  tip: "",
+  description: [],
+});
+
+interface NoticeForm {
+  title: string;
+  ctaLabel: string;
+  ctaUrl: string;
+  target: "all" | "existing";
+  endsAt: string;
+  slides: NoticeSlide[];
+}
+
+const emptyForm = (): NoticeForm => ({
+  title: "",
+  ctaLabel: "",
+  ctaUrl: "",
+  target: "all",
+  endsAt: "",
+  slides: [emptySlide()],
+});
+
+const noticeStatus = (notice: Notice) => {
+  if (!notice.is_active) return { label: "중지", className: "bg-gray-400" };
+  const now = Date.now();
+  if (new Date(notice.starts_at).getTime() > now) {
+    return { label: "예약", className: "bg-amber-500" };
+  }
+  if (notice.ends_at && new Date(notice.ends_at).getTime() <= now) {
+    return { label: "종료", className: "bg-gray-400" };
+  }
+  return { label: "노출중", className: "bg-blue-500" };
+};
 
 /**
- * 어드민 공지 관리 — 목록 / 작성 / 수정 / 활성 토글.
+ * 어드민 공지 관리 — 목록이 기본 화면이고, 작성·수정은 모달에서 한다.
  * 쓰기 권한은 notice 테이블 RLS(is_admin)가 강제한다.
  */
 const NoticeManager = () => {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-
-  const [title, setTitle] = useState("");
-  const [ctaLabel, setCtaLabel] = useState("");
-  const [ctaUrl, setCtaUrl] = useState("");
-  const [target, setTarget] = useState<"all" | "existing">("all");
-  const [endsAt, setEndsAt] = useState("");
-  const [slides, setSlides] = useState<NoticeSlide[]>([{ ...emptySlide }]);
+  const [form, setForm] = useState<NoticeForm>(emptyForm());
+  const [isSaving, setIsSaving] = useState(false);
 
   const loadNotices = useCallback(async () => {
     setIsLoading(true);
@@ -46,66 +84,70 @@ const NoticeManager = () => {
     loadNotices();
   }, [loadNotices]);
 
-  const resetForm = () => {
+  const openCreate = () => {
     setEditingId(null);
-    setTitle("");
-    setCtaLabel("");
-    setCtaUrl("");
-    setTarget("all");
-    setEndsAt("");
-    setSlides([{ ...emptySlide }]);
+    setForm(emptyForm());
+    setIsEditorOpen(true);
   };
 
-  const startEdit = (notice: Notice) => {
+  const openEdit = (notice: Notice) => {
+    const slides = parseNoticeSlides(notice.slides);
     setEditingId(notice.id);
-    setTitle(notice.title);
-    setCtaLabel(notice.cta_label || "");
-    setCtaUrl(notice.cta_url || "");
-    setTarget(notice.target === "existing" ? "existing" : "all");
-    setEndsAt(notice.ends_at ? notice.ends_at.slice(0, 16) : "");
-    const parsed = parseNoticeSlides(notice.slides);
-    setSlides(parsed.length > 0 ? parsed : [{ ...emptySlide }]);
+    setForm({
+      title: notice.title,
+      ctaLabel: notice.cta_label || "",
+      ctaUrl: notice.cta_url || "",
+      target: notice.target === "existing" ? "existing" : "all",
+      endsAt: notice.ends_at ? notice.ends_at.slice(0, 16) : "",
+      slides: slides.length > 0 ? slides : [emptySlide()],
+    });
+    setIsEditorOpen(true);
   };
 
-  const updateSlide = (index: number, patch: Partial<NoticeSlide>) => {
-    setSlides((prev) =>
-      prev.map((slide, i) => (i === index ? { ...slide, ...patch } : slide)),
-    );
+  const patchSlide = (index: number, patch: Partial<NoticeSlide>) => {
+    setForm((prev) => ({
+      ...prev,
+      slides: prev.slides.map((slide, i) =>
+        i === index ? { ...slide, ...patch } : slide,
+      ),
+    }));
   };
 
-  const handleSubmit = async () => {
-    if (!title.trim()) {
+  const handleSave = async () => {
+    if (!form.title.trim()) {
       toast({ description: "제목을 입력해 주세요" });
       return;
     }
-    // 빈 슬라이드는 저장하지 않는다
-    const cleanedSlides = slides.filter(
+    const cleanedSlides = form.slides.filter(
       (slide) =>
         slide.image_url?.trim() ||
         slide.tip?.trim() ||
         (slide.description || []).length > 0,
     );
 
+    setIsSaving(true);
     const payload = {
-      title: title.trim(),
+      title: form.title.trim(),
       // NoticeSlide는 앱에서 정의한 형태 — 컬럼은 jsonb라 Json으로 넘긴다
       slides: cleanedSlides as unknown as TablesInsert<"notice">["slides"],
-      cta_label: ctaLabel.trim() || null,
-      cta_url: ctaUrl.trim() || null,
-      target,
-      ends_at: endsAt ? new Date(endsAt).toISOString() : null,
+      cta_label: form.ctaLabel.trim() || null,
+      cta_url: form.ctaUrl.trim() || null,
+      target: form.target,
+      ends_at: form.endsAt ? new Date(form.endsAt).toISOString() : null,
     };
-
     const saved = editingId
       ? await updateNotice(editingId, payload)
       : await createNotice(payload);
+    setIsSaving(false);
 
     if (!saved) {
       toast({ description: "저장에 실패했어요" });
       return;
     }
-    toast({ description: editingId ? "공지를 수정했어요" : "공지를 만들었어요" });
-    resetForm();
+    toast({
+      description: editingId ? "공지를 수정했어요" : "공지를 만들었어요",
+    });
+    setIsEditorOpen(false);
     loadNotices();
   };
 
@@ -121,170 +163,240 @@ const NoticeManager = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Card className="w-full">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">
-            {editingId ? "공지 수정" : "새 공지 작성"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목 (예: 새로워진 말씀카드)"
-          />
-          <div className="flex flex-col gap-3 md:flex-row">
-            <Input
-              value={ctaLabel}
-              onChange={(e) => setCtaLabel(e.target.value)}
-              placeholder="CTA 문구 (예: 말씀카드 만들러 가기)"
-            />
-            <Input
-              value={ctaUrl}
-              onChange={(e) => setCtaUrl(e.target.value)}
-              placeholder="CTA 이동 경로 (예: /bible-card/new)"
-            />
-          </div>
-          <div className="flex flex-col gap-3 md:flex-row">
-            <select
-              value={target}
-              onChange={(e) =>
-                setTarget(e.target.value === "existing" ? "existing" : "all")
-              }
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-            >
-              <option value="all">전체 사용자</option>
-              <option value="existing">기존 사용자만 (신규 가입자 제외)</option>
-            </select>
-            <div className="flex flex-1 items-center gap-2">
-              <span className="shrink-0 text-sm text-gray-500">종료일시</span>
-              <Input
-                type="datetime-local"
-                value={endsAt}
-                onChange={(e) => setEndsAt(e.target.value)}
-              />
-            </div>
-          </div>
+    <div className="flex w-full flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-gray-500">
+          {isLoading ? "불러오는 중..." : `공지 ${notices.length}개`}
+        </span>
+        <Button
+          variant="primary"
+          onClick={openCreate}
+          className="flex h-9 items-center gap-1 px-3 text-sm"
+        >
+          <Plus className="h-4 w-4" />새 공지
+        </Button>
+      </div>
 
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className="flex flex-col gap-2 rounded-md border p-3"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-gray-500">
-                  슬라이드 {index + 1}
-                </span>
-                {slides.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSlides((prev) => prev.filter((_, i) => i !== index))
-                    }
-                    className="text-xs text-gray-400 hover:text-gray-600"
-                  >
-                    삭제
-                  </button>
-                )}
-              </div>
-              <Input
-                value={slide.image_url || ""}
-                onChange={(e) => updateSlide(index, { image_url: e.target.value })}
-                placeholder="이미지 경로 (예: /images/notice/bible_card.png)"
-              />
-              <Input
-                value={slide.tip || ""}
-                onChange={(e) => updateSlide(index, { tip: e.target.value })}
-                placeholder="소제목 (예: 이렇게 달라졌어요)"
-              />
-              <textarea
-                value={(slide.description || []).join("\n")}
-                onChange={(e) =>
-                  updateSlide(index, {
-                    description: e.target.value
-                      .split("\n")
-                      .filter((line) => line.trim().length > 0),
-                  })
-                }
-                placeholder="본문 — 줄바꿈으로 구분"
-                className="min-h-20 rounded-md border border-input bg-background p-3 text-sm"
-              />
-            </div>
-          ))}
-
-          <div className="flex gap-2">
-            <Button
-              variant="primaryLight"
-              onClick={() => setSlides((prev) => [...prev, { ...emptySlide }])}
-            >
-              슬라이드 추가
-            </Button>
-            <Button variant="primary" onClick={handleSubmit}>
-              {editingId ? "수정 저장" : "공지 만들기"}
-            </Button>
-            {editingId && (
-              <Button variant="secondary" onClick={resetForm}>
-                취소
-              </Button>
-            )}
+      <div className="flex flex-col gap-2">
+        {!isLoading && notices.length === 0 && (
+          <div className="rounded-xl bg-white py-10 text-center text-sm text-gray-500">
+            등록된 공지가 없어요. 새 공지를 만들어 보세요.
           </div>
-        </CardContent>
-      </Card>
-
-      <Card className="w-full">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">
-            공지 목록 {isLoading && "(불러오는 중...)"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="divide-y">
-          {notices.length === 0 && !isLoading && (
-            <div className="py-6 text-center text-sm text-gray-500">
-              등록된 공지가 없습니다.
-            </div>
-          )}
-          {notices.map((notice) => (
+        )}
+        {notices.map((notice) => {
+          const status = noticeStatus(notice);
+          const slideCount = parseNoticeSlides(notice.slides).length;
+          return (
             <div
               key={notice.id}
-              className="flex items-center justify-between gap-3 py-3"
+              className="flex flex-col gap-2 rounded-xl bg-white p-4"
             >
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="truncate text-sm font-medium">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Badge className={status.className}>{status.label}</Badge>
+                    {notice.target === "existing" && (
+                      <Badge className="bg-gray-500">기존 사용자</Badge>
+                    )}
+                  </div>
+                  <div className="mt-1.5 truncate text-sm font-semibold">
                     {notice.title}
-                  </span>
-                  <Badge
-                    className={
-                      notice.is_active ? "bg-blue-500" : "bg-gray-400"
-                    }
-                  >
-                    {notice.is_active ? "노출중" : "중지"}
-                  </Badge>
-                  {notice.target === "existing" && (
-                    <Badge className="bg-gray-500">기존 사용자</Badge>
-                  )}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {notice.starts_at.slice(0, 10)}
-                  {notice.ends_at ? ` ~ ${notice.ends_at.slice(0, 10)}` : " ~"}
+                  </div>
+                  <div className="mt-0.5 text-xs text-gray-400">
+                    {notice.starts_at.slice(0, 10)}
+                    {notice.ends_at
+                      ? ` ~ ${notice.ends_at.slice(0, 10)}`
+                      : " ~ 무기한"}
+                    {` · 슬라이드 ${slideCount}장`}
+                    {notice.cta_label ? ` · CTA "${notice.cta_label}"` : ""}
+                  </div>
                 </div>
               </div>
-              <div className="flex shrink-0 gap-2">
-                <Button variant="secondary" onClick={() => startEdit(notice)}>
+              <div className="flex gap-2">
+                <Button
+                  variant="secondary"
+                  className="h-8 flex-1 text-sm"
+                  onClick={() => openEdit(notice)}
+                >
                   수정
                 </Button>
                 <Button
                   variant="primaryLight"
+                  className="h-8 flex-1 text-sm"
                   onClick={() => handleToggleActive(notice)}
                 >
                   {notice.is_active ? "중지" : "노출"}
                 </Button>
               </div>
             </div>
-          ))}
-        </CardContent>
-      </Card>
+          );
+        })}
+      </div>
+
+      <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
+        <DialogContent className="max-h-[85vh] w-11/12 overflow-y-auto rounded-xl">
+          <DialogHeader>
+            <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
+            <DialogDescription className="text-xs">
+              슬라이드는 앱 공지 모달에 순서대로 노출됩니다.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-4">
+            <label className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-gray-600">제목</span>
+              <Input
+                value={form.title}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, title: e.target.value }))
+                }
+                placeholder="예: 새로워진 말씀카드"
+              />
+            </label>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-gray-600">
+                버튼 (선택)
+              </span>
+              <Input
+                value={form.ctaLabel}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, ctaLabel: e.target.value }))
+                }
+                placeholder="버튼 문구 — 예: 말씀카드 만들러 가기"
+              />
+              <Input
+                value={form.ctaUrl}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, ctaUrl: e.target.value }))
+                }
+                placeholder="이동 경로 — 예: /bible-card/new"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-gray-600">
+                노출 대상 · 종료일시
+              </span>
+              <select
+                value={form.target}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    target: e.target.value === "existing" ? "existing" : "all",
+                  }))
+                }
+                className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+              >
+                <option value="all">전체 사용자</option>
+                <option value="existing">
+                  기존 사용자만 (신규 가입자 제외)
+                </option>
+              </select>
+              <Input
+                type="datetime-local"
+                value={form.endsAt}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, endsAt: e.target.value }))
+                }
+              />
+              <span className="text-[11px] text-gray-400">
+                비워두면 중지할 때까지 계속 노출됩니다.
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <span className="text-xs font-medium text-gray-600">슬라이드</span>
+              {form.slides.map((slide, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col gap-2 rounded-lg border p-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-gray-500">
+                      {index + 1}번째
+                    </span>
+                    {form.slides.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setForm((prev) => ({
+                            ...prev,
+                            slides: prev.slides.filter((_, i) => i !== index),
+                          }))
+                        }
+                        className="text-gray-400 hover:text-red-500"
+                        aria-label="슬라이드 삭제"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                  <Input
+                    value={slide.image_url || ""}
+                    onChange={(e) =>
+                      patchSlide(index, { image_url: e.target.value })
+                    }
+                    placeholder="이미지 경로 — 예: /images/notice/bible_card.png"
+                  />
+                  {slide.image_url ? (
+                    <img
+                      src={slide.image_url}
+                      alt="미리보기"
+                      className="max-h-32 w-full rounded-md object-contain"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
+                    />
+                  ) : null}
+                  <Input
+                    value={slide.tip || ""}
+                    onChange={(e) => patchSlide(index, { tip: e.target.value })}
+                    placeholder="소제목 — 예: 이렇게 달라졌어요"
+                  />
+                  <textarea
+                    value={(slide.description || []).join("\n")}
+                    onChange={(e) =>
+                      patchSlide(index, {
+                        description: e.target.value
+                          .split("\n")
+                          .filter((line) => line.trim().length > 0),
+                      })
+                    }
+                    placeholder="본문 — 한 줄에 한 문장씩"
+                    className="min-h-24 rounded-md border border-input bg-background p-3 text-sm"
+                  />
+                </div>
+              ))}
+              <Button
+                variant="secondary"
+                className="h-9 text-sm"
+                onClick={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    slides: [...prev.slides, emptySlide()],
+                  }))
+                }
+              >
+                슬라이드 추가
+              </Button>
+            </div>
+          </div>
+
+          <DialogFooter className="flex-row justify-end gap-2">
+            <Button
+              variant="secondary"
+              onClick={() => setIsEditorOpen(false)}
+              disabled={isSaving}
+            >
+              취소
+            </Button>
+            <Button variant="primary" onClick={handleSave} disabled={isSaving}>
+              {isSaving ? "저장 중..." : editingId ? "수정 저장" : "만들기"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

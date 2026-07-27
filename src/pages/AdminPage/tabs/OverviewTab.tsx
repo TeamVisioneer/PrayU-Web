@@ -21,7 +21,22 @@ import {
   fetchKpiSummary,
 } from "@/apis/admin";
 
-const KpiCard = ({
+/** 상단 고정 지표 — 매일 보는 3개 (누적/오늘 신규) */
+const HeadlineStat = ({
+  title,
+  value,
+}: {
+  title: string;
+  value: number | string;
+}) => (
+  <div className="flex flex-1 flex-col items-center gap-0.5 py-3">
+    <span className="text-xs text-gray-500">{title}</span>
+    <span className="text-xl font-bold leading-none">{value}</span>
+  </div>
+);
+
+/** 기간 지표 — 보조. 값·라벨 위치를 고정해 줄이 흔들리지 않게 한다 */
+const PeriodStat = ({
   title,
   value,
   delta,
@@ -32,31 +47,28 @@ const KpiCard = ({
   delta?: number | null;
   hint?: string;
 }) => (
-  <Card className="overflow-hidden">
-    <CardHeader className="pb-1">
-      <CardTitle className="text-xs font-medium text-gray-500">
-        {title}
-      </CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="text-2xl font-bold">{value}</div>
-      {delta !== undefined && delta !== null && (
-        <div
-          className={`text-xs ${
+  <div className="flex flex-col gap-0.5 rounded-lg bg-white px-3 py-2.5">
+    <span className="text-[11px] leading-none text-gray-500">{title}</span>
+    <span className="text-lg font-bold leading-tight">{value}</span>
+    <span className="h-3 text-[11px] leading-none">
+      {delta !== undefined && delta !== null ? (
+        <span
+          className={
             delta > 0
               ? "text-blue-600"
               : delta < 0
                 ? "text-red-500"
                 : "text-gray-400"
-          }`}
+          }
         >
-          이전 기간 대비 {delta > 0 ? "+" : ""}
-          {delta}
-        </div>
+          {delta > 0 ? "+" : ""}
+          {delta} vs 이전
+        </span>
+      ) : (
+        <span className="text-gray-400">{hint || ""}</span>
       )}
-      {hint && <div className="text-xs text-gray-400">{hint}</div>}
-    </CardContent>
-  </Card>
+    </span>
+  </div>
 );
 
 const FunnelBar = ({
@@ -119,27 +131,51 @@ const OverviewTab = ({ days }: { days: number }) => {
   return (
     <div className="flex w-full flex-col gap-6">
       {kpi ? (
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <KpiCard title="누적 유저" value={kpi.totalUsers} />
-          <KpiCard
-            title="신규 유저"
-            value={kpi.newUsers}
-            delta={kpi.newUsers - kpi.prevNewUsers}
-          />
-          <KpiCard title="누적 그룹" value={kpi.totalGroups} />
-          <KpiCard
-            title="신규 그룹"
-            value={kpi.newGroups}
-            delta={kpi.newGroups - kpi.prevNewGroups}
-          />
-          <KpiCard title="DAU" value={kpi.dau} hint="오늘 기도한 유저" />
-          <KpiCard title="WAU" value={kpi.wau} hint="최근 7일" />
-          <KpiCard title="기도 수" value={kpi.prayCount} hint="기간 합계" />
-          <KpiCard
-            title="기도카드"
-            value={kpi.prayCardCount}
-            hint="기간 작성 수"
-          />
+        <div className="flex flex-col gap-3">
+          {/* 매일 확인하는 3개는 기간 선택과 무관하게 항상 위에 고정 */}
+          <Card>
+            <CardContent className="flex divide-x p-0">
+              <HeadlineStat title="누적 유저" value={kpi.totalUsers} />
+              <HeadlineStat title="오늘 신규 유저" value={kpi.todayNewUsers} />
+              <HeadlineStat title="오늘 신규 그룹" value={kpi.todayNewGroups} />
+            </CardContent>
+          </Card>
+
+          <div>
+            <div className="mb-1.5 text-xs font-medium text-gray-500">
+              최근 {days}일
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <PeriodStat
+                title="신규 유저"
+                value={kpi.newUsers}
+                delta={kpi.newUsers - kpi.prevNewUsers}
+              />
+              <PeriodStat
+                title="신규 그룹"
+                value={kpi.newGroups}
+                delta={kpi.newGroups - kpi.prevNewGroups}
+              />
+              <PeriodStat
+                title="누적 그룹"
+                value={kpi.totalGroups}
+                hint="전체"
+              />
+              <PeriodStat title="DAU" value={kpi.dau} hint="오늘 기도" />
+              <PeriodStat title="WAU" value={kpi.wau} hint="7일 기도" />
+              <PeriodStat
+                title="활성 유저"
+                value={kpi.activeUsers}
+                hint="기간 내 기도"
+              />
+              <PeriodStat title="기도 수" value={kpi.prayCount} hint="합계" />
+              <PeriodStat
+                title="기도카드"
+                value={kpi.prayCardCount}
+                hint="작성 수"
+              />
+            </div>
+          </div>
         </div>
       ) : (
         <div className="text-sm text-red-500">지표를 불러오지 못했어요</div>

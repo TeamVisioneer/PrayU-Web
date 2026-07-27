@@ -87,6 +87,8 @@ const fetchCreatedAts = async (
 
 export interface KpiSummary {
   totalUsers: number;
+  todayNewUsers: number; // 오늘(KST) 가입
+  todayNewGroups: number; // 오늘(KST) 개설
   newUsers: number;
   prevNewUsers: number;
   totalGroups: number;
@@ -106,9 +108,12 @@ export const fetchKpiSummary = async (
     const now = new Date().toISOString();
     const from = kstDaysAgoISO(days);
     const prevFrom = kstDaysAgoISO(days * 2);
+    const todayStart = kstDaysAgoISO(0);
 
     const [
       totalUsers,
+      todayNewUsers,
+      todayNewGroups,
       newUsers,
       prevNewUsers,
       totalGroups,
@@ -121,6 +126,8 @@ export const fetchKpiSummary = async (
       wauUsers,
     ] = await Promise.all([
       countCreated("profiles"),
+      countCreated("profiles", todayStart, now),
+      countCreated("group", todayStart, now),
       countCreated("profiles", from, now),
       countCreated("profiles", prevFrom, from),
       countCreated("group"),
@@ -135,6 +142,8 @@ export const fetchKpiSummary = async (
 
     return {
       totalUsers,
+      todayNewUsers,
+      todayNewGroups,
       newUsers,
       prevNewUsers,
       totalGroups,

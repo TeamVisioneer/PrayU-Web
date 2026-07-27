@@ -15,7 +15,6 @@ import { AlertTriangle, Calendar as CalendarIcon } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import useBaseStore from "@/stores/baseStore";
 import NoticeManager from "../NoticeManager";
-import NotificationSendDialog from "../NotificationDialog";
 import { Profiles } from "../../../../supabase/types/tables";
 
 type ExpiryOption = "month" | "year" | "forever";
@@ -89,11 +88,6 @@ const OperationsTab = () => {
       <section className="flex w-full flex-col gap-3">
         <h2 className="text-base font-semibold">공지 관리</h2>
         <NoticeManager />
-      </section>
-
-      <section className="flex w-full flex-col gap-3">
-        <h2 className="text-base font-semibold">공지 알림 발송</h2>
-        <NotificationSendDialog />
       </section>
 
       <section className="flex w-full flex-col gap-3">
