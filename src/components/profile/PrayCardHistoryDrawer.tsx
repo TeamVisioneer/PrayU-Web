@@ -11,7 +11,9 @@ import useBaseStore from "@/stores/baseStore";
 import { PrayCard } from "../prayCard/PrayCard";
 import ReactionResultBox from "../pray/ReactionResultBox";
 import PrayCardWithBibleCard from "../prayCard/PrayCardWithBibleCard";
+import ShareButtonGroup from "../share/ShareButtonGroup";
 import { analyticsTrack } from "@/analytics/analytics";
+import { getDomainUrl } from "@/lib/utils";
 
 const PrayCardHistoryDrawer: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ const PrayCardHistoryDrawer: React.FC = () => {
     (state) => state.setIsOpenHistoryDrawer
   );
   const historyCard = useBaseStore((state) => state.historyCard);
+  const user = useBaseStore((state) => state.user);
   const legacyBibleCardUrl = historyCard?.bible_card_url;
 
   // 말씀카드 미연결 카드에만 노출 (레거시 bible_card_url 카드도 새 체계로 만들도록 유도)
@@ -64,6 +67,16 @@ const PrayCardHistoryDrawer: React.FC = () => {
               key={historyCard.id}
               prayCard={historyCard}
               initialFlipped
+            />
+            <ShareButtonGroup
+              where="PrayCardHistoryDrawer"
+              publicUrl={historyCard.bible_card.image_url ?? undefined}
+              shareUrl={`${getDomainUrl()}/bible-card/share/${historyCard.bible_card.id}`}
+              kakaoServerCallbackArgs={
+                user
+                  ? { user_id: user.id, feature: "bible_card" }
+                  : undefined
+              }
             />
             <ReactionResultBox
               prayCard={historyCard || undefined}
