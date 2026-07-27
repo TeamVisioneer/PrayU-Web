@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { IoChevronBack } from "react-icons/io5";
+import { Info, Repeat } from "lucide-react";
 import { PulseLoader } from "react-spinners";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ import { BibleCardBase } from "@/components/prayCard/BibleCardBase";
 import BibleCardThumbnail from "@/components/prayCard/BibleCardThumbnail";
 import ShowMoreBtn from "@/components/common/ShowMoreBtn";
 import ShareButtonGroup from "@/components/share/ShareButtonGroup";
+import BibleCardGuideSheet from "./BibleCardGuideSheet";
 import useBaseStore from "@/stores/baseStore";
 import { useSaveImage } from "@/hooks/useSaveImage";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -159,19 +161,30 @@ const PrayCardBibleBackPreview = ({
   isFlipped,
   isCreating,
   onFlip,
+  cardOverlay,
 }: {
   prayCard: PrayCardWithProfiles;
   bibleCard: BibleCardType | null | undefined;
   isFlipped: boolean;
   isCreating: boolean;
   onFlip: () => void;
+  // 카드 위에 겹쳐 띄우는 액션 — 회전 컨테이너 밖이라 플립에 함께 돌지 않는다
+  cardOverlay?: React.ReactNode;
 }) => (
   <div className="flex w-full flex-col items-center gap-3">
-    <button
-      type="button"
-      onClick={onFlip}
-      disabled={isCreating}
-      className="w-full perspective-1000 text-left disabled:cursor-default"
+    {/* 카드 전체가 플립 트리거 — 앞면 오버레이(버튼)를 품어야 해서 div로 둔다 */}
+    <div
+      role="button"
+      tabIndex={isCreating ? -1 : 0}
+      onClick={isCreating ? undefined : onFlip}
+      onKeyDown={(e) => {
+        if (isCreating) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onFlip();
+        }
+      }}
+      className="w-full perspective-1000 text-left"
     >
       <div
         className={`relative aspect-[3/4] w-full transition-transform duration-700 transform-style-preserve-3d ${
@@ -180,6 +193,10 @@ const PrayCardBibleBackPreview = ({
       >
         <div className="absolute inset-0 backface-hidden">
           <PrayCard prayCard={prayCard} isMoreBtn={false} editable={false} />
+          {/* 앞면 안에 있어 카드와 함께 뒤집히고, 뒷면에서는 보이지 않는다 */}
+          {cardOverlay && (
+            <div className="absolute right-3 top-3 z-20">{cardOverlay}</div>
+          )}
         </div>
         <div className="absolute inset-0 rotate-y-180 backface-hidden">
           {bibleCard ? (
@@ -196,7 +213,7 @@ const PrayCardBibleBackPreview = ({
           )}
         </div>
       </div>
-    </button>
+    </div>
     <button
       type="button"
       onClick={onFlip}
@@ -240,6 +257,7 @@ const BibleCardNewPage = () => {
   const [todayRewardCount, setTodayRewardCount] = useState<number | null>(null);
   const prevRewardRef = useRef<number | null>(null);
   const [isReplaceDialogOpen, setIsReplaceDialogOpen] = useState(false);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   const praycardIdParam = searchParams.get("praycard_id");
   const legacyPrayCardIdParam = searchParams.get("prayCardId");
@@ -456,7 +474,8 @@ const BibleCardNewPage = () => {
     if (!user || !selectedPrayCard || isCreating) return;
     if (remainingCount === 0) {
       toast({
-        description: "오늘 생성 가능 횟수를 모두 사용했어요. 내일 다시 만들 수 있어요",
+        description:
+          "오늘 생성 횟수를 모두 사용했어요. 카카오톡으로 공유하면 1회 더 만들 수 있어요",
       });
       return;
     }
@@ -573,7 +592,8 @@ const BibleCardNewPage = () => {
   const handleClickReplace = () => {
     if (remainingCount === 0) {
       toast({
-        description: "오늘 생성 가능 횟수를 모두 사용했어요. 내일 다시 만들 수 있어요",
+        description:
+          "오늘 생성 횟수를 모두 사용했어요. 카카오톡으로 공유하면 1회 더 만들 수 있어요",
       });
       return;
     }
@@ -611,12 +631,12 @@ const BibleCardNewPage = () => {
           >
             <p className="text-[22px] font-bold leading-snug text-gray-950">
               {!selectedPrayCard
-                ? "말씀을 붙일 기도카드를 골라주세요"
+                ? "기도카드를 골라주세요"
                 : selectedBibleCard
                   ? "말씀카드가 연결되었어요"
                   : isCreating
-                    ? "이 기도에 어울리는 말씀을 찾고 있어요"
-                    : "이 기도에 어울리는 말씀을 찾아드릴게요"}
+                    ? "어울리는 말씀을 찾고 있어요"
+                    : "어울리는 말씀을 찾아드릴게요"}
             </p>
             <p className="mt-2 text-sm leading-relaxed text-gray-500">
               {!selectedPrayCard
@@ -663,6 +683,22 @@ const BibleCardNewPage = () => {
                       isFlipped={isFlipped}
                       isCreating={isCreating}
                       onFlip={() => setIsFlipped((prev) => !prev)}
+                      cardOverlay={
+                        // 카드 교체는 대상인 카드 위에 — 생성 전에만
+                        !selectedBibleCard && !isCreating ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation(); // 카드 플립으로 전파 방지
+                              setIsDrawerOpen(true);
+                            }}
+                            className="flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-500 transition active:scale-95"
+                          >
+                            <Repeat className="h-3 w-3" strokeWidth={2.5} />
+                            카드 변경
+                          </button>
+                        ) : null
+                      }
                     />
                   )}
                 </motion.div>
@@ -699,19 +735,22 @@ const BibleCardNewPage = () => {
                     )}
                   </Button>
                   {selectedPrayCard && !isCreating && remainingCount !== null && (
-                    <p className="mt-2 text-center text-xs text-gray-400">
-                      {remainingCount > 0
-                        ? `오늘 남은 생성 ${remainingCount}회`
-                        : "카카오톡으로 공유하면 1회 더 만들 수 있어요"}
-                    </p>
-                  )}
-                  {selectedPrayCard && !isCreating && (
                     <button
                       type="button"
-                      onClick={() => setIsDrawerOpen(true)}
-                      className="mx-auto mt-3 block px-3 py-2 text-sm font-medium text-gray-400 transition hover:text-gray-500"
+                      onClick={() => {
+                        analyticsTrack("클릭_말씀카드_안내", {
+                          where: "BibleCardNewPage",
+                        });
+                        setIsGuideOpen(true);
+                      }}
+                      className="mx-auto mt-2 flex items-center gap-1 py-1 text-xs text-gray-400 transition hover:text-gray-500"
                     >
-                      다른 기도카드 선택
+                      <span>
+                        {remainingCount > 0
+                          ? `오늘 남은 생성 ${remainingCount}회`
+                          : "카카오톡으로 공유하면 1회 더 만들 수 있어요"}
+                      </span>
+                      <Info className="h-3.5 w-3.5" strokeWidth={2} />
                     </button>
                   )}
                 </motion.div>
@@ -864,6 +903,8 @@ const BibleCardNewPage = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <BibleCardGuideSheet open={isGuideOpen} onOpenChange={setIsGuideOpen} />
 
       {draft && (
         <div className="fixed -top-[100vh] -z-40 pointer-events-none">
