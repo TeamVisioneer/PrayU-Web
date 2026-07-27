@@ -2,6 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { GroupStat, fetchGroupStats } from "@/apis/admin";
 
 type SortKey = "recent" | "members" | "cards";
@@ -53,15 +60,19 @@ const GroupsTab = () => {
           placeholder="그룹 이름 검색"
           className="md:w-64"
         />
-        <select
+        <Select
           value={sortKey}
-          onChange={(e) => setSortKey(e.target.value as SortKey)}
-          className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+          onValueChange={(value) => setSortKey(value as SortKey)}
         >
-          <option value="recent">최신 개설순</option>
-          <option value="members">멤버 많은순</option>
-          <option value="cards">기도카드 많은순</option>
-        </select>
+          <SelectTrigger className="md:w-44">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="recent">최신 개설순</SelectItem>
+            <SelectItem value="members">멤버 많은순</SelectItem>
+            <SelectItem value="cards">기도카드 많은순</SelectItem>
+          </SelectContent>
+        </Select>
         <label className="flex items-center gap-2 text-sm text-gray-600">
           <input
             type="checkbox"

@@ -26,6 +26,9 @@ export type Notice = Database["public"]["Tables"]["notice"]["Row"];
 export interface NoticeSlide {
   image_url?: string;
   tip?: string;
+  /** 본문 (간이 마크다운). 어드민 에디터가 쓰는 현재 형식 */
+  body?: string;
+  /** @deprecated 줄 배열로 저장하던 이전 형식 — 읽기 호환용 */
   description?: string[];
 }
 

@@ -7,16 +7,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import useBaseStore from "@/stores/baseStore";
 import { fetchActiveNotice, fetchNoticeById, parseNoticeSlides } from "@/apis/notice";
+import NoticeContent from "./NoticeContent";
 import { analyticsTrack } from "@/analytics/analytics";
 import { Notice } from "../../../supabase/types/tables";
 
@@ -61,8 +54,6 @@ const NoticeDialog = () => {
 
   const [notice, setNotice] = useState<Notice | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [api, setApi] = useState<CarouselApi>();
 
   // 자동 노출: 활성 공지 조회 → 이미 본 공지·대상 조건 확인
   useEffect(() => {
@@ -115,12 +106,6 @@ const NoticeDialog = () => {
     };
   }, [openNoticeId, setOpenNoticeId]);
 
-  useEffect(() => {
-    if (!api) return;
-    setCurrentIndex(api.selectedScrollSnap());
-    api.on("select", () => setCurrentIndex(api.selectedScrollSnap()));
-  }, [api]);
-
   const handleClose = useCallback(() => {
     setIsOpen(false);
     if (notice) analyticsTrack("클릭_공지_닫기", { notice_id: notice.id });
@@ -167,68 +152,13 @@ const NoticeDialog = () => {
           <DialogDescription className="sr-only">공지 안내</DialogDescription>
         </DialogHeader>
 
-        {slides.length > 0 && (
-          <div className="w-full px-5">
-            <hr className="my-3" />
-            <Carousel setApi={setApi}>
-              <CarouselContent>
-                {slides.map((slide, index) => (
-                  <CarouselItem key={index}>
-                    <div className="flex h-full flex-col items-center gap-4">
-                      {slide.image_url && (
-                        <img
-                          src={slide.image_url}
-                          className="w-full rounded-lg shadow-md"
-                          alt={slide.tip || notice.title}
-                        />
-                      )}
-                      <div className="w-full space-y-2 text-left">
-                        {slide.tip && (
-                          <span className="text-sm font-bold">{slide.tip}</span>
-                        )}
-                        {(slide.description || []).map((line, lineIndex) => (
-                          <p key={lineIndex} className="text-sm text-gray-600">
-                            {line}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {slides.length > 1 && (
-                <>
-                  <div className="mt-2 flex items-center justify-center p-4">
-                    {slides.map((_, index) => (
-                      <span
-                        key={index}
-                        onClick={() => api?.scrollTo(index)}
-                        className={`mx-1 cursor-pointer rounded-full transition-colors duration-300 ${
-                          currentIndex === index
-                            ? "h-[8px] w-[8px] bg-[#608CFF]"
-                            : "h-[6px] w-[6px] bg-gray-400"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <CarouselPrevious className="-left-4 h-6 w-6" />
-                  <CarouselNext className="-right-4 h-6 w-6" />
-                </>
-              )}
-            </Carousel>
-          </div>
-        )}
-
-        {notice.cta_label && notice.cta_url && (
-          <div className="px-5 pt-4">
-            <button
-              onClick={handleClickCta}
-              className="h-[48px] w-full rounded-xl bg-[#608CFF] text-base font-medium text-white transition hover:bg-[#4a70e2]"
-            >
-              {notice.cta_label}
-            </button>
-          </div>
-        )}
+        <NoticeContent
+          title={notice.title}
+          slides={slides}
+          ctaLabel={notice.cta_label}
+          ctaUrl={notice.cta_url}
+          onClickCta={handleClickCta}
+        />
 
         <div className="mt-4 grid w-full grid-cols-2 overflow-hidden border-t border-gray-200">
           <button

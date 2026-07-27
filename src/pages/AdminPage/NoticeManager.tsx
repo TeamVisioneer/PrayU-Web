@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Eye, Pencil, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
+import NoticeContent from "@/components/notice/NoticeContent";
 import {
   createNotice,
   fetchNoticeList,
@@ -24,7 +32,7 @@ import { TablesInsert } from "../../../supabase/types/database";
 const emptySlide = (): NoticeSlide => ({
   image_url: "",
   tip: "",
-  description: [],
+  body: "",
 });
 
 interface NoticeForm {
@@ -68,6 +76,7 @@ const NoticeManager = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<NoticeForm>(emptyForm());
   const [isSaving, setIsSaving] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
 
   const loadNotices = useCallback(async () => {
     setIsLoading(true);
@@ -87,11 +96,17 @@ const NoticeManager = () => {
   const openCreate = () => {
     setEditingId(null);
     setForm(emptyForm());
+    setIsPreview(false);
     setIsEditorOpen(true);
   };
 
   const openEdit = (notice: Notice) => {
-    const slides = parseNoticeSlides(notice.slides);
+    // 이전 형식(description 줄 배열)로 저장된 공지는 마크다운 본문으로 옮겨 편집한다
+    const slides = parseNoticeSlides(notice.slides).map((slide) =>
+      slide.body === undefined && slide.description
+        ? { ...slide, body: slide.description.join("\n") }
+        : slide,
+    );
     setEditingId(notice.id);
     setForm({
       title: notice.title,
@@ -101,6 +116,7 @@ const NoticeManager = () => {
       endsAt: notice.ends_at ? notice.ends_at.slice(0, 16) : "",
       slides: slides.length > 0 ? slides : [emptySlide()],
     });
+    setIsPreview(false);
     setIsEditorOpen(true);
   };
 
@@ -119,10 +135,7 @@ const NoticeManager = () => {
       return;
     }
     const cleanedSlides = form.slides.filter(
-      (slide) =>
-        slide.image_url?.trim() ||
-        slide.tip?.trim() ||
-        (slide.description || []).length > 0,
+      (slide) => slide.image_url?.trim() || slide.tip?.trim() || slide.body?.trim(),
     );
 
     setIsSaving(true);
@@ -236,12 +249,53 @@ const NoticeManager = () => {
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
         <DialogContent className="max-h-[85vh] w-11/12 overflow-y-auto rounded-xl">
           <DialogHeader>
-            <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
+            {/* pr-8: 우상단 닫기(X) 버튼과 겹치지 않게 */}
+            <div className="flex items-center justify-between gap-2 pr-8">
+              <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
+              <button
+                type="button"
+                onClick={() => setIsPreview((prev) => !prev)}
+                className="flex shrink-0 items-center gap-1 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-200"
+              >
+                {isPreview ? (
+                  <>
+                    <Pencil className="h-3.5 w-3.5" />
+                    편집
+                  </>
+                ) : (
+                  <>
+                    <Eye className="h-3.5 w-3.5" />
+                    미리보기
+                  </>
+                )}
+              </button>
+            </div>
             <DialogDescription className="text-xs">
-              슬라이드는 앱 공지 모달에 순서대로 노출됩니다.
+              {isPreview
+                ? "사용자에게 보이는 그대로입니다."
+                : "슬라이드는 앱 공지 모달에 순서대로 노출됩니다."}
             </DialogDescription>
           </DialogHeader>
 
+          {isPreview ? (
+            // 실제 공지 모달과 같은 컴포넌트로 그려 어긋나지 않게 한다
+            <div className="rounded-2xl bg-white pb-5 pt-4">
+              <div className="px-5 text-lg font-semibold">
+                📢 {form.title || "(제목 없음)"}
+              </div>
+              <NoticeContent
+                title={form.title}
+                slides={form.slides.filter(
+                  (slide) =>
+                    slide.image_url?.trim() ||
+                    slide.tip?.trim() ||
+                    slide.body?.trim(),
+                )}
+                ctaLabel={form.ctaLabel || null}
+                ctaUrl={form.ctaUrl || null}
+              />
+            </div>
+          ) : (
           <div className="flex flex-col gap-4">
             <label className="flex flex-col gap-1">
               <span className="text-xs font-medium text-gray-600">제목</span>
@@ -278,21 +332,25 @@ const NoticeManager = () => {
               <span className="text-xs font-medium text-gray-600">
                 노출 대상 · 종료일시
               </span>
-              <select
+              <Select
                 value={form.target}
-                onChange={(e) =>
+                onValueChange={(value) =>
                   setForm((prev) => ({
                     ...prev,
-                    target: e.target.value === "existing" ? "existing" : "all",
+                    target: value === "existing" ? "existing" : "all",
                   }))
                 }
-                className="h-10 rounded-md border border-input bg-background px-3 text-sm"
               >
-                <option value="all">전체 사용자</option>
-                <option value="existing">
-                  기존 사용자만 (신규 가입자 제외)
-                </option>
-              </select>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">전체 사용자</SelectItem>
+                  <SelectItem value="existing">
+                    기존 사용자만 (신규 가입자 제외)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
               <Input
                 type="datetime-local"
                 value={form.endsAt}
@@ -355,17 +413,14 @@ const NoticeManager = () => {
                     placeholder="소제목 — 예: 이렇게 달라졌어요"
                   />
                   <textarea
-                    value={(slide.description || []).join("\n")}
-                    onChange={(e) =>
-                      patchSlide(index, {
-                        description: e.target.value
-                          .split("\n")
-                          .filter((line) => line.trim().length > 0),
-                      })
-                    }
-                    placeholder="본문 — 한 줄에 한 문장씩"
-                    className="min-h-24 rounded-md border border-input bg-background p-3 text-sm"
+                    value={slide.body || ""}
+                    onChange={(e) => patchSlide(index, { body: e.target.value })}
+                    placeholder={"본문 (마크다운)\n\n**굵게**\n- 항목\n- 항목\n\n빈 줄로 문단을 나눕니다"}
+                    className="min-h-32 rounded-md border border-input bg-background p-3 font-mono text-xs leading-relaxed"
                   />
+                  <span className="text-[11px] text-gray-400">
+                    <code>**굵게**</code> · <code>- 항목</code> · 빈 줄로 문단 구분
+                  </span>
                 </div>
               ))}
               <Button
@@ -382,6 +437,7 @@ const NoticeManager = () => {
               </Button>
             </div>
           </div>
+          )}
 
           <DialogFooter className="flex-row justify-end gap-2">
             <Button
