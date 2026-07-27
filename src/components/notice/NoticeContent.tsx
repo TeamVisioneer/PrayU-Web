@@ -4,8 +4,6 @@ import {
   CarouselApi,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { NoticeMarkdown } from "./noticeMarkdown";
 import { NoticeSlide } from "../../../supabase/types/tables";
@@ -75,9 +73,10 @@ const NoticeContent = ({
                 </CarouselItem>
               ))}
             </CarouselContent>
+            {/* 좌우 화살표는 두지 않는다 — 모바일 모달에서 이미지 위에 겹쳐 지저분하고,
+                스와이프와 점 인디케이터로 충분하다 */}
             {slides.length > 1 && (
-              <>
-                <div className="mt-2 flex items-center justify-center p-4">
+              <div className="mt-2 flex items-center justify-center p-4">
                   {slides.map((_, index) => (
                     <span
                       key={index}
@@ -88,21 +87,19 @@ const NoticeContent = ({
                           : "h-[6px] w-[6px] bg-gray-400"
                       }`}
                     />
-                  ))}
-                </div>
-                <CarouselPrevious className="-left-4 h-6 w-6" />
-                <CarouselNext className="-right-4 h-6 w-6" />
-              </>
+                ))}
+              </div>
             )}
           </Carousel>
         </div>
       )}
 
+      {/* 모달의 유일한 주 액션 — 보조 액션은 카드 밖에 있다 */}
       {ctaLabel && ctaUrl && (
-        <div className="px-5 pt-4">
+        <div className="px-5 pt-5">
           <button
             onClick={onClickCta}
-            className="h-[48px] w-full rounded-xl bg-[#608CFF] text-base font-medium text-white transition hover:bg-[#4a70e2]"
+            className="h-[52px] w-full rounded-xl bg-[#608CFF] text-base font-semibold text-white shadow-md shadow-[#608CFF]/30 transition hover:bg-[#4a70e2] active:scale-[0.99]"
           >
             {ctaLabel}
           </button>

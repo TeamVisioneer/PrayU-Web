@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Eye, Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, ImagePlus, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import NoticeContent from "@/components/notice/NoticeContent";
+import { getPublicUrl, uploadImage } from "@/apis/file";
 import {
   createNotice,
   fetchNoticeList,
@@ -77,6 +78,7 @@ const NoticeManager = () => {
   const [form, setForm] = useState<NoticeForm>(emptyForm());
   const [isSaving, setIsSaving] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
 
   const loadNotices = useCallback(async () => {
     setIsLoading(true);
@@ -127,6 +129,26 @@ const NoticeManager = () => {
         i === index ? { ...slide, ...patch } : slide,
       ),
     }));
+  };
+
+  /** 공지 이미지 업로드 — 기존 prayu 버킷의 notice/ 경로를 쓴다 */
+  const handleUploadImage = async (index: number, file: File) => {
+    setUploadingIndex(index);
+    const safeName = file.name.replace(/[^\w.-]/g, "_");
+    const path = `notice/${Date.now()}-${safeName}`;
+    const uploaded = await uploadImage(file, path);
+    if (!uploaded) {
+      setUploadingIndex(null);
+      toast({ description: "이미지 업로드에 실패했어요" });
+      return;
+    }
+    const publicUrl = getPublicUrl(uploaded.path);
+    setUploadingIndex(null);
+    if (!publicUrl) {
+      toast({ description: "이미지 주소를 가져오지 못했어요" });
+      return;
+    }
+    patchSlide(index, { image_url: publicUrl });
   };
 
   const handleSave = async () => {
@@ -278,22 +300,28 @@ const NoticeManager = () => {
           </DialogHeader>
 
           {isPreview ? (
-            // 실제 공지 모달과 같은 컴포넌트로 그려 어긋나지 않게 한다
-            <div className="rounded-2xl bg-white pb-5 pt-4">
-              <div className="px-5 text-lg font-semibold">
-                📢 {form.title || "(제목 없음)"}
+            // 실제 공지 모달과 같은 구성(어두운 배경 · 카드 · 카드 밖 보조 액션)으로 그린다
+            <div className="rounded-xl bg-gray-800 p-4">
+              <div className="w-full rounded-2xl bg-white pb-5">
+                <div className="px-5 pt-5 text-lg font-semibold">
+                  📢 {form.title || "(제목 없음)"}
+                </div>
+                <NoticeContent
+                  title={form.title}
+                  slides={form.slides.filter(
+                    (slide) =>
+                      slide.image_url?.trim() ||
+                      slide.tip?.trim() ||
+                      slide.body?.trim(),
+                  )}
+                  ctaLabel={form.ctaLabel || null}
+                  ctaUrl={form.ctaUrl || null}
+                />
               </div>
-              <NoticeContent
-                title={form.title}
-                slides={form.slides.filter(
-                  (slide) =>
-                    slide.image_url?.trim() ||
-                    slide.tip?.trim() ||
-                    slide.body?.trim(),
-                )}
-                ctaLabel={form.ctaLabel || null}
-                ctaUrl={form.ctaUrl || null}
-              />
+              <div className="flex items-center justify-between px-1 pt-1 text-sm text-white/70">
+                <span className="px-3 py-2">다음에 보지 않기</span>
+                <span className="px-3 py-2">닫기</span>
+              </div>
             </div>
           ) : (
           <div className="flex flex-col gap-4">
@@ -324,8 +352,12 @@ const NoticeManager = () => {
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, ctaUrl: e.target.value }))
                 }
-                placeholder="이동 경로 — 예: /bible-card/new"
+                placeholder="이동 링크 — 예: /bible-card/new"
               />
+              <span className="text-[11px] text-gray-400">
+                둘 다 입력해야 버튼이 노출됩니다. 앱 내 이동은 /로 시작하는 경로,
+                외부는 https:// 주소를 넣으세요.
+              </span>
             </div>
 
             <div className="flex flex-col gap-1">
@@ -390,23 +422,51 @@ const NoticeManager = () => {
                       </button>
                     )}
                   </div>
-                  <Input
-                    value={slide.image_url || ""}
-                    onChange={(e) =>
-                      patchSlide(index, { image_url: e.target.value })
-                    }
-                    placeholder="이미지 경로 — 예: /images/notice/bible_card.png"
-                  />
                   {slide.image_url ? (
-                    <img
-                      src={slide.image_url}
-                      alt="미리보기"
-                      className="max-h-32 w-full rounded-md object-contain"
-                      onError={(e) => {
-                        e.currentTarget.style.display = "none";
-                      }}
-                    />
-                  ) : null}
+                    <div className="relative">
+                      <img
+                        src={slide.image_url}
+                        alt="슬라이드 이미지"
+                        className="max-h-40 w-full rounded-md object-contain"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => patchSlide(index, { image_url: "" })}
+                        className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white"
+                        aria-label="이미지 제거"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed border-gray-300 py-6 text-xs text-gray-500 hover:bg-gray-50">
+                      {uploadingIndex === index ? (
+                        <>
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                          업로드 중...
+                        </>
+                      ) : (
+                        <>
+                          <ImagePlus className="h-5 w-5" />
+                          이미지 올리기
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={uploadingIndex !== null}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleUploadImage(index, file);
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
+                  )}
                   <Input
                     value={slide.tip || ""}
                     onChange={(e) => patchSlide(index, { tip: e.target.value })}

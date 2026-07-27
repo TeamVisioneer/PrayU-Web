@@ -146,30 +146,38 @@ const NoticeDialog = () => {
         if (!open) handleClose();
       }}
     >
-      <DialogContent className="w-11/12 rounded-2xl border-none p-0 focus:outline-none">
-        <DialogHeader className="p-5 pb-0 text-left">
-          <DialogTitle className="text-lg">📢 {notice.title}</DialogTitle>
-          <DialogDescription className="sr-only">공지 안내</DialogDescription>
-        </DialogHeader>
+      {/* 카드 자체는 아래 div가 그린다 — DialogContent는 투명 래퍼.
+          보조 액션(다음에 보지 않기·닫기)을 카드 밖으로 빼서 CTA만 주 액션으로 남긴다 */}
+      <DialogContent
+        showCloseButton={false}
+        className="w-11/12 border-none bg-transparent p-0 shadow-none focus:outline-none"
+      >
+        <div className="w-full rounded-2xl bg-background pb-5">
+          <DialogHeader className="p-5 pb-0 text-left">
+            <DialogTitle className="text-lg">📢 {notice.title}</DialogTitle>
+            <DialogDescription className="sr-only">공지 안내</DialogDescription>
+          </DialogHeader>
 
-        <NoticeContent
-          title={notice.title}
-          slides={slides}
-          ctaLabel={notice.cta_label}
-          ctaUrl={notice.cta_url}
-          onClickCta={handleClickCta}
-        />
+          <NoticeContent
+            title={notice.title}
+            slides={slides}
+            ctaLabel={notice.cta_label}
+            ctaUrl={notice.cta_url}
+            onClickCta={handleClickCta}
+          />
+        </div>
 
-        <div className="mt-4 grid w-full grid-cols-2 overflow-hidden border-t border-gray-200">
+        {/* 어두운 오버레이 위에 놓이므로 밝은 텍스트 */}
+        <div className="flex w-full items-center justify-between px-1 pt-1">
           <button
             onClick={handleHideNextTime}
-            className="rounded-bl-lg p-4 font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="rounded-lg px-3 py-2 text-sm text-white/70 transition hover:text-white"
           >
             다음에 보지 않기
           </button>
           <button
             onClick={handleClose}
-            className="rounded-br-lg p-4 font-medium text-gray-700 hover:bg-gray-100"
+            className="rounded-lg px-3 py-2 text-sm text-white/70 transition hover:text-white"
           >
             닫기
           </button>
