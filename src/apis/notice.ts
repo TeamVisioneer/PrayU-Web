@@ -14,15 +14,18 @@ export const parseNoticeSlides = (slides: Notice["slides"]): NoticeSlide[] => {
 
 /**
  * 현재 노출할 공지 1건.
- * RLS가 활성·기간 조건을 강제하므로 여기서는 최신 1건만 고른다.
- * (노출 여부 최종 판단 — 이미 본 공지·대상 필터 — 은 NoticeDialog가 담당)
+ * 노출 조건(활성·기간)은 앱이 판단한다 — DB는 로그인 사용자에게 공지를 열어둘 뿐이다.
+ * 남은 판단(이미 본 공지·대상 필터)은 NoticeDialog가 이어서 한다.
  */
 export const fetchActiveNotice = async (): Promise<Notice | null> => {
   try {
+    const now = new Date().toISOString();
     const { data, error } = await supabase
       .from("notice")
       .select("*")
       .eq("is_active", true)
+      .lte("starts_at", now)
+      .or(`ends_at.is.null,ends_at.gt.${now}`)
       .order("starts_at", { ascending: false })
       .limit(1)
       .maybeSingle();
