@@ -4,7 +4,6 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -12,6 +11,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { CHART_SERIES, gridProps, xAxisProps, yAxisProps } from "./chartTheme";
+import { ChartLegend, ChartTooltip } from "./ChartParts";
 import {
   ActivationFunnel,
   DailyPoint,
@@ -20,6 +21,16 @@ import {
   fetchDailySeries,
   fetchKpiSummary,
 } from "@/apis/admin";
+
+// 계열 정의 — 범례·툴팁이 같은 출처를 보게 한다
+const INFLOW_SERIES = [
+  { key: "newUsers", label: "신규 유저", color: CHART_SERIES.primary },
+  { key: "newGroups", label: "신규 그룹", color: CHART_SERIES.secondary },
+];
+const ACTIVITY_SERIES = [
+  { key: "prays", label: "기도", color: CHART_SERIES.primary },
+  { key: "prayCards", label: "기도카드", color: CHART_SERIES.secondary },
+];
 
 /** 상단 고정 지표 — 매일 보는 3개 (누적/오늘 신규) */
 const HeadlineStat = ({
@@ -222,32 +233,65 @@ const OverviewTab = ({ days }: { days: number }) => {
       {series && (
         <>
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">유입 추이</CardTitle>
+              <ChartLegend series={INFLOW_SERIES} />
             </CardHeader>
-            <CardContent className="h-64">
+            <CardContent className="h-52 pl-0 pr-4">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={series}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
-                  <Tooltip />
-                  <Legend />
+                <AreaChart data={series} margin={{ top: 4, right: 4 }}>
+                  <defs>
+                    <linearGradient id="fillUsers" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="0%"
+                        stopColor={CHART_SERIES.primary}
+                        stopOpacity={0.24}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor={CHART_SERIES.primary}
+                        stopOpacity={0.02}
+                      />
+                    </linearGradient>
+                    <linearGradient id="fillGroups" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="0%"
+                        stopColor={CHART_SERIES.secondary}
+                        stopOpacity={0.24}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor={CHART_SERIES.secondary}
+                        stopOpacity={0.02}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid {...gridProps} />
+                  <XAxis {...xAxisProps} />
+                  <YAxis {...yAxisProps} />
+                  <Tooltip
+                    cursor={{ stroke: "#d4d4d4", strokeWidth: 1 }}
+                    content={ChartTooltip(INFLOW_SERIES)}
+                  />
                   <Area
                     type="monotone"
                     dataKey="newUsers"
-                    name="신규 유저"
-                    stroke="#608CFF"
-                    fill="#608CFF"
-                    fillOpacity={0.2}
+                    stroke={CHART_SERIES.primary}
+                    strokeWidth={2}
+                    fill="url(#fillUsers)"
+                    dot={false}
+                    activeDot={{ r: 4, strokeWidth: 2, stroke: "#fff" }}
+                    isAnimationActive={false}
                   />
                   <Area
                     type="monotone"
                     dataKey="newGroups"
-                    name="신규 그룹"
-                    stroke="#34D399"
-                    fill="#34D399"
-                    fillOpacity={0.2}
+                    stroke={CHART_SERIES.secondary}
+                    strokeWidth={2}
+                    fill="url(#fillGroups)"
+                    dot={false}
+                    activeDot={{ r: 4, strokeWidth: 2, stroke: "#fff" }}
+                    isAnimationActive={false}
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -255,30 +299,37 @@ const OverviewTab = ({ days }: { days: number }) => {
           </Card>
 
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">활동 추이</CardTitle>
+              <ChartLegend series={ACTIVITY_SERIES} />
             </CardHeader>
-            <CardContent className="h-64">
+            <CardContent className="h-52 pl-0 pr-4">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={series}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
-                  <Tooltip />
-                  <Legend />
+                <LineChart data={series} margin={{ top: 4, right: 4 }}>
+                  <CartesianGrid {...gridProps} />
+                  <XAxis {...xAxisProps} />
+                  <YAxis {...yAxisProps} />
+                  <Tooltip
+                    cursor={{ stroke: "#d4d4d4", strokeWidth: 1 }}
+                    content={ChartTooltip(ACTIVITY_SERIES)}
+                  />
                   <Line
                     type="monotone"
                     dataKey="prays"
-                    name="기도"
-                    stroke="#608CFF"
+                    stroke={CHART_SERIES.primary}
+                    strokeWidth={2}
                     dot={false}
+                    activeDot={{ r: 4, strokeWidth: 2, stroke: "#fff" }}
+                    isAnimationActive={false}
                   />
                   <Line
                     type="monotone"
                     dataKey="prayCards"
-                    name="기도카드"
-                    stroke="#F59E0B"
+                    stroke={CHART_SERIES.secondary}
+                    strokeWidth={2}
                     dot={false}
+                    activeDot={{ r: 4, strokeWidth: 2, stroke: "#fff" }}
+                    isAnimationActive={false}
                   />
                 </LineChart>
               </ResponsiveContainer>

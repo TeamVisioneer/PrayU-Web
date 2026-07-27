@@ -10,6 +10,13 @@ import {
   YAxis,
 } from "recharts";
 import { FeatureUsage, fetchFeatureUsage } from "@/apis/admin";
+import { CHART_SERIES, gridProps, xAxisProps, yAxisProps } from "./chartTheme";
+import { ChartTooltip } from "./ChartParts";
+
+// 단일 계열이라 범례를 두지 않는다 — 제목이 계열명을 대신한다
+const LLM_SERIES = [
+  { key: "calls", label: "호출", color: CHART_SERIES.primary },
+];
 
 const FEATURE_LABEL: Record<string, string> = {
   bible_card: "말씀카드",
@@ -110,14 +117,23 @@ const UsageTab = ({ days }: { days: number }) => {
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium">일별 LLM 호출</CardTitle>
         </CardHeader>
-        <CardContent className="h-56">
+        <CardContent className="h-48 pl-0 pr-4">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={usage.llmDaily}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-              <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
-              <Tooltip />
-              <Bar dataKey="calls" name="호출" fill="#608CFF" />
+            <BarChart data={usage.llmDaily} margin={{ top: 4, right: 4 }}>
+              <CartesianGrid {...gridProps} />
+              <XAxis {...xAxisProps} />
+              <YAxis {...yAxisProps} />
+              <Tooltip
+                cursor={{ fill: "#f5f5f5" }}
+                content={ChartTooltip(LLM_SERIES)}
+              />
+              <Bar
+                dataKey="calls"
+                fill={CHART_SERIES.primary}
+                radius={[4, 4, 0, 0]}
+                maxBarSize={18}
+                isAnimationActive={false}
+              />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
