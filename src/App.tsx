@@ -85,7 +85,7 @@ const GroupRedirect = () => {
 
 const App = () => {
   return (
-    <div className="w-screen h-screen bg-white">
+    <div className="w-screen h-dvh bg-white">
       <AppInit />
       <MetaPixelInit />
       <KakaoInit />

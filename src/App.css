@@ -65,6 +65,20 @@
   }
   body {
     @apply bg-mainBg text-foreground tracking-tightest;
+    /* user-scalable=no 제거에 따른 더블탭 줌 방지 (핀치 줌은 허용) */
+    touch-action: manipulation;
+  }
+}
+
+/* 화면 높이 단위: tailwind의 h-*vh 유틸(calc(var(--vh) * N))이 참조.
+   dvh 지원 브라우저는 CSS만으로 실시간 가시 높이를 따라가고,
+   미지원 구형 브라우저만 AppInit의 JS 폴백이 innerHeight로 덮어쓴다 */
+:root {
+  --vh: 1vh;
+}
+@supports (height: 1dvh) {
+  :root {
+    --vh: 1dvh;
   }
 }
 
