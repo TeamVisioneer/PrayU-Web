@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -147,16 +148,24 @@ const NoticeDialog = () => {
       }}
     >
       {/* 카드 자체는 아래 div가 그린다 — DialogContent는 투명 래퍼.
-          보조 액션(다음에 보지 않기·닫기)을 카드 밖으로 빼서 CTA만 주 액션으로 남긴다 */}
+          보조 액션은 카드 밖(dim)으로 빼서 CTA만 카드 안 주 액션으로 남긴다 */}
       <DialogContent
         showCloseButton={false}
         className="w-11/12 border-none bg-transparent p-0 shadow-none focus:outline-none"
       >
-        <div className="w-full rounded-2xl bg-background pb-5">
-          <DialogHeader className="p-5 pb-0 text-left">
+        <div className="relative w-full rounded-2xl bg-background pb-5">
+          <DialogHeader className="p-5 pb-0 pr-12 text-left">
             <DialogTitle className="text-lg">📢 {notice.title}</DialogTitle>
             <DialogDescription className="sr-only">공지 안내</DialogDescription>
           </DialogHeader>
+          {/* 카드 안 닫기 — DialogContent가 투명해져 기본 X를 끄고 카드에 직접 붙인다 */}
+          <button
+            onClick={handleClose}
+            className="absolute right-4 top-5 text-gray-400 transition hover:text-gray-600"
+            aria-label="닫기"
+          >
+            <X className="h-5 w-5" />
+          </button>
 
           <NoticeContent
             images={images}
@@ -167,21 +176,22 @@ const NoticeDialog = () => {
           />
         </div>
 
-        {/* 어두운 오버레이 위에 놓이므로 밝은 텍스트 */}
-        <div className="flex w-full items-center justify-between px-1 pt-1">
+        {/* dim 위 보조 액션 — 닫기는 앱의 다른 모달(ExternalLinkDialog)과 같은 흰 원형 버튼 */}
+        <div className="flex w-full items-center justify-center gap-3 pt-3">
           <button
             onClick={handleHideNextTime}
-            className="rounded-lg px-3 py-2 text-sm text-white/70 transition hover:text-white"
+            className="rounded-full px-3 py-2 text-sm text-white/70 transition hover:text-white"
           >
             다음에 보지 않기
           </button>
-          <button
-            onClick={handleClose}
-            className="rounded-lg px-3 py-2 text-sm text-white/70 transition hover:text-white"
-          >
-            닫기
-          </button>
         </div>
+        <button
+          onClick={handleClose}
+          className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition hover:bg-gray-100"
+          aria-label="닫기"
+        >
+          <X className="h-5 w-5 text-gray-700" />
+        </button>
       </DialogContent>
     </Dialog>
   );
