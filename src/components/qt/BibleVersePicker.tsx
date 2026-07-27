@@ -11,7 +11,6 @@ export interface BibleVerseSelection {
 interface BibleVersePickerProps {
   value: BibleVerseSelection;
   onChange: (selection: BibleVerseSelection) => void;
-  maxRange: number; // 한 번에 선택 가능한 최대 절 수
   disabled?: boolean;
 }
 
@@ -39,7 +38,6 @@ const PICKER_HEIGHT = 336;
 const BibleVersePicker = ({
   value,
   onChange,
-  maxRange,
   disabled,
 }: BibleVersePickerProps) => {
   const { book, chapter, startParagraph, endParagraph } = value;
@@ -53,10 +51,9 @@ const BibleVersePicker = ({
     setHasUserSetStart(false);
   }, [book.book, chapter]);
 
-  // 범위 확장 전이면 시작+maxRange 초과 절은 비활성으로 상한을 시각화
+  // 범위 상한은 장 전체 — 장이 자연스러운 묵상 단위이자 상한
   const isRangeSet = endParagraph > startParagraph;
   const canExtend = hasUserSetStart && !isRangeSet;
-  const maxSelectableEnd = Math.min(startParagraph + maxRange - 1, verseCount);
 
   const bookColRef = useRef<HTMLDivElement>(null);
   const chapterColRef = useRef<HTMLDivElement>(null);
@@ -98,7 +95,7 @@ const BibleVersePicker = ({
   };
 
   const handleVerseTap = (v: number) => {
-    if (canExtend && v > startParagraph && v <= maxSelectableEnd) {
+    if (canExtend && v > startParagraph) {
       // 시작 절 탭 이후 더 큰 절 탭 → 끝 절로 확장
       onChange({ book, chapter, startParagraph, endParagraph: v });
     } else {
@@ -106,6 +103,12 @@ const BibleVersePicker = ({
       setHasUserSetStart(true);
       onChange({ book, chapter, startParagraph: v, endParagraph: v });
     }
+  };
+
+  // "끝절까지" — 현재 시작 절부터 장의 마지막 절까지
+  const handleSelectToEnd = () => {
+    setHasUserSetStart(true);
+    onChange({ book, chapter, startParagraph, endParagraph: verseCount });
   };
 
   const scrollToAnchor = (bookNum: number) => {
@@ -201,15 +204,27 @@ const BibleVersePicker = ({
 
       {/* 절 열 — 첫 탭 = 시작, 더 큰 절 탭 = 끝 확장, 다시 탭 = 새 시작 */}
       <div ref={verseColRef} className="relative flex-1 overflow-y-auto">
+        <div
+          className={`${groupHeaderClass} flex items-center justify-between gap-1`}
+        >
+          <span>{hasUserSetStart ? "~ 끝 절" : "시작 절"}</span>
+          <button
+            type="button"
+            onClick={handleSelectToEnd}
+            disabled={disabled || endParagraph === verseCount}
+            className="whitespace-nowrap rounded-md bg-blue-50 px-1.5 py-0.5 font-medium text-blue-600 disabled:opacity-40"
+          >
+            끝까지
+          </button>
+        </div>
         {range(1, verseCount).map((v) => {
           const inRange = v >= startParagraph && v <= endParagraph;
-          const unselectable = canExtend && v > maxSelectableEnd;
           return (
             <button
               key={v}
               type="button"
               onClick={() => handleVerseTap(v)}
-              disabled={disabled || unselectable}
+              disabled={disabled}
               className={`${rowBase} justify-center ${
                 inRange ? selectedRow : "text-gray-700"
               }`}
