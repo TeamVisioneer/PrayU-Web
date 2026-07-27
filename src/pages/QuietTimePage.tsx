@@ -15,8 +15,6 @@ import * as Sentry from "@sentry/react";
 
 // 표시용 상수. 실제 강제는 functions/openai(QT_DAILY_LIMIT env)가 담당 — 서버가 진실
 const QT_DAILY_LIMIT = 10;
-// 한 번에 선택 가능한 최대 절 수 (LLM 프롬프트 길이·품질 보호)
-const MAX_VERSE_RANGE = 20;
 
 const DEFAULT_SELECTION: BibleVerseSelection = {
   book: BIBLE_BOOKS[0], // 창세기
@@ -264,7 +262,6 @@ const QuietTimePage = () => {
       <BibleVersePicker
         value={selection}
         onChange={setSelection}
-        maxRange={MAX_VERSE_RANGE}
         disabled={loading}
       />
 
