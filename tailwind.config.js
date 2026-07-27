@@ -128,6 +128,11 @@ module.exports = {
         500: "500ms",
         600: "600ms",
       },
+      spacing: {
+        // viewport-fit=cover 환경의 노치/홈 인디케이터 영역 (예: pb-safe-bottom)
+        "safe-top": "env(safe-area-inset-top)",
+        "safe-bottom": "env(safe-area-inset-bottom)",
+      },
       height: {
         "5vh": "calc(var(--vh) * 5)",
         "10vh": "calc(var(--vh) * 10)",

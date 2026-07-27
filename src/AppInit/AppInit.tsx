@@ -27,18 +27,23 @@ const AppInit: React.FC = () => {
       }
     };
 
+    // dvh 미지원 구형 브라우저 전용 폴백 — 지원 브라우저는 App.css의 --vh: 1dvh 사용
+    const needsVhFallback = !CSS.supports("height", "1dvh");
     const setVh = () => {
-      // 기존 vh 설정 로직 유지
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     };
 
-    setVh();
-    window.addEventListener("resize", setVh);
+    if (needsVhFallback) {
+      setVh();
+      window.addEventListener("resize", setVh);
+    }
     window.addEventListener("message", handlePushNotification);
 
     return () => {
-      window.removeEventListener("resize", setVh);
+      if (needsVhFallback) {
+        window.removeEventListener("resize", setVh);
+      }
       window.removeEventListener("message", handlePushNotification);
     };
   }, [setIsApp, setIsIOS, setIsAndroid]);

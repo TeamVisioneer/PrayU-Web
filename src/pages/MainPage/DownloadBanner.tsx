@@ -16,7 +16,7 @@ const DownloadBanner = () => {
 
   return (
     <div
-      className="w-full bg-purple-100 py-4 px-4"
+      className="w-full bg-purple-100 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]"
       onClick={() => onClickInstallPrayU()}
     >
       <div className="flex justify-between items-center max-w-[480px] mx-auto">

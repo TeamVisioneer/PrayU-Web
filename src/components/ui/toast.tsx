@@ -15,7 +15,7 @@ const ToastViewport = React.forwardRef<
     ref={ref}
     className={cn(
       // 모바일 우선: 상단 중앙 고정 (위로 스와이프해 닫는 동작과 방향 일치)
-      "fixed left-1/2 top-0 z-[100] flex w-full max-w-[420px] -translate-x-1/2 flex-col items-center gap-2 p-4",
+      "fixed left-1/2 top-0 z-[100] flex w-full max-w-[420px] -translate-x-1/2 flex-col items-center gap-2 p-4 pt-[calc(1rem+env(safe-area-inset-top))]",
       className
     )}
     {...props}
