@@ -569,6 +569,41 @@ export type Database = {
           },
         ]
       }
+      share_reward_log: {
+        Row: {
+          chat_type: string | null
+          created_at: string
+          feature: string
+          hash_chat_id: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          chat_type?: string | null
+          created_at?: string
+          feature: string
+          hash_chat_id?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          chat_type?: string | null
+          created_at?: string
+          feature?: string
+          hash_chat_id?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "share_reward_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       thanks_card: {
         Row: {
           content: string

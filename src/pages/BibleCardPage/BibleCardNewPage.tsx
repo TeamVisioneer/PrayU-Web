@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/components/ui/use-toast";
 import { fetchTodayBibleCardUsage, searchBible } from "@/apis/bible";
+import { fetchTodayShareReward } from "@/apis/llmUsage";
 import { createBibleCard } from "@/apis/bibleCard";
 import { updatePrayCard } from "@/apis/prayCard";
 import PrayCard from "@/components/prayCard/PrayCard";
@@ -236,6 +237,8 @@ const BibleCardNewPage = () => {
   const [hasMorePrayCards, setHasMorePrayCards] = useState(false);
   const [isLoadingMorePrayCards, setIsLoadingMorePrayCards] = useState(false);
   const [todayUsedCount, setTodayUsedCount] = useState<number | null>(null);
+  const [todayRewardCount, setTodayRewardCount] = useState<number | null>(null);
+  const prevRewardRef = useRef<number | null>(null);
   const [isReplaceDialogOpen, setIsReplaceDialogOpen] = useState(false);
 
   const praycardIdParam = searchParams.get("praycard_id");
@@ -251,15 +254,37 @@ const BibleCardNewPage = () => {
     : undefined;
   const displayName =
     myProfile?.full_name || user?.user_metadata.full_name || "PrayU";
-  // 표시용 남은 횟수. 조회 실패(null)면 표시만 생략 — 실제 한도는 서버가 강제
+  // 표시용 남은 횟수 = 기본 한도 + 공유 보상 - 사용. 조회 실패(null)면 표시만 생략 — 실제 한도는 서버가 강제
   const remainingCount =
     todayUsedCount === null
       ? null
-      : Math.max(0, BIBLE_CARD_DAILY_LIMIT - todayUsedCount);
+      : Math.max(
+          0,
+          BIBLE_CARD_DAILY_LIMIT + (todayRewardCount ?? 0) - todayUsedCount,
+        );
+
+  const refreshQuota = () => {
+    fetchTodayBibleCardUsage().then(setTodayUsedCount);
+    fetchTodayShareReward("bible_card").then((rewards) => {
+      if (rewards === null) return;
+      // 공유 보상(웹훅)은 비동기 도착 — 복귀 시 증가를 감지해 안내
+      if (prevRewardRef.current !== null && rewards > prevRewardRef.current) {
+        toast({ description: "공유 보상으로 생성 횟수가 +1 되었어요" });
+      }
+      prevRewardRef.current = rewards;
+      setTodayRewardCount(rewards);
+    });
+  };
 
   useEffect(() => {
     if (!user) return;
-    fetchTodayBibleCardUsage().then(setTodayUsedCount);
+    refreshQuota();
+    // 카카오톡 다녀온 뒤(웹훅 도착 후) 보상 반영을 위해 화면 복귀 시 재조회
+    const onVisible = () => {
+      if (document.visibilityState === "visible") refreshQuota();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
   }, [user]);
 
   useEffect(() => {
@@ -541,7 +566,7 @@ const BibleCardNewPage = () => {
     } finally {
       setIsCreating(false);
       // LLM 호출이 발생했으면 성공/실패와 무관하게 차감되므로 서버 기준으로 재동기화
-      fetchTodayBibleCardUsage().then(setTodayUsedCount);
+      refreshQuota();
     }
   };
 
@@ -673,14 +698,13 @@ const BibleCardNewPage = () => {
                       "뒷면에 말씀카드 만들기"
                     )}
                   </Button>
-                  {selectedPrayCard &&
-                    !isCreating &&
-                    remainingCount !== null &&
-                    remainingCount > 0 && (
-                      <p className="mt-2 text-center text-xs text-gray-400">
-                        오늘 남은 생성 {remainingCount}회
-                      </p>
-                    )}
+                  {selectedPrayCard && !isCreating && remainingCount !== null && (
+                    <p className="mt-2 text-center text-xs text-gray-400">
+                      {remainingCount > 0
+                        ? `오늘 남은 생성 ${remainingCount}회`
+                        : "카카오톡으로 공유하면 1회 더 만들 수 있어요"}
+                    </p>
+                  )}
                   {selectedPrayCard && !isCreating && (
                     <button
                       type="button"
@@ -707,6 +731,10 @@ const BibleCardNewPage = () => {
                   where="BibleCardNewPage"
                   publicUrl={selectedBibleCard.image_url}
                   shareUrl={selectedBibleCardShareUrl}
+                  kakaoServerCallbackArgs={{
+                    user_id: user.id,
+                    feature: "bible_card",
+                  }}
                 />
               </motion.div>
               <motion.div
