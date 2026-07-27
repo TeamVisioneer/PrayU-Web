@@ -406,11 +406,9 @@ export interface BaseStore {
   setIsOpenContentDrawer: (isContentShareDrawer: boolean) => void;
 
   // event
-  isOpenEventDialog: boolean;
-  setIsOpenEventDialog: (isOpenEventDialog: boolean) => void;
-
-  isOpenWeekUpdateDialog: boolean;
-  setIsOpenWeekUpdateDialog: (isOpenWeekUpdateDialog: boolean) => void;
+  // 알림함에서 특정 공지를 열 때 사용 (NoticeDialog가 소비 후 null로 되돌린다)
+  openNoticeId: string | null;
+  setOpenNoticeId: (openNoticeId: string | null) => void;
 
   bannerDialogContentType: "invite" | "reward" | null;
   isOpenBannerDialog: boolean;
@@ -1298,17 +1296,10 @@ const useBaseStore = create<BaseStore>()(
     },
 
     // event
-    isOpenEventDialog: false,
-    setIsOpenEventDialog: (isOpenEventDialog: boolean) => {
+    openNoticeId: null,
+    setOpenNoticeId: (openNoticeId: string | null) => {
       set((state) => {
-        state.isOpenEventDialog = isOpenEventDialog;
-      });
-    },
-
-    isOpenWeekUpdateDialog: false,
-    setIsOpenWeekUpdateDialog: (isOpenWeekUpdateDialog: boolean) => {
-      set((state) => {
-        state.isOpenWeekUpdateDialog = isOpenWeekUpdateDialog;
+        state.openNoticeId = openNoticeId;
       });
     },
 

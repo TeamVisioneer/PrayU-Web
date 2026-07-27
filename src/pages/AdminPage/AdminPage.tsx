@@ -2,6 +2,7 @@ import useAuth from "@/hooks/useAuth";
 import MainHeader from "../MainPage/MainHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import NotificationSendDialog from "./NotificationDialog";
+import NoticeManager from "./NoticeManager";
 import useBaseStore from "@/stores/baseStore";
 import { useEffect, useState } from "react";
 import { getISOTodayDate } from "@/lib/utils";
@@ -265,6 +266,10 @@ const AdminPage = () => {
             </CardContent>
           </Card>
         </div>
+      </section>
+      <section className="flex flex-col gap-4 w-full items-start">
+        <h1 className="">공지 관리</h1>
+        <NoticeManager />
       </section>
       <section className="flex flex-col gap-4 w-full items-start">
         <h1 className="">공지사항 알림 작성</h1>

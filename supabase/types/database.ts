@@ -295,6 +295,48 @@ export type Database = {
           },
         ]
       }
+      notice: {
+        Row: {
+          created_at: string
+          cta_label: string | null
+          cta_url: string | null
+          ends_at: string | null
+          id: string
+          is_active: boolean
+          slides: Json
+          starts_at: string
+          target: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_label?: string | null
+          cta_url?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          slides?: Json
+          starts_at?: string
+          target?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_label?: string | null
+          cta_url?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          slides?: Json
+          starts_at?: string
+          target?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notification: {
         Row: {
           body: string
@@ -480,6 +522,7 @@ export type Database = {
           fcm_token: string
           full_name: string | null
           id: string
+          is_admin: boolean
           kakao_id: string | null
           kakao_notification: boolean
           premium_expired_at: string | null
@@ -497,6 +540,7 @@ export type Database = {
           fcm_token?: string
           full_name?: string | null
           id: string
+          is_admin?: boolean
           kakao_id?: string | null
           kakao_notification?: boolean
           premium_expired_at?: string | null
@@ -514,6 +558,7 @@ export type Database = {
           fcm_token?: string
           full_name?: string | null
           id?: string
+          is_admin?: boolean
           kakao_id?: string | null
           kakao_notification?: boolean
           premium_expired_at?: string | null

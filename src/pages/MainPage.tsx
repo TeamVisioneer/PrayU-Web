@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import CountUp from "react-countup";
 import { useNavigate } from "react-router-dom";
 import DownloadBanner from "./MainPage/DownloadBanner";
-import WeekUpdateDialog from "@/components/notice/WeekUpdateDialog";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -160,7 +159,6 @@ const MainPage: React.FC = () => {
       </section>
 
       <LogInDrawer />
-      <WeekUpdateDialog />
     </div>
   );
 };

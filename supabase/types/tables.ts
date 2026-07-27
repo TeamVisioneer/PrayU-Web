@@ -20,6 +20,15 @@ export type GroupUnion = Database["public"]["Tables"]["group_union"]["Row"];
 
 export type ThanksCard = Database["public"]["Tables"]["thanks_card"]["Row"];
 
+export type Notice = Database["public"]["Tables"]["notice"]["Row"];
+
+// notice.slides(jsonb) 구조 — DB는 jsonb라 타입이 없어 앱에서 정의한다
+export interface NoticeSlide {
+  image_url?: string;
+  tip?: string;
+  description?: string[];
+}
+
 export type OriginNotification =
   Database["public"]["Tables"]["notification"]["Row"];
 export type Notification = Omit<OriginNotification, "data" | "fcm_result"> & {
