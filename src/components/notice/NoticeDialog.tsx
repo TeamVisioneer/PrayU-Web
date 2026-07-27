@@ -55,6 +55,8 @@ const NoticeDialog = () => {
 
   const [notice, setNotice] = useState<Notice | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  // 자동 노출인지, 사용자가 목록·알림함에서 직접 고른 것인지
+  const [isAutoShown, setIsAutoShown] = useState(false);
 
   // 자동 노출: 활성 공지 조회 → 이미 본 공지·대상 조건 확인
   useEffect(() => {
@@ -74,6 +76,7 @@ const NoticeDialog = () => {
       }
 
       setNotice(activeNotice);
+      setIsAutoShown(true);
       setIsOpen(true);
       analyticsTrack("노출_공지", { notice_id: activeNotice.id, where: "auto" });
     };
@@ -94,10 +97,11 @@ const NoticeDialog = () => {
       setOpenNoticeId(null);
       if (cancelled || !target) return;
       setNotice(target);
+      setIsAutoShown(false);
       setIsOpen(true);
       analyticsTrack("노출_공지", {
         notice_id: target.id,
-        where: "notification",
+        where: "selected",
       });
     };
 
@@ -178,12 +182,15 @@ const NoticeDialog = () => {
 
         {/* dim 위 보조 액션 — 카드 안에는 CTA만 남기고 둘 다 여기에 둔다 */}
         <div className="flex w-full items-center justify-center gap-2 pt-3">
-          <button
-            onClick={handleHideNextTime}
-            className="rounded-full border border-white/30 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
-          >
-            다음에 보지 않기
-          </button>
+          {/* 직접 골라서 연 공지에는 '다시 보지 않기'가 의미 없다 — 자동 노출일 때만 */}
+          {isAutoShown && (
+            <button
+              onClick={handleHideNextTime}
+              className="rounded-full border border-white/30 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
+            >
+              다음에 보지 않기
+            </button>
+          )}
           <button
             onClick={handleClose}
             className="rounded-full border border-white/30 px-4 py-2 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"

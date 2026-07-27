@@ -37,6 +37,7 @@ import UnionWorshipPage from "./pages/Open/UnionWorshipPage";
 import BibleCardNewPage from "./pages/BibleCardPage/BibleCardNewPage";
 import BibleCardSharePage from "./pages/BibleCardPage/BibleCardSharePage";
 import QuietTimePage from "./pages/QuietTimePage";
+import NoticePage from "./pages/NoticePage";
 import BibleCardGeneratorPage from "./pages/BibleCardPage/BibleCardGeneratorPage";
 import PrayCardEditPage from "./pages/PrayCard/PrayCardEditPage";
 import NotificationPage from "./components/notification/NotificationPage";
@@ -137,6 +138,14 @@ const App = () => {
                 element={<BibleCardGeneratorPage />}
               />
               <Route path="/qt" element={<QuietTimePage />} />
+              <Route
+                path="/notice"
+                element={
+                  <SlideInPage>
+                    <NoticePage />
+                  </SlideInPage>
+                }
+              />
 
               <Route path="/auth/kakao/callback" element={<KakaoCallBack />} />
               <Route
