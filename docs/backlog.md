@@ -47,12 +47,16 @@
 공개 도메인은 `r2.dev` 로 시작하되, **DB 에는 절대 URL 이 아니라 경로(key)만 저장**해 나중에 도메인을
 바꿀 때 환경변수 한 줄로 끝나게 한다.
 
-- [ ] `src/lib/assetUrl.ts` — 값이 `http` 로 시작하면 레거시 절대 URL, 아니면 R2 키로 판별하는 리졸버
-      (컬럼은 새로 만들지 않는다 — 4개 테이블 + 타입 + 모든 읽기 지점을 함께 바꾸지 않기 위해)
+- [ ] `src/lib/assetUrl.ts` — **키만 받아** URL 을 만든다. 절대 URL 을 넘기는 경로는 만들지 않는다
 - [ ] `src/apis/file.ts` — 서명 URL 방식으로 교체, 반환값을 `{ key }` 로
-- [ ] 읽는 곳 정리 — `PrayCardHistoryDrawer`·`PrayCardHistoryList`·`ThanksCardItem`·`UserProfile`·`PrayListDrawer`·`PrayCard`
+- [ ] 읽는 곳 — `PrayCardHistoryDrawer`·`PrayCardHistoryList`·`ThanksCardItem` 을
+      `assetUrl(image_key) ?? image_url` 로. **값의 생김새로 판별하지 않는다** — 컬럼이 따로 있다
 - [ ] `.env` 각 환경에 `VITE_ASSET_BASE_URL`
-- [ ] **`avatar_url` 은 R2 로 쓰지 않는다** — 대부분 카카오가 준 외부 URL 이다(리졸버가 그대로 통과시킨다)
+- [ ] **손대지 않는 것**: `avatar_url`(카카오 외부 URL)·`pray_card.bible_card_url`(레거시) →
+      `UserProfile`·`PrayListDrawer`·`PrayCard` 는 그대로
+
+**이번 범위는 앞으로 만드는 이미지뿐이다.** 이미 올라간 파일과 그 URL 은 건드리지 않는다 —
+옮길지 여부·방법은 나중에 별도로 정한다(계획 문서의 "기존 이미지는 이번에 건드리지 않는다" 절).
 
 곁가지: 말씀카드 JPEG 품질 q0.95 → q0.85 면 **52KB → 27KB**. 스토리지 수명을 두 배로 늘리는 가장 싼 수단이라
 이전과 별개로 검토할 만하다.
