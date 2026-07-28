@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { stripBibleMarkers } from "@/lib/bibleText";
 import {
   BIBLE_CARD_HEIGHT,
   BIBLE_CARD_TEXT_DARK,
@@ -22,7 +23,8 @@ export const BibleCardBase = ({ content }: { content: BibleCardContent }) => {
     borderBottomRightRadius = "80px",
     borderBottomLeftRadius = "120px",
   ] = content.radius;
-  const bibleSentence = content.bibleSentence.replace(/<[^>]*>/g, "").trim();
+  // 이미 저장된 카드에는 원본 표기가 섞여 있을 수 있어 표시 시점에도 한 번 더 정리한다
+  const bibleSentence = stripBibleMarkers(content.bibleSentence);
   const verseStyle = getBibleVerseStyle(bibleSentence.length);
   // 글씨는 중립 모노크롬: 구절은 배경 밝기 기반(다크/흰색), 이름은 다크, 키워드는 옅은 그레이
   const verseColor = getCardTextColorOnGradient(content.colors);

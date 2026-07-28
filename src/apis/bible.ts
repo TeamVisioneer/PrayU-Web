@@ -1,7 +1,15 @@
 import { supabase } from "./../../supabase/client";
 import { Bible } from "../../supabase/types/tables";
 import { fetchTodayLlmUsage } from "@/apis/llmUsage";
+import { stripBibleMarkers } from "@/lib/bibleText";
 import * as Sentry from "@sentry/react";
+
+// DB 는 원본 표기(`<구역 제목>`·`○`)를 보존한다 — 앱으로 나가는 입구에서 한 번만 걷어낸다.
+// 여기서 처리하면 표시(QT·구절 선택)와 저장(말씀카드 본문)·LLM 입력이 모두 정리된 문장을 쓴다.
+const toDisplayBible = (row: Bible): Bible => ({
+  ...row,
+  sentence: stripBibleMarkers(row.sentence),
+});
 
 export const getBible = async (
   longLabel: string,
@@ -20,7 +28,7 @@ export const getBible = async (
       Sentry.captureException(error.message);
       return null;
     }
-    return data as Bible;
+    return toDisplayBible(data as Bible);
   } catch (error) {
     Sentry.captureException(error);
 
@@ -47,7 +55,7 @@ export const fetchBibleList = async (
       Sentry.captureException(error.message);
       return null;
     }
-    return data as Bible[];
+    return (data as Bible[]).map(toDisplayBible);
   } catch (error) {
     Sentry.captureException(error);
     return null;
@@ -99,7 +107,7 @@ export const searchBible = async (
       };
     }
     return {
-      bible: data.bible as Bible[],
+      bible: (data.bible as Bible[]).map(toDisplayBible),
       keywords: data.keywords as string[],
     };
   } catch (error) {
