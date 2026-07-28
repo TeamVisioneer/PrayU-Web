@@ -44,7 +44,11 @@
 
 ## 배포 대기
 
-- [ ] staging 인수테스트 후 **prod release(태그) 발행** — 순서는 **Api 먼저 → web**
+- [ ] ⚠️ **성경 본문 동기화 짝 배포는 순서가 반대다 — web 먼저 → Api** ([PrayU-Api#44](https://github.com/TeamVisioneer/PrayU-Api/pull/44) / 이 레포 표시 정리 PR)
+  평소 규칙(Api 먼저)은 web이 새 스키마·함수에 의존하기 때문인데, 이번 건은 그 의존이 없다.
+  반대로 Api가 먼저 나가면 본문에 들어온 `○`가 **구버전 web에서 그대로 노출**된다.
+  web을 먼저 내보내면 아직 없는 표기를 지우는 no-op이라 무해하다. 상세: `../PrayU-Api/docs/bible-sync-plan.md`
+- [ ] staging 인수테스트 후 **prod release(태그) 발행** — 순서는 **Api 먼저 → web** (위 성경 동기화 건은 예외)
 - [ ] 실기기 확인(뷰포트 개편분): iOS Safari 하단 툴바 뒤 흰 띠 소멸, 회전·키보드, **앱 WebView 회귀**(`viewport-fit=cover` 영향)
 
 ## 완료
