@@ -39,6 +39,24 @@
 - [ ] **staging 게시(리허설)** — 어드민 → 레포 원고 → 초안으로 등록 → 미리보기 → 노출, 실제 모달·목록 확인
 - [ ] ⚠️ **prod 공지는 release 이후에만 가능** — 현재 prod에 `notice` 테이블이 없다(`42P01`). release → 관리자 `is_admin=true` → 게시 순서
 
+## 다음 작업 — 파일 스토리지 R2 이전 (짝 작업)
+
+계획: [../../PrayU-Api/docs/storage-r2-plan.md](../../PrayU-Api/docs/storage-r2-plan.md) · Api 백로그에 자기 단계 있음
+
+**신규 업로드만 R2 로** 돌린다. 기존 Supabase 파일·URL 은 그대로 두므로 이전 비용이 발생하지 않는다.
+공개 도메인은 `r2.dev` 로 시작하되, **DB 에는 절대 URL 이 아니라 경로(key)만 저장**해 나중에 도메인을
+바꿀 때 환경변수 한 줄로 끝나게 한다.
+
+- [ ] `src/lib/assetUrl.ts` — 값이 `http` 로 시작하면 레거시 절대 URL, 아니면 R2 키로 판별하는 리졸버
+      (컬럼은 새로 만들지 않는다 — 4개 테이블 + 타입 + 모든 읽기 지점을 함께 바꾸지 않기 위해)
+- [ ] `src/apis/file.ts` — 서명 URL 방식으로 교체, 반환값을 `{ key }` 로
+- [ ] 읽는 곳 정리 — `PrayCardHistoryDrawer`·`PrayCardHistoryList`·`ThanksCardItem`·`UserProfile`·`PrayListDrawer`·`PrayCard`
+- [ ] `.env` 각 환경에 `VITE_ASSET_BASE_URL`
+- [ ] **`avatar_url` 은 R2 로 쓰지 않는다** — 대부분 카카오가 준 외부 URL 이다(리졸버가 그대로 통과시킨다)
+
+곁가지: 말씀카드 JPEG 품질 q0.95 → q0.85 면 **52KB → 27KB**. 스토리지 수명을 두 배로 늘리는 가장 싼 수단이라
+이전과 별개로 검토할 만하다.
+
 ## 개선 아이디어 (급하지 않음)
 
 - 공지 열람 기록을 **계정 단위**로 — 현재는 localStorage(`seenNoticeIds`)라 기기·브라우저를 바꾸면 이미 닫은 공지가 한 번 더 뜬다. 정확히 하려면 "누가 어떤 공지를 봤는지" 테이블이 필요하다 (공지 성격상 현재는 과함)
