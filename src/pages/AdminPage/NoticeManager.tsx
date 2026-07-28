@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import { Eye, FileDown, ImagePlus, Link2, Loader2, Pencil, Plus, X } from "lucide-react";
+import { Eye, FileDown, ImagePlus, Link2, Loader2, Pencil, Plus, RotateCcw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -152,32 +152,39 @@ const NoticeManager = () => {
     setImageUrlInput("");
   };
 
-  /**
-   * 레포 원고를 **초안**(비활성)으로 등록한다.
-   * 노출은 별도로 사람이 누른다 — 등록만으로 사용자에게 나가지 않게 한다.
-   */
-  const handleRegisterDraft = async (file: NoticeDraftFile) => {
-    const { slug, draft } = file;
-    if (!draft.title) {
-      toast({ description: "원고에 제목(title)이 없어 등록할 수 없어요" });
-      return;
-    }
-
-    setRegisteringSlug(slug);
-    const saved = await createNotice({
-      slug,
-      title: draft.title,
+  /** 원고 → 저장 payload. 등록과 덮어쓰기가 같은 값을 쓰도록 한 곳에 둔다 */
+  const draftToPayload = (file: NoticeDraftFile) => {
+    const { draft } = file;
+    return {
+      slug: file.slug,
+      title: draft.title as string,
       body: draft.body || null,
       images: (draft.images ?? []) as unknown as TablesInsert<"notice">["images"],
       cta_label: draft.ctaLabel || null,
       cta_url: draft.ctaUrl || null,
       target: draft.target ?? "all",
       ends_at: draft.endsAt ? new Date(draft.endsAt).toISOString() : null,
-      // 초안이므로 꺼진 상태로 만든다
-      is_active: false,
       ...(draft.startsAt
         ? { starts_at: new Date(draft.startsAt).toISOString() }
         : {}),
+    };
+  };
+
+  /**
+   * 레포 원고를 **초안**(비활성)으로 등록한다.
+   * 노출은 별도로 사람이 누른다 — 등록만으로 사용자에게 나가지 않게 한다.
+   */
+  const handleRegisterDraft = async (file: NoticeDraftFile) => {
+    if (!file.draft.title) {
+      toast({ description: "원고에 제목(title)이 없어 등록할 수 없어요" });
+      return;
+    }
+
+    setRegisteringSlug(file.slug);
+    const saved = await createNotice({
+      ...draftToPayload(file),
+      // 초안이므로 꺼진 상태로 만든다
+      is_active: false,
     });
     setRegisteringSlug(null);
 
@@ -187,6 +194,33 @@ const NoticeManager = () => {
     }
     await loadNotices();
     toast({ description: "초안으로 등록했어요. 확인 후 노출해 주세요" });
+  };
+
+  /**
+   * 이미 등록된 공지를 원고 내용으로 덮어쓴다.
+   * 원고를 고친 뒤 반영할 길이 필요하다 — slug 가 unique 라 다시 등록할 수는 없다.
+   * 노출 상태(is_active)는 건드리지 않는다. 내용만 맞추고 게시 여부는 사람이 쥔다.
+   */
+  const handleSyncDraft = async (file: NoticeDraftFile, notice: Notice) => {
+    if (!file.draft.title) {
+      toast({ description: "원고에 제목(title)이 없어 불러올 수 없어요" });
+      return;
+    }
+
+    setRegisteringSlug(file.slug);
+    const saved = await updateNotice(notice.id, draftToPayload(file));
+    setRegisteringSlug(null);
+
+    if (!saved) {
+      toast({ description: "불러오기에 실패했어요" });
+      return;
+    }
+    await loadNotices();
+    toast({
+      description: notice.is_active
+        ? "원고 내용으로 덮어썼어요. 노출 중이니 바로 반영됩니다"
+        : "원고 내용으로 덮어썼어요",
+    });
   };
 
   /** 공지 이미지 업로드 — 기존 prayu 버킷의 notice/ 경로를 쓴다 */
@@ -260,8 +294,10 @@ const NoticeManager = () => {
     loadNotices();
   };
 
-  const registeredSlugs = new Set(
-    notices.map((notice) => notice.slug).filter(Boolean),
+  const registeredBySlug = new Map(
+    notices
+      .filter((notice): notice is Notice & { slug: string } => !!notice.slug)
+      .map((notice) => [notice.slug, notice]),
   );
 
   return (
@@ -284,11 +320,12 @@ const NoticeManager = () => {
           <div className="flex flex-col gap-0.5">
             <span className="text-sm font-semibold">레포 원고</span>
             <span className="text-[11px] text-gray-400">
-              docs/notices/ 에 커밋된 원고입니다. 등록하면 초안(비노출)으로 만들어져요.
+              docs/notices/ 에 커밋된 원고입니다. 등록하면 초안(비노출)으로 만들어지고,
+              원고를 고쳤으면 다시 불러와 덮어쓸 수 있어요.
             </span>
           </div>
           {draftFiles.map((file) => {
-            const registered = registeredSlugs.has(file.slug);
+            const registered = registeredBySlug.get(file.slug);
             return (
               <div
                 key={file.slug}
@@ -304,9 +341,19 @@ const NoticeManager = () => {
                     </span>
                   </div>
                   {registered ? (
-                    <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-500">
-                      등록됨
-                    </span>
+                    <Button
+                      variant="secondary"
+                      className="h-8 shrink-0 gap-1 text-xs"
+                      disabled={registeringSlug !== null || !file.draft.title}
+                      onClick={() => handleSyncDraft(file, registered)}
+                    >
+                      {registeringSlug === file.slug ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <RotateCcw className="h-3.5 w-3.5" />
+                      )}
+                      원고로 다시 불러오기
+                    </Button>
                   ) : (
                     <Button
                       variant="secondary"
