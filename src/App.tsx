@@ -7,8 +7,15 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { AuthProvider } from "./components/auth/AuthProvider";
+
+// 개발용 이메일 로그인 — 개발 빌드에만 존재한다.
+// import.meta.env.DEV 는 빌드 시 상수로 치환되므로, prod·staging 번들에서는
+// 아래 동적 import 가 통째로 제거된다(별도 청크도 생성되지 않는다).
+const DevLoginPage = import.meta.env.DEV
+  ? lazy(() => import("./pages/DevLoginPage"))
+  : null;
 import SlideInPage from "./components/common/SlideInPage";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import MainPage from "./pages/MainPage";
@@ -228,6 +235,16 @@ const App = () => {
                 element={<UnionWorshipPage />}
               />
               <Route path="/group/mock" element={<GroupPageMock />} />
+              {DevLoginPage && (
+                <Route
+                  path="/dev/login"
+                  element={
+                    <Suspense fallback={null}>
+                      <DevLoginPage />
+                    </Suspense>
+                  }
+                />
+              )}
               <Route path="/group/not-found" element={<GroupNotFoundPage />} />
               <Route path="/group/limit" element={<GroupLimitPage />} />
               <Route
