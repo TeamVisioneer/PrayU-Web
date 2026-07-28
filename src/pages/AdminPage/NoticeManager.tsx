@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import { ClipboardPaste, Eye, ImagePlus, Link2, Loader2, Pencil, Plus, X } from "lucide-react";
+import { Eye, FileDown, ImagePlus, Link2, Loader2, Pencil, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +21,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import NoticeContent from "@/components/notice/NoticeContent";
 import { getPublicUrl, uploadImage } from "@/apis/file";
-import { parseNoticeDraft } from "@/lib/noticeDraft";
+import { NoticeDraftFile, loadNoticeDrafts } from "@/lib/noticeDrafts";
 import {
   createNotice,
   fetchNoticeList,
@@ -94,9 +94,8 @@ const NoticeManager = () => {
   const [isPreview, setIsPreview] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [imageUrlInput, setImageUrlInput] = useState("");
-  const [isDraftOpen, setIsDraftOpen] = useState(false);
-  const [draftText, setDraftText] = useState("");
-  const [draftWarnings, setDraftWarnings] = useState<string[]>([]);
+  const [draftFiles, setDraftFiles] = useState<NoticeDraftFile[]>([]);
+  const [registeringSlug, setRegisteringSlug] = useState<string | null>(null);
   const editorScrollRef = useRef<HTMLDivElement>(null);
 
   const loadNotices = useCallback(async () => {
@@ -113,6 +112,10 @@ const NoticeManager = () => {
   useEffect(() => {
     loadNotices();
   }, [loadNotices]);
+
+  useEffect(() => {
+    loadNoticeDrafts().then(setDraftFiles);
+  }, []);
 
   const openCreate = () => {
     setEditingId(null);
@@ -149,34 +152,41 @@ const NoticeManager = () => {
     setImageUrlInput("");
   };
 
-  /** 레포 원고(프론트매터 마크다운)를 붙여넣어 폼을 채운다 */
-  const handleApplyDraft = () => {
-    const { draft, warnings } = parseNoticeDraft(draftText);
-    setForm((prev) => ({
-      ...prev,
-      title: draft.title ?? prev.title,
-      body: draft.body ?? prev.body,
-      target: draft.target ?? prev.target,
-      startsAt: draft.startsAt ?? prev.startsAt,
-      endsAt: draft.endsAt ?? prev.endsAt,
-      ctaLabel: draft.ctaLabel ?? prev.ctaLabel,
-      ctaUrl: draft.ctaUrl ?? prev.ctaUrl,
-      // images 키가 없으면 이미 올린 이미지를 지우지 않는다
-      images: draft.images ?? prev.images,
-    }));
-    // 경고가 있어도 닫는다 — 열린 채 두면 폼이 이미 채워졌는데도
-    // "아무 일도 일어나지 않은 것"으로 보인다. 경고는 에디터에 남겨 보여준다.
-    setDraftWarnings(warnings);
-    setIsDraftOpen(false);
-    setDraftText("");
-    // 채워진 제목·본문이 보이도록 맨 위로 돌려놓는다 (아래를 보고 있었다면 변화를 못 본다)
-    requestAnimationFrame(() => editorScrollRef.current?.scrollTo({ top: 0 }));
-    toast({
-      description:
-        warnings.length > 0
-          ? `원고를 채웠어요 · 건너뛴 항목 ${warnings.length}개`
-          : "원고를 폼에 채웠어요",
+  /**
+   * 레포 원고를 **초안**(비활성)으로 등록한다.
+   * 노출은 별도로 사람이 누른다 — 등록만으로 사용자에게 나가지 않게 한다.
+   */
+  const handleRegisterDraft = async (file: NoticeDraftFile) => {
+    const { slug, draft } = file;
+    if (!draft.title) {
+      toast({ description: "원고에 제목(title)이 없어 등록할 수 없어요" });
+      return;
+    }
+
+    setRegisteringSlug(slug);
+    const saved = await createNotice({
+      slug,
+      title: draft.title,
+      body: draft.body || null,
+      images: (draft.images ?? []) as unknown as TablesInsert<"notice">["images"],
+      cta_label: draft.ctaLabel || null,
+      cta_url: draft.ctaUrl || null,
+      target: draft.target ?? "all",
+      ends_at: draft.endsAt ? new Date(draft.endsAt).toISOString() : null,
+      // 초안이므로 꺼진 상태로 만든다
+      is_active: false,
+      ...(draft.startsAt
+        ? { starts_at: new Date(draft.startsAt).toISOString() }
+        : {}),
     });
+    setRegisteringSlug(null);
+
+    if (!saved) {
+      toast({ description: "등록에 실패했어요" });
+      return;
+    }
+    await loadNotices();
+    toast({ description: "초안으로 등록했어요. 확인 후 노출해 주세요" });
   };
 
   /** 공지 이미지 업로드 — 기존 prayu 버킷의 notice/ 경로를 쓴다 */
@@ -250,6 +260,10 @@ const NoticeManager = () => {
     loadNotices();
   };
 
+  const registeredSlugs = new Set(
+    notices.map((notice) => notice.slug).filter(Boolean),
+  );
+
   return (
     <div className="flex w-full flex-col gap-3">
       <div className="flex items-center justify-between">
@@ -264,6 +278,63 @@ const NoticeManager = () => {
           <Plus className="h-4 w-4" />새 공지
         </Button>
       </div>
+
+      {draftFiles.length > 0 && (
+        <div className="flex flex-col gap-2 rounded-xl bg-white p-4">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-sm font-semibold">레포 원고</span>
+            <span className="text-[11px] text-gray-400">
+              docs/notices/ 에 커밋된 원고입니다. 등록하면 초안(비노출)으로 만들어져요.
+            </span>
+          </div>
+          {draftFiles.map((file) => {
+            const registered = registeredSlugs.has(file.slug);
+            return (
+              <div
+                key={file.slug}
+                className="flex flex-col gap-1.5 rounded-lg border border-gray-100 p-3"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex min-w-0 flex-col">
+                    <span className="truncate text-sm font-medium">
+                      {file.draft.title || "(제목 없음)"}
+                    </span>
+                    <span className="truncate text-[11px] text-gray-400">
+                      {file.slug}
+                    </span>
+                  </div>
+                  {registered ? (
+                    <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-500">
+                      등록됨
+                    </span>
+                  ) : (
+                    <Button
+                      variant="secondary"
+                      className="h-8 shrink-0 gap-1 text-xs"
+                      disabled={registeringSlug !== null || !file.draft.title}
+                      onClick={() => handleRegisterDraft(file)}
+                    >
+                      {registeringSlug === file.slug ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <FileDown className="h-3.5 w-3.5" />
+                      )}
+                      초안으로 등록
+                    </Button>
+                  )}
+                </div>
+                {file.warnings.length > 0 && (
+                  <ul className="flex flex-col gap-0.5 rounded-md bg-amber-50 p-2 text-[11px] text-amber-800">
+                    {file.warnings.map((warning, index) => (
+                      <li key={index}>· {warning}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <div className="flex flex-col gap-2">
         {!isLoading && notices.length === 0 && (
@@ -322,30 +393,12 @@ const NoticeManager = () => {
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
         <DialogContent className="flex max-h-[85vh] w-11/12 flex-col gap-0 overflow-hidden rounded-xl p-0">
           <DialogHeader className="space-y-1 border-b px-5 py-4 pr-12 text-left">
-            <div className="flex items-start justify-between gap-2">
-              <div className="space-y-1">
-                <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
-                <DialogDescription className="text-xs">
-                  {isPreview
-                    ? "사용자에게 보이는 그대로입니다."
-                    : "이미지는 넘겨 보고, 본문은 이미지 아래에 표시됩니다."}
-                </DialogDescription>
-              </div>
-              {!isPreview && (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="h-8 shrink-0 gap-1 text-xs"
-                  onClick={() => {
-                    setDraftWarnings([]);
-                    setIsDraftOpen(true);
-                  }}
-                >
-                  <ClipboardPaste className="h-3.5 w-3.5" />
-                  원고 붙여넣기
-                </Button>
-              )}
-            </div>
+            <DialogTitle>{editingId ? "공지 수정" : "새 공지"}</DialogTitle>
+            <DialogDescription className="text-xs">
+              {isPreview
+                ? "사용자에게 보이는 그대로입니다."
+                : "이미지는 넘겨 보고, 본문은 이미지 아래에 표시됩니다."}
+            </DialogDescription>
           </DialogHeader>
 
           <div ref={editorScrollRef} className="flex-1 overflow-y-auto px-5 py-4">
@@ -369,23 +422,6 @@ const NoticeManager = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-5">
-              {draftWarnings.length > 0 && (
-                <div className="flex flex-col gap-1 rounded-md bg-amber-50 p-3 text-xs text-amber-800">
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="font-medium">원고에서 건너뛴 항목</span>
-                    <button
-                      type="button"
-                      onClick={() => setDraftWarnings([])}
-                      className="shrink-0 text-amber-700 underline"
-                    >
-                      닫기
-                    </button>
-                  </div>
-                  {draftWarnings.map((warning, index) => (
-                    <span key={index}>· {warning}</span>
-                  ))}
-                </div>
-              )}
               <label className="flex flex-col gap-1.5">
                 <span className="text-xs font-medium text-gray-700">제목</span>
                 <Input
@@ -623,48 +659,6 @@ const NoticeManager = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 레포에 커밋한 원고를 그대로 붙여넣어 폼을 채운다 (docs/notice-authoring-plan.md) */}
-      <Dialog open={isDraftOpen} onOpenChange={setIsDraftOpen}>
-        <DialogContent className="flex max-h-[85vh] w-11/12 flex-col gap-0 overflow-hidden rounded-xl p-0">
-          <DialogHeader className="space-y-1 border-b px-5 py-4 pr-12 text-left">
-            <DialogTitle>원고 붙여넣기</DialogTitle>
-            <DialogDescription className="text-xs">
-              docs/notices/ 의 파일 내용을 그대로 붙여넣으세요. 이미지 목록이 없으면
-              지금 폼에 있는 이미지를 그대로 둡니다.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-5 py-4">
-            <textarea
-              value={draftText}
-              onChange={(e) => setDraftText(e.target.value)}
-              rows={12}
-              className="w-full rounded-md border border-gray-200 p-3 font-mono text-xs"
-              placeholder={"---\ntitle: 제목\ntarget: all\nstarts_at: 2026-08-01 09:00\nimages:\n  - /images/notice/<slug>/1.png\n---\n\n**본문**"}
-            />
-            {draftWarnings.length > 0 && (
-              <ul className="flex flex-col gap-1 rounded-md bg-amber-50 p-3 text-xs text-amber-800">
-                {draftWarnings.map((warning, index) => (
-                  <li key={index}>· {warning}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <DialogFooter className="flex-row justify-end gap-2 border-t px-5 py-3">
-            <Button variant="secondary" onClick={() => setIsDraftOpen(false)}>
-              닫기
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleApplyDraft}
-              disabled={!draftText.trim()}
-            >
-              폼에 채우기
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

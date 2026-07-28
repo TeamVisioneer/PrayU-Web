@@ -305,6 +305,7 @@ export type Database = {
           id: string
           images: Json
           is_active: boolean
+          slug: string | null
           starts_at: string
           target: string
           title: string
@@ -319,6 +320,7 @@ export type Database = {
           id?: string
           images?: Json
           is_active?: boolean
+          slug?: string | null
           starts_at?: string
           target?: string
           title: string
@@ -333,6 +335,7 @@ export type Database = {
           id?: string
           images?: Json
           is_active?: boolean
+          slug?: string | null
           starts_at?: string
           target?: string
           title?: string
