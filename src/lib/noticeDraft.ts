@@ -221,8 +221,21 @@ const parseJson = (raw: string): ParseResult => {
   return { draft, warnings };
 };
 
+/**
+ * 붙여넣기 과정에서 딸려 오는 것들을 걷어낸다.
+ * 렌더된 마크다운에서 복사하면 코드펜스가, 일부 편집기·웹에서 복사하면
+ * 제로폭 문자가 앞에 붙는다. 그대로 두면 프론트매터로 인식되지 않아
+ * 원고 전체가 본문으로 처리된다.
+ */
+const stripPasteArtifacts = (raw: string): string => {
+  let value = raw.replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
+  const fenced = value.match(/^```[^\n]*\n([\s\S]*?)\n?```$/);
+  if (fenced) value = fenced[1].trim();
+  return value;
+};
+
 export const parseNoticeDraft = (raw: string): ParseResult => {
-  const trimmed = raw.trim();
+  const trimmed = stripPasteArtifacts(raw);
   if (!trimmed) return { draft: {}, warnings: ["내용이 비어 있습니다"] };
 
   const result = trimmed.startsWith("{")
