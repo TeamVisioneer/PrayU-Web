@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { ClipboardPaste, Eye, ImagePlus, Link2, Loader2, Pencil, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,6 +53,13 @@ const emptyForm = (): NoticeForm => ({
   endsAt: "",
 });
 
+/**
+ * 날짜 인풋은 값을 담을 만큼만 차지하게 한다.
+ * 기본 Input(h-10·폭 100%)에 네이티브 datetime-local 을 넣으면
+ * "연도. 월. 일. -- --:--" 자리표시자와 달력 아이콘 사이가 크게 벌어져 답답해 보인다.
+ */
+const DATE_INPUT_CLASS = "h-9 w-auto max-w-[15rem] px-2.5 text-xs";
+
 /** ISO → datetime-local 입력값(YYYY-MM-DDTHH:mm). 로컬 시간 기준으로 맞춘다 */
 const toLocalInputValue = (iso: string | null): string => {
   if (!iso) return "";
@@ -90,6 +97,7 @@ const NoticeManager = () => {
   const [isDraftOpen, setIsDraftOpen] = useState(false);
   const [draftText, setDraftText] = useState("");
   const [draftWarnings, setDraftWarnings] = useState<string[]>([]);
+  const editorScrollRef = useRef<HTMLDivElement>(null);
 
   const loadNotices = useCallback(async () => {
     setIsLoading(true);
@@ -156,12 +164,19 @@ const NoticeManager = () => {
       // images 키가 없으면 이미 올린 이미지를 지우지 않는다
       images: draft.images ?? prev.images,
     }));
+    // 경고가 있어도 닫는다 — 열린 채 두면 폼이 이미 채워졌는데도
+    // "아무 일도 일어나지 않은 것"으로 보인다. 경고는 에디터에 남겨 보여준다.
     setDraftWarnings(warnings);
-    if (warnings.length === 0) {
-      setIsDraftOpen(false);
-      setDraftText("");
-      toast({ description: "원고를 폼에 채웠어요" });
-    }
+    setIsDraftOpen(false);
+    setDraftText("");
+    // 채워진 제목·본문이 보이도록 맨 위로 돌려놓는다 (아래를 보고 있었다면 변화를 못 본다)
+    requestAnimationFrame(() => editorScrollRef.current?.scrollTo({ top: 0 }));
+    toast({
+      description:
+        warnings.length > 0
+          ? `원고를 채웠어요 · 건너뛴 항목 ${warnings.length}개`
+          : "원고를 폼에 채웠어요",
+    });
   };
 
   /** 공지 이미지 업로드 — 기존 prayu 버킷의 notice/ 경로를 쓴다 */
@@ -333,7 +348,7 @@ const NoticeManager = () => {
             </div>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto px-5 py-4">
+          <div ref={editorScrollRef} className="flex-1 overflow-y-auto px-5 py-4">
           {isPreview ? (
             // 실제 공지 모달과 같은 구성(어두운 배경 · 카드 · 카드 밖 보조 액션)으로 그린다
             <div className="rounded-xl bg-gray-800 p-4">
@@ -354,6 +369,23 @@ const NoticeManager = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-5">
+              {draftWarnings.length > 0 && (
+                <div className="flex flex-col gap-1 rounded-md bg-amber-50 p-3 text-xs text-amber-800">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="font-medium">원고에서 건너뛴 항목</span>
+                    <button
+                      type="button"
+                      onClick={() => setDraftWarnings([])}
+                      className="shrink-0 text-amber-700 underline"
+                    >
+                      닫기
+                    </button>
+                  </div>
+                  {draftWarnings.map((warning, index) => (
+                    <span key={index}>· {warning}</span>
+                  ))}
+                </div>
+              )}
               <label className="flex flex-col gap-1.5">
                 <span className="text-xs font-medium text-gray-700">제목</span>
                 <Input
@@ -532,6 +564,7 @@ const NoticeManager = () => {
                     onChange={(e) =>
                       setForm((prev) => ({ ...prev, startsAt: e.target.value }))
                     }
+                    className={DATE_INPUT_CLASS}
                   />
                   <span className="text-[11px] text-gray-400">
                     비워두면 저장 즉시 시작됩니다.
@@ -545,6 +578,7 @@ const NoticeManager = () => {
                     onChange={(e) =>
                       setForm((prev) => ({ ...prev, endsAt: e.target.value }))
                     }
+                    className={DATE_INPUT_CLASS}
                   />
                   <span className="text-[11px] text-gray-400">
                     비워두면 중지할 때까지 계속 노출됩니다.
