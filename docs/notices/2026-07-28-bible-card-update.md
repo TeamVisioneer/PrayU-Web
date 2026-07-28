@@ -6,7 +6,7 @@ ends_at:
 cta_label: 말씀카드 만들러 가기
 cta_url: /bible-card/new
 images:
-  - /images/notice/2026-07-28-bible-card-update/1.gif
+  - /images/notice/2026-07-28-bible-card-update/1.webp
 ---
 
 **공유하면 만들 수 있는 횟수가 늘어나요**
