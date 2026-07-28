@@ -44,7 +44,19 @@
 
 ## 배포 대기
 
-- [ ] staging 인수테스트 후 **prod release(태그) 발행** — 순서는 **Api 먼저 → web**
+### 성경 본문 원본 동기화 — 짝 배포
+[#475](https://github.com/TeamVisioneer/PrayU-Web/pull/475) (표시 정리) · [PrayU-Api#44](https://github.com/TeamVisioneer/PrayU-Api/pull/44) (본문 동기화) · 상세: [../../PrayU-Api/docs/bible-sync-plan.md](../../PrayU-Api/docs/bible-sync-plan.md)
+
+DB는 원본(goodtv) 표기를 **그대로 보존**한다 — `<구역 제목>`(2,431행)·`○`(3,383행, 30개 절은 중간에 위치).
+따라서 표시 시 제거는 프론트 몫이고, `apis/bible.ts` 입구에서 `stripBibleMarkers()`로 한 번만 정리한다
+(표시뿐 아니라 **말씀카드 본문 저장·QT LLM 입력**도 같은 문장을 쓰기 때문에 입구가 맞는 위치다).
+
+- [ ] ⚠️ **배포 순서가 평소와 반대 — web 먼저 → Api.** 평소 규칙(Api 먼저)은 web이 새 스키마·함수에 의존하기 때문인데
+  이번 건은 그 의존이 없다. 반대로 Api가 먼저 나가면 본문에 들어온 `○`가 **구버전 web에서 그대로 노출**된다.
+  web을 먼저 내보내면 아직 없는 표기를 지우는 no-op이라 무해하다
+- [ ] **staging 확인** — QT 본문·말씀카드 생성 본문에 `○`·`<구역제목>` 없음, 기존 말씀카드(저장된 본문)도 정상 표시
+- [ ] **기존 QT 결과(`qt_data`)에는 표기가 남아 있을 수 있다** — LLM 응답에 원문이 인용된 경우. 새로 생성되는 것부터 정리되며, 과거분 보정은 하지 않는다(판단 필요 시 별도 작업)
+- [ ] staging 인수테스트 후 **prod release(태그) 발행** — 순서는 **Api 먼저 → web** (위 성경 동기화 건은 예외)
 - [ ] 실기기 확인(뷰포트 개편분): iOS Safari 하단 툴바 뒤 흰 띠 소멸, 회전·키보드, **앱 WebView 회귀**(`viewport-fit=cover` 영향)
 
 ## 완료
