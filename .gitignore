@@ -31,5 +31,6 @@ dist-ssr
 .temp
 .vercel
 
-# local AI tooling
-.claude/
+# local AI tooling — 개인 설정(settings.local.json 등)은 무시하고, 공유할 스킬만 커밋한다
+.claude/*
+!.claude/skills/
