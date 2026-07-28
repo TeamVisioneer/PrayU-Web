@@ -149,7 +149,9 @@ const NoticeDialog = () => {
         showCloseButton={false}
         className="w-11/12 border-none bg-transparent p-0 shadow-none focus:outline-none"
       >
-        <div className="relative w-full rounded-2xl bg-background pb-5">
+        {/* 공지 길이는 원고마다 다르다 — 카드가 화면을 넘지 않도록 상한을 두고,
+            넘치면 카드 안에서 스크롤한다. 상한이 없으면 제목과 CTA 가 화면 밖으로 잘린다 */}
+        <div className="relative flex max-h-[85dvh] w-full flex-col overflow-y-auto rounded-2xl bg-background pb-5">
           <DialogHeader className="p-5 pb-0 pr-12 text-left">
             <DialogTitle className="text-lg">📢 {notice.title}</DialogTitle>
             <DialogDescription className="sr-only">공지 안내</DialogDescription>
