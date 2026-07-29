@@ -21,6 +21,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import NoticeContent from "@/components/notice/NoticeContent";
 import { getPublicUrl, uploadImage } from "@/apis/file";
+import { resizeImageFile } from "@/lib/resizeImage";
 import { NoticeDraftFile, loadNoticeDrafts } from "@/lib/noticeDrafts";
 import {
   createNotice,
@@ -227,7 +228,8 @@ const NoticeManager = () => {
   const handleUploadImages = async (files: FileList) => {
     setIsUploading(true);
     const uploadedUrls: string[] = [];
-    for (const file of Array.from(files)) {
+    for (const original of Array.from(files)) {
+      const file = await resizeImageFile(original);
       const safeName = file.name.replace(/[^\w.-]/g, "_");
       const uploaded = await uploadImage(
         file,
