@@ -545,7 +545,7 @@ const BibleCardNewPage = () => {
         storagePath: "BibleCard/UserBibleCard",
         fileName: `Card_${getTodayNumber()}_${selectedPrayCard.id}.jpeg`,
         imageFormat: "jpeg",
-        quality: 0.95,
+        quality: 0.85,
         scale: 2,
       });
 

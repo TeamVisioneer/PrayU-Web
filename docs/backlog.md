@@ -47,6 +47,8 @@
 공개 도메인은 `r2.dev` 로 시작하되, **DB 에는 절대 URL 이 아니라 경로(key)만 저장**해 나중에 도메인을
 바꿀 때 환경변수 한 줄로 끝나게 한다.
 
+- [x] ~~**업로드 전 리사이즈**~~ — [#488](https://github.com/TeamVisioneer/PrayU-Web/pull/488). 폰 사진 6.75MB → 484KB(7%).
+      **R2 와 무관하게 선행해야 할 작업이었다** — 원본 업로드는 어느 스토리지로 가도 문제다
 - [ ] `src/lib/assetUrl.ts` — **키만 받아** URL 을 만든다. 절대 URL 을 넘기는 경로는 만들지 않는다
 - [ ] `src/apis/file.ts` — 서명 URL 방식으로 교체, 반환값을 `{ key }` 로
 - [ ] 읽는 곳 — `PrayCardHistoryDrawer`·`PrayCardHistoryList`·`ThanksCardItem` 을

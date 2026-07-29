@@ -10,6 +10,7 @@ import {
 } from "@/components/thanksCard/NewThanksCardStepper";
 import { thanksCardController } from "@/apis/thanksCard";
 import { uploadImage, getPublicUrl } from "@/apis/file";
+import { resizeImageFile } from "@/lib/resizeImage";
 import { getTodayNumber } from "@/lib/utils";
 import { IoChevronBack } from "react-icons/io5";
 
@@ -73,8 +74,9 @@ const NewThanksCardPage = () => {
           const fileName = `img_${getTodayNumber()}.jpeg`;
           const uploadPath = `ThanksCard/UserImage/${fileName}`;
 
-          // Supabase Storage에 파일 업로드
-          const pathData = await uploadImage(formData.photo, uploadPath);
+          // 원본 사진은 3~5MB 라 그대로 올리면 스토리지가 금방 찬다 — 줄여서 올린다
+          const photo = await resizeImageFile(formData.photo);
+          const pathData = await uploadImage(photo, uploadPath);
 
           if (pathData) {
             // 업로드된 파일의 public URL 생성

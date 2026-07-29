@@ -7,7 +7,7 @@ interface SaveImageOptions {
   storagePath?: string; // Supabase storage 경로 (기본값: 'BibleCard/UserBibleCard')
   fileName?: string; // 파일명 (기본값: 'Card_{timestamp}.jpeg')
   imageFormat?: "jpeg" | "png"; // 이미지 포맷 (기본값: 'jpeg')
-  quality?: number; // 이미지 품질 (0-1, 기본값: 0.95)
+  quality?: number; // 이미지 품질 (0-1, 기본값: 0.85)
   scale?: number; // 고해상도 배율 (기본값: 2 - Retina 디스플레이 대응)
 }
 
@@ -47,7 +47,7 @@ export function useSaveImage() {
         storagePath = "BibleCard/UserBibleCard",
         fileName = `Card_${getTodayNumber()}.jpeg`,
         imageFormat = "jpeg",
-        quality = 0.95,
+        quality = 0.85,
         scale = 2,
       } = options || {};
 
