@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/assetUrl";
 import { ThanksCardItemProps } from "./types";
 
 /**
@@ -66,6 +67,9 @@ const getDefaultImage = (cardId: string): string => {
  * 반응형 디자인으로 모바일, 태블릿, 데스크톱에서 모두 최적화됩니다.
  */
 export const ThanksCardItem = ({ card }: ThanksCardItemProps) => {
+  // 새 스토리지(key)를 먼저 보고, 없으면 기존 절대 URL 로 떨어진다
+  const cardImageUrl = assetUrl(card.image_key) ?? card.image;
+
   return (
     <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto">
       {/* 타원형 카드 */}
@@ -90,9 +94,9 @@ export const ThanksCardItem = ({ card }: ThanksCardItemProps) => {
 
           {/* 이미지 영역 */}
           <div className="flex-shrink-0 mb-4 sm:mb-5 lg:mb-6 flex justify-center">
-            {card.image ? (
+            {cardImageUrl ? (
               <img
-                src={card.image}
+                src={cardImageUrl}
                 alt={`${card.user_name}님의 감사기도`}
                 className="w-full h-full aspect-square object-cover rounded-xl sm:rounded-2xl"
               />

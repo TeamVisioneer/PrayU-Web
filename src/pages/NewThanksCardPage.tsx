@@ -9,9 +9,8 @@ import {
   StepType,
 } from "@/components/thanksCard/NewThanksCardStepper";
 import { thanksCardController } from "@/apis/thanksCard";
-import { uploadImage, getPublicUrl } from "@/apis/file";
+import { UploadedImage, uploadImage } from "@/apis/file";
 import { resizeImageFile } from "@/lib/resizeImage";
-import { getTodayNumber } from "@/lib/utils";
 import { IoChevronBack } from "react-icons/io5";
 
 /**
@@ -67,37 +66,27 @@ const NewThanksCardPage = () => {
       setCreateError(null);
 
       // 파일 업로드 처리
-      let imageUrl = "";
+      let uploaded: UploadedImage | null = null;
       if (formData.photo) {
         try {
-          // 파일명 생성: img_${getTodayNumber()}.jpeg
-          const fileName = `img_${getTodayNumber()}.jpeg`;
-          const uploadPath = `ThanksCard/UserImage/${fileName}`;
-
           // 원본 사진은 3~5MB 라 그대로 올리면 스토리지가 금방 찬다 — 줄여서 올린다
           const photo = await resizeImageFile(formData.photo);
-          const pathData = await uploadImage(photo, uploadPath);
-
-          if (pathData) {
-            // 업로드된 파일의 public URL 생성
-            const publicUrl = getPublicUrl(pathData.path);
-            imageUrl = publicUrl || "";
-          } else {
+          uploaded = await uploadImage(photo, "thanks_card");
+          if (!uploaded) {
             console.warn("Image upload failed, proceeding without image");
-            imageUrl = "";
           }
         } catch (error) {
           console.error("Error uploading image:", error);
           // 이미지 업로드 실패 시에도 카드 생성은 계속 진행
-          imageUrl = "";
         }
       }
 
-      // 감사 카드 생성
+      // 감사 카드 생성 — 새 스토리지면 key, 레거시면 URL 이 채워진다
       const newCard = await thanksCardController.createThanksCard({
         user_name: formData.name,
         content: formData.prayerContent,
-        image: imageUrl,
+        image: uploaded?.url ?? "",
+        image_key: uploaded?.key ?? null,
       });
 
       if (newCard) {

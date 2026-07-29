@@ -36,6 +36,7 @@ import ShareButtonGroup from "@/components/share/ShareButtonGroup";
 import BibleCardGuideSheet from "./BibleCardGuideSheet";
 import useBaseStore from "@/stores/baseStore";
 import { useSaveImage } from "@/hooks/useSaveImage";
+import { assetUrl } from "@/lib/assetUrl";
 import { analyticsTrack } from "@/analytics/analytics";
 import { getDomainUrl, getISOTodayDateYMD, getTodayNumber } from "@/lib/utils";
 import {
@@ -267,6 +268,9 @@ const BibleCardNewPage = () => {
       ? historyPrayCardListView
       : historyPrayCardList || [];
   const selectedBibleCard = selectedPrayCard?.bible_card;
+  // 새 스토리지(key)를 먼저 보고, 없으면 기존 절대 URL 로 떨어진다
+  const selectedBibleCardImageUrl =
+    assetUrl(selectedBibleCard?.image_key) ?? selectedBibleCard?.image_url;
   const selectedBibleCardShareUrl = selectedBibleCard
     ? `${getDomainUrl()}/bible-card/share/${selectedBibleCard.id}`
     : undefined;
@@ -541,15 +545,15 @@ const BibleCardNewPage = () => {
         requestAnimationFrame(() => requestAnimationFrame(resolve));
       });
 
-      const imageUrl = await saveImage(bibleCardRef, {
-        storagePath: "BibleCard/UserBibleCard",
+      const uploaded = await saveImage(bibleCardRef, {
+        kind: "bible_card",
         fileName: `Card_${getTodayNumber()}_${selectedPrayCard.id}.jpeg`,
         imageFormat: "jpeg",
         quality: 0.85,
         scale: 2,
       });
 
-      if (!imageUrl) {
+      if (!uploaded) {
         toast({ description: "말씀카드 이미지를 저장하지 못했어요" });
         setIsFlipped(isReplacing);
         return;
@@ -563,7 +567,9 @@ const BibleCardNewPage = () => {
         bible_sentence: nextDraft.bibleSentence,
         colors,
         radius,
-        image_url: imageUrl,
+        // 새 스토리지면 key, 레거시면 URL 이 채워진다
+        image_url: uploaded.url,
+        image_key: uploaded.key,
       });
 
       if (!bibleCard) {
@@ -759,7 +765,7 @@ const BibleCardNewPage = () => {
             </div>
           </section>
 
-          {selectedBibleCard?.image_url && !isCreating && (
+          {selectedBibleCardImageUrl && !isCreating && (
             <section className="mx-auto mt-1 w-full max-w-[320px] space-y-3">
               <motion.div
                 className="rounded-2xl bg-white shadow-sm"
@@ -769,7 +775,7 @@ const BibleCardNewPage = () => {
               >
                 <ShareButtonGroup
                   where="BibleCardNewPage"
-                  publicUrl={selectedBibleCard.image_url}
+                  publicUrl={selectedBibleCardImageUrl}
                   shareUrl={selectedBibleCardShareUrl}
                   kakaoServerCallbackArgs={{
                     user_id: user.id,

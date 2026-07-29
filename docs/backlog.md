@@ -49,13 +49,13 @@
 
 - [x] ~~**업로드 전 리사이즈**~~ — [#488](https://github.com/TeamVisioneer/PrayU-Web/pull/488). 폰 사진 6.75MB → 484KB(7%).
       **R2 와 무관하게 선행해야 할 작업이었다** — 원본 업로드는 어느 스토리지로 가도 문제다
-- [ ] `src/lib/assetUrl.ts` — **키만 받아** URL 을 만든다. 절대 URL 을 넘기는 경로는 만들지 않는다
-- [ ] `src/apis/file.ts` — 서명 URL 방식으로 교체, 반환값을 `{ key }` 로
-- [ ] 읽는 곳 — `PrayCardHistoryDrawer`·`PrayCardHistoryList`·`ThanksCardItem` 을
-      `assetUrl(image_key) ?? image_url` 로. **값의 생김새로 판별하지 않는다** — 컬럼이 따로 있다
-- [ ] `.env` 각 환경에 `VITE_ASSET_BASE_URL`
+- [x] ~~`src/lib/assetUrl.ts` · `src/apis/file.ts` · 읽는 곳 전환~~ — [#489](https://github.com/TeamVisioneer/PrayU-Web/pull/489)
+- [ ] 🔴 **`VITE_ASSET_BASE_URL` 을 각 환경(Vercel)에 등록** — **이 값이 없으면 업로드는 계속 Supabase 로 나간다.**
+      R2 시크릿(Api 쪽)과 **함께** 넣어야 한다. 한쪽만 넣으면 업로드가 실패한다
 - [ ] **손대지 않는 것**: `avatar_url`(카카오 외부 URL)·`pray_card.bible_card_url`(레거시) →
       `UserProfile`·`PrayListDrawer`·`PrayCard` 는 그대로
+- [ ] 전환 후 확인: 말씀카드·감사카드 생성 → DB 에 **key 만** 들어가는지, 기존 카드가 그대로 보이는지,
+      카카오 공유 썸네일이 새 도메인으로 뜨는지
 
 **이번 범위는 앞으로 만드는 이미지뿐이다.** 이미 올라간 파일과 그 URL 은 건드리지 않는다 —
 옮길지 여부·방법은 나중에 별도로 정한다(계획 문서의 "기존 이미지는 이번에 건드리지 않는다" 절).

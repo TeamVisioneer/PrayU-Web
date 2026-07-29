@@ -1,7 +1,8 @@
 import html2canvas from "html2canvas";
 import { useRef, useState } from "react";
 import { dataURLToFile, getTodayNumber } from "@/lib/utils";
-import { getPublicUrl, uploadImage } from "@/apis/file";
+import { uploadImage } from "@/apis/file";
+import { assetUrl } from "@/lib/assetUrl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -62,12 +63,10 @@ const BibleCardGenerator: React.FC = () => {
       });
       const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
       const pngFile = dataURLToFile(dataUrl, `Card_${getTodayNumber()}.jpeg`);
-      const pathData = await uploadImage(
-        pngFile,
-        `BibleCard/UserBibleCard/${pngFile.name}`
-      );
-      if (!pathData) return null;
-      const publicUrl = getPublicUrl(pathData.path);
+      const uploaded = await uploadImage(pngFile, "bible_card");
+      if (!uploaded) return null;
+      // 이 페이지는 DB 에 저장하지 않고 URL 만 보여준다 — 키면 여기서 URL 로 만든다
+      const publicUrl = uploaded.url ?? assetUrl(uploaded.key);
       setPublicUrl(publicUrl || "");
       return publicUrl;
     } catch {

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { getBibleCard } from "@/apis/bibleCard";
 import { fetchPrayCardByBibleCardId } from "@/apis/prayCard";
 import BibleCardView from "@/components/prayCard/BibleCard";
+import { assetUrl } from "@/lib/assetUrl";
 import PrayCard from "@/components/prayCard/PrayCard";
 import { analyticsTrack } from "@/analytics/analytics";
 import {
@@ -61,6 +62,9 @@ const BibleCardSharePage = () => {
   const [prayCard, setPrayCard] = useState<PrayCardWithProfiles | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFlipped, setIsFlipped] = useState(false);
+  // 새 스토리지(key)를 먼저 보고, 없으면 기존 절대 URL 로 떨어진다
+  const bibleCardImageUrl =
+    assetUrl(bibleCard?.image_key) ?? bibleCard?.image_url;
 
   useEffect(() => {
     const fetchSharedBibleCard = async () => {
@@ -154,9 +158,9 @@ const BibleCardSharePage = () => {
                   }`}
                 >
                   <div className="absolute inset-0 backface-hidden">
-                    {bibleCard.image_url ? (
+                    {bibleCardImageUrl ? (
                       <img
-                        src={bibleCard.image_url}
+                        src={bibleCardImageUrl}
                         alt="공유된 말씀카드"
                         className="aspect-[3/4] w-full rounded-xl object-cover shadow-prayCard"
                       />
