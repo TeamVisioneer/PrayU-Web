@@ -39,6 +39,28 @@
 - [ ] **staging 게시(리허설)** — 어드민 → 레포 원고 → 초안으로 등록 → 미리보기 → 노출, 실제 모달·목록 확인
 - [ ] ⚠️ **prod 공지는 release 이후에만 가능** — 현재 prod에 `notice` 테이블이 없다(`42P01`). release → 관리자 `is_admin=true` → 게시 순서
 
+## 다음 작업 — 파일 스토리지 R2 이전 (짝 작업)
+
+계획: [../../PrayU-Api/docs/storage-r2-plan.md](../../PrayU-Api/docs/storage-r2-plan.md) · Api 백로그에 자기 단계 있음
+
+**신규 업로드만 R2 로** 돌린다. 기존 Supabase 파일·URL 은 그대로 두므로 이전 비용이 발생하지 않는다.
+공개 도메인은 `r2.dev` 로 시작하되, **DB 에는 절대 URL 이 아니라 경로(key)만 저장**해 나중에 도메인을
+바꿀 때 환경변수 한 줄로 끝나게 한다.
+
+- [ ] `src/lib/assetUrl.ts` — **키만 받아** URL 을 만든다. 절대 URL 을 넘기는 경로는 만들지 않는다
+- [ ] `src/apis/file.ts` — 서명 URL 방식으로 교체, 반환값을 `{ key }` 로
+- [ ] 읽는 곳 — `PrayCardHistoryDrawer`·`PrayCardHistoryList`·`ThanksCardItem` 을
+      `assetUrl(image_key) ?? image_url` 로. **값의 생김새로 판별하지 않는다** — 컬럼이 따로 있다
+- [ ] `.env` 각 환경에 `VITE_ASSET_BASE_URL`
+- [ ] **손대지 않는 것**: `avatar_url`(카카오 외부 URL)·`pray_card.bible_card_url`(레거시) →
+      `UserProfile`·`PrayListDrawer`·`PrayCard` 는 그대로
+
+**이번 범위는 앞으로 만드는 이미지뿐이다.** 이미 올라간 파일과 그 URL 은 건드리지 않는다 —
+옮길지 여부·방법은 나중에 별도로 정한다(계획 문서의 "기존 이미지는 이번에 건드리지 않는다" 절).
+
+곁가지: 말씀카드 JPEG 품질 q0.95 → q0.85 면 **52KB → 27KB**. 스토리지 수명을 두 배로 늘리는 가장 싼 수단이라
+이전과 별개로 검토할 만하다.
+
 ## 개선 아이디어 (급하지 않음)
 
 - 공지 열람 기록을 **계정 단위**로 — 현재는 localStorage(`seenNoticeIds`)라 기기·브라우저를 바꾸면 이미 닫은 공지가 한 번 더 뜬다. 정확히 하려면 "누가 어떤 공지를 봤는지" 테이블이 필요하다 (공지 성격상 현재는 과함)
