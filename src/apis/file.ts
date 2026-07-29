@@ -9,7 +9,7 @@ import { isAssetStorageConfigured } from "@/lib/assetUrl";
  * "이 키에, 이 타입으로, 5분 안에만" 서명한 URL 을 내주고 브라우저는 거기에 본문만 PUT 한다.
  * 저장하는 값은 절대 URL 이 아니라 **키**다 (PrayU-Api/docs/storage-r2-plan.md).
  *
- * R2 환경변수(`VITE_ASSET_BASE_URL`)가 없으면 **기존 Supabase Storage 경로 그대로** 동작한다.
+ * R2 환경변수(`VITE_STORAGE_BASE_URL`)가 없으면 **기존 Supabase Storage 경로 그대로** 동작한다.
  */
 
 /** 업로드 용도. 경로는 이 값으로 **서버가** 정한다 — 클라이언트가 경로를 만들지 않는다 */

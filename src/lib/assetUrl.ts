@@ -6,7 +6,7 @@
  * 그 대가로 읽는 쪽에서 매번 한 번 조립한다.
  */
 
-const BASE = (import.meta.env.VITE_ASSET_BASE_URL ?? "").replace(/\/+$/, "");
+const BASE = (import.meta.env.VITE_STORAGE_BASE_URL ?? "").replace(/\/+$/, "");
 
 /**
  * 새 스토리지(R2)를 쓸 수 있는 환경인지.

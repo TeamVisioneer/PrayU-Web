@@ -50,7 +50,7 @@
 - [x] ~~**업로드 전 리사이즈**~~ — [#488](https://github.com/TeamVisioneer/PrayU-Web/pull/488). 폰 사진 6.75MB → 484KB(7%).
       **R2 와 무관하게 선행해야 할 작업이었다** — 원본 업로드는 어느 스토리지로 가도 문제다
 - [x] ~~`src/lib/assetUrl.ts` · `src/apis/file.ts` · 읽는 곳 전환~~ — [#489](https://github.com/TeamVisioneer/PrayU-Web/pull/489)
-- [ ] 🔴 **`VITE_ASSET_BASE_URL` 을 각 환경(Vercel)에 등록** — **이 값이 없으면 업로드는 계속 Supabase 로 나간다.**
+- [ ] 🔴 **`VITE_STORAGE_BASE_URL` 을 각 환경(Vercel)에 등록** — **이 값이 없으면 업로드는 계속 Supabase 로 나간다.**
       R2 시크릿(Api 쪽)과 **함께** 넣어야 한다. 한쪽만 넣으면 업로드가 실패한다
 - [ ] **손대지 않는 것**: `avatar_url`(카카오 외부 URL)·`pray_card.bible_card_url`(레거시) →
       `UserProfile`·`PrayListDrawer`·`PrayCard` 는 그대로
