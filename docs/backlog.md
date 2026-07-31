@@ -36,7 +36,7 @@
 붙여넣기는 손으로 옮기는 단계라 없앴고, 마이그레이션 게시는 서비스 데이터를 스키마 히스토리에 남기게 되어 접었다.
 
 - [x] ~~첫 공지 원고 + 스크린샷~~ — [#480](https://github.com/TeamVisioneer/PrayU-Web/pull/480). 로컬 시드 계정으로 캡처했다(카카오 로그인 없이 가능해짐)
-- [ ] **staging 게시(리허설)** — 어드민 → 레포 원고 → 초안으로 등록 → 미리보기 → 노출, 실제 모달·목록 확인
+- [x] ~~**staging 게시(리허설)**~~ — 2026-07-31 확인 완료. 레포 원고 → 초안 등록 → 노출까지 정상
 - [ ] ⚠️ **prod 공지는 release 이후에만 가능** — 현재 prod에 `notice` 테이블이 없다(`42P01`). release → 관리자 `is_admin=true` → 게시 순서
 
 ## 다음 작업 — 파일 스토리지 R2 이전 (짝 작업)
@@ -51,9 +51,9 @@
       **R2 와 무관하게 선행해야 할 작업이었다** — 원본 업로드는 어느 스토리지로 가도 문제다
 - [x] ~~`src/lib/assetUrl.ts` · `src/apis/file.ts` · 읽는 곳 전환~~ — [#489](https://github.com/TeamVisioneer/PrayU-Web/pull/489)
 - [x] ~~Api 시크릿 `R2_*` 4개 — staging·prod 양쪽 등록 완료~~ (2026-07-31, 해시 대조로 값까지 검증)
-- [ ] 🔴 **staging Vercel(`prayu-staging`)에 `VITE_STORAGE_BASE_URL` 등록 + 재배포** —
-      이 값이 없으면 업로드는 계속 Supabase 로 나간다. `VITE_` 값은 **빌드 시점에 번들에 박히므로 재배포해야 적용**된다
-- [ ] 🔴 **prod Vercel(`prayu`)에 `VITE_STORAGE_BASE_URL` 등록 — 미리 넣어도 된다** (2026-07-31 결정)
+- [x] ~~**staging Vercel 에 `VITE_STORAGE_BASE_URL` 등록 + 재배포**~~ — 2026-07-31.
+      staging 번들에 `pub-554e60a0….r2.dev` 가 박힌 것으로 확인
+- [x] ~~**prod Vercel(`prayu`)에 `VITE_STORAGE_BASE_URL` 등록**~~ — 2026-07-31 등록 완료. release 전이라 아직 빌드에 반영되지 않는다
       - **prod release 순서를 Api 먼저 → web 으로 확정**했으므로, web 이 나가는 시점엔 업로드 엔드포인트가 이미 prod 에 있다.
         성경 동기화 때문에 web 먼저로 뒤집었던 예외는 철회됐다 → [PrayU-Api/docs/backlog.md](../../PrayU-Api/docs/backlog.md)
       - ⚠️ **Production 스코프만 체크한다.** 기존 변수들이 Production/Preview/Development 세 곳에 다 걸려 있어
@@ -62,8 +62,7 @@
         (`VITE_` 값은 빌드 시점에 번들에 박히므로 재빌드가 필요하다)
 - [ ] **손대지 않는 것**: `avatar_url`(카카오 외부 URL)·`pray_card.bible_card_url`(레거시) →
       `UserProfile`·`PrayListDrawer`·`PrayCard` 는 그대로
-- [ ] 전환 후 확인: 말씀카드·감사카드 생성 → DB 에 **key 만** 들어가는지, 기존 카드가 그대로 보이는지,
-      카카오 공유 썸네일이 새 도메인으로 뜨는지
+- [x] ~~전환 후 확인~~ — 2026-07-31 staging 확인 완료 (신규 카드는 key 저장, 기존 카드 정상 표시)
 
 **이번 범위는 앞으로 만드는 이미지뿐이다.** 이미 올라간 파일과 그 URL 은 건드리지 않는다 —
 옮길지 여부·방법은 나중에 별도로 정한다(계획 문서의 "기존 이미지는 이번에 건드리지 않는다" 절).
@@ -80,8 +79,8 @@
 
 ## 배포 대기 — 어드민 개편 후속
 
-- [ ] **staging에서 어드민 확인** — `/admin` 진입(관리자 계정에 `is_admin=true` 설정 필요), 지표가 실데이터와 맞는지, 공지 작성→노출까지
-- [ ] **공지 이미지 업로드 확인** — staging `prayu` 버킷의 `notice/` 경로에 실제로 올라가는지
+- [x] ~~**staging에서 어드민 확인**~~ — 2026-07-31 완료
+- [x] ~~**공지 이미지 업로드 확인**~~ — 2026-07-31 완료 (R2 전환 후에는 `notice/` 키로 R2 에 올라간다)
 
 ## 배포 대기
 
@@ -98,7 +97,7 @@ DB는 원본(goodtv) 표기를 **그대로 보존**한다 — `<구역 제목>`(
   - 당초 근거: Api 가 먼저 나가면 본문의 `○` 가 **구버전 web 에 그대로 노출**된다
   - 뒤집은 이유: R2 업로드가 정반대 순서를 요구하고 어기면 **500** 이다. `○` 노출은 표시 문제라 급이 다르다
   - 근거 원본: [PrayU-Api/docs/backlog.md](../../PrayU-Api/docs/backlog.md) 성경 동기화 절
-- [ ] **staging UI 확인**(로그인 필요) — QT 본문·말씀카드 생성 본문에 `○`·`<구역제목>` 없음, 기존 말씀카드(저장된 본문)도 정상 표시
+- [x] ~~**staging UI 확인**~~ — 2026-07-31 완료. `○`·`<구역제목>` 없음 확인
 - [ ] **기존 QT 결과(`qt_data`)에는 표기가 남아 있을 수 있다** — LLM 응답에 원문이 인용된 경우. 새로 생성되는 것부터 정리되며, 과거분 보정은 하지 않는다(판단 필요 시 별도 작업)
 - [ ] staging 인수테스트 후 **prod release(태그) 발행** — 순서는 **Api 먼저 → web** (예외 없음)
 - [ ] 실기기 확인(뷰포트 개편분): iOS Safari 하단 툴바 뒤 흰 띠 소멸, 회전·키보드, **앱 WebView 회귀**(`viewport-fit=cover` 영향)
