@@ -39,6 +39,11 @@
 - [x] ~~**staging 게시(리허설)**~~ — 2026-07-31 확인 완료. 레포 원고 → 초안 등록 → 노출까지 정상
 - [ ] ⚠️ **prod 공지는 release 이후에만 가능** — 현재 prod에 `notice` 테이블이 없다(`42P01`). release → 관리자 `is_admin=true` → 게시 순서
 
+## 🎯 v1.0.0 릴리스 — 범위 확정 중
+
+계획: [plans/release-v1/plan.md](plans/release-v1/plan.md) — 신규 피처 목록·보안 포함 범위·App 트랙 결정 대기.
+릴리스 전까지 신규 피처를 staging 에 쌓고, 범위가 닫히면 runbook 분리.
+
 ## `premium_expired_at` 자기부여 차단 (짝 작업)
 
 계획: [../../PrayU-Api/docs/plans/premium-guard.md](../../PrayU-Api/docs/plans/premium-guard.md) · Api 짝 PR [#59](https://github.com/TeamVisioneer/PrayU-Api/pull/59) · [security-backlog.md](security-backlog.md) 8번
