@@ -15,6 +15,7 @@ import { AlertTriangle, Calendar as CalendarIcon } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import useBaseStore from "@/stores/baseStore";
 import NoticeManager from "../NoticeManager";
+import { setPremiumExpiry } from "@/apis/admin";
 import { Profiles } from "../../../../supabase/types/tables";
 
 type ExpiryOption = "month" | "year" | "forever";
@@ -23,7 +24,6 @@ const OperationsTab = () => {
   const fetchProfileListByUserName = useBaseStore(
     (state) => state.fetchProfileListByUserName,
   );
-  const updateProfile = useBaseStore((state) => state.updateProfile);
   const deletePrayCard = useBaseStore((state) => state.deletePrayCard);
 
   const [profileKeyword, setProfileKeyword] = useState("");
@@ -65,9 +65,15 @@ const OperationsTab = () => {
       toast({ description: "프로필과 옵션을 선택해 주세요" });
       return;
     }
-    await updateProfile(targetProfile.id, {
-      premium_expired_at: getPreviewExpiryDate(),
-    });
+    // 실패해도 성공 toast 가 뜨던 문제가 있었다 — 결과를 반드시 본다
+    const succeeded = await setPremiumExpiry(
+      targetProfile.id,
+      getPreviewExpiryDate(),
+    );
+    if (!succeeded) {
+      toast({ description: "프리미엄 만료일 설정에 실패했어요" });
+      return;
+    }
     const refreshed = await fetchProfileListByUserName(profileKeyword, 100);
     setSearchResults(refreshed || []);
     setIsOpenExpiryDialog(false);

@@ -44,6 +44,16 @@
 계획: [plans/release-v1/plan.md](plans/release-v1/plan.md) — 신규 피처 목록·보안 포함 범위·App 트랙 결정 대기.
 릴리스 전까지 신규 피처를 staging 에 쌓고, 범위가 닫히면 runbook 분리.
 
+## `premium_expired_at` 자기부여 차단 (짝 작업)
+
+계획: [../../PrayU-Api/docs/plans/premium-guard.md](../../PrayU-Api/docs/plans/premium-guard.md) · Api 짝 PR [#59](https://github.com/TeamVisioneer/PrayU-Api/pull/59) · [security-backlog.md](security-backlog.md) 8번
+
+컬럼 권한이 회수되어 클라이언트는 이 컬럼을 쓸 수 없다. 어드민 설정은 서버 경로(`POST /api/admin/premium`)를 쓴다.
+
+- [x] ~~`apis/admin.ts` `setPremiumExpiry()` · `OperationsTab` 전환 · 타입에서 컬럼 제거~~ — [#497](https://github.com/TeamVisioneer/PrayU-Web/pull/497)
+- [ ] ⚠️ **staging 확인**: 어드민에서 프리미엄 설정/해제 → 대상 계정의 플랜 판정(`AuthProvider`) 반영까지
+- [ ] `VITE_PREMIUM_PLAN_USERLIST` Vercel 환경변수 정리 — 코드에서 더 이상 안 읽는다 (사람 조작)
+
 ## 회원 탈퇴 — 소프트 삭제 (짝 작업)
 
 계획: [../../PrayU-Api/docs/archive/account-deletion-plan.md](../../PrayU-Api/docs/archive/account-deletion-plan.md) · Api 짝 PR [#56](https://github.com/TeamVisioneer/PrayU-Api/pull/56)
