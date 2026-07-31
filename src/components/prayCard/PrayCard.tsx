@@ -1,6 +1,10 @@
 import useBaseStore from "@/stores/baseStore";
 import React from "react";
-import { displayProfileName, profileInitial } from "@/lib/profileName";
+import {
+  displayProfileName,
+  profileAvatarUrl,
+  profileInitial,
+} from "@/lib/profileName";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
@@ -121,6 +125,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
 
   const timeAgo = dateDistanceText(prayCard.created_at);
   const authorName = displayProfileName(prayCard.profiles);
+  const authorAvatar = profileAvatarUrl(prayCard.profiles);
   const userInitial = profileInitial(prayCard.profiles);
 
   return (
@@ -130,9 +135,9 @@ export const PrayCard: React.FC<PrayCardProps> = ({
       <div className="p-4 pb-3 flex justify-between items-center flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 rounded-full overflow-hidden">
-            {prayCard.profiles.avatar_url ? (
+            {authorAvatar ? (
               <img
-                src={prayCard.profiles.avatar_url}
+                src={authorAvatar}
                 alt={authorName}
                 className="h-full w-full object-cover"
               />

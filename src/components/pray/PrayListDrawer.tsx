@@ -1,4 +1,4 @@
-import { displayProfileName } from "@/lib/profileName";
+import { displayProfileName, profileAvatarUrl } from "@/lib/profileName";
 import useBaseStore from "@/stores/baseStore";
 import {
   Drawer,
@@ -141,7 +141,7 @@ const PrayListDrawer: React.FC = () => {
                     <img
                       className="w-8 h-8 rounded-full border object-cover"
                       src={
-                        prays[0].profiles.avatar_url ||
+                        profileAvatarUrl(prays[0].profiles) ||
                         "/images/defaultProfileImage.png"
                       }
                       onError={(
