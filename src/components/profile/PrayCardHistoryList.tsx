@@ -4,6 +4,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { useState } from "react";
 import ShowMoreBtn from "../common/ShowMoreBtn";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
+import { assetUrl } from "@/lib/assetUrl";
 
 const PrayCardHistoryList = () => {
   const user = useBaseStore((state) => state.user);
@@ -66,7 +67,9 @@ const PrayCardHistoryList = () => {
       <div className="grid w-full grid-cols-3 gap-3">
         {historyPrayCardListView.map((prayCard, index) => {
           const bibleCardImageUrl =
-            prayCard.bible_card?.image_url || prayCard.bible_card_url;
+            assetUrl(prayCard.bible_card?.image_key) ||
+            prayCard.bible_card?.image_url ||
+            prayCard.bible_card_url;
 
           if (bibleCardImageUrl) {
             return (

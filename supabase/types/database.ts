@@ -77,6 +77,7 @@ export type Database = {
           colors: string[]
           created_at: string
           id: string
+          image_key: string | null
           image_url: string | null
           keywords: string[]
           name: string
@@ -89,6 +90,7 @@ export type Database = {
           colors?: string[]
           created_at?: string
           id?: string
+          image_key?: string | null
           image_url?: string | null
           keywords?: string[]
           name?: string
@@ -101,6 +103,7 @@ export type Database = {
           colors?: string[]
           created_at?: string
           id?: string
+          image_key?: string | null
           image_url?: string | null
           keywords?: string[]
           name?: string
@@ -662,6 +665,7 @@ export type Database = {
           deleted_at: string | null
           id: number
           image: string
+          image_key: string | null
           updated_at: string
           user_name: string
         }
@@ -671,6 +675,7 @@ export type Database = {
           deleted_at?: string | null
           id?: number
           image?: string
+          image_key?: string | null
           updated_at?: string
           user_name?: string
         }
@@ -680,6 +685,7 @@ export type Database = {
           deleted_at?: string | null
           id?: number
           image?: string
+          image_key?: string | null
           updated_at?: string
           user_name?: string
         }

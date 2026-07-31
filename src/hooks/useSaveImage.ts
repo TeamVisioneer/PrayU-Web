@@ -1,10 +1,10 @@
 import { RefObject, useCallback } from "react";
 import { domToBlob } from "modern-screenshot";
-import { getPublicUrl, uploadImage } from "@/apis/file";
+import { UploadedImage, UploadKind, uploadImage } from "@/apis/file";
 import { getTodayNumber } from "@/lib/utils";
 
 interface SaveImageOptions {
-  storagePath?: string; // Supabase storage 경로 (기본값: 'BibleCard/UserBibleCard')
+  kind?: UploadKind; // 업로드 용도 — 저장 경로는 서버가 이 값으로 정한다 (기본값: 'bible_card')
   fileName?: string; // 파일명 (기본값: 'Card_{timestamp}.jpeg')
   imageFormat?: "jpeg" | "png"; // 이미지 포맷 (기본값: 'jpeg')
   quality?: number; // 이미지 품질 (0-1, 기본값: 0.85)
@@ -12,28 +12,18 @@ interface SaveImageOptions {
 }
 
 /**
- * DOM 요소를 이미지로 캡처하여 Supabase에 업로드하는 커스텀 훅
+ * DOM 요소를 이미지로 캡처해 업로드하는 커스텀 훅
  *
- * @returns saveImage 함수를 반환
+ * @returns saveImage — 저장할 값(`{ key, url }`)을 돌려준다. 실패 시 null
  *
  * @example
  * const { saveImage } = useSaveImage();
  * const cardRef = useRef<HTMLDivElement>(null);
  *
  * const handleSave = async () => {
- *   const url = await saveImage(cardRef, {
- *     storagePath: 'BibleCard/UserBibleCard',
- *     fileName: `Card_${Date.now()}.jpeg`,
- *     imageFormat: 'jpeg',
- *     quality: 0.95,
- *     scale: 2
- *   });
- *
- *   if (url) {
- *     console.log('이미지 저장 성공:', url);
- *   } else {
- *     alert('이미지 저장 실패');
- *   }
+ *   const uploaded = await saveImage(cardRef, { kind: "bible_card" });
+ *   if (!uploaded) return alert("이미지 저장 실패");
+ *   await createCard({ image_key: uploaded.key, image_url: uploaded.url });
  * };
  */
 export function useSaveImage() {
@@ -41,10 +31,10 @@ export function useSaveImage() {
     async (
       elementRef: RefObject<HTMLElement>,
       options?: SaveImageOptions,
-    ): Promise<string | null> => {
+    ): Promise<UploadedImage | null> => {
       // 기본값 설정
       const {
-        storagePath = "BibleCard/UserBibleCard",
+        kind = "bible_card",
         fileName = `Card_${getTodayNumber()}.jpeg`,
         imageFormat = "jpeg",
         quality = 0.85,
@@ -79,23 +69,15 @@ export function useSaveImage() {
           type: `image/${imageFormat}`,
         });
 
-        // Step 5: Supabase 업로드
-        const pathData = await uploadImage(file, `${storagePath}/${fileName}`);
+        // Step 5: 업로드 — 저장할 값(key 또는 레거시 url)을 그대로 돌려준다
+        const uploaded = await uploadImage(file, kind);
 
-        if (!pathData) {
-          console.error("useSaveImage: Failed to upload image to Supabase");
+        if (!uploaded) {
+          console.error("useSaveImage: Failed to upload image");
           return null;
         }
 
-        // Step 6: Public URL 생성 및 반환
-        const publicUrl = getPublicUrl(pathData.path);
-
-        if (!publicUrl) {
-          console.error("useSaveImage: Failed to get public URL");
-          return null;
-        }
-
-        return publicUrl;
+        return uploaded;
       } catch (error) {
         console.error("useSaveImage: Error during image save process", error);
         return null;

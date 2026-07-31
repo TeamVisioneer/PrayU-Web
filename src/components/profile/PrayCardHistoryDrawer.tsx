@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import useBaseStore from "@/stores/baseStore";
+import { assetUrl } from "@/lib/assetUrl";
 import { PrayCard } from "../prayCard/PrayCard";
 import ReactionResultBox from "../pray/ReactionResultBox";
 import PrayCardWithBibleCard from "../prayCard/PrayCardWithBibleCard";
@@ -80,7 +81,11 @@ const PrayCardHistoryDrawer: React.FC = () => {
               <>
                 <ShareButtonGroup
                   where="PrayCardHistoryDrawer"
-                  publicUrl={historyCard.bible_card.image_url ?? undefined}
+                  publicUrl={
+                    assetUrl(historyCard.bible_card.image_key) ??
+                    historyCard.bible_card.image_url ??
+                    undefined
+                  }
                   shareUrl={`${getDomainUrl()}/bible-card/share/${historyCard.bible_card.id}`}
                   kakaoServerCallbackArgs={
                     user

@@ -20,7 +20,8 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import NoticeContent from "@/components/notice/NoticeContent";
-import { getPublicUrl, uploadImage } from "@/apis/file";
+import { uploadImage } from "@/apis/file";
+import { assetUrl } from "@/lib/assetUrl";
 import { resizeImageFile } from "@/lib/resizeImage";
 import { NoticeDraftFile, loadNoticeDrafts } from "@/lib/noticeDrafts";
 import {
@@ -224,19 +225,21 @@ const NoticeManager = () => {
     });
   };
 
-  /** 공지 이미지 업로드 — 기존 prayu 버킷의 notice/ 경로를 쓴다 */
+  /**
+   * 공지 이미지 업로드.
+   *
+   * `notice.images` 는 설계상 **URL 목록**이다 — 레포 원고는 `/images/notice/...`(웹 오리진),
+   * 즉석 업로드는 절대 URL 이 들어간다. 카드 이미지와 달리 행이 몇 개뿐이라
+   * 나중에 도메인을 바꿔도 UPDATE 몇 줄이면 된다. 그래서 여기만 URL 로 저장한다.
+   */
   const handleUploadImages = async (files: FileList) => {
     setIsUploading(true);
     const uploadedUrls: string[] = [];
     for (const original of Array.from(files)) {
       const file = await resizeImageFile(original);
-      const safeName = file.name.replace(/[^\w.-]/g, "_");
-      const uploaded = await uploadImage(
-        file,
-        `notice/${Date.now()}-${safeName}`,
-      );
+      const uploaded = await uploadImage(file, "notice");
       if (!uploaded) continue;
-      const publicUrl = getPublicUrl(uploaded.path);
+      const publicUrl = uploaded.url ?? assetUrl(uploaded.key);
       if (publicUrl) uploadedUrls.push(publicUrl);
     }
     setIsUploading(false);
