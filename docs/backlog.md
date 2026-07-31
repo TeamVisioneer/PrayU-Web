@@ -53,13 +53,13 @@
 - [x] ~~Api 시크릿 `R2_*` 4개 — staging·prod 양쪽 등록 완료~~ (2026-07-31, 해시 대조로 값까지 검증)
 - [ ] 🔴 **staging Vercel(`prayu-staging`)에 `VITE_STORAGE_BASE_URL` 등록 + 재배포** —
       이 값이 없으면 업로드는 계속 Supabase 로 나간다. `VITE_` 값은 **빌드 시점에 번들에 박히므로 재배포해야 적용**된다
-- [ ] 🔴 **prod Vercel(`prayu`)의 `VITE_STORAGE_BASE_URL` 은 release 때 넣는다 — 미리 넣지 않는다**
-      - 이유 1: 미리 넣으면 **다음 prod 빌드부터 R2 가 켜진다.** prod 순서는 **Api release 먼저 → web 태그 발행** 인데,
-        값이 먼저 있으면 순서가 어긋났을 때 조용히 깨진다 (업로드 엔드포인트가 아직 prod 에 없으면 500)
-      - 이유 2: 기존 변수들이 Production/Preview/Development **세 곳 모두**에 걸려 있어, 습관대로 넣으면
-        preview 빌드까지 **prod 버킷**을 쓴다. 넣을 때 스코프를 확인한다
-      - 값은 시크릿이 아니라 Cloudflare 콘솔에서 언제든 다시 볼 수 있다 — 미리 넣어둘 이유가 없다
-      - 순서: **Api release → prod Vercel 값 등록 → web 태그 발행**
+- [ ] 🔴 **prod Vercel(`prayu`)에 `VITE_STORAGE_BASE_URL` 등록 — 미리 넣어도 된다** (2026-07-31 결정)
+      - **prod release 순서를 Api 먼저 → web 으로 확정**했으므로, web 이 나가는 시점엔 업로드 엔드포인트가 이미 prod 에 있다.
+        성경 동기화 때문에 web 먼저로 뒤집었던 예외는 철회됐다 → [PrayU-Api/docs/backlog.md](../../PrayU-Api/docs/backlog.md)
+      - ⚠️ **Production 스코프만 체크한다.** 기존 변수들이 Production/Preview/Development 세 곳에 다 걸려 있어
+        습관대로 하면 Preview 까지 켜지고, Preview 빌드는 prod Supabase 를 보면서 **prod 버킷**에 쓴다
+      - 이미 배포된 prod 에 값을 반영할 때는 **태그 재발행이 아니라 Vercel 대시보드에서 Redeploy** 하면 된다
+        (`VITE_` 값은 빌드 시점에 번들에 박히므로 재빌드가 필요하다)
 - [ ] **손대지 않는 것**: `avatar_url`(카카오 외부 URL)·`pray_card.bible_card_url`(레거시) →
       `UserProfile`·`PrayListDrawer`·`PrayCard` 는 그대로
 - [ ] 전환 후 확인: 말씀카드·감사카드 생성 → DB 에 **key 만** 들어가는지, 기존 카드가 그대로 보이는지,
