@@ -3,6 +3,11 @@ import { supabase } from "../../supabase/client";
 import * as Sentry from "@sentry/react";
 import { Json } from "supabase/types/database";
 
+/**
+ * `premium_expired_at` 은 **여기 없다** — 컬럼 권한이 회수되어 클라이언트가 쓸 수 없다.
+ * 어드민 설정은 `apis/admin.ts` 의 `setPremiumExpiry()` 를 쓴다
+ * (PrayU-Api/docs/plans/premium-guard.md).
+ */
 export interface updateProfilesParams {
   avatar_url?: string;
   blocking_users?: string[];
@@ -15,7 +20,6 @@ export interface updateProfilesParams {
   push_notification?: boolean;
   terms_agreed_at?: string;
   fcm_token?: string;
-  premium_expired_at?: string | null;
   app_settings?: Json;
 }
 

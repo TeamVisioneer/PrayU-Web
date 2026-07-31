@@ -16,6 +16,49 @@ import { LLM_PRICE_PER_1K_TOKENS } from "@/constants/llmPricing";
  * 그때 관리자 select 정책 추가 또는 서버 경유로 전환한다. (docs/backlog.md 참조)
  */
 
+/**
+ * 프리미엄 만료일 설정/해제 (`null` = 해제).
+ *
+ * `profiles.premium_expired_at` 은 **컬럼 권한이 회수되어** 클라이언트가 직접 쓸 수 없다 —
+ * 로그인만 하면 자기 행에 만료일을 넣어 프리미엄을 공짜로 얻을 수 있었기 때문이다
+ * (PrayU-Api/docs/plans/premium-guard.md). 이 엔드포인트가 유일한 쓰기 경로이고,
+ * 관리자 여부는 서버가 `profiles.is_admin` 을 읽어 판단한다.
+ */
+export const setPremiumExpiry = async (
+  userId: string,
+  premiumExpiredAt: string | null,
+): Promise<boolean> => {
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const response = await fetch(
+      `${import.meta.env.VITE_SUPA_PROJECT_URL}/functions/v1/api/admin/premium`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify({ userId, premiumExpiredAt }),
+      },
+    );
+
+    const { error } = await response.json();
+    if (error) {
+      Sentry.captureException(
+        `프리미엄 설정 실패 (${response.status}): ${error}`,
+      );
+      return false;
+    }
+    return true;
+  } catch (error) {
+    Sentry.captureException(error);
+    return false;
+  }
+};
+
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
 /** ISO 타임스탬프를 KST 기준 YYYY-MM-DD로 (일별 버킷 키) */
