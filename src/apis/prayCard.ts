@@ -14,10 +14,10 @@ export const fetchGroupPrayCardList = async (
       .from("pray_card")
       .select(
         `*,
-      profiles (id, full_name, avatar_url, kakao_id),
+      profiles (id, full_name, avatar_url, kakao_id, deleted_at),
       bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
-        profiles (id, full_name, avatar_url, kakao_id)
+        profiles (id, full_name, avatar_url, kakao_id, deleted_at)
       )`,
       )
       .eq("group_id", groupId)
@@ -52,10 +52,10 @@ export const fetchOtherPrayCardListByGroupId = async (
       .from("pray_card")
       .select(
         `*,
-        profiles (id, full_name, avatar_url, kakao_id),
+        profiles (id, full_name, avatar_url, kakao_id, deleted_at),
         bible_card:bible_card!pray_card_bible_card_id_fkey (*),
         pray (*, 
-          profiles (id, full_name, avatar_url, kakao_id)
+          profiles (id, full_name, avatar_url, kakao_id, deleted_at)
         )`,
       )
       .eq("user_id", userId)
@@ -88,10 +88,10 @@ export const fetchUserPrayCardListByGroupId = async (
       .from("pray_card")
       .select(
         `*,
-      profiles (id, full_name, avatar_url, kakao_id),
+      profiles (id, full_name, avatar_url, kakao_id, deleted_at),
       bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
-        profiles (id, full_name, avatar_url, kakao_id)
+        profiles (id, full_name, avatar_url, kakao_id, deleted_at)
       )`,
       )
       .eq("user_id", currentUserId)
@@ -130,10 +130,10 @@ export const fetchUserPrayCardList = async (
       .from("pray_card")
       .select(
         `*,
-      profiles (id, full_name, avatar_url, kakao_id),
+      profiles (id, full_name, avatar_url, kakao_id, deleted_at),
       bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
-        profiles (id, full_name, avatar_url, kakao_id)
+        profiles (id, full_name, avatar_url, kakao_id, deleted_at)
       ),
       group(name)`,
       )
@@ -170,10 +170,10 @@ export const fetchPrayCardByBibleCardId = async (
       .from("pray_card")
       .select(
         `*,
-      profiles (id, full_name, avatar_url, kakao_id),
+      profiles (id, full_name, avatar_url, kakao_id, deleted_at),
       bible_card:bible_card!pray_card_bible_card_id_fkey (*),
       pray (*, 
-        profiles (id, full_name, avatar_url, kakao_id)
+        profiles (id, full_name, avatar_url, kakao_id, deleted_at)
       ),
       group(name)`,
       )

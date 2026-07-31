@@ -39,6 +39,22 @@
 - [x] ~~**staging 게시(리허설)**~~ — 2026-07-31 확인 완료. 레포 원고 → 초안 등록 → 노출까지 정상
 - [ ] ⚠️ **prod 공지는 release 이후에만 가능** — 현재 prod에 `notice` 테이블이 없다(`42P01`). release → 관리자 `is_admin=true` → 게시 순서
 
+## 회원 탈퇴 — 소프트 삭제 (짝 작업)
+
+계획: [../../PrayU-Api/docs/account-deletion-plan.md](../../PrayU-Api/docs/account-deletion-plan.md) · Api 짝 PR [#56](https://github.com/TeamVisioneer/PrayU-Api/pull/56)
+
+하드 삭제는 FK 때문에 **항상 실패**했는데 web 이 반환값을 안 봐서 사용자는 탈퇴됐다고 믿었다.
+절차 전체를 서버가 소유하도록 옮기고, 실패를 사용자에게 알린다.
+
+- [x] ~~반환값 확인 · `deleted_at` 프로필을 "(탈퇴유저)"로 표시 · 클라이언트 삭제 절차 제거~~ — [#494](https://github.com/TeamVisioneer/PrayU-Web/pull/494)
+- [ ] ⚠️ **동작 변경 확인(staging)**: 예전에는 탈퇴 시 클라이언트가 `pray`·`pray_card` 까지 소프트 삭제해
+      **상대방 화면에서도 기도 기록이 사라졌다.** 이제는 남는다 — 의도된 변경이지만 실사용 화면에서 확인 필요
+- [ ] 표시 헬퍼 미적용 화면 — `Office/*`·`AdminPage/*` 는 내부 도구라 기존 폴백(`"이름 없음"` 등)을 그대로 뒀다.
+      **탈퇴자의 실명·사진이 그대로 보인다**(데이터를 지우지 않으므로). 운영 추적 용도라 의도에 부합하지만,
+      혼동되면 `displayProfileName` 으로 통일한다
+- [ ] ⚠️ **가리는 것은 화면뿐이다.** RLS 가 `select using(true)` 라 PostgREST 를 직접 부르면 탈퇴자 정보도 읽힌다 —
+      전체 RLS 정비([security-backlog.md](security-backlog.md) 1번)에 걸린 사안
+
 ## 다음 작업 — 파일 스토리지 R2 이전 (짝 작업)
 
 계획: [../../PrayU-Api/docs/storage-r2-plan.md](../../PrayU-Api/docs/storage-r2-plan.md) · Api 백로그에 자기 단계 있음

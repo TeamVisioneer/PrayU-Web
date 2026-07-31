@@ -12,6 +12,7 @@ import useBaseStore from "@/stores/baseStore";
 import { Input } from "@/components/ui/input";
 import { KakaoTokenRepo } from "@/components/kakao/KakaoTokenRepo.ts";
 import { deleteUser } from "../../apis/user.ts";
+import { useToast } from "../ui/use-toast";
 import {
   Accordion,
   AccordionContent,
@@ -49,6 +50,7 @@ const SettingDialog = () => {
   const getProfile = useBaseStore((state) => state.getProfile);
   const signOut = useBaseStore((state) => state.signOut);
 
+  const { toast } = useToast();
   const [name, setName] = useState(myProfile?.full_name || "");
 
   // appSettings 상태를 AppSettings 타입으로 관리
@@ -99,12 +101,18 @@ const SettingDialog = () => {
       color: "bg-red-400 hover:bg-red-500",
       title: "회원 탈퇴",
       description:
-        "계정을 탈퇴하시겠습니까?\nPrayU 의 모든 데이터가 삭제됩니다.",
+        "계정을 탈퇴하시겠습니까?\n프로필 정보가 삭제되고 계정을 다시 사용할 수 없습니다.",
       actionText: "탈퇴하기",
       cancelText: "취소",
       onAction: async () => {
-        const userId = user!.id;
-        await deleteUser(userId);
+        // 탈퇴가 실패해도 로그아웃하면 사용자는 탈퇴됐다고 믿는다 — 반드시 결과를 본다
+        const succeeded = await deleteUser();
+        if (!succeeded) {
+          toast({
+            description: "탈퇴에 실패했어요. 잠시 후 다시 시도해 주세요",
+          });
+          return;
+        }
         signOut();
 
         setTimeout(() => {

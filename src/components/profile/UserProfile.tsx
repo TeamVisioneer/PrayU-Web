@@ -1,5 +1,6 @@
 import { Profiles } from "supabase/types/tables";
 import { cn } from "@/lib/utils";
+import { displayProfileName, profileAvatarUrl } from "@/lib/profileName";
 
 interface UserProfileProps {
   profile?: Profiles;
@@ -16,13 +17,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     <div className="flex items-center gap-2">
       <img
         className={cn("rounded-full object-cover", imgSize)}
-        src={profile?.avatar_url || "/images/defaultProfileImage.png"}
+        src={profileAvatarUrl(profile) || "/images/defaultProfileImage.png"}
         onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
           e.currentTarget.src = "/images/defaultProfileImage.png";
         }}
       />
       <p className={cn("truncate", fontSize)}>
-        {profile?.full_name || "(알 수 없음)"}
+        {displayProfileName(profile)}
       </p>
     </div>
   );
