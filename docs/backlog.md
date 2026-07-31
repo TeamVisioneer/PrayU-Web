@@ -50,8 +50,16 @@
 - [x] ~~**업로드 전 리사이즈**~~ — [#488](https://github.com/TeamVisioneer/PrayU-Web/pull/488). 폰 사진 6.75MB → 484KB(7%).
       **R2 와 무관하게 선행해야 할 작업이었다** — 원본 업로드는 어느 스토리지로 가도 문제다
 - [x] ~~`src/lib/assetUrl.ts` · `src/apis/file.ts` · 읽는 곳 전환~~ — [#489](https://github.com/TeamVisioneer/PrayU-Web/pull/489)
-- [ ] 🔴 **`VITE_STORAGE_BASE_URL` 을 각 환경(Vercel)에 등록** — **이 값이 없으면 업로드는 계속 Supabase 로 나간다.**
-      R2 시크릿(Api 쪽)과 **함께** 넣어야 한다. 한쪽만 넣으면 업로드가 실패한다
+- [x] ~~Api 시크릿 `R2_*` 4개 — staging·prod 양쪽 등록 완료~~ (2026-07-31, 해시 대조로 값까지 검증)
+- [ ] 🔴 **staging Vercel(`prayu-staging`)에 `VITE_STORAGE_BASE_URL` 등록 + 재배포** —
+      이 값이 없으면 업로드는 계속 Supabase 로 나간다. `VITE_` 값은 **빌드 시점에 번들에 박히므로 재배포해야 적용**된다
+- [ ] 🔴 **prod Vercel(`prayu`)의 `VITE_STORAGE_BASE_URL` 은 release 때 넣는다 — 미리 넣지 않는다**
+      - 이유 1: 미리 넣으면 **다음 prod 빌드부터 R2 가 켜진다.** prod 순서는 **Api release 먼저 → web 태그 발행** 인데,
+        값이 먼저 있으면 순서가 어긋났을 때 조용히 깨진다 (업로드 엔드포인트가 아직 prod 에 없으면 500)
+      - 이유 2: 기존 변수들이 Production/Preview/Development **세 곳 모두**에 걸려 있어, 습관대로 넣으면
+        preview 빌드까지 **prod 버킷**을 쓴다. 넣을 때 스코프를 확인한다
+      - 값은 시크릿이 아니라 Cloudflare 콘솔에서 언제든 다시 볼 수 있다 — 미리 넣어둘 이유가 없다
+      - 순서: **Api release → prod Vercel 값 등록 → web 태그 발행**
 - [ ] **손대지 않는 것**: `avatar_url`(카카오 외부 URL)·`pray_card.bible_card_url`(레거시) →
       `UserProfile`·`PrayListDrawer`·`PrayCard` 는 그대로
 - [ ] 전환 후 확인: 말씀카드·감사카드 생성 → DB 에 **key 만** 들어가는지, 기존 카드가 그대로 보이는지,
