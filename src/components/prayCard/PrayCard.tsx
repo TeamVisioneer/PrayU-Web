@@ -1,5 +1,6 @@
 import useBaseStore from "@/stores/baseStore";
 import React from "react";
+import { displayProfileName, profileInitial } from "@/lib/profileName";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import MyPrayCardMenuBtn from "./MyPrayCardMenuBtn";
 import OtherPrayCardMenuBtn from "./OtherPrayCardMenuBtn";
@@ -119,9 +120,8 @@ export const PrayCard: React.FC<PrayCardProps> = ({
     }));
 
   const timeAgo = dateDistanceText(prayCard.created_at);
-  const userInitial = prayCard.profiles.full_name
-    ? prayCard.profiles.full_name.charAt(0).toUpperCase()
-    : "";
+  const authorName = displayProfileName(prayCard.profiles);
+  const userInitial = profileInitial(prayCard.profiles);
 
   return (
     // Fixed aspect ratio container (3:4 aspect ratio)
@@ -133,7 +133,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
             {prayCard.profiles.avatar_url ? (
               <img
                 src={prayCard.profiles.avatar_url}
-                alt={prayCard.profiles.full_name || ""}
+                alt={authorName}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -144,7 +144,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
           </div>
           <div>
             <h3 className="font-medium text-gray-900">
-              {isMyPrayCard ? "나" : prayCard.profiles.full_name}
+              {isMyPrayCard ? "나" : authorName}
             </h3>
             <p className="text-xs text-gray-500">{timeAgo}</p>
           </div>

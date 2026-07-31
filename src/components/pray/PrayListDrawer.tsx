@@ -1,3 +1,4 @@
+import { displayProfileName } from "@/lib/profileName";
 import useBaseStore from "@/stores/baseStore";
 import {
   Drawer,
@@ -44,8 +45,8 @@ const PrayListDrawer: React.FC = () => {
       if (a === user!.id) return -1;
       if (b === user!.id) return 1;
       // You can add more sorting logic here if needed, e.g., by name
-      const nameA = grouped[a][0].profiles?.full_name || "";
-      const nameB = grouped[b][0].profiles?.full_name || "";
+      const nameA = displayProfileName(grouped[a][0].profiles);
+      const nameB = displayProfileName(grouped[b][0].profiles);
       return nameB.localeCompare(nameA);
     });
 
@@ -153,7 +154,7 @@ const PrayListDrawer: React.FC = () => {
                       <p className="font-medium">내가 한 기도</p>
                     ) : (
                       <p className="font-medium">
-                        {prays[0].profiles.full_name}
+                        {displayProfileName(prays[0].profiles)}
                       </p>
                     )}
                   </div>

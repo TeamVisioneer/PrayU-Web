@@ -17,8 +17,8 @@ export const fetchGroupListByGroupIds = async (
       .from("group")
       .select(`
         *, 
-        profiles (id, full_name, avatar_url),
-        member (id,user_id, profiles (id, full_name, avatar_url))
+        profiles (id, full_name, avatar_url, deleted_at),
+        member (id,user_id, profiles (id, full_name, avatar_url, deleted_at))
       `)
       .in("id", groupIds)
       .is("deleted_at", null)
@@ -87,7 +87,7 @@ export const getGroup = async (
     const { error, data } = await supabase
       .from("group")
       .select(
-        `*, profiles (id, full_name, avatar_url, kakao_id), group_union (id, name, profiles (id, full_name, avatar_url))`,
+        `*, profiles (id, full_name, avatar_url, kakao_id, deleted_at), group_union (id, name, profiles (id, full_name, avatar_url, deleted_at))`,
       )
       .eq("id", groupId)
       .single();
@@ -138,7 +138,7 @@ export const createGroup = async (
     const { error, data } = await supabase
       .from("group")
       .insert([{ user_id: userId, name, intro }])
-      .select(`*, profiles (id, full_name, avatar_url, kakao_id)`);
+      .select(`*, profiles (id, full_name, avatar_url, kakao_id, deleted_at)`);
     if (error) {
       Sentry.captureException(error.message);
       return null;

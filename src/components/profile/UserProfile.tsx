@@ -1,5 +1,6 @@
 import { Profiles } from "supabase/types/tables";
 import { cn } from "@/lib/utils";
+import { displayProfileName } from "@/lib/profileName";
 
 interface UserProfileProps {
   profile?: Profiles;
@@ -22,7 +23,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         }}
       />
       <p className={cn("truncate", fontSize)}>
-        {profile?.full_name || "(알 수 없음)"}
+        {displayProfileName(profile)}
       </p>
     </div>
   );

@@ -26,6 +26,7 @@ export const mockProfiles: Profiles[] = [
     app_settings: {},
     premium_expired_at: null,
     is_admin: false,
+    deleted_at: null,
   },
   {
     id: "550e8400-e29b-41d4-a716-446655440002",
@@ -44,6 +45,7 @@ export const mockProfiles: Profiles[] = [
     app_settings: {},
     premium_expired_at: null,
     is_admin: false,
+    deleted_at: null,
   },
   {
     id: "550e8400-e29b-41d4-a716-446655440003",
@@ -62,6 +64,7 @@ export const mockProfiles: Profiles[] = [
     app_settings: {},
     premium_expired_at: null,
     is_admin: false,
+    deleted_at: null,
   },
   {
     id: "550e8400-e29b-41d4-a716-446655440004",
@@ -80,6 +83,7 @@ export const mockProfiles: Profiles[] = [
     app_settings: {},
     premium_expired_at: null,
     is_admin: false,
+    deleted_at: null,
   },
   {
     id: "550e8400-e29b-41d4-a716-446655440005",
@@ -98,6 +102,7 @@ export const mockProfiles: Profiles[] = [
     app_settings: {},
     premium_expired_at: null,
     is_admin: false,
+    deleted_at: null,
   },
 ];
 
