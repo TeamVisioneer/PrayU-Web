@@ -4,7 +4,7 @@
 세션 기록은 휘발되므로 **여기에 없으면 없는 것**이다.
 
 관련 백로그: [PrayU-Api/docs/backlog.md](../../PrayU-Api/docs/backlog.md) · `PrayU-App/docs/backlog.md`
-보안 상세: [security-backlog.md](security-backlog.md) · 운영 설정 대장: [supabase-migration-plan.md](supabase-migration-plan.md)
+보안 상세: [security-backlog.md](security-backlog.md) · 운영 설정 대장: [supabase-migration-plan.md](guides/supabase-migration-plan.md)
 
 > **기록 규칙**: 작업 중 후속 이슈를 발견하면 그 자리에서 여기에 추가한다(PR 코멘트로만 남기지 않는다).
 > 상세 설계는 별도 `docs/*-plan.md`로 만들고 여기서는 한 줄 + 링크. 완료 시 삭제하지 말고 "완료"로 옮긴다.
@@ -13,7 +13,7 @@
 
 ## 진행 중 — 어드민 개편
 
-계획: [admin-revamp-plan.md](admin-revamp-plan.md) (4개 PR, merge는 **Api 먼저 → web**)
+계획: [admin-revamp-plan.md](archive/admin-revamp-plan.md) (4개 PR, merge는 **Api 먼저 → web**)
 
 **어드민 개편은 모두 merge 완료** (아래 "완료" 절 참조). 남은 것은 staging 확인과 prod release다.
 
@@ -30,7 +30,7 @@
 
 ## 진행 중 — 공지 저작·게시 절차
 
-계획: [notice-authoring-plan.md](notice-authoring-plan.md) — 릴리스마다 반복될 절차라 고정한다.
+계획: [notice-authoring-plan.md](guides/notice-authoring-plan.md) — 릴리스마다 반복될 절차라 고정한다.
 
 결정: **원고·이미지를 레포에 커밋(PR 리뷰) → 어드민이 그 원고를 읽어 초안으로 등록 → 사람이 노출.**
 붙여넣기는 손으로 옮기는 단계라 없앴고, 마이그레이션 게시는 서비스 데이터를 스키마 히스토리에 남기게 되어 접었다.
@@ -41,7 +41,7 @@
 
 ## 회원 탈퇴 — 소프트 삭제 (짝 작업)
 
-계획: [../../PrayU-Api/docs/account-deletion-plan.md](../../PrayU-Api/docs/account-deletion-plan.md) · Api 짝 PR [#56](https://github.com/TeamVisioneer/PrayU-Api/pull/56)
+계획: [../../PrayU-Api/docs/archive/account-deletion-plan.md](../../PrayU-Api/docs/archive/account-deletion-plan.md) · Api 짝 PR [#56](https://github.com/TeamVisioneer/PrayU-Api/pull/56)
 
 하드 삭제는 FK 때문에 **항상 실패**했는데 web 이 반환값을 안 봐서 사용자는 탈퇴됐다고 믿었다.
 절차 전체를 서버가 소유하도록 옮기고, 실패를 사용자에게 알린다.
@@ -57,7 +57,7 @@
 
 ## 다음 작업 — 파일 스토리지 R2 이전 (짝 작업)
 
-계획: [../../PrayU-Api/docs/storage-r2-plan.md](../../PrayU-Api/docs/storage-r2-plan.md) · Api 백로그에 자기 단계 있음
+계획: [../../PrayU-Api/docs/archive/storage-r2-plan.md](../../PrayU-Api/docs/archive/storage-r2-plan.md) · Api 백로그에 자기 단계 있음
 
 **신규 업로드만 R2 로** 돌린다. 기존 Supabase 파일·URL 은 그대로 두므로 이전 비용이 발생하지 않는다.
 공개 도메인은 `r2.dev` 로 시작하되, **DB 에는 절대 URL 이 아니라 경로(key)만 저장**해 나중에 도메인을
@@ -91,7 +91,7 @@
 - 공지 이미지 Storage 이전 — 현재는 레포 `/images/notice/*.png` 경로 문자열. 컬럼이 text라 절대 URL도 수용하므로 확장 가능
 - 성경 구절 픽커 **초성 키보드 검색** (현재는 초성 인덱스바만)
 - 신고 접수 **테이블화** — 현재 Discord 웹훅만. 신고량이 늘면
-- 브라우저 열람 비중이 높은 공유 랜딩 페이지에 **문서 스크롤 모드** 검토 — 현재 앱 셸 구조라 iOS Safari 툴바가 접히지 않는다. 상세: [viewport-layout-improvement-plan.md](viewport-layout-improvement-plan.md) 3절
+- 브라우저 열람 비중이 높은 공유 랜딩 페이지에 **문서 스크롤 모드** 검토 — 현재 앱 셸 구조라 iOS Safari 툴바가 접히지 않는다. 상세: [viewport-layout-improvement-plan.md](archive/viewport-layout-improvement-plan.md) 3절
 
 ## 배포 대기 — 어드민 개편 후속
 
@@ -101,7 +101,7 @@
 ## 배포 대기
 
 ### 성경 본문 원본 동기화 — merge 완료, prod 대기
-[#475](https://github.com/TeamVisioneer/PrayU-Web/pull/475) (표시 정리) · [PrayU-Api#44](https://github.com/TeamVisioneer/PrayU-Api/pull/44) (본문 동기화) · 상세: [../../PrayU-Api/docs/bible-sync-plan.md](../../PrayU-Api/docs/bible-sync-plan.md)
+[#475](https://github.com/TeamVisioneer/PrayU-Web/pull/475) (표시 정리) · [PrayU-Api#44](https://github.com/TeamVisioneer/PrayU-Api/pull/44) (본문 동기화) · 상세: [../../PrayU-Api/docs/archive/bible-sync-plan.md](../../PrayU-Api/docs/archive/bible-sync-plan.md)
 
 DB는 원본(goodtv) 표기를 **그대로 보존**한다 — `<구역 제목>`(2,431행)·`○`(3,383행, 30개 절은 중간에 위치).
 따라서 표시 시 제거는 프론트 몫이고, `apis/bible.ts` 입구에서 `stripBibleMarkers()`로 한 번만 정리한다

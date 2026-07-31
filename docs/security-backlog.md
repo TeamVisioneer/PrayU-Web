@@ -1,6 +1,6 @@
 # PrayU 보안 백로그
 
-마이그레이션 체계 도입 과정(2026-06~07, `supabase-migration-plan.md`)에서 발견·정리된 보안 과제 목록.
+마이그레이션 체계 도입 과정(2026-06~07, `guides/supabase-migration-plan.md`)에서 발견·정리된 보안 과제 목록.
 여기 항목들은 **운영 중 서비스에 대한 변경**이므로 각각 별도 이슈/PR로, 사람 확인 하에 진행한다.
 전체 작업 목록은 [backlog.md](backlog.md) 참조.
 

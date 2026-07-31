@@ -21,7 +21,7 @@ export const updateUserMetaData = async (params: { [key: string]: string }) => {
  * 회원 탈퇴.
  *
  * 예전에는 여기서 member·pray·pray_card 를 직접 소프트 삭제한 뒤 서버 삭제를 불렀다.
- * 이제 **절차 전체를 서버가 소유한다** (PrayU-Api/docs/account-deletion-plan.md) —
+ * 이제 **절차 전체를 서버가 소유한다** (PrayU-Api/docs/archive/account-deletion-plan.md) —
  * 클라이언트가 중간에 끊기면 데이터가 어중간한 상태로 남고, 순서(그룹장 이양 → 나가기 →
  * 익명화 → auth)를 지킬 수 없기 때문이다.
  *

@@ -2,7 +2,7 @@
  * 스토리지 키 → 공개 URL.
  *
  * DB 에는 절대 URL 이 아니라 **경로(key)** 만 저장한다. 스토리지 도메인이 데이터에 박히면
- * 도메인을 바꿀 때 수만 행을 일괄 수정해야 하기 때문이다 (PrayU-Api/docs/storage-r2-plan.md).
+ * 도메인을 바꿀 때 수만 행을 일괄 수정해야 하기 때문이다 (PrayU-Api/docs/archive/storage-r2-plan.md).
  * 그 대가로 읽는 쪽에서 매번 한 번 조립한다.
  */
 

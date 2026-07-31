@@ -13,7 +13,7 @@
 - [x] 후속 이슈 처리 완료 (2026-07-24, 사용자 결정):
   - **드리프트 fix 보류(의도적)**: `bible_card.user_id` default — 비즈니스 로직은 DB 가 아닌 앱에서 명시하는 현행 방식이 의도된 설계라 미적용. `profiles.fcm_token` — OneSignal 전환으로 레거시 컬럼(추후 컬럼 정리 후보). `''''''` 디폴트·`qt_data.long_label`·`bible_id_seq=1` — 실피해 없는 화석, 미조치. **재발굴 방지용 기록**
   - **bible 무제한 쓰기 정책 제거**: Api#32 (`drop_bible_write_policies` — update + 조사 중 발견된 insert 까지)
-  - **보안 백로그 분리**: [security-backlog.md](security-backlog.md) — RLS 전면 정비/Kakao secret/키 로테이션·cron 결합/어드민 권한
+  - **보안 백로그 분리**: [security-backlog.md](../security-backlog.md) — RLS 전면 정비/Kakao secret/키 로테이션·cron 결합/어드민 권한
 
 ### 로컬 DB MCP (2026-07-24 등록)
 - 두 레포 `.mcp.json`에 `prayu-local-db` 등록: `uvx postgres-mcp --access-mode=unrestricted` → 로컬 스택 DB(127.0.0.1:54322) 직결. **uv 설치 필요** (`brew install uv`)
@@ -45,6 +45,12 @@
 | cron: 오늘의기도 리마인더 (`net.http_post` → `onesignal/notifications/reminder`) | **활성** | 없음 (불필요) |
 | trigger: `fcm_notification_webhook` | ~~존재(DISABLE)~~ → **레거시 확정, `drop_legacy_fcm_webhook` 마이그레이션으로 제거 예정** | 리셋 시 자연 제거 |
 | RLS event trigger: `rls_auto_enable` | 존재 | 없음 (baseline이 권한 되면 생성, 안 되면 스킵) |
+| Cloudflare R2 버킷 (2026-07-31) | `prayu-prod` | `prayu-staging` |
+| R2 공개 URL (`VITE_STORAGE_BASE_URL` 값) | `https://pub-379bc0a8d39548b2b59594abb9ff19b8.r2.dev` | `https://pub-554e60a00ebc49b8a59a633f8c50bf88.r2.dev` |
+| R2 CORS 허용 오리진 (버킷 설정, PUT) | `prayu.site` · `www.prayu.site` | `staging.prayu.site` · `localhost:5173` |
+| R2 API 토큰 (Object R/W, 버킷 스코프 — 환경별 별도) | 발급됨 | 발급됨 |
+| Edge Function secrets: `R2_ENDPOINT`·`R2_BUCKET`·`R2_ACCESS_KEY_ID`·`R2_SECRET_ACCESS_KEY` | 등록됨 (2026-07-31, 해시 대조 검증) | 등록됨 (동일) |
+| Vercel env: `VITE_STORAGE_BASE_URL` | **Production 스코프만** 등록 — release 재빌드 시 반영 | 등록·재배포 완료 (번들 확인) |
 
 ⚠️ **키 로테이션 결합**: prod cron 명령과 fcm webhook 정의에 **prod service_role JWT(legacy)가 하드코딩**돼 있음. 추후 보안 작업에서 service_role 키 로테이션 시 **cron.job 명령 갱신을 동시에** 하지 않으면 리마인더 알림이 죽는다.
 

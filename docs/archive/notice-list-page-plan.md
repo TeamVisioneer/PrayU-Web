@@ -3,7 +3,7 @@
 ## 배경
 
 메뉴의 **공지사항**이 카카오톡 채널 게시글(`https://pf.kakao.com/_XaHDG/posts`)을 외부 링크 다이얼로그로 열고 있다
-([GroupMenuBtn.tsx:130](../src/components/group/GroupMenuBtn.tsx#L130)). 이제 앱 안에 공지(`notice` 테이블)가 있으므로,
+([GroupMenuBtn.tsx:130](../../src/components/group/GroupMenuBtn.tsx#L130)). 이제 앱 안에 공지(`notice` 테이블)가 있으므로,
 카카오 채널을 걷어내고 **앱 내 공지 목록**으로 대체한다.
 
 이미 있는 것을 재사용하면 새로 만들 것이 적다:

@@ -56,7 +56,7 @@ images:
 - 프론트매터 키는 **스칼라 문자열 + `images` 목록**까지만 허용한다. 그 이상 중첩이 필요해지면 그때 다시 논의한다 (직접 만든 파서를 키우지 않는다)
 - `images`가 있으면 붙여넣기 가져오기가 폼의 이미지 목록을 **그 값으로 교체**한다. 키가 없으면 이미 올린 이미지를 유지한다
 - 본문에서 쓸 수 있는 문법은 렌더러가 지원하는 **`**굵게**` · `- 목록` · 빈 줄 문단**이 전부다
-  ([noticeMarkdown.tsx](../src/components/notice/noticeMarkdown.tsx))
+  ([noticeMarkdown.tsx](../../src/components/notice/noticeMarkdown.tsx))
 
 ## 게시 방식 개정 (2026-07-28)
 
@@ -95,7 +95,7 @@ images:
    - ⚠️ **원고 파일에는 공지 내용만 둔다.** 어드민이 파일을 통째로 받아 프론트매터 뒤 전부를 본문으로 읽으므로,
      캡처 목록·게시 기록 같은 부가 정보는 **`<같은이름>.notes.md`** 에 적는다
 2. **캡처 목록 확정** — notes 파일에 화면·상태를 적는다
-3. **캡처** — `public/images/notice/<slug>/`에 넣는다. 로그인이 필요한 화면은 **로컬 개발 계정**으로 찍을 수 있다 ([dev-seed-plan](../../PrayU-Api/docs/dev-seed-plan.md))
+3. **캡처** — `public/images/notice/<slug>/`에 넣는다. 로그인이 필요한 화면은 **로컬 개발 계정**으로 찍을 수 있다 ([dev-seed-plan](../../../PrayU-Api/docs/guides/dev-seed-plan.md))
 4. **PR 리뷰** — 원고 + 이미지가 함께 diff에 남는다. 피처 PR과 같이 내도 되고 따로 내도 된다
 5. **staging 게시(리허설)** — main merge 로 원고가 staging 에 배포된 뒤, 어드민 → 레포 원고 → **초안으로 등록** → 미리보기 → **노출**
 6. **prod 게시** — release 로 원고가 prod 에 배포된 뒤 같은 절차(등록 → 노출). `starts_at`을 미래로 두면 예약 게시가 된다

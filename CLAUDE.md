@@ -35,7 +35,8 @@ React 18 + TypeScript + Vite 5 / Tailwind + Radix(shadcn/ui) + Vaul / Zustand + 
 
 - 🔴 **merge·main push 는 사용자가 그 메시지에서 시킬 때만.** 기본 범위는 브랜치 push + PR 생성까지다. 이전 메시지의 "머지해줘"는 그 PR 한정이며, 문서 전용 변경도 main 에 직접 커밋하지 않는다 (상세: `../CLAUDE.md`)
 - **문서 갱신은 그 작업 PR 에 함께 넣는다.** 백로그·계획서만 고치는 별도 PR 을 만들지 않는다 (상세: `../CLAUDE.md`)
-- **docs 먼저, 코드는 그 다음.** 피처/개선 작업 시작 시 코드부터 수정하지 않는다. `docs/`에 설계·계획 문서를 먼저 작성(또는 기존 문서 갱신)하고 방향 확인 후 구현한다. (예: `docs/bible-card-backside-flow-plan.md`)
+- **docs 먼저, 코드는 그 다음.** 피처/개선 작업 시작 시 코드부터 수정하지 않는다. `docs/`에 설계·계획 문서를 먼저 작성(또는 기존 문서 갱신)하고 방향 확인 후 구현한다. (예: `docs/archive/bible-card-backside-flow-plan.md`)
+- **docs/ 구조**: `guides/`(절차·대장) · `plans/`(진행 중 계획) · `archive/`(구현 완료 — 갱신하지 않는다) · `notices/`(공지 원고 — **경로 이동 금지**, `import.meta.glob` 의존). 상세: `../CLAUDE.md`
 - **[docs/backlog.md](docs/backlog.md)가 이 레포 작업 목록의 원본이다.** 세션 시작 시 먼저 읽고, 작업 중 발견한 후속 이슈는 그 자리에서 여기에 추가한다 (대화·PR 코멘트로만 남기지 않는다). 백엔드 항목은 `../PrayU-Api/docs/backlog.md`.
 
 ## 의사결정 우선순위

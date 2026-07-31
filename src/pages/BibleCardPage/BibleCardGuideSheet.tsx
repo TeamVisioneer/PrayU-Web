@@ -11,7 +11,7 @@ interface BibleCardGuideSheetProps {
   onOpenChange: (open: boolean) => void;
 }
 
-// 말씀카드 매치 원리·생성 횟수 규칙 안내 시트 (문구는 docs/bible-card-usage-guide-plan.md 확정안)
+// 말씀카드 매치 원리·생성 횟수 규칙 안내 시트 (문구는 docs/archive/bible-card-usage-guide-plan.md 확정안)
 const BibleCardGuideSheet: React.FC<BibleCardGuideSheetProps> = ({
   open,
   onOpenChange,
