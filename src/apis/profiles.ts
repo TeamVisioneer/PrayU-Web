@@ -19,7 +19,6 @@ export interface updateProfilesParams {
   kakao_notification?: boolean;
   push_notification?: boolean;
   terms_agreed_at?: string;
-  fcm_token?: string;
   app_settings?: Json;
 }
 

@@ -529,7 +529,6 @@ export type Database = {
           blocking_users: string[]
           created_at: string
           deleted_at: string | null
-          fcm_token: string
           full_name: string | null
           id: string
           is_admin: boolean
@@ -548,7 +547,6 @@ export type Database = {
           blocking_users?: string[]
           created_at?: string
           deleted_at?: string | null
-          fcm_token?: string
           full_name?: string | null
           id: string
           is_admin?: boolean
@@ -567,7 +565,6 @@ export type Database = {
           blocking_users?: string[]
           created_at?: string
           deleted_at?: string | null
-          fcm_token?: string
           full_name?: string | null
           id?: string
           is_admin?: boolean
