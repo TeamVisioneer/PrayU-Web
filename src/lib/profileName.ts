@@ -2,7 +2,7 @@
  * 탈퇴한 사용자를 화면에서 가린다.
  *
  * 탈퇴해도 `profiles` 행은 **그대로 둔다** — 문의 대응·이상 행위 추적 같은 운영이 필요하고,
- * 지워버리면 되돌릴 수 없기 때문이다 (PrayU-Api/docs/account-deletion-plan.md).
+ * 지워버리면 되돌릴 수 없기 때문이다 (PrayU-Api/docs/archive/account-deletion-plan.md).
  * 그래서 **노출을 막는 일은 여기, 표시 계층의 몫**이다.
  *
  * 기도 기록도 남으므로 탈퇴자가 쓴 기도카드는 다른 사람 화면에 계속 보인다 —

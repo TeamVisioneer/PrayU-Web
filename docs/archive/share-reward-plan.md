@@ -125,7 +125,7 @@ used >= limit → 429 (기존과 동일 응답에 limit만 동적)
   - staging 앱 → `https://cguxpeghdqcqfdhvkmyv.supabase.co/functions/v1/kakao-webhook`
   - prod 앱 → `https://qggewtakkrwcclyxtxnz.supabase.co/functions/v1/kakao-webhook`
 - 각 함수 시크릿의 `KAKAO_ADMIN_KEY`가 해당 환경 카카오 앱의 어드민 키인지 확인 (검증 대조 키)
-- 등록 후 운영 설정 대장(`supabase-migration-plan.md`)에 기록
+- 등록 후 운영 설정 대장(`../guides/supabase-migration-plan.md`)에 기록
 
 ## 5. 검증 계획
 

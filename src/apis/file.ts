@@ -7,7 +7,7 @@ import { isAssetStorageConfigured } from "@/lib/assetUrl";
  *
  * 새 스토리지(R2)에는 RLS 가 없어 브라우저가 직접 올릴 수 없다. 서버(`POST /api/upload-url`)가
  * "이 키에, 이 타입으로, 5분 안에만" 서명한 URL 을 내주고 브라우저는 거기에 본문만 PUT 한다.
- * 저장하는 값은 절대 URL 이 아니라 **키**다 (PrayU-Api/docs/storage-r2-plan.md).
+ * 저장하는 값은 절대 URL 이 아니라 **키**다 (PrayU-Api/docs/archive/storage-r2-plan.md).
  *
  * R2 환경변수(`VITE_STORAGE_BASE_URL`)가 없으면 **기존 Supabase Storage 경로 그대로** 동작한다.
  */

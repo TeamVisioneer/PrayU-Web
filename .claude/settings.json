@@ -1,10 +1,5 @@
 {
   "permissions": {
-    "ask": [
-      "Bash(gh pr merge:*)",
-      "Bash(gh api:*)",
-      "Bash(git push:*)"
-    ],
     "deny": [
       "Bash(supabase link:*)",
       "Bash(supabase db push:*)",

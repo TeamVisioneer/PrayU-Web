@@ -7,7 +7,7 @@
  *   - `○` — 문단 시작 표시. 절 맨 앞이 대부분이나 절 중간에도 온다(30개 절)
  *
  * 본문을 훼손하지 않으려고 DB에 남긴 것이므로, 사용자에게 보여줄 때 걷어내는 것은 프론트 몫이다.
- * (PrayU-Api `docs/bible-sync-plan.md`)
+ * (PrayU-Api `docs/archive/bible-sync-plan.md`)
  */
 export const stripBibleMarkers = (sentence: string): string =>
   sentence

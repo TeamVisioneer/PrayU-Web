@@ -5,7 +5,7 @@ import { NoticeDraft, parseNoticeDraft } from "@/lib/noticeDraft";
  *
  * 손으로 옮겨 적는 단계를 없애기 위한 것이다 — 같은 원고를 staging·prod 에 각각
  * 붙여넣다 보면 언젠가 어긋난다. 어드민은 이 목록에서 골라 초안으로 등록한다.
- * (docs/notice-authoring-plan.md)
+ * (docs/guides/notice-authoring-plan.md)
  *
  * lazy glob 이라 본문은 번들에 실리지 않고, 목록을 열 때 따로 받아온다.
  * `.notes.md`(작업 메모)는 원고가 아니므로 제외한다.

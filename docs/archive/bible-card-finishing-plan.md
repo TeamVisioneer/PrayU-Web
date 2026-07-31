@@ -164,7 +164,7 @@ async searchBible(c: Context) {
 
 ### 2-5. 환경변수
 
-- `BIBLE_CARD_DAILY_LIMIT` (기본값 3, 코드에 fallback 있음) — staging/prod Supabase function secrets에 등록, **운영 설정 대장(`supabase-migration-plan.md`)에 기록**
+- `BIBLE_CARD_DAILY_LIMIT` (기본값 3, 코드에 fallback 있음) — staging/prod Supabase function secrets에 등록, **운영 설정 대장(`../guides/supabase-migration-plan.md`)에 기록**
 
 ## 3. 세부 구현 — PrayU-web
 

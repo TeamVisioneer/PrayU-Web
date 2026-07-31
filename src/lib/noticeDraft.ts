@@ -4,7 +4,7 @@
  * 원고는 `PrayU-web/docs/notices/<yyyy-mm-dd>-<slug>.md` 에 두고 PR 에서 리뷰한다.
  * 형식은 프론트매터 + 마크다운 본문이다 — 본문이 JSON 문자열이 되면 PR diff 가
  * 이스케이프 투성이가 되어 정작 읽어야 할 문구가 안 읽히기 때문이다.
- * (docs/notice-authoring-plan.md)
+ * (docs/guides/notice-authoring-plan.md)
  *
  * ```markdown
  * ---
