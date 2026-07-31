@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "ask": [
+      "Bash(gh pr merge:*)",
+      "Bash(gh api:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [
+      "Bash(supabase link:*)",
+      "Bash(supabase db push:*)",
+      "Bash(supabase db reset --linked:*)",
+      "Bash(supabase db remote:*)",
+      "Bash(supabase migration up --linked:*)",
+      "Bash(supabase secrets set:*)",
+      "Bash(supabase secrets unset:*)",
+      "Bash(supabase functions deploy:*)",
+      "Bash(supabase functions delete:*)",
+      "Bash(supabase projects delete:*)",
+      "Bash(supabase branches:*)",
+      "Bash(supabase domains:*)",
+      "Bash(vercel env add:*)",
+      "Bash(vercel env rm:*)",
+      "Bash(vercel deploy:*)",
+      "Bash(vercel promote:*)",
+      "Bash(vercel rollback:*)",
+      "Bash(vercel link:*)",
+      "Bash(vercel alias:*)"
+    ]
+  }
+}
