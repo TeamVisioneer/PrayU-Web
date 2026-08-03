@@ -52,6 +52,9 @@
       전부 `components/common/PageHeader`(글래스) 하나로 통일 (#499)
 - [x] ~~primitives 글래스화~~ (#500) · ~~그룹 재스킨~~ (#501) — **v1.0.0 디자인 컷라인 도달**
 - [ ] v1.0.x (릴리스 후): 나머지 화면 재스킨 — QT·공지·프로필·알림·감사카드 순, hex 리터럴 grep 0 목표
+- [ ] **(Api 이관 대기)** dev 시드 bible_card 에 이미지 없음 — `PrayU-Api/supabase/dev/seed-dev.sql` 의
+      bible_card(0d…0041)가 image_key·image_url 공란이라 로컬에서 보관함 말씀카드 케이스가 QA 불가.
+      다음 Api PR 에 시드 보강 + Api backlog 로 이 줄 이동 (2026-08-04 발견)
 - [ ] **v1.0.0: 디자인 시스템(글래스모피즘)** — 토큰·primitives·ui/ 순수성(Next.js 대비) → [design-system.md](plans/identity/design-system.md).
       ⚠️ 스크롤 아이템 backdrop-blur 금지(Android WebView 성능) · 컷라인 결정 대기
 - [ ] v1.1: 기도카드 재편(사용자 소유 + share) + 가시성/RLS — **pray 그룹 격리 결정 대기** → [pray-card-restructure.md](plans/identity/pray-card-restructure.md)
