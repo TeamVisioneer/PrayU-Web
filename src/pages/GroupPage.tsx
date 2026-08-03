@@ -98,7 +98,8 @@ const GroupPage: React.FC = () => {
         </div>
         <OtherMemberList />
       </div>
-      <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2">
+      {/* 핵심 CTA 는 네비 위에 도킹한다 (navigation.md — CTA 정책) */}
+      <div className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] left-1/2 z-30 -translate-x-1/2 transform">
         {hasPrayCardCurrentWeek ? (
           <TodayPrayBtn
             groupId={groupId}

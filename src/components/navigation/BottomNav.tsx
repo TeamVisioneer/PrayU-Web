@@ -10,11 +10,21 @@ import CreateActionSheet from "./CreateActionSheet";
  *
  * 화면 하단에 **떠 있는 알약(pill)** 형태의 글래스 크롬 — 가장자리에 붙지 않는다.
  *
- * **허용 목록 방식** — 탭 목적지 4개에서만 보인다. 새 라우트의 기본은 "안 보임"이라
- * 공유 랜딩·콜백·작성 플로우 같은 화면에 실수로 얹히지 않는다.
- * 기존 진입 경로(드로워·헤더 버튼)는 그대로 둔다 — 네비는 추가이지 대체가 아니다.
+ * 노출 원칙: **탐색 화면에는 네비, 몰입 화면에는 없다.**
+ * 작성 플로우(기도/말씀/감사카드)·오늘의기도·공유 랜딩·콜백·온보딩은 몰입 화면이다.
+ * **허용 목록 방식** — 새 라우트의 기본은 "안 보임"이라 몰입 화면에 실수로 얹히지 않는다.
+ * 화면별 하단 CTA(그룹의 오늘의기도 등)는 네비 **위에 도킹**한다 — 네비는 추가이지 대체가 아니다.
  */
-const NAV_VISIBLE_PATHS = ["/", "/group", "/notifications", "/profile/me"];
+const NAV_VISIBLE_PATHS = [
+  "/",
+  "/group",
+  "/group/:groupId",
+  "/qt",
+  "/thanks-card",
+  "/notice",
+  "/notifications",
+  "/profile/me",
+];
 
 export const useBottomNavVisible = (): boolean => {
   const location = useLocation();
@@ -36,23 +46,21 @@ interface TabItemProps {
 const TabItem = ({ label, icon, active, badge = 0, onClick }: TabItemProps) => (
   <button
     type="button"
+    aria-label={label}
     onClick={onClick}
     className="flex h-full flex-1 items-center justify-center"
   >
     <span
-      className={`relative flex flex-col items-center gap-0.5 rounded-full px-3.5 py-1 transition-colors ${
+      className={`relative flex items-center justify-center rounded-full px-4 py-2 transition-colors ${
         active ? "bg-white/80 text-mainBtn" : "text-deactivate"
       }`}
     >
-      <span className="relative">
-        {icon}
-        {badge > 0 && (
-          <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-to-r from-red-500 to-red-600 px-1 text-[0.625rem] font-medium text-white">
-            {badge < 10 ? badge : "9+"}
-          </span>
-        )}
-      </span>
-      <span className="text-[0.625rem] font-medium">{label}</span>
+      {icon}
+      {badge > 0 && (
+        <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gradient-to-r from-red-500 to-red-600 px-1 text-[0.625rem] font-medium text-white">
+          {badge < 10 ? badge : "9+"}
+        </span>
+      )}
     </span>
   </button>
 );
@@ -91,7 +99,7 @@ const BottomNav = () => {
         <nav className="flex h-14 items-stretch rounded-full border border-glassBorder/60 bg-surfaceChrome/75 px-1.5 shadow-glass backdrop-blur-xl">
           <TabItem
             label="홈"
-            icon={<House size={21} strokeWidth={isActive("/") ? 2.2 : 1.8} />}
+            icon={<House size={23} strokeWidth={isActive("/") ? 2.2 : 1.8} />}
             active={isActive("/")}
             onClick={() => moveTo("홈", "/")}
           />
@@ -99,11 +107,15 @@ const BottomNav = () => {
             label="그룹"
             icon={
               <UsersRound
-                size={21}
-                strokeWidth={isActive("/group") ? 2.2 : 1.8}
+                size={23}
+                strokeWidth={
+                  isActive("/group") || isActive("/group/:groupId")
+                    ? 2.2
+                    : 1.8
+                }
               />
             }
-            active={isActive("/group")}
+            active={isActive("/group") || isActive("/group/:groupId")}
             onClick={() => moveTo("그룹", "/group")}
           />
           <button
@@ -123,7 +135,7 @@ const BottomNav = () => {
             label="알림"
             icon={
               <Bell
-                size={21}
+                size={23}
                 strokeWidth={isActive("/notifications") ? 2.2 : 1.8}
               />
             }
@@ -135,7 +147,7 @@ const BottomNav = () => {
             label="프로필"
             icon={
               <UserRound
-                size={21}
+                size={23}
                 strokeWidth={isActive("/profile/me") ? 2.2 : 1.8}
               />
             }
