@@ -1,7 +1,7 @@
 # 제품 정체성 — 한국형 데일리 신앙 기록 + 현실 공동체
 
-> 2026-08-03 확정. 하위: [navigation.md](navigation.md)(v1.0.0) · [pray-card-restructure.md](pray-card-restructure.md)(v1.1) ·
-> [daily.md](daily.md)(v1.2) · [profile-social.md](profile-social.md) · [feed.md](feed.md)(v1.3+)
+> 2026-08-03 확정. 하위: [navigation.md](navigation.md)·[design-system.md](design-system.md)(v1.0.0) ·
+> [pray-card-restructure.md](pray-card-restructure.md)(v1.1) · [daily.md](daily.md)(v1.2) · [profile-social.md](profile-social.md) · [feed.md](feed.md)(v1.3+)
 
 ## 정체성 선언
 
@@ -43,7 +43,7 @@ Hallow 에 없고, 매일성경에 없고, 인스타에 없는 것. *혼자 쓰�
 
 | 버전 | 범위 | 상태 |
 |---|---|---|
-| **v1.0.0** | 쌓인 1년치 + **하단 네비게이션** — [navigation.md](navigation.md) | ✅ 범위 확정 (2026-08-03) |
+| **v1.0.0** | 쌓인 1년치 + **하단 네비게이션** + **디자인 시스템(글래스모피즘) 기반** — [navigation.md](navigation.md) · [design-system.md](design-system.md) | 범위 확정 · 디자인 컷라인 결정 대기 |
 | v1.1 | **기도카드 재편**(사용자 소유 + share) + 가시성/RLS — [pray-card-restructure.md](pray-card-restructure.md) | 설계 초안 |
 | v1.2 | 데일리 기록 + "오늘" 허브 — [daily.md](daily.md) | 방향만 |
 | v1.3+ | 설교노트 → 선택적 공개·프로필·팔로우([profile-social.md](profile-social.md)) → 피드([feed.md](feed.md)) → 시즌 챌린지 | 방향만 |
