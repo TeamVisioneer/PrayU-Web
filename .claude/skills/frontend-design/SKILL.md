@@ -53,3 +53,12 @@ Use active voice as default. A control should say exactly what happens when it's
 Treat failure and emptiness as moments for direction, not mood. Explain what went wrong and how to fix it, in the interface's voice rather than a person's. Errors don't apologize, and they are never vague about what happened. An empty screen is an invitation to act.
 
 Keep the register conversational and tuned: plain verbs, sentence case, no filler, with tone matched to the brand and the audience. Let each element do exactly one job. A label labels, an example demonstrates, and nothing quietly does double duty.
+
+## PrayU 프로젝트 노트 — 사용자 피드백 누적 (규칙으로 취급)
+
+- **"그라디언트 사각 타일 + 아이콘" 나열 금지** — 리스트 항목마다 색색의 아이콘 타일을 붙이는 것은
+  전형적인 AI 생성 티다 (2026-08-03 액션시트 반려). 행을 구분하는 것은 장식이 아니라 **텍스트의 위계**다.
+  아이콘은 방향(뒤로·이동)이나 상태처럼 의미를 운반할 때만 쓴다
+- 신규 UI 는 **스크린샷을 찍어 직접 보고** 검수한다 — DOM/기능 검증만으로 통과시키지 않는다
+- 이 레포의 shadcn primitive 는 표준에서 변형돼 있다(예: DrawerHeader 기본 패딩 없음) — 기본값 확인 후 사용
+- 톤: 글래스모피즘(docs/plans/identity/design-system.md) — blur 는 고정 크롬만, 색은 토큰만
