@@ -39,6 +39,19 @@
 - [x] ~~**staging 게시(리허설)**~~ — 2026-07-31 확인 완료. 레포 원고 → 초안 등록 → 노출까지 정상
 - [ ] ⚠️ **prod 공지는 release 이후에만 가능** — 현재 prod에 `notice` 테이블이 없다(`42P01`). release → 관리자 `is_admin=true` → 게시 순서
 
+## 🚀 기독교 SNS 전환 — 방향 수립 (2026-07-31)
+
+계획: [plans/sns/overview.md](plans/sns/overview.md) — 하위 [navigation](plans/sns/navigation.md) · [profile-social](plans/sns/profile-social.md) · [feed](plans/sns/feed.md)
+
+그룹 기도앱 → **열린 소셜 그래프를 가진 기독교 SNS**. 하단 네비게이션 · 프로필 검색/팔로우 · 피드.
+
+- [ ] 🔴 **선행: 가시성 모델 + RLS 정비** — 스키마에 공개/비공개 개념이 **없고** SELECT 가 전부 `using(true)` 다.
+      피드는 "누가 어떤 행을 보나"를 정의해야 만들 수 있고 그게 곧 [security-backlog](security-backlog.md) 1번이다.
+      **기존 데이터는 전부 그룹 전용으로 시작해야 한다** — 기본값이 공개면 사고다
+- [ ] 결정: "게시물"이 새 엔티티인가, 기존 카드를 흘리는 것인가 → [feed.md](plans/sns/feed.md) 1절
+- [ ] 결정: v1.0.0 에 얼마나 넣을지 (네비게이션만 권장)
+- [ ] 운영: 공개 피드는 **모더레이션 책임**을 만든다. 현재 신고는 Discord 웹훅뿐
+
 ## 🎯 v1.0.0 릴리스 — 범위 확정 중
 
 계획: [plans/release-v1/plan.md](plans/release-v1/plan.md) — 신규 피처 목록·보안 포함 범위·App 트랙 결정 대기.
