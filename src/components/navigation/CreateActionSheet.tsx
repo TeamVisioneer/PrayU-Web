@@ -53,7 +53,7 @@ const CreateActionSheet = ({ open, onOpenChange }: CreateActionSheetProps) => {
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="mx-auto max-w-app bg-surfaceChrome/90 backdrop-blur-xl">
+      <DrawerContent className="mx-auto max-w-app">
         <DrawerHeader className="pb-2 text-left">
           <DrawerTitle>만들기</DrawerTitle>
           <DrawerDescription className="sr-only">
