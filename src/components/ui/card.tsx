@@ -9,7 +9,8 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg bg-card text-card-foreground shadow-sm",
+      // glass-card: 반투명 + 유리 보더, blur 는 쓰지 않는다 (스크롤 아이템 성능 규칙)
+      "rounded-2xl border border-glassBorder/50 bg-surfaceCard/70 text-card-foreground shadow-member",
       className
     )}
     {...props}

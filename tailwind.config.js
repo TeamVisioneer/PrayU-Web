@@ -28,6 +28,8 @@ module.exports = {
       },
       colors: {
         // 글래스 토큰 (semantic — App.css 변수 매핑)
+        accentFrom: "rgb(var(--accent-from) / <alpha-value>)",
+        accentTo: "rgb(var(--accent-to) / <alpha-value>)",
         surfaceChrome: "rgb(var(--surface-chrome) / <alpha-value>)",
         surfaceCard: "rgb(var(--surface-card) / <alpha-value>)",
         glassBorder: "rgb(var(--glass-border) / <alpha-value>)",
