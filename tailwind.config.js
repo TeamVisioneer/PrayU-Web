@@ -26,6 +26,10 @@ module.exports = {
         prayCard: "0 10px 10px rgba(193, 198, 246, 0.25)",
       },
       colors: {
+        // 글래스 토큰 (semantic — App.css 변수 매핑)
+        surfaceChrome: "rgb(var(--surface-chrome) / <alpha-value>)",
+        surfaceCard: "rgb(var(--surface-card) / <alpha-value>)",
+        glassBorder: "rgb(var(--glass-border) / <alpha-value>)",
         mainBg: "#F2F3FD",
         mainBtn: "#70AAFF",
         black: "#020202",

@@ -47,7 +47,8 @@
 
 **기록이 원본, 나눔은 파생.** Hallow 벤치마킹(시스템만, 오디오 비채택). SNS 는 후순위.
 
-- [ ] **v1.0.0: 하단 네비게이션** — 설계·파일 매니페스트 완성, 구현 승인 대기 → [navigation.md](plans/identity/navigation.md)
+- [x] ~~**v1.0.0: 하단 네비게이션**~~ — [#499](https://github.com/TeamVisioneer/PrayU-Web/pull/499). 글래스 토큰 + 첫 glass-chrome
+- [ ] v1.0.0 디자인 후속: primitives 글래스화(Button·Card·Input·Dialog) → 홈·그룹 화면 재스킨 (컷라인: 그룹까지)
 - [ ] **v1.0.0: 디자인 시스템(글래스모피즘)** — 토큰·primitives·ui/ 순수성(Next.js 대비) → [design-system.md](plans/identity/design-system.md).
       ⚠️ 스크롤 아이템 backdrop-blur 금지(Android WebView 성능) · 컷라인 결정 대기
 - [ ] v1.1: 기도카드 재편(사용자 소유 + share) + 가시성/RLS — **pray 그룹 격리 결정 대기** → [pray-card-restructure.md](plans/identity/pray-card-restructure.md)
