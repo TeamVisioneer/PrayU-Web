@@ -389,6 +389,25 @@ const SettingDialog = () => {
                   </AccordionItem>
                 </Accordion>
               </div>
+
+              {/* 프로필 하단 푸터에 있던 약관·저작권 — 설정으로 이동 (화면은 콘텐츠에 집중) */}
+              <div className="flex flex-col items-center gap-1.5 pb-1 pt-3 text-center text-xs text-gray-500">
+                <div className="flex justify-center gap-2">
+                  <a
+                    href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:underline"
+                  >
+                    개인정보 처리방침
+                  </a>
+                  <span>|</span>
+                  <a href="/term/240909" className="hover:underline">
+                    이용약관
+                  </a>
+                </div>
+                <div>© 2025 PrayU. All rights reserved.</div>
+              </div>
             </div>
           </div>
         </DialogHeader>

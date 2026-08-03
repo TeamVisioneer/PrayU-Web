@@ -191,22 +191,6 @@ const MyProfilePage = () => {
         </Tabs>
       </main>
 
-      <footer className="w-full bg-mainBg px-6 py-4 text-center text-xs text-gray-500">
-        <div className="mb-2">© 2025 PrayU. All rights reserved.</div>
-        <div className="flex gap-2 justify-center">
-          <a
-            href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html"
-            className="hover:underline"
-          >
-            개인정보 처리방침
-          </a>
-          <span>|</span>
-          <a href="/term/240909" className="hover:underline">
-            이용약관
-          </a>
-        </div>
-      </footer>
-
       <SettingDialog />
       <PrayCardHistoryDrawer />
       <PrayListDrawer />
