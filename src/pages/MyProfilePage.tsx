@@ -95,7 +95,7 @@ const MyProfilePage = () => {
         />
 
         <main className="flex-grow p-4 space-y-6 animate-pulse">
-          <section className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-5">
+          <section className="border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-6 rounded-2xl flex items-center gap-5">
             <Skeleton className="h-20 w-20 rounded-full" />
             <div className="space-y-2">
               <Skeleton className="h-6 w-24 rounded-md" />
@@ -136,7 +136,7 @@ const MyProfilePage = () => {
       />
 
       <main className="flex-grow p-4 space-y-6">
-        <section className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-5">
+        <section className="border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-6 rounded-2xl flex items-center gap-5">
           <img
             className="h-20 w-20 rounded-full object-cover ring-4 ring-white"
             src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
@@ -168,7 +168,7 @@ const MyProfilePage = () => {
         </section>
 
         <Tabs defaultValue="history" className="w-full">
-          <TabsList className="grid h-12 w-full grid-cols-2 rounded-xl border border-gray-100 bg-white p-1 shadow-sm">
+          <TabsList className="grid h-12 w-full grid-cols-2 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-1 shadow-member">
             <TabsTrigger
               value="history"
               className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"

@@ -120,7 +120,7 @@ const NotificationPage = () => {
         <div className="w-full max-w-5xl px-4">
           <Tabs defaultValue="unread" className="w-full">
             {/* 개선된 탭 리스트 */}
-            <TabsList className="w-full bg-white shadow-sm border border-gray-100 rounded-xl p-1 mb-6 h-12">
+            <TabsList className="mb-6 h-12 w-full rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-1 shadow-member">
               <TabsTrigger
                 value="unread"
                 onClick={() => onClickNotificationTab(true)}
@@ -140,7 +140,7 @@ const NotificationPage = () => {
             <TabsContent value="unread" className="pb-5 w-full">
               {userNotificationUnreadTotal === 0 ? (
                 <div className="flex flex-col justify-center items-center py-16">
-                  <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center">
+                  <div className="border border-glassBorder/50 bg-surfaceCard/70 shadow-member rounded-2xl p-8 max-w-sm w-full text-center">
                     <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                       <RiNotification4Line
                         size={32}
@@ -162,7 +162,7 @@ const NotificationPage = () => {
                   {userNotificationView.map((notification, index) => (
                     <div
                       key={index}
-                      className="w-full bg-white rounded-xl border border-gray-50 overflow-hidden  duration-200"
+                      className="w-full rounded-xl border border-glassBorder/50 bg-surfaceCard/70 shadow-member overflow-hidden duration-200"
                     >
                       <NotificationItem notification={notification} />
                     </div>
@@ -184,7 +184,7 @@ const NotificationPage = () => {
                 {userNotificationView.map((notification, index) => (
                   <div
                     key={index}
-                    className="w-full bg-white rounded-xl border border-gray-50 overflow-hidden  duration-200"
+                    className="w-full rounded-xl border border-glassBorder/50 bg-surfaceCard/70 shadow-member overflow-hidden duration-200"
                   >
                     <NotificationItem notification={notification} />
                   </div>
