@@ -83,17 +83,13 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     <div
       className={`mx-auto h-100vh overflow-x-hidden no-scrollbar bg-mainBg ${
         isFullWidth ? "w-full" : "max-w-app"
+      } ${
+        // 스페이서가 아니라 padding 이어야 한다 — h-full 페이지가 네비 위 공간만큼
+        // 줄어들어 "콘텐츠가 안 찼는데 스크롤"이 생기지 않는다
+        isNavVisible ? "pb-[calc(4.75rem+env(safe-area-inset-bottom))]" : ""
       }`}
     >
       {children}
-      {/* 네비가 콘텐츠 하단을 가리지 않도록 문서 흐름에 여백을 만든다
-          (부유 pill: 바 3.5rem + 하단 띄움 0.75rem + 여유) */}
-      {isNavVisible && (
-        <div
-          aria-hidden
-          className="h-[calc(5rem+env(safe-area-inset-bottom))]"
-        />
-      )}
       <BottomNav />
     </div>
   );

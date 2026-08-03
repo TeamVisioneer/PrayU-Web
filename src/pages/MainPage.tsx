@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import CountUp from "react-countup";
 import { useNavigate } from "react-router-dom";
 import DownloadBanner from "./MainPage/DownloadBanner";
+import { useBottomNavVisible } from "@/components/navigation/BottomNav";
 
 const MainPage: React.FC = () => {
   const user = useBaseStore((state) => state.user);
@@ -20,6 +21,7 @@ const MainPage: React.FC = () => {
   );
 
   const isApp = useBaseStore((state) => state.isApp);
+  const isNavVisible = useBottomNavVisible();
 
   useEffect(() => {
     fetchTotalPrayCount();
@@ -152,7 +154,13 @@ const MainPage: React.FC = () => {
         </div>
 
         {!isApp && (
-          <div className="fixed bottom-0 w-full max-w-app mx-auto">
+          <div
+            className={`fixed w-full max-w-app mx-auto ${
+              isNavVisible
+                ? "bottom-[calc(4.75rem+env(safe-area-inset-bottom))]"
+                : "bottom-0"
+            }`}
+          >
             <DownloadBanner />
           </div>
         )}

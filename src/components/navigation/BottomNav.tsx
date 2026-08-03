@@ -52,7 +52,7 @@ const TabItem = ({ label, icon, active, badge = 0, onClick }: TabItemProps) => (
   >
     <span
       className={`relative flex items-center justify-center rounded-full px-4 py-2 transition-colors ${
-        active ? "bg-white/80 text-mainBtn" : "text-deactivate"
+        active ? "bg-white text-mainBtn" : "text-dark"
       }`}
     >
       {icon}
@@ -96,7 +96,7 @@ const BottomNav = () => {
       {/* 부유 pill — 하단에서 띄우고 safe-area 만큼 더 올린다.
           glass-chrome: 고정 크롬이라 backdrop-blur 허용 (스크롤 아이템에는 금지) */}
       <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-1/2 z-40 w-full max-w-app -translate-x-1/2 px-4">
-        <nav className="flex h-14 items-stretch rounded-full border border-glassBorder/60 bg-surfaceChrome/75 px-1.5 shadow-glass backdrop-blur-xl">
+        <nav className="flex h-14 items-stretch rounded-full border border-glassBorder/80 bg-surfaceChrome/90 px-1.5 shadow-glass backdrop-blur-xl">
           <TabItem
             label="홈"
             icon={<House size={23} strokeWidth={isActive("/") ? 2.2 : 1.8} />}
