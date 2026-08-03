@@ -51,7 +51,7 @@ const MyMemberDrawer = () => {
               </div>
 
               <div
-                className="text-blue-600 font-medium mt-2 text-sm underline cursor-pointer"
+                className="text-accentTo font-medium mt-2 text-sm underline cursor-pointer"
                 onClick={() => navigate("/praycard/new")}
               >
                 이번 주 기도카드 만들기 &gt;

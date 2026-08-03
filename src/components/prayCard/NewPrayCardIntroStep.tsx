@@ -46,7 +46,7 @@ const NewPrayCardIntroStep: React.FC<NewPrayCardIntroStepProps> = ({
       <motion.div className="w-3/4" variants={itemVariants}>
         <Button
           onClick={handleStart}
-          className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600 mb-10"
+          className="w-full py-6 text-base bg-accentFrom hover:bg-blue-600 mb-10"
         >
           시작하기
         </Button>

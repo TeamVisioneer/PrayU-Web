@@ -89,7 +89,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           {isNotice ? (
             <RiMegaphoneLine size={16} className="text-orange-600" />
           ) : (
-            <RiBellLine size={16} className="text-blue-600" />
+            <RiBellLine size={16} className="text-accentTo" />
           )}
         </div>
 

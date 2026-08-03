@@ -97,7 +97,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
             {inputPrayCardContent}
           </div>
         ) : (
-          <div className="text-left text-sm text-indigo-600 whitespace-nowrap overflow-hidden text-ellipsis font-medium">
+          <div className="text-left text-sm text-accentTo whitespace-nowrap overflow-hidden text-ellipsis font-medium">
             ✏️ 기도카드에 일상과 기도제목을 작성해 보아요
           </div>
         )}

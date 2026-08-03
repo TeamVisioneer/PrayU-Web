@@ -124,14 +124,14 @@ const NotificationPage = () => {
               <TabsTrigger
                 value="unread"
                 onClick={() => onClickNotificationTab(true)}
-                className="flex-1 h-full text-gray-500 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200 rounded-lg"
+                className="flex-1 h-full text-gray-500 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-accentFrom data-[state=active]:to-accentTo data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200 rounded-lg"
               >
                 읽지 않음
               </TabsTrigger>
               <TabsTrigger
                 value="all"
                 onClick={() => onClickNotificationTab(false)}
-                className="flex-1 h-full text-gray-500 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200 rounded-lg"
+                className="flex-1 h-full text-gray-500 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-accentFrom data-[state=active]:to-accentTo data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200 rounded-lg"
               >
                 전체
               </TabsTrigger>

@@ -92,7 +92,7 @@ const PrayCardHistoryList = () => {
               className="aspect-[0.76] grid cursor-pointer grid-rows-[auto_1fr_auto] gap-1 overflow-hidden rounded-xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md"
               onClick={() => onClickStory(prayCard)}
             >
-              <p className="truncate text-xs font-bold text-indigo-600">
+              <p className="truncate text-xs font-bold text-accentTo">
                 {prayCard.group?.name || "말씀 카드"}
               </p>
               <p className="line-clamp-3 text-xs leading-relaxed text-gray-700">

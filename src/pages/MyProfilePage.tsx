@@ -150,7 +150,7 @@ const MyProfilePage = () => {
               {userPlan == UserPlanType.Premium && (
                 <Badge
                   variant="outline"
-                  className="gap-1.5 border-0 bg-gradient-to-r from-mainBtn via-blue-500 to-blue-600 text-white shadow-md ring-1 ring-blue-300/60 px-3 py-1 rounded-full whitespace-nowrap"
+                  className="gap-1.5 border-0 bg-gradient-to-r from-accentFrom to-accentTo text-white shadow-md ring-1 ring-accentFrom/40 px-3 py-1 rounded-full whitespace-nowrap"
                 >
                   <Crown
                     size={12}
@@ -171,13 +171,13 @@ const MyProfilePage = () => {
           <TabsList className="grid h-12 w-full grid-cols-2 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-1 shadow-member">
             <TabsTrigger
               value="history"
-              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
+              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-accentFrom data-[state=active]:to-accentTo data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               기도카드 보관함
             </TabsTrigger>
             <TabsTrigger
               value="calendar"
-              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
+              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-accentFrom data-[state=active]:to-accentTo data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               기도 달력
             </TabsTrigger>

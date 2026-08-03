@@ -96,7 +96,7 @@ export default function GroupListDrawer() {
                       </div>
                     </div>
                     {targetGroup?.id === group.id && !isGroupListPage && (
-                      <span className="text-blue-500">
+                      <span className="text-accentFrom">
                         <FaCircleCheck size={20} />
                       </span>
                     )}

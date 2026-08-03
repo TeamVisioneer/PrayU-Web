@@ -259,7 +259,7 @@ const SettingDialog = () => {
                   <span className="font-semibold">알림 설정</span>
                   <button
                     onClick={() => onClickOpenAppSettings()}
-                    className="text-blue-500 hover:text-blue-700 text-sm"
+                    className="text-accentFrom hover:text-accentTo text-sm"
                   >
                     열기
                   </button>
@@ -300,7 +300,7 @@ const SettingDialog = () => {
                             <div
                               className={`w-4 h-4 rounded-full border-2 ${
                                 appSettings.fontSize === option.value
-                                  ? "bg-blue-500 border-blue-500"
+                                  ? "bg-accentFrom border-accentFrom"
                                   : "border-gray-300"
                               }`}
                             >

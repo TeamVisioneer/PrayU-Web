@@ -30,7 +30,7 @@ export const CompletionStep = ({
         <h2 className="text-2xl sm:text-3xl font-medium text-slate-800 mb-3">
           감사 카드가 완성되었어요!
         </h2>
-        <p className="text-lg text-blue-600 font-medium mb-2">
+        <p className="text-lg text-accentTo font-medium mb-2">
           {cardNumber}번째 감사카드가 작성되었어요
         </p>
         <p className="text-base text-slate-600">
