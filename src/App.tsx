@@ -86,7 +86,7 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       } ${
         // 스페이서가 아니라 padding 이어야 한다 — h-full 페이지가 네비 위 공간만큼
         // 줄어들어 "콘텐츠가 안 찼는데 스크롤"이 생기지 않는다
-        isNavVisible ? "pb-[calc(4.75rem+env(safe-area-inset-bottom))]" : ""
+        isNavVisible ? "pb-[calc(5.25rem+env(safe-area-inset-bottom))]" : ""
       }`}
     >
       {children}

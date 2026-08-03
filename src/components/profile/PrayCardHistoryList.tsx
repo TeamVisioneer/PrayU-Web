@@ -86,6 +86,19 @@ const PrayCardHistoryList = () => {
               </div>
             );
           }
+          // 받은 기도 요약: 같은 심볼을 개수만큼 겹치지 않고, 종류별 심볼 + 총 개수로.
+          // 많은 순으로 정렬해 가장 많이 받은 반응이 앞에 온다
+          const prayCountByType = new Map<string, number>();
+          prayCard.pray.forEach((pray) =>
+            prayCountByType.set(
+              pray.pray_type ?? "",
+              (prayCountByType.get(pray.pray_type ?? "") ?? 0) + 1
+            )
+          );
+          const prayTypes = [...prayCountByType.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .map(([type]) => type as PrayType);
+
           return (
             <div
               key={index}
@@ -95,25 +108,29 @@ const PrayCardHistoryList = () => {
               <p className="truncate text-xs font-bold text-accentTo">
                 {prayCard.group?.name || "말씀 카드"}
               </p>
-              <p className="line-clamp-3 text-xs leading-relaxed text-gray-700">
-                {prayCard.content}
-              </p>
-              <div className="flex items-center space-x-1 pt-1">
-                <div className="flex -space-x-2">
-                  {prayCard.pray.slice(0, 5).map((pray) => (
-                    <img
-                      key={pray.id}
-                      src={PrayTypeDatas[pray.pray_type as PrayType]?.img}
-                      className="h-5 w-5 rounded-full border-2 border-white object-cover"
-                    />
-                  ))}
-                </div>
-                {prayCard.pray.length > 5 && (
-                  <span className="text-xs text-gray-500">
-                    +{prayCard.pray.length - 5}
-                  </span>
-                )}
+              {/* line-clamp 는 grid stretch 로 늘어나면 말줄임 뒤 줄이 계속 그려진다 —
+                  min-h-0 + overflow-hidden 래퍼로 본문이 아래 행을 침범하지 않게 한다 */}
+              <div className="min-h-0 overflow-hidden">
+                <p className="line-clamp-3 text-xs leading-relaxed text-gray-700">
+                  {prayCard.content}
+                </p>
               </div>
+              {prayCard.pray.length > 0 && (
+                <div className="flex items-center gap-1 pt-1">
+                  <div className="flex -space-x-1.5">
+                    {prayTypes.map((type) => (
+                      <img
+                        key={type}
+                        src={PrayTypeDatas[type]?.img}
+                        className="h-5 w-5 rounded-full border-2 border-white object-cover"
+                      />
+                    ))}
+                  </div>
+                  <span className="text-[11px] font-medium text-gray-500">
+                    {prayCard.pray.length}
+                  </span>
+                </div>
+              )}
             </div>
           );
         })}
