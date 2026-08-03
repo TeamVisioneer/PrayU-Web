@@ -22,6 +22,7 @@ module.exports = {
       },
       boxShadow: {
         button: "0 10px 10px rgba(188, 190, 208, 0.8)",
+        glass: "0 8px 28px rgba(147, 151, 211, 0.30)",
         member: "0 7px 7px rgba(193, 198, 246, 0.25)",
         prayCard: "0 10px 10px rgba(193, 198, 246, 0.25)",
       },

@@ -86,11 +86,12 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       }`}
     >
       {children}
-      {/* 네비가 콘텐츠 하단을 가리지 않도록 문서 흐름에 여백을 만든다 */}
+      {/* 네비가 콘텐츠 하단을 가리지 않도록 문서 흐름에 여백을 만든다
+          (부유 pill: 바 3.5rem + 하단 띄움 0.75rem + 여유) */}
       {isNavVisible && (
         <div
           aria-hidden
-          className="h-[calc(3.5rem+env(safe-area-inset-bottom))]"
+          className="h-[calc(5rem+env(safe-area-inset-bottom))]"
         />
       )}
       <BottomNav />
