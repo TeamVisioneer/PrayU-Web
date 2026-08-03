@@ -39,6 +39,20 @@
 - [x] ~~**staging 게시(리허설)**~~ — 2026-07-31 확인 완료. 레포 원고 → 초안 등록 → 노출까지 정상
 - [ ] ⚠️ **prod 공지는 release 이후에만 가능** — 현재 prod에 `notice` 테이블이 없다(`42P01`). release → 관리자 `is_admin=true` → 게시 순서
 
+## 🚀 제품 정체성 — 데일리 신앙 기록 + 공동체 (2026-08-03 확정)
+
+계획: [plans/identity/overview.md](plans/identity/overview.md) —
+[navigation](plans/identity/navigation.md)(v1.0.0) · [pray-card-restructure](plans/identity/pray-card-restructure.md)(v1.1) ·
+[daily](plans/identity/daily.md)(v1.2) · [profile-social](plans/identity/profile-social.md)·[feed](plans/identity/feed.md)(v1.3+)
+
+**기록이 원본, 나눔은 파생.** Hallow 벤치마킹(시스템만, 오디오 비채택). SNS 는 후순위.
+
+- [ ] **v1.0.0: 하단 네비게이션** — 설계·파일 매니페스트 완성, 구현 승인 대기 → [navigation.md](plans/identity/navigation.md)
+- [ ] **v1.0.0: 디자인 시스템(글래스모피즘)** — 토큰·primitives·ui/ 순수성(Next.js 대비) → [design-system.md](plans/identity/design-system.md).
+      ⚠️ 스크롤 아이템 backdrop-blur 금지(Android WebView 성능) · 컷라인 결정 대기
+- [ ] v1.1: 기도카드 재편(사용자 소유 + share) + 가시성/RLS — **pray 그룹 격리 결정 대기** → [pray-card-restructure.md](plans/identity/pray-card-restructure.md)
+- [ ] 유료화 선행 조사: WebView iOS 결제(IAP) 정책 충돌 여부
+
 ## 🎯 v1.0.0 릴리스 — 범위 확정 중
 
 계획: [plans/release-v1/plan.md](plans/release-v1/plan.md) — 신규 피처 목록·보안 포함 범위·App 트랙 결정 대기.

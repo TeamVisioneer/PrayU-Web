@@ -24,7 +24,15 @@
 진행 방식: 테이블별 마이그레이션으로 쪼개서 로컬 → staging에서 앱 전 플로우 회귀 확인 후 prod.
 `rls_auto_enable` event trigger(신규 테이블 RLS 자동 활성화)는 prod에 이미 존재 — 유지.
 
-## 2. Kakao client secret 프론트 노출 — 🔴
+## 2. Kakao client secret 프론트 노출 — 🔴 (v1.0.0 제외, 가입 흐름 정리와 묶음)
+
+> **2026-07-31 결정**: v1.0.0 에 넣지 않는다. 인증 흐름 전체를 건드리는 작업이라
+> 1년 만의 대형 릴리스와 함께 가기 불안하다. **`handle_new_user` 트리거 제거와 묶어** 릴리스 후 진행한다 —
+> 둘 다 "가입 순간 서버가 개입할 지점이 없다"는 같은 제약에서 나온다.
+> 쟁점·준비물 상세: [PrayU-Api/docs/backlog.md](../../PrayU-Api/docs/backlog.md) "가입 흐름 정리" 절
+>
+> 특히 **애플 로그인은 `signInWithOAuth` 라 서버 훅이 없다** — 카카오만 옮기면 애플 가입에 프로필이 안 생긴다.
+
 
 `VITE_KAKAO_CLIENT_SECRET_KEY` 가 web 번들에 포함된다 (`KakaoTokenRepo.fetchKakaoToken` 이
 브라우저에서 직접 kauth.kakao.com 토큰 교환). 조치:
@@ -72,4 +80,10 @@ update profiles set premium_expired_at = '9999-12-31' where id = <본인>;  -- �
 
 ## 권장 진행 순서
 
-**8**(프리미엄 자기부여 — 금전적 영향이 직접적, PR C와 묶으면 추가 비용 없음) → 2(Kakao secret — 노출 면적이 가장 공개적) → 1(RLS — 파급 크므로 테이블별 분할) → 4(어드민, 1과 함께) → 3(키 로테이션 — 1·2 마무리 후 일괄)
+~~**8**(프리미엄 자기부여)~~ **완료 2026-07-31** ([PrayU-Api#59](https://github.com/TeamVisioneer/PrayU-Api/pull/59) · [#497](https://github.com/TeamVisioneer/PrayU-Web/pull/497)) —
+컬럼 UPDATE 권한 회수 + 어드민 전용 서버 경로(`POST /api/admin/premium`)
+
+이후 순서: **2**(Kakao secret — 가입 흐름 정리와 묶어 **v1.0.0 이후**) → 1(RLS — 파급 크므로 테이블별 분할) → 4(어드민, 1과 함께) → 3(키 로테이션 — 1·2 마무리 후 일괄)
+
+**v1.0.0 에 포함된 보안 작업은 8번뿐이다.** 1번(RLS)은 구멍이 이미 prod 에 있어 릴리스가 상황을
+악화시키지 않으므로 릴리스 직후 트랙으로 미룬다 — 근거: [plans/release-v1/plan.md](plans/release-v1/plan.md) 3절
