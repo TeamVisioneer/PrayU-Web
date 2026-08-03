@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import PageHeader from "@/components/common/PageHeader";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { IoChevronBack } from "react-icons/io5";
 import { Info, Repeat } from "lucide-react";
 import { PulseLoader } from "react-spinners";
 import { AnimatePresence, motion } from "framer-motion";
@@ -456,12 +456,7 @@ const BibleCardNewPage = () => {
   };
 
   const renderHeader = () => (
-    <header className="sticky top-0 z-50 flex items-center border-b bg-mainBg p-4">
-      <button onClick={() => navigate(-1)} className="absolute left-4">
-        <IoChevronBack size={20} />
-      </button>
-      <h1 className="w-full text-center text-lg font-bold">말씀카드 만들기</h1>
-    </header>
+    <PageHeader title="말씀카드 만들기" />
   );
 
   const handleMoveToProfile = () => {

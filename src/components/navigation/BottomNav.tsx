@@ -15,6 +15,9 @@ import CreateActionSheet from "./CreateActionSheet";
  * **허용 목록 방식** — 새 라우트의 기본은 "안 보임"이라 몰입 화면에 실수로 얹히지 않는다.
  * 화면별 하단 CTA(그룹의 오늘의기도 등)는 네비 **위에 도킹**한다 — 네비는 추가이지 대체가 아니다.
  */
+/** `:groupId` 와일드카드에 걸리지만 몰입 화면인 것들 — 노출 목록보다 먼저 검사한다 */
+const NAV_HIDDEN_PATHS = ["/group/new", "/group/limit", "/group/mock"];
+
 const NAV_VISIBLE_PATHS = [
   "/",
   "/group",
@@ -29,6 +32,9 @@ const NAV_VISIBLE_PATHS = [
 export const useBottomNavVisible = (): boolean => {
   const location = useLocation();
   const user = useBaseStore((state) => state.user);
+  if (NAV_HIDDEN_PATHS.some((path) => matchPath(path, location.pathname))) {
+    return false;
+  }
   return (
     !!user &&
     NAV_VISIBLE_PATHS.some((path) => matchPath(path, location.pathname))

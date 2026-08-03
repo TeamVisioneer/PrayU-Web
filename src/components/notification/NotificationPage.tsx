@@ -1,17 +1,15 @@
 import { RiNotification4Line, RiCheckLine } from "react-icons/ri";
+import PageHeader from "@/components/common/PageHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import NotificationItem from "./NotificationItem";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import { useEffect, useState } from "react";
-import { IoChevronBack } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import ShowMoreBtn from "../common/ShowMoreBtn";
 
 const NotificationPage = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const userNotificationList = useBaseStore(
     (state) => state.userNotificationList
@@ -102,45 +100,20 @@ const NotificationPage = () => {
   return (
     <div className="w-full min-h-screen bg-mainBg flex flex-col">
       {/* 상단 헤더 영역 - PrayU 스타일로 개선 */}
-      <header className="sticky top-0 z-50 bg-mainBg border-b border-gray-100 shadow-sm">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center justify-between p-5">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => navigate(-1)}
-                className="p-1 hover:bg-white/50 rounded-lg transition-colors"
-              >
-                <IoChevronBack size={20} className="text-gray-700" />
-              </button>
-              <h1 className="text-xl font-bold text-gray-800">알림</h1>
-              {/* <div className="flex items-center gap-2">
-                <div className="p-2 bg-gradient-to-br from-mainBtn to-blue-600 rounded-lg shadow-md">
-                  <RiNotification4Line size={16} className="text-white" />
-                </div>
-              </div> */}
-            </div>
-
-            <div className="flex items-center gap-2">
-              {userNotificationUnreadTotal > 0 && (
-                <>
-                  <button
-                    onClick={() => onClickCheckAllNotification()}
-                    className="flex items-center gap-1.5 rounded-lg border border-violet-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-violet-600 shadow-sm transition-colors hover:bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-300 focus:ring-offset-2"
-                  >
-                    <RiCheckLine className="h-4 w-4" />
-                    <span>모두 읽음</span>
-                  </button>
-                  <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-full min-w-[24px] text-center">
-                    {userNotificationUnreadTotal > 99
-                      ? "99+"
-                      : userNotificationUnreadTotal}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <PageHeader
+        title="알림"
+        right={
+          userNotificationUnreadTotal > 0 ? (
+            <button
+              onClick={() => onClickCheckAllNotification()}
+              className="flex items-center gap-1 rounded-lg border border-violet-200 bg-white px-2 py-1 text-xs font-semibold text-violet-600 shadow-sm transition-colors hover:bg-violet-50"
+            >
+              <RiCheckLine className="h-4 w-4" />
+              <span>모두 읽음</span>
+            </button>
+          ) : undefined
+        }
+      />
 
       {/* 메인 컨텐츠 영역 */}
       <div className="flex-1 flex flex-col items-center pt-6">

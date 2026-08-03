@@ -1,7 +1,7 @@
 import useBaseStore from "@/stores/baseStore";
+import PageHeader from "@/components/common/PageHeader";
 import SettingDialog from "@/components/profile/SettingDialog";
 import { useEffect } from "react";
-import { IoChevronBack } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IoSettingsOutline } from "react-icons/io5";
 import PrayCardHistoryList from "@/components/profile/PrayCardHistoryList";
@@ -10,7 +10,6 @@ import { analyticsTrack } from "@/analytics/analytics";
 import PrayCalendar from "@/components/profile/PrayCalendar";
 import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +18,6 @@ import { Crown } from "lucide-react";
 
 const MyProfilePage = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const myProfile = useBaseStore((state) => state.myProfile);
   const historyPrayCardCount = useBaseStore(
     (state) => state.historyPrayCardCount
@@ -91,22 +89,10 @@ const MyProfilePage = () => {
   ) {
     return (
       <div className="w-full min-h-screen bg-mainBg flex flex-col">
-        <header className="sticky top-0 z-50 bg-mainBg border-b border-gray-100 shadow-sm">
-          <div className="max-w-5xl mx-auto flex items-center justify-between p-5">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => navigate(-1)}
-                className="p-1 hover:bg-white/50 rounded-lg transition-colors"
-              >
-                <IoChevronBack size={20} className="text-gray-700" />
-              </button>
-              <h1 className="text-xl font-bold text-gray-800">내 프로필</h1>
-            </div>
-            <div className="p-1">
-              <IoSettingsOutline size={20} className="text-gray-700" />
-            </div>
-          </div>
-        </header>
+        <PageHeader
+          title="내 프로필"
+          right={<IoSettingsOutline size={20} className="text-gray-400" />}
+        />
 
         <main className="flex-grow p-4 space-y-6 animate-pulse">
           <section className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-5">
@@ -137,25 +123,17 @@ const MyProfilePage = () => {
 
   return (
     <div className="w-full min-h-screen bg-mainBg flex flex-col">
-      <header className="sticky top-0 z-50 bg-mainBg border-b border-gray-100 shadow-sm">
-        <div className="max-w-5xl mx-auto flex items-center justify-between p-5">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => navigate(-1)}
-              className="p-1 hover:bg-white/50 rounded-lg transition-colors"
-            >
-              <IoChevronBack size={20} className="text-gray-700" />
-            </button>
-            <h1 className="text-xl font-bold text-gray-800">내 프로필</h1>
-          </div>
+      <PageHeader
+        title="내 프로필"
+        right={
           <button
             onClick={onClickSettingBtn}
-            className="p-1 hover:bg-white/50 rounded-lg transition-colors"
+            className="rounded-lg p-1 transition-colors hover:bg-white/60"
           >
-            <IoSettingsOutline size={20} className="text-gray-700" />
+            <IoSettingsOutline size={20} className="text-liteBlack" />
           </button>
-        </div>
-      </header>
+        }
+      />
 
       <main className="flex-grow p-4 space-y-6">
         <section className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-5">

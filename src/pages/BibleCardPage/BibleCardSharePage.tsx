@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import PageHeader from "@/components/common/PageHeader";
 import { useNavigate, useParams } from "react-router-dom";
-import { IoChevronBack } from "react-icons/io5";
 import { PulseLoader } from "react-spinners";
 import { LockKeyhole } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -101,23 +101,20 @@ const BibleCardSharePage = () => {
 
   return (
     <div className="flex min-h-full w-full flex-col bg-mainBg">
-      <header className="sticky top-0 z-50 flex items-center border-b bg-mainBg p-4">
-        <button onClick={() => navigate(-1)} className="absolute left-4">
-          <IoChevronBack size={20} />
-        </button>
-        <h1 className="w-full truncate px-20 text-center text-lg font-bold">
-          {bibleCard ? `${bibleCard.name}님의 말씀카드` : "PrayU 말씀카드"}
-        </h1>
-        {!navigator.userAgent.match(/prayu/i) && (
-          <Badge
-            variant="secondary"
-            className="absolute right-4 cursor-pointer rounded-sm border-gray-300 text-base font-normal"
-            onClick={handleInstallApp}
-          >
-            앱설치
-          </Badge>
-        )}
-      </header>
+      <PageHeader
+        title={bibleCard ? `${bibleCard.name}님의 말씀카드` : "PrayU 말씀카드"}
+        right={
+          !navigator.userAgent.match(/prayu/i) && (
+            <Badge
+              variant="secondary"
+              className="cursor-pointer rounded-sm border-gray-300 text-base font-normal"
+              onClick={handleInstallApp}
+            >
+              앱설치
+            </Badge>
+          )
+        }
+      />
 
       <main className="flex flex-1 flex-col px-5 pb-8 pt-6">
         {isLoading ? (

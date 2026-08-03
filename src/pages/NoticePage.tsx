@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { IoChevronBack } from "react-icons/io5";
+import PageHeader from "@/components/common/PageHeader";
 import { fetchPublicNoticeList } from "@/apis/notice";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -12,7 +11,6 @@ import { Notice } from "../../supabase/types/tables";
  * 열린다. 알림함에서 공지를 여는 경로와 같은 방식이다.
  */
 const NoticePage = () => {
-  const navigate = useNavigate();
   const setOpenNoticeId = useBaseStore((state) => state.setOpenNoticeId);
   const [notices, setNotices] = useState<Notice[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,12 +34,7 @@ const NoticePage = () => {
 
   return (
     <div className="flex h-full w-full flex-col bg-mainBg">
-      <header className="sticky top-0 z-50 flex items-center border-b bg-mainBg p-4">
-        <button onClick={() => navigate(-1)} className="absolute left-4">
-          <IoChevronBack size={20} />
-        </button>
-        <h1 className="w-full text-center text-lg font-bold">공지사항</h1>
-      </header>
+      <PageHeader title="공지사항" />
 
       <main className="flex-1 overflow-y-auto px-5 py-4">
         {isLoading && (
