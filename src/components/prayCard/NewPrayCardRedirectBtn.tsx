@@ -8,7 +8,7 @@ const NewPrayCardRedirectBtn: React.FC = () => {
 
   return (
     <Button
-      className={`bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 hover:from-cyan-500 hover:via-blue-600 hover:to-indigo-700 
+      className={`bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90 
                   text-white px-8 py-5 h-auto rounded-full transition-all duration-300 shadow-lg
                   active:scale-95 transform`}
       onClick={() => {

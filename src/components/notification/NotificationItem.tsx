@@ -74,7 +74,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     >
       {/* 읽지않음 표시 */}
       {unread && (
-        <div className="absolute top-6 left-3 w-2 h-2 bg-blue-500 rounded-full"></div>
+        <div className="absolute top-6 left-3 w-2 h-2 bg-accentFrom rounded-full"></div>
       )}
 
       <div className="flex items-start gap-3 pl-4">

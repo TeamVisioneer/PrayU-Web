@@ -59,7 +59,7 @@ export const CompletionStep = ({
       <div className="space-y-3">
         <button
           onClick={onViewAllCards}
-          className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-lg font-medium transition-colors shadow-md hover:shadow-lg"
+          className="w-full py-4 px-6 bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90 text-white rounded-2xl text-lg font-medium transition-colors shadow-md hover:shadow-lg"
         >
           📚 감사카드 모아보기
         </button>

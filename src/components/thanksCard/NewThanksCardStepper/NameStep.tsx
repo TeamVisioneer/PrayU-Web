@@ -53,7 +53,7 @@ export const NameStep = ({ formData, onUpdate, onNext }: StepProps) => {
         disabled={!formData.name.trim()}
         className={`w-full py-4 px-6 rounded-2xl text-lg font-medium transition-all duration-200 ${
           formData.name.trim()
-            ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg"
+            ? "bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90 text-white shadow-md hover:shadow-lg"
             : "bg-slate-200 text-slate-400 cursor-not-allowed"
         }`}
       >

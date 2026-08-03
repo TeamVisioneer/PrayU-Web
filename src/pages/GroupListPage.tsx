@@ -237,7 +237,7 @@ const GroupListPage: React.FC = () => {
       <Button
         variant="primary"
         onClick={addGroup}
-        className="absolute bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-6 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500 p-0 text-white shadow-lg hover:bg-blue-600"
+        className="absolute bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-6 z-10 flex h-14 w-14 items-center justify-center rounded-full p-0 text-white shadow-glass bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90"
         aria-label="새 그룹 만들기"
       >
         <PlusCircle className="h-6 w-6" />

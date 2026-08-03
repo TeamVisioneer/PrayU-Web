@@ -152,7 +152,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
         </Button>
         <Button
           onClick={handleNext}
-          className="flex-1 py-6 text-base bg-blue-500 hover:bg-blue-600"
+          className="flex-1 py-6 text-base bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90"
         >
           {value.length > 0 ? "다음" : "건너뛰기"}
         </Button>
