@@ -198,7 +198,9 @@ const App = () => {
                 path="/group"
                 element={
                   <PrivateRoute>
-                    <GroupListPage />
+                    <SlideInPage>
+                      <GroupListPage />
+                    </SlideInPage>
                   </PrivateRoute>
                 }
               />

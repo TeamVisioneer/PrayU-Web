@@ -59,7 +59,7 @@ const TabItem = ({ label, icon, active, badge = 0, onClick }: TabItemProps) => (
   >
     <span
       className={`relative flex items-center justify-center rounded-full px-4 py-2 transition-colors ${
-        active ? "bg-white text-mainBtn" : "text-dark"
+        active ? "bg-accentFrom/15 text-accentFrom" : "text-dark"
       }`}
     >
       {icon}
@@ -116,7 +116,7 @@ const BottomNav = () => {
             }}
             className="flex w-[4.25rem] items-center justify-center"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-start to-middle text-white shadow-member">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accentFrom to-accentTo text-white shadow-member">
               <Plus size={22} strokeWidth={2.2} />
             </span>
           </button>
