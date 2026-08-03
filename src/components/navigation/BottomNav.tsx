@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { matchPath, useLocation, useNavigate } from "react-router-dom";
-import { Bell, House, Plus, UserRound, UsersRound } from "lucide-react";
+import { Bell, Plus, UserRound, UsersRound } from "lucide-react";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import CreateActionSheet from "./CreateActionSheet";
@@ -18,8 +18,9 @@ import CreateActionSheet from "./CreateActionSheet";
 /** `:groupId` 와일드카드에 걸리지만 몰입 화면인 것들 — 노출 목록보다 먼저 검사한다 */
 const NAV_HIDDEN_PATHS = ["/group/new", "/group/limit", "/group/mock"];
 
+// "/" 는 없다 — 로그인해도 랜딩 성격이라 탭 화면이 아니다.
+// 홈 탭은 v1.2 "오늘" 허브가 생길 때 함께 돌아온다 (docs/plans/identity/daily.md)
 const NAV_VISIBLE_PATHS = [
-  "/",
   "/group",
   "/group/:groupId",
   "/qt",
@@ -103,12 +104,6 @@ const BottomNav = () => {
           glass-chrome: 고정 크롬이라 backdrop-blur 허용 (스크롤 아이템에는 금지) */}
       <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-1/2 z-40 w-full max-w-app -translate-x-1/2 px-4">
         <nav className="flex h-14 items-stretch rounded-full border border-glassBorder/80 bg-surfaceChrome/90 px-1.5 shadow-glass backdrop-blur-xl">
-          <TabItem
-            label="홈"
-            icon={<House size={23} strokeWidth={isActive("/") ? 2.2 : 1.8} />}
-            active={isActive("/")}
-            onClick={() => moveTo("홈", "/")}
-          />
           <TabItem
             label="그룹"
             icon={
