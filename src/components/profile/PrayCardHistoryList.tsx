@@ -4,7 +4,7 @@ import { analyticsTrack } from "@/analytics/analytics";
 import { useState } from "react";
 import ShowMoreBtn from "../common/ShowMoreBtn";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import { assetUrl } from "@/lib/assetUrl";
+import BibleCardThumbnail from "../prayCard/BibleCardThumbnail";
 
 const PrayCardHistoryList = () => {
   const user = useBaseStore((state) => state.user);
@@ -66,20 +66,30 @@ const PrayCardHistoryList = () => {
     <div className="flex w-full flex-col items-center gap-4">
       <div className="grid w-full grid-cols-3 gap-3">
         {historyPrayCardListView.map((prayCard, index) => {
-          const bibleCardImageUrl =
-            assetUrl(prayCard.bible_card?.image_key) ||
-            prayCard.bible_card?.image_url ||
-            prayCard.bible_card_url;
-
-          if (bibleCardImageUrl) {
+          // 말씀카드는 bible_card row 데이터로 렌더한다 (#448 통합 렌더러).
+          // image_key/image_url 은 공유 산출물 — 목록 UI 가 의존하지 않는다
+          if (prayCard.bible_card) {
             return (
               <div
                 key={index}
-                className="aspect-[0.76] cursor-pointer overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md"
+                className="aspect-[3/4] cursor-pointer overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md"
+                onClick={() => onClickStory(prayCard)}
+              >
+                <BibleCardThumbnail bibleCard={prayCard.bible_card} />
+              </div>
+            );
+          }
+
+          // 레거시 표시 호환: 신규 체계 이전 카드는 bible_card row 없이 URL 만 있다
+          if (prayCard.bible_card_url) {
+            return (
+              <div
+                key={index}
+                className="aspect-[3/4] cursor-pointer overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md"
                 onClick={() => onClickStory(prayCard)}
               >
                 <img
-                  src={bibleCardImageUrl}
+                  src={prayCard.bible_card_url}
                   alt="Bible Card"
                   className="h-full w-full object-cover"
                 />
@@ -102,7 +112,7 @@ const PrayCardHistoryList = () => {
           return (
             <div
               key={index}
-              className="aspect-[0.76] grid cursor-pointer grid-rows-[auto_1fr_auto] gap-1 overflow-hidden rounded-xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md"
+              className="aspect-[3/4] grid cursor-pointer grid-rows-[auto_1fr_auto] gap-1 overflow-hidden rounded-xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md"
               onClick={() => onClickStory(prayCard)}
             >
               <p className="truncate text-xs font-bold text-accentTo">
