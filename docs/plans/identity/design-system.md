@@ -54,9 +54,9 @@ src/pages/                라우팅 + 조립
 
 | 단계 | 내용 | 효과 |
 |---|---|---|
-| **1** | 토큰 체계 + 배경 그라디언트 + **Button·Card·Input·Dialog/Sheet 글래스화** | primitives 만 바꿔도 전역 톤이 잡힌다 |
-| **2** | **하단 네비 = 첫 `glass-chrome`** ([navigation.md](navigation.md)와 한 작업) | 신규 컴포넌트라 회귀 위험 0 |
-| **3** | 코어 여정 재스킨: 홈 → 그룹 → 기도카드 (화면별 PR, hex 리터럴 제거 동반) | 사용자 체감 |
+| **1** | ✅ 토큰 + **primitives 글래스화** (#500) — Button hex 제거·Card·Input·Dialog/Drawer/Sheet | primitives 만 바꿔도 전역 톤이 잡힌다 |
+| **2** | ✅ **하단 네비 = 첫 `glass-chrome`** (#499) + PageHeader 통일 | 신규 컴포넌트라 회귀 위험 0 |
+| **3** | ✅ 그룹 재스킨 (#501) — 목록·상세 카드·GroupHeader glass-chrome. 홈(랜딩)은 네비 제외 결정으로 대상 아님 | **컷라인 도달** |
 | **4** | 나머지 화면 (release 후 v1.0.x 순차) | 어드민·Office 는 내부 도구라 제외 |
 
 **v1.0.0 컷라인 제안: 1 + 2 필수, 3 은 그룹 화면까지, 4 는 릴리스 후.**
@@ -71,6 +71,6 @@ src/pages/                라우팅 + 조립
 
 ## 결정 대기
 
-- [ ] **v1.0.0 컷라인** — 제안(1+2+그룹까지) 승인 여부
-- [ ] 커스텀 Button variant(separated·combined) 통폐합 여부
+- [x] ~~**v1.0.0 컷라인**~~ — 승인·완료 (1+2+그룹, 2026-08-03). 나머지 화면은 v1.0.x
+- [x] ~~커스텀 Button variant 통폐합~~ — separated·combined 는 ReactionResultBox 의 variant 였다. Button 은 4종으로 이미 수렴
 - [ ] 폰트 유지 여부 (현재 체계 그대로 갈지)

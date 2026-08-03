@@ -79,7 +79,7 @@ const GroupListPage: React.FC = () => {
           {[...Array(3)].map((_, index) => (
             <Card
               key={index}
-              className="hover:shadow-lg transition-all duration-200 border-0 shadow-sm bg-white"
+              className="transition-all duration-200 hover:shadow-glass"
             >
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-2">
@@ -141,7 +141,7 @@ const GroupListPage: React.FC = () => {
               return (
                 <Card
                   key={group.id}
-                  className="transition-all duration-200 cursor-pointer hover:scale-[1.02] border-0 bg-white shadow-none overflow-hidden"
+                  className="cursor-pointer overflow-hidden transition-all duration-200 hover:scale-[1.02] hover:shadow-glass"
                   onClick={() => handleGroupClick(group.id)}
                 >
                   <CardContent className="p-4">

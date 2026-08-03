@@ -81,7 +81,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   return (
     <div
       onClick={() => onClickMyMember()}
-      className="w-full flex flex-col gap-3 cursor-pointer bg-white p-5 rounded-2xl h-36"
+      className="w-full flex flex-col gap-3 cursor-pointer border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-5 rounded-2xl h-36"
     >
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2 justify-between">

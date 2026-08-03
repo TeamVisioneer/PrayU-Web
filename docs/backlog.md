@@ -50,7 +50,8 @@
 - [x] ~~**v1.0.0: 하단 네비게이션**~~ — [#499](https://github.com/TeamVisioneer/PrayU-Web/pull/499). 글래스 토큰 + 첫 glass-chrome
 - [x] ~~공용 PageHeader 추출~~ — 같은 sticky 헤더가 8개 파일에 복붙돼 있었고 그룹 만들기는 그마저 아니었다.
       전부 `components/common/PageHeader`(글래스) 하나로 통일 (#499)
-- [ ] v1.0.0 디자인 후속: primitives 글래스화(Button·Card·Input·Dialog) → 홈·그룹 화면 재스킨 (컷라인: 그룹까지)
+- [x] ~~primitives 글래스화~~ (#500) · ~~그룹 재스킨~~ (#501) — **v1.0.0 디자인 컷라인 도달**
+- [ ] v1.0.x (릴리스 후): 나머지 화면 재스킨 — QT·공지·프로필·알림·감사카드 순, hex 리터럴 grep 0 목표
 - [ ] **v1.0.0: 디자인 시스템(글래스모피즘)** — 토큰·primitives·ui/ 순수성(Next.js 대비) → [design-system.md](plans/identity/design-system.md).
       ⚠️ 스크롤 아이템 backdrop-blur 금지(Android WebView 성능) · 컷라인 결정 대기
 - [ ] v1.1: 기도카드 재편(사용자 소유 + share) + 가시성/RLS — **pray 그룹 격리 결정 대기** → [pray-card-restructure.md](plans/identity/pray-card-restructure.md)
