@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { matchPath, useLocation, useNavigate } from "react-router-dom";
-import { Bell, Plus, UserRound, UsersRound } from "lucide-react";
+import { Plus, UserRound, UsersRound } from "lucide-react";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
 import CreateActionSheet from "./CreateActionSheet";
@@ -78,18 +78,6 @@ const BottomNav = () => {
   const navigate = useNavigate();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  const user = useBaseStore((state) => state.user);
-  const unreadTotal = useBaseStore(
-    (state) => state.userNotificationUnreadTotal,
-  );
-  const fetchNotificationCount = useBaseStore(
-    (state) => state.fetchNotificationCount,
-  );
-
-  useEffect(() => {
-    if (visible && user) fetchNotificationCount(user.id, true);
-  }, [visible, user, fetchNotificationCount]);
-
   if (!visible) return null;
 
   const isActive = (path: string) => !!matchPath(path, location.pathname);
@@ -132,18 +120,15 @@ const BottomNav = () => {
               <Plus size={22} strokeWidth={2.2} />
             </span>
           </button>
+          {/* 알림 탭은 홈 탭과 함께 v1.2 에 복귀한다 — 3탭+홈 없는 상태에서 좌우 균형이
+              맞지 않고, 알림은 상단 헤더 벨로 접근 가능하다 (navigation.md)
           <TabItem
             label="알림"
-            icon={
-              <Bell
-                size={23}
-                strokeWidth={isActive("/notifications") ? 2.2 : 1.8}
-              />
-            }
+            icon={<Bell size={23} strokeWidth={isActive("/notifications") ? 2.2 : 1.8} />}
             active={isActive("/notifications")}
             badge={unreadTotal}
             onClick={() => moveTo("알림", "/notifications")}
-          />
+          /> */}
           <TabItem
             label="프로필"
             icon={
