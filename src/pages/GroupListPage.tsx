@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { PlusCircle, Crown, Calendar, Users } from "lucide-react";
+import { Plus, Crown, Calendar, Users } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import useBaseStore from "@/stores/baseStore";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -79,7 +78,7 @@ const GroupListPage: React.FC = () => {
           {[...Array(3)].map((_, index) => (
             <Card
               key={index}
-              className="hover:shadow-lg transition-all duration-200 border-0 shadow-sm bg-white"
+              className="transition-all duration-200 hover:shadow-glass"
             >
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-2">
@@ -141,7 +140,7 @@ const GroupListPage: React.FC = () => {
               return (
                 <Card
                   key={group.id}
-                  className="transition-all duration-200 cursor-pointer hover:scale-[1.02] border-0 bg-white shadow-none overflow-hidden"
+                  className="cursor-pointer overflow-hidden transition-all duration-200 hover:scale-[1.02] hover:shadow-glass"
                   onClick={() => handleGroupClick(group.id)}
                 >
                   <CardContent className="p-4">
@@ -231,17 +230,16 @@ const GroupListPage: React.FC = () => {
             })}
           </div>
         )}
-      </div>
 
-      {/* 플로팅 버튼 */}
-      <Button
-        variant="primary"
-        onClick={addGroup}
-        className="absolute bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-6 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500 p-0 text-white shadow-lg hover:bg-blue-600"
-        aria-label="새 그룹 만들기"
-      >
-        <PlusCircle className="h-6 w-6" />
-      </Button>
+        {/* 그룹 추가 — 부유 FAB 대신 목록 끝 행 (드로워 '새 그룹 만들기'와 같은 언어) */}
+        <button
+          type="button"
+          onClick={addGroup}
+          className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-[1.25rem] border border-dashed border-accentFrom/40 bg-white/50 px-5 py-4 font-semibold text-accentFrom transition-all duration-150 active:scale-[0.98]"
+        >
+          <Plus size={18} strokeWidth={2.4} />새 그룹 만들기
+        </button>
+      </div>
 
       <GroupListDrawer />
     </div>

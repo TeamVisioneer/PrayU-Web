@@ -59,7 +59,7 @@ const TabItem = ({ label, icon, active, badge = 0, onClick }: TabItemProps) => (
   >
     <span
       className={`relative flex items-center justify-center rounded-full px-4 py-2 transition-colors ${
-        active ? "bg-white text-mainBtn" : "text-dark"
+        active ? "bg-accentFrom/15 text-accentFrom" : "text-dark"
       }`}
     >
       {icon}
@@ -88,9 +88,10 @@ const BottomNav = () => {
 
   return (
     <>
-      {/* 부유 pill — 하단에서 띄우고 safe-area 만큼 더 올린다.
+      {/* 부유 pill — 하단에서 띄우고 safe-area 만큼 더 올린다. iOS 홈 인디케이터와
+          겹치지 않도록 여유를 둔다 (연동 오프셋: AppLayout pb, 도킹 CTA bottom).
           glass-chrome: 고정 크롬이라 backdrop-blur 허용 (스크롤 아이템에는 금지) */}
-      <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-1/2 z-40 -translate-x-1/2">
+      <div className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-1/2 z-40 -translate-x-1/2">
         <nav className="flex h-14 items-stretch gap-1 rounded-full border border-glassBorder/80 bg-surfaceChrome/90 px-2 shadow-glass backdrop-blur-xl">
           <TabItem
             label="그룹"
@@ -116,7 +117,7 @@ const BottomNav = () => {
             }}
             className="flex w-[4.25rem] items-center justify-center"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-start to-middle text-white shadow-member">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accentFrom to-accentTo text-white shadow-member">
               <Plus size={22} strokeWidth={2.2} />
             </span>
           </button>

@@ -81,7 +81,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
   return (
     <div
       onClick={() => onClickMyMember()}
-      className="w-full flex flex-col gap-3 cursor-pointer bg-white p-5 rounded-2xl h-36"
+      className="w-full flex flex-col gap-3 cursor-pointer border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-5 rounded-2xl h-36"
     >
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2 justify-between">
@@ -97,7 +97,7 @@ const MyMember: React.FC<MemberProps> = ({ myMember }) => {
             {inputPrayCardContent}
           </div>
         ) : (
-          <div className="text-left text-sm text-indigo-600 whitespace-nowrap overflow-hidden text-ellipsis font-medium">
+          <div className="text-left text-sm text-accentTo whitespace-nowrap overflow-hidden text-ellipsis font-medium">
             ✏️ 기도카드에 일상과 기도제목을 작성해 보아요
           </div>
         )}

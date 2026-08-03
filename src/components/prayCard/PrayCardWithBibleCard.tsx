@@ -55,7 +55,7 @@ const PrayCardWithBibleCard: React.FC<PrayCardWithBibleCardProps> = ({
         <button
           type="button"
           onClick={handleFlip}
-          className="rounded-full bg-white px-4 py-2 text-sm font-medium text-blue-600 shadow-sm"
+          className="rounded-full bg-white px-4 py-2 text-sm font-medium text-accentTo shadow-sm"
         >
           {isFlipped ? "기도카드 보기" : "말씀카드 보기"}
         </button>

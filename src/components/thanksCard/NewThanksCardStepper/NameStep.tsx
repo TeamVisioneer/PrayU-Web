@@ -42,7 +42,7 @@ export const NameStep = ({ formData, onUpdate, onNext }: StepProps) => {
           onChange={handleNameChange}
           onKeyPress={handleKeyPress}
           placeholder="이름을 입력해주세요"
-          className="w-full px-4 py-4 text-lg text-center border-2 border-slate-200 rounded-2xl focus:border-blue-500  transition-colors focus:placeholder:text-transparent"
+          className="w-full px-4 py-4 text-lg text-center border-2 border-slate-200 rounded-2xl focus:border-accentFrom  transition-colors focus:placeholder:text-transparent"
           maxLength={20}
         />
       </div>
@@ -53,7 +53,7 @@ export const NameStep = ({ formData, onUpdate, onNext }: StepProps) => {
         disabled={!formData.name.trim()}
         className={`w-full py-4 px-6 rounded-2xl text-lg font-medium transition-all duration-200 ${
           formData.name.trim()
-            ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg"
+            ? "bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90 text-white shadow-md hover:shadow-lg"
             : "bg-slate-200 text-slate-400 cursor-not-allowed"
         }`}
       >

@@ -51,9 +51,9 @@ const InviteBanner = () => {
       <div className="flex gap-1 items-center text-xs">
         <p>🚨 마감까지</p>
         <div className="flex items-center gap-1 font-extrabold text-red-500 text-center ">
-          <span className="w-11 bg-[#FBEBED]  p-1 rounded-sm">{hours}시간</span>
-          <span className="w-10 bg-[#FBEBED]  p-1 rounded-sm">{minutes}분</span>
-          <span className="w-10 bg-[#FBEBED]  p-1 rounded-sm">{seconds}초</span>
+          <span className="w-11 bg-red-50  p-1 rounded-sm">{hours}시간</span>
+          <span className="w-10 bg-red-50  p-1 rounded-sm">{minutes}분</span>
+          <span className="w-10 bg-red-50  p-1 rounded-sm">{seconds}초</span>
         </div>
         <span>남았습니다</span>
       </div>

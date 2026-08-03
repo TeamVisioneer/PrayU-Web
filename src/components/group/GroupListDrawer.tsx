@@ -8,10 +8,8 @@ import {
 } from "@/components/ui/drawer";
 import useBaseStore from "@/stores/baseStore";
 import { analyticsTrack } from "@/analytics/analytics";
-import { FaCircleCheck } from "react-icons/fa6";
 import { useToast } from "../ui/use-toast";
-import { Button } from "../ui/button";
-import { PlusCircle } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import { UserPlanType } from "@/Enums/userPlanType";
 
@@ -59,61 +57,63 @@ export default function GroupListDrawer() {
         if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
-      <DrawerContent className="bg-mainBg h-[60vh]">
-        <DrawerHeader>
-          <DrawerTitle></DrawerTitle>
-          <DrawerDescription></DrawerDescription>
-        </DrawerHeader>
-        <div className="overflow-y-auto p-4">
-          <ul className="space-y-2 overflow-y-auto">
+      <DrawerContent className="mx-auto max-w-app">
+        <div className="px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-1">
+          <DrawerHeader className="p-0 pb-3.5 text-left">
+            <DrawerTitle className="text-[17px] font-bold tracking-tight text-black">
+              내 그룹
+            </DrawerTitle>
+            <DrawerDescription className="sr-only">
+              이동할 그룹을 선택하세요
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="flex max-h-[55vh] flex-col gap-2.5 overflow-y-auto">
             {!groupList
               ? [...Array(3)].map((_, index) => (
-                  <div className="flex items-center gap-3 py-3" key={index}>
-                    <Skeleton className="w-10 h-10 bg-gray-200 rounded-lg" />
-                    <div>
-                      <Skeleton className="w-24 h-5 bg-gray-200 mb-1" />
-                      <Skeleton className="w-16 h-4 bg-gray-200" />
-                    </div>
-                  </div>
+                  <Skeleton
+                    key={index}
+                    className="h-[4.25rem] w-full rounded-[1.25rem] bg-gray-200"
+                  />
                 ))
               : groupList.map((group) => (
-                  <li
+                  <button
                     key={group.id}
-                    className="cursor-pointer p-3 rounded-lg truncate flex justify-between items-center"
+                    type="button"
                     onClick={() => handleClickGroup(group)}
+                    className="flex items-center rounded-[1.25rem] border border-black/[0.04] bg-white px-5 py-4 text-left shadow-sm transition-all duration-150 active:scale-[0.98] active:shadow-none"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                        {group?.name ? [...group.name][0] : ""}
-                      </div>
-                      <div>
-                        <div className="font-medium">{group?.name}</div>
-                        {group.user_id === user?.id ? (
-                          <div className="text-sm text-mainBtn">그룹장</div>
-                        ) : (
-                          <div className="text-sm text-gray-500">그룹원</div>
-                        )}
-                      </div>
-                    </div>
-                    {targetGroup?.id === group.id && !isGroupListPage && (
-                      <span className="text-blue-500">
-                        <FaCircleCheck size={20} />
+                    <span className="flex min-w-0 flex-col">
+                      <span className="truncate text-base font-bold text-black">
+                        {group?.name}
                       </span>
+                      <span
+                        className={`mt-0.5 text-[13px] ${
+                          group.user_id === user?.id
+                            ? "text-accentFrom"
+                            : "text-dark"
+                        }`}
+                      >
+                        {group.user_id === user?.id ? "그룹장" : "그룹원"}
+                      </span>
+                    </span>
+                    {targetGroup?.id === group.id && !isGroupListPage && (
+                      <Check
+                        size={20}
+                        strokeWidth={2.6}
+                        className="ml-auto shrink-0 text-accentFrom"
+                      />
                     )}
-                  </li>
+                  </button>
                 ))}
-          </ul>
+            <button
+              type="button"
+              onClick={handleClickCreateGroup}
+              className="flex items-center justify-center gap-1.5 rounded-[1.25rem] border border-dashed border-accentFrom/40 bg-white/50 px-5 py-4 font-semibold text-accentFrom transition-all duration-150 active:scale-[0.98]"
+            >
+              <Plus size={18} strokeWidth={2.4} />새 그룹 만들기
+            </button>
+          </div>
         </div>
-
-        {/* 플로팅 버튼 */}
-        <Button
-          variant="primary"
-          onClick={handleClickCreateGroup}
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg bg-blue-500 text-white hover:bg-blue-600 flex items-center justify-center p-0 z-10"
-          aria-label="새 그룹 만들기"
-        >
-          <PlusCircle className="h-6 w-6" />
-        </Button>
       </DrawerContent>
     </Drawer>
   );

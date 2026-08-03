@@ -107,7 +107,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
               !historyPrayCardList?.[0]?.life ||
               value == historyPrayCardList?.[0]?.life
             }
-            className="text-xs text-blue-500 hover:text-blue-600"
+            className="text-xs text-accentFrom hover:text-accentTo"
           >
             기존 내용 불러오기
           </Button>
@@ -132,7 +132,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
                 key={suggestion}
                 variant="outline"
                 size="sm"
-                className="text-xs rounded-full bg-gray-50 border-gray-200 hover:bg-blue-50 hover:text-blue-600"
+                className="text-xs rounded-full bg-gray-50 border-gray-200 hover:bg-blue-50 hover:text-accentTo"
                 onClick={() => handleSelectSuggestion(suggestion)}
               >
                 {suggestion}
@@ -152,7 +152,7 @@ const NewPrayCardLifeShareStep: React.FC<NewPrayCardLifeShareStepProps> = ({
         </Button>
         <Button
           onClick={handleNext}
-          className="flex-1 py-6 text-base bg-blue-500 hover:bg-blue-600"
+          className="flex-1 py-6 text-base bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90"
         >
           {value.length > 0 ? "다음" : "건너뛰기"}
         </Button>

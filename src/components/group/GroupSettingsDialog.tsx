@@ -90,7 +90,7 @@ const GroupSettingsDialog: React.FC = () => {
               <label className="text-sm font-medium text-gray-700">
                 그룹 기도시간
               </label>
-              <span className="px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 rounded-full">
+              <span className="px-2 py-1 text-xs font-medium text-accentTo bg-blue-100 rounded-full">
                 BETA
               </span>
             </div>

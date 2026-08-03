@@ -74,7 +74,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     >
       {/* 읽지않음 표시 */}
       {unread && (
-        <div className="absolute top-6 left-3 w-2 h-2 bg-blue-500 rounded-full"></div>
+        <div className="absolute top-6 left-3 w-2 h-2 bg-accentFrom rounded-full"></div>
       )}
 
       <div className="flex items-start gap-3 pl-4">
@@ -89,7 +89,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           {isNotice ? (
             <RiMegaphoneLine size={16} className="text-orange-600" />
           ) : (
-            <RiBellLine size={16} className="text-blue-600" />
+            <RiBellLine size={16} className="text-accentTo" />
           )}
         </div>
 

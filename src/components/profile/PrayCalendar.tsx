@@ -58,7 +58,7 @@ const PrayCalendar = () => {
               >
                 {days[dayOfWeek]}
               </span>
-              <div className="w-full aspect-square rounded-full flex items-center justify-center bg-[#EFEFEF] ">
+              <div className="w-full aspect-square rounded-full flex items-center justify-center bg-gray-100 ">
                 {!isFutureDate(currentDateString, date.date) &&
                   (hasPrayed ? (
                     isToday ? (

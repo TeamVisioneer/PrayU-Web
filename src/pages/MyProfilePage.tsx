@@ -95,7 +95,7 @@ const MyProfilePage = () => {
         />
 
         <main className="flex-grow p-4 space-y-6 animate-pulse">
-          <section className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-5">
+          <section className="border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-6 rounded-2xl flex items-center gap-5">
             <Skeleton className="h-20 w-20 rounded-full" />
             <div className="space-y-2">
               <Skeleton className="h-6 w-24 rounded-md" />
@@ -136,7 +136,7 @@ const MyProfilePage = () => {
       />
 
       <main className="flex-grow p-4 space-y-6">
-        <section className="bg-white p-6 rounded-xl shadow-sm flex items-center gap-5">
+        <section className="border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-6 rounded-2xl flex items-center gap-5">
           <img
             className="h-20 w-20 rounded-full object-cover ring-4 ring-white"
             src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
@@ -150,7 +150,7 @@ const MyProfilePage = () => {
               {userPlan == UserPlanType.Premium && (
                 <Badge
                   variant="outline"
-                  className="gap-1.5 border-0 bg-gradient-to-r from-mainBtn via-blue-500 to-blue-600 text-white shadow-md ring-1 ring-blue-300/60 px-3 py-1 rounded-full whitespace-nowrap"
+                  className="gap-1.5 border-0 bg-gradient-to-r from-accentFrom to-accentTo text-white shadow-md ring-1 ring-accentFrom/40 px-3 py-1 rounded-full whitespace-nowrap"
                 >
                   <Crown
                     size={12}
@@ -168,16 +168,16 @@ const MyProfilePage = () => {
         </section>
 
         <Tabs defaultValue="history" className="w-full">
-          <TabsList className="grid h-12 w-full grid-cols-2 rounded-xl border border-gray-100 bg-white p-1 shadow-sm">
+          <TabsList className="grid h-12 w-full grid-cols-2 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-1 shadow-member">
             <TabsTrigger
               value="history"
-              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
+              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-accentFrom data-[state=active]:to-accentTo data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               기도카드 보관함
             </TabsTrigger>
             <TabsTrigger
               value="calendar"
-              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-mainBtn data-[state=active]:to-blue-600 data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
+              className="flex-1 h-full rounded-lg text-gray-500 transition-all duration-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-accentFrom data-[state=active]:to-accentTo data-[state=active]:font-semibold data-[state=active]:text-white data-[state=active]:shadow-md"
             >
               기도 달력
             </TabsTrigger>
@@ -190,22 +190,6 @@ const MyProfilePage = () => {
           </TabsContent>
         </Tabs>
       </main>
-
-      <footer className="w-full bg-mainBg px-6 py-4 text-center text-xs text-gray-500">
-        <div className="mb-2">© 2025 PrayU. All rights reserved.</div>
-        <div className="flex gap-2 justify-center">
-          <a
-            href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html"
-            className="hover:underline"
-          >
-            개인정보 처리방침
-          </a>
-          <span>|</span>
-          <a href="/term/240909" className="hover:underline">
-            이용약관
-          </a>
-        </div>
-      </footer>
 
       <SettingDialog />
       <PrayCardHistoryDrawer />

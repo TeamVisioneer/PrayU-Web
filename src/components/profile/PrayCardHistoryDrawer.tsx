@@ -44,7 +44,8 @@ const PrayCardHistoryDrawer: React.FC = () => {
     navigate(`/bible-card/new?praycard_id=${historyCard.id}`);
   };
 
-  // 미연결 카드: 만들기 유도 / 연결 카드의 말씀카드 면: 다시 만들기(교체)
+  // 미연결·舊체계 카드에서만 만들기 유도. 연결된 카드에는 재생성 진입점을 두지 않는다
+  // — 보관함의 주 행동은 열람·공유이고, 재생성은 LLM 한도를 쓰는 교정용 액션이다
   const createBibleCardButton = (label: string) => (
     <Button
       variant="primary"
@@ -78,23 +79,20 @@ const PrayCardHistoryDrawer: React.FC = () => {
               onFlipChange={setIsBibleSideVisible}
             />
             {isBibleSideVisible ? (
-              <>
-                <ShareButtonGroup
-                  where="PrayCardHistoryDrawer"
-                  publicUrl={
-                    assetUrl(historyCard.bible_card.image_key) ??
-                    historyCard.bible_card.image_url ??
-                    undefined
-                  }
-                  shareUrl={`${getDomainUrl()}/bible-card/share/${historyCard.bible_card.id}`}
-                  kakaoServerCallbackArgs={
-                    user
-                      ? { user_id: user.id, feature: "bible_card" }
-                      : undefined
-                  }
-                />
-                {createBibleCardButton("말씀카드 다시 만들기")}
-              </>
+              <ShareButtonGroup
+                where="PrayCardHistoryDrawer"
+                publicUrl={
+                  assetUrl(historyCard.bible_card.image_key) ??
+                  historyCard.bible_card.image_url ??
+                  undefined
+                }
+                shareUrl={`${getDomainUrl()}/bible-card/share/${historyCard.bible_card.id}`}
+                kakaoServerCallbackArgs={
+                  user
+                    ? { user_id: user.id, feature: "bible_card" }
+                    : undefined
+                }
+              />
             ) : (
               <ReactionResultBox
                 prayCard={historyCard || undefined}
