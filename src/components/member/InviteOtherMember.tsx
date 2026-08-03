@@ -1,6 +1,6 @@
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
-import { IoMdPersonAdd } from "react-icons/io";
+import { UserRoundPlus } from "lucide-react";
 
 const InviteOtherMember = () => {
   const setIsOpenShareDrawer = useBaseStore(
@@ -13,17 +13,14 @@ const InviteOtherMember = () => {
   };
 
   return (
-    <div
-      className="flex items-center justify-center w-full p-4 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer  h-32"
-      onClick={() => {
-        onClickDummyOtherMember();
-      }}
+    <button
+      type="button"
+      onClick={() => onClickDummyOtherMember()}
+      className="flex h-32 w-full items-center justify-center gap-1.5 rounded-[1.25rem] border border-dashed border-accentFrom/40 bg-white/50 font-semibold text-accentFrom transition-all duration-150 active:scale-[0.98]"
     >
-      <div className="flex flex-col items-center gap-2 py-1">
-        <IoMdPersonAdd size={40} className="text-gray-400" />
-        <p className="text-gray-400">그룹원 초대하기</p>
-      </div>
-    </div>
+      <UserRoundPlus size={18} strokeWidth={2.4} />
+      그룹원 초대하기
+    </button>
   );
 };
 
