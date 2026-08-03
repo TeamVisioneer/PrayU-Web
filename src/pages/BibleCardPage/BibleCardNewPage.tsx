@@ -806,10 +806,10 @@ const BibleCardNewPage = () => {
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DrawerContent className="max-h-[85vh] bg-mainBg pb-7">
           <DrawerHeader className="px-6 pb-4 pt-5 text-center">
-            <DrawerTitle className="text-[18px] font-bold text-[#222222]">
+            <DrawerTitle className="text-[18px] font-bold text-black">
               기도카드 선택하기
             </DrawerTitle>
-            <DrawerDescription className="text-sm text-[#919191]">
+            <DrawerDescription className="text-sm text-dark">
               말씀카드를 붙일 기도카드를 선택한 뒤 완료해 주세요.
             </DrawerDescription>
           </DrawerHeader>
