@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
+import PageHeader from "@/components/common/PageHeader";
 import useBaseStore from "@/stores/baseStore";
 import useAuth from "../hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "../components/ui/use-toast";
 import { analyticsTrack } from "@/analytics/analytics";
-import { IoChevronBack } from "react-icons/io5";
 import GroupMenuBtn from "@/components/group/GroupMenuBtn";
 import PrayUSquareImage from "@/assets/prayu_square.png";
 import GroupListDrawer from "@/components/group/GroupListDrawer";
@@ -63,12 +63,9 @@ const GroupCreatePage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 items-center p-5">
-      <div className="w-full flex justify-between items-center">
-        <IoChevronBack size={20} onClick={() => window.history.back()} />
-        <span className="text-xl font-bold">그룹 만들기</span>
-        <GroupMenuBtn />
-      </div>
+    <div className="flex flex-col items-center">
+      <PageHeader title="그룹 만들기" right={<GroupMenuBtn />} />
+      <div className="flex w-full flex-col items-center gap-6 p-5">
       <div className="w-full aspect-square flex justify-center">
         <img
           className="h-full object-cover rounded-lg"
@@ -105,6 +102,7 @@ const GroupCreatePage: React.FC = () => {
         </div>
       </div>
       <GroupListDrawer />
+      </div>
     </div>
   );
 };

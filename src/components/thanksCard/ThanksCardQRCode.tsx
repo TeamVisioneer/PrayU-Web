@@ -40,7 +40,7 @@ export const ThanksCardQRCode = () => {
     return (
       <button
         onClick={handleQRClick}
-        className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg border-2 border-white p-3 transition-all duration-300 z-10"
+        className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] right-4 z-10 rounded-full border-2 border-white bg-blue-600 p-3 text-white shadow-lg transition-all duration-300 hover:bg-blue-700"
       >
         <svg
           className="w-6 h-6"
@@ -63,7 +63,7 @@ export const ThanksCardQRCode = () => {
   return (
     <div
       onClick={handleQRClick}
-      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg border-2 border-slate-200 p-3 sm:p-4 lg:p-6 hover:shadow-xl transition-all duration-500 z-10 cursor-pointer"
+      className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] right-4 z-10 cursor-pointer rounded-2xl border-2 border-slate-200 bg-white p-3 shadow-lg transition-all duration-500 hover:shadow-xl sm:right-6 sm:rounded-3xl sm:p-4 lg:right-8 lg:p-6"
     >
       {/* 모바일에서 닫기 버튼 */}
       {isMobile && (

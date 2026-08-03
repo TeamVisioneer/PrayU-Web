@@ -1,9 +1,9 @@
 import useBaseStore from "@/stores/baseStore";
+import PageHeader from "@/components/common/PageHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { Textarea } from "../../components/ui/textarea";
 import { useToast } from "../../components/ui/use-toast";
-import { IoChevronBack } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
 import InfoBtn from "../../components/alert/infoBtn";
 import { Reorder } from "framer-motion";
@@ -126,18 +126,17 @@ const PrayCardEditPage = () => {
 
   return (
     <div className="bg-white flex flex-col w-full h-full overflow-y-auto no-scrollbar">
-      <header className="sticky top-0 z-50 flex items-center p-4 border-b bg-white">
-        <button onClick={() => navigate(-1)} className="absolute left-4">
-          <IoChevronBack size={20} />
-        </button>
-        <h1 className="text-lg font-bold w-full text-center">기도카드 수정</h1>
-        <button
-          className="absolute right-4 text-sm font-medium text-blue-500"
-          onClick={() => setPreviewMode(!previewMode)}
-        >
-          {previewMode ? "수정하기" : "미리보기"}
-        </button>
-      </header>
+      <PageHeader
+        title="기도카드 수정"
+        right={
+          <button
+            className="text-sm font-medium text-blue-500"
+            onClick={() => setPreviewMode(!previewMode)}
+          >
+            {previewMode ? "수정하기" : "미리보기"}
+          </button>
+        }
+      />
 
       {previewMode ? (
         // Preview mode using PrayCard component

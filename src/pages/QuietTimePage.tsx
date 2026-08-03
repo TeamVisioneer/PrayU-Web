@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import PageHeader from "@/components/common/PageHeader";
+import { useSearchParams } from "react-router-dom";
 import { analyticsTrack } from "@/analytics/analytics";
 import useBaseStore from "@/stores/baseStore";
 import { AiOutlineLoading } from "react-icons/ai";
-import { IoChevronBack } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import BibleVersePicker, {
   BibleVerseSelection,
@@ -24,7 +24,6 @@ const DEFAULT_SELECTION: BibleVerseSelection = {
 };
 
 const QuietTimePage = () => {
-  const navigate = useNavigate();
   const user = useBaseStore((state) => state.user);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selection, setSelection] =
@@ -238,14 +237,7 @@ const QuietTimePage = () => {
       : ""
   }`;
 
-  const renderHeader = () => (
-    <header className="sticky top-0 z-50 flex items-center border-b bg-mainBg p-4">
-      <button onClick={() => navigate(-1)} className="absolute left-4">
-        <IoChevronBack size={20} />
-      </button>
-      <h1 className="w-full text-center text-lg font-bold">QT 만들기</h1>
-    </header>
-  );
+  const renderHeader = () => <PageHeader title="QT 만들기" />;
 
   const versePickerForm = () => (
     <div className="flex flex-col gap-4">

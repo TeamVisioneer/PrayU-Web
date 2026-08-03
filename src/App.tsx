@@ -62,12 +62,16 @@ import GroupListDrawer from "./components/group/GroupListDrawer";
 import NoticeDialog from "./components/notice/NoticeDialog";
 import ReportAlert from "./components/alert/ReportAlert";
 import { BottomToaster } from "@/components/ui/bottom-toaster";
+import BottomNav, {
+  useBottomNavVisible,
+} from "@/components/navigation/BottomNav";
 import GroupPageMock from "@/mock/GroupPageMock";
 import ThanksCardPage from "./pages/ThanksCardPage";
 import NewThanksCardPage from "./pages/NewThanksCardPage";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const isNavVisible = useBottomNavVisible();
 
   const fullWidthRoutes: string[] = ["/thanks-card"];
 
@@ -79,9 +83,14 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     <div
       className={`mx-auto h-100vh overflow-x-hidden no-scrollbar bg-mainBg ${
         isFullWidth ? "w-full" : "max-w-app"
+      } ${
+        // 스페이서가 아니라 padding 이어야 한다 — h-full 페이지가 네비 위 공간만큼
+        // 줄어들어 "콘텐츠가 안 찼는데 스크롤"이 생기지 않는다
+        isNavVisible ? "pb-[calc(4.75rem+env(safe-area-inset-bottom))]" : ""
       }`}
     >
       {children}
+      <BottomNav />
     </div>
   );
 };
