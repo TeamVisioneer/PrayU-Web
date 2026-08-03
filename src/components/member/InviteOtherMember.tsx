@@ -16,7 +16,7 @@ const InviteOtherMember = () => {
     <button
       type="button"
       onClick={() => onClickDummyOtherMember()}
-      className="flex h-32 w-full items-center justify-center gap-1.5 rounded-[1.25rem] border border-dashed border-accentFrom/40 bg-white/50 font-semibold text-accentFrom transition-all duration-150 active:scale-[0.98]"
+      className="flex w-full items-center justify-center gap-1.5 rounded-[1.25rem] border border-dashed border-accentFrom/40 bg-white/50 px-5 py-4 font-semibold text-accentFrom transition-all duration-150 active:scale-[0.98]"
     >
       <UserRoundPlus size={18} strokeWidth={2.4} />
       그룹원 초대하기

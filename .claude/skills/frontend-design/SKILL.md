@@ -59,6 +59,8 @@ Keep the register conversational and tuned: plain verbs, sentence case, no fille
 - **"그라디언트 사각 타일 + 아이콘" 나열 금지** — 리스트 항목마다 색색의 아이콘 타일을 붙이는 것은
   전형적인 AI 생성 티다 (2026-08-03 액션시트 반려). 행을 구분하는 것은 장식이 아니라 **텍스트의 위계**다.
   아이콘은 방향(뒤로·이동)이나 상태처럼 의미를 운반할 때만 쓴다
+- **CTA 버튼 라벨 앞 장식 심볼 금지** — 반짝이(Sparkles)·연필 같은 꾸밈 아이콘을 라벨 앞에 얹는 것도
+  같은 AI 티다 (2026-08-03 기도카드 만들기 버튼 반려). CTA 는 라벨 텍스트가 전부다
 - 신규 UI 는 **스크린샷을 찍어 직접 보고** 검수한다 — DOM/기능 검증만으로 통과시키지 않는다
 - 이 레포의 shadcn primitive 는 표준에서 변형돼 있다(예: DrawerHeader 기본 패딩 없음) — 기본값 확인 후 사용
 - 톤: 글래스모피즘(docs/plans/identity/design-system.md) — blur 는 고정 크롬만, 색은 토큰만

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { analyticsTrack } from "@/analytics/analytics";
-import { FileEdit, Sparkles } from "lucide-react";
 
 const NewPrayCardRedirectBtn: React.FC = () => {
   const navigate = useNavigate();
@@ -18,11 +17,7 @@ const NewPrayCardRedirectBtn: React.FC = () => {
         });
       }}
     >
-      <div className="flex items-center gap-2 relative">
-        <Sparkles className="h-5 w-5 absolute -left-1 -top-1 text-yellow-300" />
-        <FileEdit className="mr-2 h-5 w-5" />
-        <span className="text-lg font-medium">기도카드 만들기</span>
-      </div>
+      <span className="text-lg font-medium">기도카드 만들기</span>
     </Button>
   );
 };
