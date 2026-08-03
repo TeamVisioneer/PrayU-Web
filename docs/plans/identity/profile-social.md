@@ -1,6 +1,6 @@
-# 프로필 · 검색 · 팔로우
+# 프로필 · 검색 · 팔로우 (v1.3+)
 
-상위: [overview.md](overview.md) · 상태: **설계 전, 방향만 합의**
+상위: [overview.md](overview.md) · 상태: **로드맵 후순위** (2026-08-03) — 선행: [pray-card-restructure.md](pray-card-restructure.md)의 가시성/RLS
 
 ## 목표
 
