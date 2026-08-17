@@ -7,9 +7,9 @@ import {
   isFutureDate,
 } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
+import { Skeleton } from "@/components/ui/skeleton";
 import historyToday from "@/assets/historyToday.png";
 import historyYes from "@/assets/historyYes.png";
-import historyNo from "@/assets/historyNo.png";
 
 const PrayCalendar = () => {
   const currentDate = getISOTodayDate();
@@ -30,17 +30,28 @@ const PrayCalendar = () => {
     return dateList;
   };
 
+  // 페이지 로딩 게이트에서 빠졌다 — 달력 데이터는 여기서 직접 기다린다 (plans/my-profile-refresh.md)
+  if (!prayListByDate) {
+    return (
+      <div className="w-full rounded-2xl border border-glassBorder/50 bg-surfaceCard/70 p-5 shadow-member">
+        <Skeleton className="h-24 w-full rounded-xl" />
+      </div>
+    );
+  }
+
   const hasPrayedList = weekInfo.weekDates.map((date) =>
-    prayListByDate!.some((pray) => pray.created_at.split("T")[0] === date)
+    prayListByDate.some((pray) => pray.created_at.split("T")[0] === date)
   );
   const weeklyDays = generateDates(weekInfo.weekDates, hasPrayedList);
 
   return (
-    <div className="w-full flex-grow flex flex-col gap-1 bg-white p-5 rounded-xl">
+    <div className="w-full flex-grow flex flex-col gap-1 rounded-2xl border border-glassBorder/50 bg-surfaceCard/70 p-5 shadow-member">
       <div className="flex flex-row justify-between">
-        <span className="items-start text-sm font-semibold">기도 캘린더</span>
+        <span className="items-start text-sm font-semibold text-black">
+          기도 캘린더
+        </span>
       </div>
-      <div className="border-t border-[#f7f7f7] my-2"></div>
+      <div className="border-t border-gray-100 my-2"></div>
       <div className="w-full flex justify-around ">
         {weeklyDays.map((date) => {
           const isToday = date.date === currentDateString;
@@ -58,16 +69,14 @@ const PrayCalendar = () => {
               >
                 {days[dayOfWeek]}
               </span>
-              <div className="w-full aspect-square rounded-full flex items-center justify-center bg-gray-100 ">
+              {/* 안 기도한 날은 빈 원으로 둔다 — ✗ 표식은 죄책감 UI 라 쓰지 않는다 */}
+              <div className="w-full aspect-square rounded-full flex items-center justify-center bg-mainBg">
                 {!isFutureDate(currentDateString, date.date) &&
-                  (hasPrayed ? (
-                    isToday ? (
-                      <img src={historyToday} alt="Today Prayed" />
-                    ) : (
-                      <img src={historyYes} alt="Prayed" />
-                    )
+                  hasPrayed &&
+                  (isToday ? (
+                    <img src={historyToday} alt="오늘 기도함" />
                   ) : (
-                    !isToday && <img src={historyNo} alt="Not Prayed" />
+                    <img src={historyYes} alt="기도함" />
                   ))}
               </div>
             </div>
