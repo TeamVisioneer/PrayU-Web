@@ -4,33 +4,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
+import { useHistoryOverlay } from "@/components/ui/use-history-overlay";
 
-// Sheet Custom Start
 const Sheet = ({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Root>) => {
   const { open, onOpenChange } = props;
-
-  useEffect(() => {
-    if (open && window.history.state?.open !== true) {
-      window.history.pushState({ open: true }, "", "");
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      if (onOpenChange) onOpenChange(false);
-    };
-    window.addEventListener("popstate", handlePopState);
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [onOpenChange]);
+  // 뒤로가기 = 닫기 + 히스토리 엔트리 회수 (use-history-overlay.ts 참조)
+  useHistoryOverlay(open, onOpenChange);
 
   return <SheetPrimitive.Root {...props} />;
 };
-// Sheet Custom End
 
 const SheetTrigger = SheetPrimitive.Trigger;
 

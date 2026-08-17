@@ -30,7 +30,6 @@ const MyMemberDrawer = () => {
       open={isOpenMyMemberDrawer}
       onOpenChange={(open) => {
         setIsOpenMyMemberDrawer(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <DrawerContent className="bg-mainBg max-h-[90vh]">

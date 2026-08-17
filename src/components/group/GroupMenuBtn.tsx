@@ -206,7 +206,6 @@ const GroupMenuBtn: React.FC = () => {
       open={isOpenGroupMenuSheet}
       onOpenChange={(open) => {
         setIsOpenGroupMenuSheet(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <SheetTrigger

@@ -54,7 +54,6 @@ export default function GroupListDrawer() {
       open={isOpenGroupListDrawer}
       onOpenChange={(open) => {
         setIsOpenGroupListDrawer(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <DrawerContent className="mx-auto max-w-app">

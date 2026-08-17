@@ -1,31 +1,15 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { cn } from "@/lib/utils";
-import { useEffect, forwardRef } from "react";
+import { forwardRef } from "react";
+import { useHistoryOverlay } from "@/components/ui/use-history-overlay";
 
 const Popover = ({
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Root>) => {
-  // Custom Start
   const { open, onOpenChange } = props;
-
-  useEffect(() => {
-    if (open && window.history.state?.open !== true) {
-      window.history.pushState({ open: true }, "", "");
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      if (onOpenChange) onOpenChange(false);
-    };
-    window.addEventListener("popstate", handlePopState);
-    // window.history.replaceState(null, "", window.location.pathname);
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [onOpenChange]);
-  // Dialog Custom End
+  // 뒤로가기 = 닫기 + 히스토리 엔트리 회수 (use-history-overlay.ts 참조)
+  useHistoryOverlay(open, onOpenChange);
 
   return <PopoverPrimitive.Root {...props} />;
 };

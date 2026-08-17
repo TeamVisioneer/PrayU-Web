@@ -120,7 +120,6 @@ const OtherMemberDrawer: React.FC = () => {
       }}
       onOpenChange={(open) => {
         setIsOpenOtherMemberDrawer(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <DrawerContent className="bg-mainBg flex flex-col max-h-90vh border-none">

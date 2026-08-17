@@ -1,33 +1,16 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { useEffect } from "react";
 
 import { cn } from "@/lib/utils";
+import { useHistoryOverlay } from "@/components/ui/use-history-overlay";
 
 const Dialog = ({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) => {
-  // Dialog Custom Start
   const { open, onOpenChange } = props;
-
-  useEffect(() => {
-    if (open && window.history.state?.open !== true) {
-      window.history.pushState({ open: true }, "", "");
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      if (onOpenChange) onOpenChange(false);
-    };
-    window.addEventListener("popstate", handlePopState);
-    // window.history.replaceState(null, "", window.location.pathname);
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [onOpenChange]);
-  // Dialog Custom End
+  // 뒤로가기 = 닫기 + 히스토리 엔트리 회수 (use-history-overlay.ts 참조)
+  useHistoryOverlay(open, onOpenChange);
 
   return <DialogPrimitive.Root {...props} />;
 };
