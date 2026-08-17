@@ -244,8 +244,8 @@ const PrayCalendar = () => {
                         />
                         <span className="min-w-0 flex-1 truncate text-sm text-liteBlack">
                           {senderName
-                            ? `${senderName}님이 마음을 전했어요`
-                            : "마음이 도착했어요"}
+                            ? `${senderName}님이 나에게 마음을 전했어요`
+                            : "나에게 마음이 도착했어요"}
                         </span>
                         <span className="shrink-0 text-xs text-deactivate">
                           {formatKstTime(pray.created_at)}
