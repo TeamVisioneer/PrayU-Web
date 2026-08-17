@@ -87,7 +87,7 @@ const GroupPage: React.FC = () => {
   return (
     <div className="flex flex-col h-full">
       <GroupHeader />
-      <div className="flex flex-col px-5 pb-5 flex-grow gap-4">
+      <div className="flex flex-col px-5 pt-4 pb-5 flex-grow gap-4">
         <div className="flex flex-col gap-2">
           <MyMember myMember={myMember} />
           {targetGroup?.group_union && (
