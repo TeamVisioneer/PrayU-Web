@@ -1,7 +1,11 @@
 import { getISOTodayDate } from "@/lib/utils";
 import { supabase } from "../../supabase/client";
 import { PrayType } from "../Enums/prayType";
-import { Pray, PrayWithPrayCard } from "../../supabase/types/tables";
+import {
+  Pray,
+  PrayWithPrayCard,
+  PrayWithPrayCardProfiles,
+} from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 
 export const fetchTodayUserPrayByGroupId = async (
@@ -97,23 +101,25 @@ export const fetchPrayByDateRange = async (
   userId: string | undefined,
   startDt: string,
   endDt: string,
-): Promise<Pray[] | null> => {
+): Promise<PrayWithPrayCardProfiles[] | null> => {
   try {
     if (!userId) return null;
 
     const { data, error } = await supabase
       .from("pray")
-      .select("*")
+      .select("*, pray_card (*, profiles (*))")
       .eq("user_id", userId)
       .gte("created_at", startDt)
-      .lt("created_at", endDt);
+      .lt("created_at", endDt)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true });
 
     if (error) {
       Sentry.captureException(error.message);
       return null;
     }
 
-    return data ? data : null;
+    return data ? (data as PrayWithPrayCardProfiles[]) : null;
   } catch (error) {
     Sentry.captureException(error);
     return null;

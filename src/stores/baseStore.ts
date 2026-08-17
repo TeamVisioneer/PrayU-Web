@@ -22,6 +22,7 @@ import {
   Pray,
   PrayCard,
   PrayCardWithProfiles,
+  PrayWithPrayCardProfiles,
   Profiles,
   QtData,
   TodayPrayTypeHash,
@@ -324,12 +325,12 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType,
   ) => Promise<Pray | null>;
-  prayListByDate: Pray[] | null;
+  prayListByDate: PrayWithPrayCardProfiles[] | null;
   fetchPrayListByDate: (
     userId: string,
     startDt: string,
     endDt: string,
-  ) => Promise<Pray[] | null>;
+  ) => Promise<PrayWithPrayCardProfiles[] | null>;
 
   //onesignal
   createOnesignalPush: (

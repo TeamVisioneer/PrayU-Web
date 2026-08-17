@@ -79,13 +79,13 @@ const MyProfilePage = () => {
   // 게이트는 첫 페인트에 필요한 것만 — 차단 목록(설정 다이얼로그)·달력 데이터는 각 소비처에서 대기한다
   if (!myProfile || historyPrayCardCount === null) {
     return (
-      <div className="w-full min-h-screen bg-mainBg flex flex-col">
+      <div className="w-full h-full bg-mainBg flex flex-col">
         <PageHeader
           title="내 프로필"
           right={<IoSettingsOutline size={20} className="text-gray-400" />}
         />
 
-        <main className="flex-grow p-4 space-y-6 animate-pulse">
+        <main className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-6 animate-pulse">
           <section className="border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-6 rounded-2xl flex items-center gap-5">
             <Skeleton className="h-20 w-20 rounded-full" />
             <div className="space-y-2">
@@ -113,7 +113,9 @@ const MyProfilePage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-mainBg flex flex-col">
+    // 내부 스크롤 컨테이너가 이 페이지의 스크롤을 소유한다 — AppLayout(h-100vh) 아래에서
+    // min-h-screen 을 쓰면 넘친 콘텐츠가 잘린 채 스크롤이 불가능했다 (2026-08-17 달력 상세에서 발견)
+    <div className="w-full h-full bg-mainBg flex flex-col">
       <PageHeader
         title="내 프로필"
         right={
@@ -126,7 +128,7 @@ const MyProfilePage = () => {
         }
       />
 
-      <main className="flex-grow p-4 space-y-6">
+      <main className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-6">
         <section className="rounded-2xl border border-glassBorder/50 bg-surfaceCard/70 p-6 shadow-member">
           <div className="flex items-center gap-5">
             <img
@@ -179,13 +181,13 @@ const MyProfilePage = () => {
                 하단 네비 활성 탭과 같은 흰 pill 문법으로 */}
             <TabsTrigger
               value="history"
-              className="flex-1 h-full rounded-lg text-dark transition-all duration-200 data-[state=active]:bg-surfaceCard data-[state=active]:font-semibold data-[state=active]:text-black data-[state=active]:shadow-sm"
+              className="flex-1 h-full rounded-lg text-dark transition-all duration-200 data-[state=active]:bg-surfaceCard data-[state=active]:font-bold data-[state=active]:text-accentTo data-[state=active]:shadow-sm"
             >
               기도카드 보관함
             </TabsTrigger>
             <TabsTrigger
               value="calendar"
-              className="flex-1 h-full rounded-lg text-dark transition-all duration-200 data-[state=active]:bg-surfaceCard data-[state=active]:font-semibold data-[state=active]:text-black data-[state=active]:shadow-sm"
+              className="flex-1 h-full rounded-lg text-dark transition-all duration-200 data-[state=active]:bg-surfaceCard data-[state=active]:font-bold data-[state=active]:text-accentTo data-[state=active]:shadow-sm"
             >
               기도 달력
             </TabsTrigger>
