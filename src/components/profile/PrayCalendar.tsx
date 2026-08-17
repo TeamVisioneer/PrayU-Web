@@ -162,17 +162,18 @@ const PrayCalendar = () => {
                     setSelectedDate(isSelected ? null : dateString)
                   }
                   className={`flex aspect-square items-center justify-center rounded-full text-sm transition-all duration-150 ${
-                    hasPrayed
-                      ? "font-bold text-accentTo"
-                      : isFuture
-                        ? "text-deactivate"
-                        : "text-dark active:bg-white/70"
-                  } ${
+                    // 채워진 원은 "선택" 하나뿐 — 활동한 날은 숫자 색으로만 (2026-08-17 피드백)
                     isSelected
-                      ? "ring-2 ring-inset ring-accentTo"
-                      : isToday
-                        ? "ring-1 ring-inset ring-accentFrom/60"
-                        : ""
+                      ? "bg-accentFrom font-semibold text-white shadow-glass"
+                      : hasPrayed
+                        ? "font-bold text-accentTo"
+                        : isFuture
+                          ? "text-deactivate"
+                          : "text-dark active:bg-white/70"
+                  } ${
+                    !isSelected && isToday
+                      ? "ring-1 ring-inset ring-accentFrom/60"
+                      : ""
                   }`}
                 >
                   {day}
