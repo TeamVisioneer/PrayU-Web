@@ -4,20 +4,26 @@ import { getISOTodayDate, formatToDateString, days } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
-import { PrayWithPrayCardProfiles } from "supabase/types/tables";
+import {
+  PrayWithPrayCardProfiles,
+  PrayWithProfiles,
+} from "supabase/types/tables";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
  * 월 단위 기도 달력. 데이터 소유권도 여기 있다 —
  * 월이 바뀔 때마다 해당 월 범위로 직접 조회한다 (plans/my-profile-refresh.md PR 2).
- * 기도한 날만 채운다 — 안 한 날 표식(✗)은 죄책감 UI 라 쓰지 않는다.
- * 날짜를 선택하면 그날 내가 남긴 기도 목록을 아래에 보여준다. 오늘이 기본 선택.
+ * 날짜 마킹은 "내가 기도한 날" — 데일리 기록(습관)의 축이다. 안 한 날 표식(✗)은 죄책감 UI 라 쓰지 않는다.
+ * 날짜를 선택하면 그날 **남긴 기도 + 받은 기도**를 아래에 보여준다. 오늘이 기본 선택.
  */
 const PrayCalendar = () => {
   const user = useBaseStore((state) => state.user);
   const fetchPrayListByDate = useBaseStore(
     (state) => state.fetchPrayListByDate
+  );
+  const fetchReceivedPrayListByDate = useBaseStore(
+    (state) => state.fetchReceivedPrayListByDate
   );
 
   const todayString = formatToDateString(getISOTodayDate());
@@ -28,25 +34,33 @@ const PrayCalendar = () => {
   const [monthPrayList, setMonthPrayList] = useState<
     PrayWithPrayCardProfiles[] | null
   >(null);
+  const [monthReceivedList, setMonthReceivedList] = useState<
+    PrayWithProfiles[] | null
+  >(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(todayString);
 
   useEffect(() => {
     if (!user) return;
     let cancelled = false;
     setMonthPrayList(null);
+    setMonthReceivedList(null);
     const start = `${anchor.year}-${pad(anchor.month)}-01`;
     const end =
       anchor.month === 12
         ? `${anchor.year + 1}-01-01`
         : `${anchor.year}-${pad(anchor.month + 1)}-01`;
-    fetchPrayListByDate(user.id, start, end).then((prayList) => {
-      if (cancelled || !prayList) return;
-      setMonthPrayList(prayList);
+    Promise.all([
+      fetchPrayListByDate(user.id, start, end),
+      fetchReceivedPrayListByDate(user.id, start, end),
+    ]).then(([prayList, receivedList]) => {
+      if (cancelled) return;
+      if (prayList) setMonthPrayList(prayList);
+      setMonthReceivedList(receivedList ?? []);
     });
     return () => {
       cancelled = true;
     };
-  }, [user, anchor, fetchPrayListByDate]);
+  }, [user, anchor, fetchPrayListByDate, fetchReceivedPrayListByDate]);
 
   const isCurrentMonth =
     anchor.year === todayYear && anchor.month === todayMonth;
@@ -68,6 +82,12 @@ const PrayCalendar = () => {
   const selectedPrayList =
     selectedDate && monthPrayList
       ? monthPrayList.filter(
+          (pray) => pray.created_at.split("T")[0] === selectedDate
+        )
+      : [];
+  const selectedReceivedList =
+    selectedDate && monthReceivedList
+      ? monthReceivedList.filter(
           (pray) => pray.created_at.split("T")[0] === selectedDate
         )
       : [];
@@ -166,37 +186,74 @@ const PrayCalendar = () => {
             {Number(selectedDate.split("-")[1])}월{" "}
             {Number(selectedDate.split("-")[2])}일
           </span>
-          {selectedPrayList.length === 0 ? (
+          {selectedPrayList.length === 0 &&
+          selectedReceivedList.length === 0 ? (
             <p className="py-2 text-center text-sm text-dark">
               이 날의 기도 기록이 없어요
             </p>
           ) : (
-            <ul className="flex flex-col gap-1.5">
-              {selectedPrayList.map((pray) => {
-                const typeData = PrayTypeDatas[pray.pray_type as PrayType];
-                const targetName = pray.pray_card?.profiles?.full_name;
-                return (
-                  <li
-                    key={pray.id}
-                    className="flex items-center gap-2.5 rounded-xl bg-white/70 px-3 py-2.5"
-                  >
-                    <img
-                      src={typeData?.img}
-                      alt={typeData?.text}
-                      className="h-6 w-6 shrink-0"
-                    />
-                    <span className="min-w-0 flex-1 truncate text-sm text-liteBlack">
-                      {targetName
-                        ? `${targetName}님의 기도제목에 마음을 전했어요`
-                        : "기도제목에 마음을 전했어요"}
-                    </span>
-                    <span className="shrink-0 text-xs text-deactivate">
-                      {formatKstTime(pray.created_at)}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
+            <>
+              {selectedPrayList.length > 0 && (
+                <ul className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-deactivate">
+                    내가 남긴 기도
+                  </span>
+                  {selectedPrayList.map((pray) => {
+                    const typeData = PrayTypeDatas[pray.pray_type as PrayType];
+                    const targetName = pray.pray_card?.profiles?.full_name;
+                    return (
+                      <li
+                        key={pray.id}
+                        className="flex items-center gap-2.5 rounded-xl bg-white/70 px-3 py-2.5"
+                      >
+                        <img
+                          src={typeData?.img}
+                          alt={typeData?.text}
+                          className="h-6 w-6 shrink-0"
+                        />
+                        <span className="min-w-0 flex-1 truncate text-sm text-liteBlack">
+                          {targetName
+                            ? `${targetName}님의 기도제목에 마음을 전했어요`
+                            : "기도제목에 마음을 전했어요"}
+                        </span>
+                        <span className="shrink-0 text-xs text-deactivate">
+                          {formatKstTime(pray.created_at)}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {selectedReceivedList.length > 0 && (
+                <ul className="flex flex-col gap-1.5">
+                  <span className="text-[11px] text-deactivate">받은 기도</span>
+                  {selectedReceivedList.map((pray) => {
+                    const typeData = PrayTypeDatas[pray.pray_type as PrayType];
+                    const senderName = pray.profiles?.full_name;
+                    return (
+                      <li
+                        key={pray.id}
+                        className="flex items-center gap-2.5 rounded-xl bg-white/70 px-3 py-2.5"
+                      >
+                        <img
+                          src={typeData?.img}
+                          alt={typeData?.text}
+                          className="h-6 w-6 shrink-0"
+                        />
+                        <span className="min-w-0 flex-1 truncate text-sm text-liteBlack">
+                          {senderName
+                            ? `${senderName}님이 내 기도제목에 마음을 전했어요`
+                            : "내 기도제목에 마음이 도착했어요"}
+                        </span>
+                        <span className="shrink-0 text-xs text-deactivate">
+                          {formatKstTime(pray.created_at)}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
           )}
         </div>
       )}

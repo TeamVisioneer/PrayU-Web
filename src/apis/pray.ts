@@ -5,6 +5,7 @@ import {
   Pray,
   PrayWithPrayCard,
   PrayWithPrayCardProfiles,
+  PrayWithProfiles,
 } from "../../supabase/types/tables";
 import * as Sentry from "@sentry/react";
 
@@ -126,14 +127,17 @@ export const fetchPrayByDateRange = async (
   }
 };
 
+// "받은 기도" — 내 기도카드에 달린 반응 수. 과거에는 pray.user_id = 나(= 내가 한 기도)를
+// 세면서 "받았어요"로 표시하던 라벨-데이터 불일치가 있었다 (2026-08-17 교정)
 export const fetchUserTotalPrayCount = async (
   userId: string,
 ): Promise<number> => {
   try {
     const { count, error } = await supabase
       .from("pray")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", userId);
+      .select("id, pray_card!inner(user_id)", { count: "exact", head: true })
+      .eq("pray_card.user_id", userId)
+      .is("deleted_at", null);
     if (error) {
       Sentry.captureException(error.message);
       return 0;
@@ -142,5 +146,35 @@ export const fetchUserTotalPrayCount = async (
   } catch (error) {
     Sentry.captureException(error);
     return 0;
+  }
+};
+
+// 기간 내 "받은 기도" — 내 기도카드에 달린 반응 + 기도한 사람 프로필 (기도 달력 일자 상세용)
+export const fetchReceivedPrayByDateRange = async (
+  userId: string | undefined,
+  startDt: string,
+  endDt: string,
+): Promise<PrayWithProfiles[] | null> => {
+  try {
+    if (!userId) return null;
+
+    const { data, error } = await supabase
+      .from("pray")
+      .select("*, profiles (*), pray_card!inner (user_id)")
+      .eq("pray_card.user_id", userId)
+      .gte("created_at", startDt)
+      .lt("created_at", endDt)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      Sentry.captureException(error.message);
+      return null;
+    }
+
+    return data ? (data as unknown as PrayWithProfiles[]) : null;
+  } catch (error) {
+    Sentry.captureException(error);
+    return null;
   }
 };
