@@ -61,6 +61,11 @@
 - [ ] v1.1: 기도카드 재편(사용자 소유 + share) + 가시성/RLS — **pray 그룹 격리 결정 대기** → [pray-card-restructure.md](plans/identity/pray-card-restructure.md)
 - [ ] 유료화 선행 조사: WebView iOS 결제(IAP) 정책 충돌 여부
 
+## 진행 중 — 내 프로필 리프레시
+
+계획: [plans/my-profile-refresh.md](plans/my-profile-refresh.md) — 히어로 스탯·빈 상태·탭/토큰 정리·코드 결함 (2026-08-17 점검 발원).
+달력 월 단위(PR 2)와 `historyPrayCardList*` 소유권 일원화는 결정·후속 대기.
+
 ## 🎯 v1.0.0 릴리스 — 범위 확정 중
 
 계획: [plans/release-v1/plan.md](plans/release-v1/plan.md) — 신규 피처 목록·보안 포함 범위·App 트랙 결정 대기.

@@ -2,6 +2,7 @@ import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ShowMoreBtn from "../common/ShowMoreBtn";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import BibleCardThumbnail from "../prayCard/BibleCardThumbnail";
@@ -32,20 +33,43 @@ const PrayCardHistoryList = () => {
     (state) => state.historyPrayCardCount
   );
 
+  const navigate = useNavigate();
   const pageSize = 18;
   const [offset, setOffset] = useState(pageSize);
 
-  if (!historyPrayCardCount) return null;
+  if (historyPrayCardCount === null) return null;
+
+  // 빈 상태는 행동 초대다 — 상태 설명으로 끝내지 않는다 (plans/my-profile-refresh.md)
+  if (historyPrayCardCount === 0) {
+    return (
+      <div className="flex w-full flex-col items-center gap-4 rounded-2xl border border-glassBorder/50 bg-surfaceCard/70 px-6 py-10 text-center shadow-member">
+        <div className="flex flex-col gap-1">
+          <p className="font-bold text-black">아직 기도카드가 없어요</p>
+          <p className="text-sm text-dark">
+            이번 주 기도제목을 그룹에 나눠보세요
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            analyticsTrack("클릭_내프로필_첫기도카드", {});
+            navigate("/praycard/new");
+          }}
+          className="rounded-full bg-gradient-to-r from-accentFrom to-accentTo px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-150 active:scale-[0.98]"
+        >
+          기도카드 만들기
+        </button>
+      </div>
+    );
+  }
 
   const onClickMoreHistoryPrayCardList = async () => {
     if (offset >= historyPrayCardCount) return;
 
     setHistoryPrayCardList(null);
-    const limit =
-      offset > historyPrayCardCount ? historyPrayCardCount - offset : pageSize;
     const newHistoryPrayCardList = await fetchUserPrayCardList(
       user!.id,
-      limit,
+      pageSize,
       offset
     );
     if (!historyPrayCardList || !newHistoryPrayCardList) return;
@@ -65,13 +89,13 @@ const PrayCardHistoryList = () => {
   return (
     <div className="flex w-full flex-col items-center gap-4">
       <div className="grid w-full grid-cols-3 gap-3">
-        {historyPrayCardListView.map((prayCard, index) => {
+        {historyPrayCardListView.map((prayCard) => {
           // 말씀카드는 bible_card row 데이터로 렌더한다 (#448 통합 렌더러).
           // image_key/image_url 은 공유 산출물 — 목록 UI 가 의존하지 않는다
           if (prayCard.bible_card) {
             return (
               <div
-                key={index}
+                key={prayCard.id}
                 className="aspect-[3/4] cursor-pointer overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md"
                 onClick={() => onClickStory(prayCard)}
               >
@@ -84,7 +108,7 @@ const PrayCardHistoryList = () => {
           if (prayCard.bible_card_url) {
             return (
               <div
-                key={index}
+                key={prayCard.id}
                 className="aspect-[3/4] cursor-pointer overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md"
                 onClick={() => onClickStory(prayCard)}
               >
@@ -111,7 +135,7 @@ const PrayCardHistoryList = () => {
 
           return (
             <div
-              key={index}
+              key={prayCard.id}
               className="aspect-[3/4] grid cursor-pointer grid-rows-[auto_1fr_auto] gap-1 overflow-hidden rounded-xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md"
               onClick={() => onClickStory(prayCard)}
             >
