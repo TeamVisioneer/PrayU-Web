@@ -151,6 +151,7 @@ const PrayCalendar = () => {
               const isToday = dateString === todayString;
               const isFuture = dateString > todayString;
               const isSelected = dateString === selectedDate;
+              // 활동한 날은 숫자 "색"으로만 포인트 — 배경 채움은 버그처럼 읽힌다 (2026-08-17 피드백)
               const hasPrayed = prayedDates.has(dateString);
               return (
                 <button
@@ -162,13 +163,13 @@ const PrayCalendar = () => {
                   }
                   className={`flex aspect-square items-center justify-center rounded-full text-sm transition-all duration-150 ${
                     hasPrayed
-                      ? "bg-accentFrom font-semibold text-white"
+                      ? "font-bold text-accentTo"
                       : isFuture
                         ? "text-deactivate"
                         : "text-dark active:bg-white/70"
-                  } ${isToday && !hasPrayed ? "font-bold text-accentTo" : ""} ${
+                  } ${
                     isSelected
-                      ? "ring-2 ring-inset ring-accentTo scale-105 shadow-glass"
+                      ? "ring-2 ring-inset ring-accentTo"
                       : isToday
                         ? "ring-1 ring-inset ring-accentFrom/60"
                         : ""
@@ -213,8 +214,8 @@ const PrayCalendar = () => {
                         />
                         <span className="min-w-0 flex-1 truncate text-sm text-liteBlack">
                           {targetName
-                            ? `${targetName}님의 기도제목에 마음을 전했어요`
-                            : "기도제목에 마음을 전했어요"}
+                            ? `${targetName}님에게 마음을 전했어요`
+                            : "마음을 전했어요"}
                         </span>
                         <span className="shrink-0 text-xs text-deactivate">
                           {formatKstTime(pray.created_at)}
@@ -242,8 +243,8 @@ const PrayCalendar = () => {
                         />
                         <span className="min-w-0 flex-1 truncate text-sm text-liteBlack">
                           {senderName
-                            ? `${senderName}님이 내 기도제목에 마음을 전했어요`
-                            : "내 기도제목에 마음이 도착했어요"}
+                            ? `${senderName}님이 마음을 전했어요`
+                            : "마음이 도착했어요"}
                         </span>
                         <span className="shrink-0 text-xs text-deactivate">
                           {formatKstTime(pray.created_at)}
