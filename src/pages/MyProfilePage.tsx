@@ -176,18 +176,17 @@ const MyProfilePage = () => {
         </section>
 
         <Tabs defaultValue="history" className="w-full">
-          {/* 세그먼티드 컨트롤: 트랙은 "파인 홈"(장식 없는 어두운 면), 활성만 흰 pill 로 뜬다 —
-              트랙에 보더·그림자를 주면 카드 안에 카드가 겹친 것처럼 보인다 (2026-08-17 피드백) */}
-          <TabsList className="grid h-12 w-full grid-cols-2 rounded-xl bg-black/5 p-1">
+          {/* 플레인 탭: 트랙·pill 장식 없이 활성 = 강조색 텍스트만 (2026-08-17 피드백) */}
+          <TabsList className="grid h-11 w-full grid-cols-2 bg-transparent p-0">
             <TabsTrigger
               value="history"
-              className="flex-1 h-full rounded-lg text-dark transition-all duration-200 data-[state=active]:bg-white data-[state=active]:font-bold data-[state=active]:text-accentTo data-[state=active]:shadow-sm"
+              className="flex-1 h-full text-base text-dark transition-colors duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:font-bold data-[state=active]:text-accentTo"
             >
               기도카드 보관함
             </TabsTrigger>
             <TabsTrigger
               value="calendar"
-              className="flex-1 h-full rounded-lg text-dark transition-all duration-200 data-[state=active]:bg-white data-[state=active]:font-bold data-[state=active]:text-accentTo data-[state=active]:shadow-sm"
+              className="flex-1 h-full text-base text-dark transition-colors duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:font-bold data-[state=active]:text-accentTo"
             >
               기도 달력
             </TabsTrigger>

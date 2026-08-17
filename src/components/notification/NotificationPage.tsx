@@ -120,19 +120,19 @@ const NotificationPage = () => {
         <div className="w-full max-w-5xl px-4">
           <Tabs defaultValue="unread" className="w-full">
             {/* 개선된 탭 리스트 */}
-            {/* 세그먼티드 컨트롤: 파인 트랙 + 흰 pill — 내 프로필 탭과 같은 문법 (MyProfilePage 참조) */}
-            <TabsList className="mb-6 h-12 w-full rounded-xl bg-black/5 p-1">
+            {/* 플레인 탭: 트랙·pill 장식 없이 활성 = 강조색 텍스트만 — 내 프로필 탭과 같은 문법 */}
+            <TabsList className="mb-6 h-11 w-full bg-transparent p-0">
               <TabsTrigger
                 value="unread"
                 onClick={() => onClickNotificationTab(true)}
-                className="flex-1 h-full text-dark data-[state=active]:bg-white data-[state=active]:text-accentTo data-[state=active]:shadow-sm data-[state=active]:font-bold transition-all duration-200 rounded-lg"
+                className="flex-1 h-full text-base text-dark transition-colors duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:font-bold data-[state=active]:text-accentTo"
               >
                 읽지 않음
               </TabsTrigger>
               <TabsTrigger
                 value="all"
                 onClick={() => onClickNotificationTab(false)}
-                className="flex-1 h-full text-dark data-[state=active]:bg-white data-[state=active]:text-accentTo data-[state=active]:shadow-sm data-[state=active]:font-bold transition-all duration-200 rounded-lg"
+                className="flex-1 h-full text-base text-dark transition-colors duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:font-bold data-[state=active]:text-accentTo"
               >
                 전체
               </TabsTrigger>
