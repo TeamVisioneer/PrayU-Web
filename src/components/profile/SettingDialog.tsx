@@ -20,8 +20,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-// import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
+
 import { UserProfile } from "@/components/profile/UserProfile.tsx";
 // import InfoBtn from "@/components/alert/infoBtn.tsx";
 import { Json } from "supabase/types/database";
@@ -92,13 +91,17 @@ const SettingDialog = () => {
   };
 
   const onBlurUpdateName = async () => {
-    if (name.trim() === "") setName(myProfile?.full_name || "");
-    else {
-      await updateProfile(user!.id, {
-        full_name: name,
-      });
-      await getProfile(user!.id);
+    if (name.trim() === "") {
+      setName(myProfile?.full_name || "");
+      return;
     }
+    if (name === myProfile?.full_name) return;
+    await updateProfile(user!.id, {
+      full_name: name,
+    });
+    await getProfile(user!.id);
+    // onBlur 저장은 조용히 지나가면 저장 여부를 알 수 없다 — 결과를 말해준다
+    toast({ description: "이름을 변경했어요" });
   };
 
   const onClickExitPrayU = () => {
@@ -151,23 +154,6 @@ const SettingDialog = () => {
     }
   };
 
-  // const onChangeKakaoNotificationToggle = async () => {
-  //   analyticsTrack("클릭_프로필_카카오메세지토글", {});
-  //   if (!myProfile) return;
-  //   await updateProfile(myProfile.id, {
-  //     kakao_notification: !myProfile.kakao_notification,
-  //   });
-  // };
-
-  // const onChangePushNotificationToggle = async () => {
-  //   analyticsTrack("클릭_프로필_푸쉬알림토글", {});
-  //   await updateProfile(myProfile.id, {
-  //     push_notification: !myProfile.push_notification,
-  //   });
-  // };
-
-  // const kakaoMessageEnabled = false;
-
   const fontSizeOptions = [
     { value: "small" as const, label: "작게" },
     { value: "medium" as const, label: "보통" },
@@ -185,238 +171,205 @@ const SettingDialog = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         className="w-11/12 h-auto overflow-auto rounded-2xl bg-mainBg"
       >
-        <DialogHeader>
-          <DialogTitle className="text-xl text-left pb-4">설정</DialogTitle>
-          <DialogDescription></DialogDescription>
-          <div className="w-full flex flex-col gap-6 items-center">
-            <div className="w-full flex flex-col items-center gap-4">
-              <div className="w-full h-14 flex justify-between items-center px-4 py-2 bg-white rounded-xl">
-                <span className="text-md font-semibold">이름</span>
-                <div className="flex items-center gap-2">
-                  <Input
-                    className="flex-1 text-md "
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    onBlur={() => onBlurUpdateName()}
-                    maxLength={8}
-                    placeholder="이름을 입력해주세요!"
-                  />
+        {/* 헤더에는 제목만 — 본문을 DialogHeader 안에 넣지 않는다 (시맨틱) */}
+        <DialogHeader className="text-left">
+          <DialogTitle className="text-xl">설정</DialogTitle>
+          <DialogDescription className="sr-only">
+            계정과 앱 환경을 설정합니다
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex w-full flex-col gap-3">
+          <div className="flex h-14 w-full items-center justify-between gap-2 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 px-4 shadow-member">
+            <span className="shrink-0 text-base font-semibold text-black">
+              이름
+            </span>
+            <Input
+              className="flex-1 text-base"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={() => onBlurUpdateName()}
+              maxLength={8}
+              placeholder="이름을 입력해주세요!"
+            />
+          </div>
+
+          <div className="flex h-14 w-full items-center justify-between rounded-xl border border-glassBorder/50 bg-surfaceCard/70 px-4 shadow-member">
+            <span className="text-base font-semibold text-black">
+              알림 설정
+            </span>
+            <button
+              onClick={() => onClickOpenAppSettings()}
+              className="text-sm text-accentFrom hover:text-accentTo"
+            >
+              열기
+            </button>
+          </div>
+
+          {/* 펼침 항목은 하나의 Accordion — 한 번에 하나만 열린다 */}
+          <Accordion
+            type="single"
+            collapsible
+            className="flex w-full flex-col gap-3"
+          >
+            <AccordionItem
+              value="font-size"
+              className="rounded-xl border border-glassBorder/50 bg-surfaceCard/70 px-4 shadow-member"
+            >
+              <AccordionTrigger
+                className="h-14 py-0"
+                onClick={() => analyticsTrack("클릭_프로필_글씨크기설정", {})}
+              >
+                <div className="flex w-full items-center justify-between">
+                  <span className="text-base font-semibold text-black">
+                    글씨 크기
+                  </span>
+                  <span className="p-2 text-sm text-dark">
+                    {
+                      fontSizeOptions.find(
+                        (option) => option.value === appSettings.fontSize
+                      )?.label
+                    }
+                  </span>
                 </div>
-              </div>
-
-              {/* <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger
-                      onClick={() => analyticsTrack("클릭_프로필_환경설정", {})}
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex w-full flex-col gap-3 p-2 text-sm">
+                  <div className="rounded-md bg-mainBg p-2 text-center text-xs text-dark">
+                    글씨 크기 설정은 현재 기도카드 본문에만 적용됩니다.
+                  </div>
+                  {fontSizeOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className="flex w-full items-center justify-between gap-2"
+                      onClick={() => setFontSize(option.value)}
                     >
-                      <div className="w-full h-10 flex flex-grow justify-between items-center">
-                        <span className="font-semibold">알림 설정</span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="w-full flex flex-col p-2 gap-4 text-sm">
-                        {kakaoMessageEnabled && (
-                          <div className="w-full flex justify-between items-center bg-white rounded-xl">
-                            <div className="flex items-center gap-1">
-                              <span>카카오 메세지 전송</span>
-                              <InfoBtn
-                                text={[
-                                  "기도 반응 할 때 상대방에게 카카오 메세지가 전송됩니다",
-                                ]}
-                                eventOption={{ where: "SettingDialog" }}
-                              />
-                            </div>
-                            <Switch
-                              defaultChecked={myProfile.kakao_notification}
-                              onCheckedChange={() =>
-                                onChangeKakaoNotificationToggle()
-                              }
-                            />
-                          </div>
+                      <span className="font-medium text-liteBlack">
+                        {option.label}
+                      </span>
+                      <div
+                        className={`h-4 w-4 rounded-full border-2 ${
+                          appSettings.fontSize === option.value
+                            ? "border-accentFrom bg-accentFrom"
+                            : "border-deactivate"
+                        }`}
+                      >
+                        {appSettings.fontSize === option.value && (
+                          <div className="h-full w-full scale-50 rounded-full bg-white"></div>
                         )}
-                        <div className="w-full flex justify-between items-center bg-white rounded-xl">
-                          <div className="flex items-center gap-1">
-                            <span>모바일 푸시 알림</span>
-                            <InfoBtn
-                              text={[
-                                "모바일에서 오늘의 기도 알림,",
-                                "친구의 기도 알림을 받습니다",
-                              ]}
-                              eventOption={{ where: "SettingDialog" }}
-                            />
-                          </div>
-                          <Switch
-                            defaultChecked={myProfile.push_notification}
-                            onCheckedChange={() =>
-                              onChangePushNotificationToggle()
-                            }
-                          />
-                        </div>
                       </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div> */}
+                    </button>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
 
-              <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-                <div className="w-full h-10 flex flex-grow justify-between items-center">
-                  <span className="font-semibold">알림 설정</span>
+            <AccordionItem
+              value="blocked"
+              className="rounded-xl border border-glassBorder/50 bg-surfaceCard/70 px-4 shadow-member"
+            >
+              <AccordionTrigger
+                className="h-14 py-0"
+                onClick={() => analyticsTrack("클릭_프로필_차단친구관리", {})}
+              >
+                <div className="flex w-full items-center justify-between">
+                  <span className="text-base font-semibold text-black">
+                    차단친구 관리
+                  </span>
+                  <span className="p-2 text-sm text-dark">
+                    {blockedProfileList.length} 명
+                  </span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex w-full flex-col gap-4 px-2 py-2">
+                  {blockedProfileList.length === 0 ? (
+                    <p className="text-center text-sm text-dark">
+                      차단한 친구가 없어요
+                    </p>
+                  ) : (
+                    blockedProfileList.map((blockedProfile) => (
+                      <div
+                        key={blockedProfile.id}
+                        className="flex w-full items-center justify-between"
+                      >
+                        <UserProfile
+                          profile={blockedProfile}
+                          imgSize="w-6 h-6"
+                          fontSize="font-medium"
+                        />
+                        {/* 액션은 버튼으로 — Badge 는 라벨이지 눌리는 것이 아니다 */}
+                        <button
+                          type="button"
+                          onClick={() => onClickUnblock(blockedProfile.id)}
+                          className="rounded-full border border-glassBorder/70 bg-white px-3 py-1 text-xs font-medium text-liteBlack transition-colors active:bg-mainBg"
+                        >
+                          차단 해제
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem
+              value="account"
+              className="rounded-xl border border-glassBorder/50 bg-surfaceCard/70 px-4 shadow-member"
+            >
+              <AccordionTrigger
+                className="h-14 py-0"
+                onClick={() => analyticsTrack("클릭_프로필_계정관리", {})}
+              >
+                <div className="flex w-full items-center justify-between">
+                  <span className="shrink-0 text-base font-semibold text-black">
+                    계정 관리
+                  </span>
+                  <span className="max-w-56 overflow-hidden text-ellipsis whitespace-nowrap p-2 text-sm text-dark">
+                    {user!.user_metadata.email}
+                  </span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex w-full justify-end gap-6 p-2 text-sm">
                   <button
-                    onClick={() => onClickOpenAppSettings()}
-                    className="text-accentFrom hover:text-accentTo text-sm"
+                    className="text-dark hover:text-black"
+                    onClick={onClickSignOut}
                   >
-                    열기
+                    로그아웃
+                  </button>
+                  <button
+                    className="text-liteRed hover:text-red-600"
+                    onClick={onClickExitPrayU}
+                  >
+                    회원탈퇴
                   </button>
                 </div>
-              </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
-              <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger
-                      onClick={() =>
-                        analyticsTrack("클릭_프로필_글씨크기설정", {})
-                      }
-                    >
-                      <div className="w-full h-10 flex flex-grow justify-between items-center">
-                        <span className="font-semibold">글씨 크기</span>
-                        <span className="p-2 text-sm text-gray-500">
-                          {
-                            fontSizeOptions.find(
-                              (option) => option.value === appSettings.fontSize
-                            )?.label
-                          }
-                        </span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="w-full flex flex-col p-2 gap-3 text-sm">
-                        <div className="bg-gray-100 p-2 rounded-md text-xs text-gray-600 text-center">
-                          글씨 크기 설정은 현재 기도카드 본문에만 적용됩니다.
-                        </div>
-                        {fontSizeOptions.map((option) => (
-                          <div
-                            key={option.value}
-                            className="w-full flex justify-between items-center gap-2 bg-white rounded-xl cursor-pointer"
-                            onClick={() => setFontSize(option.value)}
-                          >
-                            <span className="font-medium">{option.label}</span>
-                            <div
-                              className={`w-4 h-4 rounded-full border-2 ${
-                                appSettings.fontSize === option.value
-                                  ? "bg-accentFrom border-accentFrom"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {appSettings.fontSize === option.value && (
-                                <div className="w-full h-full rounded-full bg-white scale-50"></div>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
-
-              <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger
-                      onClick={() =>
-                        analyticsTrack("클릭_프로필_차단친구관리", {})
-                      }
-                    >
-                      <div className="w-full h-10 flex flex-grow justify-between items-center">
-                        <span className="font-semibold">차단친구 관리</span>
-                        <span className="p-2">{blockedProfileList.length} 명</span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="w-full flex flex-col gap-4 px-2 py-4">
-                        {blockedProfileList.map((blockedProfile) => (
-                          <div
-                            key={blockedProfile.id}
-                            className="w-full flex justify-between items-center bg-white rounded-xl"
-                          >
-                            <UserProfile
-                              profile={blockedProfile}
-                              imgSize="w-6 h-6"
-                              fontSize="font-medium"
-                            />
-                            <Badge
-                              variant="outline"
-                              onClick={() => onClickUnblock(blockedProfile.id)}
-                            >
-                              차단 해제
-                            </Badge>
-                          </div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
-
-              <div className="w-full flex px-4 py-2 justify-between items-center bg-white rounded-xl text-md ">
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger
-                      onClick={() => analyticsTrack("클릭_프로필_계정관리", {})}
-                    >
-                      <div className="w-full h-10 flex flex-grow justify-between items-center">
-                        <span className="font-semibold flex-shrink-0">
-                          계정 관리
-                        </span>
-                        <span className="flex-shrink text-sm text-gray-500 p-2 max-w-56 whitespace-nowrap overflow-hidden text-ellipsis">
-                          {user!.user_metadata.email}
-                        </span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="w-full flex p-2 gap-6 text-sm justify-end">
-                        <button
-                          className="cursor-pointer text-gray-600 hover:text-gray-900"
-                          onClick={onClickSignOut}
-                        >
-                          로그아웃
-                        </button>
-                        <button
-                          className="cursor-pointer text-red-500 hover:text-red-700"
-                          onClick={onClickExitPrayU}
-                        >
-                          회원탈퇴
-                        </button>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
-
-              {/* 프로필 하단 푸터에 있던 약관·저작권 — 설정으로 이동 (화면은 콘텐츠에 집중) */}
-              <div className="flex flex-col items-center gap-1.5 pb-1 pt-3 text-center text-xs text-gray-500">
-                <div className="flex justify-center gap-2">
-                  <a
-                    href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:underline"
-                  >
-                    개인정보 처리방침
-                  </a>
-                  <span>|</span>
-                  <a href="/term/240909" className="hover:underline">
-                    이용약관
-                  </a>
-                </div>
-                <div>© 2025 PrayU. All rights reserved.</div>
-              </div>
+          {/* 프로필 하단 푸터에 있던 약관·저작권 — 설정으로 이동 (화면은 콘텐츠에 집중) */}
+          <div className="flex flex-col items-center gap-1.5 pb-1 pt-3 text-center text-xs text-dark">
+            <div className="flex justify-center gap-2">
+              <a
+                href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:underline"
+              >
+                개인정보 처리방침
+              </a>
+              <span>|</span>
+              <a href="/term/240909" className="hover:underline">
+                이용약관
+              </a>
             </div>
+            <div>© {new Date().getFullYear()} PrayU. All rights reserved.</div>
           </div>
-        </DialogHeader>
+        </div>
       </DialogContent>
     </Dialog>
   );
