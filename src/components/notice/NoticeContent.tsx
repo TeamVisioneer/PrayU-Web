@@ -63,7 +63,7 @@ const NoticeContent = ({
                   onClick={() => api?.scrollTo(index)}
                   className={`mx-1 cursor-pointer rounded-full transition-colors duration-300 ${
                     currentIndex === index
-                      ? "h-[8px] w-[8px] bg-[#608CFF]"
+                      ? "h-[8px] w-[8px] bg-accentFrom"
                       : "h-[6px] w-[6px] bg-gray-400"
                   }`}
                 />
@@ -84,7 +84,7 @@ const NoticeContent = ({
         <div className="px-5 pt-5">
           <button
             onClick={onClickCta}
-            className="h-[52px] w-full rounded-xl bg-[#608CFF] text-base font-semibold text-white shadow-md shadow-[#608CFF]/30 transition hover:bg-[#4a70e2] active:scale-[0.99]"
+            className="h-[52px] w-full rounded-xl bg-accentFrom text-base font-semibold text-white shadow-md shadow-accentFrom/30 transition hover:bg-accentTo active:scale-[0.99]"
           >
             {ctaLabel}
           </button>

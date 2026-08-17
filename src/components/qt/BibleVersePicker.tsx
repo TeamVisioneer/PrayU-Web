@@ -171,7 +171,7 @@ const BibleVersePicker = ({
             type="button"
             onClick={() => scrollToAnchor(a.book)}
             disabled={disabled}
-            className="px-1 py-0.5 text-[11px] font-medium text-blue-500"
+            className="px-1 py-0.5 text-[11px] font-medium text-accentFrom"
           >
             {a.label}
           </button>
@@ -212,7 +212,7 @@ const BibleVersePicker = ({
             type="button"
             onClick={handleSelectToEnd}
             disabled={disabled || endParagraph === verseCount}
-            className="whitespace-nowrap rounded-md bg-blue-50 px-1.5 py-0.5 font-medium text-blue-600 disabled:opacity-40"
+            className="whitespace-nowrap rounded-md bg-blue-50 px-1.5 py-0.5 font-medium text-accentTo disabled:opacity-40"
           >
             끝까지
           </button>

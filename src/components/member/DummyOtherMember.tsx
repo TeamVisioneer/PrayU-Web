@@ -13,7 +13,7 @@ const DummyOtherMember: React.FC = () => {
 
   return (
     <div
-      className="flex flex-col gap-[10px] cursor-pointer bg-white p-5 rounded-2xl h-32"
+      className="flex flex-col gap-[10px] cursor-pointer border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-5 rounded-2xl h-32"
       onClick={() => onClickDummyOtherMember()}
     >
       <div className="flex items-center gap-2">

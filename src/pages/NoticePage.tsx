@@ -55,7 +55,7 @@ const NoticePage = () => {
               <button
                 type="button"
                 onClick={() => onClickNotice(notice)}
-                className="flex w-full flex-col items-start gap-1 rounded-xl bg-white px-4 py-3.5 text-left transition active:scale-[0.99]"
+                className="flex w-full flex-col items-start gap-1 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 px-4 py-3.5 text-left shadow-member transition active:scale-[0.99]"
               >
                 <span className="line-clamp-2 text-sm font-medium text-gray-900">
                   {notice.title}

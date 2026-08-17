@@ -140,14 +140,14 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
       {/* 중앙 선택된 영역 강조 */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="h-full flex items-center justify-center">
-          <div className="h-12 bg-blue-50/30 border-t-2 border-b-2 border-blue-500/50 rounded-md"></div>
+          <div className="h-12 bg-blue-50/30 border-t-2 border-b-2 border-accentFrom/50 rounded-md"></div>
         </div>
       </div>
       {/* 중앙 아이템 강조 오버레이 */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="h-full flex items-center justify-center">
           <div
-            className="text-xl font-bold text-blue-600 bg-white rounded-lg px-4 py-2 shadow-sm border border-blue-200 whitespace-nowrap"
+            className="text-xl font-bold text-accentTo bg-white rounded-lg px-4 py-2 shadow-sm border border-blue-200 whitespace-nowrap"
             style={{
               transform: "scale(1.1)",
               minWidth: "120px",

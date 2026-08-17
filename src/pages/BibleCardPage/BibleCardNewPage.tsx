@@ -219,7 +219,7 @@ const PrayCardBibleBackPreview = ({
       type="button"
       onClick={onFlip}
       disabled={isCreating}
-      className="rounded-full bg-white px-4 py-2 text-sm font-medium text-blue-600 shadow-sm disabled:opacity-60"
+      className="rounded-full bg-white px-4 py-2 text-sm font-medium text-accentTo shadow-sm disabled:opacity-60"
     >
       {isFlipped ? "기도카드 보기" : "뒷면 보기"}
     </button>
@@ -667,7 +667,7 @@ const BibleCardNewPage = () => {
                       className="flex aspect-[3/4] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-blue-200 bg-white/70 px-7 text-center shadow-sm"
                       whileTap={{ scale: 0.98 }}
                     >
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-2xl font-bold text-blue-500">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-2xl font-bold text-accentFrom">
                         +
                       </div>
                       <p className="mt-5 text-lg font-bold text-gray-900">
@@ -694,7 +694,7 @@ const BibleCardNewPage = () => {
                               e.stopPropagation(); // 카드 플립으로 전파 방지
                               setIsDrawerOpen(true);
                             }}
-                            className="flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-500 transition active:scale-95"
+                            className="flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-accentFrom transition active:scale-95"
                           >
                             <Repeat className="h-3 w-3" strokeWidth={2.5} />
                             카드 변경
@@ -806,10 +806,10 @@ const BibleCardNewPage = () => {
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DrawerContent className="max-h-[85vh] bg-mainBg pb-7">
           <DrawerHeader className="px-6 pb-4 pt-5 text-center">
-            <DrawerTitle className="text-[18px] font-bold text-[#222222]">
+            <DrawerTitle className="text-[18px] font-bold text-black">
               기도카드 선택하기
             </DrawerTitle>
-            <DrawerDescription className="text-sm text-[#919191]">
+            <DrawerDescription className="text-sm text-dark">
               말씀카드를 붙일 기도카드를 선택한 뒤 완료해 주세요.
             </DrawerDescription>
           </DrawerHeader>
@@ -833,7 +833,7 @@ const BibleCardNewPage = () => {
                     whileTap={{ scale: 0.97 }}
                     className={`relative flex aspect-[3/4] flex-col items-stretch justify-start overflow-hidden rounded-xl border bg-white p-2 text-left shadow-sm transition ${
                       selectedPrayCard?.id === prayCard.id
-                        ? "border-blue-500 ring-2 ring-blue-100"
+                        ? "border-accentFrom ring-2 ring-blue-100"
                         : "border-gray-100"
                     }`}
                   >
@@ -846,7 +846,7 @@ const BibleCardNewPage = () => {
                     ) : (
                       <>
                         <div className="mb-1 flex items-start">
-                          <span className="truncate text-[11px] font-bold text-blue-600">
+                          <span className="truncate text-[11px] font-bold text-accentTo">
                             {prayCard.group?.name || "내 기도카드"}
                           </span>
                         </div>

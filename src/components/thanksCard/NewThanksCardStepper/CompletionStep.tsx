@@ -30,7 +30,7 @@ export const CompletionStep = ({
         <h2 className="text-2xl sm:text-3xl font-medium text-slate-800 mb-3">
           감사 카드가 완성되었어요!
         </h2>
-        <p className="text-lg text-blue-600 font-medium mb-2">
+        <p className="text-lg text-accentTo font-medium mb-2">
           {cardNumber}번째 감사카드가 작성되었어요
         </p>
         <p className="text-base text-slate-600">
@@ -59,7 +59,7 @@ export const CompletionStep = ({
       <div className="space-y-3">
         <button
           onClick={onViewAllCards}
-          className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-lg font-medium transition-colors shadow-md hover:shadow-lg"
+          className="w-full py-4 px-6 bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90 text-white rounded-2xl text-lg font-medium transition-colors shadow-md hover:shadow-lg"
         >
           📚 감사카드 모아보기
         </button>

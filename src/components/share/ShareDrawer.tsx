@@ -67,7 +67,7 @@ const ShareDrawer: React.FC = () => {
           key={index}
           className={` mx-1 rounded-full cursor-pointer transition-colors duration-300 ${
             currentIndex === index
-              ? "w-[8px] h-[8px] bg-[#608CFF]"
+              ? "w-[8px] h-[8px] bg-accentFrom"
               : "h-[6px] w-[6px] bg-gray-400"
           }`}
           onClick={() => handleDotsClick(index)}
@@ -85,10 +85,10 @@ const ShareDrawer: React.FC = () => {
             <img className="h-full rounded-md" src="/images/InviteDrawer.png" />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-base font-bold text-[#222222]">
+            <p className="text-base font-bold text-black">
               함께 기도할 그룹원들을 초대해보아요
             </p>
-            <div className="text-sm text-[#919191]">
+            <div className="text-sm text-dark">
               <p>초대 링크를 보내면 새 그룹원들이</p>
               <p>편하게 참여할 수 있어요</p>
             </div>
@@ -102,8 +102,8 @@ const ShareDrawer: React.FC = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-base font-bold text-[#222222]">그룹 링크 공지</p>
-            <div className="text-sm text-[#919191]">
+            <p className="text-base font-bold text-black">그룹 링크 공지</p>
+            <div className="text-sm text-dark">
               <p>링크를 공지에 등록하고</p>
               <p>채팅방에서 편하게 접근해요</p>
             </div>
@@ -117,10 +117,10 @@ const ShareDrawer: React.FC = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-base font-bold text-[#222222]">
+            <p className="text-base font-bold text-black">
               카카오톡 초대 전송
             </p>
-            <div className="text-sm text-[#919191]">
+            <div className="text-sm text-dark">
               <p>카카오톡 초대하기를 통해</p>
               <p>그룹 입장 카드를 전송할 수 있어요</p>
             </div>

@@ -130,7 +130,7 @@ const PrayCardEditPage = () => {
         title="기도카드 수정"
         right={
           <button
-            className="text-sm font-medium text-blue-500"
+            className="text-sm font-medium text-accentFrom"
             onClick={() => setPreviewMode(!previewMode)}
           >
             {previewMode ? "수정하기" : "미리보기"}
@@ -179,7 +179,7 @@ const PrayCardEditPage = () => {
             </div>
             <div className="flex justify-between items-center mt-1">
               <div className="text-xs text-gray-500">
-                <span className="text-blue-500 font-medium">Tip</span> 길게 쓸
+                <span className="text-accentFrom font-medium">Tip</span> 길게 쓸
                 필요 없어요. 간단하게 나눠보세요!
               </div>
               <div className="text-xs text-gray-400">
@@ -217,7 +217,7 @@ const PrayCardEditPage = () => {
                       disabled={!currentPrayInput.trim()}
                       className={`text-sm font-medium px-3 py-1 rounded ${
                         currentPrayInput.trim()
-                          ? "bg-blue-100 text-blue-500 hover:bg-blue-200"
+                          ? "bg-blue-100 text-accentFrom hover:bg-blue-200"
                           : "bg-gray-100 text-gray-400 cursor-not-allowed"
                       }`}
                     >
@@ -255,7 +255,7 @@ const PrayCardEditPage = () => {
                 <div className="w-6 h-6 bg-blue-50 rounded-full flex items-center justify-center mr-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-blue-500"
+                    className="h-4 w-4 text-accentFrom"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -274,7 +274,7 @@ const PrayCardEditPage = () => {
 
             {!showAddPrayForm && (
               <div className="text-xs text-gray-500 mb-4">
-                <span className="text-blue-500 font-medium">Tip</span>{" "}
+                <span className="text-accentFrom font-medium">Tip</span>{" "}
                 기도제목을 클릭하면 수정할 수 있어요. 드래그하여 순서를 변경할
                 수도 있어요!
               </div>

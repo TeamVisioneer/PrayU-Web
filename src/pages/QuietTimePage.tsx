@@ -290,7 +290,7 @@ const QuietTimePage = () => {
 
   const qtContent = () => (
     <div className="flex flex-col gap-5 fade-in">
-      <section className="flex flex-col bg-white p-3 rounded-lg gap-3">
+      <section className="flex flex-col gap-3 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-3 shadow-member">
         <p className="text-xl font-bold">💬 본문 말씀</p>
         {targetBibleList && (
           <div className="italic">
@@ -308,7 +308,7 @@ const QuietTimePage = () => {
           </div>
         )}
       </section>
-      <section className="flex flex-col bg-white p-3 rounded-lg gap-3">
+      <section className="flex flex-col gap-3 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-3 shadow-member">
         <p className="text-xl font-bold">🤔 말씀 묵상</p>
         <p>{qtData?.meditation.introduction}</p>
         <p className="text-lg font-semibold">핵심 메시지</p>
@@ -325,7 +325,7 @@ const QuietTimePage = () => {
           </div>
         ))}
       </section>
-      <section className="flex flex-col bg-white p-3 rounded-lg gap-3">
+      <section className="flex flex-col gap-3 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-3 shadow-member">
         <h2 className="text-xl font-bold">✅ 적용 질문</h2>
         <ul className="list-disc pl-6">
           {qtData?.application_questions.map((q, idx) => (
@@ -333,7 +333,7 @@ const QuietTimePage = () => {
           ))}
         </ul>
       </section>
-      <section className="flex flex-col bg-white p-3 rounded-lg gap-3">
+      <section className="flex flex-col gap-3 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-3 shadow-member">
         <h2 className="text-xl font-bold">🎈 실천 과제</h2>
         <ul className="list-disc pl-6">
           {qtData?.practical_tasks.map((task, idx) => (

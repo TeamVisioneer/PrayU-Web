@@ -195,7 +195,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
         variants={itemVariants}
       >
         <div className="flex items-start gap-2">
-          <div className="mt-0.5 text-blue-500 flex-shrink-0">
+          <div className="mt-0.5 text-accentFrom flex-shrink-0">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -235,7 +235,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={handleNewGroupClick}
-                  className="text-xs text-blue-500 hover:text-blue-600"
+                  className="text-xs text-accentFrom hover:text-accentTo"
                 >
                   새 그룹 만들기
                 </Button>
@@ -248,7 +248,7 @@ const NewPrayCardGroupSelectStep: React.FC<NewPrayCardGroupSelectStepProps> = ({
       <motion.div className="flex flex-col gap-2 mb-5" variants={itemVariants}>
         <Button
           onClick={() => handleCreatePrayCard()}
-          className="py-4 h-14 text-base bg-blue-500 hover:bg-blue-600"
+          className="py-4 h-14 text-base bg-accentFrom hover:bg-blue-600"
           disabled={selectedGroups.length === 0 || isCreating}
         >
           {isCreating ? (

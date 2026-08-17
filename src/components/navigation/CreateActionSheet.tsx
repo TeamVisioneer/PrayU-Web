@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BookOpenText, HandHeart, Sparkles } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -16,29 +16,22 @@ interface CreateActionSheetProps {
 
 /**
  * 네비 `+` 액션 시트 — 기존 생성 경로 3개로 연결만 한다 (새 개념 없음).
- * 항목이 늘면(묵상 기록 등 — docs/plans/identity/daily.md) 여기에 추가된다.
+ * 제목이 "오늘 무엇을 남길까요?" 인 이유: 기록-퍼스트 정체성(identity/overview.md)의
+ * 목소리다 — 만들기는 오늘의 기록을 남기는 행위다. 항목은 데일리 기록(daily.md) 때 늘어난다.
  */
+// 아이콘 타일 없이 텍스트로만 — "그라디언트 사각형 + 아이콘" 나열은 AI 생성 티가 난다
+// (design-system.md 품질 기준). 행을 구분하는 것은 장식이 아니라 제목의 무게다.
+// 감사카드는 공식 기능이 아니라 노출하지 않는다 (2026-08-17) — 경로 자체는 살아 있다.
 const CREATE_ACTIONS = [
   {
     label: "기도카드",
     description: "이번 주 기도제목을 그룹에 나눠요",
     path: "/praycard/new",
-    icon: <HandHeart size={22} />,
-    iconBg: "bg-gradient-to-br from-start to-middle",
   },
   {
     label: "말씀카드",
     description: "내 기도에 맞는 말씀을 찾아 카드로 만들어요",
     path: "/bible-card/new",
-    icon: <BookOpenText size={22} />,
-    iconBg: "bg-gradient-to-br from-middle to-end",
-  },
-  {
-    label: "감사카드",
-    description: "감사한 순간을 사진과 함께 남겨요",
-    path: "/thanks-card/new",
-    icon: <Sparkles size={22} />,
-    iconBg: "bg-gradient-to-br from-prayCardStart to-prayCardMiddle",
   },
 ];
 
@@ -53,34 +46,46 @@ const CreateActionSheet = ({ open, onOpenChange }: CreateActionSheetProps) => {
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="mx-auto max-w-app">
-        <DrawerHeader className="pb-2 text-left">
-          <DrawerTitle>만들기</DrawerTitle>
-          <DrawerDescription className="sr-only">
-            만들 항목을 선택하세요
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="flex flex-col gap-1 px-3 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-          {CREATE_ACTIONS.map((action) => (
-            <button
-              key={action.label}
-              type="button"
-              onClick={() => onSelect(action.label, action.path)}
-              className="flex items-center gap-3 rounded-2xl border border-glassBorder/50 bg-surfaceCard/60 p-3 text-left active:bg-surfaceCard/90"
-            >
-              <span
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white ${action.iconBg}`}
+      {/* 배경색 대신 그라디언트를 겹친다 — 시트(글래스 크롬)와 카드가 같은 흰색으로
+          붙어 보이던 문제를, 시트를 mainBg 쪽으로 기울여 층을 분리하는 방식으로 푼다 */}
+      <DrawerContent className="mx-auto max-w-app overflow-hidden bg-gradient-to-b from-surfaceChrome/60 to-mainBg">
+        {/* 시그니처: 제목 뒤에서 스미는 accent 광원 — 장식 요소는 이 한 곳뿐 */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[radial-gradient(70%_100%_at_50%_0%,rgb(var(--accent-from)/0.14),transparent_75%)]"
+        />
+        <div className="relative px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-2">
+          <DrawerHeader className="p-0 pb-4 text-left">
+            <DrawerTitle className="text-[19px] font-bold tracking-tight text-black">
+              오늘 무엇을 남길까요?
+            </DrawerTitle>
+            <DrawerDescription className="sr-only">
+              만들 항목을 선택하세요
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="flex flex-col gap-3">
+            {CREATE_ACTIONS.map((action) => (
+              <button
+                key={action.label}
+                type="button"
+                onClick={() => onSelect(action.label, action.path)}
+                className="flex items-center rounded-2xl border border-glassBorder/70 bg-gradient-to-br from-surfaceCard to-surfaceCard/60 px-5 py-[18px] text-left shadow-glass transition-all duration-150 active:scale-[0.98] active:shadow-none"
               >
-                {action.icon}
-              </span>
-              <span className="flex flex-col">
-                <span className="text-sm font-semibold text-liteBlack">
-                  {action.label}
+                <span className="flex min-w-0 flex-col">
+                  <span className="text-[17px] font-bold text-black">
+                    {action.label}
+                  </span>
+                  <span className="mt-1 text-[13px] leading-snug text-dark">
+                    {action.description}
+                  </span>
                 </span>
-                <span className="text-xs text-dark">{action.description}</span>
-              </span>
-            </button>
-          ))}
+                <ChevronRight
+                  size={18}
+                  className="ml-auto shrink-0 text-accentFrom/70"
+                />
+              </button>
+            ))}
+          </div>
         </div>
       </DrawerContent>
     </Drawer>

@@ -33,7 +33,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
             {/* Step segment */}
             <div className="flex-1 h-1 bg-gray-200 rounded-sm overflow-hidden">
               <div
-                className="h-full bg-blue-500 transition-all ease-out"
+                className="h-full bg-accentFrom transition-all ease-out"
                 style={{
                   width:
                     step < animatedStep

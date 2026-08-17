@@ -224,7 +224,7 @@ const GroupMenuBtn: React.FC = () => {
             </SheetHeader>
 
             <div
-              className="max-w-full w-auto flex items-center py-3 border-none font-bold text-[#222222] text-xl gap-1 cursor-pointer"
+              className="max-w-full w-auto flex items-center py-3 border-none font-bold text-black text-xl gap-1 cursor-pointer"
               onClick={() => onClickGroupName()}
             >
               <span className="truncate">
@@ -247,7 +247,7 @@ const GroupMenuBtn: React.FC = () => {
                   <IoPersonCircleOutline size={20} color="#222222" />
                   <a
                     onClick={() => onClickMyProfile()}
-                    className="cursor-pointer text-[#222222] font-medium"
+                    className="cursor-pointer text-black font-medium"
                   >
                     내 프로필
                   </a>
@@ -256,7 +256,7 @@ const GroupMenuBtn: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <PiHandsPrayingFill size={20} color="#222222" />
                   <a
-                    className="cursor-pointer text-[#222222] font-medium"
+                    className="cursor-pointer text-black font-medium"
                     onClick={() => onClickGroupHome()}
                   >
                     그룹 홈
@@ -268,7 +268,7 @@ const GroupMenuBtn: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <IoAddCircleOutline size={20} color="#222222" />
                       <a
-                        className="cursor-pointer text-[#222222] font-medium"
+                        className="cursor-pointer text-black font-medium"
                         onClick={() => handleClickCreateGroup()}
                       >
                         그룹 만들기
@@ -277,7 +277,7 @@ const GroupMenuBtn: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <IoRemoveCircleOutline size={20} color="#222222" />
                       <a
-                        className="cursor-pointer text-[#222222] font-medium"
+                        className="cursor-pointer text-black font-medium"
                         onClick={() => handleClickExitGroup()}
                       >
                         그룹 나가기
@@ -287,7 +287,7 @@ const GroupMenuBtn: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <IoSettingsOutline size={20} color="#222222" />
                         <a
-                          className="cursor-pointer text-[#222222] font-medium"
+                          className="cursor-pointer text-black font-medium"
                           onClick={() => handleClickUpdateGroup()}
                         >
                           그룹 설정

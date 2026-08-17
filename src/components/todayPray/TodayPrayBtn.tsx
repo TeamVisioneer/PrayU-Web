@@ -78,7 +78,7 @@ const TodayPrayBtn: React.FC<TodayPrayBtnProps> = ({
   return (
     <Button
       variant="primary"
-      className="bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 px-8 py-5 h-auto rounded-xl active:scale-95"
+      className="bg-gradient-to-br from-accentFrom to-accentTo hover:from-accentFrom/90 hover:to-accentTo/90 px-8 py-5 h-auto rounded-full shadow-glass active:scale-95"
       onClick={() => onClickTodayPrayBtn()}
     >
       <div className="flex items-center gap-3">

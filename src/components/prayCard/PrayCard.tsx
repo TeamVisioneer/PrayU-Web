@@ -142,7 +142,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-blue-100 text-blue-600">
+              <div className="flex h-full w-full items-center justify-center bg-blue-100 text-accentTo">
                 {userInitial}
               </div>
             )}
@@ -194,7 +194,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
                 <div className="min-w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-3 w-3 text-blue-600"
+                    className="h-3 w-3 text-accentTo"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -217,7 +217,7 @@ export const PrayCard: React.FC<PrayCardProps> = ({
       {/* Footer - actions - fixed */}
       {/* <div className="pt-2 pb-4 px-4 flex justify-end flex-shrink-0 border-t border-gray-100">
         <div className="flex space-x-2">
-          <button className="text-xs text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-1">
+          <button className="text-xs text-gray-500 hover:text-accentTo transition-colors flex items-center gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"

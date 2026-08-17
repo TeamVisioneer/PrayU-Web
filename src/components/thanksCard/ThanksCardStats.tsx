@@ -11,7 +11,7 @@ export const ThanksCardStats = ({ totalCount }: ThanksCardStatsProps) => {
       <div className="text-center px-2 sm:px-4 md:px-6 lg:px-8 overflow-x-auto">
         <p className="whitespace-nowrap text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-light text-slate-700 mb-2 lg:mb-3 inline-block">
           오늘까지 총{" "}
-          <span className="text-blue-600 font-medium">
+          <span className="text-accentTo font-medium">
             <CountUp
               key={totalCount}
               start={0}

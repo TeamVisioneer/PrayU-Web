@@ -172,7 +172,7 @@ const NewThanksCardPage = () => {
           <div className="mb-4">
             <div className="w-full bg-slate-200 rounded-full h-2">
               <div
-                className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500 ease-out"
+                className="bg-gradient-to-r from-accentFrom to-accentTo h-2 rounded-full transition-all duration-500 ease-out"
                 style={{
                   width: `${
                     ((currentStepIndex + 1) / (steps.length - 1)) * 100
@@ -191,7 +191,7 @@ const NewThanksCardPage = () => {
                     index <= currentStepIndex
                       ? "bg-blue-600 text-white shadow-lg scale-110"
                       : index === currentStepIndex + 1
-                      ? "bg-blue-100 text-blue-600 border-2 border-blue-300"
+                      ? "bg-blue-100 text-accentTo border-2 border-blue-300"
                       : "bg-slate-200 text-slate-400"
                   }`}
                 >
@@ -216,7 +216,7 @@ const NewThanksCardPage = () => {
                 <span
                   className={`mt-2 text-xs font-medium transition-colors ${
                     index <= currentStepIndex
-                      ? "text-blue-600"
+                      ? "text-accentTo"
                       : "text-slate-400"
                   }`}
                 >

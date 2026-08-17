@@ -74,9 +74,9 @@ const DrawerContent = React.forwardRef<
       >
         <div className="px-2 mt-2 flex justify-between items-center">
           <DrawerClose>
-            <IoIosArrowDown className="w-8" size={20} color={"#9dacbe"} />
+            <IoIosArrowDown className="w-8 text-deactivate" size={20} />
           </DrawerClose>
-          <div className="h-[4px] w-[50px] rounded-full bg-[#9dacbe]" />
+          <div className="h-1 w-10 rounded-full bg-deactivate/70" />
           <div className="w-8" />
         </div>
         {children}

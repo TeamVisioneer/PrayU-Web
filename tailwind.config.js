@@ -34,7 +34,9 @@ module.exports = {
         surfaceCard: "rgb(var(--surface-card) / <alpha-value>)",
         glassBorder: "rgb(var(--glass-border) / <alpha-value>)",
         mainBg: "#F2F3FD",
-        mainBtn: "#70AAFF",
+        // mainBtn 은 accent 의 별칭이다 — 강조색 두 계열(#70AAFF vs #608CFF)이 공존하던 것을
+        // 토큰 수준에서 통일 (2026-08-03). 새 코드는 accentFrom/To 를 직접 쓴다
+        mainBtn: "rgb(var(--accent-from) / <alpha-value>)",
         black: "#020202",
         liteBlack: "#4A4A4A",
         dark: "#6A6A6A",

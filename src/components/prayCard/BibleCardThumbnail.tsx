@@ -35,7 +35,7 @@ const BibleCardThumbnail: React.FC<BibleCardThumbnailProps> = ({
 
       {dimmed && <div className="absolute inset-0 bg-white/65" />}
       {label && (
-        <div className="absolute right-2 top-2 rounded-full bg-white px-2 py-0.5 text-[9px] font-semibold text-blue-500 shadow-sm">
+        <div className="absolute right-2 top-2 rounded-full bg-white px-2 py-0.5 text-[9px] font-semibold text-accentFrom shadow-sm">
           {label}
         </div>
       )}

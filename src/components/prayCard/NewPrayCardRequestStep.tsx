@@ -191,7 +191,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
             onClick={handleAddRequest}
             disabled={!currentInput.trim()}
             className={`font-medium ${
-              currentInput.trim() ? "text-blue-500" : "text-gray-300"
+              currentInput.trim() ? "text-accentFrom" : "text-gray-300"
             }`}
           >
             {editingIndex !== null ? "수정하기" : "추가하기"}
@@ -214,7 +214,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
                 key={suggestion}
                 variant="outline"
                 size="sm"
-                className="text-xs rounded-full bg-gray-50 border-gray-200 hover:bg-blue-50 hover:text-blue-600"
+                className="text-xs rounded-full bg-gray-50 border-gray-200 hover:bg-blue-50 hover:text-accentTo"
                 onClick={() => handleSelectSuggestion(suggestion)}
               >
                 {suggestion}
@@ -243,7 +243,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
             !historyPrayCardList?.[0]?.content ||
             value == historyPrayCardList?.[0]?.content
           }
-          className="text-xs text-blue-500 hover:text-blue-600"
+          className="text-xs text-accentFrom hover:text-accentTo"
         >
           기존 내용 불러오기
         </Button>
@@ -261,7 +261,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
             <div className="w-6 h-6 bg-blue-50 rounded-full flex items-center justify-center mr-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 text-blue-500"
+                className="h-4 w-4 text-accentFrom"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -280,7 +280,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
 
         <motion.div variants={itemVariants}>
           <div className="text-xs text-gray-500 mb-4">
-            <span className="text-blue-500 font-medium">Tip</span> 기도제목을
+            <span className="text-accentFrom font-medium">Tip</span> 기도제목을
             클릭하면 수정할 수 있어요. 드래그하여 순서를 변경할 수도 있어요!
           </div>
         </motion.div>
@@ -347,7 +347,7 @@ const NewPrayCardRequestStep: React.FC<NewPrayCardRequestStepProps> = ({
           disabled={!isValid}
           className={`flex-1 py-6 text-base ${
             isValid
-              ? "bg-blue-500 hover:bg-blue-600"
+              ? "bg-accentFrom hover:bg-blue-600"
               : "bg-gray-300 cursor-not-allowed"
           }`}
         >

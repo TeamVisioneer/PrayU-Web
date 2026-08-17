@@ -25,7 +25,7 @@ const GroupHeader: React.FC = () => {
   };
 
   return (
-    <div className="sticky top-0 flex justify-between items-center p-5 bg-mainBg z-50">
+    <div className="sticky top-0 z-50 flex items-center justify-between border-b border-glassBorder/60 bg-surfaceChrome/90 p-5 py-3 backdrop-blur-xl">
       <OpenShareDrawerBtn
         text="초대"
         eventOption={{ where: "GroupPage" }}

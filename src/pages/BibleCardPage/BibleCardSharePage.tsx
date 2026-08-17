@@ -39,7 +39,7 @@ const SharedPrayCardBack = ({
     </div>
     <div className="absolute inset-0 flex items-center justify-center bg-white/55 px-8 text-center backdrop-blur-[1px]">
       <div className="flex max-w-[230px] flex-col items-center">
-        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/75 text-blue-600 shadow-sm">
+        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/75 text-accentTo shadow-sm">
           <LockKeyhole size={18} strokeWidth={2.4} />
         </div>
         <p className="text-base font-semibold leading-snug text-gray-950">
@@ -173,7 +173,7 @@ const BibleCardSharePage = () => {
               <button
                 type="button"
                 onClick={handleFlipCard}
-                className="mx-auto mt-3 block rounded-full bg-white px-4 py-2 text-sm font-medium text-blue-600 shadow-sm"
+                className="mx-auto mt-3 block rounded-full bg-white px-4 py-2 text-sm font-medium text-accentTo shadow-sm"
               >
                 {isFlipped ? "말씀카드 보기" : "기도카드 보기"}
               </button>

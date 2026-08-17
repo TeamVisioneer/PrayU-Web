@@ -23,7 +23,7 @@
 |---|---|---|
 | 홈 | `/` (MainPage) | v1.2 에서 "오늘" 허브로 교체 예정 ([daily.md](daily.md)) |
 | 그룹 | `/group` | 기존 핵심 흐름 그대로 |
-| **+** | **액션 시트** — 기도카드 / 감사카드 / 말씀카드 | 새 개념 없이 기존 생성 경로 3개로 연결. 항목은 나중에 추가 |
+| **+** | **액션 시트** — 기도카드 / 말씀카드 | 새 개념 없이 기존 생성 경로로 연결. 감사카드는 공식 기능이 아니라 제외(2026-08-17, 라우트는 유지). 항목은 나중에 추가 |
 | 알림 | `/notifications` (NotificationPage — 이미 있음) | 지금은 그룹 헤더 버튼으로만 진입 가능하던 화면 |
 | 프로필 | `/profile/me` (MyProfilePage — 이미 있음) | |
 
@@ -53,7 +53,7 @@
 | 파일 | 내용 |
 |---|---|
 | `src/components/navigation/BottomNav.tsx` (신규) | 탭 5개 렌더·현재 탭 하이라이트·라우트 노출 규칙. 알림 미읽음 뱃지는 기존 `userNotificationUnreadTotal` 재사용 |
-| `src/components/navigation/CreateActionSheet.tsx` (신규) | `+` 액션 시트 — 기도카드(그룹 선택 플로우)·감사카드(`/thanks-card/new`)·말씀카드(`/bible-card/new`) |
+| `src/components/navigation/CreateActionSheet.tsx` (신규) | `+` 액션 시트 — 기도카드(그룹 선택 플로우)·말씀카드(`/bible-card/new`). 감사카드는 미공식 기능이라 미노출 |
 | `src/App.tsx` (수정) | `AppLayout` 에 `BottomNav` 마운트 + 노출 라우트 목록. 라우트 재작성 없음 |
 | 네비 노출 화면들 | 하단 패딩 보정 (개별 페이지 최소 수정) |
 

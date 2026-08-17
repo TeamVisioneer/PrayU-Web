@@ -107,7 +107,7 @@ const NewPrayCardCompletionStep: React.FC<NewPrayCardCompletionStepProps> = ({
       >
         <Button
           onClick={handleMoveToBibleCards}
-          className="w-full py-6 text-base bg-blue-500 hover:bg-blue-600"
+          className="w-full py-6 text-base bg-accentFrom hover:bg-blue-600"
         >
           말씀카드 만들기
         </Button>

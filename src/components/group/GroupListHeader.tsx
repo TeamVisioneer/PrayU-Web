@@ -10,7 +10,7 @@ const GroupListHeader: React.FC = () => {
         onClick={() => {
           navigate("/office/union");
         }}
-        className="text-xl font-bold text-[#222222]"
+        className="text-xl font-bold text-black"
       >
         그룹 홈
       </h1>

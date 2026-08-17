@@ -209,7 +209,7 @@ const PrayerTimerButton: React.FC<PrayerTimerButtonProps> = ({
       <div className="w-full max-w-md text-center mt-2">
         <p className="text-sm text-gray-500">
           이번주 기도한 횟수:{" "}
-          <span className="font-medium text-blue-600">{prayCount}회</span>
+          <span className="font-medium text-accentTo">{prayCount}회</span>
         </p>
       </div>
     </div>
