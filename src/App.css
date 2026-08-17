@@ -6,6 +6,8 @@
   :root {
     /* 글래스 표면 토큰 — docs/plans/identity/design-system.md.
        chrome 은 backdrop-blur 와 함께(고정 크롬 전용), card 는 blur 없이 쓴다 */
+    --accent-from: 96 140 255;   /* primary 그라디언트 시작 (#608CFF) */
+    --accent-to: 69 116 241;     /* primary 그라디언트 끝   (#4574F1) */
     --surface-chrome: 248 249 255;
     --surface-card: 255 255 255;
     --glass-border: 255 255 255;

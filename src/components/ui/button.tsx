@@ -13,15 +13,16 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-glassBorder/70 bg-surfaceCard/60 hover:bg-surfaceCard/90",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // custom
+        // custom — 색은 토큰만 쓴다 (design-system.md: hex 리터럴 금지)
         primary:
-          "shadow-md bg-gradient-to-br from-[#608CFF] to-[#4574F1] text-white cursor-pointer hover:bg-gradient-to-br hover:from-[#608CFF]/90 hover:to-[#4574F1]/90",
-        primaryLight: "shadow-sm bg-white text-[#222222] cursor-pointer",
+          "shadow-md bg-gradient-to-br from-accentFrom to-accentTo text-white cursor-pointer hover:from-accentFrom/90 hover:to-accentTo/90",
+        primaryLight:
+          "shadow-sm border border-glassBorder/60 bg-surfaceCard/80 text-liteBlack cursor-pointer",
       },
       size: {
         default: "h-10 px-4 py-2",
