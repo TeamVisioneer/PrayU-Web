@@ -1,7 +1,6 @@
 import useBaseStore from "@/stores/baseStore";
 import PageHeader from "@/components/common/PageHeader";
 import SettingDialog from "@/components/profile/SettingDialog";
-import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IoSettingsOutline } from "react-icons/io5";
 import PrayCardHistoryList from "@/components/profile/PrayCardHistoryList";
@@ -14,70 +13,31 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { UserPlanType } from "@/Enums/userPlanType";
 import { Crown } from "lucide-react";
+import {
+  useMyPrayCardCount,
+  useReceivedPrayCount,
+  useMyMemberList,
+} from "@/queries/profile";
 
+/**
+ * fetch 오케스트레이션이 없다 — 서버 상태는 각 소비처가 쿼리 훅으로 선언한다
+ * (규약: docs/guides/data-fetching.md · 파일럿: docs/plans/data-fetching-layer.md).
+ * myProfile 만 예외로 store 소비 — AuthProvider 가 소유하는 auth 도메인 (Phase 2 전환 대상).
+ */
 const MyProfilePage = () => {
   const { user } = useAuth();
   const myProfile = useBaseStore((state) => state.myProfile);
-  const historyPrayCardCount = useBaseStore(
-    (state) => state.historyPrayCardCount
-  );
-  const userTotalPrayCount = useBaseStore((state) => state.userTotalPrayCount);
-  const getProfile = useBaseStore((state) => state.getProfile);
-  const fetchProfileList = useBaseStore((state) => state.fetchProfileList);
   const setIsOpenSettingDialog = useBaseStore(
     (state) => state.setIsOpenSettingDialog
   );
-  const fetchUserPrayCardList = useBaseStore(
-    (state) => state.fetchUserPrayCardList
-  );
-  const fetchUserPrayCardCount = useBaseStore(
-    (state) => state.fetchUserPrayCardCount
-  );
-  const fetchUserTotalPrayCount = useBaseStore(
-    (state) => state.fetchUserTotalPrayCount
-  );
-  const myMemberList = useBaseStore((state) => state.myMemberList);
-  const fetchMemberListByUserId = useBaseStore(
-    (state) => state.fetchMemberListByUserId
-  );
   const userPlan = useBaseStore((state) => state.userPlan);
 
-  const setHistoryPrayCardListView = useBaseStore(
-    (state) => state.setHistoryPrayCardListView
-  );
-  useEffect(() => {
-    const fetchHistoryPrayCardList = async () => {
-      const newHistoryPrayCardList = await fetchUserPrayCardList(
-        user!.id,
-        18,
-        0
-      );
-      if (!newHistoryPrayCardList) return;
-      setHistoryPrayCardListView([...newHistoryPrayCardList]);
-    };
+  const { data: myPrayCardCount } = useMyPrayCardCount(user?.id);
+  const { data: receivedPrayCount } = useReceivedPrayCount(user?.id);
+  const { data: myMemberList } = useMyMemberList(user?.id);
 
-    getProfile(user!.id);
-    fetchUserPrayCardCount(user!.id);
-    fetchUserTotalPrayCount(user!.id);
-    fetchMemberListByUserId(user!.id);
-    fetchHistoryPrayCardList();
-  }, [
-    user,
-    getProfile,
-    fetchUserPrayCardList,
-    fetchUserPrayCardCount,
-    fetchUserTotalPrayCount,
-    fetchMemberListByUserId,
-    setHistoryPrayCardListView,
-  ]);
-
-  // 달력 데이터는 PrayCalendar 가 월 범위로 직접 조회한다 (plans/my-profile-refresh.md PR 2)
-  useEffect(() => {
-    if (myProfile) fetchProfileList(myProfile.blocking_users);
-  }, [myProfile, fetchProfileList]);
-
-  // 게이트는 첫 페인트에 필요한 것만 — 차단 목록(설정 다이얼로그)·달력 데이터는 각 소비처에서 대기한다
-  if (!myProfile || historyPrayCardCount === null) {
+  // 게이트는 첫 페인트에 필요한 것만 — 나머지는 각 소비처의 쿼리 로딩 상태가 처리한다
+  if (!myProfile || myPrayCardCount === undefined) {
     return (
       <div className="w-full h-full bg-mainBg flex flex-col">
         <PageHeader
@@ -154,12 +114,12 @@ const MyProfilePage = () => {
           {/* 기록 스탯 — 이 화면의 존재 이유(기록의 축적)를 숫자로. 아이콘 타일 없이 텍스트 위계로 */}
           <div className="mt-5 grid grid-cols-3 divide-x divide-glassBorder/60">
             {[
-              { label: "기도카드", value: historyPrayCardCount },
-              { label: "받은 기도", value: userTotalPrayCount },
+              { label: "기도카드", value: myPrayCardCount ?? null },
+              { label: "받은 기도", value: receivedPrayCount ?? null },
               {
                 label: "그룹",
                 value:
-                  myMemberList === null
+                  myMemberList == null
                     ? null
                     : myMemberList.filter((member) => member.group_id !== null)
                         .length,

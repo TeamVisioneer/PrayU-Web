@@ -66,6 +66,12 @@
 계획: [plans/my-profile-refresh.md](plans/my-profile-refresh.md) — PR 1(히어로 스탯·빈 상태·탭/토큰·코드 결함) #504 merge, PR 2(달력 월 단위) 진행.
 
 - [ ] 후속: `historyPrayCardList*` 전역 상태 소유권 일원화 — 작성 플로우 3곳·말씀카드 페이지와 공유 중이라 파급 확인 필요
+- [x] ~~**데이터 fetch 계층 도입 (TanStack Query) — Phase 0 규약 + Phase 1 프로필 파일럿**~~:
+  [plans/data-fetching-layer.md](plans/data-fetching-layer.md) · 규약: [guides/data-fetching.md](guides/data-fetching.md).
+  프로필 fetch 중복(2026-08-17 계측 14건 — 빈 in() 쿼리·getProfile 재호출·마운트마다 재요청)이 구조적으로 해소됨
+- [ ] **fetch 계층 Phase 2** (릴리스 후): 화면별 점진 전환 — auth 도메인(`myProfile`) 우선,
+  새 작업이 닿는 화면부터 (보이스카우트). 전환 완료 화면은 store 서버 상태 접근 금지
+  참고: GroupPage·AdminPage 의 `getProfile` 재호출, dev 계측 시 StrictMode 이중 발화는 착시 (프로덕션 없음)
 - [ ] 후속: 기도 날짜 판정의 KST 경계 스큐 — `created_at` UTC 날짜부 비교라 자정 전후 9시간이 이웃 날짜로 집계됨 (주간 시절부터 동일)
 - [ ] 참고: `/dev/login` 직접 입력 폼이 기존 세션이 있으면 계정을 못 바꾼다 (2026-08-17 검증 중 발견, 개발 편의 문제)
 

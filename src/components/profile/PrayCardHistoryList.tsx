@@ -1,46 +1,42 @@
 import useBaseStore from "@/stores/baseStore";
 import { PrayCardWithProfiles } from "supabase/types/tables";
 import { analyticsTrack } from "@/analytics/analytics";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ShowMoreBtn from "../common/ShowMoreBtn";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import BibleCardThumbnail from "../prayCard/BibleCardThumbnail";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useMyPrayCardsInfinite } from "@/queries/myPrayCards";
 
+// 목록·페이지네이션은 쿼리가 소유한다 (docs/guides/data-fetching.md).
+// store 는 UI 상태(클릭된 카드·드로워 열림)만 쓴다.
 const PrayCardHistoryList = () => {
   const user = useBaseStore((state) => state.user);
-  const historyPrayCardList = useBaseStore(
-    (state) => state.historyPrayCardList
-  );
-  const setHistoryPrayCardList = useBaseStore(
-    (state) => state.setHistoryPrayCardList
-  );
   const setIsOpenHistoryDrawer = useBaseStore(
     (state) => state.setIsOpenHistoryDrawer
   );
   const setHistoryCard = useBaseStore((state) => state.setHistoryCard); // 클릭돼서 열릴 카드
-  const fetchUserPrayCardList = useBaseStore(
-    (state) => state.fetchUserPrayCardList
-  );
-
-  const historyPrayCardListView = useBaseStore(
-    (state) => state.historyPrayCardListView
-  );
-  const setHistoryPrayCardListView = useBaseStore(
-    (state) => state.setHistoryPrayCardListView
-  );
-  const historyPrayCardCount = useBaseStore(
-    (state) => state.historyPrayCardCount
-  );
 
   const navigate = useNavigate();
-  const pageSize = 18;
-  const [offset, setOffset] = useState(pageSize);
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useMyPrayCardsInfinite(user?.id);
 
-  if (historyPrayCardCount === null) return null;
+  if (isLoading) {
+    return (
+      <div className="grid w-full grid-cols-3 gap-3">
+        {Array.from({ length: 6 }, (_, i) => (
+          <Skeleton key={i} className="aspect-[3/4] rounded-xl" />
+        ))}
+      </div>
+    );
+  }
+
+  const prayCardList = (data?.pages ?? [])
+    .filter((page): page is PrayCardWithProfiles[] => page !== null)
+    .flat();
 
   // 빈 상태는 행동 초대다 — 상태 설명으로 끝내지 않는다 (plans/my-profile-refresh.md)
-  if (historyPrayCardCount === 0) {
+  if (prayCardList.length === 0) {
     return (
       <div className="flex w-full flex-col items-center gap-4 rounded-2xl border border-glassBorder/50 bg-surfaceCard/70 px-6 py-10 text-center shadow-member">
         <div className="flex flex-col gap-1">
@@ -63,21 +59,8 @@ const PrayCardHistoryList = () => {
     );
   }
 
-  const onClickMoreHistoryPrayCardList = async () => {
-    if (offset >= historyPrayCardCount) return;
-
-    setHistoryPrayCardList(null);
-    const newHistoryPrayCardList = await fetchUserPrayCardList(
-      user!.id,
-      pageSize,
-      offset
-    );
-    if (!historyPrayCardList || !newHistoryPrayCardList) return;
-    setHistoryPrayCardListView([
-      ...historyPrayCardListView,
-      ...newHistoryPrayCardList,
-    ]);
-    setOffset(offset + pageSize);
+  const onClickMore = () => {
+    fetchNextPage();
     analyticsTrack("클릭_기도카드_히스토리", {});
   };
 
@@ -89,7 +72,7 @@ const PrayCardHistoryList = () => {
   return (
     <div className="flex w-full flex-col items-center gap-4">
       <div className="grid w-full grid-cols-3 gap-3">
-        {historyPrayCardListView.map((prayCard) => {
+        {prayCardList.map((prayCard) => {
           // 말씀카드는 bible_card row 데이터로 렌더한다 (#448 통합 렌더러).
           // image_key/image_url 은 공유 산출물 — 목록 UI 가 의존하지 않는다
           if (prayCard.bible_card) {
@@ -169,11 +152,8 @@ const PrayCardHistoryList = () => {
           );
         })}
       </div>
-      {offset < historyPrayCardCount && (
-        <ShowMoreBtn
-          isLoading={!historyPrayCardList}
-          onClick={onClickMoreHistoryPrayCardList}
-        />
+      {hasNextPage && (
+        <ShowMoreBtn isLoading={isFetchingNextPage} onClick={onClickMore} />
       )}
     </div>
   );

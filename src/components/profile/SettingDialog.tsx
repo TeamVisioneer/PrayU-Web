@@ -6,6 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import { useBlockedProfiles } from "@/queries/profile";
 import useAuth from "@/hooks/useAuth";
 import { analyticsTrack } from "@/analytics/analytics.ts";
 import useBaseStore from "@/stores/baseStore";
@@ -44,11 +45,16 @@ const SettingDialog = () => {
   );
 
   const myProfile = useBaseStore((state) => state.myProfile);
-  const profileList = useBaseStore((state) => state.profileList);
-  const fetchProfileList = useBaseStore((state) => state.fetchProfileList);
   const updateProfile = useBaseStore((state) => state.updateProfile);
   const getProfile = useBaseStore((state) => state.getProfile);
   const signOut = useBaseStore((state) => state.signOut);
+
+  // 차단 목록은 다이얼로그가 열려 있고 차단이 있을 때만 조회한다 (docs/guides/data-fetching.md)
+  const { data: blockedProfiles } = useBlockedProfiles(
+    myProfile?.blocking_users ?? [],
+    isOpenSettingDialog
+  );
+  const blockedProfileList = blockedProfiles ?? [];
 
   const { toast } = useToast();
   const [name, setName] = useState(myProfile?.full_name || "");
@@ -77,7 +83,7 @@ const SettingDialog = () => {
     await getProfile(user!.id);
   };
 
-  if (!myProfile || !profileList) return null;
+  if (!myProfile) return null;
 
   const onClickSignOut = () => {
     analyticsTrack("클릭_로그아웃", {});
@@ -131,7 +137,8 @@ const SettingDialog = () => {
     await updateProfile(myProfile.id, {
       blocking_users: updatedBlockingUsers,
     });
-    fetchProfileList(updatedBlockingUsers);
+    // store 의 myProfile 을 갱신하면 blocking_users 가 바뀌고 → 쿼리 키가 바뀌어 목록이 따라온다
+    await getProfile(myProfile.id);
   };
 
   const onClickOpenAppSettings = () => {
@@ -325,12 +332,12 @@ const SettingDialog = () => {
                     >
                       <div className="w-full h-10 flex flex-grow justify-between items-center">
                         <span className="font-semibold">차단친구 관리</span>
-                        <span className="p-2">{profileList.length} 명</span>
+                        <span className="p-2">{blockedProfileList.length} 명</span>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="w-full flex flex-col gap-4 px-2 py-4">
-                        {profileList.map((blockedProfile) => (
+                        {blockedProfileList.map((blockedProfile) => (
                           <div
                             key={blockedProfile.id}
                             className="w-full flex justify-between items-center bg-white rounded-xl"
