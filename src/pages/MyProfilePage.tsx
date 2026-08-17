@@ -176,17 +176,17 @@ const MyProfilePage = () => {
         </section>
 
         <Tabs defaultValue="history" className="w-full">
-          {/* 플레인 탭: 트랙·pill 장식 없이 활성 = 강조색 텍스트만 (2026-08-17 피드백) */}
-          <TabsList className="grid h-11 w-full grid-cols-2 bg-transparent p-0">
+          {/* 라인 탭(표준 활성 문법): 옅은 기준선 + 활성 탭 아래 강조색 언더라인 (2026-08-17 확정) */}
+          <TabsList className="grid h-11 w-full grid-cols-2 rounded-none border-b border-gray-200 bg-transparent p-0">
             <TabsTrigger
               value="history"
-              className="flex-1 h-full text-base text-dark transition-colors duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:font-bold data-[state=active]:text-accentTo"
+              className="-mb-px h-full flex-1 rounded-none border-b-2 border-transparent text-base text-dark transition-colors duration-200 data-[state=active]:border-accentTo data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-accentTo data-[state=active]:shadow-none"
             >
               기도카드 보관함
             </TabsTrigger>
             <TabsTrigger
               value="calendar"
-              className="flex-1 h-full text-base text-dark transition-colors duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:font-bold data-[state=active]:text-accentTo"
+              className="-mb-px h-full flex-1 rounded-none border-b-2 border-transparent text-base text-dark transition-colors duration-200 data-[state=active]:border-accentTo data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-accentTo data-[state=active]:shadow-none"
             >
               기도 달력
             </TabsTrigger>
