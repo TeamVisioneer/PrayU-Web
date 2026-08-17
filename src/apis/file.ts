@@ -13,7 +13,7 @@ import { isAssetStorageConfigured } from "@/lib/assetUrl";
  */
 
 /** 업로드 용도. 경로는 이 값으로 **서버가** 정한다 — 클라이언트가 경로를 만들지 않는다 */
-export type UploadKind = "bible_card" | "thanks_card" | "notice";
+export type UploadKind = "bible_card" | "thanks_card" | "notice" | "avatar";
 
 export interface UploadedImage {
   /** 새 스토리지 경로. DB 의 `image_key` 에 넣는다 */
@@ -27,6 +27,7 @@ const LEGACY_DIRS: Record<UploadKind, string> = {
   bible_card: "BibleCard/UserBibleCard",
   thanks_card: "ThanksCard/UserImage",
   notice: "notice",
+  avatar: "avatar", // 신규 kind — 물려받을 레거시 디렉터리가 없어 kind 명 그대로
 };
 
 /**

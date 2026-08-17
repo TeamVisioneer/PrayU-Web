@@ -61,6 +61,12 @@
 - [ ] v1.1: 기도카드 재편(사용자 소유 + share) + 가시성/RLS — **pray 그룹 격리 결정 대기** → [pray-card-restructure.md](plans/identity/pray-card-restructure.md)
 - [ ] 유료화 선행 조사: WebView iOS 결제(IAP) 정책 충돌 여부
 
+## 진행 중 — 프로필 사진 변경 (짝 작업 — 주도: web)
+
+계획: [plans/profile-photo.md](plans/profile-photo.md) · Api 짝 PR [#61](https://github.com/TeamVisioneer/PrayU-Api/pull/61) (merge 는 Api 먼저)
+
+- [ ] 후속: 기본 이미지로 되돌리기 — `LoginRedirect` 의 카카오 사진 재주입 조건(`!avatar_url`) 수정과 묶어서
+
 ## 진행 중 — 내 프로필 리프레시
 
 계획: [plans/my-profile-refresh.md](plans/my-profile-refresh.md) — PR 1(히어로 스탯·빈 상태·탭/토큰·코드 결함) #504 merge, PR 2(달력 월 단위) 진행.
