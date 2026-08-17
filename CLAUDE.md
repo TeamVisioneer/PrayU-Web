@@ -52,7 +52,10 @@ React 18 + TypeScript + Vite 5 / Tailwind + Radix(shadcn/ui) + Vaul / Zustand + 
 - **기존 흐름 보존**: 로그인/로그아웃, 그룹 조회·생성·가입, 기도카드 CRUD, 감사카드 생성·공유, 알림 진입, Kakao callback, WebView 진입·푸시 이동은 회귀 없이 유지
 - **모바일 우선**: `max-w-[480px]` 기반 레이아웃, `--vh` 높이 계산을 함부로 바꾸지 않는다
 - **KST 기준 날짜**: 날짜 로직은 `src/lib/utils.ts`의 KST 유틸 재사용. UTC 계산을 섞어 저장/조회 조건을 바꾸지 않는다
-- **데이터 접근 패턴**: 컴포넌트에서 직접 Supabase 쿼리를 늘리지 않는다. 전역 상태는 기존 Zustand 패턴, 일회성 UI 상태는 지역 상태 우선
+- **데이터 접근 패턴**: 컴포넌트에서 직접 Supabase 쿼리를 늘리지 않는다.
+  **신규 원격 읽기는 `src/queries/` 훅(TanStack Query)으로 — useEffect 에서 fetch 를 시작하지 않는다**
+  (규약: [docs/guides/data-fetching.md](docs/guides/data-fetching.md)).
+  기존 화면의 Zustand fetch 는 화면 전환 작업이 닿을 때 이관. UI 상태는 Zustand·지역 상태 우선
 - **환경변수 보호**: `.env` 값 추측 금지. `VITE_ENV` 분기는 staging/prod 동작에 직접 영향 — 임의 변경 금지
 - **소프트 삭제**: `deleted_at` 기준이 일관되게 적용되는지 확인. 쿼리에 `.is("deleted_at", null)` 누락 주의
 - **에러 처리**: 원격 호출 실패는 삼키지 않고 Sentry 캡처 또는 사용자 피드백. null 반환 패턴이 많으므로 호출부 처리까지 함께 본다

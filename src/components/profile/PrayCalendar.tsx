@@ -1,66 +1,34 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getISOTodayDate, formatToDateString, days } from "@/lib/utils";
 import useBaseStore from "@/stores/baseStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PrayType, PrayTypeDatas } from "@/Enums/prayType";
 import {
-  PrayWithPrayCardProfiles,
-  PrayWithProfiles,
-} from "supabase/types/tables";
+  useMonthlyPrays,
+  useMonthlyReceivedPrays,
+} from "@/queries/prayCalendar";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
- * 월 단위 기도 달력. 데이터 소유권도 여기 있다 —
- * 월이 바뀔 때마다 해당 월 범위로 직접 조회한다 (plans/my-profile-refresh.md PR 2).
+ * 월 단위 기도 달력. 월 데이터는 쿼리 훅이 소유한다 — 월 키("YYYY-MM")가 곧 캐시라
+ * 탭 전환·월 재방문에 재요청이 없다 (규약: docs/guides/data-fetching.md).
  * 날짜 마킹은 "내가 기도한 날" — 데일리 기록(습관)의 축이다. 안 한 날 표식(✗)은 죄책감 UI 라 쓰지 않는다.
  * 날짜를 선택하면 그날 **남긴 기도 + 받은 기도**를 아래에 보여준다. 오늘이 기본 선택.
  */
 const PrayCalendar = () => {
   const user = useBaseStore((state) => state.user);
-  const fetchPrayListByDate = useBaseStore(
-    (state) => state.fetchPrayListByDate
-  );
-  const fetchReceivedPrayListByDate = useBaseStore(
-    (state) => state.fetchReceivedPrayListByDate
-  );
 
   const todayString = formatToDateString(getISOTodayDate());
   const [todayYear, todayMonth] = todayString.split("-").map((v) => Number(v));
 
   const [anchor, setAnchor] = useState({ year: todayYear, month: todayMonth });
-  // 월별 조회 결과는 지역 상태로 — 월 전환 중 이전 달 데이터가 새 그리드에 섞이지 않게 한다
-  const [monthPrayList, setMonthPrayList] = useState<
-    PrayWithPrayCardProfiles[] | null
-  >(null);
-  const [monthReceivedList, setMonthReceivedList] = useState<
-    PrayWithProfiles[] | null
-  >(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(todayString);
 
-  useEffect(() => {
-    if (!user) return;
-    let cancelled = false;
-    setMonthPrayList(null);
-    setMonthReceivedList(null);
-    const start = `${anchor.year}-${pad(anchor.month)}-01`;
-    const end =
-      anchor.month === 12
-        ? `${anchor.year + 1}-01-01`
-        : `${anchor.year}-${pad(anchor.month + 1)}-01`;
-    Promise.all([
-      fetchPrayListByDate(user.id, start, end),
-      fetchReceivedPrayListByDate(user.id, start, end),
-    ]).then(([prayList, receivedList]) => {
-      if (cancelled) return;
-      if (prayList) setMonthPrayList(prayList);
-      setMonthReceivedList(receivedList ?? []);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [user, anchor, fetchPrayListByDate, fetchReceivedPrayListByDate]);
+  const ym = `${anchor.year}-${pad(anchor.month)}`;
+  const { data: monthPrayList } = useMonthlyPrays(user?.id, ym);
+  const { data: monthReceivedList } = useMonthlyReceivedPrays(user?.id, ym);
 
   const isCurrentMonth =
     anchor.year === todayYear && anchor.month === todayMonth;
