@@ -63,8 +63,11 @@
 
 ## 진행 중 — 내 프로필 리프레시
 
-계획: [plans/my-profile-refresh.md](plans/my-profile-refresh.md) — 히어로 스탯·빈 상태·탭/토큰 정리·코드 결함 (2026-08-17 점검 발원).
-달력 월 단위(PR 2)와 `historyPrayCardList*` 소유권 일원화는 결정·후속 대기.
+계획: [plans/my-profile-refresh.md](plans/my-profile-refresh.md) — PR 1(히어로 스탯·빈 상태·탭/토큰·코드 결함) #504 merge, PR 2(달력 월 단위) 진행.
+
+- [ ] 후속: `historyPrayCardList*` 전역 상태 소유권 일원화 — 작성 플로우 3곳·말씀카드 페이지와 공유 중이라 파급 확인 필요
+- [ ] 후속: 기도 날짜 판정의 KST 경계 스큐 — `created_at` UTC 날짜부 비교라 자정 전후 9시간이 이웃 날짜로 집계됨 (주간 시절부터 동일)
+- [ ] 참고: `/dev/login` 직접 입력 폼이 기존 세션이 있으면 계정을 못 바꾼다 (2026-08-17 검증 중 발견, 개발 편의 문제)
 
 ## 🎯 v1.0.0 릴리스 — 범위 확정 중
 

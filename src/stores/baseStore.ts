@@ -1,6 +1,7 @@
 import {
   createPray,
   fetchPrayByDateRange,
+  fetchReceivedPrayByDateRange,
   fetchTodayUserPrayByGroupId,
   fetchTotalPrayCount,
   fetchUserTotalPrayCount,
@@ -22,6 +23,8 @@ import {
   Pray,
   PrayCard,
   PrayCardWithProfiles,
+  PrayWithPrayCardProfiles,
+  PrayWithProfiles,
   Profiles,
   QtData,
   TodayPrayTypeHash,
@@ -324,12 +327,17 @@ export interface BaseStore {
     userId: string | undefined,
     prayType: PrayType,
   ) => Promise<Pray | null>;
-  prayListByDate: Pray[] | null;
+  prayListByDate: PrayWithPrayCardProfiles[] | null;
   fetchPrayListByDate: (
     userId: string,
     startDt: string,
     endDt: string,
-  ) => Promise<Pray[] | null>;
+  ) => Promise<PrayWithPrayCardProfiles[] | null>;
+  fetchReceivedPrayListByDate: (
+    userId: string,
+    startDt: string,
+    endDt: string,
+  ) => Promise<PrayWithProfiles[] | null>;
 
   //onesignal
   createOnesignalPush: (
@@ -1132,6 +1140,13 @@ const useBaseStore = create<BaseStore>()(
         state.prayListByDate = prayList;
       });
       return prayList;
+    },
+    fetchReceivedPrayListByDate: async (
+      userId: string,
+      startDt: string,
+      endDt: string,
+    ) => {
+      return await fetchReceivedPrayByDateRange(userId, startDt, endDt);
     },
 
     //onesignal

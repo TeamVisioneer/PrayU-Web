@@ -99,3 +99,8 @@ export interface TodayPrayTypeHash {
 export interface PrayWithPrayCard extends Pray {
   pray_card: PrayCard;
 }
+
+// 기도 달력 일자 상세용 — 내가 남긴 기도에 대상 기도카드(작성자 포함)를 붙인다
+export interface PrayWithPrayCardProfiles extends Pray {
+  pray_card: (PrayCard & { profiles: Profiles | null }) | null;
+}

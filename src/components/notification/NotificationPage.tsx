@@ -120,18 +120,19 @@ const NotificationPage = () => {
         <div className="w-full max-w-5xl px-4">
           <Tabs defaultValue="unread" className="w-full">
             {/* 개선된 탭 리스트 */}
-            <TabsList className="mb-6 h-12 w-full rounded-xl border border-glassBorder/50 bg-surfaceCard/70 p-1 shadow-member">
+            {/* 라인 탭(표준 활성 문법): 옅은 기준선 + 활성 탭 아래 강조색 언더라인 — 내 프로필과 동일 */}
+            <TabsList className="mb-6 h-11 w-full rounded-none border-b border-gray-200 bg-transparent p-0">
               <TabsTrigger
                 value="unread"
                 onClick={() => onClickNotificationTab(true)}
-                className="flex-1 h-full text-gray-500 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-accentFrom data-[state=active]:to-accentTo data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200 rounded-lg"
+                className="-mb-px h-full flex-1 rounded-none border-b-2 border-transparent text-base text-dark transition-colors duration-200 data-[state=active]:border-accentTo data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-accentTo data-[state=active]:shadow-none"
               >
                 읽지 않음
               </TabsTrigger>
               <TabsTrigger
                 value="all"
                 onClick={() => onClickNotificationTab(false)}
-                className="flex-1 h-full text-gray-500 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-accentFrom data-[state=active]:to-accentTo data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200 rounded-lg"
+                className="-mb-px h-full flex-1 rounded-none border-b-2 border-transparent text-base text-dark transition-colors duration-200 data-[state=active]:border-accentTo data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-accentTo data-[state=active]:shadow-none"
               >
                 전체
               </TabsTrigger>
