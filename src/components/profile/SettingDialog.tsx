@@ -47,6 +47,8 @@ const SettingDialog = () => {
   const updateProfile = useBaseStore((state) => state.updateProfile);
   const getProfile = useBaseStore((state) => state.getProfile);
   const signOut = useBaseStore((state) => state.signOut);
+  // 약관·개인정보 링크는 앱 전용 인앱 모달(ExternalLinkDialog)로 연다 — 동의 페이지와 같은 패턴
+  const setExternalUrl = useBaseStore((state) => state.setExternalUrl);
 
   // 차단 목록은 다이얼로그가 열려 있고 차단이 있을 때만 조회한다 (docs/guides/data-fetching.md)
   const { data: blockedProfiles } = useBlockedProfiles(
@@ -172,14 +174,14 @@ const SettingDialog = () => {
         className="w-11/12 h-auto overflow-auto rounded-2xl bg-mainBg"
       >
         {/* 헤더에는 제목만 — 본문을 DialogHeader 안에 넣지 않는다 (시맨틱) */}
-        <DialogHeader className="text-left">
+        <DialogHeader className="pb-2 text-left">
           <DialogTitle className="text-xl">설정</DialogTitle>
           <DialogDescription className="sr-only">
             계정과 앱 환경을 설정합니다
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex w-full flex-col gap-3">
+        <div className="mt-1 flex w-full flex-col gap-3">
           <div className="flex h-14 w-full items-center justify-between gap-2 rounded-xl border border-glassBorder/50 bg-surfaceCard/70 px-4 shadow-member">
             <span className="shrink-0 text-base font-semibold text-black">
               이름
@@ -235,15 +237,15 @@ const SettingDialog = () => {
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="flex w-full flex-col gap-3 p-2 text-sm">
-                  <div className="rounded-md bg-mainBg p-2 text-center text-xs text-dark">
+                <div className="flex w-full flex-col gap-2 px-1 pb-4 pt-1 text-sm">
+                  <div className="mb-1 rounded-md bg-mainBg p-2 text-center text-xs text-dark">
                     글씨 크기 설정은 현재 기도카드 본문에만 적용됩니다.
                   </div>
                   {fontSizeOptions.map((option) => (
                     <button
                       key={option.value}
                       type="button"
-                      className="flex w-full items-center justify-between gap-2"
+                      className="flex w-full items-center justify-between gap-2 py-1.5"
                       onClick={() => setFontSize(option.value)}
                     >
                       <span className="font-medium text-liteBlack">
@@ -284,16 +286,16 @@ const SettingDialog = () => {
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="flex w-full flex-col gap-4 px-2 py-2">
+                <div className="flex w-full flex-col gap-3 px-1 pb-4 pt-1">
                   {blockedProfileList.length === 0 ? (
-                    <p className="text-center text-sm text-dark">
+                    <p className="py-2 text-center text-sm text-dark">
                       차단한 친구가 없어요
                     </p>
                   ) : (
                     blockedProfileList.map((blockedProfile) => (
                       <div
                         key={blockedProfile.id}
-                        className="flex w-full items-center justify-between"
+                        className="flex min-h-9 w-full items-center justify-between"
                       >
                         <UserProfile
                           profile={blockedProfile}
@@ -333,15 +335,15 @@ const SettingDialog = () => {
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="flex w-full justify-end gap-6 p-2 text-sm">
+                <div className="flex w-full justify-end gap-6 px-1 pb-4 pt-1 text-sm">
                   <button
-                    className="text-dark hover:text-black"
+                    className="py-1.5 text-dark hover:text-black"
                     onClick={onClickSignOut}
                   >
                     로그아웃
                   </button>
                   <button
-                    className="text-liteRed hover:text-red-600"
+                    className="py-1.5 text-liteRed hover:text-red-600"
                     onClick={onClickExitPrayU}
                   >
                     회원탈퇴
@@ -351,21 +353,29 @@ const SettingDialog = () => {
             </AccordionItem>
           </Accordion>
 
-          {/* 프로필 하단 푸터에 있던 약관·저작권 — 설정으로 이동 (화면은 콘텐츠에 집중) */}
+          {/* 프로필 하단 푸터에 있던 약관·저작권 — 설정으로 이동 (화면은 콘텐츠에 집중).
+              링크는 인앱 모달(ExternalLinkDialog)로 — 앱 WebView 에서 새 탭이 열리지 않는다 */}
           <div className="flex flex-col items-center gap-1.5 pb-1 pt-3 text-center text-xs text-dark">
             <div className="flex justify-center gap-2">
-              <a
-                href="https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html"
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
+                onClick={() =>
+                  setExternalUrl(
+                    "https://plip.kr/pcc/e117f200-873e-4090-8234-08d0116f9d03/privacy/1.html"
+                  )
+                }
                 className="hover:underline"
               >
                 개인정보 처리방침
-              </a>
+              </button>
               <span>|</span>
-              <a href="/term/240909" className="hover:underline">
+              <button
+                type="button"
+                onClick={() => setExternalUrl("/term/240909")}
+                className="hover:underline"
+              >
                 이용약관
-              </a>
+              </button>
             </div>
             <div>© {new Date().getFullYear()} PrayU. All rights reserved.</div>
           </div>
