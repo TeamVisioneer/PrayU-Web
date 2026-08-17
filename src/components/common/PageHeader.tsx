@@ -14,12 +14,13 @@ interface PageHeaderProps {
  *
  * 같은 모양의 sticky 헤더가 8개 파일에 복붙되어 있던 것을 통일했다
  * (docs/plans/identity/design-system.md — 재사용성/역할과 책임).
- * sticky 상단은 고정 크롬이므로 glass-chrome(backdrop-blur)을 쓴다.
+ * 배경은 페이지와 같은 mainBg — 헤더가 본문과 다른 색이면 상단에 띠가 생긴다
+ * (2026-08-17 결정, glass-chrome 은 하단 네비만).
  *
  * router 를 import 하지 않는다 — 뒤로가기는 history API, 특수 동작은 `onBack` 으로.
  */
 const PageHeader = ({ title, onBack, right, hideBack }: PageHeaderProps) => (
-  <header className="sticky top-0 z-50 flex h-[52px] w-full items-center border-b border-glassBorder/60 bg-surfaceChrome/90 px-4 backdrop-blur-xl">
+  <header className="sticky top-0 z-50 flex h-[52px] w-full items-center border-b border-gray-100 bg-mainBg px-4 shadow-sm">
     {!hideBack && (
       <button
         type="button"
