@@ -1,6 +1,6 @@
 # 내 프로필 리프레시 — 기록의 공간으로
 
-> 상태: **PR 1 승인·구현** (2026-08-17) — PR 2(달력 월 단위)는 결정 대기
+> 상태: **PR 1 merge(#504) · PR 2 승인·구현** (2026-08-17)
 > 배경: 2026-08-17 세션 점검(디자인·코드 관점)에서 나온 개선 포인트를 범위로 묶은 계획.
 > [profile-social.md](identity/profile-social.md)(username·팔로우·검색, v1.3+)는 **이 계획 범위 밖** —
 > RLS 정비 선행 조건에 묶여 있어 건드리지 않는다.
@@ -79,12 +79,15 @@
 | `src/components/profile/MyProfile.tsx` (삭제) | import 0건 데드 코드 |
 | `docs/backlog.md` (수정) | 완료 기록 + 후속 두 줄(달력 월 단위 PR 2 결정 대기 · `historyPrayCardList*` 소유권 일원화) |
 
-## PR 2 (선택 — 진행 여부 결정 대기): 달력 월 단위
+## PR 2 (승인 2026-08-17): 달력 월 단위
 
-- `PrayCalendar` 를 월 그리드(6주×7일)로, 월 이동(←/→), 이번 달 기본
-- 조회: `fetchPrayListByDate(id, 월 시작, 월 끝)` — 시그니처 그대로, 호출 범위만 월로
-- 파일: `PrayCalendar.tsx` 전면 개정 (+커지면 `profile/calendar/` 분리), `MyProfilePage.tsx` 호출부
-- 이름과 실물을 일치시키는 작업 — 미진행 시 탭 이름을 "이번 주 기도"로 바꾸는 축소안도 있다
+- `PrayCalendar` 를 월 그리드로 전면 개정 — 월 이동(←/→, 미래 달 비활성), 이번 달 기본,
+  기도한 날 = accent 원, 오늘 = 링. **데이터 소유권도 이 컴포넌트로** —
+  월이 바뀔 때마다 `fetchPrayListByDate(id, 월 시작, 다음 달 1일)` 로 직접 조회
+  (`prayListByDate` 소비자는 이 달력뿐이라 이동 안전)
+- `MyProfilePage` 의 주간 범위 계산·조회 제거
+- 알려진 한계(기존 주간 버전과 동일): 날짜 판정이 `created_at` 의 **UTC 날짜부** 기준이라
+  KST 자정 전후 9시간 구간의 기도가 이웃 날짜로 보일 수 있다 — 후속(backlog)
 
 ## 검증
 

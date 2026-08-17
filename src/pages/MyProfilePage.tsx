@@ -8,7 +8,6 @@ import PrayCardHistoryList from "@/components/profile/PrayCardHistoryList";
 import PrayCardHistoryDrawer from "@/components/profile/PrayCardHistoryDrawer";
 import { analyticsTrack } from "@/analytics/analytics";
 import PrayCalendar from "@/components/profile/PrayCalendar";
-import { getISOTodayDate, getNextDate, getWeekInfo } from "@/lib/utils";
 import useAuth from "@/hooks/useAuth";
 import PrayListDrawer from "@/components/pray/PrayListDrawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,9 +33,6 @@ const MyProfilePage = () => {
   const fetchUserPrayCardCount = useBaseStore(
     (state) => state.fetchUserPrayCardCount
   );
-  const fetchPrayListByDate = useBaseStore(
-    (state) => state.fetchPrayListByDate
-  );
   const fetchUserTotalPrayCount = useBaseStore(
     (state) => state.fetchUserTotalPrayCount
   );
@@ -49,11 +45,6 @@ const MyProfilePage = () => {
   const setHistoryPrayCardListView = useBaseStore(
     (state) => state.setHistoryPrayCardListView
   );
-  const currentDate = getISOTodayDate();
-  const weekInfo = getWeekInfo(currentDate);
-  const startDt = weekInfo.weekDates[0];
-  const endDt = getNextDate(weekInfo.weekDates[6]);
-
   useEffect(() => {
     const fetchHistoryPrayCardList = async () => {
       const newHistoryPrayCardList = await fetchUserPrayCardList(
@@ -80,10 +71,10 @@ const MyProfilePage = () => {
     setHistoryPrayCardListView,
   ]);
 
+  // 달력 데이터는 PrayCalendar 가 월 범위로 직접 조회한다 (plans/my-profile-refresh.md PR 2)
   useEffect(() => {
     if (myProfile) fetchProfileList(myProfile.blocking_users);
-    if (myProfile) fetchPrayListByDate(myProfile.id, startDt, endDt);
-  }, [myProfile, fetchProfileList, fetchPrayListByDate, startDt, endDt]);
+  }, [myProfile, fetchProfileList]);
 
   // 게이트는 첫 페인트에 필요한 것만 — 차단 목록(설정 다이얼로그)·달력 데이터는 각 소비처에서 대기한다
   if (!myProfile || historyPrayCardCount === null) {
