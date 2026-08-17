@@ -75,7 +75,6 @@ const BannerDialog = () => {
       open={isOpenBannerDialog}
       onOpenChange={(open) => {
         setIsOpenBannerDialog(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <DialogContent className="w-11/12 rounded-xl bg-mainBg">

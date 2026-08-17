@@ -71,7 +71,6 @@ const LogInDrawer = ({ path }: LogInDrawerProps) => {
       open={isOpenLoginDrawer}
       onOpenChange={(open) => {
         setIsOpenLoginDrawer(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <DrawerContent className="bg-mainBg pb-5">

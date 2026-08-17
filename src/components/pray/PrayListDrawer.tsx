@@ -73,7 +73,6 @@ const PrayListDrawer: React.FC = () => {
       open={isOpenMyPrayDrawer}
       onOpenChange={(open) => {
         setIsOpenMyPrayDrawer(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <DrawerContent className="h-[400px] bg-mainBg border-none">

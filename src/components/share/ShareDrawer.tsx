@@ -159,7 +159,6 @@ const ShareDrawer: React.FC = () => {
       open={isOpenShareDrawer}
       onOpenChange={(open) => {
         setIsOpenShareDrawer(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <DrawerContent className="bg-mainBg focus:outline-none">

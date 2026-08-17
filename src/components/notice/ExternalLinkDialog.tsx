@@ -16,10 +16,7 @@ const ExternalLinkDialog: React.FC = () => {
     <Dialog
       open={!!externalUrl}
       onOpenChange={(open) => {
-        if (!open) {
-          setExternalUrl(null);
-          if (window.history.state?.open === true) window.history.back();
-        }
+        if (!open) setExternalUrl(null);
       }}
     >
       <DialogContent

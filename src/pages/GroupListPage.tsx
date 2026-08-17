@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { analyticsTrack } from "@/analytics/analytics";
 import GroupListHeader from "@/components/group/GroupListHeader";
-import GroupListDrawer from "@/components/group/GroupListDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const GroupListPage: React.FC = () => {
@@ -240,8 +239,6 @@ const GroupListPage: React.FC = () => {
           <Plus size={18} strokeWidth={2.4} />새 그룹 만들기
         </button>
       </div>
-
-      <GroupListDrawer />
     </div>
   );
 };

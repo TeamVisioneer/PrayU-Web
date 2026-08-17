@@ -41,7 +41,9 @@ const CreateActionSheet = ({ open, onOpenChange }: CreateActionSheetProps) => {
   const onSelect = (label: string, path: string) => {
     analyticsTrack("클릭_네비_만들기_" + label, {});
     onOpenChange(false);
-    navigate(path);
+    // replace: 현재 최상단은 드로워가 쌓은 {open:true} 엔트리다 — 덮어써서
+    // 목적지에서 뒤로가기가 정확히 한 페이지 뒤(이 화면)로 오게 한다 (use-history-overlay.ts)
+    navigate(path, { replace: true });
   };
 
   return (

@@ -1,33 +1,16 @@
 import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
+import { useHistoryOverlay } from "@/components/ui/use-history-overlay";
 
 const Drawer = ({
   shouldScaleBackground = true,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
-  // Drawer Custom Start
   const { onOpenChange, open } = props;
-
-  useEffect(() => {
-    if (open && window.history.state?.open !== true) {
-      window.history.pushState({ open: true }, "", "");
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      if (onOpenChange) onOpenChange(false);
-    };
-    window.addEventListener("popstate", handlePopState);
-    // window.history.replaceState(null, "", window.location.pathname);
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [onOpenChange]);
-  // Drawer Custom End
+  // 뒤로가기 = 닫기 + 히스토리 엔트리 회수 (use-history-overlay.ts 참조)
+  useHistoryOverlay(open, onOpenChange);
 
   return (
     <DrawerPrimitive.Root

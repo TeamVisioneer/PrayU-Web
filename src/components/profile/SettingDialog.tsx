@@ -172,7 +172,6 @@ const SettingDialog = () => {
       open={isOpenSettingDialog}
       onOpenChange={(open) => {
         setIsOpenSettingDialog(open);
-        if (!open && window.history.state?.open === true) window.history.back();
       }}
     >
       <DialogContent
