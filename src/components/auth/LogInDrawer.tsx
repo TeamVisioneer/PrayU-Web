@@ -36,8 +36,11 @@ const LogInDrawer = ({ path }: LogInDrawerProps) => {
       </div>
       <div className="flex flex-col w-full justify-center gap-4 pb-3">
         <KakaoLoginBtn
-          redirectUri={`${baseUrl}/auth/kakao/callback`}
-          state={path ? `path:${path}` : ""}
+          redirectUrl={
+            path
+              ? `${baseUrl}/login-redirect?path=${path}`
+              : `${baseUrl}/login-redirect`
+          }
         />
         {isApp && (
           <div className="flex flex-col items-center gap-3">
