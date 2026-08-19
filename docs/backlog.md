@@ -11,6 +11,17 @@
 
 ---
 
+## 🔴 운영 장애 — 카카오 로그인 (2026-08-19)
+
+계획: [plans/kakao-oauth-migration.md](plans/kakao-oauth-migration.md)
+
+Supabase(GoTrue) 서버 정책 변경으로 `signInWithIdToken`(id_token grant)이 **Apple/Google/Firebase 발급자만** 허용,
+**Kakao 차단** → prod 카카오 로그인 전면 실패(`400 {"message":"...Only Apple, Google, Firebase issuer allowed."}`).
+코드/env/대시보드 무변경, 호스팅 GoTrue 자동 롤아웃이라 배포 없이 이번 주 발생.
+
+- [ ] 🔴 **카카오 로그인을 `signInWithOAuth`로 전환** — 애플 버튼과 동형. access_token 기능은 flag OFF라 provider_token 재배선은 2단계로 분리. 계획서 참조
+- [ ] 선행 확인: 대시보드 Redirect URLs 허용 · Kakao provider Client Secret 설정 · Kakao 콘솔 Redirect URI(Supabase 콜백)
+
 ## 진행 중 — 어드민 개편
 
 계획: [admin-revamp-plan.md](archive/admin-revamp-plan.md) (4개 PR, merge는 **Api 먼저 → web**)

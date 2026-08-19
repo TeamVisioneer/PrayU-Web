@@ -34,11 +34,15 @@
 > 특히 **애플 로그인은 `signInWithOAuth` 라 서버 훅이 없다** — 카카오만 옮기면 애플 가입에 프로필이 안 생긴다.
 
 
+> **2026-08-19 갱신**: 운영 카카오 로그인 장애([plans/kakao-oauth-migration.md](plans/kakao-oauth-migration.md))로
+> **`signInWithOAuth` 전환이 강제됐다.** 전환하면 브라우저의 kauth.kakao.com 직접 교환이 사라져 **이 노출 문제가 함께 해소**된다
+> (secret 은 Supabase 대시보드 provider 설정에만 존재). 아래 "Edge Function 이전(1)"은 상당 부분 무효화 — 전환 후 이 절을 완료 처리하고 잔여는 **secret 로테이션(2)** 만 남는다.
+
 `VITE_KAKAO_CLIENT_SECRET_KEY` 가 web 번들에 포함된다 (`KakaoTokenRepo.fetchKakaoToken` 이
 브라우저에서 직접 kauth.kakao.com 토큰 교환). 조치:
-1. 토큰 교환을 Edge Function 으로 이전 (secret 은 함수 시크릿으로)
+1. 토큰 교환을 Edge Function 으로 이전 (secret 은 함수 시크릿으로) — **OAuth 전환으로 대체됨**
 2. Kakao 콘솔에서 client secret 로테이션 (기존 값은 노출된 것으로 간주)
-3. web 에서 `VITE_KAKAO_CLIENT_SECRET_KEY` 제거
+3. web 에서 `VITE_KAKAO_CLIENT_SECRET_KEY` 제거 — **OAuth 전환 시 함께**
 
 ## 3. service_role 키(legacy JWT) 로테이션 — ⚠️ 결합 주의
 
