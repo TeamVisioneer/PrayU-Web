@@ -23,6 +23,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: 버전-태그 일치 확인
+        run: |
+          tag="${{ github.event.release.tag_name }}"; tag="${tag#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::릴리스 태그($tag) ≠ package.json($pkg). scripts/release.sh 로 버전 범프 후 재발행하세요."
+            exit 1
+          fi
+          echo "버전 일치: $pkg"
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Pull Vercel Environment Information
