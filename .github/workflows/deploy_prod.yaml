@@ -2,26 +2,24 @@ name: Production Tag Deployment
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+# prod 배포는 GitHub Release 발행(태그)로만 이뤄진다 — "최신 Release 태그 = 현재 prod".
+#   - 정식 배포: minor 릴리스 vX.Y.0 발행
+#   - hotfix   : 최신 태그에서 분기 → 수정 → 패치 릴리스 vX.Y.Z 발행 → main 으로 포워드포트
+# 브랜치 push(v*)·hotfix PR→main 경로는 prod 를 태그 라인에서 이탈시켜 제거했다(2026-08 회귀 사고).
+# 상세 절차: docs/guides/deployment-runbook.md
 on:
   release:
     types: [published]
-  push:
-    branches:
-      - "v*"
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+
+# 동일 prod 배포가 중복/연속 트리거되면 이전 실행을 취소해 이중 배포를 막는다.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
 jobs:
-  # 배포 CI/CD
-  # 1. Github 에서 수동으로 release 발행할 경우
-  # 2. v0.0.0-patch 형식의 branch 생성(cherry-pick 을 사용하여 main 의 특정 커밋만 배포할 경우)
-  # 3. hotfix 로 시작하는 PR 이 main 에 병합(main 최신 내용을 빠르게 배포할 경우)
   Deploy-Production:
-    if: |
-      github.event.action == 'published' || 
-      github.event_name == 'push' && startsWith(github.ref, 'refs/heads/v')||
-      github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'hotfix')
+    if: github.event.action == 'published'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,19 +32,18 @@ jobs:
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
+  # (참고) 릴리스 발행 시 버전 자동 patch — 필요 시 활성화
   # Version-Patch:
   #   if: github.event.action == 'published'
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Checkout code
   #       uses: actions/checkout@v4
-
   #     - name: Configure Git for CI
   #       run: |
   #         git config --global user.name "TeamVisioneer"
   #         git config --global user.email "team.visioneer15@gmail.com"
   #         git clone https://x-access-token:${{ secrets.PERSONAL_GITHUB_ADMIN_TOKEN }}@github.com/${{ github.repository }} ${{ github.repository }}
-
   #     - name: version patch
   #       run: |
   #         cd ${{ github.repository }}
