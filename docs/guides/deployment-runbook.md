@@ -13,10 +13,16 @@
 
 ## 정식 배포 (minor)
 
-1. 배포할 커밋이 어느 라인인지 확인(보통 이전 prod 태그의 후속). 대개 `main` 에서 릴리스 준비가 끝났을 때.
-2. GitHub → Releases → **Draft a new release** → 태그 `vX.Y.0` 생성(target 커밋 지정) → 노트 작성 → **Publish**.
-3. `Production Tag Deployment` 워크플로우가 자동 실행 → Vercel prod 배포.
+1. `main` 에서 릴리스 준비가 끝나면 **버전 범프 커밋**을 만든다(태그 커밋이 자기 버전을 갖도록):
+   ```bash
+   scripts/release.sh minor    # package.json → X.Y.0 갱신 + "chore: release vX.Y.0" 커밋
+   ```
+   PR 로 리뷰 → `main` 머지.
+2. 머지된 그 커밋을 target 으로 GitHub → Releases → 태그 `vX.Y.0` → 노트 작성 → **Publish**.
+3. `Production Tag Deployment` 워크플로우 자동 실행 → Vercel prod 배포.
 4. 크로스 레포: 스키마/함수 의존이 있으면 **Api 먼저 release → web** 순서.
+
+> **버전 범프는 왜 CI 자동이 아닌가**: 릴리스 후 CI 가 `npm version` 하고 main 에 push 하면 (1) **태그된 커밋엔 옛 버전이 남고**(범프가 태그 뒤에 붙음) (2) 실제 릴리스 버전과 드리프트 (3) CI 가 main 에 직접 push(브랜치보호·토큰·staging 재배포). 그래서 범프를 **릴리스 커밋 안**에 둔다.
 
 ## 핫픽스 (patch)
 
@@ -25,13 +31,14 @@
 git fetch --tags
 git checkout -b hotfix/<주제> vX.Y.Z        # vX.Y.Z = 최신 Release 태그
 
-# 2) 수정 커밋 (최소 변경)
+# 2) 수정 커밋 (최소 변경) 후 버전 범프
+scripts/release.sh patch                    # package.json → X.Y.(Z+1) + release 커밋
 
-# 3) PR 로 리뷰 (base 는 상황에 따라 — 아래 "포워드포트" 참조)
+# 3) push + 리뷰
 git push origin hotfix/<주제>
 gh pr create --title "fix: ..." --body "..."
 
-# 4) 리뷰 통과 후 patch Release 발행 → prod 배포
+# 4) patch Release 발행 → prod 배포
 #    GitHub Releases → 태그 vX.Y.(Z+1), target = 핫픽스 커밋 → Publish
 ```
 

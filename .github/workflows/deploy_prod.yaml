@@ -32,21 +32,5 @@ jobs:
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-  # (참고) 릴리스 발행 시 버전 자동 patch — 필요 시 활성화
-  # Version-Patch:
-  #   if: github.event.action == 'published'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: Configure Git for CI
-  #       run: |
-  #         git config --global user.name "TeamVisioneer"
-  #         git config --global user.email "team.visioneer15@gmail.com"
-  #         git clone https://x-access-token:${{ secrets.PERSONAL_GITHUB_ADMIN_TOKEN }}@github.com/${{ github.repository }} ${{ github.repository }}
-  #     - name: version patch
-  #       run: |
-  #         cd ${{ github.repository }}
-  #         npm version patch
-  #         git push origin main
-  #         git push origin --tags
+  # 버전(package.json) 범프는 CI 가 아니라 "릴리스 커밋"에 포함한다 —
+  # 태그된(=배포되는) 커밋이 자기 버전을 갖도록. 절차: docs/guides/deployment-runbook.md · 헬퍼: scripts/release.sh
