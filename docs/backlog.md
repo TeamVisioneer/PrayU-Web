@@ -22,7 +22,7 @@ Supabase(GoTrue) 서버 정책 변경으로 `signInWithIdToken`(id_token grant)�
 - [x] ~~🔴 **카카오 로그인을 `signInWithOAuth`로 전환**~~ — [#509](https://github.com/TeamVisioneer/PrayU-Web/pull/509) merge + prod `v0.15.2` 배포(2026-08-20). 후속: 카카오톡 앱 전환 UX 복원은 App 레포([PrayU-App backlog](../../PrayU-App/docs/backlog.md))
 - [x] ~~선행 확인: 대시보드 Redirect URLs · Client Secret · Kakao 콘솔 Redirect URI~~ — 2026-08-19 확인 완료
 - [ ] staging Supabase **URL Configuration** 정리 — `staging.prayu.site`가 Redirect URLs에 없어 `prayu-staging.vercel.app`으로 폴백됨. Site URL/Redirect URLs 갱신 (사람, 대시보드)
-- [ ] **카카오 원탭 앱 전환 — web 발사 로직** (`kakaoTalkLaunch.ts` + `KakaoLoginBtn` 분기, 폴백 내장) — 계획·매니페스트: [PrayU-App/docs/plans/kakao-app-switch-restore.md](../../PrayU-App/docs/plans/kakao-app-switch-restore.md) "web 단계" 절. **스파이크(실기기)로 스킴 포맷·성립 확정 후 구현**
+- [ ] **카카오 원탭 앱 전환** — 스파이크 완료(2026-08-22): 발사 성립 ✅ / 복귀는 카카오톡 인앱브라우저에 갇힘 ❌ → 1차 발사(#511)는 **임시 비활성(웹 플로우 복원)**. 재도입은 **PKCE + 신버전 앱(딥링크 복귀) 한 묶음**으로 — 구버전 앱은 무손상 게이팅. 설계: [PrayU-App/docs/plans/kakao-app-switch-restore.md](../../PrayU-App/docs/plans/kakao-app-switch-restore.md) "최종 설계"
 
 ## 운영 장애 — 애플 로그인 (2026-08-20 발견 → **08-22 복구 완료**)
 
