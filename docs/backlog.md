@@ -19,8 +19,18 @@ Supabase(GoTrue) 서버 정책 변경으로 `signInWithIdToken`(id_token grant)�
 **Kakao 차단** → prod 카카오 로그인 전면 실패(`400 {"message":"...Only Apple, Google, Firebase issuer allowed."}`).
 코드/env/대시보드 무변경, 호스팅 GoTrue 자동 롤아웃이라 배포 없이 이번 주 발생.
 
-- [ ] 🔴 **카카오 로그인을 `signInWithOAuth`로 전환** — 애플 버튼과 동형. access_token 기능은 flag OFF라 provider_token 재배선은 2단계로 분리. 계획서 참조
-- [ ] 선행 확인: 대시보드 Redirect URLs 허용 · Kakao provider Client Secret 설정 · Kakao 콘솔 Redirect URI(Supabase 콜백)
+- [x] ~~🔴 **카카오 로그인을 `signInWithOAuth`로 전환**~~ — [#509](https://github.com/TeamVisioneer/PrayU-Web/pull/509) merge + prod `v0.15.2` 배포(2026-08-20). 후속: 카카오톡 앱 전환 UX 복원은 App 레포([PrayU-App backlog](../../PrayU-App/docs/backlog.md))
+- [x] ~~선행 확인: 대시보드 Redirect URLs · Client Secret · Kakao 콘솔 Redirect URI~~ — 2026-08-19 확인 완료
+- [ ] staging Supabase **URL Configuration** 정리 — `staging.prayu.site`가 Redirect URLs에 없어 `prayu-staging.vercel.app`으로 폴백됨. Site URL/Redirect URLs 갱신 (사람, 대시보드)
+- [ ] **카카오 원탭 앱 전환 — web 발사 로직** (`kakaoTalkLaunch.ts` + `KakaoLoginBtn` 분기, 폴백 내장) — 계획·매니페스트: [PrayU-App/docs/plans/kakao-app-switch-restore.md](../../PrayU-App/docs/plans/kakao-app-switch-restore.md) "web 단계" 절. **스파이크(실기기)로 스킴 포맷·성립 확정 후 구현**
+
+## 운영 장애 — 애플 로그인 (2026-08-20 발견 → **08-22 복구 완료**)
+
+"OS 승인은 되는데 앱 무반응" — Apple client secret(JWT, 최대 180일) 만료가 원인이었다.
+**사건 전체 기록(카카오·애플·배포 사고 회고): [archive/2026-08-auth-incident-retrospective.md](archive/2026-08-auth-incident-retrospective.md)**
+
+- [x] ~~secret 재발급 → Supabase Apple provider 갱신~~ — 2026-08-22 완료, 다음 만료 **2027-02-18** (기록: 워크스페이스 `secrets/README.md`, 캘린더 D-30 알림)
+- [ ] 재발 방지: [plans/secret-expiry-admin-alert.md](plans/secret-expiry-admin-alert.md) — 시크릿 로테이션 대장 + 만료 임박(D-30) 어드민 앱 내 alert (짝: Api 테이블 먼저 → web UI)
 
 ## 진행 중 — 어드민 개편
 
