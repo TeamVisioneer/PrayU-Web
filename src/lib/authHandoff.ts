@@ -1,0 +1,93 @@
+// 세션 핸드오프 릴레이 클라이언트 (docs: docs/plans/kakao-login-handoff.md)
+//
+// 카카오톡 인앱브라우저에서 완결된 Supabase 세션을 "로그인을 시작한 원래 탭"으로
+// 옮기는 1회용 우체통(Edge Function `auth-handoff`)의 클라이언트 절반.
+//
+// - secret(256bit 랜덤)은 원래 탭 메모리에만 존재 — 리다이렉트 체인에 실리지 않는다
+// - nonce = SHA-256(secret) 커밋만 redirectTo URL 로 흘러간다 → URL 노출이 무해
+// - 개시 마커(sessionStorage): 톡 미설치 폴백처럼 "같은 탭"이 흐름을 이어갈 때
+//   login-redirect 가 예치(deposit) 대신 일반 로그인으로 진행하기 위한 컨텍스트 표식
+// ⚠️ secret/nonce/토큰을 Sentry·analytics·console 에 절대 기록하지 않는다
+
+const FUNCTIONS_BASE = `${
+  import.meta.env.VITE_SUPA_PROJECT_URL
+}/functions/v1/auth-handoff`;
+const MARKER_KEY = "kakaoHandoffStarted";
+
+const toHex = (bytes: Uint8Array) =>
+  Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+export interface HandoffTokens {
+  access_token: string;
+  refresh_token: string;
+}
+
+/** secret(원래 탭 보관용)과 nonce(SHA-256 커밋, URL 탑재용) 쌍 생성 */
+export const createHandoffPair = async (): Promise<{
+  secret: string;
+  nonce: string;
+}> => {
+  const secret = toHex(crypto.getRandomValues(new Uint8Array(32)));
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(secret),
+  );
+  return { secret, nonce: toHex(new Uint8Array(digest)) };
+};
+
+export const markHandoffStarted = () =>
+  sessionStorage.setItem(MARKER_KEY, "1");
+export const hasHandoffMarker = () =>
+  sessionStorage.getItem(MARKER_KEY) === "1";
+export const clearHandoffMarker = () => sessionStorage.removeItem(MARKER_KEY);
+
+/** (완결 컨텍스트에서) 현재 세션 토큰을 nonce 로 예치. 성공 여부만 반환 */
+export const depositSession = async (
+  nonce: string,
+  tokens: HandoffTokens,
+): Promise<boolean> => {
+  try {
+    const res = await fetch(`${FUNCTIONS_BASE}/deposit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nonce, ...tokens }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * (원래 탭에서) secret 으로 예치된 토큰을 폴링 수령.
+ * 타임아웃/취소 시 null — 호출부가 재시도 UI 로 처리한다.
+ */
+export const claimSession = async (
+  secret: string,
+  options: { signal?: AbortSignal; intervalMs?: number; timeoutMs?: number } =
+    {},
+): Promise<HandoffTokens | null> => {
+  const { signal, intervalMs = 1500, timeoutMs = 3 * 60 * 1000 } = options;
+  const deadline = Date.now() + timeoutMs;
+
+  while (Date.now() < deadline) {
+    if (signal?.aborted) return null;
+    try {
+      const res = await fetch(`${FUNCTIONS_BASE}/claim`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ secret }),
+        signal,
+      });
+      if (res.ok) return (await res.json()) as HandoffTokens;
+      // 404 = 아직 예치 전 — 폴링 계속
+    } catch {
+      if (signal?.aborted) return null;
+      // 일시 네트워크 오류 — 폴링 계속
+    }
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+  }
+  return null;
+};
