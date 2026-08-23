@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import kakaoIcon from "@/assets/kakaoIcon.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import * as Sentry from "@sentry/react";
@@ -20,7 +20,6 @@ interface KakaoLoginBtnProps {
 const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
   const [isWaitingTalk, setIsWaitingTalk] = useState(false);
   const [isTimeout, setIsTimeout] = useState(false);
-  const abortRef = useRef<AbortController | null>(null);
 
   const webRedirectLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -60,14 +59,10 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
     window.location.href = buildTalkLaunchUrl(data.url, data.url);
 
     // ③ 카카오톡에서 로그인이 완결되면 릴레이로 토큰 수령 → 이 탭에 세션 확립
-    const abortController = new AbortController();
-    abortRef.current = abortController;
-    const tokens = await claimSession(secret, {
-      signal: abortController.signal,
-    });
+    const tokens = await claimSession(secret);
     if (!tokens) {
       setIsWaitingTalk(false);
-      if (!abortController.signal.aborted) setIsTimeout(true);
+      setIsTimeout(true);
       return;
     }
     const { error: sessionError } = await supabase.auth.setSession(tokens);
@@ -88,12 +83,6 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
     else await webRedirectLogin();
   };
 
-  const onClickCancelWaiting = () => {
-    abortRef.current?.abort();
-    clearHandoffMarker();
-    setIsWaitingTalk(false);
-  };
-
   return (
     <div className="w-full flex flex-col items-center gap-2">
       <button
@@ -107,14 +96,6 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
           {isWaitingTalk ? "카카오톡에서 로그인해 주세요..." : "카카오로 시작하기"}
         </div>
       </button>
-      {isWaitingTalk && (
-        <button
-          className="text-xs text-gray-500 underline"
-          onClick={onClickCancelWaiting}
-        >
-          취소
-        </button>
-      )}
       {isTimeout && (
         <p className="text-xs text-gray-500">
           로그인이 완료되지 않았어요. 다시 시도해 주세요.
