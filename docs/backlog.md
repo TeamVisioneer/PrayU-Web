@@ -11,18 +11,18 @@
 
 ---
 
-## 🔴 운영 장애 — 카카오 로그인 (2026-08-19)
+## 운영 장애 — 카카오 로그인 (2026-08-19 발생 → **08-23 완결: 원탭 UX 포함 prod 출고**)
 
-계획: [plans/kakao-oauth-migration.md](plans/kakao-oauth-migration.md)
+Supabase(GoTrue)가 `signInWithIdToken`(id_token grant)을 Apple/Google/Firebase 전용으로 잠가 카카오 로그인 전면 실패.
+`signInWithOAuth` 전환으로 복구 후, 사라진 카카오톡 원탭 UX를 **세션 핸드오프 릴레이(B안)** 로 복원해 **web v0.16.0** 으로 출고.
+계획서(완료): [archive/kakao-oauth-migration.md](archive/kakao-oauth-migration.md) · [archive/kakao-login-handoff.md](archive/kakao-login-handoff.md)
+· 사건 회고: [archive/2026-08-auth-incident-retrospective.md](archive/2026-08-auth-incident-retrospective.md)
 
-Supabase(GoTrue) 서버 정책 변경으로 `signInWithIdToken`(id_token grant)이 **Apple/Google/Firebase 발급자만** 허용,
-**Kakao 차단** → prod 카카오 로그인 전면 실패(`400 {"message":"...Only Apple, Google, Firebase issuer allowed."}`).
-코드/env/대시보드 무변경, 호스팅 GoTrue 자동 롤아웃이라 배포 없이 이번 주 발생.
-
-- [x] ~~🔴 **카카오 로그인을 `signInWithOAuth`로 전환**~~ — [#509](https://github.com/TeamVisioneer/PrayU-Web/pull/509) merge + prod `v0.15.2` 배포(2026-08-20). 후속: 카카오톡 앱 전환 UX 복원은 App 레포([PrayU-App backlog](../../PrayU-App/docs/backlog.md))
-- [x] ~~선행 확인: 대시보드 Redirect URLs · Client Secret · Kakao 콘솔 Redirect URI~~ — 2026-08-19 확인 완료
-- [ ] staging Supabase **URL Configuration** 정리 — `staging.prayu.site`가 Redirect URLs에 없어 `prayu-staging.vercel.app`으로 폴백됨. Site URL/Redirect URLs 갱신 (사람, 대시보드)
-- [ ] **카카오 원탭 앱 전환** — 스파이크 완료(2026-08-22): 발사 성립 ✅ / 복귀는 카카오톡 인앱브라우저에 갇힘 ❌ → 1차 발사(#511)는 **임시 비활성(웹 플로우 복원)**. 재도입은 **PKCE + 신버전 앱(딥링크 복귀) 한 묶음**으로 — 구버전 앱은 무손상 게이팅. 설계: [PrayU-App/docs/plans/kakao-app-switch-restore.md](../../PrayU-App/docs/plans/kakao-app-switch-restore.md) "최종 설계"
+- [x] ~~`signInWithOAuth` 전환~~ — [#509](https://github.com/TeamVisioneer/PrayU-Web/pull/509) + prod `v0.15.2` (2026-08-20)
+- [x] ~~원탭 릴레이(B안): Api `auth-handoff` EF + web 발사·폴링·완료화면~~ — Api [#62](https://github.com/TeamVisioneer/PrayU-Api/pull/62) · web [#513](https://github.com/TeamVisioneer/PrayU-Web/pull/513)~[#517](https://github.com/TeamVisioneer/PrayU-Web/pull/517) · **prod: Api `v1.0.0` + web `v0.16.0`** (2026-08-23, 실기기 검증 완료)
+- [x] ~~staging Supabase URL Configuration (staging.prayu.site Redirect URLs)~~ — 2026-08-23 핸드오프 검증 준비 중 완료
+- [ ] 후속(보류): 카카오 2단계 — friends/talk_message 기능 재활성화 시 `provider_token` 재배선 ([archive/kakao-oauth-migration.md](archive/kakao-oauth-migration.md) "2단계")
+- [ ] 후속(보류): C안(신버전 앱 `prayu://` 딥링크 복귀)은 **B안 성공으로 불채택 확정** — Supabase가 implicit flow 를 조일 때의 회귀 경로로만 보존 (App 계획서)
 
 ## 운영 장애 — 애플 로그인 (2026-08-20 발견 → **08-22 복구 완료**)
 
