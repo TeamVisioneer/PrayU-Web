@@ -7,6 +7,7 @@ import { updateProfilesParams } from "@/apis/profiles";
 import { supabase } from "../../../supabase/client";
 import {
   clearHandoffMarker,
+  clearLocalAuthStorage,
   depositSession,
   hasHandoffMarker,
 } from "@/lib/authHandoff";
@@ -58,8 +59,11 @@ const LoginRedirect = () => {
         refresh_token: session.refresh_token,
       });
       if (ok) {
-        // scope 주의: global 이면 예치한 토큰까지 무효화된다 — 이 컨텍스트만 정리
-        await supabase.auth.signOut({ scope: "local" });
+        // ⚠️ signOut 은 scope:'local' 이어도 서버 revoke 를 호출해 예치 토큰까지 죽인다
+        // (2026-08-23 staging 버그) — 로컬 저장소 제거 + 자동 갱신 중지로만 정리한다.
+        // 이 페이지의 메모리 세션은 남지만, 카카오톡 브라우저는 곧 닫히므로 무해.
+        supabase.auth.stopAutoRefresh();
+        clearLocalAuthStorage();
         setHandoffState("deposited");
       } else {
         // 예치 실패 — 이 컨텍스트에 로그인은 살아있으므로 안내만 (강하 모드)
