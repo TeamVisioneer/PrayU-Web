@@ -37,6 +37,22 @@ export const createHandoffPair = async (): Promise<{
   return { secret, nonce: toHex(new Uint8Array(digest)) };
 };
 
+/**
+ * (완결 컨텍스트 전용) 서버 세션은 살린 채 이 브라우저의 로컬 세션 저장소만 제거.
+ *
+ * ⚠️ supabase.auth.signOut({ scope: "local" }) 을 쓰면 안 된다 — scope 가 local 이어도
+ * 서버에 현재 세션 revoke 를 요청해서, 방금 예치(deposit)한 토큰까지 무효화된다
+ * (2026-08-23 staging 검증에서 실증: 양쪽 다 로그아웃 + "Auth session missing!").
+ * 호출부에서 supabase.auth.stopAutoRefresh() 도 함께 불러 이 페이지의 자동 갱신이
+ * 원래 탭과 refresh token rotation 경합을 일으키지 않게 한다.
+ */
+export const clearLocalAuthStorage = () => {
+  const ref = new URL(import.meta.env.VITE_SUPA_PROJECT_URL).hostname.split(
+    ".",
+  )[0];
+  localStorage.removeItem(`sb-${ref}-auth-token`);
+};
+
 export const markHandoffStarted = () =>
   sessionStorage.setItem(MARKER_KEY, "1");
 export const hasHandoffMarker = () =>
