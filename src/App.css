@@ -4,6 +4,9 @@
 
 @layer base {
   :root {
+    /* 글래스 표면 토큰 백포트 (main 과 동일 값) — 로그인 완료 화면 전용 */
+    --surface-card: 255 255 255;
+    --glass-border: 255 255 255;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
