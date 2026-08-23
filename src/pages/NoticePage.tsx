@@ -33,10 +33,11 @@ const NoticePage = () => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col bg-mainBg">
+    // 스크롤·배경은 AppLayout 소유 (내부 스크롤 금지 — 네비 경계 클리핑, 2026-08-23)
+    <div className="flex min-h-full w-full flex-col">
       <PageHeader title="공지사항" />
 
-      <main className="flex-1 overflow-y-auto px-5 py-4">
+      <main className="flex-1 px-5 py-4">
         {isLoading && (
           <div className="py-16 text-center text-sm text-gray-400">
             불러오는 중...

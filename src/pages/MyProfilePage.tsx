@@ -40,13 +40,13 @@ const MyProfilePage = () => {
   // 게이트는 첫 페인트에 필요한 것만 — 나머지는 각 소비처의 쿼리 로딩 상태가 처리한다
   if (!myProfile || myPrayCardCount === undefined) {
     return (
-      <div className="w-full h-full bg-mainBg flex flex-col">
+      <div className="w-full min-h-full flex flex-col">
         <PageHeader
           title="내 프로필"
           right={<IoSettingsOutline size={20} className="text-gray-400" />}
         />
 
-        <main className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-6 animate-pulse">
+        <main className="flex-1 p-4 space-y-6 animate-pulse">
           <section className="border border-glassBorder/50 bg-surfaceCard/70 shadow-member p-6 rounded-2xl flex items-center gap-5">
             <Skeleton className="h-20 w-20 rounded-full" />
             <div className="space-y-2">
@@ -76,7 +76,8 @@ const MyProfilePage = () => {
   return (
     // 내부 스크롤 컨테이너가 이 페이지의 스크롤을 소유한다 — AppLayout(h-100vh) 아래에서
     // min-h-screen 을 쓰면 넘친 콘텐츠가 잘린 채 스크롤이 불가능했다 (2026-08-17 달력 상세에서 발견)
-    <div className="w-full h-full bg-mainBg flex flex-col">
+    // 스크롤·배경은 AppLayout 소유 (내부 스크롤 금지 — 네비 경계 클리핑, 2026-08-23)
+    <div className="w-full min-h-full flex flex-col">
       <PageHeader
         title="내 프로필"
         right={
@@ -89,7 +90,7 @@ const MyProfilePage = () => {
         }
       />
 
-      <main className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-6">
+      <main className="flex-1 p-4 space-y-6">
         <section className="rounded-2xl border border-glassBorder/50 bg-surfaceCard/70 p-6 shadow-member">
           <div className="flex items-center gap-5">
             <AvatarUploader />
