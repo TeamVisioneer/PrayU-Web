@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ClipLoader } from "react-spinners";
 import kakaoIcon from "@/assets/kakaoIcon.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import * as Sentry from "@sentry/react";
@@ -92,8 +93,12 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
         style={{ background: "#FEE500", color: "black" }}
       >
         <img src={kakaoIcon} className="w-4 h-4" />
-        <div className="flex-grow">
-          {isWaitingTalk ? "카카오톡에서 로그인해 주세요..." : "카카오로 시작하기"}
+        <div className="flex-grow flex justify-center">
+          {isWaitingTalk ? (
+            <ClipLoader color="#020202" size={14} />
+          ) : (
+            "카카오로 시작하기"
+          )}
         </div>
       </button>
       {isTimeout && (

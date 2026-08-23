@@ -24,10 +24,15 @@ const isAndroid = (ua: string) => /android/.test(ua);
 /**
  * 카카오톡 앱 전환을 시도할 환경인가.
  * SDK 와 동일 기준: 모바일(iOS/Android)만, Android 인스타/페북 인앱브라우저는 제외.
+ *
+ * 카카오톡 인앱브라우저(초대 링크로 진입한 멤버 등)도 제외한다 — 이미 카카오 컨텍스트라
+ * 같은 창 웹 플로우가 최선이고(릴레이·완료 화면 불필요, 로그인 후 그 자리에서 계속),
+ * 톡 안에서 다시 톡을 여는 스킴은 동작이 보장되지 않는다.
  */
 export const canLaunchKakaoTalk = (): boolean => {
   const ua = getUA();
   if (!isIOS(ua) && !isAndroid(ua)) return false;
+  if (/kakaotalk/.test(ua)) return false;
   if (isAndroid(ua) && /instagram|fb_iab/.test(ua)) return false;
   return true;
 };
