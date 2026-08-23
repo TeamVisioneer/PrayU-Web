@@ -1,5 +1,6 @@
 import useBaseStore from "@/stores/baseStore";
 import PageHeader from "@/components/common/PageHeader";
+import AvatarUploader from "@/components/profile/AvatarUploader";
 import SettingDialog from "@/components/profile/SettingDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -91,11 +92,7 @@ const MyProfilePage = () => {
       <main className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-6">
         <section className="rounded-2xl border border-glassBorder/50 bg-surfaceCard/70 p-6 shadow-member">
           <div className="flex items-center gap-5">
-            <img
-              className="h-20 w-20 rounded-full object-cover ring-4 ring-white"
-              src={myProfile.avatar_url || "/images/defaultProfileImage.png"}
-              alt="Profile Avatar"
-            />
+            <AvatarUploader />
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-bold text-black">
                 {myProfile.full_name}
