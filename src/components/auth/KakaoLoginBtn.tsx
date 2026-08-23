@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ClipLoader } from "react-spinners";
+import { PulseLoader } from "react-spinners";
 import kakaoIcon from "@/assets/kakaoIcon.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import * as Sentry from "@sentry/react";
@@ -80,6 +80,13 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
   const handleKakaoLoginBtnClick = async () => {
     if (isWaitingTalk) return;
     analyticsTrack("클릭_카카오_로그인", { where: "KakaoLoginBtn" });
+    // 앱(WebView)이면 탭 햅틱 (ReactionBtn 과 동일 브리지)
+    if (window.flutter_inappwebview?.callHandler) {
+      window.flutter_inappwebview.callHandler(
+        "triggerHapticFeedback",
+        "mediumImpact",
+      );
+    }
     if (canLaunchKakaoTalk()) await talkLaunchLogin();
     else await webRedirectLogin();
   };
@@ -95,7 +102,7 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
         <img src={kakaoIcon} className="w-4 h-4" />
         <div className="flex-grow flex justify-center">
           {isWaitingTalk ? (
-            <ClipLoader color="#020202" size={14} />
+            <PulseLoader color="#020202" size={10} />
           ) : (
             "카카오로 시작하기"
           )}

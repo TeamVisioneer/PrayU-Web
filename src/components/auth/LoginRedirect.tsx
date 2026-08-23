@@ -5,6 +5,9 @@ import useBaseStore from "@/stores/baseStore";
 import useAuth from "@/hooks/useAuth";
 import { updateProfilesParams } from "@/apis/profiles";
 import { supabase } from "../../../supabase/client";
+import Lottie from "react-lottie";
+import { PulseLoader } from "react-spinners";
+import checkAnimation from "@/assets/lottie/check2.json";
 import {
   clearHandoffMarker,
   clearLocalAuthStorage,
@@ -134,37 +137,35 @@ const LoginRedirect = () => {
   ]);
 
   if (isHandoffDepositContext) {
-    // 카카오톡 인앱브라우저에 보이는 완료 안내 — 글래스 톤(토큰만 사용, 시안 검수 2026-08-23)
+    // 카카오톡 인앱브라우저에 보이는 완료 안내 — 글래스 톤, 체크는 그룹 입장 완료와
+    // 동일한 Lottie(check2) 재사용 (사용자 피드백 2026-08-23)
     return (
       <div className="min-h-dvh flex items-center justify-center px-6 bg-gradient-to-b from-prayCardStart/40 via-mainBg to-prayCardMiddle/40">
-        <main className="w-full max-w-[320px] rounded-3xl border border-glassBorder/60 bg-surfaceCard/70 shadow-glass px-7 pt-10 pb-8 text-center">
-          <div
-            aria-hidden
-            className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-accentFrom to-accentTo shadow-member"
-          >
-            {handoffState === "idle" ? (
-              <span className="h-6 w-6 rounded-full border-[2.5px] border-white/40 border-t-white animate-spin" />
-            ) : (
-              <svg viewBox="0 0 24 24" fill="none" className="h-[26px] w-[26px]">
-                <path
-                  d="M5 12.5l4.5 4.5L19 7.5"
-                  stroke="white"
-                  strokeWidth="2.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </div>
-          <h1 className="text-lg font-bold tracking-tight text-black">
+        <main className="w-full max-w-[320px] rounded-3xl border border-glassBorder/60 bg-surfaceCard/70 shadow-glass px-7 pt-8 pb-8 text-center">
+          {handoffState === "idle" ? (
+            <div className="flex h-[120px] items-center justify-center">
+              <PulseLoader size={10} color="#608CFF" />
+            </div>
+          ) : (
+            <Lottie
+              height={120}
+              width={120}
+              options={{
+                loop: false,
+                autoplay: true,
+                animationData: checkAnimation,
+              }}
+            />
+          )}
+          <h1 className="mt-1 text-lg font-bold tracking-tight text-black">
             {handoffState === "idle" ? "로그인 처리 중" : "로그인 완료"}
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-dark break-keep">
             {handoffState === "deposited" && (
               <>
-                이 창을 닫으면
+                이 창은 닫아도 괜찮아요
                 <br />
-                원래 화면에서 이어집니다
+                로그인하던 화면으로 돌아가 주세요
               </>
             )}
             {handoffState === "failed" &&
