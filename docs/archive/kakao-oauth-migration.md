@@ -1,6 +1,8 @@
 # 카카오 로그인 OAuth 전환 (signInWithIdToken → signInWithOAuth)
 
-> 상태: **긴급 · 설계 확정 대기** (2026-08-19) — **운영 카카오 로그인 장애 복구**
+> 상태: **구현 완료 · prod 출고** (1단계 [#509](https://github.com/TeamVisioneer/PrayU-Web/pull/509) → `v0.15.2`, 2026-08-20). 잃어버린 원탭 UX 는 후속 [kakao-login-handoff.md](kakao-login-handoff.md)(B안)로 복원 → `v0.16.0`.
+> 미완 잔여: "2단계 provider_token 재배선"(기능 flag ON 시) — backlog 후속 항목으로 이관.
+> (이하 원문 — 설계 당시 기준)
 > 짝 PR: Api 변경은 원칙적으로 불필요(로그인은 대시보드 provider 설정으로 동작). 단 `handle_new_user` 프로필 생성 검증에서 어긋나면 Api 후속 PR 발생 가능 → 아래 "리스크 3" 참조
 > merge 순서: web 단독(Api 변경 없을 시). Api 후속이 필요하면 Api 먼저 → web
 

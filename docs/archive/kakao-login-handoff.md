@@ -1,6 +1,8 @@
 # 카카오 원탭 로그인 — 세션 핸드오프 릴레이 (B안)
 
-> 상태: **설계 확정 — 구현 승인 대기** (2026-08-22) · 짝 PR: **Api(EF+테이블) 먼저 → web** · 사용자 결정: 앱 업데이트 없이 원탭 복원
+> 상태: **구현 완료 · prod 출고** (2026-08-23) — Api [#62](https://github.com/TeamVisioneer/PrayU-Api/pull/62)(`v1.0.0`) · web [#513](https://github.com/TeamVisioneer/PrayU-Web/pull/513)~[#517](https://github.com/TeamVisioneer/PrayU-Web/pull/517)(`v0.16.0`) · 실기기 검증 완료.
+> 구현 중 교정 1건: 완결 컨텍스트 정리는 `signOut(scope:'local')` 금지(서버 revoke) → 로컬 저장소 제거 + stopAutoRefresh (#514, 본문 반영됨)
+> (이하 원문 — 설계 당시 기준)
 > 맥락: [PrayU-App/docs/plans/kakao-app-switch-restore.md](../../../PrayU-App/docs/plans/kakao-app-switch-restore.md) (스파이크·대안 비교) · 사건 전체: [../archive/2026-08-auth-incident-retrospective.md](../archive/2026-08-auth-incident-retrospective.md)
 
 ## 왜
