@@ -8,6 +8,7 @@ import { supabase } from "../../../supabase/client";
 import Lottie from "react-lottie";
 import { PulseLoader } from "react-spinners";
 import checkAnimation from "@/assets/lottie/check2.json";
+import prayuLogo from "@/assets/PrayULogoV3.png";
 import {
   clearHandoffMarker,
   clearLocalAuthStorage,
@@ -172,7 +173,8 @@ const LoginRedirect = () => {
               "원래 화면에서 로그인되지 않았다면 다시 시도해 주세요"}
             {handoffState === "idle" && "잠시만 기다려 주세요"}
           </p>
-          <div className="mt-7 text-xs font-semibold text-deactivate">
+          <div className="mt-7 flex items-center justify-center gap-1.5 text-xs font-semibold text-deactivate">
+            <img src={prayuLogo} alt="" className="h-4 w-4" />
             PrayU
           </div>
         </main>
