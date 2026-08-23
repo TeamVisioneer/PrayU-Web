@@ -134,20 +134,47 @@ const LoginRedirect = () => {
   ]);
 
   if (isHandoffDepositContext) {
+    // 카카오톡 인앱브라우저에 보이는 완료 안내 — 글래스 톤(토큰만 사용, 시안 검수 2026-08-23)
     return (
-      <div className="h-full flex flex-col items-center justify-center gap-2 px-10 text-center">
-        <p className="text-base font-semibold">
-          {handoffState === "failed"
-            ? "로그인이 완료됐어요"
-            : "로그인 완료!"}
-        </p>
-        <p className="text-sm text-gray-500">
-          {handoffState === "deposited" &&
-            "이 창을 닫고 원래 화면으로 돌아가 주세요."}
-          {handoffState === "failed" &&
-            "원래 화면에서 로그인되지 않았다면 다시 시도해 주세요."}
-          {handoffState === "idle" && "잠시만 기다려 주세요..."}
-        </p>
+      <div className="min-h-dvh flex items-center justify-center px-6 bg-gradient-to-b from-prayCardStart/40 via-mainBg to-prayCardMiddle/40">
+        <main className="w-full max-w-[320px] rounded-3xl border border-glassBorder/60 bg-surfaceCard/70 shadow-glass px-7 pt-10 pb-8 text-center">
+          <div
+            aria-hidden
+            className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-accentFrom to-accentTo shadow-member"
+          >
+            {handoffState === "idle" ? (
+              <span className="h-6 w-6 rounded-full border-[2.5px] border-white/40 border-t-white animate-spin" />
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" className="h-[26px] w-[26px]">
+                <path
+                  d="M5 12.5l4.5 4.5L19 7.5"
+                  stroke="white"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </div>
+          <h1 className="text-lg font-bold tracking-tight text-black">
+            {handoffState === "idle" ? "로그인 처리 중" : "로그인 완료"}
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-dark break-keep">
+            {handoffState === "deposited" && (
+              <>
+                이 창을 닫으면
+                <br />
+                원래 화면에서 이어집니다
+              </>
+            )}
+            {handoffState === "failed" &&
+              "원래 화면에서 로그인되지 않았다면 다시 시도해 주세요"}
+            {handoffState === "idle" && "잠시만 기다려 주세요"}
+          </p>
+          <div className="mt-7 text-xs font-semibold text-deactivate">
+            PrayU
+          </div>
+        </main>
       </div>
     );
   }
