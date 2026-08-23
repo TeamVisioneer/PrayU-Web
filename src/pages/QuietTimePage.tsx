@@ -355,7 +355,7 @@ const QuietTimePage = () => {
 
   if (!user) {
     return (
-      <div className="flex h-full w-full flex-col bg-mainBg">
+      <div className="flex h-full w-full flex-col">
         {renderHeader()}
         <main className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
           <h1 className="text-xl font-bold">로그인이 필요해요</h1>
@@ -368,10 +368,12 @@ const QuietTimePage = () => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col bg-mainBg">
+    // 스크롤·배경은 AppLayout 소유 — 페이지는 자연 흐름으로 네비 뒤까지 흘러간다
+    // (내부 overflow-y-auto 를 두면 콘텐츠가 네비 위 경계에서 잘린다, 2026-08-23)
+    <div className="flex min-h-full w-full flex-col">
       {renderHeader()}
-      <main className="flex-1 overflow-y-auto">
-        <div className="flex min-h-full w-full flex-col gap-4 px-5 pb-8 pt-5">
+      <main className="flex-1">
+        <div className="flex w-full flex-col gap-4 px-5 pb-8 pt-5">
           {!qtData ? versePickerForm() : qtContent()}
           {error && <div className="text-red-500">{error}</div>}
         </div>

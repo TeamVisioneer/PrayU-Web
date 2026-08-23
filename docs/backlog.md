@@ -73,6 +73,9 @@ Supabase(GoTrue)가 `signInWithIdToken`(id_token grant)을 Apple/Google/Firebase
       전부 `components/common/PageHeader`(글래스) 하나로 통일 (#499)
 - [x] ~~primitives 글래스화~~ (#500) · ~~그룹 재스킨~~ (#501) — **v1.0.0 디자인 컷라인 도달**
 - [ ] v1.0.x (릴리스 후): 나머지 화면 재스킨 — QT·공지·프로필·알림·감사카드 순, hex 리터럴 grep 0 목표
+- **레이아웃 원칙 (2026-08-23 확정)**: **페이지는 배경도 스크롤도 소유하지 않는다 — 둘 다 AppLayout 소유.**
+  페이지가 `h-full`+`overflow-y-auto`로 내부 스크롤을 만들면 콘텐츠가 하단 네비 위 경계에서 잘린다
+  (QT·공지·프로필 수리 완료 — 그룹 디테일이 준수 레퍼런스). 잔여 위반: GroupListPage·ThanksCardPage(구식 배경·`h-screen`) → 재스킨 때 함께
 - **말씀카드 UI 원칙 (2026-08-04 재확인)**: 목록·화면 표시는 **`bible_card` row 데이터 렌더**
   (#448 통합 렌더러 — `BibleCardThumbnail`/`ScaledBibleCard`). `image_key`/`image_url` 은 공유 산출물
   전용이라 UI 가 의존하지 않는다. `pray_card.bible_card_url` 은 舊체계 표시 호환 fallback 만.
