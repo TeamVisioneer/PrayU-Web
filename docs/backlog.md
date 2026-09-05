@@ -85,6 +85,22 @@ Supabase(GoTrue)가 `signInWithIdToken`(id_token grant)을 Apple/Google/Firebase
 - [ ] v1.1: 기도카드 재편(사용자 소유 + share) + 가시성/RLS — **pray 그룹 격리 결정 대기** → [pray-card-restructure.md](plans/identity/pray-card-restructure.md)
 - [ ] 유료화 선행 조사: WebView iOS 결제(IAP) 정책 충돌 여부
 
+## 🔴 진행 중 — 도메인 이전 prayu.site → Cloudflare Registrar (기한 9/12, 사람 작업)
+
+결정·근거: [guides/supabase-migration-plan.md](guides/supabase-migration-plan.md) "도메인·배포 인프라" 절.
+Vercel 자동 연장 결제 실패 안내(9/12 까지 미조치 시 도메인 상실). 연장 대신 이전 — 이전 시 만료일 +1년.
+
+⚠️ 메일 링크는 누르지 말고 **Vercel 대시보드 → Domains** 에서 실제 만료일·결제 상태를 직접 확인한다 (결제 실패 메일은 피싱 패턴이기도 하다).
+**이번 주 안에 시작** — 이전은 5~7일 걸리고 만료 후엔 불가. 9/5 완료 목표.
+
+- [ ] Vercel: 실제 만료일 확인 → transfer lock 해제 → auth code(EPP) 발급. WHOIS 메일 수신 가능 확인
+- [ ] Cloudflare: 사이트 추가 → DNS 레코드 가져오기 → Vercel 레코드 **DNS only(회색 구름)** → 네임서버 변경 (Registrar 이전은 Cloudflare DNS 활성 후 가능)
+- [ ] Cloudflare Registrar → Transfer: auth code → 결제(도매가, +1년) → Vercel 측 승인 메일 승인
+- [ ] 완료 확인: WHOIS 레지스트라 Cloudflare · 만료일 +1년 · 사이트·카카오 콜백·앱 딥링크 정상 → 대장에 날짜 기록
+- **폴백**: 9/1 까지 이전을 시작 못 하면 Vercel 결제수단 갱신 후 1년 연장 → 여유 있을 때 이전 (연장은 60일 잠금 없음)
+- [ ] 후속: R2 커스텀 도메인 `assets.prayu.site` → `VITE_STORAGE_BASE_URL` 교체 + prod 절대 URL(`avatar_url`·공지 이미지) 일괄 치환
+- [ ] **릴리스 후 트랙: 서빙 Vercel → Cloudflare Pages 이전** — 별도 계획서 필요: 태그 기반 prod 배포를 GitHub Actions + wrangler 로 재현, `_redirects`(SPA 리라이트)·`_headers`(`.well-known` 딥링크) 이관, staging/prod 환경변수 이관, Preview 배포 검증. Next.js 이행 결정이 먼저 나면 재평가(Next 면 Vercel 유지가 유리)
+
 ## 진행 중 — 프로필 사진 변경 (짝 작업 — 주도: web)
 
 계획: [plans/profile-photo.md](plans/profile-photo.md) · Api 짝 PR [#61](https://github.com/TeamVisioneer/PrayU-Api/pull/61) (merge 는 Api 먼저)

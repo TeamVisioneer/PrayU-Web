@@ -54,6 +54,17 @@
 
 ⚠️ **키 로테이션 결합**: prod cron 명령과 fcm webhook 정의에 **prod service_role JWT(legacy)가 하드코딩**돼 있음. 추후 보안 작업에서 service_role 키 로테이션 시 **cron.job 명령 갱신을 동시에** 하지 않으면 리마인더 알림이 죽는다.
 
+### 도메인·배포 인프라 (2026-08-18 결정)
+
+| 항목 | 값 | 비고 |
+|---|---|---|
+| 도메인 | `prayu.site` (prod) · `staging.prayu.site` | 카카오 콜백·앱 딥링크(`.well-known`)·WebView 고정 URL 이 이 도메인에 묶여 있다 — **도메인 자체는 바꾸지 않는다** |
+| 레지스트라 | Vercel → **Cloudflare Registrar 로 이전 중** (이전일: ____ · 새 만료일: ____) | Vercel 자동 연장 결제 실패(기한 9/12) 계기. 도매가 + R2 와 한 콘솔. `.site` 는 Cloudflare 지원 TLD(Radix) |
+| DNS | Cloudflare DNS (이전 후) | **Vercel 연결 레코드는 DNS only(회색 구름)** — Cloudflare 프록시를 Vercel 앞에 두면 인증서·캐시 이중화로 Vercel 비권장 구성 |
+| 서빙 | **Vercel 유지** (main=staging · release 태그=prod, 프로젝트 2개) | 정적 SPA 라 Cloudflare Pages 이전은 다운그레이드가 아니지만 v1.0.0 릴리스 직전에 검증된 파이프라인을 흔들지 않는다 → 릴리스 후 트랙(backlog) |
+| 서빙 이전 재검토 조건 | Vercel 대역폭이 플랜 한도 50% 도달 · 시트 비용 부담 · Next.js 이행 결정 | PrayU 는 백엔드가 Supabase, 무거운 이미지는 R2 라 Vercel 과금 리스크가 낮다 (번들·HTML 만 서빙) |
+| 후속 | R2 커스텀 도메인 `assets.prayu.site` | 도메인이 Cloudflare 에 오면 연결 가능. `VITE_STORAGE_BASE_URL` 교체 + prod 절대 URL(`avatar_url`·공지 이미지) 일괄 치환 필요 |
+
 ### staging↔prod 스키마 드리프트 (2026-07-18 staging 덤프 비교)
 baseline은 prod 기준이므로 Phase D 리셋 시 staging에서 아래가 사라짐/변경됨 — 모두 의도된 정리:
 - staging에만: `vector` extension(public), `search_bible` 함수 — **레거시 확정(사용자, 2026-07-18)**, 리셋이 자연 제거 (OK)
