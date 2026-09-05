@@ -59,7 +59,7 @@
 | 항목 | 값 | 비고 |
 |---|---|---|
 | 도메인 | `prayu.site` (prod) · `staging.prayu.site` | 카카오 콜백·앱 딥링크(`.well-known`)·WebView 고정 URL 이 이 도메인에 묶여 있다 — **도메인 자체는 바꾸지 않는다** |
-| 레지스트라 | Vercel → **Cloudflare Registrar 로 이전 중** (이전일: ____ · 새 만료일: ____) | Vercel 자동 연장 결제 실패(기한 9/12) 계기. 도매가 + R2 와 한 콘솔. `.site` 는 Cloudflare 지원 TLD(Radix) |
+| 레지스트라 | Vercel(실제 등록: Tucows/OpenSRS) → **Cloudflare Registrar 로 이전 예정** (연장일: ____ · 이전일: ____ · 새 만료일: ____) | 만료 2026-09-12(WHOIS 실측). 7일 남은 시점이라 **Vercel 연장 먼저, 이전은 원 만료일 +45일(10/27) 이후·릴리스 후** — 연장 직후 이전 시 연장분 회수 가능성 회피. 도매가 + R2 와 한 콘솔. `.site` 는 Cloudflare 지원 TLD(Radix) |
 | DNS | Cloudflare DNS (이전 후) | **Vercel 연결 레코드는 DNS only(회색 구름)** — Cloudflare 프록시를 Vercel 앞에 두면 인증서·캐시 이중화로 Vercel 비권장 구성 |
 | 서빙 | **Vercel 유지** (main=staging · release 태그=prod, 프로젝트 2개) | 정적 SPA 라 Cloudflare Pages 이전은 다운그레이드가 아니지만 v1.0.0 릴리스 직전에 검증된 파이프라인을 흔들지 않는다 → 릴리스 후 트랙(backlog) |
 | 서빙 이전 재검토 조건 | Vercel 대역폭이 플랜 한도 50% 도달 · 시트 비용 부담 · Next.js 이행 결정 | PrayU 는 백엔드가 Supabase, 무거운 이미지는 R2 라 Vercel 과금 리스크가 낮다 (번들·HTML 만 서빙) |
