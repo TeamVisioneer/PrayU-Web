@@ -21,6 +21,13 @@ Supabase(GoTrue)가 `signInWithIdToken`(id_token grant)을 Apple/Google/Firebase
 - [x] ~~`signInWithOAuth` 전환~~ — [#509](https://github.com/TeamVisioneer/PrayU-Web/pull/509) + prod `v0.15.2` (2026-08-20)
 - [x] ~~원탭 릴레이(B안): Api `auth-handoff` EF + web 발사·폴링·완료화면~~ — Api [#62](https://github.com/TeamVisioneer/PrayU-Api/pull/62) · web [#513](https://github.com/TeamVisioneer/PrayU-Web/pull/513)~[#517](https://github.com/TeamVisioneer/PrayU-Web/pull/517) · **prod: Api `v1.0.0` + web `v0.16.0`** (2026-08-23, 실기기 검증 완료)
 - [x] ~~staging Supabase URL Configuration (staging.prayu.site Redirect URLs)~~ — 2026-08-23 핸드오프 검증 준비 중 완료
+- 🔴 **2026-09-06 안드로이드 원탭 불가 발견** — 안드로이드 앱에서 카카오톡 인앱브라우저가 빈 페이지로 열림(운영 리포트).
+  원인: SDK 는 Android 에서 `inappbrowser` 스킴을 쓰지 않는다(`CAPRI_LOGGED_IN_ACTIVITY` explicit intent, kakao.min.js 실측) —
+  우리 Android 발사 URL 은 iOS 스킴을 유추한 미검증 코드였고 **prod 검증이 iPhone 으로만 됐다**. hotfix `v0.16.1`: 안드로이드는 톡 발사 제외 → 웹 플로우
+- [ ] **안드로이드 카카오 원탭 복원** — 후보 2개, 실기기 검증 전에는 출고 금지:
+  - A′ (릴레이 재사용, 2탭): 앱 WebView 가 authorize URL 을 **외부 브라우저**로 여는 intent(`scheme=https;action=VIEW`) 발사 → 크롬에서 kauth("카카오톡으로 로그인" 포함) → `login-redirect?handoff` 예치 → WebView 폴링 수령. iOS 릴레이와 동일 구조, 카카오톡 대신 크롬이 "다른 컨텍스트". 에뮬레이터(Play 이미지)로 계정 로그인 경로까지 검증 가능
+  - B′ (진짜 원탭): SDK 와 같은 CAPRI intent — 단 `state` 는 GoTrue 가 서버에서 만들어 302 에 실어 보내므로 **Edge Function 이 authorize 를 `redirect:manual` 로 호출해 Location 의 state·client_id·redirect_uri 를 꺼내 준다** → 클라이언트가 CAPRI intent 구성 → 카카오톡이 `callback?code&state` 를 브라우저로 열어 Supabase 콜백 → 릴레이. 키는 같은 앱의 JS/REST 키가 code 플로우에서 호환. 실기기 필수
+  - 검증 환경: 안드로이드 실기기 + 카카오톡 (에뮬레이터는 카카오톡 로그인 불가). 앱 환경 분기(R2 env flavor) 전에는 staging 을 앱으로 못 봄 → 크롬 `staging.prayu.site` 로 웹 경로만
 - [ ] 후속(보류): 카카오 2단계 — friends/talk_message 기능 재활성화 시 `provider_token` 재배선 ([archive/kakao-oauth-migration.md](archive/kakao-oauth-migration.md) "2단계")
 - [ ] 후속(보류): C안(신버전 앱 `prayu://` 딥링크 복귀)은 **B안 성공으로 불채택 확정** — Supabase가 implicit flow 를 조일 때의 회귀 경로로만 보존 (App 계획서)
 
