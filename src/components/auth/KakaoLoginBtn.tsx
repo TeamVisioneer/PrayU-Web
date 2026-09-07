@@ -44,6 +44,9 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
     const { secret, nonce } = await createHandoffPair();
     const redirectTo = new URL(redirectUrl);
     redirectTo.searchParams.set("handoff", nonce);
+    // 완료 카드가 "어디로 돌아가라"고 정확히 말할 수 있게 출처를 실어 보낸다
+    // (앱 WebView 에서 시작 → "PrayU 앱으로"). 앱 자동 복귀(딥링크 수리) 전까지의 안내
+    if (window.flutter_inappwebview) redirectTo.searchParams.set("from", "app");
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
