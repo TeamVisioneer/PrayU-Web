@@ -1,4 +1,5 @@
 import React from "react";
+import { openKakaoChannelChat } from "@/lib/kakaoChannel";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -16,7 +17,7 @@ const GroupLimitPage: React.FC = () => {
         variant="primary"
         className="w-32"
         onClick={() => {
-          window.open(`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`);
+          openKakaoChannelChat();
         }}
       >
         문의하기

@@ -28,6 +28,7 @@ Supabase(GoTrue)가 `signInWithIdToken`(id_token grant)을 Apple/Google/Firebase
   - A′ (릴레이 재사용, 2탭): 앱 WebView 가 authorize URL 을 **외부 브라우저**로 여는 intent(`scheme=https;action=VIEW`) 발사 → 크롬에서 kauth("카카오톡으로 로그인" 포함) → `login-redirect?handoff` 예치 → WebView 폴링 수령. iOS 릴레이와 동일 구조, 카카오톡 대신 크롬이 "다른 컨텍스트". 에뮬레이터(Play 이미지)로 계정 로그인 경로까지 검증 가능
   - B′ (진짜 원탭): SDK 와 같은 CAPRI intent — 단 `state` 는 GoTrue 가 서버에서 만들어 302 에 실어 보내므로 **Edge Function 이 authorize 를 `redirect:manual` 로 호출해 Location 의 state·client_id·redirect_uri 를 꺼내 준다** → 클라이언트가 CAPRI intent 구성 → 카카오톡이 `callback?code&state` 를 브라우저로 열어 Supabase 콜백 → 릴레이. 키는 같은 앱의 JS/REST 키가 code 플로우에서 호환. 실기기 필수
   - 검증 환경: 안드로이드 실기기 + 카카오톡 (에뮬레이터는 카카오톡 로그인 불가). 앱 환경 분기(R2 env flavor) 전에는 staging 을 앱으로 못 봄 → 크롬 `staging.prayu.site` 로 웹 경로만
+- [ ] **카카오톡 문의하기 — 안드로이드 앱에서 무반응 수리 (2026-09-07 발견)**: `window.open` 을 앱이 버린다 — flutter_inappwebview 는 `onCreateWindow` 미구현 시 iOS 만 같은 창에 로드해 주고(그래서 iOS 는 채널 페이지가 뜸) Android 는 무반응(플러그인 소스 실측). 수리: `lib/kakaoChannel.ts` — 앱에서는 SDK Channel.chat 과 같은 스킴/intent 로 **카카오톡 채팅방을 직접** 연다(PrayU 화면 유지, 돌아와도 채널 페이지 안 남음). 브라우저는 새 탭 그대로. 진입점 5곳(그룹 메뉴·그룹 없음·그룹 한도·QT 신고·약관) 통일. 검증은 **앱(prod)에서만 가능** → v0.16.3. 근본(`onCreateWindow`)은 App R1/W1
 - [ ] 후속(보류): 카카오 2단계 — friends/talk_message 기능 재활성화 시 `provider_token` 재배선 ([archive/kakao-oauth-migration.md](archive/kakao-oauth-migration.md) "2단계")
 - [ ] 후속(보류): C안(신버전 앱 `prayu://` 딥링크 복귀)은 **B안 성공으로 불채택 확정** — Supabase가 implicit flow 를 조일 때의 회귀 경로로만 보존 (App 계획서)
 
