@@ -24,6 +24,37 @@ export interface HandoffTokens {
   refresh_token: string;
 }
 
+/** EF `resolve` 응답 — kauth authorize URL 의 쿼리 (안드로이드 원탭 intent 재료) */
+export interface ResolvedAuthorize {
+  client_id: string;
+  redirect_uri: string;
+  state: string;
+  scope?: string;
+}
+
+/**
+ * (안드로이드 원탭) GoTrue authorize 의 302 Location 은 브라우저 JS 가 볼 수 없어
+ * 서버가 대신 읽어 준다. 실패 시 null — 호출부는 웹 플로우로 폴백.
+ * docs: docs/plans/kakao-android-onetap.md
+ */
+export const resolveAuthorize = async (
+  redirectTo: string,
+): Promise<ResolvedAuthorize | null> => {
+  try {
+    const res = await fetch(`${FUNCTIONS_BASE}/resolve`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ redirect_to: redirectTo }),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as Partial<ResolvedAuthorize>;
+    if (!data.client_id || !data.redirect_uri || !data.state) return null;
+    return data as ResolvedAuthorize;
+  } catch {
+    return null;
+  }
+};
+
 /** secret(원래 탭 보관용)과 nonce(SHA-256 커밋, URL 탑재용) 쌍 생성 */
 export const createHandoffPair = async (): Promise<{
   secret: string;
