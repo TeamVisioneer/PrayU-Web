@@ -100,14 +100,17 @@ Supabase(GoTrue)가 `signInWithIdToken`(id_token grant)을 Apple/Google/Firebase
 결정·근거: [guides/supabase-migration-plan.md](guides/supabase-migration-plan.md) "도메인·배포 인프라" 절.
 Vercel 자동 연장 결제 실패 안내(9/12 까지 미조치 시 도메인 상실). 연장 대신 이전 — 이전 시 만료일 +1년.
 
-⚠️ 메일 링크는 누르지 말고 **Vercel 대시보드 → Domains** 에서 실제 만료일·결제 상태를 직접 확인한다 (결제 실패 메일은 피싱 패턴이기도 하다).
-**이번 주 안에 시작** — 이전은 5~7일 걸리고 만료 후엔 불가. 9/5 완료 목표.
+**2026-09-05 WHOIS 실측**: 레지스트리 만료 **2026-09-12 23:59 UTC** (메일이 진짜였음) · 실제 레지스트라 Tucows/OpenSRS(Vercel 리셀) ·
+상태 `ok`(이미 잠금 해제 상태) · DNSSEC unsigned · NS = vercel-dns · 레코드 = `@`·`www`·`staging` A 레코드뿐(TXT/MX 없음).
 
-- [ ] Vercel: 실제 만료일 확인 → transfer lock 해제 → auth code(EPP) 발급. WHOIS 메일 수신 가능 확인
-- [ ] Cloudflare: 사이트 추가 → DNS 레코드 가져오기 → Vercel 레코드 **DNS only(회색 구름)** → 네임서버 변경 (Registrar 이전은 Cloudflare DNS 활성 후 가능)
-- [ ] Cloudflare Registrar → Transfer: auth code → 결제(도매가, +1년) → Vercel 측 승인 메일 승인
-- [ ] 완료 확인: WHOIS 레지스트라 Cloudflare · 만료일 +1년 · 사이트·카카오 콜백·앱 딥링크 정상 → 대장에 날짜 기록
-- **폴백**: 9/1 까지 이전을 시작 못 하면 Vercel 결제수단 갱신 후 1년 연장 → 여유 있을 때 이전 (연장은 60일 잠금 없음)
+**순서 변경 (9/5 결정)**: 만료까지 7일이라 이전(최대 5영업일~1주)을 지금 시작하면 마진이 0 이다.
+**① Vercel 에서 먼저 연장(결제수단 갱신) → ② 45일 이후·v1.0.0 릴리스 후에 Cloudflare 로 이전.**
+연장 직후 이전하면 레지스트리 정책에 따라 연장 1년이 회수될 수 있어 45일을 띄운다 (Cloudflare 안내 기준). 손해는 Vercel 마진 1년치뿐, 도메인 상실 리스크는 0.
+
+- [ ] **즉시(9/12 전)**: Vercel 대시보드 → Settings → Billing 결제수단 갱신 → Domains → prayu.site 연장 확인 (만료일 2027-09-12 로 바뀌는지 WHOIS 재확인). 메일 링크 말고 대시보드로 직접
+- [ ] **10/27 이후(원 만료일 +45일) + 릴리스 후**: Cloudflare 사이트 추가 → 레코드 스캔(A ×3) → Vercel 레코드 **DNS only(회색 구름)** → Vercel Domains 에서 네임서버를 Cloudflare 로 변경 → 상태 Active 확인
+- [ ] Vercel Domains → ⋯ → **Transfer out** 으로 auth code 발급(Team Owner 만 보임) → Cloudflare Registrar → Transfer 에서 입력·결제(도매가, +1년) → Tucows FOA 메일 승인(승인하면 수 시간, 방치 시 5일)
+- [ ] 완료 확인: WHOIS 레지스트라 Cloudflare · 만료일 +1년 · 사이트·카카오 콜백·앱 딥링크(`.well-known`) 정상 → 대장에 날짜 기록
 - [ ] 후속: R2 커스텀 도메인 `assets.prayu.site` → `VITE_STORAGE_BASE_URL` 교체 + prod 절대 URL(`avatar_url`·공지 이미지) 일괄 치환
 - [ ] **릴리스 후 트랙: 서빙 Vercel → Cloudflare Pages 이전** — 별도 계획서 필요: 태그 기반 prod 배포를 GitHub Actions + wrangler 로 재현, `_redirects`(SPA 리라이트)·`_headers`(`.well-known` 딥링크) 이관, staging/prod 환경변수 이관, Preview 배포 검증. Next.js 이행 결정이 먼저 나면 재평가(Next 면 Vercel 유지가 유리)
 
