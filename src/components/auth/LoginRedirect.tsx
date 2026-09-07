@@ -41,6 +41,8 @@ const LoginRedirect = () => {
   // 카카오톡 인앱브라우저(완결 컨텍스트)다 → 세션을 예치하고 이 컨텍스트는 로그아웃.
   // 마커가 있으면(톡 미설치 폴백 등 같은 탭 진행) 일반 로그인으로 계속한다.
   const handoffNonce = params.get("handoff");
+  // 로그인을 시작한 곳 — 앱 WebView 면 "PrayU 앱으로 돌아가라"고 안내 (KakaoLoginBtn 이 실음)
+  const handoffFromApp = params.get("from") === "app";
   const isHandoffDepositContext = !!handoffNonce && !hasHandoffMarker();
   const [handoffState, setHandoffState] = useState<
     "idle" | "deposited" | "failed"
@@ -162,11 +164,18 @@ const LoginRedirect = () => {
             {handoffState === "idle" ? "로그인 처리 중" : "로그인 완료"}
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-dark break-keep">
-            {handoffState === "deposited" && (
+            {handoffState === "deposited" && handoffFromApp && (
               <>
-                이 창은 닫아도 괜찮아요
+                PrayU 앱으로 돌아가면 로그인이 완료돼요
                 <br />
-                로그인하던 화면으로 돌아가 주세요
+                이 창은 닫아도 괜찮아요
+              </>
+            )}
+            {handoffState === "deposited" && !handoffFromApp && (
+              <>
+                로그인하던 브라우저 화면으로 돌아가면 완료돼요
+                <br />
+                이 창은 닫아도 괜찮아요
               </>
             )}
             {handoffState === "failed" &&
