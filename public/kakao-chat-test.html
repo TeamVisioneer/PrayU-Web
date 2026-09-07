@@ -1,0 +1,14 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>카카오 채널 채팅 스킴 테스트</title>
+<style>body{font-family:-apple-system,sans-serif;padding:20px;line-height:1.6}section{border:1px solid #ddd;border-radius:12px;padding:12px 16px;margin:12px 0}code{font-size:12px;word-break:break-all;color:#555}a{display:inline-block;padding:8px 12px;margin:4px 4px 0 0;background:#FEE500;border-radius:8px;color:#000;text-decoration:none}</style>
+<h1>카카오 채널 채팅 스킴 테스트</h1>
+<p>안드로이드는 <b>Android intent</b>, 아이폰은 <b>iOS 유니버설 링크</b>를 눌러 카카오톡에 <b>PrayU 채팅방</b>이 열리는 변형을 알려주세요. (임시 페이지 — 확인 후 삭제)</p>
+
+<section><h2>V1 · 카카오 페이지와 동일 (fromtype=web)</h2><code>kakaoplus://plusfriend/chat/_XaHDG?fromtype=web</code>
+<p><a href="intent://plusfriend/chat/_XaHDG?fromtype=web#Intent;scheme=kakaoplus;package=com.kakao.talk;S.browser_fallback_url=https%3A%2F%2Fpf.kakao.com%2F_XaHDG%2Fchat;end;">Android intent</a> · <a href="https://talk-apps.kakao.com/scheme/kakaoplus%3A%2F%2Fplusfriend%2Fchat%2F_XaHDG%3Ffromtype%3Dweb&web=https%3A%2F%2Fpf.kakao.com%2F_XaHDG%2Fchat">iOS 유니버설 링크</a> · <a href="kakaoplus://plusfriend/chat/_XaHDG?fromtype=web">스킴 직접</a></p></section>
+<section><h2>V2 · 현재 v0.16.3 (플래그 없음)</h2><code>kakaoplus://plusfriend/chat/_XaHDG</code>
+<p><a href="intent://plusfriend/chat/_XaHDG#Intent;scheme=kakaoplus;package=com.kakao.talk;S.browser_fallback_url=https%3A%2F%2Fpf.kakao.com%2F_XaHDG%2Fchat;end;">Android intent</a> · <a href="https://talk-apps.kakao.com/scheme/kakaoplus%3A%2F%2Fplusfriend%2Fchat%2F_XaHDG&web=https%3A%2F%2Fpf.kakao.com%2F_XaHDG%2Fchat">iOS 유니버설 링크</a> · <a href="kakaoplus://plusfriend/chat/_XaHDG">스킴 직접</a></p></section>
+<section><h2>V3 · talk/chat 경로</h2><code>kakaoplus://plusfriend/talk/chat/_XaHDG?fromtype=web</code>
+<p><a href="intent://plusfriend/talk/chat/_XaHDG?fromtype=web#Intent;scheme=kakaoplus;package=com.kakao.talk;S.browser_fallback_url=https%3A%2F%2Fpf.kakao.com%2F_XaHDG%2Fchat;end;">Android intent</a> · <a href="https://talk-apps.kakao.com/scheme/kakaoplus%3A%2F%2Fplusfriend%2Ftalk%2Fchat%2F_XaHDG%3Ffromtype%3Dweb&web=https%3A%2F%2Fpf.kakao.com%2F_XaHDG%2Fchat">iOS 유니버설 링크</a> · <a href="kakaoplus://plusfriend/talk/chat/_XaHDG?fromtype=web">스킴 직접</a></p></section>
+<section><h2>V4 · 채널 홈 (정상 대조군)</h2><code>kakaoplus://plusfriend/home/_XaHDG?fromtype=web</code>
+<p><a href="intent://plusfriend/home/_XaHDG?fromtype=web#Intent;scheme=kakaoplus;package=com.kakao.talk;S.browser_fallback_url=https%3A%2F%2Fpf.kakao.com%2F_XaHDG%2Fchat;end;">Android intent</a> · <a href="https://talk-apps.kakao.com/scheme/kakaoplus%3A%2F%2Fplusfriend%2Fhome%2F_XaHDG%3Ffromtype%3Dweb&web=https%3A%2F%2Fpf.kakao.com%2F_XaHDG%2Fchat">iOS 유니버설 링크</a> · <a href="kakaoplus://plusfriend/home/_XaHDG?fromtype=web">스킴 직접</a></p></section></html>
