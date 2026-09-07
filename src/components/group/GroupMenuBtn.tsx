@@ -1,3 +1,4 @@
+import { openKakaoChannelChat } from "@/lib/kakaoChannel";
 import {
   Sheet,
   SheetContent,
@@ -119,7 +120,7 @@ const GroupMenuBtn: React.FC = () => {
   const onClickContactUs = () => {
     setIsOpenGroupMenuSheet(false);
     analyticsTrack("클릭_문의", {});
-    window.open(import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL, "_blank");
+    openKakaoChannelChat();
   };
 
   const onClickSheetTrigeer = () => {
