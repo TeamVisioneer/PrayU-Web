@@ -50,6 +50,8 @@
 | R2 CORS 허용 오리진 (버킷 설정, PUT) | `prayu.site` · `www.prayu.site` | `staging.prayu.site` · `localhost:5173` |
 | R2 API 토큰 (Object R/W, 버킷 스코프 — 환경별 별도) | 발급됨 | 발급됨 |
 | Edge Function secrets: `R2_ENDPOINT`·`R2_BUCKET`·`R2_ACCESS_KEY_ID`·`R2_SECRET_ACCESS_KEY` | 등록됨 (2026-07-31, 해시 대조 검증) | 등록됨 (동일) |
+| **Auth URL Configuration — Site URL** (2026-09-07 실측) | `https://app.prayu.site` (redirect_to 거부 시 이 루트로 대체됨) | 미확인 — prod 와 같은 원칙으로 맞출 것 |
+| **Auth URL Configuration — Redirect URLs** | `https://*.prayu.site/**` · `https://prayu.site/**` · `prayu://` — ⚠️ **`*` 는 `.`·`/` 를 못 넘는다(glob 구분자). `/*` 였을 때 `login-redirect?path=/group/<id>/join` 이 거부돼 초대 복귀가 사라졌음(2026-09-07). apex 는 `*.` 에 안 잡혀 별도 줄 필수** | 미확인 — 동일 패턴 적용 |
 | Vercel env: `VITE_STORAGE_BASE_URL` | **Production 스코프만** 등록 — release 재빌드 시 반영 | 등록·재배포 완료 (번들 확인) |
 
 ⚠️ **키 로테이션 결합**: prod cron 명령과 fcm webhook 정의에 **prod service_role JWT(legacy)가 하드코딩**돼 있음. 추후 보안 작업에서 service_role 키 로테이션 시 **cron.job 명령 갱신을 동시에** 하지 않으면 리마인더 알림이 죽는다.

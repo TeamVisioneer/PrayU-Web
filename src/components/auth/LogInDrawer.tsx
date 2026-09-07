@@ -23,6 +23,9 @@ const LogInDrawer = ({ path }: LogInDrawerProps) => {
   );
 
   const baseUrl = window.location.origin;
+  // path 는 반드시 인코딩 — 값 안의 '/' 가 그대로 들어가면 Supabase Redirect URLs glob(`*` 는 '/' 를
+  // 못 넘음)에 걸려 Site URL 루트로 떨어지고 초대 복귀가 사라진다 (2026-09-07 prod 사고).
+  // 받는 쪽(LoginRedirect·TermServicePage)은 decodeURIComponent 로 복원한다.
 
   const LoginContent = (
     <div className="flex flex-col gap-6 px-10">
@@ -38,7 +41,7 @@ const LogInDrawer = ({ path }: LogInDrawerProps) => {
         <KakaoLoginBtn
           redirectUrl={
             path
-              ? `${baseUrl}/login-redirect?path=${path}`
+              ? `${baseUrl}/login-redirect?path=${encodeURIComponent(path)}`
               : `${baseUrl}/login-redirect`
           }
         />
@@ -56,7 +59,7 @@ const LogInDrawer = ({ path }: LogInDrawerProps) => {
                 <AppleLoginBtn
                   redirectUrl={
                     path
-                      ? `${baseUrl}/login-redirect?path=${path}`
+                      ? `${baseUrl}/login-redirect?path=${encodeURIComponent(path)}`
                       : `${baseUrl}/login-redirect`
                   }
                 />
