@@ -4,12 +4,18 @@ import kakaoIcon from "@/assets/kakaoIcon.svg";
 import { analyticsTrack } from "@/analytics/analytics";
 import * as Sentry from "@sentry/react";
 import { supabase } from "../../../supabase/client";
-import { buildTalkLaunchUrl, canLaunchKakaoTalk } from "@/lib/kakaoTalkLaunch";
+import {
+  buildAndroidTalkIntent,
+  buildTalkLaunchUrl,
+  canLaunchKakaoTalk,
+  isAndroid,
+} from "@/lib/kakaoTalkLaunch";
 import {
   claimSession,
   clearHandoffMarker,
   createHandoffPair,
   markHandoffStarted,
+  resolveAuthorize,
 } from "@/lib/authHandoff";
 
 interface KakaoLoginBtnProps {
@@ -38,6 +44,9 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
     const { secret, nonce } = await createHandoffPair();
     const redirectTo = new URL(redirectUrl);
     redirectTo.searchParams.set("handoff", nonce);
+    // 완료 카드가 "어디로 돌아가라"고 정확히 말할 수 있게 출처를 실어 보낸다
+    // (앱 WebView 에서 시작 → "PrayU 앱으로"). 앱 자동 복귀(딥링크 수리) 전까지의 안내
+    if (window.flutter_inappwebview) redirectTo.searchParams.set("from", "app");
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
@@ -53,11 +62,22 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
       return webRedirectLogin(); // 개시 실패 → 기존 웹 플로우
     }
 
+    // Android 는 kauth authorize 파라미터가 필요 — 서버가 302 Location 을 대신 읽어 준다.
+    // 실패하면 원탭을 포기하고 웹 플로우 (docs/plans/kakao-android-onetap.md)
+    let launchUrl: string;
+    if (isAndroid()) {
+      const resolved = await resolveAuthorize(redirectTo.toString());
+      if (!resolved) return webRedirectLogin();
+      launchUrl = buildAndroidTalkIntent(resolved, data.url);
+    } else {
+      launchUrl = buildTalkLaunchUrl(data.url, data.url);
+    }
+
     // ② 같은 탭 폴백(톡 미설치 → 웹 플로우 진행) 대비 개시 마커
     markHandoffStarted();
     setIsTimeout(false);
     setIsWaitingTalk(true);
-    window.location.href = buildTalkLaunchUrl(data.url, data.url);
+    window.location.href = launchUrl;
 
     // ③ 카카오톡에서 로그인이 완결되면 릴레이로 토큰 수령 → 이 탭에 세션 확립
     const tokens = await claimSession(secret);
@@ -112,6 +132,19 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
         <p className="text-xs text-gray-500">
           로그인이 완료되지 않았어요. 다시 시도해 주세요.
         </p>
+      )}
+      {/* 원탭이 완결되지 않으면 갇히지 않도록 웹 플로우 탈출구 (2026-09-06 사고의 안전장치) */}
+      {isTimeout && (
+        <button
+          type="button"
+          onClick={() => {
+            analyticsTrack("클릭_카카오_로그인_웹폴백", { where: "KakaoLoginBtn" });
+            webRedirectLogin();
+          }}
+          className="text-xs text-gray-500 underline underline-offset-2"
+        >
+          카카오 계정으로 로그인
+        </button>
       )}
     </div>
   );
