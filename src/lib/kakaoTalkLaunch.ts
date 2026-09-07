@@ -12,7 +12,7 @@
 //            inappbrowser 스킴은 안드로이드 카카오톡이 URL 을 받지 못한다, 2026-09-06 사고).
 //            intent 에는 kauth authorize 파라미터(client_id·redirect_uri·state…)가 필요한데
 //            state 는 GoTrue 가 302 에만 실어 보내므로 EF `auth-handoff/resolve` 가 대신 읽어 준다.
-//            docs/plans/kakao-android-onetap.md
+//            docs/archive/kakao-android-onetap.md
 
 import type { ResolvedAuthorize } from "@/lib/authHandoff";
 

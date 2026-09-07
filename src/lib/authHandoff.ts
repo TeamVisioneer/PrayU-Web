@@ -35,7 +35,7 @@ export interface ResolvedAuthorize {
 /**
  * (안드로이드 원탭) GoTrue authorize 의 302 Location 은 브라우저 JS 가 볼 수 없어
  * 서버가 대신 읽어 준다. 실패 시 null — 호출부는 웹 플로우로 폴백.
- * docs: docs/plans/kakao-android-onetap.md
+ * docs: docs/archive/kakao-android-onetap.md
  */
 export const resolveAuthorize = async (
   redirectTo: string,

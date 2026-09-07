@@ -63,7 +63,7 @@ const KakaoLoginBtn: React.FC<KakaoLoginBtnProps> = ({ redirectUrl }) => {
     }
 
     // Android 는 kauth authorize 파라미터가 필요 — 서버가 302 Location 을 대신 읽어 준다.
-    // 실패하면 원탭을 포기하고 웹 플로우 (docs/plans/kakao-android-onetap.md)
+    // 실패하면 원탭을 포기하고 웹 플로우 (docs/archive/kakao-android-onetap.md)
     let launchUrl: string;
     if (isAndroid()) {
       const resolved = await resolveAuthorize(redirectTo.toString());
