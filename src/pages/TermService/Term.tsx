@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { openKakaoChannelChat } from "@/lib/kakaoChannel";
 import { useParams } from "react-router-dom";
 import termsDataDefault from "./240909.json";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -166,10 +167,7 @@ const Term: React.FC = () => {
         <button
           onClick={() => {
             analyticsTrack("클릭_문의", {});
-            window.open(
-              import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL,
-              "_blank"
-            );
+            openKakaoChannelChat();
           }}
           className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150"
         >

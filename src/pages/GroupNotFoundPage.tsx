@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { openKakaoChannelChat } from "@/lib/kakaoChannel";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -14,7 +15,7 @@ const GroupNotFoundPage: React.FC = () => {
         variant="primary"
         className="w-32"
         onClick={() => {
-          window.open(`${import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL}`);
+          openKakaoChannelChat();
         }}
       >
         문의하기

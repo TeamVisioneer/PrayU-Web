@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { openKakaoChannelChat } from "@/lib/kakaoChannel";
 import PageHeader from "@/components/common/PageHeader";
 import { useSearchParams } from "react-router-dom";
 import { analyticsTrack } from "@/analytics/analytics";
@@ -205,7 +206,7 @@ const QuietTimePage = () => {
       });
 
       if (response.ok) {
-        window.location.href = import.meta.env.VITE_PRAY_KAKAO_CHANNEL_CHAT_URL;
+        openKakaoChannelChat();
       } else {
         Sentry.captureException(response.statusText);
       }
