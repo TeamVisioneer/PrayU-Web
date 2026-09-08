@@ -139,6 +139,24 @@ Vercel 자동 연장 결제 실패 안내(9/12 까지 미조치 시 도메인 �
 계획: [plans/release-v1/plan.md](plans/release-v1/plan.md) — 신규 피처 목록·보안 포함 범위·App 트랙 결정 대기.
 릴리스 전까지 신규 피처를 staging 에 쌓고, 범위가 닫히면 runbook 분리.
 
+## 신규 피처 요청 — v1 런치 전 (2026-09-08, 사용자 요청 · 범위/타이밍 결정 대기)
+
+셋 다 **스키마 변경 + 권한/도메인 로직**이라 각각 별도 계획서(docs 먼저)와 Api 짝 작업이 필요하다. 착수 전 사용자 확인 대상.
+⚠️ **원래 v1 에서 뺐던 영역과 겹친다** — "기도카드 재편·인증/권한은 릴리스 후(v1.1+)"로 결정했었다([release-v1/plan.md](plans/release-v1/plan.md)). v1 로 당기면 릴리스가 늦어지고 QA 면적이 커진다. 포함 여부는 목표 시점과 함께 판단.
+
+- [ ] **1. 기도카드 기간 지정 + 기간 내 만료 없음** — 생성 시 시작/종료일을 받고, 그 기간 동안은 만료로 처리하지 않는다.
+  - 현재 만료는 **저장값이 아니라 파생 계산**: `src/lib/utils.ts` `isCurrentWeek(created_at)`(주 경계 일요일 하드코딩) 한 곳에 의존, 소비처 7곳(`MyMember`·`MyMemberDrawer`·`OtherMember(Drawer)`·`PrayListDrawer`·`TodayPrayCardList` + 전역 `hasPrayCardCurrentWeek`)
+  - 필요: Api `pray_card` 에 `started_at`/`ended_at`(또는 유사) 컬럼 + 생성 API/UI 에 날짜 입력 스텝(`NewPrayCard*`, `createPrayCardParams`) + `isCurrentWeek` 소비처를 **기간 비교**로 교체
+  - ⚠️ [pray-card-restructure.md](plans/identity/pray-card-restructure.md)(v1.1)는 "주 단위 유지, 판정 기준을 share.created_at 으로 이동"이라 **이 요청(기간 만료)과 다른 축** — 만료 모델을 통째로 바꾸는 것이라 재편과 순서·정합성 정리 필요
+- [ ] **2. `member` 에 그룹장/부그룹장(role)** — 부그룹장 지정.
+  - 현재 그룹장은 `member` 가 아니라 **`group.user_id`**(소유 컬럼) 한 곳으로 표현, 판정 6곳(`GroupPage`·`GroupListPage`·`GroupListDrawer`·`GroupMemberProfileList`·`Office/GroupDetailPage`). `member` 에는 role 컬럼이 **없다**(`id·user_id·group_id·pray_summary·타임스탬프`뿐)
+  - 필요: Api `member.role` 컬럼 신설(마이그레이션 + 타입 재생성) + web 판정 6곳을 role 인식으로 확장 + 탈퇴 이양 `findNextLeaderId`("가장 먼저 들어온 멤버" → "부그룹장 우선")
+  - 🔑 **첫 설계 결정**: 그룹장을 `group.user_id` 에 유지하고 부그룹장만 role 로 둘지, 그룹장까지 `member.role` 로 통합할지
+- [ ] **3. 그룹 기도제목 카드 (그룹장 작성, 그룹 공용)** — 소유자 개인이 아닌 그룹 공용 카드.
+  - 현재 `pray_card` 는 `user_id`(소유자)+`group_id`(대상)로 **그룹당 1행 복제, 전부 개인 소유**. "그룹 공용" 표현 수단이 스키마에 없다
+  - ⚠️ **[pray-card-restructure.md](plans/identity/pray-card-restructure.md)(v1.1)와 정면 충돌** — 재편은 `pray_card.group_id` 를 **제거**하고 `pray_card_share` 관계로 옮긴다. 지금 `group_id` 를 전제로 그룹 카드를 짜면 곧 폐기될 컬럼에 얹는 셈. **재편을 v1 으로 당겨 그 위에서 설계**하거나, 재편과 독립적인 최소 표현(카드 종류 플래그)을 쓰거나 결정 필요
+  - 권한(그룹장/부그룹장만 작성)은 CLAUDE.md 원칙상 RLS 가 아니라 앱/edge function 에 — 2번 role 과 묶임
+
 ## `premium_expired_at` 자기부여 차단 (짝 작업)
 
 계획: [../../PrayU-Api/docs/plans/premium-guard.md](../../PrayU-Api/docs/plans/premium-guard.md) · Api 짝 PR [#59](https://github.com/TeamVisioneer/PrayU-Api/pull/59) · [security-backlog.md](security-backlog.md) 8번
